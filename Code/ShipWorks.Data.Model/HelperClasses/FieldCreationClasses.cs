@@ -10332,6 +10332,11 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(FilterFieldIndex.IsSavedSearch);}
 		}
+		/// <summary>Creates a new FilterEntity.HubFilterID field instance</summary>
+		public static EntityField2 HubFilterID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(FilterFieldIndex.HubFilterID);}
+		}
 	}
 
 	/// <summary>Field Creation Class for entity FilterLayoutEntity</summary>

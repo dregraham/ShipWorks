@@ -1636,6 +1636,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 			this.AddElementFieldInfo("FilterEntity", "Definition", typeof(System.String), false, false, false, true,  (int)FilterFieldIndex.Definition, 2147483647, 0, 0);
 			this.AddElementFieldInfo("FilterEntity", "State", typeof(System.Byte), false, false, false, false,  (int)FilterFieldIndex.State, 0, 0, 3);
 			this.AddElementFieldInfo("FilterEntity", "IsSavedSearch", typeof(System.Boolean), false, false, false, false,  (int)FilterFieldIndex.IsSavedSearch, 0, 0, 0);
+			this.AddElementFieldInfo("FilterEntity", "HubFilterID", typeof(System.String), false, false, false, false,  (int)FilterFieldIndex.HubFilterID, 32, 0, 0);
 		}
 		/// <summary>Inits FilterLayoutEntity's FieldInfo objects</summary>
 		private void InitFilterLayoutEntityInfos()

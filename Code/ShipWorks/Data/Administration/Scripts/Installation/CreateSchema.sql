@@ -2437,7 +2437,8 @@ CREATE TABLE [dbo].[Filter]
 [IsFolder] [bit] NOT NULL,
 [Definition] [xml] NULL,
 [State] [tinyint] NOT NULL,
-[IsSavedSearch] [bit] NOT NULL CONSTRAINT [DF_Filter_IsSavedSearch] DEFAULT ((0))
+[IsSavedSearch] [bit] NOT NULL CONSTRAINT [DF_Filter_IsSavedSearch] DEFAULT ((0)),
+[HubFilterID] [nvarchar] (32) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL CONSTRAINT [DF_Filter_HubFilterID] DEFAULT ('')
 )
 GO
 PRINT N'Creating primary key [PK_Filter] on [dbo].[Filter]'

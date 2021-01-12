@@ -376,6 +376,8 @@ namespace ShipWorks.Data.Model.EntityClasses
 			_fieldsCustomProperties.Add("State", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
 			_fieldsCustomProperties.Add("IsSavedSearch", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+			_fieldsCustomProperties.Add("HubFilterID", fieldHashtable);
 		}
 		#endregion
 
@@ -534,6 +536,17 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			get { return (System.Boolean)GetValue((int)FilterFieldIndex.IsSavedSearch, true); }
 			set	{ SetValue((int)FilterFieldIndex.IsSavedSearch, value); }
+		}
+
+		/// <summary> The HubFilterID property of the Entity Filter<br/><br/></summary>
+		/// <remarks>Mapped on  table field: "Filter"."HubFilterID"<br/>
+		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 32<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
+		public virtual System.String HubFilterID
+		{
+			get { return (System.String)GetValue((int)FilterFieldIndex.HubFilterID, true); }
+			set	{ SetValue((int)FilterFieldIndex.HubFilterID, value); }
 		}
 
 		/// <summary> Gets the EntityCollection with the related entities of type 'FilterSequenceEntity' which are related to this entity via a relation of type '1:n'. If the EntityCollection hasn't been fetched yet, the collection returned will be empty.<br/><br/></summary>

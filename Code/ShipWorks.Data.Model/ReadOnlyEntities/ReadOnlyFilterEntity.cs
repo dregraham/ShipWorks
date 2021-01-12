@@ -44,6 +44,7 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
             Definition = source.Definition;
             State = source.State;
             IsSavedSearch = source.IsSavedSearch;
+            HubFilterID = source.HubFilterID;
             
             
             
@@ -104,6 +105,12 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
         /// Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
         public System.Boolean IsSavedSearch { get; }
+        /// <summary> The HubFilterID property of the Entity Filter<br/><br/>
+        /// </summary>
+        /// <remarks>Mapped on table field: "Filter"."HubFilterID"<br/>
+        /// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 32<br/>
+        /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+        public System.String HubFilterID { get; }
         
         
         

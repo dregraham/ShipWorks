@@ -1422,6 +1422,7 @@
           <Field Name="Definition" Type="string" IsOptional="true" MaxLength="2147483647" FieldIndex="5" />
           <Field Name="FilterID" Type="long" IsReadOnly="true" IsPrimaryKey="true" FieldIndex="0" />
           <Field Name="FilterTarget" Type="int" FieldIndex="3" />
+          <Field Name="HubFilterID" Type="string" MaxLength="32" FieldIndex="8" />
           <Field Name="IsFolder" Type="bool" FieldIndex="4" />
           <Field Name="IsSavedSearch" Type="bool" FieldIndex="7" />
           <Field Name="Name" Type="string" MaxLength="50" FieldIndex="2" />
@@ -4672,7 +4673,7 @@
       <Catalogs>
         <Catalog Name="ShipWorksLocal">
           <Schemas>
-            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2020-11-25T21:53:17.1411283Z">
+            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2021-01-12T20:57:51.1772473Z">
               <Tables>
                 <Table Name="Action">
                   <PkConstraintName Name="PK_Action" />
@@ -6760,6 +6761,7 @@
                     <Field Name="Definition" Ordinal="6" IsOptional="true" DbType="26" Length="2147483647" />
                     <Field Name="State" Ordinal="7" DbType="22" Precision="3" />
                     <Field Name="IsSavedSearch" Ordinal="8" HasDefaultValue="true" DefaultValue="(0)" DbType="2" />
+                    <Field Name="HubFilterID" Ordinal="9" HasDefaultValue="true" DefaultValue="''" DbType="12" Length="32" />
                   </Fields>
                 </Table>
                 <Table Name="FilterLayout">
@@ -12368,6 +12370,7 @@
             <FieldMapping FieldName="Definition" TargetFieldName="Definition" />
             <FieldMapping FieldName="FilterID" TargetFieldName="FilterID" SequenceToUse="SCOPE_IDENTITY()" />
             <FieldMapping FieldName="FilterTarget" TargetFieldName="FilterTarget" />
+            <FieldMapping FieldName="HubFilterID" TargetFieldName="HubFilterID" />
             <FieldMapping FieldName="IsFolder" TargetFieldName="IsFolder" />
             <FieldMapping FieldName="IsSavedSearch" TargetFieldName="IsSavedSearch" />
             <FieldMapping FieldName="Name" TargetFieldName="Name" />

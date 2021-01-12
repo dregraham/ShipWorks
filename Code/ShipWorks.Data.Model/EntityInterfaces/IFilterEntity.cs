@@ -69,6 +69,12 @@ namespace ShipWorks.Data.Model.EntityInterfaces
         /// Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
         System.Boolean IsSavedSearch { get; }
+        /// <summary> The HubFilterID property of the Entity Filter<br/><br/>
+        /// </summary>
+        /// <remarks>Mapped on table field: "Filter"."HubFilterID"<br/>
+        /// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 32<br/>
+        /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+        System.String HubFilterID { get; }
         
         
         

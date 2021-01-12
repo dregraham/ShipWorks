@@ -4428,6 +4428,8 @@ namespace ShipWorks.Data.Model
 		State,
 		///<summary>IsSavedSearch. </summary>
 		IsSavedSearch,
+		///<summary>HubFilterID. </summary>
+		HubFilterID,
 		/// <summary></summary>
 		AmountOfFields
 	}
