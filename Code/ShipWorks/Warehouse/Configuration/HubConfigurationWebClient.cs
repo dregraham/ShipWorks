@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Net;
 using System.Threading.Tasks;
 using Interapptive.Shared.ComponentRegistration;
@@ -8,6 +9,7 @@ using Newtonsoft.Json.Serialization;
 using RestSharp;
 using ShipWorks.ApplicationCore.Licensing.Warehouse;
 using ShipWorks.Warehouse.Configuration.DTO;
+using ShipWorks.Warehouse.Configuration.Filters.DTO;
 
 namespace ShipWorks.Warehouse.Configuration
 {
@@ -46,7 +48,7 @@ namespace ShipWorks.Warehouse.Configuration
                     throw new WebException(response.Message, response.Exception);
                 }
 
-                var configuration = JsonConvert.DeserializeObject<HubConfiguration>(
+                return JsonConvert.DeserializeObject<HubConfiguration>(
                     response.Value.Content,
                     new JsonSerializerSettings
                     {
@@ -58,12 +60,47 @@ namespace ShipWorks.Warehouse.Configuration
                             }
                         },
                     });
-
-                return configuration;
             }
             catch (Exception ex)
             {
                 throw new WebException($"An error occurred downloading the configuration for warehouse ID {warehouseID}", ex);
+            }
+        }
+
+        /// <summary>
+        /// Get the list of filters from Hub
+        /// </summary>
+        public async Task<List<GetFiltersResponse>> GetFilters()
+        {
+            try
+            {
+                IRestRequest request = new RestRequest(WarehouseEndpoints.GetFilters, Method.GET);
+
+                GenericResult<IRestResponse> response = await warehouseRequestClient
+                    .MakeRequest(request, "Get Filters")
+                    .ConfigureAwait(true);
+
+                if (response.Failure)
+                {
+                    throw new WebException(response.Message, response.Exception);
+                }
+
+                return JsonConvert.DeserializeObject<List<GetFiltersResponse>>(
+                    response.Value.Content,
+                    new JsonSerializerSettings
+                    {
+                        ContractResolver = new DefaultContractResolver
+                        {
+                            NamingStrategy = new CamelCaseNamingStrategy
+                            {
+                                OverrideSpecifiedNames = false
+                            }
+                        },
+                    });
+            }
+            catch (Exception ex)
+            {
+                throw new WebException($"An error occurred downloading filters", ex);
             }
         }
     }

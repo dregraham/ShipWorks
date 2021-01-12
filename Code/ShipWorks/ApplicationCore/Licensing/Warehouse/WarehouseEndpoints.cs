@@ -21,6 +21,7 @@ namespace ShipWorks.ApplicationCore.Licensing.Warehouse
         public const string AddProduct = "api/products";
         public const string SetActivationBulk = "api/products/activation";
         public const string GetConfig = "api/config";
+        public const string GetFilters = "api/order-service/filters/all";
 
         private const string linkWarehouse = "api/warehouses/{0}/link";
         private const string orders = "api/warehouses/{0}/orders";

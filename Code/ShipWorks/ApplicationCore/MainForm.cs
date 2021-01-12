@@ -5543,7 +5543,7 @@ namespace ShipWorks
 
                     if (!string.IsNullOrEmpty(configuration.WarehouseID))
                     {
-                        var hubConfig = lifetimeScope.Resolve<HubStoreImporter>().ImportStores(this, configuration.WarehouseID);
+                        var hubConfig = lifetimeScope.Resolve<HubConfigurationImporter>().ImportConfiguration(this, configuration.WarehouseID);
                         lifetimeScope.Resolve<HubConfigurationSynchronizer>().Synchronize(hubConfig);
                     }
                 }

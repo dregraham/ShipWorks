@@ -1,5 +1,4 @@
-﻿using System;
-using System.Data.Common;
+﻿using System.Data.Common;
 using System.Data.SqlClient;
 using Interapptive.Shared.Data;
 using Interapptive.Shared.Threading;
@@ -8,6 +7,7 @@ using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model;
 using ShipWorks.Data.Model.Custom;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Filters.Content;
 
 namespace ShipWorks.Filters
 {
@@ -113,5 +113,17 @@ namespace ShipWorks.Filters
                 progressFilterCounts.Completed();
             }
         }
+
+        /// <summary>
+        /// Create a FilterEntity object of the given name from the specified definition
+        /// </summary>
+        public FilterEntity CreateFilterEntity(string name, FilterDefinition definition) =>
+            FilterHelper.CreateFilterEntity(name, definition);
+
+        /// <summary>
+        /// Create a FilterEntity object of the given name with no definition that represents a folder
+        /// </summary>
+        public FilterEntity CreateFilterFolderEntity(string name, FilterTarget target) =>
+            FilterHelper.CreateFilterFolderEntity(name, target);
     }
 }

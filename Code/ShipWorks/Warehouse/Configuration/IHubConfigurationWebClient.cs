@@ -1,5 +1,7 @@
-﻿using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using ShipWorks.Warehouse.Configuration.DTO;
+using ShipWorks.Warehouse.Configuration.Filters.DTO;
 
 namespace ShipWorks.Warehouse.Configuration
 {
@@ -12,5 +14,10 @@ namespace ShipWorks.Warehouse.Configuration
         /// Get the configuration from Hub
         /// </summary>
         Task<HubConfiguration> GetConfig(string warehouseID);
+
+        /// <summary>
+        /// Get list of filters from Hub
+        /// </summary>
+        Task<List<GetFiltersResponse>> GetFilters();
     }
 }

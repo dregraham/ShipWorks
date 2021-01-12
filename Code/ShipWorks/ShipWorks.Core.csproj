@@ -1578,13 +1578,16 @@
     <Compile Include="Warehouse\Configuration\Carriers\DTO\FedExAccountConfiguration.cs" />
     <Compile Include="Warehouse\Configuration\Carriers\DTO\OnTracAccountConfiguration.cs" />
     <Compile Include="Warehouse\Configuration\Carriers\DTO\UpsAccountConfiguration.cs" />
+    <Compile Include="Warehouse\Configuration\Filters\DTO\GetFiltersResponse.cs" />
+    <Compile Include="Warehouse\Configuration\Filters\HubFilterConfigurator.cs" />
+    <Compile Include="Warehouse\Configuration\Filters\IHubFilterConfigurator.cs" />
     <Compile Include="Warehouse\Configuration\HubConfigurationSynchronizer.cs" />
     <Compile Include="Warehouse\Configuration\HubConfigurator.cs" />
     <Compile Include="Warehouse\Configuration\IHubConfigurator.cs" />
     <Compile Include="Warehouse\Configuration\Stores\DTO\StoreConfiguration.cs" />
     <Compile Include="Warehouse\Configuration\Stores\DTO\StoreSynchronization.cs" />
     <Compile Include="Warehouse\Configuration\Stores\HubStoreConfigurator.cs" />
-    <Compile Include="Warehouse\Configuration\Stores\HubStoreImporter.cs" />
+    <Compile Include="Warehouse\Configuration\Stores\HubConfigurationImporter.cs" />
     <Compile Include="Warehouse\Configuration\Stores\HubStoreSynchronizer.cs" />
     <Compile Include="Warehouse\Configuration\Stores\IHubStoreConfigurator.cs" />
     <Compile Include="Warehouse\Configuration\Stores\IHubStoreSynchronizer.cs" />
