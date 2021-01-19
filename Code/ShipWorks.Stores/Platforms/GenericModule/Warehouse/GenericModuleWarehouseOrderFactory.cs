@@ -70,7 +70,7 @@ namespace ShipWorks.Stores.Platforms.GenericModule.Warehouse
             genericModuleOrderEntity.IsPrime = genericModuleWarehouseOrder.IsPrime == 1 ? AmazonIsPrime.Yes : AmazonIsPrime.No;
             genericModuleOrderEntity.IsSameDay = genericModuleWarehouseOrder.IsSameDay;
 
-            genericModuleOrderEntity.Marketplace = genericModuleWarehouseOrder.Marketplace;
+            genericModuleOrderEntity.Marketplace = genericModuleWarehouseOrder.Marketplace ?? string.Empty;
         }
 
         /// <summary>
