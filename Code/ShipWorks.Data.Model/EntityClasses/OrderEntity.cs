@@ -847,6 +847,8 @@ namespace ShipWorks.Data.Model.EntityClasses
 			_fieldsCustomProperties.Add("Custom9", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
 			_fieldsCustomProperties.Add("Custom10", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+			_fieldsCustomProperties.Add("DeliverByDate", fieldHashtable);
 		}
 		#endregion
 
@@ -1965,6 +1967,16 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			get { return (System.String)GetValue((int)OrderFieldIndex.Custom10, true); }
 			set	{ SetValue((int)OrderFieldIndex.Custom10, value); }
+		}
+
+		/// <summary> The DeliverByDate property of the Entity Order<br/><br/></summary>
+		/// <remarks>Mapped on  table field: "Order"."DeliverByDate"<br/>
+		/// Table field type characteristics (type, precision, scale, length): DateTime, 0, 0, 0<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		public virtual Nullable<System.DateTime> DeliverByDate
+		{
+			get { return (Nullable<System.DateTime>)GetValue((int)OrderFieldIndex.DeliverByDate, false); }
+			set	{ SetValue((int)OrderFieldIndex.DeliverByDate, value); }
 		}
 
 		/// <summary> Gets the EntityCollection with the related entities of type 'NoteEntity' which are related to this entity via a relation of type '1:n'. If the EntityCollection hasn't been fetched yet, the collection returned will be empty.<br/><br/></summary>
