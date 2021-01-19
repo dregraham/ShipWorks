@@ -74,7 +74,7 @@ namespace ShipWorks.Warehouse.Configuration.Filters
             }
             catch (Exception ex)
             {
-                /// wat
+                /// TODO: Add logging / error handling
             }
             finally
             {

@@ -56,11 +56,14 @@ namespace ShipWorks.Warehouse.Configuration.Filters.DTO
         public string Path { get; set; }
 
         /// <summary>
-        /// The filter's definition
+        /// The filter's definition as JSON
         /// </summary>
         [JsonProperty("definition")]
         public JToken DefinitionJson { get; set; }
 
+        /// <summary>
+        /// The filter's definition as XML
+        /// </summary>
         [JsonIgnore]
         public string DefinitionXML
         {
@@ -81,13 +84,11 @@ namespace ShipWorks.Warehouse.Configuration.Filters.DTO
                 }
 
             }
-
-            set
-            {
-
-            }
         }
 
+        /// <summary>
+        /// Recursive function to write the group containers of a filter
+        /// </summary>
         public void WriteGroupContainer(XmlWriter writer, JToken groupContainer)
         {
             writer.WriteStartElement("JoinType");
