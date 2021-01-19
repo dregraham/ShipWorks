@@ -535,7 +535,8 @@ CREATE TABLE [dbo].[Order]
 [Custom7] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL CONSTRAINT [DF_Order_Custom7] DEFAULT (''),
 [Custom8] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL CONSTRAINT [DF_Order_Custom8] DEFAULT (''),
 [Custom9] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL CONSTRAINT [DF_Order_Custom9] DEFAULT (''),
-[Custom10] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL CONSTRAINT [DF_Order_Custom10] DEFAULT ('')
+[Custom10] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL CONSTRAINT [DF_Order_Custom10] DEFAULT (''),
+[DeliverByDate] [datetime] NULL
 )
 GO
 PRINT N'Creating primary key [PK_Order] on [dbo].[Order]'
