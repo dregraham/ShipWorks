@@ -4,7 +4,7 @@ using ShipWorks.Filters.Content.SqlGeneration;
 namespace ShipWorks.Filters.Content.Conditions.Orders
 {
     /// <summary>
-    /// Condition base on the Custom10 of an Order
+    /// Condition based on the DeliverByDate of an Order
     /// </summary>
     [ConditionElement("Deliver By Date", "Order.DeliverByDate")]
     public class DeliverByDateCondition : DateCondition
