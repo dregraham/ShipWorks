@@ -818,6 +818,11 @@ namespace ShipWorks.Data.Grid.Columns.Definitions
                         new GridDateDisplayType { UseDescriptiveDates = true, TimeDisplayFormat = TimeDisplayFormat.None, DateFormat = "MMMM dd, yyyy"},
                         "Ship By Date", DateTimeUtility.ParseEnUS("01/01/9999 12:00 AM").ToUniversalTime(),
                         OrderFields.ShipByDate),
+                    
+                    new GridColumnDefinition("{55BDBA99-E087-4004-B7B8-0094F7E77B57}",
+                        new GridDateDisplayType { UseDescriptiveDates = true, TimeDisplayFormat = TimeDisplayFormat.None, DateFormat = "MMMM dd, yyyy"},
+                        "Deliver By Date", DateTimeUtility.ParseEnUS("01/01/9999 12:00 AM").ToUniversalTime(),
+                        OrderFields.DeliverByDate),
 
                     new GridColumnDefinition("{E4E7DC99-5FC4-46B7-93FA-4FB983B84EBC}",
                         new GridTextDisplayType(), "Custom Field 1", "Custom Field 1", OrderFields.Custom1),

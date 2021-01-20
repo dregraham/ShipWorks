@@ -49,6 +49,7 @@ namespace ShipWorks.Templates.Processing.TemplateXml.ElementOutlines
 
             AddElement("ChannelOrderID", () => Order.ChannelOrderID);
             AddElement("ShipByDate", () => Order.ShipByDate);
+            AddElement("DeliverByDate", () => Order.DeliverByDate);
 
             AddElement("CustomField1", () => Order.Custom1);
             AddElement("CustomField2", () => Order.Custom2);
