@@ -11352,6 +11352,11 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(GenericModuleOrderFieldIndex.IsSameDay);}
 		}
+		/// <summary>Creates a new GenericModuleOrderEntity.Marketplace field instance</summary>
+		public static EntityField2 Marketplace
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(GenericModuleOrderFieldIndex.Marketplace);}
+		}
 	}
 
 	/// <summary>Field Creation Class for entity GenericModuleOrderItemEntity</summary>
@@ -15941,6 +15946,11 @@ namespace ShipWorks.Data.Model.HelperClasses
 		public static EntityField2 IsSameDay
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(MagentoOrderFieldIndex.IsSameDay);}
+		}
+		/// <summary>Creates a new MagentoOrderEntity.Marketplace field instance</summary>
+		public static EntityField2 Marketplace
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(MagentoOrderFieldIndex.Marketplace);}
 		}
 		/// <summary>Creates a new MagentoOrderEntity.OrderID field instance</summary>
 		public static EntityField2 OrderID

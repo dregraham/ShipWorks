@@ -40,6 +40,7 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
             IsFBA = source.IsFBA;
             IsPrime = source.IsPrime;
             IsSameDay = source.IsSameDay;
+            Marketplace = source.Marketplace;
             
             
             
@@ -72,6 +73,12 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
         /// Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
         public System.Boolean IsSameDay { get; }
+        /// <summary> The Marketplace property of the Entity GenericModuleOrder<br/><br/>
+        /// </summary>
+        /// <remarks>Mapped on table field: "GenericModuleOrder"."Marketplace"<br/>
+        /// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 50<br/>
+        /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+        public System.String Marketplace { get; }
         
         
         

@@ -6384,7 +6384,8 @@ CREATE TABLE [dbo].[GenericModuleOrder](
 	[AmazonOrderID] [varchar](32) NOT NULL,
 	[IsFBA] [bit] NOT NULL,
 	[IsPrime] [int] NOT NULL,
-	[IsSameDay] bit NOT NULL
+	[IsSameDay] bit NOT NULL,
+	[Marketplace] [nvarchar](50) NOT NULL
  CONSTRAINT [PK_GenericModuleOrder] PRIMARY KEY CLUSTERED
 (
 	[OrderID] ASC
@@ -6398,6 +6399,9 @@ REFERENCES [dbo].[Order] ([OrderID])
 GO
 
 ALTER TABLE [dbo].[GenericModuleOrder] CHECK CONSTRAINT [FK_GenericModuleOrder_Order]
+GO
+
+CREATE NONCLUSTERED INDEX [IX_SWDefault_GenericModuleOrder_Marketplace] ON [dbo].[GenericModuleOrder] ([Marketplace])
 GO
 
 PRINT N'Creating MagentoOrder foreign key'

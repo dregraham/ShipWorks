@@ -271,6 +271,13 @@ namespace ShipWorks.Data.Grid.Columns.Definitions
                         "ShipSense", ShipSenseOrderRecognitionStatus.Recognized,
                         OrderFields.ShipSenseRecognitionStatus),
 
+                    new GridColumnDefinition("{847DC572-CBD8-49A4-AECC-6EA206AB30B6}", false,
+                        new GridTextDisplayType(), "Marketplace", "Store B",
+                        GenericModuleOrderFields.Marketplace)
+                        {
+                            StoreTypeCode = StoreTypeCode.GenericModule
+                        },
+
                     new GridColumnDefinition("{00B66937-CB98-4FE5-B916-8DA5BACC06B1}",
                         new GridEnumDisplayType<ChannelAdvisorCheckoutStatus>(EnumSortMethod.Description), "Checkout Status", ChannelAdvisorCheckoutStatus.Completed,
                         ChannelAdvisorOrderFields.OnlineCheckoutStatus)
@@ -811,7 +818,7 @@ namespace ShipWorks.Data.Grid.Columns.Definitions
                         StoreTypeCode = StoreTypeCode.Overstock
                     },
 
-                    new GridColumnDefinition("{5C7C3411-6B22-4DB5-BFCC-5131AFABD3DC}", 
+                    new GridColumnDefinition("{5C7C3411-6B22-4DB5-BFCC-5131AFABD3DC}",
                         new GridTextDisplayType(), "Channel Order ID", "ABC123", OrderFields.ChannelOrderID),
 
                     new GridColumnDefinition("{13F8DD60-0104-4575-9B9C-E3DCE4573FB0}",
