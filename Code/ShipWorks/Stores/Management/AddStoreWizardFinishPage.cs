@@ -49,7 +49,7 @@ namespace ShipWorks.Stores.Management
         /// <summary>
         /// Get the control to display at the top of the page
         /// </summary>
-        private IStoreWizardFinishPageControlFactory CreateFinishPageControl(StoreTypeCode storeTypeCode, ILifetimeScope scope) => 
+        private IStoreWizardFinishPageControlFactory CreateFinishPageControl(StoreTypeCode storeTypeCode, ILifetimeScope scope) =>
             scope.IsRegisteredWithKey<IStoreWizardFinishPageControlFactory>(storeTypeCode) ?
                     scope.ResolveKeyed<IStoreWizardFinishPageControlFactory>(storeTypeCode) :
                     scope.Resolve<IStoreWizardFinishPageControlFactory>();
@@ -59,15 +59,15 @@ namespace ShipWorks.Stores.Management
         /// </summary>
         private void OnLinkGettingStartedGuide(object sender, EventArgs e)
         {
-            WebHelper.OpenUrl("https://shipworks.zendesk.com/hc/en-us/articles/360022464752-ShipWorks-User-Manual", this);
+            WebHelper.OpenUrl("https://support.shipworks.com/hc/en-us/articles/360050817192-Quick-Start-Welcome", this);
         }
-        
+
         /// <summary>
         /// Open up the hub documentation
         /// </summary>
         private void OnLinkHubDoc(object sender, EventArgs e)
         {
-            WebHelper.OpenUrl("https://support.shipworks.com/hc/en-us/articles/360029495931-The-ShipWorks-Hub", this);
+            WebHelper.OpenUrl("https://support.shipworks.com/hc/en-us/articles/360054590831-Introduction-to-The-Hub", this);
         }
 
         /// <summary>

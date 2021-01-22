@@ -54,7 +54,7 @@
             // label11
             // 
             this.label11.AutoSize = true;
-            this.label11.Location = new System.Drawing.Point(278, 63);
+            this.label11.Location = new System.Drawing.Point(260, 63);
             this.label11.Name = "label11";
             this.label11.Size = new System.Drawing.Size(58, 13);
             this.label11.TabIndex = 23;
@@ -70,7 +70,7 @@
             this.linkGettingStarted.Name = "linkGettingStarted";
             this.linkGettingStarted.Size = new System.Drawing.Size(111, 13);
             this.linkGettingStarted.TabIndex = 22;
-            this.linkGettingStarted.Text = "Getting Started Guide";
+            this.linkGettingStarted.Text = "Quick Start Guide";
             this.linkGettingStarted.Click += new System.EventHandler(this.OnLinkGettingStartedGuide);
             // 
             // label9
