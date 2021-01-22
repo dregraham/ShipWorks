@@ -405,6 +405,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "ShippingPrintOutput"."ShippingPrintOutputID"<br/>
 		/// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, true, true</remarks>
+		[DataMember]
 		public virtual System.Int64 ShippingPrintOutputID
 		{
 			get { return (System.Int64)GetValue((int)ShippingPrintOutputFieldIndex.ShippingPrintOutputID, true); }
@@ -415,6 +416,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "ShippingPrintOutput"."RowVersion"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Timestamp, 0, 0, 2147483647<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Byte[] RowVersion
 		{
 			get { return (System.Byte[])GetValue((int)ShippingPrintOutputFieldIndex.RowVersion, true); }
@@ -425,6 +427,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "ShippingPrintOutput"."ShipmentType"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Int32 ShipmentType
 		{
 			get { return (System.Int32)GetValue((int)ShippingPrintOutputFieldIndex.ShipmentType, true); }
@@ -435,6 +438,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "ShippingPrintOutput"."Name"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 50<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.String Name
 		{
 			get { return (System.String)GetValue((int)ShippingPrintOutputFieldIndex.Name, true); }
@@ -443,6 +447,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 
 		/// <summary> Gets the EntityCollection with the related entities of type 'ShippingPrintOutputRuleEntity' which are related to this entity via a relation of type '1:n'. If the EntityCollection hasn't been fetched yet, the collection returned will be empty.<br/><br/></summary>
 		[TypeContainedAttribute(typeof(ShippingPrintOutputRuleEntity))]
+		[DataMember]
 		public virtual EntityCollection<ShippingPrintOutputRuleEntity> Rules
 		{
 			get { return GetOrCreateEntityCollection<ShippingPrintOutputRuleEntity, ShippingPrintOutputRuleEntityFactory>("ShippingPrintOutput", true, false, ref _rules);	}

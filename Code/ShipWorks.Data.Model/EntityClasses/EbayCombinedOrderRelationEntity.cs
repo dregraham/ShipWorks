@@ -534,6 +534,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "EbayCombinedOrderRelation"."EbayCombinedOrderRelationID"<br/>
 		/// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, true, true</remarks>
+		[DataMember]
 		public virtual System.Int64 EbayCombinedOrderRelationID
 		{
 			get { return (System.Int64)GetValue((int)EbayCombinedOrderRelationFieldIndex.EbayCombinedOrderRelationID, true); }
@@ -544,6 +545,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "EbayCombinedOrderRelation"."OrderID"<br/>
 		/// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Int64 OrderID
 		{
 			get { return (System.Int64)GetValue((int)EbayCombinedOrderRelationFieldIndex.OrderID, true); }
@@ -554,6 +556,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "EbayCombinedOrderRelation"."EbayOrderID"<br/>
 		/// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Int64 EbayOrderID
 		{
 			get { return (System.Int64)GetValue((int)EbayCombinedOrderRelationFieldIndex.EbayOrderID, true); }
@@ -564,6 +567,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "EbayCombinedOrderRelation"."StoreID"<br/>
 		/// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Int64 StoreID
 		{
 			get { return (System.Int64)GetValue((int)EbayCombinedOrderRelationFieldIndex.StoreID, true); }
@@ -572,6 +576,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 
 		/// <summary> Gets / sets related entity of type 'EbayOrderEntity' which has to be set using a fetch action earlier. If no related entity is set for this property, null is returned..<br/><br/></summary>
 		[Browsable(true)]
+		[DataMember]
 		public virtual EbayOrderEntity EbayOrder
 		{
 			get	{ return _ebayOrder; }
@@ -590,6 +595,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 
 		/// <summary> Gets / sets related entity of type 'EbayStoreEntity' which has to be set using a fetch action earlier. If no related entity is set for this property, null is returned..<br/><br/></summary>
 		[Browsable(true)]
+		[DataMember]
 		public virtual EbayStoreEntity EbayStore
 		{
 			get	{ return _ebayStore; }

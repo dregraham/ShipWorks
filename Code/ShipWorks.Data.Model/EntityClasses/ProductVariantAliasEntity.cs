@@ -458,6 +458,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "ProductVariantAlias"."ProductVariantAliasID"<br/>
 		/// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, true, true</remarks>
+		[DataMember]
 		public virtual System.Int64 ProductVariantAliasID
 		{
 			get { return (System.Int64)GetValue((int)ProductVariantAliasFieldIndex.ProductVariantAliasID, true); }
@@ -468,6 +469,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "ProductVariantAlias"."ProductVariantID"<br/>
 		/// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Int64 ProductVariantID
 		{
 			get { return (System.Int64)GetValue((int)ProductVariantAliasFieldIndex.ProductVariantID, true); }
@@ -478,6 +480,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "ProductVariantAlias"."AliasName"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 50<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.String AliasName
 		{
 			get { return (System.String)GetValue((int)ProductVariantAliasFieldIndex.AliasName, true); }
@@ -488,6 +491,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "ProductVariantAlias"."Sku"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 300<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.String Sku
 		{
 			get { return (System.String)GetValue((int)ProductVariantAliasFieldIndex.Sku, true); }
@@ -498,6 +502,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "ProductVariantAlias"."IsDefault"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Boolean IsDefault
 		{
 			get { return (System.Boolean)GetValue((int)ProductVariantAliasFieldIndex.IsDefault, true); }
@@ -506,6 +511,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 
 		/// <summary> Gets / sets related entity of type 'ProductVariantEntity' which has to be set using a fetch action earlier. If no related entity is set for this property, null is returned..<br/><br/></summary>
 		[Browsable(true)]
+		[DataMember]
 		public virtual ProductVariantEntity ProductVariant
 		{
 			get	{ return _productVariant; }

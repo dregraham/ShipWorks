@@ -470,6 +470,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "ShipmentCustomsItem"."ShipmentCustomsItemID"<br/>
 		/// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, true, true</remarks>
+		[DataMember]
 		public virtual System.Int64 ShipmentCustomsItemID
 		{
 			get { return (System.Int64)GetValue((int)ShipmentCustomsItemFieldIndex.ShipmentCustomsItemID, true); }
@@ -480,6 +481,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "ShipmentCustomsItem"."RowVersion"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Timestamp, 0, 0, 2147483647<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Byte[] RowVersion
 		{
 			get { return (System.Byte[])GetValue((int)ShipmentCustomsItemFieldIndex.RowVersion, true); }
@@ -490,6 +492,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "ShipmentCustomsItem"."ShipmentID"<br/>
 		/// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Int64 ShipmentID
 		{
 			get { return (System.Int64)GetValue((int)ShipmentCustomsItemFieldIndex.ShipmentID, true); }
@@ -500,6 +503,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "ShipmentCustomsItem"."Description"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 150<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.String Description
 		{
 			get { return (System.String)GetValue((int)ShipmentCustomsItemFieldIndex.Description, true); }
@@ -510,6 +514,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "ShipmentCustomsItem"."Quantity"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Float, 38, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Double Quantity
 		{
 			get { return (System.Double)GetValue((int)ShipmentCustomsItemFieldIndex.Quantity, true); }
@@ -520,6 +525,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "ShipmentCustomsItem"."Weight"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Float, 38, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Double Weight
 		{
 			get { return (System.Double)GetValue((int)ShipmentCustomsItemFieldIndex.Weight, true); }
@@ -530,6 +536,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "ShipmentCustomsItem"."UnitValue"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Money, 19, 4, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Decimal UnitValue
 		{
 			get { return (System.Decimal)GetValue((int)ShipmentCustomsItemFieldIndex.UnitValue, true); }
@@ -540,6 +547,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "ShipmentCustomsItem"."CountryOfOrigin"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 50<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.String CountryOfOrigin
 		{
 			get { return (System.String)GetValue((int)ShipmentCustomsItemFieldIndex.CountryOfOrigin, true); }
@@ -550,6 +558,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "ShipmentCustomsItem"."HarmonizedCode"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 20<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.String HarmonizedCode
 		{
 			get { return (System.String)GetValue((int)ShipmentCustomsItemFieldIndex.HarmonizedCode, true); }
@@ -560,6 +569,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "ShipmentCustomsItem"."NumberOfPieces"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Int32 NumberOfPieces
 		{
 			get { return (System.Int32)GetValue((int)ShipmentCustomsItemFieldIndex.NumberOfPieces, true); }
@@ -570,6 +580,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "ShipmentCustomsItem"."UnitPriceAmount"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Money, 19, 4, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Decimal UnitPriceAmount
 		{
 			get { return (System.Decimal)GetValue((int)ShipmentCustomsItemFieldIndex.UnitPriceAmount, true); }
@@ -578,6 +589,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 
 		/// <summary> Gets / sets related entity of type 'ShipmentEntity' which has to be set using a fetch action earlier. If no related entity is set for this property, null is returned..<br/><br/></summary>
 		[Browsable(true)]
+		[DataMember]
 		public virtual ShipmentEntity Shipment
 		{
 			get	{ return _shipment; }

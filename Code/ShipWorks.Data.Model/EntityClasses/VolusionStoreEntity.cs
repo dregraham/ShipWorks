@@ -406,6 +406,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "VolusionStore"."StoreUrl"<br/>
 		/// Table field type characteristics (type, precision, scale, length): VarChar, 0, 0, 255<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.String StoreUrl
 		{
 			get { return (System.String)GetValue((int)VolusionStoreFieldIndex.StoreUrl, true); }
@@ -416,6 +417,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "VolusionStore"."WebUserName"<br/>
 		/// Table field type characteristics (type, precision, scale, length): VarChar, 0, 0, 50<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.String WebUserName
 		{
 			get { return (System.String)GetValue((int)VolusionStoreFieldIndex.WebUserName, true); }
@@ -426,6 +428,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "VolusionStore"."WebPassword"<br/>
 		/// Table field type characteristics (type, precision, scale, length): VarChar, 0, 0, 70<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.String WebPassword
 		{
 			get { return (System.String)GetValue((int)VolusionStoreFieldIndex.WebPassword, true); }
@@ -436,6 +439,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "VolusionStore"."ApiPassword"<br/>
 		/// Table field type characteristics (type, precision, scale, length): VarChar, 0, 0, 100<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.String ApiPassword
 		{
 			get { return (System.String)GetValue((int)VolusionStoreFieldIndex.ApiPassword, true); }
@@ -446,6 +450,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "VolusionStore"."PaymentMethods"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Xml, 0, 0, 2147483647<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.String PaymentMethods
 		{
 			get { return (System.String)GetValue((int)VolusionStoreFieldIndex.PaymentMethods, true); }
@@ -456,6 +461,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "VolusionStore"."ShipmentMethods"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Xml, 0, 0, 2147483647<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.String ShipmentMethods
 		{
 			get { return (System.String)GetValue((int)VolusionStoreFieldIndex.ShipmentMethods, true); }
@@ -466,6 +472,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "VolusionStore"."DownloadOrderStatuses"<br/>
 		/// Table field type characteristics (type, precision, scale, length): VarChar, 0, 0, 255<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.String DownloadOrderStatuses
 		{
 			get { return (System.String)GetValue((int)VolusionStoreFieldIndex.DownloadOrderStatuses, true); }
@@ -476,6 +483,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "VolusionStore"."ServerTimeZone"<br/>
 		/// Table field type characteristics (type, precision, scale, length): VarChar, 0, 0, 30<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.String ServerTimeZone
 		{
 			get { return (System.String)GetValue((int)VolusionStoreFieldIndex.ServerTimeZone, true); }
@@ -486,6 +494,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "VolusionStore"."ServerTimeZoneDST"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Boolean ServerTimeZoneDST
 		{
 			get { return (System.Boolean)GetValue((int)VolusionStoreFieldIndex.ServerTimeZoneDST, true); }

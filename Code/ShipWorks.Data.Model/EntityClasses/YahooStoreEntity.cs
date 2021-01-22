@@ -490,6 +490,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "YahooStore"."YahooEmailAccountID"<br/>
 		/// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Int64 YahooEmailAccountID
 		{
 			get { return (System.Int64)GetValue((int)YahooStoreFieldIndex.YahooEmailAccountID, true); }
@@ -500,6 +501,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "YahooStore"."TrackingUpdatePassword"<br/>
 		/// Table field type characteristics (type, precision, scale, length): VarChar, 0, 0, 100<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.String TrackingUpdatePassword
 		{
 			get { return (System.String)GetValue((int)YahooStoreFieldIndex.TrackingUpdatePassword, true); }
@@ -510,6 +512,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "YahooStore"."YahooStoreID"<br/>
 		/// Table field type characteristics (type, precision, scale, length): VarChar, 0, 0, 50<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.String YahooStoreID
 		{
 			get { return (System.String)GetValue((int)YahooStoreFieldIndex.YahooStoreID, true); }
@@ -520,6 +523,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "YahooStore"."AccessToken"<br/>
 		/// Table field type characteristics (type, precision, scale, length): VarChar, 0, 0, 200<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.String AccessToken
 		{
 			get { return (System.String)GetValue((int)YahooStoreFieldIndex.AccessToken, true); }
@@ -530,6 +534,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "YahooStore"."BackupOrderNumber"<br/>
 		/// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		[DataMember]
 		public virtual Nullable<System.Int64> BackupOrderNumber
 		{
 			get { return (Nullable<System.Int64>)GetValue((int)YahooStoreFieldIndex.BackupOrderNumber, false); }
@@ -538,6 +543,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 
 		/// <summary> Gets / sets related entity of type 'EmailAccountEntity' which has to be set using a fetch action earlier. If no related entity is set for this property, null is returned..<br/><br/></summary>
 		[Browsable(true)]
+		[DataMember]
 		public virtual EmailAccountEntity YahooEmailAccount
 		{
 			get	{ return _yahooEmailAccount; }

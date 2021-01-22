@@ -207,6 +207,7 @@
     <Compile Include="Collections\ListExtensions.cs" />
     <Compile Include="Collections\BasicSortDefinition.cs" />
     <Compile Include="ComponentRegistration\ComponentAttribute.cs" />
+    <Compile Include="ComponentRegistration\KeyAllComponent.cs" />
     <Compile Include="ComponentRegistration\KeyedComponent.cs" />
     <Compile Include="ComponentRegistration\NamedComponentAttribute.cs" />
     <Compile Include="ComponentRegistration\Ordering\OrderAttribute.cs" />

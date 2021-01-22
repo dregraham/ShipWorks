@@ -394,6 +394,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "LemonStandStore"."Token"<br/>
 		/// Table field type characteristics (type, precision, scale, length): VarChar, 0, 0, 100<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.String Token
 		{
 			get { return (System.String)GetValue((int)LemonStandStoreFieldIndex.Token, true); }
@@ -404,6 +405,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "LemonStandStore"."StoreURL"<br/>
 		/// Table field type characteristics (type, precision, scale, length): VarChar, 0, 0, 255<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.String StoreURL
 		{
 			get { return (System.String)GetValue((int)LemonStandStoreFieldIndex.StoreURL, true); }
@@ -414,6 +416,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "LemonStandStore"."StatusCodes"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Xml, 0, 0, 2147483647<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		[DataMember]
 		public virtual System.String StatusCodes
 		{
 			get { return (System.String)GetValue((int)LemonStandStoreFieldIndex.StatusCodes, true); }

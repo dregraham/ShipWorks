@@ -489,6 +489,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "AuditChange"."AuditChangeID"<br/>
 		/// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, true, true</remarks>
+		[DataMember]
 		public virtual System.Int64 AuditChangeID
 		{
 			get { return (System.Int64)GetValue((int)AuditChangeFieldIndex.AuditChangeID, true); }
@@ -499,6 +500,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "AuditChange"."AuditID"<br/>
 		/// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Int64 AuditID
 		{
 			get { return (System.Int64)GetValue((int)AuditChangeFieldIndex.AuditID, true); }
@@ -509,6 +511,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "AuditChange"."ChangeType"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Int32 ChangeType
 		{
 			get { return (System.Int32)GetValue((int)AuditChangeFieldIndex.ChangeType, true); }
@@ -519,6 +522,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "AuditChange"."ObjectID"<br/>
 		/// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Int64 EntityID
 		{
 			get { return (System.Int64)GetValue((int)AuditChangeFieldIndex.EntityID, true); }
@@ -527,6 +531,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 
 		/// <summary> Gets the EntityCollection with the related entities of type 'AuditChangeDetailEntity' which are related to this entity via a relation of type '1:n'. If the EntityCollection hasn't been fetched yet, the collection returned will be empty.<br/><br/></summary>
 		[TypeContainedAttribute(typeof(AuditChangeDetailEntity))]
+		[DataMember]
 		public virtual EntityCollection<AuditChangeDetailEntity> AuditChangeDetails
 		{
 			get { return GetOrCreateEntityCollection<AuditChangeDetailEntity, AuditChangeDetailEntityFactory>("", false, false, ref _auditChangeDetails);	}
@@ -534,6 +539,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 
 		/// <summary> Gets / sets related entity of type 'AuditEntity' which has to be set using a fetch action earlier. If no related entity is set for this property, null is returned..<br/><br/></summary>
 		[Browsable(true)]
+		[DataMember]
 		public virtual AuditEntity Audit
 		{
 			get	{ return _audit; }

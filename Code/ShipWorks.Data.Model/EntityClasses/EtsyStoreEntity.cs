@@ -398,6 +398,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "EtsyStore"."EtsyShopID"<br/>
 		/// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Int64 EtsyShopID
 		{
 			get { return (System.Int64)GetValue((int)EtsyStoreFieldIndex.EtsyShopID, true); }
@@ -408,6 +409,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "EtsyStore"."EtsyLogin"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 255<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.String EtsyLoginName
 		{
 			get { return (System.String)GetValue((int)EtsyStoreFieldIndex.EtsyLoginName, true); }
@@ -418,6 +420,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "EtsyStore"."EtsyStoreName"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 255<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.String EtsyStoreName
 		{
 			get { return (System.String)GetValue((int)EtsyStoreFieldIndex.EtsyStoreName, true); }
@@ -428,6 +431,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "EtsyStore"."OAuthToken"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 50<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.String OAuthToken
 		{
 			get { return (System.String)GetValue((int)EtsyStoreFieldIndex.OAuthToken, true); }
@@ -438,6 +442,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "EtsyStore"."OAuthTokenSecret"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 50<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.String OAuthTokenSecret
 		{
 			get { return (System.String)GetValue((int)EtsyStoreFieldIndex.OAuthTokenSecret, true); }

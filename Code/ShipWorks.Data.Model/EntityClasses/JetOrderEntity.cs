@@ -447,6 +447,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "JetOrder"."MerchantOrderId"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 50<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.String MerchantOrderId
 		{
 			get { return (System.String)GetValue((int)JetOrderFieldIndex.MerchantOrderId, true); }
@@ -455,6 +456,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 
 		/// <summary> Gets the EntityCollection with the related entities of type 'JetOrderSearchEntity' which are related to this entity via a relation of type '1:n'. If the EntityCollection hasn't been fetched yet, the collection returned will be empty.<br/><br/></summary>
 		[TypeContainedAttribute(typeof(JetOrderSearchEntity))]
+		[DataMember]
 		public virtual EntityCollection<JetOrderSearchEntity> JetOrderSearch
 		{
 			get { return GetOrCreateEntityCollection<JetOrderSearchEntity, JetOrderSearchEntityFactory>("JetOrder", true, false, ref _jetOrderSearch);	}

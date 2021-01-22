@@ -451,6 +451,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "ProStoresOrder"."ConfirmationNumber"<br/>
 		/// Table field type characteristics (type, precision, scale, length): VarChar, 0, 0, 12<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.String ConfirmationNumber
 		{
 			get { return (System.String)GetValue((int)ProStoresOrderFieldIndex.ConfirmationNumber, true); }
@@ -461,6 +462,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "ProStoresOrder"."AuthorizedDate"<br/>
 		/// Table field type characteristics (type, precision, scale, length): DateTime, 0, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		[DataMember]
 		public virtual Nullable<System.DateTime> AuthorizedDate
 		{
 			get { return (Nullable<System.DateTime>)GetValue((int)ProStoresOrderFieldIndex.AuthorizedDate, false); }
@@ -471,6 +473,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "ProStoresOrder"."AuthorizedBy"<br/>
 		/// Table field type characteristics (type, precision, scale, length): VarChar, 0, 0, 50<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.String AuthorizedBy
 		{
 			get { return (System.String)GetValue((int)ProStoresOrderFieldIndex.AuthorizedBy, true); }
@@ -479,6 +482,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 
 		/// <summary> Gets the EntityCollection with the related entities of type 'ProStoresOrderSearchEntity' which are related to this entity via a relation of type '1:n'. If the EntityCollection hasn't been fetched yet, the collection returned will be empty.<br/><br/></summary>
 		[TypeContainedAttribute(typeof(ProStoresOrderSearchEntity))]
+		[DataMember]
 		public virtual EntityCollection<ProStoresOrderSearchEntity> ProStoresOrderSearch
 		{
 			get { return GetOrCreateEntityCollection<ProStoresOrderSearchEntity, ProStoresOrderSearchEntityFactory>("ProStoresOrder", true, false, ref _proStoresOrderSearch);	}

@@ -14,8 +14,8 @@ using ShipWorks.Common.Net;
 using ShipWorks.Data;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
-using ShipWorks.Editions;
 using ShipWorks.Stores.Management;
+using ShipWorks.Warehouse.Configuration.Stores.DTO;
 
 namespace ShipWorks.Stores.Warehouse
 {
@@ -108,6 +108,7 @@ namespace ShipWorks.Stores.Warehouse
                     request.RequestFormat = DataFormat.Json;
 
                     Store storeDto = await GetStoreDtoFactory(store).Create(store).ConfigureAwait(false);
+
                     if (!isNew)
                     {
                         storeDto.MigrationWarehouseId = Guid.Parse(configurationData.FetchReadOnly().WarehouseID).ToString("D");
@@ -148,5 +149,46 @@ namespace ShipWorks.Stores.Warehouse
             storeDtoFactories.TryGetValue(store.StoreTypeCode, out IStoreDtoFactory storeDtoFactory) ?
                 storeDtoFactory :
                 throw new NotSupportedException($"The StoreType {EnumHelper.GetDescription(store.StoreTypeCode)} is not supported for ShipWorks Warehouse mode.");
+
+        /// <summary>
+        /// Synchronize the given stores with the Hub
+        /// </summary>
+        public async Task<Result> SynchronizeStores(StoreSynchronizationRequest storesDTO)
+        {
+            try
+            {
+                if (licenseService.IsHub)
+                {
+                    IRestRequest request = new RestRequest(WarehouseEndpoints.SyncStores, Method.POST);
+                    request.JsonSerializer = new RestSharpJsonNetSerializer(new JsonSerializerSettings
+                    {
+                        ContractResolver = new DefaultContractResolver
+                        {
+                            NamingStrategy = new CamelCaseNamingStrategy
+                            {
+                                OverrideSpecifiedNames = false
+                            }
+                        },
+                    });
+                    request.RequestFormat = DataFormat.Json;
+                    request.AddJsonBody(storesDTO);
+
+                    GenericResult<IRestResponse> response = await warehouseRequestClient
+                        .MakeRequest(request, "Synchronize Store")
+                        .ConfigureAwait(false);
+
+                    if (response.Failure)
+                    {
+                        return Result.FromError(response.Message);
+                    }
+                }
+
+                return Result.FromSuccess();
+            }
+            catch (Exception ex)
+            {
+                return Result.FromError(ex);
+            }
+        }
     }
 }

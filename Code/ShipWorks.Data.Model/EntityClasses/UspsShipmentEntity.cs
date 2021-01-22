@@ -551,6 +551,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "UspsShipment"."ShipmentID"<br/>
 		/// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, true, false</remarks>
+		[DataMember]
 		public virtual System.Int64 ShipmentID
 		{
 			get { return (System.Int64)GetValue((int)UspsShipmentFieldIndex.ShipmentID, true); }
@@ -561,6 +562,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "UspsShipment"."UspsAccountID"<br/>
 		/// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Int64 UspsAccountID
 		{
 			get { return (System.Int64)GetValue((int)UspsShipmentFieldIndex.UspsAccountID, true); }
@@ -571,6 +573,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "UspsShipment"."HidePostage"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Boolean HidePostage
 		{
 			get { return (System.Boolean)GetValue((int)UspsShipmentFieldIndex.HidePostage, true); }
@@ -581,6 +584,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "UspsShipment"."RequireFullAddressValidation"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Boolean RequireFullAddressValidation
 		{
 			get { return (System.Boolean)GetValue((int)UspsShipmentFieldIndex.RequireFullAddressValidation, true); }
@@ -591,6 +595,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "UspsShipment"."IntegratorTransactionID"<br/>
 		/// Table field type characteristics (type, precision, scale, length): UniqueIdentifier, 0, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Guid IntegratorTransactionID
 		{
 			get { return (System.Guid)GetValue((int)UspsShipmentFieldIndex.IntegratorTransactionID, true); }
@@ -601,6 +606,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "UspsShipment"."UspsTransactionID"<br/>
 		/// Table field type characteristics (type, precision, scale, length): UniqueIdentifier, 0, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Guid UspsTransactionID
 		{
 			get { return (System.Guid)GetValue((int)UspsShipmentFieldIndex.UspsTransactionID, true); }
@@ -611,6 +617,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "UspsShipment"."OriginalUspsAccountID"<br/>
 		/// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		[DataMember]
 		public virtual Nullable<System.Int64> OriginalUspsAccountID
 		{
 			get { return (Nullable<System.Int64>)GetValue((int)UspsShipmentFieldIndex.OriginalUspsAccountID, false); }
@@ -621,6 +628,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "UspsShipment"."ScanFormBatchID"<br/>
 		/// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		[DataMember]
 		public virtual Nullable<System.Int64> ScanFormBatchID
 		{
 			get { return (Nullable<System.Int64>)GetValue((int)UspsShipmentFieldIndex.ScanFormBatchID, false); }
@@ -631,6 +639,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "UspsShipment"."RequestedLabelFormat"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Int32 RequestedLabelFormat
 		{
 			get { return (System.Int32)GetValue((int)UspsShipmentFieldIndex.RequestedLabelFormat, true); }
@@ -641,6 +650,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "UspsShipment"."RateShop"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Boolean RateShop
 		{
 			get { return (System.Boolean)GetValue((int)UspsShipmentFieldIndex.RateShop, true); }
@@ -651,6 +661,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "UspsShipment"."Insurance"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Boolean Insurance
 		{
 			get { return (System.Boolean)GetValue((int)UspsShipmentFieldIndex.Insurance, true); }
@@ -659,6 +670,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 
 		/// <summary> Gets / sets related entity of type 'ScanFormBatchEntity' which has to be set using a fetch action earlier. If no related entity is set for this property, null is returned..<br/><br/></summary>
 		[Browsable(true)]
+		[DataMember]
 		public virtual ScanFormBatchEntity ScanFormBatch
 		{
 			get	{ return _scanFormBatch; }
@@ -678,6 +690,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <summary> Gets / sets related entity of type 'PostalShipmentEntity' which has to be set using a fetch action earlier. If no related entity is set for this property, null is returned.<br/><br/>
 		/// </summary>
 		[Browsable(true)]
+		[DataMember]
 		public virtual PostalShipmentEntity PostalShipment
 		{
 			get { return _postalShipment; }

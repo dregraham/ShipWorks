@@ -3,7 +3,7 @@ cls
 remove-item Artifacts\Application\Obfuscated\*.* 
 remove-item Artifacts\Application\Original\*.* 
     
-rake build:debug
+.\cake build:debug
 
 copy Artifacts\Application\ShipWorks.* Artifacts\Application\Original\
 copy Artifacts\Application\Interapptive.* Artifacts\Application\Original\

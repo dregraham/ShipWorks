@@ -396,6 +396,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "InfopiaOrderItem"."Marketplace"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 50<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.String Marketplace
 		{
 			get { return (System.String)GetValue((int)InfopiaOrderItemFieldIndex.Marketplace, true); }
@@ -406,6 +407,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "InfopiaOrderItem"."MarketplaceItemID"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 20<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.String MarketplaceItemID
 		{
 			get { return (System.String)GetValue((int)InfopiaOrderItemFieldIndex.MarketplaceItemID, true); }
@@ -416,6 +418,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "InfopiaOrderItem"."BuyerID"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 50<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.String BuyerID
 		{
 			get { return (System.String)GetValue((int)InfopiaOrderItemFieldIndex.BuyerID, true); }

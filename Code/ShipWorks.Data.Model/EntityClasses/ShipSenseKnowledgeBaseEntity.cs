@@ -362,6 +362,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "ShipSenseKnowledgeBase"."Hash"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 64<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, true, false</remarks>
+		[DataMember]
 		public virtual System.String Hash
 		{
 			get { return (System.String)GetValue((int)ShipSenseKnowledgebaseFieldIndex.Hash, true); }
@@ -372,6 +373,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "ShipSenseKnowledgeBase"."Entry"<br/>
 		/// Table field type characteristics (type, precision, scale, length): VarBinary, 0, 0, 2147483647<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Byte[] Entry
 		{
 			get { return (System.Byte[])GetValue((int)ShipSenseKnowledgebaseFieldIndex.Entry, true); }

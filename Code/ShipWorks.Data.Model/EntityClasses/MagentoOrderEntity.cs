@@ -447,6 +447,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "MagentoOrder"."MagentoOrderID"<br/>
 		/// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Int64 MagentoOrderID
 		{
 			get { return (System.Int64)GetValue((int)MagentoOrderFieldIndex.MagentoOrderID, true); }
@@ -455,6 +456,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 
 		/// <summary> Gets the EntityCollection with the related entities of type 'MagentoOrderSearchEntity' which are related to this entity via a relation of type '1:n'. If the EntityCollection hasn't been fetched yet, the collection returned will be empty.<br/><br/></summary>
 		[TypeContainedAttribute(typeof(MagentoOrderSearchEntity))]
+		[DataMember]
 		public virtual EntityCollection<MagentoOrderSearchEntity> MagentoOrderSearch
 		{
 			get { return GetOrCreateEntityCollection<MagentoOrderSearchEntity, MagentoOrderSearchEntityFactory>("MagentoOrder", true, false, ref _magentoOrderSearch);	}

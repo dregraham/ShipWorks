@@ -384,6 +384,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "LabelSheet"."LabelSheetID"<br/>
 		/// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, true, true</remarks>
+		[DataMember]
 		public virtual System.Int64 LabelSheetID
 		{
 			get { return (System.Int64)GetValue((int)LabelSheetFieldIndex.LabelSheetID, true); }
@@ -394,6 +395,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "LabelSheet"."RowVersion"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Timestamp, 0, 0, 2147483647<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Byte[] RowVersion
 		{
 			get { return (System.Byte[])GetValue((int)LabelSheetFieldIndex.RowVersion, true); }
@@ -404,6 +406,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "LabelSheet"."Name"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 100<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.String Name
 		{
 			get { return (System.String)GetValue((int)LabelSheetFieldIndex.Name, true); }
@@ -414,6 +417,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "LabelSheet"."PaperSizeHeight"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Float, 38, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Double PaperSizeHeight
 		{
 			get { return (System.Double)GetValue((int)LabelSheetFieldIndex.PaperSizeHeight, true); }
@@ -424,6 +428,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "LabelSheet"."PaperSizeWidth"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Float, 38, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Double PaperSizeWidth
 		{
 			get { return (System.Double)GetValue((int)LabelSheetFieldIndex.PaperSizeWidth, true); }
@@ -434,6 +439,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "LabelSheet"."MarginTop"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Float, 38, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Double MarginTop
 		{
 			get { return (System.Double)GetValue((int)LabelSheetFieldIndex.MarginTop, true); }
@@ -444,6 +450,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "LabelSheet"."MarginLeft"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Float, 38, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Double MarginLeft
 		{
 			get { return (System.Double)GetValue((int)LabelSheetFieldIndex.MarginLeft, true); }
@@ -454,6 +461,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "LabelSheet"."LabelHeight"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Float, 38, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Double LabelHeight
 		{
 			get { return (System.Double)GetValue((int)LabelSheetFieldIndex.LabelHeight, true); }
@@ -464,6 +472,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "LabelSheet"."LabelWidth"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Float, 38, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Double LabelWidth
 		{
 			get { return (System.Double)GetValue((int)LabelSheetFieldIndex.LabelWidth, true); }
@@ -474,6 +483,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "LabelSheet"."VerticalSpacing"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Float, 38, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Double VerticalSpacing
 		{
 			get { return (System.Double)GetValue((int)LabelSheetFieldIndex.VerticalSpacing, true); }
@@ -484,6 +494,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "LabelSheet"."HorizontalSpacing"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Float, 38, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Double HorizontalSpacing
 		{
 			get { return (System.Double)GetValue((int)LabelSheetFieldIndex.HorizontalSpacing, true); }
@@ -494,6 +505,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "LabelSheet"."Rows"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Int32 Rows
 		{
 			get { return (System.Int32)GetValue((int)LabelSheetFieldIndex.Rows, true); }
@@ -504,6 +516,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "LabelSheet"."Columns"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Int32 Columns
 		{
 			get { return (System.Int32)GetValue((int)LabelSheetFieldIndex.Columns, true); }

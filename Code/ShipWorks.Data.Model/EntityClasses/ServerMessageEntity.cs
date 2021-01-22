@@ -429,6 +429,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "ServerMessage"."ServerMessageID"<br/>
 		/// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, true, true</remarks>
+		[DataMember]
 		public virtual System.Int64 ServerMessageID
 		{
 			get { return (System.Int64)GetValue((int)ServerMessageFieldIndex.ServerMessageID, true); }
@@ -439,6 +440,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "ServerMessage"."RowVersion"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Timestamp, 0, 0, 2147483647<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Byte[] RowVersion
 		{
 			get { return (System.Byte[])GetValue((int)ServerMessageFieldIndex.RowVersion, true); }
@@ -449,6 +451,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "ServerMessage"."Number"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Int32 Number
 		{
 			get { return (System.Int32)GetValue((int)ServerMessageFieldIndex.Number, true); }
@@ -459,6 +462,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "ServerMessage"."Published"<br/>
 		/// Table field type characteristics (type, precision, scale, length): DateTime, 0, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.DateTime Published
 		{
 			get { return (System.DateTime)GetValue((int)ServerMessageFieldIndex.Published, true); }
@@ -469,6 +473,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "ServerMessage"."Active"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Boolean Active
 		{
 			get { return (System.Boolean)GetValue((int)ServerMessageFieldIndex.Active, true); }
@@ -479,6 +484,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "ServerMessage"."Dismissable"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Boolean Dismissable
 		{
 			get { return (System.Boolean)GetValue((int)ServerMessageFieldIndex.Dismissable, true); }
@@ -489,6 +495,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "ServerMessage"."Expires"<br/>
 		/// Table field type characteristics (type, precision, scale, length): DateTime, 0, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		[DataMember]
 		public virtual Nullable<System.DateTime> Expires
 		{
 			get { return (Nullable<System.DateTime>)GetValue((int)ServerMessageFieldIndex.Expires, false); }
@@ -499,6 +506,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "ServerMessage"."ResponseTo"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		[DataMember]
 		public virtual Nullable<System.Int32> ResponseTo
 		{
 			get { return (Nullable<System.Int32>)GetValue((int)ServerMessageFieldIndex.ResponseTo, false); }
@@ -509,6 +517,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "ServerMessage"."ResponseAction"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		[DataMember]
 		public virtual Nullable<System.Int32> ResponseAction
 		{
 			get { return (Nullable<System.Int32>)GetValue((int)ServerMessageFieldIndex.ResponseAction, false); }
@@ -519,6 +528,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "ServerMessage"."EditTo"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		[DataMember]
 		public virtual Nullable<System.Int32> EditTo
 		{
 			get { return (Nullable<System.Int32>)GetValue((int)ServerMessageFieldIndex.EditTo, false); }
@@ -529,6 +539,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "ServerMessage"."Image"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 350<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.String Image
 		{
 			get { return (System.String)GetValue((int)ServerMessageFieldIndex.Image, true); }
@@ -539,6 +550,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "ServerMessage"."PrimaryText"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 30<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.String PrimaryText
 		{
 			get { return (System.String)GetValue((int)ServerMessageFieldIndex.PrimaryText, true); }
@@ -549,6 +561,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "ServerMessage"."SecondaryText"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 60<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.String SecondaryText
 		{
 			get { return (System.String)GetValue((int)ServerMessageFieldIndex.SecondaryText, true); }
@@ -559,6 +572,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "ServerMessage"."Actions"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NText, 0, 0, 1073741823<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.String Actions
 		{
 			get { return (System.String)GetValue((int)ServerMessageFieldIndex.Actions, true); }
@@ -569,6 +583,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "ServerMessage"."Stores"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NText, 0, 0, 1073741823<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.String Stores
 		{
 			get { return (System.String)GetValue((int)ServerMessageFieldIndex.Stores, true); }
@@ -579,6 +594,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "ServerMessage"."Shippers"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NText, 0, 0, 1073741823<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.String Shippers
 		{
 			get { return (System.String)GetValue((int)ServerMessageFieldIndex.Shippers, true); }
@@ -587,6 +603,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 
 		/// <summary> Gets the EntityCollection with the related entities of type 'ServerMessageSignoffEntity' which are related to this entity via a relation of type '1:n'. If the EntityCollection hasn't been fetched yet, the collection returned will be empty.<br/><br/></summary>
 		[TypeContainedAttribute(typeof(ServerMessageSignoffEntity))]
+		[DataMember]
 		public virtual EntityCollection<ServerMessageSignoffEntity> Signoffs
 		{
 			get { return GetOrCreateEntityCollection<ServerMessageSignoffEntity, ServerMessageSignoffEntityFactory>("ServerMessage", true, false, ref _signoffs);	}

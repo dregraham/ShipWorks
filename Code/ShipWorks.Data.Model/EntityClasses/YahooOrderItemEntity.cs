@@ -394,6 +394,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "YahooOrderItem"."YahooProductID"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 255<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.String YahooProductID
 		{
 			get { return (System.String)GetValue((int)YahooOrderItemFieldIndex.YahooProductID, true); }
@@ -404,6 +405,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "YahooOrderItem"."Url"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 255<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.String Url
 		{
 			get { return (System.String)GetValue((int)YahooOrderItemFieldIndex.Url, true); }

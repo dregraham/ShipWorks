@@ -424,6 +424,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "AmazonStore"."AmazonApi"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Int32 AmazonApi
 		{
 			get { return (System.Int32)GetValue((int)AmazonStoreFieldIndex.AmazonApi, true); }
@@ -434,6 +435,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "AmazonStore"."AmazonApiRegion"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Char, 0, 0, 2<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.String AmazonApiRegion
 		{
 			get { return (System.String)GetValue((int)AmazonStoreFieldIndex.AmazonApiRegion, true); }
@@ -444,6 +446,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "AmazonStore"."SellerCentralUsername"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 50<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.String SellerCentralUsername
 		{
 			get { return (System.String)GetValue((int)AmazonStoreFieldIndex.SellerCentralUsername, true); }
@@ -454,6 +457,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "AmazonStore"."SellerCentralPassword"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 50<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.String SellerCentralPassword
 		{
 			get { return (System.String)GetValue((int)AmazonStoreFieldIndex.SellerCentralPassword, true); }
@@ -464,6 +468,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "AmazonStore"."MerchantName"<br/>
 		/// Table field type characteristics (type, precision, scale, length): VarChar, 0, 0, 64<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.String MerchantName
 		{
 			get { return (System.String)GetValue((int)AmazonStoreFieldIndex.MerchantName, true); }
@@ -474,6 +479,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "AmazonStore"."MerchantToken"<br/>
 		/// Table field type characteristics (type, precision, scale, length): VarChar, 0, 0, 32<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.String MerchantToken
 		{
 			get { return (System.String)GetValue((int)AmazonStoreFieldIndex.MerchantToken, true); }
@@ -484,6 +490,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "AmazonStore"."AccessKeyID"<br/>
 		/// Table field type characteristics (type, precision, scale, length): VarChar, 0, 0, 32<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.String AccessKeyID
 		{
 			get { return (System.String)GetValue((int)AmazonStoreFieldIndex.AccessKeyID, true); }
@@ -494,6 +501,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "AmazonStore"."AuthToken"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 100<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.String AuthToken
 		{
 			get { return (System.String)GetValue((int)AmazonStoreFieldIndex.AuthToken, true); }
@@ -504,6 +512,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "AmazonStore"."Cookie"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Text, 0, 0, 2147483647<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.String Cookie
 		{
 			get { return (System.String)GetValue((int)AmazonStoreFieldIndex.Cookie, true); }
@@ -514,6 +523,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "AmazonStore"."CookieExpires"<br/>
 		/// Table field type characteristics (type, precision, scale, length): DateTime, 0, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.DateTime CookieExpires
 		{
 			get { return (System.DateTime)GetValue((int)AmazonStoreFieldIndex.CookieExpires, true); }
@@ -524,6 +534,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "AmazonStore"."CookieWaitUntil"<br/>
 		/// Table field type characteristics (type, precision, scale, length): DateTime, 0, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.DateTime CookieWaitUntil
 		{
 			get { return (System.DateTime)GetValue((int)AmazonStoreFieldIndex.CookieWaitUntil, true); }
@@ -534,6 +545,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "AmazonStore"."Certificate"<br/>
 		/// Table field type characteristics (type, precision, scale, length): VarBinary, 0, 0, 2048<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		[DataMember]
 		public virtual System.Byte[] Certificate
 		{
 			get { return (System.Byte[])GetValue((int)AmazonStoreFieldIndex.Certificate, true); }
@@ -544,6 +556,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "AmazonStore"."WeightDownloads"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Text, 0, 0, 2147483647<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.String WeightDownloads
 		{
 			get { return (System.String)GetValue((int)AmazonStoreFieldIndex.WeightDownloads, true); }
@@ -554,6 +567,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "AmazonStore"."MerchantID"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 50<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.String MerchantID
 		{
 			get { return (System.String)GetValue((int)AmazonStoreFieldIndex.MerchantID, true); }
@@ -564,6 +578,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "AmazonStore"."MarketplaceID"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 50<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.String MarketplaceID
 		{
 			get { return (System.String)GetValue((int)AmazonStoreFieldIndex.MarketplaceID, true); }
@@ -574,6 +589,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "AmazonStore"."ExcludeFBA"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Boolean ExcludeFBA
 		{
 			get { return (System.Boolean)GetValue((int)AmazonStoreFieldIndex.ExcludeFBA, true); }
@@ -584,6 +600,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "AmazonStore"."DomainName"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 50<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.String DomainName
 		{
 			get { return (System.String)GetValue((int)AmazonStoreFieldIndex.DomainName, true); }
@@ -594,6 +611,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "AmazonStore"."AmazonVATS"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Boolean AmazonVATS
 		{
 			get { return (System.Boolean)GetValue((int)AmazonStoreFieldIndex.AmazonVATS, true); }

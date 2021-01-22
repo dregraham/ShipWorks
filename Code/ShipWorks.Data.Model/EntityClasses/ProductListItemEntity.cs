@@ -361,6 +361,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  view field: "ProductListView"."ProductVariantID"<br/>
 		/// View field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
 		/// View field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Int64 ProductVariantID
 		{
 			get { return (System.Int64)GetValue((int)ProductListItemFieldIndex.ProductVariantID, true); }
@@ -371,6 +372,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  view field: "ProductListView"."SKU"<br/>
 		/// View field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 300<br/>
 		/// View field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.String SKU
 		{
 			get { return (System.String)GetValue((int)ProductListItemFieldIndex.SKU, true); }
@@ -381,6 +383,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  view field: "ProductListView"."Name"<br/>
 		/// View field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 300<br/>
 		/// View field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		[DataMember]
 		public virtual System.String Name
 		{
 			get { return (System.String)GetValue((int)ProductListItemFieldIndex.Name, true); }
@@ -391,6 +394,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  view field: "ProductListView"."Length"<br/>
 		/// View field type characteristics (type, precision, scale, length): Decimal, 10, 2, 0<br/>
 		/// View field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		[DataMember]
 		public virtual Nullable<System.Decimal> Length
 		{
 			get { return (Nullable<System.Decimal>)GetValue((int)ProductListItemFieldIndex.Length, false); }
@@ -401,6 +405,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  view field: "ProductListView"."Width"<br/>
 		/// View field type characteristics (type, precision, scale, length): Decimal, 10, 2, 0<br/>
 		/// View field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		[DataMember]
 		public virtual Nullable<System.Decimal> Width
 		{
 			get { return (Nullable<System.Decimal>)GetValue((int)ProductListItemFieldIndex.Width, false); }
@@ -411,6 +416,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  view field: "ProductListView"."Height"<br/>
 		/// View field type characteristics (type, precision, scale, length): Decimal, 10, 2, 0<br/>
 		/// View field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		[DataMember]
 		public virtual Nullable<System.Decimal> Height
 		{
 			get { return (Nullable<System.Decimal>)GetValue((int)ProductListItemFieldIndex.Height, false); }
@@ -421,6 +427,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  view field: "ProductListView"."Weight"<br/>
 		/// View field type characteristics (type, precision, scale, length): Decimal, 29, 9, 0<br/>
 		/// View field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		[DataMember]
 		public virtual Nullable<System.Decimal> Weight
 		{
 			get { return (Nullable<System.Decimal>)GetValue((int)ProductListItemFieldIndex.Weight, false); }
@@ -431,6 +438,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  view field: "ProductListView"."BinLocation"<br/>
 		/// View field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 255<br/>
 		/// View field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		[DataMember]
 		public virtual System.String BinLocation
 		{
 			get { return (System.String)GetValue((int)ProductListItemFieldIndex.BinLocation, true); }
@@ -441,6 +449,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  view field: "ProductListView"."ImageUrl"<br/>
 		/// View field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 500<br/>
 		/// View field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		[DataMember]
 		public virtual System.String ImageUrl
 		{
 			get { return (System.String)GetValue((int)ProductListItemFieldIndex.ImageUrl, true); }
@@ -451,6 +460,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  view field: "ProductListView"."IsActive"<br/>
 		/// View field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
 		/// View field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Boolean IsActive
 		{
 			get { return (System.Boolean)GetValue((int)ProductListItemFieldIndex.IsActive, true); }

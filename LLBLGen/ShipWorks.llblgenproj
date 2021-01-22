@@ -150,10 +150,25 @@
     </SettingValues>
   </OutputSettingValues>
   <CodeGenerationMetaDataDefaults>
+    <TargetElement Type="64">
+      <Defaults>
+        <Attributes>
+          <Attribute Value="DataMember" />
+        </Attributes>
+      </Defaults>
+    </TargetElement>
     <TargetElement Type="256">
       <Defaults>
         <Attributes>
           <Attribute Value="Browsable($true)" />
+          <Attribute Value="DataMember" />
+        </Attributes>
+      </Defaults>
+    </TargetElement>
+    <TargetElement Type="512">
+      <Defaults>
+        <Attributes>
+          <Attribute Value="DataMember" />
         </Attributes>
       </Defaults>
     </TargetElement>

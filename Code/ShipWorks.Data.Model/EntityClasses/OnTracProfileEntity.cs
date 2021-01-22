@@ -471,6 +471,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "OnTracProfile"."ShippingProfileID"<br/>
 		/// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, true, false</remarks>
+		[DataMember]
 		public virtual System.Int64 ShippingProfileID
 		{
 			get { return (System.Int64)GetValue((int)OnTracProfileFieldIndex.ShippingProfileID, true); }
@@ -481,6 +482,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "OnTracProfile"."OnTracAccountID"<br/>
 		/// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		[DataMember]
 		public virtual Nullable<System.Int64> OnTracAccountID
 		{
 			get { return (Nullable<System.Int64>)GetValue((int)OnTracProfileFieldIndex.OnTracAccountID, false); }
@@ -491,6 +493,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "OnTracProfile"."ResidentialDetermination"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		[DataMember]
 		public virtual Nullable<System.Int32> ResidentialDetermination
 		{
 			get { return (Nullable<System.Int32>)GetValue((int)OnTracProfileFieldIndex.ResidentialDetermination, false); }
@@ -501,6 +504,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "OnTracProfile"."Service"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		[DataMember]
 		public virtual Nullable<System.Int32> Service
 		{
 			get { return (Nullable<System.Int32>)GetValue((int)OnTracProfileFieldIndex.Service, false); }
@@ -511,6 +515,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "OnTracProfile"."SaturdayDelivery"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		[DataMember]
 		public virtual Nullable<System.Boolean> SaturdayDelivery
 		{
 			get { return (Nullable<System.Boolean>)GetValue((int)OnTracProfileFieldIndex.SaturdayDelivery, false); }
@@ -521,6 +526,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "OnTracProfile"."SignatureRequired"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		[DataMember]
 		public virtual Nullable<System.Boolean> SignatureRequired
 		{
 			get { return (Nullable<System.Boolean>)GetValue((int)OnTracProfileFieldIndex.SignatureRequired, false); }
@@ -531,6 +537,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "OnTracProfile"."PackagingType"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		[DataMember]
 		public virtual Nullable<System.Int32> PackagingType
 		{
 			get { return (Nullable<System.Int32>)GetValue((int)OnTracProfileFieldIndex.PackagingType, false); }
@@ -541,6 +548,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "OnTracProfile"."Reference1"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 300<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		[DataMember]
 		public virtual System.String Reference1
 		{
 			get { return (System.String)GetValue((int)OnTracProfileFieldIndex.Reference1, true); }
@@ -551,6 +559,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "OnTracProfile"."Reference2"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 300<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		[DataMember]
 		public virtual System.String Reference2
 		{
 			get { return (System.String)GetValue((int)OnTracProfileFieldIndex.Reference2, true); }
@@ -561,6 +570,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "OnTracProfile"."Instructions"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 300<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		[DataMember]
 		public virtual System.String Instructions
 		{
 			get { return (System.String)GetValue((int)OnTracProfileFieldIndex.Instructions, true); }
@@ -570,6 +580,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <summary> Gets / sets related entity of type 'ShippingProfileEntity' which has to be set using a fetch action earlier. If no related entity is set for this property, null is returned.<br/><br/>
 		/// </summary>
 		[Browsable(true)]
+		[DataMember]
 		public virtual ShippingProfileEntity ShippingProfile
 		{
 			get { return _shippingProfile; }

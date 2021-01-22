@@ -460,6 +460,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "GridColumnPosition"."GridColumnPositionID"<br/>
 		/// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, true, true</remarks>
+		[DataMember]
 		public virtual System.Int64 GridColumnPositionID
 		{
 			get { return (System.Int64)GetValue((int)GridColumnPositionFieldIndex.GridColumnPositionID, true); }
@@ -470,6 +471,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "GridColumnPosition"."GridColumnLayoutID"<br/>
 		/// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Int64 GridColumnLayoutID
 		{
 			get { return (System.Int64)GetValue((int)GridColumnPositionFieldIndex.GridColumnLayoutID, true); }
@@ -480,6 +482,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "GridColumnPosition"."ColumnGuid"<br/>
 		/// Table field type characteristics (type, precision, scale, length): UniqueIdentifier, 0, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Guid ColumnGuid
 		{
 			get { return (System.Guid)GetValue((int)GridColumnPositionFieldIndex.ColumnGuid, true); }
@@ -490,6 +493,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "GridColumnPosition"."Visible"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Boolean Visible
 		{
 			get { return (System.Boolean)GetValue((int)GridColumnPositionFieldIndex.Visible, true); }
@@ -500,6 +504,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "GridColumnPosition"."Width"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Int32 Width
 		{
 			get { return (System.Int32)GetValue((int)GridColumnPositionFieldIndex.Width, true); }
@@ -510,6 +515,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "GridColumnPosition"."Position"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Int32 Position
 		{
 			get { return (System.Int32)GetValue((int)GridColumnPositionFieldIndex.Position, true); }
@@ -518,6 +524,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 
 		/// <summary> Gets / sets related entity of type 'GridColumnLayoutEntity' which has to be set using a fetch action earlier. If no related entity is set for this property, null is returned..<br/><br/></summary>
 		[Browsable(true)]
+		[DataMember]
 		public virtual GridColumnLayoutEntity GridColumnLayout
 		{
 			get	{ return _gridColumnLayout; }

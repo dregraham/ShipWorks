@@ -381,6 +381,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "FilterNodeContentDetail"."FilterNodeContentID"<br/>
 		/// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, true, false</remarks>
+		[DataMember]
 		public virtual System.Int64 FilterNodeContentID
 		{
 			get { return (System.Int64)GetValue((int)FilterNodeContentDetailFieldIndex.FilterNodeContentID, true); }
@@ -391,6 +392,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "FilterNodeContentDetail"."ObjectID"<br/>
 		/// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, true, false</remarks>
+		[DataMember]
 		public virtual System.Int64 EntityID
 		{
 			get { return (System.Int64)GetValue((int)FilterNodeContentDetailFieldIndex.EntityID, true); }

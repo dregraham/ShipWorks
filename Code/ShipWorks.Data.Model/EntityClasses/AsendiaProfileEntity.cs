@@ -463,6 +463,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "AsendiaProfile"."ShippingProfileID"<br/>
 		/// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, true, false</remarks>
+		[DataMember]
 		public virtual System.Int64 ShippingProfileID
 		{
 			get { return (System.Int64)GetValue((int)AsendiaProfileFieldIndex.ShippingProfileID, true); }
@@ -473,6 +474,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "AsendiaProfile"."AsendiaAccountID"<br/>
 		/// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		[DataMember]
 		public virtual Nullable<System.Int64> AsendiaAccountID
 		{
 			get { return (Nullable<System.Int64>)GetValue((int)AsendiaProfileFieldIndex.AsendiaAccountID, false); }
@@ -483,6 +485,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "AsendiaProfile"."Service"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		[DataMember]
 		public virtual Nullable<Interapptive.Shared.Enums.AsendiaServiceType> Service
 		{
 			get { return (Nullable<Interapptive.Shared.Enums.AsendiaServiceType>)GetValue((int)AsendiaProfileFieldIndex.Service, false); }
@@ -493,6 +496,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "AsendiaProfile"."NonMachinable"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		[DataMember]
 		public virtual Nullable<System.Boolean> NonMachinable
 		{
 			get { return (Nullable<System.Boolean>)GetValue((int)AsendiaProfileFieldIndex.NonMachinable, false); }
@@ -503,6 +507,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "AsendiaProfile"."Contents"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		[DataMember]
 		public virtual Nullable<System.Int32> Contents
 		{
 			get { return (Nullable<System.Int32>)GetValue((int)AsendiaProfileFieldIndex.Contents, false); }
@@ -513,6 +518,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "AsendiaProfile"."NonDelivery"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		[DataMember]
 		public virtual Nullable<System.Int32> NonDelivery
 		{
 			get { return (Nullable<System.Int32>)GetValue((int)AsendiaProfileFieldIndex.NonDelivery, false); }
@@ -522,6 +528,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <summary> Gets / sets related entity of type 'ShippingProfileEntity' which has to be set using a fetch action earlier. If no related entity is set for this property, null is returned.<br/><br/>
 		/// </summary>
 		[Browsable(true)]
+		[DataMember]
 		public virtual ShippingProfileEntity ShippingProfile
 		{
 			get { return _shippingProfile; }

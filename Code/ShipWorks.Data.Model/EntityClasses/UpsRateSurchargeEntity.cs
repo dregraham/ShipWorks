@@ -456,6 +456,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "UpsRateSurcharge"."UpsRateSurchargeID"<br/>
 		/// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, true, true</remarks>
+		[DataMember]
 		public virtual System.Int64 UpsRateSurchargeID
 		{
 			get { return (System.Int64)GetValue((int)UpsRateSurchargeFieldIndex.UpsRateSurchargeID, true); }
@@ -466,6 +467,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "UpsRateSurcharge"."UpsRateTableID"<br/>
 		/// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Int64 UpsRateTableID
 		{
 			get { return (System.Int64)GetValue((int)UpsRateSurchargeFieldIndex.UpsRateTableID, true); }
@@ -476,6 +478,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "UpsRateSurcharge"."SurchargeType"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Int32 SurchargeType
 		{
 			get { return (System.Int32)GetValue((int)UpsRateSurchargeFieldIndex.SurchargeType, true); }
@@ -486,6 +489,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "UpsRateSurcharge"."Amount"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Float, 38, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Double Amount
 		{
 			get { return (System.Double)GetValue((int)UpsRateSurchargeFieldIndex.Amount, true); }
@@ -494,6 +498,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 
 		/// <summary> Gets / sets related entity of type 'UpsRateTableEntity' which has to be set using a fetch action earlier. If no related entity is set for this property, null is returned..<br/><br/></summary>
 		[Browsable(true)]
+		[DataMember]
 		public virtual UpsRateTableEntity UpsRateTable
 		{
 			get	{ return _upsRateTable; }

@@ -485,6 +485,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "Product"."ProductID"<br/>
 		/// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, true, true</remarks>
+		[DataMember]
 		public virtual System.Int64 ProductID
 		{
 			get { return (System.Int64)GetValue((int)ProductFieldIndex.ProductID, true); }
@@ -495,6 +496,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "Product"."CreatedDate"<br/>
 		/// Table field type characteristics (type, precision, scale, length): DateTime, 0, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.DateTime CreatedDate
 		{
 			get { return (System.DateTime)GetValue((int)ProductFieldIndex.CreatedDate, true); }
@@ -505,6 +507,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "Product"."IsActive"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Boolean IsActive
 		{
 			get { return (System.Boolean)GetValue((int)ProductFieldIndex.IsActive, true); }
@@ -515,6 +518,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "Product"."IsBundle"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Boolean IsBundle
 		{
 			get { return (System.Boolean)GetValue((int)ProductFieldIndex.IsBundle, true); }
@@ -525,6 +529,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "Product"."UploadToWarehouseNeeded"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Boolean UploadToWarehouseNeeded
 		{
 			get { return (System.Boolean)GetValue((int)ProductFieldIndex.UploadToWarehouseNeeded, true); }
@@ -533,6 +538,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 
 		/// <summary> Gets the EntityCollection with the related entities of type 'ProductAttributeEntity' which are related to this entity via a relation of type '1:n'. If the EntityCollection hasn't been fetched yet, the collection returned will be empty.<br/><br/></summary>
 		[TypeContainedAttribute(typeof(ProductAttributeEntity))]
+		[DataMember]
 		public virtual EntityCollection<ProductAttributeEntity> Attributes
 		{
 			get { return GetOrCreateEntityCollection<ProductAttributeEntity, ProductAttributeEntityFactory>("Product", true, false, ref _attributes);	}
@@ -540,6 +546,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 
 		/// <summary> Gets the EntityCollection with the related entities of type 'ProductBundleEntity' which are related to this entity via a relation of type '1:n'. If the EntityCollection hasn't been fetched yet, the collection returned will be empty.<br/><br/></summary>
 		[TypeContainedAttribute(typeof(ProductBundleEntity))]
+		[DataMember]
 		public virtual EntityCollection<ProductBundleEntity> Bundles
 		{
 			get { return GetOrCreateEntityCollection<ProductBundleEntity, ProductBundleEntityFactory>("Product", true, false, ref _bundles);	}
@@ -547,6 +554,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 
 		/// <summary> Gets the EntityCollection with the related entities of type 'ProductVariantEntity' which are related to this entity via a relation of type '1:n'. If the EntityCollection hasn't been fetched yet, the collection returned will be empty.<br/><br/></summary>
 		[TypeContainedAttribute(typeof(ProductVariantEntity))]
+		[DataMember]
 		public virtual EntityCollection<ProductVariantEntity> Variants
 		{
 			get { return GetOrCreateEntityCollection<ProductVariantEntity, ProductVariantEntityFactory>("Product", true, false, ref _variants);	}

@@ -1,5 +1,4 @@
 ﻿using ShipWorks.Data.Model.EntityInterfaces;
-using ShipWorks.Products;
 
 namespace ShipWorks.ApplicationCore.Licensing.Warehouse
 {
@@ -17,6 +16,7 @@ namespace ShipWorks.ApplicationCore.Licensing.Warehouse
         public const string Stores = "api/stores";
         public const string OdbcStores = "api/stores/{0}/odbc";
         public const string GenericFile = "api/stores/{0}/genericFile";
+        public const string SyncStores = "api/customer/store/sync";
         public const string UploadOrders = "api/orders";
         public const string AddProduct = "api/products";
         public const string SetActivationBulk = "api/products/activation";
@@ -84,7 +84,7 @@ namespace ShipWorks.ApplicationCore.Licensing.Warehouse
         /// <summary>
         /// Create a get products after sequence route
         /// </summary>
-        public static string GetProductsAfterSequence(string warehouseId, long sequence) => 
+        public static string GetProductsAfterSequence(string warehouseId, long sequence) =>
             $"api/products/sync/{warehouseId}/after/{sequence}";
     }
 }

@@ -110,6 +110,8 @@ using ShipWorks.Users;
 using ShipWorks.Users.Audit;
 using ShipWorks.Users.Logon;
 using ShipWorks.Users.Security;
+using ShipWorks.Warehouse.Configuration;
+using ShipWorks.Warehouse.Configuration.Stores;
 using TD.SandDock;
 using static Interapptive.Shared.Utility.Functional;
 using Application = System.Windows.Forms.Application;
@@ -871,6 +873,8 @@ namespace ShipWorks
             UserEntity user = UserSession.User;
 
             MigrateStoresToHub();
+
+            SynchronizeConfig();
 
             MigrateSqlConfigToHub();
 
@@ -5523,6 +5527,31 @@ namespace ShipWorks
             catch (Exception ex)
             {
                 log.Error("Failed to migrate SQL Config to Hub", ex);
+            }
+        }
+
+        /// <summary>
+        /// Synchronize our database with the config from Hub
+        /// </summary>
+        private void SynchronizeConfig()
+        {
+            try
+            {
+                using (var lifetimeScope = IoC.BeginLifetimeScope())
+                {
+                    var configuration = lifetimeScope.Resolve<IConfigurationData>().FetchReadOnly();
+
+                    if (!string.IsNullOrEmpty(configuration.WarehouseID))
+                    {
+                        var hubConfig = lifetimeScope.Resolve<HubStoreImporter>().ImportStores(this, configuration.WarehouseID);
+                        lifetimeScope.Resolve<HubConfigurationSynchronizer>().Synchronize(hubConfig);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                // Log a generic message here - more detailed error logging is done by the importer/synchronizer
+                log.Error("Failed to synchronize with Hub configuration", ex);
             }
         }
 

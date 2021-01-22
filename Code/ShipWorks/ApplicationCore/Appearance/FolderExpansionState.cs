@@ -1,8 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
-using ShipWorks.Data.Model.EntityClasses;
-using System.IO;
 using System.Xml;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 

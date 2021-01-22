@@ -396,6 +396,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "ShopifyOrderItem"."ShopifyOrderItemID"<br/>
 		/// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Int64 ShopifyOrderItemID
 		{
 			get { return (System.Int64)GetValue((int)ShopifyOrderItemFieldIndex.ShopifyOrderItemID, true); }
@@ -406,6 +407,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "ShopifyOrderItem"."ShopifyProductID"<br/>
 		/// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Int64 ShopifyProductID
 		{
 			get { return (System.Int64)GetValue((int)ShopifyOrderItemFieldIndex.ShopifyProductID, true); }
@@ -416,6 +418,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "ShopifyOrderItem"."InventoryItemID"<br/>
 		/// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		[DataMember]
 		public virtual Nullable<System.Int64> InventoryItemID
 		{
 			get { return (Nullable<System.Int64>)GetValue((int)ShopifyOrderItemFieldIndex.InventoryItemID, false); }

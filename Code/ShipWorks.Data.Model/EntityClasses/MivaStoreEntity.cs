@@ -400,6 +400,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "MivaStore"."EncryptionPassphrase"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 50<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.String EncryptionPassphrase
 		{
 			get { return (System.String)GetValue((int)MivaStoreFieldIndex.EncryptionPassphrase, true); }
@@ -410,6 +411,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "MivaStore"."LiveManualOrderNumbers"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Boolean LiveManualOrderNumbers
 		{
 			get { return (System.Boolean)GetValue((int)MivaStoreFieldIndex.LiveManualOrderNumbers, true); }
@@ -420,6 +422,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "MivaStore"."SebenzaCheckoutDataEnabled"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Boolean SebenzaCheckoutDataEnabled
 		{
 			get { return (System.Boolean)GetValue((int)MivaStoreFieldIndex.SebenzaCheckoutDataEnabled, true); }
@@ -430,6 +433,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "MivaStore"."OnlineUpdateStrategy"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Int32 OnlineUpdateStrategy
 		{
 			get { return (System.Int32)GetValue((int)MivaStoreFieldIndex.OnlineUpdateStrategy, true); }
@@ -440,6 +444,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "MivaStore"."OnlineUpdateStatusChangeEmail"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Boolean OnlineUpdateStatusChangeEmail
 		{
 			get { return (System.Boolean)GetValue((int)MivaStoreFieldIndex.OnlineUpdateStatusChangeEmail, true); }
@@ -450,6 +455,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "MivaStore"."AddendumCheckoutDataEnabled"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Boolean AddendumCheckoutDataEnabled
 		{
 			get { return (System.Boolean)GetValue((int)MivaStoreFieldIndex.AddendumCheckoutDataEnabled, true); }

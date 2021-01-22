@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Xml.Linq;
+using Newtonsoft.Json;
 using ShipWorks.Stores.Platforms.Amazon;
 
 namespace ShipWorks.Data.Model.EntityClasses
@@ -40,6 +41,7 @@ namespace ShipWorks.Data.Model.EntityClasses
         /// <summary>
         /// Returns a list of attributes user has selected to download
         /// </summary>
+        [JsonIgnore]
         public IEnumerable<string> ParsedAttributesToDownload
         {
             get

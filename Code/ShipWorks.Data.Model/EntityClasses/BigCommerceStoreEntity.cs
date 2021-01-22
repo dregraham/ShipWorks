@@ -408,6 +408,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "BigCommerceStore"."ApiUrl"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 110<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.String ApiUrl
 		{
 			get { return (System.String)GetValue((int)BigCommerceStoreFieldIndex.ApiUrl, true); }
@@ -418,6 +419,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "BigCommerceStore"."ApiUserName"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 65<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.String ApiUserName
 		{
 			get { return (System.String)GetValue((int)BigCommerceStoreFieldIndex.ApiUserName, true); }
@@ -428,6 +430,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "BigCommerceStore"."ApiToken"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 100<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		[DataMember]
 		public virtual System.String ApiToken
 		{
 			get { return (System.String)GetValue((int)BigCommerceStoreFieldIndex.ApiToken, true); }
@@ -438,6 +441,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "BigCommerceStore"."StatusCodes"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Xml, 0, 0, 2147483647<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		[DataMember]
 		public virtual System.String StatusCodes
 		{
 			get { return (System.String)GetValue((int)BigCommerceStoreFieldIndex.StatusCodes, true); }
@@ -448,6 +452,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "BigCommerceStore"."WeightUnitOfMeasure"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Int32 WeightUnitOfMeasure
 		{
 			get { return (System.Int32)GetValue((int)BigCommerceStoreFieldIndex.WeightUnitOfMeasure, true); }
@@ -458,6 +463,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "BigCommerceStore"."DownloadModifiedNumberOfDaysBack"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Int32 DownloadModifiedNumberOfDaysBack
 		{
 			get { return (System.Int32)GetValue((int)BigCommerceStoreFieldIndex.DownloadModifiedNumberOfDaysBack, true); }
@@ -468,6 +474,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "BigCommerceStore"."BigCommerceAuthentication"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual Interapptive.Shared.Enums.BigCommerceAuthenticationType BigCommerceAuthentication
 		{
 			get { return (Interapptive.Shared.Enums.BigCommerceAuthenticationType)GetValue((int)BigCommerceStoreFieldIndex.BigCommerceAuthentication, true); }
@@ -478,6 +485,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "BigCommerceStore"."OauthClientId"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 100<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.String OauthClientId
 		{
 			get { return (System.String)GetValue((int)BigCommerceStoreFieldIndex.OauthClientId, true); }
@@ -488,6 +496,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "BigCommerceStore"."OauthToken"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 100<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.String OauthToken
 		{
 			get { return (System.String)GetValue((int)BigCommerceStoreFieldIndex.OauthToken, true); }
@@ -498,6 +507,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "BigCommerceStore"."Identifier"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 1024<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.String Identifier
 		{
 			get { return (System.String)GetValue((int)BigCommerceStoreFieldIndex.Identifier, true); }

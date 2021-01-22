@@ -609,6 +609,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "ProductVariant"."ProductVariantID"<br/>
 		/// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, true, true</remarks>
+		[DataMember]
 		public virtual System.Int64 ProductVariantID
 		{
 			get { return (System.Int64)GetValue((int)ProductVariantFieldIndex.ProductVariantID, true); }
@@ -619,6 +620,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "ProductVariant"."ProductID"<br/>
 		/// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Int64 ProductID
 		{
 			get { return (System.Int64)GetValue((int)ProductVariantFieldIndex.ProductID, true); }
@@ -629,6 +631,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "ProductVariant"."CreatedDate"<br/>
 		/// Table field type characteristics (type, precision, scale, length): DateTime, 0, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.DateTime CreatedDate
 		{
 			get { return (System.DateTime)GetValue((int)ProductVariantFieldIndex.CreatedDate, true); }
@@ -639,6 +642,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "ProductVariant"."Name"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 300<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		[DataMember]
 		public virtual System.String Name
 		{
 			get { return (System.String)GetValue((int)ProductVariantFieldIndex.Name, true); }
@@ -649,6 +653,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "ProductVariant"."IsActive"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Boolean IsActive
 		{
 			get { return (System.Boolean)GetValue((int)ProductVariantFieldIndex.IsActive, true); }
@@ -659,6 +664,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "ProductVariant"."UPC"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 30<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		[DataMember]
 		public virtual System.String UPC
 		{
 			get { return (System.String)GetValue((int)ProductVariantFieldIndex.UPC, true); }
@@ -669,6 +675,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "ProductVariant"."ASIN"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 255<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		[DataMember]
 		public virtual System.String ASIN
 		{
 			get { return (System.String)GetValue((int)ProductVariantFieldIndex.ASIN, true); }
@@ -679,6 +686,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "ProductVariant"."ISBN"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 30<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		[DataMember]
 		public virtual System.String ISBN
 		{
 			get { return (System.String)GetValue((int)ProductVariantFieldIndex.ISBN, true); }
@@ -689,6 +697,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "ProductVariant"."Weight"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Decimal, 29, 9, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		[DataMember]
 		public virtual Nullable<System.Decimal> Weight
 		{
 			get { return (Nullable<System.Decimal>)GetValue((int)ProductVariantFieldIndex.Weight, false); }
@@ -699,6 +708,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "ProductVariant"."Length"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Decimal, 10, 2, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		[DataMember]
 		public virtual Nullable<System.Decimal> Length
 		{
 			get { return (Nullable<System.Decimal>)GetValue((int)ProductVariantFieldIndex.Length, false); }
@@ -709,6 +719,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "ProductVariant"."Width"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Decimal, 10, 2, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		[DataMember]
 		public virtual Nullable<System.Decimal> Width
 		{
 			get { return (Nullable<System.Decimal>)GetValue((int)ProductVariantFieldIndex.Width, false); }
@@ -719,6 +730,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "ProductVariant"."Height"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Decimal, 10, 2, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		[DataMember]
 		public virtual Nullable<System.Decimal> Height
 		{
 			get { return (Nullable<System.Decimal>)GetValue((int)ProductVariantFieldIndex.Height, false); }
@@ -729,6 +741,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "ProductVariant"."ImageUrl"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 500<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		[DataMember]
 		public virtual System.String ImageUrl
 		{
 			get { return (System.String)GetValue((int)ProductVariantFieldIndex.ImageUrl, true); }
@@ -739,6 +752,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "ProductVariant"."BinLocation"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 255<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		[DataMember]
 		public virtual System.String BinLocation
 		{
 			get { return (System.String)GetValue((int)ProductVariantFieldIndex.BinLocation, true); }
@@ -749,6 +763,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "ProductVariant"."HarmonizedCode"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 20<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		[DataMember]
 		public virtual System.String HarmonizedCode
 		{
 			get { return (System.String)GetValue((int)ProductVariantFieldIndex.HarmonizedCode, true); }
@@ -759,6 +774,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "ProductVariant"."DeclaredValue"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Money, 19, 4, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		[DataMember]
 		public virtual Nullable<System.Decimal> DeclaredValue
 		{
 			get { return (Nullable<System.Decimal>)GetValue((int)ProductVariantFieldIndex.DeclaredValue, false); }
@@ -769,6 +785,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "ProductVariant"."CountryOfOrigin"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 50<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		[DataMember]
 		public virtual System.String CountryOfOrigin
 		{
 			get { return (System.String)GetValue((int)ProductVariantFieldIndex.CountryOfOrigin, true); }
@@ -779,6 +796,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "ProductVariant"."FNSku"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 300<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		[DataMember]
 		public virtual System.String FNSku
 		{
 			get { return (System.String)GetValue((int)ProductVariantFieldIndex.FNSku, true); }
@@ -789,6 +807,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "ProductVariant"."EAN"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 30<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		[DataMember]
 		public virtual System.String EAN
 		{
 			get { return (System.String)GetValue((int)ProductVariantFieldIndex.EAN, true); }
@@ -799,6 +818,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "ProductVariant"."HubProductId"<br/>
 		/// Table field type characteristics (type, precision, scale, length): UniqueIdentifier, 0, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		[DataMember]
 		public virtual Nullable<System.Guid> HubProductId
 		{
 			get { return (Nullable<System.Guid>)GetValue((int)ProductVariantFieldIndex.HubProductId, false); }
@@ -809,6 +829,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "ProductVariant"."HubVersion"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		[DataMember]
 		public virtual Nullable<System.Int32> HubVersion
 		{
 			get { return (Nullable<System.Int32>)GetValue((int)ProductVariantFieldIndex.HubVersion, false); }
@@ -819,6 +840,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "ProductVariant"."HubSequence"<br/>
 		/// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		[DataMember]
 		public virtual Nullable<System.Int64> HubSequence
 		{
 			get { return (Nullable<System.Int64>)GetValue((int)ProductVariantFieldIndex.HubSequence, false); }
@@ -827,6 +849,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 
 		/// <summary> Gets the EntityCollection with the related entities of type 'ProductBundleEntity' which are related to this entity via a relation of type '1:n'. If the EntityCollection hasn't been fetched yet, the collection returned will be empty.<br/><br/></summary>
 		[TypeContainedAttribute(typeof(ProductBundleEntity))]
+		[DataMember]
 		public virtual EntityCollection<ProductBundleEntity> IncludedInBundles
 		{
 			get { return GetOrCreateEntityCollection<ProductBundleEntity, ProductBundleEntityFactory>("ChildVariant", true, false, ref _includedInBundles);	}
@@ -834,6 +857,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 
 		/// <summary> Gets the EntityCollection with the related entities of type 'ProductVariantAliasEntity' which are related to this entity via a relation of type '1:n'. If the EntityCollection hasn't been fetched yet, the collection returned will be empty.<br/><br/></summary>
 		[TypeContainedAttribute(typeof(ProductVariantAliasEntity))]
+		[DataMember]
 		public virtual EntityCollection<ProductVariantAliasEntity> Aliases
 		{
 			get { return GetOrCreateEntityCollection<ProductVariantAliasEntity, ProductVariantAliasEntityFactory>("ProductVariant", true, false, ref _aliases);	}
@@ -841,6 +865,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 
 		/// <summary> Gets the EntityCollection with the related entities of type 'ProductVariantAttributeValueEntity' which are related to this entity via a relation of type '1:n'. If the EntityCollection hasn't been fetched yet, the collection returned will be empty.<br/><br/></summary>
 		[TypeContainedAttribute(typeof(ProductVariantAttributeValueEntity))]
+		[DataMember]
 		public virtual EntityCollection<ProductVariantAttributeValueEntity> AttributeValues
 		{
 			get { return GetOrCreateEntityCollection<ProductVariantAttributeValueEntity, ProductVariantAttributeValueEntityFactory>("ProductVariant", true, false, ref _attributeValues);	}
@@ -848,6 +873,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 
 		/// <summary> Gets / sets related entity of type 'ProductEntity' which has to be set using a fetch action earlier. If no related entity is set for this property, null is returned..<br/><br/></summary>
 		[Browsable(true)]
+		[DataMember]
 		public virtual ProductEntity Product
 		{
 			get	{ return _product; }

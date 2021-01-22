@@ -394,6 +394,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "MivaOrderItemAttribute"."MivaOptionCode"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 300<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.String MivaOptionCode
 		{
 			get { return (System.String)GetValue((int)MivaOrderItemAttributeFieldIndex.MivaOptionCode, true); }
@@ -404,6 +405,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "MivaOrderItemAttribute"."MivaAttributeID"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Int32 MivaAttributeID
 		{
 			get { return (System.Int32)GetValue((int)MivaOrderItemAttributeFieldIndex.MivaAttributeID, true); }
@@ -414,6 +416,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "MivaOrderItemAttribute"."MivaAttributeCode"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 300<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.String MivaAttributeCode
 		{
 			get { return (System.String)GetValue((int)MivaOrderItemAttributeFieldIndex.MivaAttributeCode, true); }

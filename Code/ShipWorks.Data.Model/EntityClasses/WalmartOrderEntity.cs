@@ -455,6 +455,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "WalmartOrder"."PurchaseOrderID"<br/>
 		/// Table field type characteristics (type, precision, scale, length): VarChar, 0, 0, 32<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.String PurchaseOrderID
 		{
 			get { return (System.String)GetValue((int)WalmartOrderFieldIndex.PurchaseOrderID, true); }
@@ -465,6 +466,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "WalmartOrder"."CustomerOrderID"<br/>
 		/// Table field type characteristics (type, precision, scale, length): VarChar, 0, 0, 50<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.String CustomerOrderID
 		{
 			get { return (System.String)GetValue((int)WalmartOrderFieldIndex.CustomerOrderID, true); }
@@ -475,6 +477,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "WalmartOrder"."EstimatedDeliveryDate"<br/>
 		/// Table field type characteristics (type, precision, scale, length): DateTime, 0, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.DateTime EstimatedDeliveryDate
 		{
 			get { return (System.DateTime)GetValue((int)WalmartOrderFieldIndex.EstimatedDeliveryDate, true); }
@@ -485,6 +488,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "WalmartOrder"."EstimatedShipDate"<br/>
 		/// Table field type characteristics (type, precision, scale, length): DateTime, 0, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.DateTime EstimatedShipDate
 		{
 			get { return (System.DateTime)GetValue((int)WalmartOrderFieldIndex.EstimatedShipDate, true); }
@@ -495,6 +499,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "WalmartOrder"."RequestedShippingMethodCode"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 12<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.String RequestedShippingMethodCode
 		{
 			get { return (System.String)GetValue((int)WalmartOrderFieldIndex.RequestedShippingMethodCode, true); }
@@ -503,6 +508,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 
 		/// <summary> Gets the EntityCollection with the related entities of type 'WalmartOrderSearchEntity' which are related to this entity via a relation of type '1:n'. If the EntityCollection hasn't been fetched yet, the collection returned will be empty.<br/><br/></summary>
 		[TypeContainedAttribute(typeof(WalmartOrderSearchEntity))]
+		[DataMember]
 		public virtual EntityCollection<WalmartOrderSearchEntity> WalmartOrderSearch
 		{
 			get { return GetOrCreateEntityCollection<WalmartOrderSearchEntity, WalmartOrderSearchEntityFactory>("WalmartOrder", true, false, ref _walmartOrderSearch);	}

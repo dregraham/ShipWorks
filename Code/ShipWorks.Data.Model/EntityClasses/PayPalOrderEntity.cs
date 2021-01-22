@@ -453,6 +453,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "PayPalOrder"."TransactionID"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 50<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.String TransactionID
 		{
 			get { return (System.String)GetValue((int)PayPalOrderFieldIndex.TransactionID, true); }
@@ -463,6 +464,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "PayPalOrder"."AddressStatus"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Int32 AddressStatus
 		{
 			get { return (System.Int32)GetValue((int)PayPalOrderFieldIndex.AddressStatus, true); }
@@ -473,6 +475,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "PayPalOrder"."PayPalFee"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Money, 19, 4, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Decimal PayPalFee
 		{
 			get { return (System.Decimal)GetValue((int)PayPalOrderFieldIndex.PayPalFee, true); }
@@ -483,6 +486,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "PayPalOrder"."PaymentStatus"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Int32 PaymentStatus
 		{
 			get { return (System.Int32)GetValue((int)PayPalOrderFieldIndex.PaymentStatus, true); }
@@ -491,6 +495,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 
 		/// <summary> Gets the EntityCollection with the related entities of type 'PayPalOrderSearchEntity' which are related to this entity via a relation of type '1:n'. If the EntityCollection hasn't been fetched yet, the collection returned will be empty.<br/><br/></summary>
 		[TypeContainedAttribute(typeof(PayPalOrderSearchEntity))]
+		[DataMember]
 		public virtual EntityCollection<PayPalOrderSearchEntity> PayPalOrderSearch
 		{
 			get { return GetOrCreateEntityCollection<PayPalOrderSearchEntity, PayPalOrderSearchEntityFactory>("PayPalOrder", true, false, ref _payPalOrderSearch);	}

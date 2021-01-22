@@ -1,18 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Autofac.Features.Indexed;
 using Common.Logging;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Utility;
-using ShipWorks.Shipping.CarrierSetup;
-using ShipWorks.Warehouse.Configuration.DTO.ShippingSettings;
-using System.Linq;
-using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.EntityInterfaces;
+using ShipWorks.Shipping;
+using ShipWorks.Shipping.Carriers;
 using ShipWorks.Shipping.Settings.OneBalance;
+using ShipWorks.Warehouse.Configuration.Carriers.DTO;
 
-namespace ShipWorks.Shipping.Carriers.CarrierSetup
+namespace ShipWorks.Warehouse.Configuration.Carriers
 {
     /// <summary>
     /// Configures carriers downloaded from the Hub
@@ -41,7 +42,7 @@ namespace ShipWorks.Shipping.Carriers.CarrierSetup
 
         private bool SkipOneBalanceSetup(CarrierConfiguration uspsOneBalanceConfig, UspsAccountEntity existingUspsOneBalanceAccount)
         {
-            if(uspsOneBalanceConfig == null)
+            if (uspsOneBalanceConfig == null)
             {
                 // one balance isn't set up in the hub
                 return true;
@@ -64,7 +65,7 @@ namespace ShipWorks.Shipping.Carriers.CarrierSetup
         /// <summary>
         /// Configure carriers
         /// </summary>
-        public async Task Configure(List<CarrierConfiguration> configs)
+        public async Task Configure(IEnumerable<CarrierConfiguration> configs)
         {
             var uspsOneBalanceConfig = configs.SingleOrDefault(c => c.CarrierType == ShipmentTypeCode.Usps && c.IsOneBalance);
 

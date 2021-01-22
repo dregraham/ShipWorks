@@ -408,6 +408,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "UpsProfilePackage"."PackagingType"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		[DataMember]
 		public virtual Nullable<System.Int32> PackagingType
 		{
 			get { return (Nullable<System.Int32>)GetValue((int)UpsProfilePackageFieldIndex.PackagingType, false); }
@@ -418,6 +419,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "UpsProfilePackage"."AdditionalHandlingEnabled"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		[DataMember]
 		public virtual Nullable<System.Boolean> AdditionalHandlingEnabled
 		{
 			get { return (Nullable<System.Boolean>)GetValue((int)UpsProfilePackageFieldIndex.AdditionalHandlingEnabled, false); }
@@ -428,6 +430,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "UpsProfilePackage"."VerbalConfirmationEnabled"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		[DataMember]
 		public virtual Nullable<System.Boolean> VerbalConfirmationEnabled
 		{
 			get { return (Nullable<System.Boolean>)GetValue((int)UpsProfilePackageFieldIndex.VerbalConfirmationEnabled, false); }
@@ -438,6 +441,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "UpsProfilePackage"."VerbalConfirmationName"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 35<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		[DataMember]
 		public virtual System.String VerbalConfirmationName
 		{
 			get { return (System.String)GetValue((int)UpsProfilePackageFieldIndex.VerbalConfirmationName, true); }
@@ -448,6 +452,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "UpsProfilePackage"."VerbalConfirmationPhone"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 15<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		[DataMember]
 		public virtual System.String VerbalConfirmationPhone
 		{
 			get { return (System.String)GetValue((int)UpsProfilePackageFieldIndex.VerbalConfirmationPhone, true); }
@@ -458,6 +463,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "UpsProfilePackage"."VerbalConfirmationPhoneExtension"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 4<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		[DataMember]
 		public virtual System.String VerbalConfirmationPhoneExtension
 		{
 			get { return (System.String)GetValue((int)UpsProfilePackageFieldIndex.VerbalConfirmationPhoneExtension, true); }
@@ -468,6 +474,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "UpsProfilePackage"."DryIceEnabled"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		[DataMember]
 		public virtual Nullable<System.Boolean> DryIceEnabled
 		{
 			get { return (Nullable<System.Boolean>)GetValue((int)UpsProfilePackageFieldIndex.DryIceEnabled, false); }
@@ -478,6 +485,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "UpsProfilePackage"."DryIceRegulationSet"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		[DataMember]
 		public virtual Nullable<System.Int32> DryIceRegulationSet
 		{
 			get { return (Nullable<System.Int32>)GetValue((int)UpsProfilePackageFieldIndex.DryIceRegulationSet, false); }
@@ -488,6 +496,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "UpsProfilePackage"."DryIceWeight"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Float, 38, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		[DataMember]
 		public virtual Nullable<System.Double> DryIceWeight
 		{
 			get { return (Nullable<System.Double>)GetValue((int)UpsProfilePackageFieldIndex.DryIceWeight, false); }
@@ -498,6 +507,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "UpsProfilePackage"."DryIceIsForMedicalUse"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		[DataMember]
 		public virtual Nullable<System.Boolean> DryIceIsForMedicalUse
 		{
 			get { return (Nullable<System.Boolean>)GetValue((int)UpsProfilePackageFieldIndex.DryIceIsForMedicalUse, false); }

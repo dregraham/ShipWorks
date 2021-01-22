@@ -398,6 +398,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "AmeriCommerceStore"."Username"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 70<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.String Username
 		{
 			get { return (System.String)GetValue((int)AmeriCommerceStoreFieldIndex.Username, true); }
@@ -408,6 +409,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "AmeriCommerceStore"."Password"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 70<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.String Password
 		{
 			get { return (System.String)GetValue((int)AmeriCommerceStoreFieldIndex.Password, true); }
@@ -418,6 +420,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "AmeriCommerceStore"."StoreUrl"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 350<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.String StoreUrl
 		{
 			get { return (System.String)GetValue((int)AmeriCommerceStoreFieldIndex.StoreUrl, true); }
@@ -428,6 +431,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "AmeriCommerceStore"."StoreCode"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Int32 StoreCode
 		{
 			get { return (System.Int32)GetValue((int)AmeriCommerceStoreFieldIndex.StoreCode, true); }
@@ -438,6 +442,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "AmeriCommerceStore"."StatusCodes"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Xml, 0, 0, 2147483647<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.String StatusCodes
 		{
 			get { return (System.String)GetValue((int)AmeriCommerceStoreFieldIndex.StatusCodes, true); }

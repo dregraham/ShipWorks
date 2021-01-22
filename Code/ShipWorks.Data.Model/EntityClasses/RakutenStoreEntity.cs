@@ -394,6 +394,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "RakutenStore"."AuthKey"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 100<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.String AuthKey
 		{
 			get { return (System.String)GetValue((int)RakutenStoreFieldIndex.AuthKey, true); }
@@ -404,6 +405,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "RakutenStore"."MarketplaceID"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 10<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.String MarketplaceID
 		{
 			get { return (System.String)GetValue((int)RakutenStoreFieldIndex.MarketplaceID, true); }
@@ -414,6 +416,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "RakutenStore"."ShopURL"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 50<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.String ShopURL
 		{
 			get { return (System.String)GetValue((int)RakutenStoreFieldIndex.ShopURL, true); }

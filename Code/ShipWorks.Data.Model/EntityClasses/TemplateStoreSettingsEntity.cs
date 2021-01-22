@@ -466,6 +466,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "TemplateStoreSettings"."TemplateStoreSettingsID"<br/>
 		/// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, true, true</remarks>
+		[DataMember]
 		public virtual System.Int64 TemplateStoreSettingsID
 		{
 			get { return (System.Int64)GetValue((int)TemplateStoreSettingsFieldIndex.TemplateStoreSettingsID, true); }
@@ -476,6 +477,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "TemplateStoreSettings"."TemplateID"<br/>
 		/// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Int64 TemplateID
 		{
 			get { return (System.Int64)GetValue((int)TemplateStoreSettingsFieldIndex.TemplateID, true); }
@@ -486,6 +488,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "TemplateStoreSettings"."StoreID"<br/>
 		/// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		[DataMember]
 		public virtual Nullable<System.Int64> StoreID
 		{
 			get { return (Nullable<System.Int64>)GetValue((int)TemplateStoreSettingsFieldIndex.StoreID, false); }
@@ -496,6 +499,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "TemplateStoreSettings"."EmailUseDefault"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Boolean EmailUseDefault
 		{
 			get { return (System.Boolean)GetValue((int)TemplateStoreSettingsFieldIndex.EmailUseDefault, true); }
@@ -506,6 +510,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "TemplateStoreSettings"."EmailAccountID"<br/>
 		/// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Int64 EmailAccountID
 		{
 			get { return (System.Int64)GetValue((int)TemplateStoreSettingsFieldIndex.EmailAccountID, true); }
@@ -516,6 +521,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "TemplateStoreSettings"."EmailTo"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 2147483647<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.String EmailTo
 		{
 			get { return (System.String)GetValue((int)TemplateStoreSettingsFieldIndex.EmailTo, true); }
@@ -526,6 +532,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "TemplateStoreSettings"."EmailCc"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 2147483647<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.String EmailCc
 		{
 			get { return (System.String)GetValue((int)TemplateStoreSettingsFieldIndex.EmailCc, true); }
@@ -536,6 +543,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "TemplateStoreSettings"."EmailBcc"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 2147483647<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.String EmailBcc
 		{
 			get { return (System.String)GetValue((int)TemplateStoreSettingsFieldIndex.EmailBcc, true); }
@@ -546,6 +554,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "TemplateStoreSettings"."EmailSubject"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 500<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.String EmailSubject
 		{
 			get { return (System.String)GetValue((int)TemplateStoreSettingsFieldIndex.EmailSubject, true); }
@@ -554,6 +563,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 
 		/// <summary> Gets / sets related entity of type 'TemplateEntity' which has to be set using a fetch action earlier. If no related entity is set for this property, null is returned..<br/><br/></summary>
 		[Browsable(true)]
+		[DataMember]
 		public virtual TemplateEntity Template
 		{
 			get	{ return _template; }
