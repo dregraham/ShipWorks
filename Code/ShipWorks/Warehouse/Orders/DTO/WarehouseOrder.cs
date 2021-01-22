@@ -67,6 +67,7 @@ namespace ShipWorks.Warehouse.Orders.DTO
         public WarehouseOrderAddress ShipAddress { get; set; }
         public string ChannelOrderId { get; set; }
         public DateTime? ShipByDate { get; set; }
+        public DateTime? DeliverByDate { get; set; }
 
         public string Custom1 { get; set; }
 

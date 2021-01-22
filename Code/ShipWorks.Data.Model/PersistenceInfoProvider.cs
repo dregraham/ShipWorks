@@ -2424,7 +2424,7 @@ namespace ShipWorks.Data.Model
 		/// <summary>Inits OrderEntity's mappings</summary>
 		private void InitOrderEntityMappings()
 		{
-			this.AddElementMapping("OrderEntity", @"ShipWorksLocal", @"dbo", "Order", 92, 0);
+			this.AddElementMapping("OrderEntity", @"ShipWorksLocal", @"dbo", "Order", 93, 0);
 			this.AddElementFieldMapping("OrderEntity", "OrderID", "OrderID", false, "BigInt", 0, 19, 0, true, "SCOPE_IDENTITY()", null, typeof(System.Int64), 0);
 			this.AddElementFieldMapping("OrderEntity", "RowVersion", "RowVersion", false, "Timestamp", 2147483647, 0, 0, false, "", null, typeof(System.Byte[]), 1);
 			this.AddElementFieldMapping("OrderEntity", "StoreID", "StoreID", false, "BigInt", 0, 19, 0, false, "", null, typeof(System.Int64), 2);
@@ -2517,6 +2517,7 @@ namespace ShipWorks.Data.Model
 			this.AddElementFieldMapping("OrderEntity", "Custom8", "Custom8", false, "NVarChar", 50, 0, 0, false, "", null, typeof(System.String), 89);
 			this.AddElementFieldMapping("OrderEntity", "Custom9", "Custom9", false, "NVarChar", 50, 0, 0, false, "", null, typeof(System.String), 90);
 			this.AddElementFieldMapping("OrderEntity", "Custom10", "Custom10", false, "NVarChar", 50, 0, 0, false, "", null, typeof(System.String), 91);
+			this.AddElementFieldMapping("OrderEntity", "DeliverByDate", "DeliverByDate", true, "DateTime", 0, 0, 0, false, "", null, typeof(System.DateTime), 92);
 		}
 
 		/// <summary>Inits OrderChargeEntity's mappings</summary>

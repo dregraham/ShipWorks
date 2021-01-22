@@ -93,8 +93,6 @@ namespace ShipWorks.Warehouse.Orders
         /// </summary>
         protected virtual void LoadOrderData(WarehouseOrder warehouseOrder, OrderEntity orderEntity)
         {
-            // todo: orderid, storeid, warehousecustomerid
-            // todo: figure out what should and shouldn't be downloaded when new
             orderEntity.OrderDate = warehouseOrder.OrderDate;
             orderEntity.OrderTotal = Math.Round(warehouseOrder.OrderTotal, 2);
             orderEntity.OnlineLastModified = warehouseOrder.OnlineLastModified;
@@ -104,6 +102,7 @@ namespace ShipWorks.Warehouse.Orders
             orderEntity.RequestedShipping = warehouseOrder.RequestedShipping;
             orderEntity.ChannelOrderID = warehouseOrder.ChannelOrderId;
             orderEntity.ShipByDate = warehouseOrder.ShipByDate;
+            orderEntity.DeliverByDate = warehouseOrder.DeliverByDate;
             orderEntity.HubOrderID = Guid.Parse(warehouseOrder.HubOrderId);
             orderEntity.HubSequence = warehouseOrder.HubSequence;
         }

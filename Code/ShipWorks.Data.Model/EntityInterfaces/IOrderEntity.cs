@@ -573,6 +573,12 @@ namespace ShipWorks.Data.Model.EntityInterfaces
         /// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 50<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
         System.String Custom10 { get; }
+        /// <summary> The DeliverByDate property of the Entity Order<br/><br/>
+        /// </summary>
+        /// <remarks>Mapped on table field: "Order"."DeliverByDate"<br/>
+        /// Table field type characteristics (type, precision, scale, length): DateTime, 0, 0, 0<br/>
+        /// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+        Nullable<System.DateTime> DeliverByDate { get; }
         
         
         ICustomerEntity Customer { get; }

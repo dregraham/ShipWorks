@@ -956,6 +956,7 @@
     <Compile Include="Filters\Content\Conditions\OrderItems\MpnCondition.cs" />
     <Compile Include="Filters\Content\Conditions\OrderItems\BrandCondition.cs" />
     <Compile Include="Filters\Content\Conditions\Orders\ChannelOrderIdCondition.cs" />
+    <Compile Include="Filters\Content\Conditions\Orders\DeliverByDateCondition.cs" />
     <Compile Include="Filters\Content\Conditions\Orders\Custom10Condition.cs" />
     <Compile Include="Filters\Content\Conditions\Orders\Custom1Condition.cs" />
     <Compile Include="Filters\Content\Conditions\Orders\Custom5Condition.cs" />
