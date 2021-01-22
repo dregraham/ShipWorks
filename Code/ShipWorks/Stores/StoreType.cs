@@ -471,7 +471,6 @@ namespace ShipWorks.Stores
             }
 
             order.OrderNumber = orderNumber;
-            order.DeliverByDate = new DateTime()
             order.ApplyOrderNumberPrefix(Store.ManualOrderPrefix);
             order.ApplyOrderNumberPostfix(Store.ManualOrderPostfix);
         }
