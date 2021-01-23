@@ -157,7 +157,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
         /// </summary>
         public static string GetDefaultDescription(UpsAccountEntity account)
         {
-            if (account.ShipEngineCarrierId != null)
+            if (!string.IsNullOrEmpty(account.ShipEngineCarrierId))
             {
                 return "UPS from ShipWorks";
             }
