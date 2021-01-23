@@ -70,7 +70,7 @@ namespace ShipWorks.Warehouse.Configuration
                         {
                             log.Error("Error getting configuration", ex);
                         }
-                    });
+                    }).Wait();
                 }
             }
         }
