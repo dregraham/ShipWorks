@@ -41,7 +41,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
         {
             try
             {
-                if (upsAccountRepository.GetAccountReadOnly(shipment).ShipEngineCarrierId != null)
+                if (!string.IsNullOrEmpty(upsAccountRepository.GetAccountReadOnly(shipment).ShipEngineCarrierId))
                 {
                     throw new ShippingException("This account cannot be used to process shipments using WorldShip.");
                 }

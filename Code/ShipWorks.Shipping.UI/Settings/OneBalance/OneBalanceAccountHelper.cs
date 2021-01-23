@@ -53,7 +53,7 @@ namespace ShipWorks.Shipping.UI.Settings.OneBalance
             }
 
             // If there are multiple accounts the one with a ShipEngineCarrierId is the One Balance account
-            var account = accounts.FirstOrDefault(a => a.ShipEngineCarrierId != null);
+            var account = accounts.FirstOrDefault(a => !string.IsNullOrEmpty(a.ShipEngineCarrierId));
 
             if (account == null)
             {
@@ -73,7 +73,7 @@ namespace ShipWorks.Shipping.UI.Settings.OneBalance
         /// Get the ups account from the local database
         /// </summary>
         public bool LocalUpsAccountExists() =>
-            upsRepository.AccountsReadOnly.Any(e => e.ShipEngineCarrierId != null);
+            upsRepository.AccountsReadOnly.Any(e => !string.IsNullOrEmpty(e.ShipEngineCarrierId));
 
         /// <summary>
         /// Get the USPS account that has been used to setup one balance

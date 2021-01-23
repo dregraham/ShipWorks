@@ -46,7 +46,7 @@ namespace ShipWorks.Shipping.Carriers.Dhl
             {
                 IDhlExpressAccountEntity account = accountRepository.GetAccountReadOnly(shipment);
 
-                return account?.ShipEngineCarrierId == null ?
+                return string.IsNullOrEmpty(account?.ShipEngineCarrierId) ?
                     stampsRatingClient.GetRates(shipment) :
                     shipEngineRatingClient.GetRates(shipment);
             }

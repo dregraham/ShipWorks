@@ -727,7 +727,7 @@ namespace ShipWorks.ApplicationCore.Dashboard
         {
             var oneBalanceItem = dashboardItems.OfType<DashboardOneBalancePromoItem>().SingleOrDefault();
 
-            if (UspsAccountManager.UspsAccountsReadOnly.Any(e => e.ShipEngineCarrierId != null))
+            if (UspsAccountManager.UspsAccountsReadOnly.Any(e => !string.IsNullOrEmpty(e.ShipEngineCarrierId)))
             {
                 if (oneBalanceItem != null)
                 {

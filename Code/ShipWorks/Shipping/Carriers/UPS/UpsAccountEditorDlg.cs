@@ -48,7 +48,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
             }
             personControl.LoadEntity(new PersonAdapter(account, ""));
 
-            if (account.ShipEngineCarrierId != null)
+            if (!string.IsNullOrEmpty(account.ShipEngineCarrierId))
             {
                 description.ReadOnly = true;
                 labelOptional.Visible = false;

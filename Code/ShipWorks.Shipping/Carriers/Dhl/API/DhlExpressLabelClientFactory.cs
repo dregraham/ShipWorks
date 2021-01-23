@@ -35,7 +35,7 @@ namespace ShipWorks.Shipping.Carriers.Dhl.API
         {
             IDhlExpressAccountEntity account = accountRepository.GetAccount(shipment);
 
-            if (account?.ShipEngineCarrierId != null)
+            if (!string.IsNullOrEmpty(account?.ShipEngineCarrierId))
             {
                 return createShipEngineLabelClient();
             }

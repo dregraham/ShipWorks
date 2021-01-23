@@ -125,7 +125,7 @@ namespace ShipWorks.Shipping.Carriers.Ups.OneBalance
             {
                 UspsAccountEntity uspsAccount = uspsAccountRepository.Accounts.Single();
 
-                if (uspsAccount.ShipEngineCarrierId == null)
+                if (string.IsNullOrEmpty(uspsAccount.ShipEngineCarrierId))
                 {
                     return await CreateOneBalanceAccount(uspsAccount).ConfigureAwait(false);
                 }

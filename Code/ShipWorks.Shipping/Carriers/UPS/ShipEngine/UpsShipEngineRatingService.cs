@@ -54,7 +54,7 @@ namespace ShipWorks.Shipping.Carriers.Ups.ShipEngine
         public RateGroup GetRates(ShipmentEntity shipment)
         {
             // We don't have any ShipEngine UPS accounts, so let the user know they need an account.
-            if (accountRepository.Accounts.All(x => x.ShipEngineCarrierId == null))
+            if (accountRepository.Accounts.All(x => string.IsNullOrEmpty(x.ShipEngineCarrierId)))
             {
                 throw new ShippingException("A UPS from ShipWorks account is required to view UPS rates.");
             }

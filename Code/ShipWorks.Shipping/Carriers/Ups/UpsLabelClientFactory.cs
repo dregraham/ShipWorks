@@ -35,7 +35,7 @@ namespace ShipWorks.Shipping.Carriers.Ups
         {
             IUpsAccountEntity account = accountRepository.GetAccount(shipment);
 
-            if (account?.ShipEngineCarrierId != null)
+            if (!string.IsNullOrEmpty(account?.ShipEngineCarrierId))
             {
                 return seLabelClientFactory();
             }

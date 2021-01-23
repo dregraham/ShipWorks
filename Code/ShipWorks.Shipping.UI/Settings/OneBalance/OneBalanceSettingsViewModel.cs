@@ -235,7 +235,7 @@ namespace ShipWorks.Shipping.UI.Settings.OneBalance
         /// <summary>
         /// Get the Ups account
         /// </summary>
-        private UpsAccountEntity GetUpsAccount() => UpsAccountManager.Accounts.FirstOrDefault(e => e.ShipEngineCarrierId != null);
+        private UpsAccountEntity GetUpsAccount() => UpsAccountManager.Accounts.FirstOrDefault(e => !string.IsNullOrEmpty(e.ShipEngineCarrierId));
 
         /// <summary>
         /// Event handler for the banners SetupComplete event
@@ -273,7 +273,7 @@ namespace ShipWorks.Shipping.UI.Settings.OneBalance
             }
 
             // If there are multiple accounts the one with a ShipEngineCarrierId is the One Balance account
-            return uspsAccountManager.UspsAccounts.FirstOrDefault(a => a.ShipEngineCarrierId != null);
+            return uspsAccountManager.UspsAccounts.FirstOrDefault(a => !string.IsNullOrEmpty(a.ShipEngineCarrierId));
         }
     }
 }
