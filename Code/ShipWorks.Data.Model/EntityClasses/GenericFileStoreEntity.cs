@@ -426,6 +426,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "GenericFileStore"."FileFormat"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Int32 FileFormat
 		{
 			get { return (System.Int32)GetValue((int)GenericFileStoreFieldIndex.FileFormat, true); }
@@ -436,6 +437,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "GenericFileStore"."FileSource"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Int32 FileSource
 		{
 			get { return (System.Int32)GetValue((int)GenericFileStoreFieldIndex.FileSource, true); }
@@ -446,6 +448,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "GenericFileStore"."DiskFolder"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 355<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.String DiskFolder
 		{
 			get { return (System.String)GetValue((int)GenericFileStoreFieldIndex.DiskFolder, true); }
@@ -456,6 +459,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "GenericFileStore"."FtpAccountID"<br/>
 		/// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		[DataMember]
 		public virtual Nullable<System.Int64> FtpAccountID
 		{
 			get { return (Nullable<System.Int64>)GetValue((int)GenericFileStoreFieldIndex.FtpAccountID, false); }
@@ -466,6 +470,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "GenericFileStore"."FtpFolder"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 355<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.String FtpFolder
 		{
 			get { return (System.String)GetValue((int)GenericFileStoreFieldIndex.FtpFolder, true); }
@@ -476,6 +481,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "GenericFileStore"."EmailAccountID"<br/>
 		/// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		[DataMember]
 		public virtual Nullable<System.Int64> EmailAccountID
 		{
 			get { return (Nullable<System.Int64>)GetValue((int)GenericFileStoreFieldIndex.EmailAccountID, false); }
@@ -486,6 +492,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "GenericFileStore"."EmailFolder"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 100<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.String EmailIncomingFolder
 		{
 			get { return (System.String)GetValue((int)GenericFileStoreFieldIndex.EmailIncomingFolder, true); }
@@ -496,6 +503,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "GenericFileStore"."EmailFolderValidityID"<br/>
 		/// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Int64 EmailFolderValidityID
 		{
 			get { return (System.Int64)GetValue((int)GenericFileStoreFieldIndex.EmailFolderValidityID, true); }
@@ -506,6 +514,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "GenericFileStore"."EmailFolderLastMessageID"<br/>
 		/// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Int64 EmailFolderLastMessageID
 		{
 			get { return (System.Int64)GetValue((int)GenericFileStoreFieldIndex.EmailFolderLastMessageID, true); }
@@ -516,6 +525,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "GenericFileStore"."EmailOnlyUnread"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Boolean EmailOnlyUnread
 		{
 			get { return (System.Boolean)GetValue((int)GenericFileStoreFieldIndex.EmailOnlyUnread, true); }
@@ -526,6 +536,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "GenericFileStore"."NamePatternMatch"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 50<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		[DataMember]
 		public virtual System.String NamePatternMatch
 		{
 			get { return (System.String)GetValue((int)GenericFileStoreFieldIndex.NamePatternMatch, true); }
@@ -536,6 +547,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "GenericFileStore"."NamePatternSkip"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 50<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		[DataMember]
 		public virtual System.String NamePatternSkip
 		{
 			get { return (System.String)GetValue((int)GenericFileStoreFieldIndex.NamePatternSkip, true); }
@@ -546,6 +558,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "GenericFileStore"."SuccessAction"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Int32 SuccessAction
 		{
 			get { return (System.Int32)GetValue((int)GenericFileStoreFieldIndex.SuccessAction, true); }
@@ -556,6 +569,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "GenericFileStore"."SuccessMoveFolder"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 355<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.String SuccessMoveFolder
 		{
 			get { return (System.String)GetValue((int)GenericFileStoreFieldIndex.SuccessMoveFolder, true); }
@@ -566,6 +580,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "GenericFileStore"."ErrorAction"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Int32 ErrorAction
 		{
 			get { return (System.Int32)GetValue((int)GenericFileStoreFieldIndex.ErrorAction, true); }
@@ -576,6 +591,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "GenericFileStore"."ErrorMoveFolder"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 355<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.String ErrorMoveFolder
 		{
 			get { return (System.String)GetValue((int)GenericFileStoreFieldIndex.ErrorMoveFolder, true); }
@@ -586,6 +602,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "GenericFileStore"."XmlXsltFileName"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 355<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		[DataMember]
 		public virtual System.String XmlXsltFileName
 		{
 			get { return (System.String)GetValue((int)GenericFileStoreFieldIndex.XmlXsltFileName, true); }
@@ -596,6 +613,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "GenericFileStore"."XmlXsltContent"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NText, 0, 0, 1073741823<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		[DataMember]
 		public virtual System.String XmlXsltContent
 		{
 			get { return (System.String)GetValue((int)GenericFileStoreFieldIndex.XmlXsltContent, true); }
@@ -606,6 +624,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "GenericFileStore"."FlatImportMap"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NText, 0, 0, 1073741823<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.String FlatImportMap
 		{
 			get { return (System.String)GetValue((int)GenericFileStoreFieldIndex.FlatImportMap, true); }

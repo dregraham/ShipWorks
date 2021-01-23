@@ -477,6 +477,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "ServiceStatus"."ServiceStatusID"<br/>
 		/// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, true, true</remarks>
+		[DataMember]
 		public virtual System.Int64 ServiceStatusID
 		{
 			get { return (System.Int64)GetValue((int)ServiceStatusFieldIndex.ServiceStatusID, true); }
@@ -487,6 +488,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "ServiceStatus"."RowVersion"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Timestamp, 0, 0, 2147483647<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Byte[] RowVersion
 		{
 			get { return (System.Byte[])GetValue((int)ServiceStatusFieldIndex.RowVersion, true); }
@@ -497,6 +499,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "ServiceStatus"."ComputerID"<br/>
 		/// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Int64 ComputerID
 		{
 			get { return (System.Int64)GetValue((int)ServiceStatusFieldIndex.ComputerID, true); }
@@ -507,6 +510,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "ServiceStatus"."ServiceType"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Int32 ServiceType
 		{
 			get { return (System.Int32)GetValue((int)ServiceStatusFieldIndex.ServiceType, true); }
@@ -517,6 +521,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "ServiceStatus"."LastStartDateTime"<br/>
 		/// Table field type characteristics (type, precision, scale, length): DateTime, 0, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		[DataMember]
 		public virtual Nullable<System.DateTime> LastStartDateTime
 		{
 			get { return (Nullable<System.DateTime>)GetValue((int)ServiceStatusFieldIndex.LastStartDateTime, false); }
@@ -527,6 +532,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "ServiceStatus"."LastStopDateTime"<br/>
 		/// Table field type characteristics (type, precision, scale, length): DateTime, 0, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		[DataMember]
 		public virtual Nullable<System.DateTime> LastStopDateTime
 		{
 			get { return (Nullable<System.DateTime>)GetValue((int)ServiceStatusFieldIndex.LastStopDateTime, false); }
@@ -537,6 +543,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "ServiceStatus"."LastCheckInDateTime"<br/>
 		/// Table field type characteristics (type, precision, scale, length): DateTime, 0, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		[DataMember]
 		public virtual Nullable<System.DateTime> LastCheckInDateTime
 		{
 			get { return (Nullable<System.DateTime>)GetValue((int)ServiceStatusFieldIndex.LastCheckInDateTime, false); }
@@ -547,6 +554,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "ServiceStatus"."ServiceFullName"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 256<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.String ServiceFullName
 		{
 			get { return (System.String)GetValue((int)ServiceStatusFieldIndex.ServiceFullName, true); }
@@ -557,6 +565,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "ServiceStatus"."ServiceDisplayName"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 256<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.String ServiceDisplayName
 		{
 			get { return (System.String)GetValue((int)ServiceStatusFieldIndex.ServiceDisplayName, true); }
@@ -565,6 +574,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 
 		/// <summary> Gets / sets related entity of type 'ComputerEntity' which has to be set using a fetch action earlier. If no related entity is set for this property, null is returned..<br/><br/></summary>
 		[Browsable(true)]
+		[DataMember]
 		public virtual ComputerEntity Computer
 		{
 			get	{ return _computer; }

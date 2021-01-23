@@ -214,7 +214,7 @@ namespace ShipWorks.Shipping.UI.Carriers.Dhl
             }
             else
             {
-                uspsAccount = uspsAccounts.FirstOrDefault(x => x.ShipEngineCarrierId != null);
+                uspsAccount = uspsAccounts.FirstOrDefault(x => !string.IsNullOrEmpty(x.ShipEngineCarrierId));
             }
 
             // Only skip the account screen if they already have a One Balance USPS account.

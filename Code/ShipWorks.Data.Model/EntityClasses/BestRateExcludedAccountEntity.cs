@@ -360,6 +360,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "BestRateExcludedAccount"."AccountID"<br/>
 		/// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, true, false</remarks>
+		[DataMember]
 		public virtual System.Int64 AccountID
 		{
 			get { return (System.Int64)GetValue((int)BestRateExcludedAccountFieldIndex.AccountID, true); }

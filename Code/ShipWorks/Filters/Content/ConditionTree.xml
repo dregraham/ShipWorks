@@ -77,6 +77,7 @@
         <Condition identifier="Order.ShipSenseRecognitionStatus" displayAs="ShipSense Status" />
         <Condition identifier="Order.ChannelOrderID" displayAs="Channel Order ID" />
         <Condition identifier="Order.ShipByDate" displayAs="Ship By Date" />
+		<Condition identifier="Order.DeliverByDate" displayAs="Deliver By Date" />
         <Condition identifier="Order.Verified" displayAs ="Verified" />
         <Condition identifier="Order.Custom1" displayAs="Custom Field 1" />
         <Condition identifier="Order.Custom2" displayAs="Custom Field 2" />
@@ -179,6 +180,7 @@
         <Condition identifier="GenericModule.AmazonOrderID" />
         <Condition identifier="GenericModule.IsFBA" />
         <Condition identifier="GenericModule.IsPrime" />
+		<Condition identifier="GenericModule.Marketplace" />
         <Condition identifier="InfiPlex.AmazonOrderID" />
         <Condition identifier="InfiPlex.IsFBA" />
         <Condition identifier="InfiPlex.IsPrime" />

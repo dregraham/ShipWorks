@@ -525,6 +525,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "UpsProfile"."ShippingProfileID"<br/>
 		/// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, true, false</remarks>
+		[DataMember]
 		public virtual System.Int64 ShippingProfileID
 		{
 			get { return (System.Int64)GetValue((int)UpsProfileFieldIndex.ShippingProfileID, true); }
@@ -535,6 +536,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "UpsProfile"."UpsAccountID"<br/>
 		/// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		[DataMember]
 		public virtual Nullable<System.Int64> UpsAccountID
 		{
 			get { return (Nullable<System.Int64>)GetValue((int)UpsProfileFieldIndex.UpsAccountID, false); }
@@ -545,6 +547,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "UpsProfile"."Service"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		[DataMember]
 		public virtual Nullable<System.Int32> Service
 		{
 			get { return (Nullable<System.Int32>)GetValue((int)UpsProfileFieldIndex.Service, false); }
@@ -555,6 +558,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "UpsProfile"."SaturdayDelivery"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		[DataMember]
 		public virtual Nullable<System.Boolean> SaturdayDelivery
 		{
 			get { return (Nullable<System.Boolean>)GetValue((int)UpsProfileFieldIndex.SaturdayDelivery, false); }
@@ -565,6 +569,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "UpsProfile"."ResidentialDetermination"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		[DataMember]
 		public virtual Nullable<System.Int32> ResidentialDetermination
 		{
 			get { return (Nullable<System.Int32>)GetValue((int)UpsProfileFieldIndex.ResidentialDetermination, false); }
@@ -575,6 +580,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "UpsProfile"."DeliveryConfirmation"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		[DataMember]
 		public virtual Nullable<System.Int32> DeliveryConfirmation
 		{
 			get { return (Nullable<System.Int32>)GetValue((int)UpsProfileFieldIndex.DeliveryConfirmation, false); }
@@ -585,6 +591,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "UpsProfile"."ReferenceNumber"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 300<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		[DataMember]
 		public virtual System.String ReferenceNumber
 		{
 			get { return (System.String)GetValue((int)UpsProfileFieldIndex.ReferenceNumber, true); }
@@ -595,6 +602,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "UpsProfile"."ReferenceNumber2"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 300<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		[DataMember]
 		public virtual System.String ReferenceNumber2
 		{
 			get { return (System.String)GetValue((int)UpsProfileFieldIndex.ReferenceNumber2, true); }
@@ -605,6 +613,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "UpsProfile"."PayorType"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		[DataMember]
 		public virtual Nullable<System.Int32> PayorType
 		{
 			get { return (Nullable<System.Int32>)GetValue((int)UpsProfileFieldIndex.PayorType, false); }
@@ -615,6 +624,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "UpsProfile"."PayorAccount"<br/>
 		/// Table field type characteristics (type, precision, scale, length): VarChar, 0, 0, 10<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		[DataMember]
 		public virtual System.String PayorAccount
 		{
 			get { return (System.String)GetValue((int)UpsProfileFieldIndex.PayorAccount, true); }
@@ -625,6 +635,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "UpsProfile"."PayorPostalCode"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 20<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		[DataMember]
 		public virtual System.String PayorPostalCode
 		{
 			get { return (System.String)GetValue((int)UpsProfileFieldIndex.PayorPostalCode, true); }
@@ -635,6 +646,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "UpsProfile"."PayorCountryCode"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 50<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		[DataMember]
 		public virtual System.String PayorCountryCode
 		{
 			get { return (System.String)GetValue((int)UpsProfileFieldIndex.PayorCountryCode, true); }
@@ -645,6 +657,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "UpsProfile"."EmailNotifySender"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		[DataMember]
 		public virtual Nullable<System.Int32> EmailNotifySender
 		{
 			get { return (Nullable<System.Int32>)GetValue((int)UpsProfileFieldIndex.EmailNotifySender, false); }
@@ -655,6 +668,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "UpsProfile"."EmailNotifyRecipient"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		[DataMember]
 		public virtual Nullable<System.Int32> EmailNotifyRecipient
 		{
 			get { return (Nullable<System.Int32>)GetValue((int)UpsProfileFieldIndex.EmailNotifyRecipient, false); }
@@ -665,6 +679,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "UpsProfile"."EmailNotifyOther"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		[DataMember]
 		public virtual Nullable<System.Int32> EmailNotifyOther
 		{
 			get { return (Nullable<System.Int32>)GetValue((int)UpsProfileFieldIndex.EmailNotifyOther, false); }
@@ -675,6 +690,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "UpsProfile"."EmailNotifyOtherAddress"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 100<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		[DataMember]
 		public virtual System.String EmailNotifyOtherAddress
 		{
 			get { return (System.String)GetValue((int)UpsProfileFieldIndex.EmailNotifyOtherAddress, true); }
@@ -685,6 +701,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "UpsProfile"."EmailNotifyFrom"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 100<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		[DataMember]
 		public virtual System.String EmailNotifyFrom
 		{
 			get { return (System.String)GetValue((int)UpsProfileFieldIndex.EmailNotifyFrom, true); }
@@ -695,6 +712,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "UpsProfile"."EmailNotifySubject"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		[DataMember]
 		public virtual Nullable<System.Int32> EmailNotifySubject
 		{
 			get { return (Nullable<System.Int32>)GetValue((int)UpsProfileFieldIndex.EmailNotifySubject, false); }
@@ -705,6 +723,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "UpsProfile"."EmailNotifyMessage"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 120<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		[DataMember]
 		public virtual System.String EmailNotifyMessage
 		{
 			get { return (System.String)GetValue((int)UpsProfileFieldIndex.EmailNotifyMessage, true); }
@@ -715,6 +734,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "UpsProfile"."ReturnService"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		[DataMember]
 		public virtual Nullable<System.Int32> ReturnService
 		{
 			get { return (Nullable<System.Int32>)GetValue((int)UpsProfileFieldIndex.ReturnService, false); }
@@ -725,6 +745,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "UpsProfile"."ReturnUndeliverableEmail"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 100<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		[DataMember]
 		public virtual System.String ReturnUndeliverableEmail
 		{
 			get { return (System.String)GetValue((int)UpsProfileFieldIndex.ReturnUndeliverableEmail, true); }
@@ -735,6 +756,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "UpsProfile"."ReturnContents"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 300<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		[DataMember]
 		public virtual System.String ReturnContents
 		{
 			get { return (System.String)GetValue((int)UpsProfileFieldIndex.ReturnContents, true); }
@@ -745,6 +767,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "UpsProfile"."Endorsement"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		[DataMember]
 		public virtual Nullable<System.Int32> Endorsement
 		{
 			get { return (Nullable<System.Int32>)GetValue((int)UpsProfileFieldIndex.Endorsement, false); }
@@ -755,6 +778,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "UpsProfile"."Subclassification"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		[DataMember]
 		public virtual Nullable<System.Int32> Subclassification
 		{
 			get { return (Nullable<System.Int32>)GetValue((int)UpsProfileFieldIndex.Subclassification, false); }
@@ -765,6 +789,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "UpsProfile"."PaperlessAdditionalDocumentation"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		[DataMember]
 		public virtual Nullable<System.Boolean> PaperlessAdditionalDocumentation
 		{
 			get { return (Nullable<System.Boolean>)GetValue((int)UpsProfileFieldIndex.PaperlessAdditionalDocumentation, false); }
@@ -775,6 +800,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "UpsProfile"."ShipperRelease"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		[DataMember]
 		public virtual Nullable<System.Boolean> ShipperRelease
 		{
 			get { return (Nullable<System.Boolean>)GetValue((int)UpsProfileFieldIndex.ShipperRelease, false); }
@@ -785,6 +811,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "UpsProfile"."CarbonNeutral"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		[DataMember]
 		public virtual Nullable<System.Boolean> CarbonNeutral
 		{
 			get { return (Nullable<System.Boolean>)GetValue((int)UpsProfileFieldIndex.CarbonNeutral, false); }
@@ -795,6 +822,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "UpsProfile"."CommercialPaperlessInvoice"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		[DataMember]
 		public virtual Nullable<System.Boolean> CommercialPaperlessInvoice
 		{
 			get { return (Nullable<System.Boolean>)GetValue((int)UpsProfileFieldIndex.CommercialPaperlessInvoice, false); }
@@ -805,6 +833,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "UpsProfile"."CostCenter"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 100<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		[DataMember]
 		public virtual System.String CostCenter
 		{
 			get { return (System.String)GetValue((int)UpsProfileFieldIndex.CostCenter, true); }
@@ -815,6 +844,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "UpsProfile"."IrregularIndicator"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		[DataMember]
 		public virtual Nullable<System.Int32> IrregularIndicator
 		{
 			get { return (Nullable<System.Int32>)GetValue((int)UpsProfileFieldIndex.IrregularIndicator, false); }
@@ -825,6 +855,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "UpsProfile"."Cn22Number"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 255<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		[DataMember]
 		public virtual System.String Cn22Number
 		{
 			get { return (System.String)GetValue((int)UpsProfileFieldIndex.Cn22Number, true); }
@@ -835,6 +866,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "UpsProfile"."ShipmentChargeType"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		[DataMember]
 		public virtual Nullable<System.Int32> ShipmentChargeType
 		{
 			get { return (Nullable<System.Int32>)GetValue((int)UpsProfileFieldIndex.ShipmentChargeType, false); }
@@ -845,6 +877,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "UpsProfile"."ShipmentChargeAccount"<br/>
 		/// Table field type characteristics (type, precision, scale, length): VarChar, 0, 0, 10<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		[DataMember]
 		public virtual System.String ShipmentChargeAccount
 		{
 			get { return (System.String)GetValue((int)UpsProfileFieldIndex.ShipmentChargeAccount, true); }
@@ -855,6 +888,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "UpsProfile"."ShipmentChargePostalCode"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 20<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		[DataMember]
 		public virtual System.String ShipmentChargePostalCode
 		{
 			get { return (System.String)GetValue((int)UpsProfileFieldIndex.ShipmentChargePostalCode, true); }
@@ -865,6 +899,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "UpsProfile"."ShipmentChargeCountryCode"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 50<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		[DataMember]
 		public virtual System.String ShipmentChargeCountryCode
 		{
 			get { return (System.String)GetValue((int)UpsProfileFieldIndex.ShipmentChargeCountryCode, true); }
@@ -875,6 +910,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "UpsProfile"."UspsPackageID"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 100<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		[DataMember]
 		public virtual System.String UspsPackageID
 		{
 			get { return (System.String)GetValue((int)UpsProfileFieldIndex.UspsPackageID, true); }
@@ -885,6 +921,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "UpsProfile"."CustomsDescription"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 150<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		[DataMember]
 		public virtual System.String CustomsDescription
 		{
 			get { return (System.String)GetValue((int)UpsProfileFieldIndex.CustomsDescription, true); }
@@ -894,6 +931,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <summary> Gets / sets related entity of type 'ShippingProfileEntity' which has to be set using a fetch action earlier. If no related entity is set for this property, null is returned.<br/><br/>
 		/// </summary>
 		[Browsable(true)]
+		[DataMember]
 		public virtual ShippingProfileEntity ShippingProfile
 		{
 			get { return _shippingProfile; }

@@ -388,6 +388,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "AmazonSWAAccount"."AmazonSWAAccountID"<br/>
 		/// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, true, true</remarks>
+		[DataMember]
 		public virtual System.Int64 AmazonSWAAccountID
 		{
 			get { return (System.Int64)GetValue((int)AmazonSWAAccountFieldIndex.AmazonSWAAccountID, true); }
@@ -398,6 +399,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "AmazonSWAAccount"."RowVersion"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Timestamp, 0, 0, 2147483647<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Byte[] RowVersion
 		{
 			get { return (System.Byte[])GetValue((int)AmazonSWAAccountFieldIndex.RowVersion, true); }
@@ -408,6 +410,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "AmazonSWAAccount"."ShipEngineCarrierId"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 50<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.String ShipEngineCarrierId
 		{
 			get { return (System.String)GetValue((int)AmazonSWAAccountFieldIndex.ShipEngineCarrierId, true); }
@@ -418,6 +421,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "AmazonSWAAccount"."Description"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 50<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.String Description
 		{
 			get { return (System.String)GetValue((int)AmazonSWAAccountFieldIndex.Description, true); }
@@ -428,6 +432,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "AmazonSWAAccount"."FirstName"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 30<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.String FirstName
 		{
 			get { return (System.String)GetValue((int)AmazonSWAAccountFieldIndex.FirstName, true); }
@@ -438,6 +443,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "AmazonSWAAccount"."MiddleName"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 30<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.String MiddleName
 		{
 			get { return (System.String)GetValue((int)AmazonSWAAccountFieldIndex.MiddleName, true); }
@@ -448,6 +454,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "AmazonSWAAccount"."LastName"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 30<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.String LastName
 		{
 			get { return (System.String)GetValue((int)AmazonSWAAccountFieldIndex.LastName, true); }
@@ -458,6 +465,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "AmazonSWAAccount"."Company"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 30<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.String Company
 		{
 			get { return (System.String)GetValue((int)AmazonSWAAccountFieldIndex.Company, true); }
@@ -468,6 +476,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "AmazonSWAAccount"."Street1"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 43<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.String Street1
 		{
 			get { return (System.String)GetValue((int)AmazonSWAAccountFieldIndex.Street1, true); }
@@ -478,6 +487,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "AmazonSWAAccount"."City"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 25<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.String City
 		{
 			get { return (System.String)GetValue((int)AmazonSWAAccountFieldIndex.City, true); }
@@ -488,6 +498,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "AmazonSWAAccount"."StateProvCode"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 50<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.String StateProvCode
 		{
 			get { return (System.String)GetValue((int)AmazonSWAAccountFieldIndex.StateProvCode, true); }
@@ -498,6 +509,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "AmazonSWAAccount"."PostalCode"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 10<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.String PostalCode
 		{
 			get { return (System.String)GetValue((int)AmazonSWAAccountFieldIndex.PostalCode, true); }
@@ -508,6 +520,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "AmazonSWAAccount"."CountryCode"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 50<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.String CountryCode
 		{
 			get { return (System.String)GetValue((int)AmazonSWAAccountFieldIndex.CountryCode, true); }
@@ -518,6 +531,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "AmazonSWAAccount"."Email"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 50<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.String Email
 		{
 			get { return (System.String)GetValue((int)AmazonSWAAccountFieldIndex.Email, true); }
@@ -528,6 +542,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "AmazonSWAAccount"."Phone"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 15<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.String Phone
 		{
 			get { return (System.String)GetValue((int)AmazonSWAAccountFieldIndex.Phone, true); }

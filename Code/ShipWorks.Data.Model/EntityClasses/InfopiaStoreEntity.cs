@@ -390,6 +390,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "InfopiaStore"."ApiToken"<br/>
 		/// Table field type characteristics (type, precision, scale, length): VarChar, 0, 0, 128<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.String ApiToken
 		{
 			get { return (System.String)GetValue((int)InfopiaStoreFieldIndex.ApiToken, true); }

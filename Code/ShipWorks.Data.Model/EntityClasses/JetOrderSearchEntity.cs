@@ -456,6 +456,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "JetOrderSearch"."JetOrderSearchID"<br/>
 		/// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, true, true</remarks>
+		[DataMember]
 		public virtual System.Int64 JetOrderSearchID
 		{
 			get { return (System.Int64)GetValue((int)JetOrderSearchFieldIndex.JetOrderSearchID, true); }
@@ -466,6 +467,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "JetOrderSearch"."OrderID"<br/>
 		/// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Int64 OrderID
 		{
 			get { return (System.Int64)GetValue((int)JetOrderSearchFieldIndex.OrderID, true); }
@@ -476,6 +478,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "JetOrderSearch"."MerchantOrderID"<br/>
 		/// Table field type characteristics (type, precision, scale, length): VarChar, 0, 0, 50<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.String MerchantOrderID
 		{
 			get { return (System.String)GetValue((int)JetOrderSearchFieldIndex.MerchantOrderID, true); }
@@ -486,6 +489,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "JetOrderSearch"."OriginalOrderID"<br/>
 		/// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Int64 OriginalOrderID
 		{
 			get { return (System.Int64)GetValue((int)JetOrderSearchFieldIndex.OriginalOrderID, true); }
@@ -494,6 +498,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 
 		/// <summary> Gets / sets related entity of type 'JetOrderEntity' which has to be set using a fetch action earlier. If no related entity is set for this property, null is returned..<br/><br/></summary>
 		[Browsable(true)]
+		[DataMember]
 		public virtual JetOrderEntity JetOrder
 		{
 			get	{ return _jetOrder; }

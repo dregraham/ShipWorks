@@ -439,6 +439,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "EmailOutbound"."EmailOutboundID"<br/>
 		/// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, true, true</remarks>
+		[DataMember]
 		public virtual System.Int64 EmailOutboundID
 		{
 			get { return (System.Int64)GetValue((int)EmailOutboundFieldIndex.EmailOutboundID, true); }
@@ -449,6 +450,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "EmailOutbound"."RowVersion"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Timestamp, 0, 0, 2147483647<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Byte[] RowVersion
 		{
 			get { return (System.Byte[])GetValue((int)EmailOutboundFieldIndex.RowVersion, true); }
@@ -459,6 +461,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "EmailOutbound"."ContextID"<br/>
 		/// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		[DataMember]
 		public virtual Nullable<System.Int64> ContextID
 		{
 			get { return (Nullable<System.Int64>)GetValue((int)EmailOutboundFieldIndex.ContextID, false); }
@@ -469,6 +472,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "EmailOutbound"."ContextType"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		[DataMember]
 		public virtual Nullable<System.Int32> ContextType
 		{
 			get { return (Nullable<System.Int32>)GetValue((int)EmailOutboundFieldIndex.ContextType, false); }
@@ -479,6 +483,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "EmailOutbound"."TemplateID"<br/>
 		/// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		[DataMember]
 		public virtual Nullable<System.Int64> TemplateID
 		{
 			get { return (Nullable<System.Int64>)GetValue((int)EmailOutboundFieldIndex.TemplateID, false); }
@@ -489,6 +494,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "EmailOutbound"."AccountID"<br/>
 		/// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Int64 AccountID
 		{
 			get { return (System.Int64)GetValue((int)EmailOutboundFieldIndex.AccountID, true); }
@@ -499,6 +505,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "EmailOutbound"."Visibility"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Int32 Visibility
 		{
 			get { return (System.Int32)GetValue((int)EmailOutboundFieldIndex.Visibility, true); }
@@ -509,6 +516,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "EmailOutbound"."FromAddress"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 200<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.String FromAddress
 		{
 			get { return (System.String)GetValue((int)EmailOutboundFieldIndex.FromAddress, true); }
@@ -519,6 +527,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "EmailOutbound"."ToList"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 2147483647<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.String ToList
 		{
 			get { return (System.String)GetValue((int)EmailOutboundFieldIndex.ToList, true); }
@@ -529,6 +538,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "EmailOutbound"."CcList"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 2147483647<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.String CcList
 		{
 			get { return (System.String)GetValue((int)EmailOutboundFieldIndex.CcList, true); }
@@ -539,6 +549,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "EmailOutbound"."BccList"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 2147483647<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.String BccList
 		{
 			get { return (System.String)GetValue((int)EmailOutboundFieldIndex.BccList, true); }
@@ -549,6 +560,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "EmailOutbound"."Subject"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 300<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.String Subject
 		{
 			get { return (System.String)GetValue((int)EmailOutboundFieldIndex.Subject, true); }
@@ -559,6 +571,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "EmailOutbound"."HtmlPartResourceID"<br/>
 		/// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		[DataMember]
 		public virtual Nullable<System.Int64> HtmlPartResourceID
 		{
 			get { return (Nullable<System.Int64>)GetValue((int)EmailOutboundFieldIndex.HtmlPartResourceID, false); }
@@ -569,6 +582,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "EmailOutbound"."PlainPartResourceID"<br/>
 		/// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Int64 PlainPartResourceID
 		{
 			get { return (System.Int64)GetValue((int)EmailOutboundFieldIndex.PlainPartResourceID, true); }
@@ -579,6 +593,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "EmailOutbound"."Encoding"<br/>
 		/// Table field type characteristics (type, precision, scale, length): VarChar, 0, 0, 20<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		[DataMember]
 		public virtual System.String Encoding
 		{
 			get { return (System.String)GetValue((int)EmailOutboundFieldIndex.Encoding, true); }
@@ -589,6 +604,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "EmailOutbound"."ComposedDate"<br/>
 		/// Table field type characteristics (type, precision, scale, length): DateTime, 0, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.DateTime ComposedDate
 		{
 			get { return (System.DateTime)GetValue((int)EmailOutboundFieldIndex.ComposedDate, true); }
@@ -599,6 +615,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "EmailOutbound"."SentDate"<br/>
 		/// Table field type characteristics (type, precision, scale, length): DateTime, 0, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.DateTime SentDate
 		{
 			get { return (System.DateTime)GetValue((int)EmailOutboundFieldIndex.SentDate, true); }
@@ -609,6 +626,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "EmailOutbound"."DontSendBefore"<br/>
 		/// Table field type characteristics (type, precision, scale, length): DateTime, 0, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		[DataMember]
 		public virtual Nullable<System.DateTime> DontSendBefore
 		{
 			get { return (Nullable<System.DateTime>)GetValue((int)EmailOutboundFieldIndex.DontSendBefore, false); }
@@ -619,6 +637,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "EmailOutbound"."SendStatus"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Int32 SendStatus
 		{
 			get { return (System.Int32)GetValue((int)EmailOutboundFieldIndex.SendStatus, true); }
@@ -629,6 +648,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "EmailOutbound"."SendAttemptCount"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Int32 SendAttemptCount
 		{
 			get { return (System.Int32)GetValue((int)EmailOutboundFieldIndex.SendAttemptCount, true); }
@@ -639,6 +659,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "EmailOutbound"."SendAttemptLastError"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 300<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.String SendAttemptLastError
 		{
 			get { return (System.String)GetValue((int)EmailOutboundFieldIndex.SendAttemptLastError, true); }
@@ -647,6 +668,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 
 		/// <summary> Gets the EntityCollection with the related entities of type 'EmailOutboundRelationEntity' which are related to this entity via a relation of type '1:n'. If the EntityCollection hasn't been fetched yet, the collection returned will be empty.<br/><br/></summary>
 		[TypeContainedAttribute(typeof(EmailOutboundRelationEntity))]
+		[DataMember]
 		public virtual EntityCollection<EmailOutboundRelationEntity> RelatedObjects
 		{
 			get { return GetOrCreateEntityCollection<EmailOutboundRelationEntity, EmailOutboundRelationEntityFactory>("EmailOutbound", true, false, ref _relatedObjects);	}

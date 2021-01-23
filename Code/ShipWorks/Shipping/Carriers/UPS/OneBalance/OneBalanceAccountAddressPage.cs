@@ -44,7 +44,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.OneBalance
         /// </summary>
         private async Task OnStepNext(object sender, WizardStepEventArgs e)
         {
-            if (upsAccount.ShipEngineCarrierId != null)
+            if (!string.IsNullOrEmpty(upsAccount.ShipEngineCarrierId))
             {
                 return;
             }

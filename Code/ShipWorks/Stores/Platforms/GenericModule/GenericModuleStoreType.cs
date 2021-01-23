@@ -522,9 +522,9 @@ namespace ShipWorks.Stores.Platforms.GenericModule
         /// <summary>
         /// Generate GenericModule specific template order elements
         /// </summary>
-        public override void GenerateTemplateOrderElements(ElementOutline container, Func<OrderEntity> orderSource)
+        public override void GenerateTemplateOrderElements(ElementOutline container, Func<OrderEntity> Marketplace)
         {
-            var order = new Lazy<GenericModuleOrderEntity>(() => (GenericModuleOrderEntity) orderSource());
+            var order = new Lazy<GenericModuleOrderEntity>(() => (GenericModuleOrderEntity) Marketplace());
 
             string storeType = TypeCode.ToString();
 
@@ -533,6 +533,7 @@ namespace ShipWorks.Stores.Platforms.GenericModule
             outline.AddElement("IsPrime", () => EnumHelper.GetDescription(order.Value.IsPrime));
             outline.AddElement("AmazonOrderID", () => order.Value.AmazonOrderID);
             outline.AddElement("IsSameDay", () => order.Value.IsSameDay);
+            outline.AddElement("Marketplace", () => order.Value.Marketplace);
         }
 
         /// <summary>

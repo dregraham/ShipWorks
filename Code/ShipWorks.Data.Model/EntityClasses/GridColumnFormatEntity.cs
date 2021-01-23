@@ -381,6 +381,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "GridColumnFormat"."GridColumnFormatID"<br/>
 		/// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, true, true</remarks>
+		[DataMember]
 		public virtual System.Int64 GridColumnFormatID
 		{
 			get { return (System.Int64)GetValue((int)GridColumnFormatFieldIndex.GridColumnFormatID, true); }
@@ -391,6 +392,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "GridColumnFormat"."UserID"<br/>
 		/// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Int64 UserID
 		{
 			get { return (System.Int64)GetValue((int)GridColumnFormatFieldIndex.UserID, true); }
@@ -401,6 +403,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "GridColumnFormat"."ColumnGuid"<br/>
 		/// Table field type characteristics (type, precision, scale, length): UniqueIdentifier, 0, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Guid ColumnGuid
 		{
 			get { return (System.Guid)GetValue((int)GridColumnFormatFieldIndex.ColumnGuid, true); }
@@ -411,6 +414,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "GridColumnFormat"."Settings"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Xml, 0, 0, 2147483647<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.String Settings
 		{
 			get { return (System.String)GetValue((int)GridColumnFormatFieldIndex.Settings, true); }

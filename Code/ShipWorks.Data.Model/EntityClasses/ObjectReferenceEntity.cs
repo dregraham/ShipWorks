@@ -368,6 +368,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "ObjectReference"."ObjectReferenceID"<br/>
 		/// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, true, true</remarks>
+		[DataMember]
 		public virtual System.Int64 ObjectReferenceID
 		{
 			get { return (System.Int64)GetValue((int)ObjectReferenceFieldIndex.ObjectReferenceID, true); }
@@ -378,6 +379,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "ObjectReference"."ConsumerID"<br/>
 		/// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Int64 ConsumerID
 		{
 			get { return (System.Int64)GetValue((int)ObjectReferenceFieldIndex.ConsumerID, true); }
@@ -388,6 +390,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "ObjectReference"."ReferenceKey"<br/>
 		/// Table field type characteristics (type, precision, scale, length): VarChar, 0, 0, 250<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.String ReferenceKey
 		{
 			get { return (System.String)GetValue((int)ObjectReferenceFieldIndex.ReferenceKey, true); }
@@ -398,6 +401,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "ObjectReference"."ObjectID"<br/>
 		/// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Int64 EntityID
 		{
 			get { return (System.Int64)GetValue((int)ObjectReferenceFieldIndex.EntityID, true); }
@@ -408,6 +412,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "ObjectReference"."Reason"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 250<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		[DataMember]
 		public virtual System.String Reason
 		{
 			get { return (System.String)GetValue((int)ObjectReferenceFieldIndex.Reason, true); }

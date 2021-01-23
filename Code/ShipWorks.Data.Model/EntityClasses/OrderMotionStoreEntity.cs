@@ -482,6 +482,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "OrderMotionStore"."OrderMotionEmailAccountID"<br/>
 		/// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Int64 OrderMotionEmailAccountID
 		{
 			get { return (System.Int64)GetValue((int)OrderMotionStoreFieldIndex.OrderMotionEmailAccountID, true); }
@@ -492,6 +493,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "OrderMotionStore"."OrderMotionBizID"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Text, 0, 0, 2147483647<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.String OrderMotionBizID
 		{
 			get { return (System.String)GetValue((int)OrderMotionStoreFieldIndex.OrderMotionBizID, true); }
@@ -500,6 +502,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 
 		/// <summary> Gets / sets related entity of type 'EmailAccountEntity' which has to be set using a fetch action earlier. If no related entity is set for this property, null is returned..<br/><br/></summary>
 		[Browsable(true)]
+		[DataMember]
 		public virtual EmailAccountEntity OrderMotionEmailAccount
 		{
 			get	{ return _orderMotionEmailAccount; }

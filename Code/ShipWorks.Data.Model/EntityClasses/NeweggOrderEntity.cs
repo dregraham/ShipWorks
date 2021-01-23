@@ -412,6 +412,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "NeweggOrder"."InvoiceNumber"<br/>
 		/// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		[DataMember]
 		public virtual Nullable<System.Int64> InvoiceNumber
 		{
 			get { return (Nullable<System.Int64>)GetValue((int)NeweggOrderFieldIndex.InvoiceNumber, false); }
@@ -422,6 +423,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "NeweggOrder"."RefundAmount"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Money, 19, 4, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		[DataMember]
 		public virtual Nullable<System.Decimal> RefundAmount
 		{
 			get { return (Nullable<System.Decimal>)GetValue((int)NeweggOrderFieldIndex.RefundAmount, false); }
@@ -432,6 +434,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "NeweggOrder"."IsAutoVoid"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		[DataMember]
 		public virtual Nullable<System.Boolean> IsAutoVoid
 		{
 			get { return (Nullable<System.Boolean>)GetValue((int)NeweggOrderFieldIndex.IsAutoVoid, false); }

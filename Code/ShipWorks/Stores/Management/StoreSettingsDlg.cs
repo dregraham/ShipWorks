@@ -9,6 +9,7 @@ using Interapptive.Shared;
 using Interapptive.Shared.Enums;
 using Interapptive.Shared.UI;
 using Interapptive.Shared.Utility;
+using log4net;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.AddressValidation.Enums;
 using ShipWorks.ApplicationCore;
@@ -23,6 +24,7 @@ using ShipWorks.Messaging.Messages;
 using ShipWorks.UI.Controls;
 using ShipWorks.Users;
 using ShipWorks.Users.Security;
+using ShipWorks.Warehouse.Configuration.Stores;
 
 namespace ShipWorks.Stores.Management
 {
@@ -394,20 +396,30 @@ namespace ShipWorks.Stores.Management
                 result = storeSettingsControl.SaveToEntity(store);
             }
 
-            if (result && store?.WarehouseStoreID != null && storeType.ShouldUseHub(store))
+            if (result)
             {
                 using (ILifetimeScope scope = IoC.BeginLifetimeScope())
                 {
-                    Result warehouseResult;
                     using (scope.Resolve<IMessageHelper>().ShowProgressDialog("Updating store information...", "Updating store information..."))
                     {
-                        warehouseResult = await scope.Resolve<IWarehouseStoreClient>().UpdateStoreCredentials(store).ConfigureAwait(true);
-                    }
+                        var syncResult = await scope.Resolve<IHubStoreSynchronizer>().SynchronizeStore(store).ConfigureAwait(true);
 
-                    if (warehouseResult.Failure)
-                    {
-                        MessageHelper.ShowError(this, $"An error occurred saving the store to ShipWorks.{Environment.NewLine + Environment.NewLine + warehouseResult.Message}");
-                        result = false;
+                        if (syncResult.Failure)
+                        {
+                            var logger = scope.Resolve<Func<Type, ILog>>();
+                            logger(typeof(StoreSettingsDlg)).Error("Failed to Sync store to Hub.", syncResult.Exception);
+                        }
+
+                        if (store?.WarehouseStoreID != null && storeType.ShouldUseHub(store))
+                        {
+                            Result warehouseResult = await scope.Resolve<IWarehouseStoreClient>().UpdateStoreCredentials(store).ConfigureAwait(true);
+
+                            if (warehouseResult.Failure)
+                            {
+                                MessageHelper.ShowError(this, $"An error occurred saving the store to ShipWorks.{Environment.NewLine + Environment.NewLine + warehouseResult.Message}");
+                                result = false;
+                            }
+                        }
                     }
                 }
             }

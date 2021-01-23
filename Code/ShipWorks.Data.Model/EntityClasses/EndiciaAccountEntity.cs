@@ -416,6 +416,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "EndiciaAccount"."EndiciaAccountID"<br/>
 		/// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, true, true</remarks>
+		[DataMember]
 		public virtual System.Int64 EndiciaAccountID
 		{
 			get { return (System.Int64)GetValue((int)EndiciaAccountFieldIndex.EndiciaAccountID, true); }
@@ -426,6 +427,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "EndiciaAccount"."EndiciaReseller"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Int32 EndiciaReseller
 		{
 			get { return (System.Int32)GetValue((int)EndiciaAccountFieldIndex.EndiciaReseller, true); }
@@ -436,6 +438,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "EndiciaAccount"."AccountNumber"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 50<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		[DataMember]
 		public virtual System.String AccountNumber
 		{
 			get { return (System.String)GetValue((int)EndiciaAccountFieldIndex.AccountNumber, true); }
@@ -446,6 +449,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "EndiciaAccount"."SignupConfirmation"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 30<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.String SignupConfirmation
 		{
 			get { return (System.String)GetValue((int)EndiciaAccountFieldIndex.SignupConfirmation, true); }
@@ -456,6 +460,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "EndiciaAccount"."WebPassword"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 250<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.String WebPassword
 		{
 			get { return (System.String)GetValue((int)EndiciaAccountFieldIndex.WebPassword, true); }
@@ -466,6 +471,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "EndiciaAccount"."ApiInitialPassword"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 250<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.String ApiInitialPassword
 		{
 			get { return (System.String)GetValue((int)EndiciaAccountFieldIndex.ApiInitialPassword, true); }
@@ -476,6 +482,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "EndiciaAccount"."ApiUserPassword"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 250<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.String ApiUserPassword
 		{
 			get { return (System.String)GetValue((int)EndiciaAccountFieldIndex.ApiUserPassword, true); }
@@ -486,6 +493,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "EndiciaAccount"."AccountType"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Int32 AccountType
 		{
 			get { return (System.Int32)GetValue((int)EndiciaAccountFieldIndex.AccountType, true); }
@@ -496,6 +504,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "EndiciaAccount"."TestAccount"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Boolean TestAccount
 		{
 			get { return (System.Boolean)GetValue((int)EndiciaAccountFieldIndex.TestAccount, true); }
@@ -506,6 +515,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "EndiciaAccount"."CreatedByShipWorks"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Boolean CreatedByShipWorks
 		{
 			get { return (System.Boolean)GetValue((int)EndiciaAccountFieldIndex.CreatedByShipWorks, true); }
@@ -516,6 +526,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "EndiciaAccount"."Description"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 50<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.String Description
 		{
 			get { return (System.String)GetValue((int)EndiciaAccountFieldIndex.Description, true); }
@@ -526,6 +537,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "EndiciaAccount"."FirstName"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 30<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.String FirstName
 		{
 			get { return (System.String)GetValue((int)EndiciaAccountFieldIndex.FirstName, true); }
@@ -536,6 +548,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "EndiciaAccount"."LastName"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 30<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.String LastName
 		{
 			get { return (System.String)GetValue((int)EndiciaAccountFieldIndex.LastName, true); }
@@ -546,6 +559,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "EndiciaAccount"."Company"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 30<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.String Company
 		{
 			get { return (System.String)GetValue((int)EndiciaAccountFieldIndex.Company, true); }
@@ -556,6 +570,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "EndiciaAccount"."Street1"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 60<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.String Street1
 		{
 			get { return (System.String)GetValue((int)EndiciaAccountFieldIndex.Street1, true); }
@@ -566,6 +581,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "EndiciaAccount"."Street2"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 60<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.String Street2
 		{
 			get { return (System.String)GetValue((int)EndiciaAccountFieldIndex.Street2, true); }
@@ -576,6 +592,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "EndiciaAccount"."Street3"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 60<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.String Street3
 		{
 			get { return (System.String)GetValue((int)EndiciaAccountFieldIndex.Street3, true); }
@@ -586,6 +603,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "EndiciaAccount"."City"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 50<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.String City
 		{
 			get { return (System.String)GetValue((int)EndiciaAccountFieldIndex.City, true); }
@@ -596,6 +614,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "EndiciaAccount"."StateProvCode"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 50<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.String StateProvCode
 		{
 			get { return (System.String)GetValue((int)EndiciaAccountFieldIndex.StateProvCode, true); }
@@ -606,6 +625,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "EndiciaAccount"."PostalCode"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 20<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.String PostalCode
 		{
 			get { return (System.String)GetValue((int)EndiciaAccountFieldIndex.PostalCode, true); }
@@ -616,6 +636,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "EndiciaAccount"."CountryCode"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 50<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.String CountryCode
 		{
 			get { return (System.String)GetValue((int)EndiciaAccountFieldIndex.CountryCode, true); }
@@ -626,6 +647,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "EndiciaAccount"."Phone"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 25<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.String Phone
 		{
 			get { return (System.String)GetValue((int)EndiciaAccountFieldIndex.Phone, true); }
@@ -636,6 +658,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "EndiciaAccount"."Fax"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 35<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.String Fax
 		{
 			get { return (System.String)GetValue((int)EndiciaAccountFieldIndex.Fax, true); }
@@ -646,6 +669,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "EndiciaAccount"."Email"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 100<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.String Email
 		{
 			get { return (System.String)GetValue((int)EndiciaAccountFieldIndex.Email, true); }
@@ -656,6 +680,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "EndiciaAccount"."MailingPostalCode"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 20<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.String MailingPostalCode
 		{
 			get { return (System.String)GetValue((int)EndiciaAccountFieldIndex.MailingPostalCode, true); }
@@ -666,6 +691,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "EndiciaAccount"."ScanFormAddressSource"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Int32 ScanFormAddressSource
 		{
 			get { return (System.Int32)GetValue((int)EndiciaAccountFieldIndex.ScanFormAddressSource, true); }
@@ -676,6 +702,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "EndiciaAccount"."AcceptedFCMILetterWarning"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Boolean AcceptedFCMILetterWarning
 		{
 			get { return (System.Boolean)GetValue((int)EndiciaAccountFieldIndex.AcceptedFCMILetterWarning, true); }
@@ -686,6 +713,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "EndiciaAccount"."HubVersion"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		[DataMember]
 		public virtual Nullable<System.Int32> HubVersion
 		{
 			get { return (Nullable<System.Int32>)GetValue((int)EndiciaAccountFieldIndex.HubVersion, false); }
@@ -696,6 +724,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "EndiciaAccount"."HubCarrierId"<br/>
 		/// Table field type characteristics (type, precision, scale, length): UniqueIdentifier, 0, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		[DataMember]
 		public virtual Nullable<System.Guid> HubCarrierId
 		{
 			get { return (Nullable<System.Guid>)GetValue((int)EndiciaAccountFieldIndex.HubCarrierId, false); }

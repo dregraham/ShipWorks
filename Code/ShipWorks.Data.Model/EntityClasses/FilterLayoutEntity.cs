@@ -540,6 +540,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "FilterLayout"."FilterLayoutID"<br/>
 		/// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, true, true</remarks>
+		[DataMember]
 		public virtual System.Int64 FilterLayoutID
 		{
 			get { return (System.Int64)GetValue((int)FilterLayoutFieldIndex.FilterLayoutID, true); }
@@ -550,6 +551,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "FilterLayout"."RowVersion"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Timestamp, 0, 0, 2147483647<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Byte[] RowVersion
 		{
 			get { return (System.Byte[])GetValue((int)FilterLayoutFieldIndex.RowVersion, true); }
@@ -560,6 +562,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "FilterLayout"."UserID"<br/>
 		/// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		[DataMember]
 		public virtual Nullable<System.Int64> UserID
 		{
 			get { return (Nullable<System.Int64>)GetValue((int)FilterLayoutFieldIndex.UserID, false); }
@@ -570,6 +573,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "FilterLayout"."FilterTarget"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Int32 FilterTarget
 		{
 			get { return (System.Int32)GetValue((int)FilterLayoutFieldIndex.FilterTarget, true); }
@@ -580,6 +584,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "FilterLayout"."FilterNodeID"<br/>
 		/// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Int64 FilterNodeID
 		{
 			get { return (System.Int64)GetValue((int)FilterLayoutFieldIndex.FilterNodeID, true); }
@@ -588,6 +593,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 
 		/// <summary> Gets / sets related entity of type 'FilterNodeEntity' which has to be set using a fetch action earlier. If no related entity is set for this property, null is returned..<br/><br/></summary>
 		[Browsable(true)]
+		[DataMember]
 		public virtual FilterNodeEntity FilterNode
 		{
 			get	{ return _filterNode; }
@@ -606,6 +612,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 
 		/// <summary> Gets / sets related entity of type 'UserEntity' which has to be set using a fetch action earlier. If no related entity is set for this property, null is returned..<br/><br/></summary>
 		[Browsable(true)]
+		[DataMember]
 		public virtual UserEntity User
 		{
 			get	{ return _user; }

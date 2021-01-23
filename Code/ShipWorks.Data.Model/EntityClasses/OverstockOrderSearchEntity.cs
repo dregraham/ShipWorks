@@ -458,6 +458,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "OverstockOrderSearch"."OverstockOrderSearchID"<br/>
 		/// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, true, true</remarks>
+		[DataMember]
 		public virtual System.Int64 OverstockOrderSearchID
 		{
 			get { return (System.Int64)GetValue((int)OverstockOrderSearchFieldIndex.OverstockOrderSearchID, true); }
@@ -468,6 +469,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "OverstockOrderSearch"."OrderID"<br/>
 		/// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Int64 OrderID
 		{
 			get { return (System.Int64)GetValue((int)OverstockOrderSearchFieldIndex.OrderID, true); }
@@ -478,6 +480,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "OverstockOrderSearch"."OriginalOrderID"<br/>
 		/// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Int64 OriginalOrderID
 		{
 			get { return (System.Int64)GetValue((int)OverstockOrderSearchFieldIndex.OriginalOrderID, true); }
@@ -488,6 +491,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "OverstockOrderSearch"."SalesChannelName"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 50<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.String SalesChannelName
 		{
 			get { return (System.String)GetValue((int)OverstockOrderSearchFieldIndex.SalesChannelName, true); }
@@ -498,6 +502,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "OverstockOrderSearch"."WarehouseCode"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 50<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		[DataMember]
 		public virtual System.String WarehouseCode
 		{
 			get { return (System.String)GetValue((int)OverstockOrderSearchFieldIndex.WarehouseCode, true); }
@@ -506,6 +511,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 
 		/// <summary> Gets / sets related entity of type 'OverstockOrderEntity' which has to be set using a fetch action earlier. If no related entity is set for this property, null is returned..<br/><br/></summary>
 		[Browsable(true)]
+		[DataMember]
 		public virtual OverstockOrderEntity OverstockOrder
 		{
 			get	{ return _overstockOrder; }

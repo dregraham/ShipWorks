@@ -364,6 +364,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "AmazonSFPServiceType"."AmazonSFPServiceTypeID"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, true, true</remarks>
+		[DataMember]
 		public virtual System.Int32 AmazonSFPServiceTypeID
 		{
 			get { return (System.Int32)GetValue((int)AmazonSFPServiceTypeFieldIndex.AmazonSFPServiceTypeID, true); }
@@ -374,6 +375,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "AmazonSFPServiceType"."ApiValue"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 50<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.String ApiValue
 		{
 			get { return (System.String)GetValue((int)AmazonSFPServiceTypeFieldIndex.ApiValue, true); }
@@ -384,6 +386,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "AmazonSFPServiceType"."Description"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 100<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.String Description
 		{
 			get { return (System.String)GetValue((int)AmazonSFPServiceTypeFieldIndex.Description, true); }

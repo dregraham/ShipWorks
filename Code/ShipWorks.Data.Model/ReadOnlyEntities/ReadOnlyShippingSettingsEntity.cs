@@ -93,6 +93,7 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
             ShipmentDateCutoffJson = source.ShipmentDateCutoffJson;
             OrderLookupFieldLayout = source.OrderLookupFieldLayout;
             UpsAllowNoDims = source.UpsAllowNoDims;
+            ShipEngineAccountID = source.ShipEngineAccountID;
             
             
             
@@ -443,6 +444,12 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
         /// Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
         public System.Boolean UpsAllowNoDims { get; }
+        /// <summary> The ShipEngineAccountID property of the Entity ShippingSettings<br/><br/>
+        /// </summary>
+        /// <remarks>Mapped on table field: "ShippingSettings"."ShipEngineAccountID"<br/>
+        /// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 20<br/>
+        /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+        public System.String ShipEngineAccountID { get; }
         
         
         

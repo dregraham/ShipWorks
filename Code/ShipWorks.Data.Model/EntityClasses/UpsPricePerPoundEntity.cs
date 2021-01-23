@@ -458,6 +458,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "UpsPricePerPound"."UpsPricePerPoundID"<br/>
 		/// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, true, true</remarks>
+		[DataMember]
 		public virtual System.Int64 UpsPricePerPoundID
 		{
 			get { return (System.Int64)GetValue((int)UpsPricePerPoundFieldIndex.UpsPricePerPoundID, true); }
@@ -468,6 +469,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "UpsPricePerPound"."UpsRateTableID"<br/>
 		/// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Int64 UpsRateTableID
 		{
 			get { return (System.Int64)GetValue((int)UpsPricePerPoundFieldIndex.UpsRateTableID, true); }
@@ -478,6 +480,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "UpsPricePerPound"."Zone"<br/>
 		/// Table field type characteristics (type, precision, scale, length): VarChar, 0, 0, 3<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.String Zone
 		{
 			get { return (System.String)GetValue((int)UpsPricePerPoundFieldIndex.Zone, true); }
@@ -488,6 +491,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "UpsPricePerPound"."Service"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Int32 Service
 		{
 			get { return (System.Int32)GetValue((int)UpsPricePerPoundFieldIndex.Service, true); }
@@ -498,6 +502,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "UpsPricePerPound"."Rate"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Money, 19, 4, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Decimal Rate
 		{
 			get { return (System.Decimal)GetValue((int)UpsPricePerPoundFieldIndex.Rate, true); }
@@ -506,6 +511,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 
 		/// <summary> Gets / sets related entity of type 'UpsRateTableEntity' which has to be set using a fetch action earlier. If no related entity is set for this property, null is returned..<br/><br/></summary>
 		[Browsable(true)]
+		[DataMember]
 		public virtual UpsRateTableEntity UpsRateTable
 		{
 			get	{ return _upsRateTable; }

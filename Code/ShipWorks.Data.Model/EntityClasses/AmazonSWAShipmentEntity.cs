@@ -477,6 +477,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "AmazonSWAShipment"."ShipmentID"<br/>
 		/// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, true, false</remarks>
+		[DataMember]
 		public virtual System.Int64 ShipmentID
 		{
 			get { return (System.Int64)GetValue((int)AmazonSWAShipmentFieldIndex.ShipmentID, true); }
@@ -487,6 +488,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "AmazonSWAShipment"."AmazonSWAAccountID"<br/>
 		/// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Int64 AmazonSWAAccountID
 		{
 			get { return (System.Int64)GetValue((int)AmazonSWAShipmentFieldIndex.AmazonSWAAccountID, true); }
@@ -497,6 +499,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "AmazonSWAShipment"."Service"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Int32 Service
 		{
 			get { return (System.Int32)GetValue((int)AmazonSWAShipmentFieldIndex.Service, true); }
@@ -507,6 +510,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "AmazonSWAShipment"."RequestedLabelFormat"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Int32 RequestedLabelFormat
 		{
 			get { return (System.Int32)GetValue((int)AmazonSWAShipmentFieldIndex.RequestedLabelFormat, true); }
@@ -517,6 +521,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "AmazonSWAShipment"."ShipEngineLabelID"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 50<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.String ShipEngineLabelID
 		{
 			get { return (System.String)GetValue((int)AmazonSWAShipmentFieldIndex.ShipEngineLabelID, true); }
@@ -527,6 +532,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "AmazonSWAShipment"."DimsProfileID"<br/>
 		/// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Int64 DimsProfileID
 		{
 			get { return (System.Int64)GetValue((int)AmazonSWAShipmentFieldIndex.DimsProfileID, true); }
@@ -537,6 +543,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "AmazonSWAShipment"."DimsLength"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Float, 38, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Double DimsLength
 		{
 			get { return (System.Double)GetValue((int)AmazonSWAShipmentFieldIndex.DimsLength, true); }
@@ -547,6 +554,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "AmazonSWAShipment"."DimsWidth"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Float, 38, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Double DimsWidth
 		{
 			get { return (System.Double)GetValue((int)AmazonSWAShipmentFieldIndex.DimsWidth, true); }
@@ -557,6 +565,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "AmazonSWAShipment"."DimsHeight"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Float, 38, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Double DimsHeight
 		{
 			get { return (System.Double)GetValue((int)AmazonSWAShipmentFieldIndex.DimsHeight, true); }
@@ -567,6 +576,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "AmazonSWAShipment"."DimsAddWeight"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Boolean DimsAddWeight
 		{
 			get { return (System.Boolean)GetValue((int)AmazonSWAShipmentFieldIndex.DimsAddWeight, true); }
@@ -577,6 +587,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "AmazonSWAShipment"."DimsWeight"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Float, 38, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Double DimsWeight
 		{
 			get { return (System.Double)GetValue((int)AmazonSWAShipmentFieldIndex.DimsWeight, true); }
@@ -587,6 +598,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "AmazonSWAShipment"."InsuranceValue"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Money, 19, 4, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Decimal InsuranceValue
 		{
 			get { return (System.Decimal)GetValue((int)AmazonSWAShipmentFieldIndex.InsuranceValue, true); }
@@ -597,6 +609,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "AmazonSWAShipment"."Insurance"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Boolean Insurance
 		{
 			get { return (System.Boolean)GetValue((int)AmazonSWAShipmentFieldIndex.Insurance, true); }
@@ -606,6 +619,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <summary> Gets / sets related entity of type 'ShipmentEntity' which has to be set using a fetch action earlier. If no related entity is set for this property, null is returned.<br/><br/>
 		/// </summary>
 		[Browsable(true)]
+		[DataMember]
 		public virtual ShipmentEntity Shipment
 		{
 			get { return _shipment; }

@@ -465,6 +465,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "TemplateUserSettings"."TemplateUserSettingsID"<br/>
 		/// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, true, true</remarks>
+		[DataMember]
 		public virtual System.Int64 TemplateUserSettingsID
 		{
 			get { return (System.Int64)GetValue((int)TemplateUserSettingsFieldIndex.TemplateUserSettingsID, true); }
@@ -475,6 +476,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "TemplateUserSettings"."TemplateID"<br/>
 		/// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Int64 TemplateID
 		{
 			get { return (System.Int64)GetValue((int)TemplateUserSettingsFieldIndex.TemplateID, true); }
@@ -485,6 +487,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "TemplateUserSettings"."UserID"<br/>
 		/// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Int64 UserID
 		{
 			get { return (System.Int64)GetValue((int)TemplateUserSettingsFieldIndex.UserID, true); }
@@ -495,6 +498,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "TemplateUserSettings"."PreviewSource"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Int32 PreviewSource
 		{
 			get { return (System.Int32)GetValue((int)TemplateUserSettingsFieldIndex.PreviewSource, true); }
@@ -505,6 +509,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "TemplateUserSettings"."PreviewCount"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Int32 PreviewCount
 		{
 			get { return (System.Int32)GetValue((int)TemplateUserSettingsFieldIndex.PreviewCount, true); }
@@ -515,6 +520,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "TemplateUserSettings"."PreviewFilterNodeID"<br/>
 		/// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		[DataMember]
 		public virtual Nullable<System.Int64> PreviewFilterNodeID
 		{
 			get { return (Nullable<System.Int64>)GetValue((int)TemplateUserSettingsFieldIndex.PreviewFilterNodeID, false); }
@@ -525,6 +531,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "TemplateUserSettings"."PreviewZoom"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 10<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.String PreviewZoom
 		{
 			get { return (System.String)GetValue((int)TemplateUserSettingsFieldIndex.PreviewZoom, true); }
@@ -533,6 +540,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 
 		/// <summary> Gets / sets related entity of type 'TemplateEntity' which has to be set using a fetch action earlier. If no related entity is set for this property, null is returned..<br/><br/></summary>
 		[Browsable(true)]
+		[DataMember]
 		public virtual TemplateEntity Template
 		{
 			get	{ return _template; }

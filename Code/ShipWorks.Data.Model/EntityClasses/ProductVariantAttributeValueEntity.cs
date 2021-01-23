@@ -534,6 +534,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "ProductVariantAttributeValue"."ProductVariantAttributeValueID"<br/>
 		/// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, true, true</remarks>
+		[DataMember]
 		public virtual System.Int64 ProductVariantAttributeValueID
 		{
 			get { return (System.Int64)GetValue((int)ProductVariantAttributeValueFieldIndex.ProductVariantAttributeValueID, true); }
@@ -544,6 +545,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "ProductVariantAttributeValue"."ProductVariantID"<br/>
 		/// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Int64 ProductVariantID
 		{
 			get { return (System.Int64)GetValue((int)ProductVariantAttributeValueFieldIndex.ProductVariantID, true); }
@@ -554,6 +556,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "ProductVariantAttributeValue"."AttributeValue"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 300<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.String AttributeValue
 		{
 			get { return (System.String)GetValue((int)ProductVariantAttributeValueFieldIndex.AttributeValue, true); }
@@ -564,6 +567,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "ProductVariantAttributeValue"."ProductAttributeID"<br/>
 		/// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Int64 ProductAttributeID
 		{
 			get { return (System.Int64)GetValue((int)ProductVariantAttributeValueFieldIndex.ProductAttributeID, true); }
@@ -572,6 +576,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 
 		/// <summary> Gets / sets related entity of type 'ProductAttributeEntity' which has to be set using a fetch action earlier. If no related entity is set for this property, null is returned..<br/><br/></summary>
 		[Browsable(true)]
+		[DataMember]
 		public virtual ProductAttributeEntity ProductAttribute
 		{
 			get	{ return _productAttribute; }
@@ -590,6 +595,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 
 		/// <summary> Gets / sets related entity of type 'ProductVariantEntity' which has to be set using a fetch action earlier. If no related entity is set for this property, null is returned..<br/><br/></summary>
 		[Browsable(true)]
+		[DataMember]
 		public virtual ProductVariantEntity ProductVariant
 		{
 			get	{ return _productVariant; }

@@ -396,6 +396,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "NeweggStore"."SellerID"<br/>
 		/// Table field type characteristics (type, precision, scale, length): VarChar, 0, 0, 10<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.String SellerID
 		{
 			get { return (System.String)GetValue((int)NeweggStoreFieldIndex.SellerID, true); }
@@ -406,6 +407,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "NeweggStore"."SecretKey"<br/>
 		/// Table field type characteristics (type, precision, scale, length): VarChar, 0, 0, 50<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.String SecretKey
 		{
 			get { return (System.String)GetValue((int)NeweggStoreFieldIndex.SecretKey, true); }
@@ -416,6 +418,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "NeweggStore"."ExcludeFulfilledByNewegg"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Boolean ExcludeFulfilledByNewegg
 		{
 			get { return (System.Boolean)GetValue((int)NeweggStoreFieldIndex.ExcludeFulfilledByNewegg, true); }
@@ -426,6 +429,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "NeweggStore"."Channel"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Int32 Channel
 		{
 			get { return (System.Int32)GetValue((int)NeweggStoreFieldIndex.Channel, true); }

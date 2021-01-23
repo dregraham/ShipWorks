@@ -1750,6 +1750,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 			this.AddElementFieldInfo("GenericModuleOrderEntity", "IsFBA", typeof(System.Boolean), false, false, false, false,  (int)GenericModuleOrderFieldIndex.IsFBA, 0, 0, 0);
 			this.AddElementFieldInfo("GenericModuleOrderEntity", "IsPrime", typeof(Interapptive.Shared.Enums.AmazonIsPrime), false, false, false, false,  (int)GenericModuleOrderFieldIndex.IsPrime, 0, 0, 10);
 			this.AddElementFieldInfo("GenericModuleOrderEntity", "IsSameDay", typeof(System.Boolean), false, false, false, false,  (int)GenericModuleOrderFieldIndex.IsSameDay, 0, 0, 0);
+			this.AddElementFieldInfo("GenericModuleOrderEntity", "Marketplace", typeof(System.String), false, false, false, false,  (int)GenericModuleOrderFieldIndex.Marketplace, 50, 0, 0);
 		}
 		/// <summary>Inits GenericModuleOrderItemEntity's FieldInfo objects</summary>
 		private void InitGenericModuleOrderItemEntityInfos()
@@ -2392,6 +2393,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 			this.AddElementFieldInfo("OrderEntity", "Custom8", typeof(System.String), false, false, false, false,  (int)OrderFieldIndex.Custom8, 50, 0, 0);
 			this.AddElementFieldInfo("OrderEntity", "Custom9", typeof(System.String), false, false, false, false,  (int)OrderFieldIndex.Custom9, 50, 0, 0);
 			this.AddElementFieldInfo("OrderEntity", "Custom10", typeof(System.String), false, false, false, false,  (int)OrderFieldIndex.Custom10, 50, 0, 0);
+			this.AddElementFieldInfo("OrderEntity", "DeliverByDate", typeof(Nullable<System.DateTime>), false, false, false, true,  (int)OrderFieldIndex.DeliverByDate, 0, 0, 0);
 		}
 		/// <summary>Inits OrderChargeEntity's FieldInfo objects</summary>
 		private void InitOrderChargeEntityInfos()
@@ -3249,6 +3251,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 			this.AddElementFieldInfo("ShippingSettingsEntity", "ShipmentDateCutoffJson", typeof(System.String), false, false, false, false,  (int)ShippingSettingsFieldIndex.ShipmentDateCutoffJson, 1000, 0, 0);
 			this.AddElementFieldInfo("ShippingSettingsEntity", "OrderLookupFieldLayout", typeof(System.String), false, false, false, false,  (int)ShippingSettingsFieldIndex.OrderLookupFieldLayout, 2147483647, 0, 0);
 			this.AddElementFieldInfo("ShippingSettingsEntity", "UpsAllowNoDims", typeof(System.Boolean), false, false, false, false,  (int)ShippingSettingsFieldIndex.UpsAllowNoDims, 0, 0, 0);
+			this.AddElementFieldInfo("ShippingSettingsEntity", "ShipEngineAccountID", typeof(System.String), false, false, false, false,  (int)ShippingSettingsFieldIndex.ShipEngineAccountID, 20, 0, 0);
 		}
 		/// <summary>Inits ShipSenseKnowledgebaseEntity's FieldInfo objects</summary>
 		private void InitShipSenseKnowledgebaseEntityInfos()

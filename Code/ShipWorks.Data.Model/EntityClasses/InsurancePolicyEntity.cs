@@ -477,6 +477,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "InsurancePolicy"."ShipmentID"<br/>
 		/// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, true, false</remarks>
+		[DataMember]
 		public virtual System.Int64 ShipmentID
 		{
 			get { return (System.Int64)GetValue((int)InsurancePolicyFieldIndex.ShipmentID, true); }
@@ -487,6 +488,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "InsurancePolicy"."InsureShipStoreName"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 75<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.String InsureShipStoreName
 		{
 			get { return (System.String)GetValue((int)InsurancePolicyFieldIndex.InsureShipStoreName, true); }
@@ -497,6 +499,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "InsurancePolicy"."CreatedWithApi"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Boolean CreatedWithApi
 		{
 			get { return (System.Boolean)GetValue((int)InsurancePolicyFieldIndex.CreatedWithApi, true); }
@@ -507,6 +510,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "InsurancePolicy"."ItemName"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 255<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		[DataMember]
 		public virtual System.String ItemName
 		{
 			get { return (System.String)GetValue((int)InsurancePolicyFieldIndex.ItemName, true); }
@@ -517,6 +521,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "InsurancePolicy"."Description"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 255<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		[DataMember]
 		public virtual System.String Description
 		{
 			get { return (System.String)GetValue((int)InsurancePolicyFieldIndex.Description, true); }
@@ -527,6 +532,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "InsurancePolicy"."ClaimType"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		[DataMember]
 		public virtual Nullable<System.Int32> ClaimType
 		{
 			get { return (Nullable<System.Int32>)GetValue((int)InsurancePolicyFieldIndex.ClaimType, false); }
@@ -537,6 +543,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "InsurancePolicy"."DamageValue"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Money, 19, 4, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		[DataMember]
 		public virtual Nullable<System.Decimal> DamageValue
 		{
 			get { return (Nullable<System.Decimal>)GetValue((int)InsurancePolicyFieldIndex.DamageValue, false); }
@@ -547,6 +554,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "InsurancePolicy"."SubmissionDate"<br/>
 		/// Table field type characteristics (type, precision, scale, length): DateTime, 0, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		[DataMember]
 		public virtual Nullable<System.DateTime> SubmissionDate
 		{
 			get { return (Nullable<System.DateTime>)GetValue((int)InsurancePolicyFieldIndex.SubmissionDate, false); }
@@ -557,6 +565,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "InsurancePolicy"."ClaimID"<br/>
 		/// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		[DataMember]
 		public virtual Nullable<System.Int64> ClaimID
 		{
 			get { return (Nullable<System.Int64>)GetValue((int)InsurancePolicyFieldIndex.ClaimID, false); }
@@ -567,6 +576,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "InsurancePolicy"."EmailAddress"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 100<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		[DataMember]
 		public virtual System.String EmailAddress
 		{
 			get { return (System.String)GetValue((int)InsurancePolicyFieldIndex.EmailAddress, true); }
@@ -577,6 +587,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "InsurancePolicy"."InsureShipPolicyID"<br/>
 		/// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		[DataMember]
 		public virtual Nullable<System.Int64> InsureShipPolicyID
 		{
 			get { return (Nullable<System.Int64>)GetValue((int)InsurancePolicyFieldIndex.InsureShipPolicyID, false); }
@@ -587,6 +598,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "InsurancePolicy"."DateOfIssue"<br/>
 		/// Table field type characteristics (type, precision, scale, length): DateTime, 0, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		[DataMember]
 		public virtual Nullable<System.DateTime> DateOfIssue
 		{
 			get { return (Nullable<System.DateTime>)GetValue((int)InsurancePolicyFieldIndex.DateOfIssue, false); }
@@ -597,6 +609,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "InsurancePolicy"."InsureShipStatus"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 50<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		[DataMember]
 		public virtual System.String InsureShipStatus
 		{
 			get { return (System.String)GetValue((int)InsurancePolicyFieldIndex.InsureShipStatus, true); }
@@ -606,6 +619,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <summary> Gets / sets related entity of type 'ShipmentEntity' which has to be set using a fetch action earlier. If no related entity is set for this property, null is returned.<br/><br/>
 		/// </summary>
 		[Browsable(true)]
+		[DataMember]
 		public virtual ShipmentEntity Shipment
 		{
 			get { return _shipment; }

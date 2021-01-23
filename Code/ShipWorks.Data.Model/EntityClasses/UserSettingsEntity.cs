@@ -501,6 +501,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "UserSettings"."UserID"<br/>
 		/// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, true, false</remarks>
+		[DataMember]
 		public virtual System.Int64 UserID
 		{
 			get { return (System.Int64)GetValue((int)UserSettingsFieldIndex.UserID, true); }
@@ -511,6 +512,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "UserSettings"."DisplayColorScheme"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Int32 DisplayColorScheme
 		{
 			get { return (System.Int32)GetValue((int)UserSettingsFieldIndex.DisplayColorScheme, true); }
@@ -521,6 +523,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "UserSettings"."DisplaySystemTray"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Boolean DisplaySystemTray
 		{
 			get { return (System.Boolean)GetValue((int)UserSettingsFieldIndex.DisplaySystemTray, true); }
@@ -531,6 +534,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "UserSettings"."WindowLayout"<br/>
 		/// Table field type characteristics (type, precision, scale, length): VarBinary, 0, 0, 2147483647<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Byte[] WindowLayout
 		{
 			get { return (System.Byte[])GetValue((int)UserSettingsFieldIndex.WindowLayout, true); }
@@ -541,6 +545,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "UserSettings"."GridMenuLayout"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Xml, 0, 0, 2147483647<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		[DataMember]
 		public virtual System.String GridMenuLayout
 		{
 			get { return (System.String)GetValue((int)UserSettingsFieldIndex.GridMenuLayout, true); }
@@ -551,6 +556,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "UserSettings"."FilterInitialUseLastActive"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Boolean FilterInitialUseLastActive
 		{
 			get { return (System.Boolean)GetValue((int)UserSettingsFieldIndex.FilterInitialUseLastActive, true); }
@@ -561,6 +567,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "UserSettings"."FilterInitialSpecified"<br/>
 		/// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Int64 FilterInitialSpecified
 		{
 			get { return (System.Int64)GetValue((int)UserSettingsFieldIndex.FilterInitialSpecified, true); }
@@ -571,6 +578,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "UserSettings"."FilterInitialSortType"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Int32 FilterInitialSortType
 		{
 			get { return (System.Int32)GetValue((int)UserSettingsFieldIndex.FilterInitialSortType, true); }
@@ -581,6 +589,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "UserSettings"."OrderFilterLastActive"<br/>
 		/// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Int64 OrderFilterLastActive
 		{
 			get { return (System.Int64)GetValue((int)UserSettingsFieldIndex.OrderFilterLastActive, true); }
@@ -591,6 +600,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "UserSettings"."OrderFilterExpandedFolders"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Xml, 0, 0, 2147483647<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		[DataMember]
 		public virtual System.String OrderFilterExpandedFolders
 		{
 			get { return (System.String)GetValue((int)UserSettingsFieldIndex.OrderFilterExpandedFolders, true); }
@@ -601,6 +611,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "UserSettings"."ShippingWeightFormat"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Int32 ShippingWeightFormat
 		{
 			get { return (System.Int32)GetValue((int)UserSettingsFieldIndex.ShippingWeightFormat, true); }
@@ -611,6 +622,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "UserSettings"."TemplateExpandedFolders"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Xml, 0, 0, 2147483647<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		[DataMember]
 		public virtual System.String TemplateExpandedFolders
 		{
 			get { return (System.String)GetValue((int)UserSettingsFieldIndex.TemplateExpandedFolders, true); }
@@ -621,6 +633,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "UserSettings"."TemplateLastSelected"<br/>
 		/// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Int64 TemplateLastSelected
 		{
 			get { return (System.Int64)GetValue((int)UserSettingsFieldIndex.TemplateLastSelected, true); }
@@ -631,6 +644,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "UserSettings"."CustomerFilterLastActive"<br/>
 		/// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Int64 CustomerFilterLastActive
 		{
 			get { return (System.Int64)GetValue((int)UserSettingsFieldIndex.CustomerFilterLastActive, true); }
@@ -641,6 +655,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "UserSettings"."CustomerFilterExpandedFolders"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Xml, 0, 0, 2147483647<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		[DataMember]
 		public virtual System.String CustomerFilterExpandedFolders
 		{
 			get { return (System.String)GetValue((int)UserSettingsFieldIndex.CustomerFilterExpandedFolders, true); }
@@ -651,6 +666,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "UserSettings"."SingleScanSettings"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Int32 SingleScanSettings
 		{
 			get { return (System.Int32)GetValue((int)UserSettingsFieldIndex.SingleScanSettings, true); }
@@ -661,6 +677,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "UserSettings"."AutoWeigh"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Boolean AutoWeigh
 		{
 			get { return (System.Boolean)GetValue((int)UserSettingsFieldIndex.AutoWeigh, true); }
@@ -671,6 +688,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "UserSettings"."DialogSettings"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Xml, 0, 0, 2147483647<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		[DataMember]
 		public virtual System.String DialogSettings
 		{
 			get { return (System.String)GetValue((int)UserSettingsFieldIndex.DialogSettings, true); }
@@ -681,6 +699,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "UserSettings"."UIMode"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual ShipWorks.Settings.UIMode UIMode
 		{
 			get { return (ShipWorks.Settings.UIMode)GetValue((int)UserSettingsFieldIndex.UIMode, true); }
@@ -691,6 +710,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "UserSettings"."OrderLookupLayout"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 2147483647<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		[DataMember]
 		public virtual System.String OrderLookupLayout
 		{
 			get { return (System.String)GetValue((int)UserSettingsFieldIndex.OrderLookupLayout, true); }
@@ -701,6 +721,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "UserSettings"."LastReleaseNotesSeen"<br/>
 		/// Table field type characteristics (type, precision, scale, length): VarChar, 0, 0, 25<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.String LastReleaseNotesSeen
 		{
 			get { return (System.String)GetValue((int)UserSettingsFieldIndex.LastReleaseNotesSeen, true); }
@@ -711,6 +732,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "UserSettings"."RequireVerificationToShip"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Boolean RequireVerificationToShip
 		{
 			get { return (System.Boolean)GetValue((int)UserSettingsFieldIndex.RequireVerificationToShip, true); }
@@ -721,6 +743,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "UserSettings"."MinimizeRibbon"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Boolean MinimizeRibbon
 		{
 			get { return (System.Boolean)GetValue((int)UserSettingsFieldIndex.MinimizeRibbon, true); }
@@ -731,6 +754,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "UserSettings"."ShowQAToolbarBelowRibbon"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Boolean ShowQAToolbarBelowRibbon
 		{
 			get { return (System.Boolean)GetValue((int)UserSettingsFieldIndex.ShowQAToolbarBelowRibbon, true); }
@@ -741,6 +765,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "UserSettings"."SingleScanConfirmationMode"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual ShipWorks.Settings.SingleScanConfirmationMode SingleScanConfirmationMode
 		{
 			get { return (ShipWorks.Settings.SingleScanConfirmationMode)GetValue((int)UserSettingsFieldIndex.SingleScanConfirmationMode, true); }
@@ -750,6 +775,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <summary> Gets / sets related entity of type 'UserEntity' which has to be set using a fetch action earlier. If no related entity is set for this property, null is returned.<br/><br/>
 		/// </summary>
 		[Browsable(true)]
+		[DataMember]
 		public virtual UserEntity User
 		{
 			get { return _user; }

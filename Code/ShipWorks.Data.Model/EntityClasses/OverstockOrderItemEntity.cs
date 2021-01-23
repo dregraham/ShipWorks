@@ -392,6 +392,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "OverstockOrderItem"."SalesChannelLineNumber"<br/>
 		/// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Int64 SalesChannelLineNumber
 		{
 			get { return (System.Int64)GetValue((int)OverstockOrderItemFieldIndex.SalesChannelLineNumber, true); }

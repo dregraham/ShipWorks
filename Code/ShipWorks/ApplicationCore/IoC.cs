@@ -249,6 +249,7 @@ namespace ShipWorks.ApplicationCore
             ServiceAttribute.Register(builder, registrationCache, allAssemblies);
             KeyedComponentAttribute.Register(builder, registrationCache, allAssemblies);
             NamedComponentAttribute.Register(builder, registrationCache, allAssemblies);
+            KeyAllComponentAttribute.Register(builder, registrationCache, allAssemblies);
 
             builder.Register((c, _) => Program.ExecutionMode.IsUISupported ?
                     (IUserLoginWorkflow) c.Resolve<UserLoginWorkflow>() :

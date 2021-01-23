@@ -400,6 +400,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "SearsOrderItem"."LineNumber"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Int32 LineNumber
 		{
 			get { return (System.Int32)GetValue((int)SearsOrderItemFieldIndex.LineNumber, true); }
@@ -410,6 +411,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "SearsOrderItem"."ItemID"<br/>
 		/// Table field type characteristics (type, precision, scale, length): VarChar, 0, 0, 300<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.String ItemID
 		{
 			get { return (System.String)GetValue((int)SearsOrderItemFieldIndex.ItemID, true); }
@@ -420,6 +422,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "SearsOrderItem"."Commission"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Money, 19, 4, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Decimal Commission
 		{
 			get { return (System.Decimal)GetValue((int)SearsOrderItemFieldIndex.Commission, true); }
@@ -430,6 +433,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "SearsOrderItem"."Shipping"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Money, 19, 4, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Decimal Shipping
 		{
 			get { return (System.Decimal)GetValue((int)SearsOrderItemFieldIndex.Shipping, true); }
@@ -440,6 +444,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "SearsOrderItem"."OnlineStatus"<br/>
 		/// Table field type characteristics (type, precision, scale, length): VarChar, 0, 0, 20<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.String OnlineStatus
 		{
 			get { return (System.String)GetValue((int)SearsOrderItemFieldIndex.OnlineStatus, true); }

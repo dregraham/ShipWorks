@@ -376,6 +376,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "FtpAccount"."FtpAccountID"<br/>
 		/// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, true, true</remarks>
+		[DataMember]
 		public virtual System.Int64 FtpAccountID
 		{
 			get { return (System.Int64)GetValue((int)FtpAccountFieldIndex.FtpAccountID, true); }
@@ -386,6 +387,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "FtpAccount"."Host"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 100<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.String Host
 		{
 			get { return (System.String)GetValue((int)FtpAccountFieldIndex.Host, true); }
@@ -396,6 +398,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "FtpAccount"."Username"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 50<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.String Username
 		{
 			get { return (System.String)GetValue((int)FtpAccountFieldIndex.Username, true); }
@@ -406,6 +409,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "FtpAccount"."Password"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 50<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.String Password
 		{
 			get { return (System.String)GetValue((int)FtpAccountFieldIndex.Password, true); }
@@ -416,6 +420,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "FtpAccount"."Port"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Int32 Port
 		{
 			get { return (System.Int32)GetValue((int)FtpAccountFieldIndex.Port, true); }
@@ -426,6 +431,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "FtpAccount"."SecurityType"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Int32 SecurityType
 		{
 			get { return (System.Int32)GetValue((int)FtpAccountFieldIndex.SecurityType, true); }
@@ -436,6 +442,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "FtpAccount"."Passive"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Boolean Passive
 		{
 			get { return (System.Boolean)GetValue((int)FtpAccountFieldIndex.Passive, true); }
@@ -446,6 +453,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "FtpAccount"."InternalOwnerID"<br/>
 		/// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		[DataMember]
 		public virtual Nullable<System.Int64> InternalOwnerID
 		{
 			get { return (Nullable<System.Int64>)GetValue((int)FtpAccountFieldIndex.InternalOwnerID, false); }
@@ -456,6 +464,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "FtpAccount"."ReuseControlConnectionSession"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Boolean ReuseControlConnectionSession
 		{
 			get { return (System.Boolean)GetValue((int)FtpAccountFieldIndex.ReuseControlConnectionSession, true); }

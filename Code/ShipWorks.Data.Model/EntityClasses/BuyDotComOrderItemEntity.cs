@@ -402,6 +402,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "BuyDotComOrderItem"."ReceiptItemID"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 100<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.String ReceiptItemID
 		{
 			get { return (System.String)GetValue((int)BuyDotComOrderItemFieldIndex.ReceiptItemID, true); }
@@ -412,6 +413,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "BuyDotComOrderItem"."ListingID"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Int32 ListingID
 		{
 			get { return (System.Int32)GetValue((int)BuyDotComOrderItemFieldIndex.ListingID, true); }
@@ -422,6 +424,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "BuyDotComOrderItem"."Shipping"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Money, 19, 4, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Decimal Shipping
 		{
 			get { return (System.Decimal)GetValue((int)BuyDotComOrderItemFieldIndex.Shipping, true); }
@@ -432,6 +435,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "BuyDotComOrderItem"."Tax"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Money, 19, 4, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Decimal Tax
 		{
 			get { return (System.Decimal)GetValue((int)BuyDotComOrderItemFieldIndex.Tax, true); }
@@ -442,6 +446,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "BuyDotComOrderItem"."Commission"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Money, 19, 4, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Decimal Commission
 		{
 			get { return (System.Decimal)GetValue((int)BuyDotComOrderItemFieldIndex.Commission, true); }
@@ -452,6 +457,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "BuyDotComOrderItem"."ItemFee"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Money, 19, 4, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Decimal ItemFee
 		{
 			get { return (System.Decimal)GetValue((int)BuyDotComOrderItemFieldIndex.ItemFee, true); }

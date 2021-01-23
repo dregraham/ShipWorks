@@ -542,6 +542,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "FedExPackage"."FedExPackageID"<br/>
 		/// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, true, true</remarks>
+		[DataMember]
 		public virtual System.Int64 FedExPackageID
 		{
 			get { return (System.Int64)GetValue((int)FedExPackageFieldIndex.FedExPackageID, true); }
@@ -552,6 +553,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "FedExPackage"."ShipmentID"<br/>
 		/// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Int64 ShipmentID
 		{
 			get { return (System.Int64)GetValue((int)FedExPackageFieldIndex.ShipmentID, true); }
@@ -562,6 +564,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "FedExPackage"."Weight"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Float, 38, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Double Weight
 		{
 			get { return (System.Double)GetValue((int)FedExPackageFieldIndex.Weight, true); }
@@ -572,6 +575,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "FedExPackage"."DimsProfileID"<br/>
 		/// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Int64 DimsProfileID
 		{
 			get { return (System.Int64)GetValue((int)FedExPackageFieldIndex.DimsProfileID, true); }
@@ -582,6 +586,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "FedExPackage"."DimsLength"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Float, 38, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Double DimsLength
 		{
 			get { return (System.Double)GetValue((int)FedExPackageFieldIndex.DimsLength, true); }
@@ -592,6 +597,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "FedExPackage"."DimsWidth"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Float, 38, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Double DimsWidth
 		{
 			get { return (System.Double)GetValue((int)FedExPackageFieldIndex.DimsWidth, true); }
@@ -602,6 +608,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "FedExPackage"."DimsHeight"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Float, 38, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Double DimsHeight
 		{
 			get { return (System.Double)GetValue((int)FedExPackageFieldIndex.DimsHeight, true); }
@@ -612,6 +619,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "FedExPackage"."DimsWeight"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Float, 38, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Double DimsWeight
 		{
 			get { return (System.Double)GetValue((int)FedExPackageFieldIndex.DimsWeight, true); }
@@ -622,6 +630,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "FedExPackage"."DimsAddWeight"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Boolean DimsAddWeight
 		{
 			get { return (System.Boolean)GetValue((int)FedExPackageFieldIndex.DimsAddWeight, true); }
@@ -632,6 +641,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "FedExPackage"."SkidPieces"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Int32 SkidPieces
 		{
 			get { return (System.Int32)GetValue((int)FedExPackageFieldIndex.SkidPieces, true); }
@@ -642,6 +652,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "FedExPackage"."Insurance"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Boolean Insurance
 		{
 			get { return (System.Boolean)GetValue((int)FedExPackageFieldIndex.Insurance, true); }
@@ -652,6 +663,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "FedExPackage"."InsuranceValue"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Money, 19, 4, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Decimal InsuranceValue
 		{
 			get { return (System.Decimal)GetValue((int)FedExPackageFieldIndex.InsuranceValue, true); }
@@ -662,6 +674,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "FedExPackage"."InsurancePennyOne"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Boolean InsurancePennyOne
 		{
 			get { return (System.Boolean)GetValue((int)FedExPackageFieldIndex.InsurancePennyOne, true); }
@@ -672,6 +685,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "FedExPackage"."DeclaredValue"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Money, 19, 4, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Decimal DeclaredValue
 		{
 			get { return (System.Decimal)GetValue((int)FedExPackageFieldIndex.DeclaredValue, true); }
@@ -682,6 +696,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "FedExPackage"."TrackingNumber"<br/>
 		/// Table field type characteristics (type, precision, scale, length): VarChar, 0, 0, 50<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.String TrackingNumber
 		{
 			get { return (System.String)GetValue((int)FedExPackageFieldIndex.TrackingNumber, true); }
@@ -692,6 +707,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "FedExPackage"."PriorityAlert"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Boolean PriorityAlert
 		{
 			get { return (System.Boolean)GetValue((int)FedExPackageFieldIndex.PriorityAlert, true); }
@@ -702,6 +718,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "FedExPackage"."PriorityAlertEnhancementType"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Int32 PriorityAlertEnhancementType
 		{
 			get { return (System.Int32)GetValue((int)FedExPackageFieldIndex.PriorityAlertEnhancementType, true); }
@@ -712,6 +729,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "FedExPackage"."PriorityAlertDetailContent"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 1024<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.String PriorityAlertDetailContent
 		{
 			get { return (System.String)GetValue((int)FedExPackageFieldIndex.PriorityAlertDetailContent, true); }
@@ -722,6 +740,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "FedExPackage"."DryIceWeight"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Float, 38, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Double DryIceWeight
 		{
 			get { return (System.Double)GetValue((int)FedExPackageFieldIndex.DryIceWeight, true); }
@@ -732,6 +751,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "FedExPackage"."ContainsAlcohol"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Boolean ContainsAlcohol
 		{
 			get { return (System.Boolean)GetValue((int)FedExPackageFieldIndex.ContainsAlcohol, true); }
@@ -742,6 +762,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "FedExPackage"."DangerousGoodsEnabled"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Boolean DangerousGoodsEnabled
 		{
 			get { return (System.Boolean)GetValue((int)FedExPackageFieldIndex.DangerousGoodsEnabled, true); }
@@ -752,6 +773,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "FedExPackage"."DangerousGoodsType"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Int32 DangerousGoodsType
 		{
 			get { return (System.Int32)GetValue((int)FedExPackageFieldIndex.DangerousGoodsType, true); }
@@ -762,6 +784,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "FedExPackage"."DangerousGoodsAccessibilityType"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Int32 DangerousGoodsAccessibilityType
 		{
 			get { return (System.Int32)GetValue((int)FedExPackageFieldIndex.DangerousGoodsAccessibilityType, true); }
@@ -772,6 +795,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "FedExPackage"."DangerousGoodsCargoAircraftOnly"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Boolean DangerousGoodsCargoAircraftOnly
 		{
 			get { return (System.Boolean)GetValue((int)FedExPackageFieldIndex.DangerousGoodsCargoAircraftOnly, true); }
@@ -782,6 +806,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "FedExPackage"."DangerousGoodsEmergencyContactPhone"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 16<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.String DangerousGoodsEmergencyContactPhone
 		{
 			get { return (System.String)GetValue((int)FedExPackageFieldIndex.DangerousGoodsEmergencyContactPhone, true); }
@@ -792,6 +817,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "FedExPackage"."DangerousGoodsOfferor"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 128<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.String DangerousGoodsOfferor
 		{
 			get { return (System.String)GetValue((int)FedExPackageFieldIndex.DangerousGoodsOfferor, true); }
@@ -802,6 +828,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "FedExPackage"."DangerousGoodsPackagingCount"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Int32 DangerousGoodsPackagingCount
 		{
 			get { return (System.Int32)GetValue((int)FedExPackageFieldIndex.DangerousGoodsPackagingCount, true); }
@@ -812,6 +839,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "FedExPackage"."HazardousMaterialNumber"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 16<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.String HazardousMaterialNumber
 		{
 			get { return (System.String)GetValue((int)FedExPackageFieldIndex.HazardousMaterialNumber, true); }
@@ -822,6 +850,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "FedExPackage"."HazardousMaterialClass"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 8<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.String HazardousMaterialClass
 		{
 			get { return (System.String)GetValue((int)FedExPackageFieldIndex.HazardousMaterialClass, true); }
@@ -832,6 +861,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "FedExPackage"."HazardousMaterialProperName"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 64<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.String HazardousMaterialProperName
 		{
 			get { return (System.String)GetValue((int)FedExPackageFieldIndex.HazardousMaterialProperName, true); }
@@ -842,6 +872,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "FedExPackage"."HazardousMaterialPackingGroup"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Int32 HazardousMaterialPackingGroup
 		{
 			get { return (System.Int32)GetValue((int)FedExPackageFieldIndex.HazardousMaterialPackingGroup, true); }
@@ -852,6 +883,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "FedExPackage"."HazardousMaterialQuantityValue"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Float, 38, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Double HazardousMaterialQuantityValue
 		{
 			get { return (System.Double)GetValue((int)FedExPackageFieldIndex.HazardousMaterialQuantityValue, true); }
@@ -862,6 +894,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "FedExPackage"."HazardousMaterialQuanityUnits"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Int32 HazardousMaterialQuanityUnits
 		{
 			get { return (System.Int32)GetValue((int)FedExPackageFieldIndex.HazardousMaterialQuanityUnits, true); }
@@ -872,6 +905,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "FedExPackage"."HazardousMaterialTechnicalName"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 64<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.String HazardousMaterialTechnicalName
 		{
 			get { return (System.String)GetValue((int)FedExPackageFieldIndex.HazardousMaterialTechnicalName, true); }
@@ -882,6 +916,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "FedExPackage"."SignatoryContactName"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 100<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.String SignatoryContactName
 		{
 			get { return (System.String)GetValue((int)FedExPackageFieldIndex.SignatoryContactName, true); }
@@ -892,6 +927,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "FedExPackage"."SignatoryTitle"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 100<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.String SignatoryTitle
 		{
 			get { return (System.String)GetValue((int)FedExPackageFieldIndex.SignatoryTitle, true); }
@@ -902,6 +938,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "FedExPackage"."SignatoryPlace"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 100<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.String SignatoryPlace
 		{
 			get { return (System.String)GetValue((int)FedExPackageFieldIndex.SignatoryPlace, true); }
@@ -912,6 +949,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "FedExPackage"."AlcoholRecipientType"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Int32 AlcoholRecipientType
 		{
 			get { return (System.Int32)GetValue((int)FedExPackageFieldIndex.AlcoholRecipientType, true); }
@@ -922,6 +960,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "FedExPackage"."ContainerType"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 100<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.String ContainerType
 		{
 			get { return (System.String)GetValue((int)FedExPackageFieldIndex.ContainerType, true); }
@@ -932,6 +971,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "FedExPackage"."NumberOfContainers"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Int32 NumberOfContainers
 		{
 			get { return (System.Int32)GetValue((int)FedExPackageFieldIndex.NumberOfContainers, true); }
@@ -942,6 +982,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "FedExPackage"."PackingDetailsCargoAircraftOnly"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Boolean PackingDetailsCargoAircraftOnly
 		{
 			get { return (System.Boolean)GetValue((int)FedExPackageFieldIndex.PackingDetailsCargoAircraftOnly, true); }
@@ -952,6 +993,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "FedExPackage"."PackingDetailsPackingInstructions"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 50<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.String PackingDetailsPackingInstructions
 		{
 			get { return (System.String)GetValue((int)FedExPackageFieldIndex.PackingDetailsPackingInstructions, true); }
@@ -962,6 +1004,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "FedExPackage"."BatteryMaterial"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual ShipWorks.Shipping.FedEx.FedExBatteryMaterialType BatteryMaterial
 		{
 			get { return (ShipWorks.Shipping.FedEx.FedExBatteryMaterialType)GetValue((int)FedExPackageFieldIndex.BatteryMaterial, true); }
@@ -972,6 +1015,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "FedExPackage"."BatteryPacking"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual ShipWorks.Shipping.FedEx.FedExBatteryPackingType BatteryPacking
 		{
 			get { return (ShipWorks.Shipping.FedEx.FedExBatteryPackingType)GetValue((int)FedExPackageFieldIndex.BatteryPacking, true); }
@@ -982,6 +1026,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "FedExPackage"."BatteryRegulatorySubtype"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual ShipWorks.Shipping.FedEx.FedExBatteryRegulatorySubType BatteryRegulatorySubtype
 		{
 			get { return (ShipWorks.Shipping.FedEx.FedExBatteryRegulatorySubType)GetValue((int)FedExPackageFieldIndex.BatteryRegulatorySubtype, true); }
@@ -992,6 +1037,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "FedExPackage"."FreightPackaging"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual ShipWorks.Shipping.FedEx.FedExFreightPhysicalPackagingType FreightPackaging
 		{
 			get { return (ShipWorks.Shipping.FedEx.FedExFreightPhysicalPackagingType)GetValue((int)FedExPackageFieldIndex.FreightPackaging, true); }
@@ -1002,6 +1048,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "FedExPackage"."FreightPieces"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Int32 FreightPieces
 		{
 			get { return (System.Int32)GetValue((int)FedExPackageFieldIndex.FreightPieces, true); }
@@ -1010,6 +1057,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 
 		/// <summary> Gets / sets related entity of type 'FedExShipmentEntity' which has to be set using a fetch action earlier. If no related entity is set for this property, null is returned..<br/><br/></summary>
 		[Browsable(true)]
+		[DataMember]
 		public virtual FedExShipmentEntity FedExShipment
 		{
 			get	{ return _fedExShipment; }

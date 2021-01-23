@@ -452,6 +452,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "Filter"."FilterID"<br/>
 		/// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, true, true</remarks>
+		[DataMember]
 		public virtual System.Int64 FilterID
 		{
 			get { return (System.Int64)GetValue((int)FilterFieldIndex.FilterID, true); }
@@ -462,6 +463,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "Filter"."RowVersion"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Timestamp, 0, 0, 2147483647<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Byte[] RowVersion
 		{
 			get { return (System.Byte[])GetValue((int)FilterFieldIndex.RowVersion, true); }
@@ -472,6 +474,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "Filter"."Name"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 50<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.String Name
 		{
 			get { return (System.String)GetValue((int)FilterFieldIndex.Name, true); }
@@ -482,6 +485,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "Filter"."FilterTarget"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Int32 FilterTarget
 		{
 			get { return (System.Int32)GetValue((int)FilterFieldIndex.FilterTarget, true); }
@@ -492,6 +496,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "Filter"."IsFolder"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Boolean IsFolder
 		{
 			get { return (System.Boolean)GetValue((int)FilterFieldIndex.IsFolder, true); }
@@ -502,6 +507,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "Filter"."Definition"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Xml, 0, 0, 2147483647<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		[DataMember]
 		public virtual System.String Definition
 		{
 			get { return (System.String)GetValue((int)FilterFieldIndex.Definition, true); }
@@ -512,6 +518,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "Filter"."State"<br/>
 		/// Table field type characteristics (type, precision, scale, length): TinyInt, 3, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Byte State
 		{
 			get { return (System.Byte)GetValue((int)FilterFieldIndex.State, true); }
@@ -522,6 +529,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "Filter"."IsSavedSearch"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Boolean IsSavedSearch
 		{
 			get { return (System.Boolean)GetValue((int)FilterFieldIndex.IsSavedSearch, true); }
@@ -530,6 +538,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 
 		/// <summary> Gets the EntityCollection with the related entities of type 'FilterSequenceEntity' which are related to this entity via a relation of type '1:n'. If the EntityCollection hasn't been fetched yet, the collection returned will be empty.<br/><br/></summary>
 		[TypeContainedAttribute(typeof(FilterSequenceEntity))]
+		[DataMember]
 		public virtual EntityCollection<FilterSequenceEntity> UsedBySequences
 		{
 			get { return GetOrCreateEntityCollection<FilterSequenceEntity, FilterSequenceEntityFactory>("Filter", true, false, ref _usedBySequences);	}
@@ -537,6 +546,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 
 		/// <summary> Gets the EntityCollection with the related entities of type 'FilterSequenceEntity' which are related to this entity via a relation of type '1:n'. If the EntityCollection hasn't been fetched yet, the collection returned will be empty.<br/><br/></summary>
 		[TypeContainedAttribute(typeof(FilterSequenceEntity))]
+		[DataMember]
 		public virtual EntityCollection<FilterSequenceEntity> ChildSequences
 		{
 			get { return GetOrCreateEntityCollection<FilterSequenceEntity, FilterSequenceEntityFactory>("Parent", true, false, ref _childSequences);	}

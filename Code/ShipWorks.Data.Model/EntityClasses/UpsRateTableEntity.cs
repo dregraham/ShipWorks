@@ -557,6 +557,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "UpsRateTable"."UpsRateTableID"<br/>
 		/// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, true, true</remarks>
+		[DataMember]
 		public virtual System.Int64 UpsRateTableID
 		{
 			get { return (System.Int64)GetValue((int)UpsRateTableFieldIndex.UpsRateTableID, true); }
@@ -567,6 +568,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "UpsRateTable"."UploadDate"<br/>
 		/// Table field type characteristics (type, precision, scale, length): DateTime2, 7, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.DateTime UploadDate
 		{
 			get { return (System.DateTime)GetValue((int)UpsRateTableFieldIndex.UploadDate, true); }
@@ -575,6 +577,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 
 		/// <summary> Gets the EntityCollection with the related entities of type 'UpsAccountEntity' which are related to this entity via a relation of type '1:n'. If the EntityCollection hasn't been fetched yet, the collection returned will be empty.<br/><br/></summary>
 		[TypeContainedAttribute(typeof(UpsAccountEntity))]
+		[DataMember]
 		public virtual EntityCollection<UpsAccountEntity> UpsAccount
 		{
 			get { return GetOrCreateEntityCollection<UpsAccountEntity, UpsAccountEntityFactory>("UpsRateTable", true, false, ref _upsAccount);	}
@@ -582,6 +585,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 
 		/// <summary> Gets the EntityCollection with the related entities of type 'UpsLetterRateEntity' which are related to this entity via a relation of type '1:n'. If the EntityCollection hasn't been fetched yet, the collection returned will be empty.<br/><br/></summary>
 		[TypeContainedAttribute(typeof(UpsLetterRateEntity))]
+		[DataMember]
 		public virtual EntityCollection<UpsLetterRateEntity> UpsLetterRate
 		{
 			get { return GetOrCreateEntityCollection<UpsLetterRateEntity, UpsLetterRateEntityFactory>("UpsRateTable", true, false, ref _upsLetterRate);	}
@@ -589,6 +593,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 
 		/// <summary> Gets the EntityCollection with the related entities of type 'UpsPackageRateEntity' which are related to this entity via a relation of type '1:n'. If the EntityCollection hasn't been fetched yet, the collection returned will be empty.<br/><br/></summary>
 		[TypeContainedAttribute(typeof(UpsPackageRateEntity))]
+		[DataMember]
 		public virtual EntityCollection<UpsPackageRateEntity> UpsPackageRate
 		{
 			get { return GetOrCreateEntityCollection<UpsPackageRateEntity, UpsPackageRateEntityFactory>("UpsRateTable", true, false, ref _upsPackageRate);	}
@@ -596,6 +601,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 
 		/// <summary> Gets the EntityCollection with the related entities of type 'UpsPricePerPoundEntity' which are related to this entity via a relation of type '1:n'. If the EntityCollection hasn't been fetched yet, the collection returned will be empty.<br/><br/></summary>
 		[TypeContainedAttribute(typeof(UpsPricePerPoundEntity))]
+		[DataMember]
 		public virtual EntityCollection<UpsPricePerPoundEntity> UpsPricePerPound
 		{
 			get { return GetOrCreateEntityCollection<UpsPricePerPoundEntity, UpsPricePerPoundEntityFactory>("UpsRateTable", true, false, ref _upsPricePerPound);	}
@@ -603,6 +609,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 
 		/// <summary> Gets the EntityCollection with the related entities of type 'UpsRateSurchargeEntity' which are related to this entity via a relation of type '1:n'. If the EntityCollection hasn't been fetched yet, the collection returned will be empty.<br/><br/></summary>
 		[TypeContainedAttribute(typeof(UpsRateSurchargeEntity))]
+		[DataMember]
 		public virtual EntityCollection<UpsRateSurchargeEntity> UpsRateSurcharge
 		{
 			get { return GetOrCreateEntityCollection<UpsRateSurchargeEntity, UpsRateSurchargeEntityFactory>("UpsRateTable", true, false, ref _upsRateSurcharge);	}

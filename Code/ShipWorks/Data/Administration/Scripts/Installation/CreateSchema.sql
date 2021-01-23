@@ -535,7 +535,8 @@ CREATE TABLE [dbo].[Order]
 [Custom7] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL CONSTRAINT [DF_Order_Custom7] DEFAULT (''),
 [Custom8] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL CONSTRAINT [DF_Order_Custom8] DEFAULT (''),
 [Custom9] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL CONSTRAINT [DF_Order_Custom9] DEFAULT (''),
-[Custom10] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL CONSTRAINT [DF_Order_Custom10] DEFAULT ('')
+[Custom10] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL CONSTRAINT [DF_Order_Custom10] DEFAULT (''),
+[DeliverByDate] [datetime] NULL
 )
 GO
 PRINT N'Creating primary key [PK_Order] on [dbo].[Order]'
@@ -5285,7 +5286,8 @@ CREATE TABLE [dbo].[ShippingSettings]
 [ShipmentDateCutoffJson] [nvarchar] (1000) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL CONSTRAINT [DF_ShippingSettings_ShipmentDateCutoffJson] DEFAULT (''),
 [ShipEngineApiKey] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [OrderLookupFieldLayout] [nvarchar] (max) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL CONSTRAINT [DF_ShippingSettings_OrderLookupFieldLayout] DEFAULT (''),
-[UpsAllowNoDims] [bit] NOT NULL CONSTRAINT [DF_ShippingSettings_UpsAllowNoDims] DEFAULT ((0))
+[UpsAllowNoDims] [bit] NOT NULL CONSTRAINT [DF_ShippingSettings_UpsAllowNoDims] DEFAULT ((0)),
+[ShipEngineAccountID] [nvarchar] (20) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL CONSTRAINT [DF_ShippingSettings_ShipEngineAccountID] DEFAULT (''),
 )
 GO
 PRINT N'Creating primary key [PK_ShippingSettings] on [dbo].[ShippingSettings]'
@@ -6383,7 +6385,8 @@ CREATE TABLE [dbo].[GenericModuleOrder](
 	[AmazonOrderID] [varchar](32) NOT NULL,
 	[IsFBA] [bit] NOT NULL,
 	[IsPrime] [int] NOT NULL,
-	[IsSameDay] bit NOT NULL
+	[IsSameDay] bit NOT NULL,
+	[Marketplace] [nvarchar](50) NOT NULL
  CONSTRAINT [PK_GenericModuleOrder] PRIMARY KEY CLUSTERED
 (
 	[OrderID] ASC
@@ -6397,6 +6400,9 @@ REFERENCES [dbo].[Order] ([OrderID])
 GO
 
 ALTER TABLE [dbo].[GenericModuleOrder] CHECK CONSTRAINT [FK_GenericModuleOrder_Order]
+GO
+
+CREATE NONCLUSTERED INDEX [IX_SWDefault_GenericModuleOrder_Marketplace] ON [dbo].[GenericModuleOrder] ([Marketplace])
 GO
 
 PRINT N'Creating MagentoOrder foreign key'

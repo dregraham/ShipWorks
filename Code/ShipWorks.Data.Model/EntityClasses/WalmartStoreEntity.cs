@@ -398,6 +398,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "WalmartStore"."ConsumerID"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 50<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.String ConsumerID
 		{
 			get { return (System.String)GetValue((int)WalmartStoreFieldIndex.ConsumerID, true); }
@@ -408,6 +409,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "WalmartStore"."PrivateKey"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 2000<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.String PrivateKey
 		{
 			get { return (System.String)GetValue((int)WalmartStoreFieldIndex.PrivateKey, true); }
@@ -418,6 +420,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "WalmartStore"."DownloadModifiedNumberOfDaysBack"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Int32 DownloadModifiedNumberOfDaysBack
 		{
 			get { return (System.Int32)GetValue((int)WalmartStoreFieldIndex.DownloadModifiedNumberOfDaysBack, true); }
@@ -428,6 +431,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "WalmartStore"."ClientID"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 50<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.String ClientID
 		{
 			get { return (System.String)GetValue((int)WalmartStoreFieldIndex.ClientID, true); }
@@ -438,6 +442,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "WalmartStore"."ClientSecret"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 2000<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.String ClientSecret
 		{
 			get { return (System.String)GetValue((int)WalmartStoreFieldIndex.ClientSecret, true); }

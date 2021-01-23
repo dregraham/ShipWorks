@@ -396,6 +396,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "DhlExpressAccount"."DhlExpressAccountID"<br/>
 		/// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, true, true</remarks>
+		[DataMember]
 		public virtual System.Int64 DhlExpressAccountID
 		{
 			get { return (System.Int64)GetValue((int)DhlExpressAccountFieldIndex.DhlExpressAccountID, true); }
@@ -406,6 +407,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "DhlExpressAccount"."RowVersion"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Timestamp, 0, 0, 2147483647<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Byte[] RowVersion
 		{
 			get { return (System.Byte[])GetValue((int)DhlExpressAccountFieldIndex.RowVersion, true); }
@@ -416,6 +418,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "DhlExpressAccount"."AccountNumber"<br/>
 		/// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Int64 AccountNumber
 		{
 			get { return (System.Int64)GetValue((int)DhlExpressAccountFieldIndex.AccountNumber, true); }
@@ -426,6 +429,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "DhlExpressAccount"."ShipEngineCarrierId"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 50<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		[DataMember]
 		public virtual System.String ShipEngineCarrierId
 		{
 			get { return (System.String)GetValue((int)DhlExpressAccountFieldIndex.ShipEngineCarrierId, true); }
@@ -436,6 +440,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "DhlExpressAccount"."Description"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 50<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.String Description
 		{
 			get { return (System.String)GetValue((int)DhlExpressAccountFieldIndex.Description, true); }
@@ -446,6 +451,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "DhlExpressAccount"."FirstName"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 30<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.String FirstName
 		{
 			get { return (System.String)GetValue((int)DhlExpressAccountFieldIndex.FirstName, true); }
@@ -456,6 +462,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "DhlExpressAccount"."MiddleName"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 30<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.String MiddleName
 		{
 			get { return (System.String)GetValue((int)DhlExpressAccountFieldIndex.MiddleName, true); }
@@ -466,6 +473,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "DhlExpressAccount"."LastName"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 30<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.String LastName
 		{
 			get { return (System.String)GetValue((int)DhlExpressAccountFieldIndex.LastName, true); }
@@ -476,6 +484,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "DhlExpressAccount"."Company"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 30<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.String Company
 		{
 			get { return (System.String)GetValue((int)DhlExpressAccountFieldIndex.Company, true); }
@@ -486,6 +495,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "DhlExpressAccount"."Street1"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 43<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.String Street1
 		{
 			get { return (System.String)GetValue((int)DhlExpressAccountFieldIndex.Street1, true); }
@@ -496,6 +506,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "DhlExpressAccount"."City"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 25<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.String City
 		{
 			get { return (System.String)GetValue((int)DhlExpressAccountFieldIndex.City, true); }
@@ -506,6 +517,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "DhlExpressAccount"."StateProvCode"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 50<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.String StateProvCode
 		{
 			get { return (System.String)GetValue((int)DhlExpressAccountFieldIndex.StateProvCode, true); }
@@ -516,6 +528,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "DhlExpressAccount"."PostalCode"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 10<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.String PostalCode
 		{
 			get { return (System.String)GetValue((int)DhlExpressAccountFieldIndex.PostalCode, true); }
@@ -526,6 +539,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "DhlExpressAccount"."CountryCode"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 50<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.String CountryCode
 		{
 			get { return (System.String)GetValue((int)DhlExpressAccountFieldIndex.CountryCode, true); }
@@ -536,6 +550,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "DhlExpressAccount"."Email"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 50<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.String Email
 		{
 			get { return (System.String)GetValue((int)DhlExpressAccountFieldIndex.Email, true); }
@@ -546,6 +561,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "DhlExpressAccount"."Phone"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 15<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.String Phone
 		{
 			get { return (System.String)GetValue((int)DhlExpressAccountFieldIndex.Phone, true); }
@@ -556,6 +572,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "DhlExpressAccount"."UspsAccountId"<br/>
 		/// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		[DataMember]
 		public virtual Nullable<System.Int64> UspsAccountId
 		{
 			get { return (Nullable<System.Int64>)GetValue((int)DhlExpressAccountFieldIndex.UspsAccountId, false); }
@@ -566,6 +583,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "DhlExpressAccount"."HubVersion"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		[DataMember]
 		public virtual Nullable<System.Int32> HubVersion
 		{
 			get { return (Nullable<System.Int32>)GetValue((int)DhlExpressAccountFieldIndex.HubVersion, false); }
@@ -576,6 +594,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "DhlExpressAccount"."HubCarrierId"<br/>
 		/// Table field type characteristics (type, precision, scale, length): UniqueIdentifier, 0, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		[DataMember]
 		public virtual Nullable<System.Guid> HubCarrierId
 		{
 			get { return (Nullable<System.Guid>)GetValue((int)DhlExpressAccountFieldIndex.HubCarrierId, false); }

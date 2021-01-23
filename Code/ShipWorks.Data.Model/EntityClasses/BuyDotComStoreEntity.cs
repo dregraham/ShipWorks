@@ -392,6 +392,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "BuyDotComStore"."FtpUsername"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 50<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.String FtpUsername
 		{
 			get { return (System.String)GetValue((int)BuyDotComStoreFieldIndex.FtpUsername, true); }
@@ -402,6 +403,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "BuyDotComStore"."FtpPassword"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 50<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.String FtpPassword
 		{
 			get { return (System.String)GetValue((int)BuyDotComStoreFieldIndex.FtpPassword, true); }

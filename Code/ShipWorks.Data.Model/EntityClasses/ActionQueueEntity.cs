@@ -484,6 +484,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "ActionQueue"."ActionQueueID"<br/>
 		/// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, true, true</remarks>
+		[DataMember]
 		public virtual System.Int64 ActionQueueID
 		{
 			get { return (System.Int64)GetValue((int)ActionQueueFieldIndex.ActionQueueID, true); }
@@ -494,6 +495,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "ActionQueue"."RowVersion"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Timestamp, 0, 0, 2147483647<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Byte[] RowVersion
 		{
 			get { return (System.Byte[])GetValue((int)ActionQueueFieldIndex.RowVersion, true); }
@@ -504,6 +506,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "ActionQueue"."ActionID"<br/>
 		/// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Int64 ActionID
 		{
 			get { return (System.Int64)GetValue((int)ActionQueueFieldIndex.ActionID, true); }
@@ -514,6 +517,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "ActionQueue"."ActionName"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 50<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.String ActionName
 		{
 			get { return (System.String)GetValue((int)ActionQueueFieldIndex.ActionName, true); }
@@ -524,6 +528,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "ActionQueue"."ActionQueueType"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Int32 ActionQueueType
 		{
 			get { return (System.Int32)GetValue((int)ActionQueueFieldIndex.ActionQueueType, true); }
@@ -534,6 +539,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "ActionQueue"."ActionVersion"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Binary, 0, 0, 8<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Byte[] ActionVersion
 		{
 			get { return (System.Byte[])GetValue((int)ActionQueueFieldIndex.ActionVersion, true); }
@@ -544,6 +550,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "ActionQueue"."QueueVersion"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Binary, 0, 0, 8<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Byte[] QueueVersion
 		{
 			get { return (System.Byte[])GetValue((int)ActionQueueFieldIndex.QueueVersion, true); }
@@ -554,6 +561,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "ActionQueue"."TriggerDate"<br/>
 		/// Table field type characteristics (type, precision, scale, length): DateTime, 0, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.DateTime TriggerDate
 		{
 			get { return (System.DateTime)GetValue((int)ActionQueueFieldIndex.TriggerDate, true); }
@@ -564,6 +572,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "ActionQueue"."TriggerComputerID"<br/>
 		/// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Int64 TriggerComputerID
 		{
 			get { return (System.Int64)GetValue((int)ActionQueueFieldIndex.TriggerComputerID, true); }
@@ -574,6 +583,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "ActionQueue"."ComputerLimitedList"<br/>
 		/// Table field type characteristics (type, precision, scale, length): VarChar, 0, 0, 150<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.String InternalComputerLimitedList
 		{
 			get { return (System.String)GetValue((int)ActionQueueFieldIndex.InternalComputerLimitedList, true); }
@@ -584,6 +594,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "ActionQueue"."ObjectID"<br/>
 		/// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		[DataMember]
 		public virtual Nullable<System.Int64> EntityID
 		{
 			get { return (Nullable<System.Int64>)GetValue((int)ActionQueueFieldIndex.EntityID, false); }
@@ -594,6 +605,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "ActionQueue"."Status"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Int32 Status
 		{
 			get { return (System.Int32)GetValue((int)ActionQueueFieldIndex.Status, true); }
@@ -604,6 +616,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "ActionQueue"."NextStep"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Int32 NextStep
 		{
 			get { return (System.Int32)GetValue((int)ActionQueueFieldIndex.NextStep, true); }
@@ -614,6 +627,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "ActionQueue"."ContextLock"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 36<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		[DataMember]
 		public virtual System.String ContextLock
 		{
 			get { return (System.String)GetValue((int)ActionQueueFieldIndex.ContextLock, true); }
@@ -624,6 +638,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "ActionQueue"."ExtraData"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Xml, 0, 0, 2147483647<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		[DataMember]
 		public virtual System.String ExtraData
 		{
 			get { return (System.String)GetValue((int)ActionQueueFieldIndex.ExtraData, true); }
@@ -632,6 +647,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 
 		/// <summary> Gets the EntityCollection with the related entities of type 'ActionQueueSelectionEntity' which are related to this entity via a relation of type '1:n'. If the EntityCollection hasn't been fetched yet, the collection returned will be empty.<br/><br/></summary>
 		[TypeContainedAttribute(typeof(ActionQueueSelectionEntity))]
+		[DataMember]
 		public virtual EntityCollection<ActionQueueSelectionEntity> ActionQueueSelection
 		{
 			get { return GetOrCreateEntityCollection<ActionQueueSelectionEntity, ActionQueueSelectionEntityFactory>("ActionQueue", true, false, ref _actionQueueSelection);	}
@@ -639,6 +655,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 
 		/// <summary> Gets the EntityCollection with the related entities of type 'ActionQueueStepEntity' which are related to this entity via a relation of type '1:n'. If the EntityCollection hasn't been fetched yet, the collection returned will be empty.<br/><br/></summary>
 		[TypeContainedAttribute(typeof(ActionQueueStepEntity))]
+		[DataMember]
 		public virtual EntityCollection<ActionQueueStepEntity> Steps
 		{
 			get { return GetOrCreateEntityCollection<ActionQueueStepEntity, ActionQueueStepEntityFactory>("ActionQueue", true, false, ref _steps);	}

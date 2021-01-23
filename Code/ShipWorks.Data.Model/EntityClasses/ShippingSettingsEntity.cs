@@ -410,6 +410,8 @@ namespace ShipWorks.Data.Model.EntityClasses
 			_fieldsCustomProperties.Add("OrderLookupFieldLayout", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
 			_fieldsCustomProperties.Add("UpsAllowNoDims", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+			_fieldsCustomProperties.Add("ShipEngineAccountID", fieldHashtable);
 		}
 		#endregion
 
@@ -472,6 +474,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "ShippingSettings"."ShippingSettingsID"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, true, false</remarks>
+		[DataMember]
 		public virtual System.Boolean ShippingSettingsID
 		{
 			get { return (System.Boolean)GetValue((int)ShippingSettingsFieldIndex.ShippingSettingsID, true); }
@@ -482,6 +485,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "ShippingSettings"."Activated"<br/>
 		/// Table field type characteristics (type, precision, scale, length): VarChar, 0, 0, 45<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.String InternalActivated
 		{
 			get { return (System.String)GetValue((int)ShippingSettingsFieldIndex.InternalActivated, true); }
@@ -492,6 +496,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "ShippingSettings"."Configured"<br/>
 		/// Table field type characteristics (type, precision, scale, length): VarChar, 0, 0, 45<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.String InternalConfigured
 		{
 			get { return (System.String)GetValue((int)ShippingSettingsFieldIndex.InternalConfigured, true); }
@@ -502,6 +507,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "ShippingSettings"."Excluded"<br/>
 		/// Table field type characteristics (type, precision, scale, length): VarChar, 0, 0, 45<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.String InternalExcluded
 		{
 			get { return (System.String)GetValue((int)ShippingSettingsFieldIndex.InternalExcluded, true); }
@@ -512,6 +518,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "ShippingSettings"."DefaultType"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Int32 DefaultType
 		{
 			get { return (System.Int32)GetValue((int)ShippingSettingsFieldIndex.DefaultType, true); }
@@ -522,6 +529,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "ShippingSettings"."BlankPhoneOption"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Int32 BlankPhoneOption
 		{
 			get { return (System.Int32)GetValue((int)ShippingSettingsFieldIndex.BlankPhoneOption, true); }
@@ -532,6 +540,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "ShippingSettings"."BlankPhoneNumber"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 16<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.String BlankPhoneNumber
 		{
 			get { return (System.String)GetValue((int)ShippingSettingsFieldIndex.BlankPhoneNumber, true); }
@@ -542,6 +551,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "ShippingSettings"."InsurancePolicy"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 40<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.String InsurancePolicy
 		{
 			get { return (System.String)GetValue((int)ShippingSettingsFieldIndex.InsurancePolicy, true); }
@@ -552,6 +562,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "ShippingSettings"."InsuranceLastAgreed"<br/>
 		/// Table field type characteristics (type, precision, scale, length): DateTime, 0, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		[DataMember]
 		public virtual Nullable<System.DateTime> InsuranceLastAgreed
 		{
 			get { return (Nullable<System.DateTime>)GetValue((int)ShippingSettingsFieldIndex.InsuranceLastAgreed, false); }
@@ -562,6 +573,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "ShippingSettings"."FedExUsername"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 50<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		[DataMember]
 		public virtual System.String FedExUsername
 		{
 			get { return (System.String)GetValue((int)ShippingSettingsFieldIndex.FedExUsername, true); }
@@ -572,6 +584,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "ShippingSettings"."FedExPassword"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 50<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		[DataMember]
 		public virtual System.String FedExPassword
 		{
 			get { return (System.String)GetValue((int)ShippingSettingsFieldIndex.FedExPassword, true); }
@@ -582,6 +595,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "ShippingSettings"."FedExMaskAccount"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Boolean FedExMaskAccount
 		{
 			get { return (System.Boolean)GetValue((int)ShippingSettingsFieldIndex.FedExMaskAccount, true); }
@@ -592,6 +606,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "ShippingSettings"."FedExThermalDocTab"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Boolean FedExThermalDocTab
 		{
 			get { return (System.Boolean)GetValue((int)ShippingSettingsFieldIndex.FedExThermalDocTab, true); }
@@ -602,6 +617,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "ShippingSettings"."FedExThermalDocTabType"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Int32 FedExThermalDocTabType
 		{
 			get { return (System.Int32)GetValue((int)ShippingSettingsFieldIndex.FedExThermalDocTabType, true); }
@@ -612,6 +628,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "ShippingSettings"."FedExInsuranceProvider"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Int32 FedExInsuranceProvider
 		{
 			get { return (System.Int32)GetValue((int)ShippingSettingsFieldIndex.FedExInsuranceProvider, true); }
@@ -622,6 +639,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "ShippingSettings"."FedExInsurancePennyOne"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Boolean FedExInsurancePennyOne
 		{
 			get { return (System.Boolean)GetValue((int)ShippingSettingsFieldIndex.FedExInsurancePennyOne, true); }
@@ -632,6 +650,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "ShippingSettings"."UpsAccessKey"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 50<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		[DataMember]
 		public virtual System.String UpsAccessKey
 		{
 			get { return (System.String)GetValue((int)ShippingSettingsFieldIndex.UpsAccessKey, true); }
@@ -642,6 +661,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "ShippingSettings"."UpsInsuranceProvider"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Int32 UpsInsuranceProvider
 		{
 			get { return (System.Int32)GetValue((int)ShippingSettingsFieldIndex.UpsInsuranceProvider, true); }
@@ -652,6 +672,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "ShippingSettings"."UpsInsurancePennyOne"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Boolean UpsInsurancePennyOne
 		{
 			get { return (System.Boolean)GetValue((int)ShippingSettingsFieldIndex.UpsInsurancePennyOne, true); }
@@ -662,6 +683,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "ShippingSettings"."EndiciaCustomsCertify"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Boolean EndiciaCustomsCertify
 		{
 			get { return (System.Boolean)GetValue((int)ShippingSettingsFieldIndex.EndiciaCustomsCertify, true); }
@@ -672,6 +694,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "ShippingSettings"."EndiciaCustomsSigner"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 100<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.String EndiciaCustomsSigner
 		{
 			get { return (System.String)GetValue((int)ShippingSettingsFieldIndex.EndiciaCustomsSigner, true); }
@@ -682,6 +705,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "ShippingSettings"."EndiciaThermalDocTab"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Boolean EndiciaThermalDocTab
 		{
 			get { return (System.Boolean)GetValue((int)ShippingSettingsFieldIndex.EndiciaThermalDocTab, true); }
@@ -692,6 +716,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "ShippingSettings"."EndiciaThermalDocTabType"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Int32 EndiciaThermalDocTabType
 		{
 			get { return (System.Int32)GetValue((int)ShippingSettingsFieldIndex.EndiciaThermalDocTabType, true); }
@@ -702,6 +727,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "ShippingSettings"."EndiciaAutomaticExpress1"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Boolean EndiciaAutomaticExpress1
 		{
 			get { return (System.Boolean)GetValue((int)ShippingSettingsFieldIndex.EndiciaAutomaticExpress1, true); }
@@ -712,6 +738,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "ShippingSettings"."EndiciaAutomaticExpress1Account"<br/>
 		/// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Int64 EndiciaAutomaticExpress1Account
 		{
 			get { return (System.Int64)GetValue((int)ShippingSettingsFieldIndex.EndiciaAutomaticExpress1Account, true); }
@@ -722,6 +749,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "ShippingSettings"."EndiciaInsuranceProvider"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Int32 EndiciaInsuranceProvider
 		{
 			get { return (System.Int32)GetValue((int)ShippingSettingsFieldIndex.EndiciaInsuranceProvider, true); }
@@ -732,6 +760,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "ShippingSettings"."WorldShipLaunch"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Boolean WorldShipLaunch
 		{
 			get { return (System.Boolean)GetValue((int)ShippingSettingsFieldIndex.WorldShipLaunch, true); }
@@ -742,6 +771,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "ShippingSettings"."UspsAutomaticExpress1"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Boolean UspsAutomaticExpress1
 		{
 			get { return (System.Boolean)GetValue((int)ShippingSettingsFieldIndex.UspsAutomaticExpress1, true); }
@@ -752,6 +782,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "ShippingSettings"."UspsAutomaticExpress1Account"<br/>
 		/// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Int64 UspsAutomaticExpress1Account
 		{
 			get { return (System.Int64)GetValue((int)ShippingSettingsFieldIndex.UspsAutomaticExpress1Account, true); }
@@ -762,6 +793,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "ShippingSettings"."UspsInsuranceProvider"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Int32 UspsInsuranceProvider
 		{
 			get { return (System.Int32)GetValue((int)ShippingSettingsFieldIndex.UspsInsuranceProvider, true); }
@@ -772,6 +804,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "ShippingSettings"."Express1EndiciaCustomsCertify"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Boolean Express1EndiciaCustomsCertify
 		{
 			get { return (System.Boolean)GetValue((int)ShippingSettingsFieldIndex.Express1EndiciaCustomsCertify, true); }
@@ -782,6 +815,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "ShippingSettings"."Express1EndiciaCustomsSigner"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 100<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.String Express1EndiciaCustomsSigner
 		{
 			get { return (System.String)GetValue((int)ShippingSettingsFieldIndex.Express1EndiciaCustomsSigner, true); }
@@ -792,6 +826,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "ShippingSettings"."Express1EndiciaThermalDocTab"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Boolean Express1EndiciaThermalDocTab
 		{
 			get { return (System.Boolean)GetValue((int)ShippingSettingsFieldIndex.Express1EndiciaThermalDocTab, true); }
@@ -802,6 +837,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "ShippingSettings"."Express1EndiciaThermalDocTabType"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Int32 Express1EndiciaThermalDocTabType
 		{
 			get { return (System.Int32)GetValue((int)ShippingSettingsFieldIndex.Express1EndiciaThermalDocTabType, true); }
@@ -812,6 +848,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "ShippingSettings"."Express1EndiciaSingleSource"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Boolean Express1EndiciaSingleSource
 		{
 			get { return (System.Boolean)GetValue((int)ShippingSettingsFieldIndex.Express1EndiciaSingleSource, true); }
@@ -822,6 +859,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "ShippingSettings"."OnTracInsuranceProvider"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Int32 OnTracInsuranceProvider
 		{
 			get { return (System.Int32)GetValue((int)ShippingSettingsFieldIndex.OnTracInsuranceProvider, true); }
@@ -832,6 +870,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "ShippingSettings"."OnTracInsurancePennyOne"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Boolean OnTracInsurancePennyOne
 		{
 			get { return (System.Boolean)GetValue((int)ShippingSettingsFieldIndex.OnTracInsurancePennyOne, true); }
@@ -842,6 +881,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "ShippingSettings"."iParcelInsuranceProvider"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Int32 IParcelInsuranceProvider
 		{
 			get { return (System.Int32)GetValue((int)ShippingSettingsFieldIndex.IParcelInsuranceProvider, true); }
@@ -852,6 +892,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "ShippingSettings"."iParcelInsurancePennyOne"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Boolean IParcelInsurancePennyOne
 		{
 			get { return (System.Boolean)GetValue((int)ShippingSettingsFieldIndex.IParcelInsurancePennyOne, true); }
@@ -862,6 +903,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "ShippingSettings"."Express1UspsSingleSource"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Boolean Express1UspsSingleSource
 		{
 			get { return (System.Boolean)GetValue((int)ShippingSettingsFieldIndex.Express1UspsSingleSource, true); }
@@ -872,6 +914,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "ShippingSettings"."UpsMailInnovationsEnabled"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Boolean UpsMailInnovationsEnabled
 		{
 			get { return (System.Boolean)GetValue((int)ShippingSettingsFieldIndex.UpsMailInnovationsEnabled, true); }
@@ -882,6 +925,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "ShippingSettings"."WorldShipMailInnovationsEnabled"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Boolean WorldShipMailInnovationsEnabled
 		{
 			get { return (System.Boolean)GetValue((int)ShippingSettingsFieldIndex.WorldShipMailInnovationsEnabled, true); }
@@ -892,6 +936,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "ShippingSettings"."BestRateExcludedShipmentTypes"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 100<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.String InternalBestRateExcludedShipmentTypes
 		{
 			get { return (System.String)GetValue((int)ShippingSettingsFieldIndex.InternalBestRateExcludedShipmentTypes, true); }
@@ -902,6 +947,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "ShippingSettings"."ShipSenseEnabled"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Boolean ShipSenseEnabled
 		{
 			get { return (System.Boolean)GetValue((int)ShippingSettingsFieldIndex.ShipSenseEnabled, true); }
@@ -912,6 +958,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "ShippingSettings"."ShipSenseUniquenessXml"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Xml, 0, 0, 2147483647<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.String ShipSenseUniquenessXml
 		{
 			get { return (System.String)GetValue((int)ShippingSettingsFieldIndex.ShipSenseUniquenessXml, true); }
@@ -922,6 +969,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "ShippingSettings"."ShipSenseProcessedShipmentID"<br/>
 		/// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Int64 ShipSenseProcessedShipmentID
 		{
 			get { return (System.Int64)GetValue((int)ShippingSettingsFieldIndex.ShipSenseProcessedShipmentID, true); }
@@ -932,6 +980,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "ShippingSettings"."ShipSenseEndShipmentID"<br/>
 		/// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Int64 ShipSenseEndShipmentID
 		{
 			get { return (System.Int64)GetValue((int)ShippingSettingsFieldIndex.ShipSenseEndShipmentID, true); }
@@ -942,6 +991,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "ShippingSettings"."AutoCreateShipments"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Boolean AutoCreateShipments
 		{
 			get { return (System.Boolean)GetValue((int)ShippingSettingsFieldIndex.AutoCreateShipments, true); }
@@ -952,6 +1002,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "ShippingSettings"."FedExFimsEnabled"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Boolean FedExFimsEnabled
 		{
 			get { return (System.Boolean)GetValue((int)ShippingSettingsFieldIndex.FedExFimsEnabled, true); }
@@ -962,6 +1013,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "ShippingSettings"."FedExFimsUsername"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 50<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.String FedExFimsUsername
 		{
 			get { return (System.String)GetValue((int)ShippingSettingsFieldIndex.FedExFimsUsername, true); }
@@ -972,6 +1024,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "ShippingSettings"."FedExFimsPassword"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 50<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.String FedExFimsPassword
 		{
 			get { return (System.String)GetValue((int)ShippingSettingsFieldIndex.FedExFimsPassword, true); }
@@ -982,6 +1035,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "ShippingSettings"."ShipmentEditLimit"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Int32 ShipmentEditLimit
 		{
 			get { return (System.Int32)GetValue((int)ShippingSettingsFieldIndex.ShipmentEditLimit, true); }
@@ -992,6 +1046,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "ShippingSettings"."ShipmentsLoaderEnsureFiltersLoadedTimeout"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Int32 ShipmentsLoaderEnsureFiltersLoadedTimeout
 		{
 			get { return (System.Int32)GetValue((int)ShippingSettingsFieldIndex.ShipmentsLoaderEnsureFiltersLoadedTimeout, true); }
@@ -1002,6 +1057,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "ShippingSettings"."ShipEngineApiKey"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 50<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.String ShipEngineApiKey
 		{
 			get { return (System.String)GetValue((int)ShippingSettingsFieldIndex.ShipEngineApiKey, true); }
@@ -1012,6 +1068,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "ShippingSettings"."ShipmentDateCutoffJson"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 1000<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.String ShipmentDateCutoffJson
 		{
 			get { return (System.String)GetValue((int)ShippingSettingsFieldIndex.ShipmentDateCutoffJson, true); }
@@ -1022,6 +1079,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "ShippingSettings"."OrderLookupFieldLayout"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 2147483647<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.String OrderLookupFieldLayout
 		{
 			get { return (System.String)GetValue((int)ShippingSettingsFieldIndex.OrderLookupFieldLayout, true); }
@@ -1032,10 +1090,21 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "ShippingSettings"."UpsAllowNoDims"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Boolean UpsAllowNoDims
 		{
 			get { return (System.Boolean)GetValue((int)ShippingSettingsFieldIndex.UpsAllowNoDims, true); }
 			set	{ SetValue((int)ShippingSettingsFieldIndex.UpsAllowNoDims, value); }
+		}
+
+		/// <summary> The ShipEngineAccountID property of the Entity ShippingSettings<br/><br/></summary>
+		/// <remarks>Mapped on  table field: "ShippingSettings"."ShipEngineAccountID"<br/>
+		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 20<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		public virtual System.String ShipEngineAccountID
+		{
+			get { return (System.String)GetValue((int)ShippingSettingsFieldIndex.ShipEngineAccountID, true); }
+			set	{ SetValue((int)ShippingSettingsFieldIndex.ShipEngineAccountID, value); }
 		}
 	
 		/// <summary> Gets the type of the hierarchy this entity is in. </summary>

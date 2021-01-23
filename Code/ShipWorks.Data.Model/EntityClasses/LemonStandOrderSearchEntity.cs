@@ -456,6 +456,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "LemonStandOrderSearch"."LemonStandOrderSearchID"<br/>
 		/// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, true, true</remarks>
+		[DataMember]
 		public virtual System.Int64 LemonStandOrderSearchID
 		{
 			get { return (System.Int64)GetValue((int)LemonStandOrderSearchFieldIndex.LemonStandOrderSearchID, true); }
@@ -466,6 +467,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "LemonStandOrderSearch"."OrderID"<br/>
 		/// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Int64 OrderID
 		{
 			get { return (System.Int64)GetValue((int)LemonStandOrderSearchFieldIndex.OrderID, true); }
@@ -476,6 +478,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "LemonStandOrderSearch"."LemonStandOrderID"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 20<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.String LemonStandOrderID
 		{
 			get { return (System.String)GetValue((int)LemonStandOrderSearchFieldIndex.LemonStandOrderID, true); }
@@ -486,6 +489,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "LemonStandOrderSearch"."OriginalOrderID"<br/>
 		/// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Int64 OriginalOrderID
 		{
 			get { return (System.Int64)GetValue((int)LemonStandOrderSearchFieldIndex.OriginalOrderID, true); }
@@ -494,6 +498,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 
 		/// <summary> Gets / sets related entity of type 'LemonStandOrderEntity' which has to be set using a fetch action earlier. If no related entity is set for this property, null is returned..<br/><br/></summary>
 		[Browsable(true)]
+		[DataMember]
 		public virtual LemonStandOrderEntity LemonStandOrder
 		{
 			get	{ return _lemonStandOrder; }

@@ -490,6 +490,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "PackageProfile"."PackageProfileID"<br/>
 		/// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, true, true</remarks>
+		[DataMember]
 		public virtual System.Int64 PackageProfileID
 		{
 			get { return (System.Int64)GetValue((int)PackageProfileFieldIndex.PackageProfileID, true); }
@@ -500,6 +501,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "PackageProfile"."ShippingProfileID"<br/>
 		/// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Int64 ShippingProfileID
 		{
 			get { return (System.Int64)GetValue((int)PackageProfileFieldIndex.ShippingProfileID, true); }
@@ -510,6 +512,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "PackageProfile"."Weight"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Float, 38, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		[DataMember]
 		public virtual Nullable<System.Double> Weight
 		{
 			get { return (Nullable<System.Double>)GetValue((int)PackageProfileFieldIndex.Weight, false); }
@@ -520,6 +523,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "PackageProfile"."DimsProfileID"<br/>
 		/// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		[DataMember]
 		public virtual Nullable<System.Int64> DimsProfileID
 		{
 			get { return (Nullable<System.Int64>)GetValue((int)PackageProfileFieldIndex.DimsProfileID, false); }
@@ -530,6 +534,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "PackageProfile"."DimsLength"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Float, 38, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		[DataMember]
 		public virtual Nullable<System.Double> DimsLength
 		{
 			get { return (Nullable<System.Double>)GetValue((int)PackageProfileFieldIndex.DimsLength, false); }
@@ -540,6 +545,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "PackageProfile"."DimsWidth"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Float, 38, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		[DataMember]
 		public virtual Nullable<System.Double> DimsWidth
 		{
 			get { return (Nullable<System.Double>)GetValue((int)PackageProfileFieldIndex.DimsWidth, false); }
@@ -550,6 +556,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "PackageProfile"."DimsHeight"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Float, 38, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		[DataMember]
 		public virtual Nullable<System.Double> DimsHeight
 		{
 			get { return (Nullable<System.Double>)GetValue((int)PackageProfileFieldIndex.DimsHeight, false); }
@@ -560,6 +567,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "PackageProfile"."DimsWeight"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Float, 38, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		[DataMember]
 		public virtual Nullable<System.Double> DimsWeight
 		{
 			get { return (Nullable<System.Double>)GetValue((int)PackageProfileFieldIndex.DimsWeight, false); }
@@ -570,6 +578,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "PackageProfile"."DimsAddWeight"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		[DataMember]
 		public virtual Nullable<System.Boolean> DimsAddWeight
 		{
 			get { return (Nullable<System.Boolean>)GetValue((int)PackageProfileFieldIndex.DimsAddWeight, false); }
@@ -578,6 +587,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 
 		/// <summary> Gets / sets related entity of type 'ShippingProfileEntity' which has to be set using a fetch action earlier. If no related entity is set for this property, null is returned..<br/><br/></summary>
 		[Browsable(true)]
+		[DataMember]
 		public virtual ShippingProfileEntity ShippingProfile
 		{
 			get	{ return _shippingProfile; }

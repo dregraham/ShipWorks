@@ -396,6 +396,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "MarketplaceAdvisorStore"."Username"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 50<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.String Username
 		{
 			get { return (System.String)GetValue((int)MarketplaceAdvisorStoreFieldIndex.Username, true); }
@@ -406,6 +407,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "MarketplaceAdvisorStore"."Password"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 50<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.String Password
 		{
 			get { return (System.String)GetValue((int)MarketplaceAdvisorStoreFieldIndex.Password, true); }
@@ -416,6 +418,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "MarketplaceAdvisorStore"."AccountType"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Int32 AccountType
 		{
 			get { return (System.Int32)GetValue((int)MarketplaceAdvisorStoreFieldIndex.AccountType, true); }
@@ -426,6 +429,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "MarketplaceAdvisorStore"."DownloadFlags"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Int32 DownloadFlags
 		{
 			get { return (System.Int32)GetValue((int)MarketplaceAdvisorStoreFieldIndex.DownloadFlags, true); }

@@ -611,6 +611,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "Template"."TemplateID"<br/>
 		/// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, true, true</remarks>
+		[DataMember]
 		public virtual System.Int64 TemplateID
 		{
 			get { return (System.Int64)GetValue((int)TemplateFieldIndex.TemplateID, true); }
@@ -621,6 +622,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "Template"."RowVersion"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Timestamp, 0, 0, 2147483647<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Byte[] RowVersion
 		{
 			get { return (System.Byte[])GetValue((int)TemplateFieldIndex.RowVersion, true); }
@@ -631,6 +633,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "Template"."ParentFolderID"<br/>
 		/// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Int64 ParentFolderID
 		{
 			get { return (System.Int64)GetValue((int)TemplateFieldIndex.ParentFolderID, true); }
@@ -641,6 +644,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "Template"."Name"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 100<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.String Name
 		{
 			get { return (System.String)GetValue((int)TemplateFieldIndex.Name, true); }
@@ -651,6 +655,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "Template"."Xsl"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 2147483647<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.String Xsl
 		{
 			get { return (System.String)GetValue((int)TemplateFieldIndex.Xsl, true); }
@@ -661,6 +666,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "Template"."Type"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Int32 Type
 		{
 			get { return (System.Int32)GetValue((int)TemplateFieldIndex.Type, true); }
@@ -671,6 +677,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "Template"."Context"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Int32 Context
 		{
 			get { return (System.Int32)GetValue((int)TemplateFieldIndex.Context, true); }
@@ -681,6 +688,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "Template"."OutputFormat"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Int32 OutputFormat
 		{
 			get { return (System.Int32)GetValue((int)TemplateFieldIndex.OutputFormat, true); }
@@ -691,6 +699,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "Template"."OutputEncoding"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 20<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.String OutputEncoding
 		{
 			get { return (System.String)GetValue((int)TemplateFieldIndex.OutputEncoding, true); }
@@ -701,6 +710,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "Template"."PageMarginLeft"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Float, 38, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Double PageMarginLeft
 		{
 			get { return (System.Double)GetValue((int)TemplateFieldIndex.PageMarginLeft, true); }
@@ -711,6 +721,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "Template"."PageMarginRight"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Float, 38, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Double PageMarginRight
 		{
 			get { return (System.Double)GetValue((int)TemplateFieldIndex.PageMarginRight, true); }
@@ -721,6 +732,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "Template"."PageMarginBottom"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Float, 38, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Double PageMarginBottom
 		{
 			get { return (System.Double)GetValue((int)TemplateFieldIndex.PageMarginBottom, true); }
@@ -731,6 +743,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "Template"."PageMarginTop"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Float, 38, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Double PageMarginTop
 		{
 			get { return (System.Double)GetValue((int)TemplateFieldIndex.PageMarginTop, true); }
@@ -741,6 +754,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "Template"."PageWidth"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Float, 38, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Double PageWidth
 		{
 			get { return (System.Double)GetValue((int)TemplateFieldIndex.PageWidth, true); }
@@ -751,6 +765,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "Template"."PageHeight"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Float, 38, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Double PageHeight
 		{
 			get { return (System.Double)GetValue((int)TemplateFieldIndex.PageHeight, true); }
@@ -761,6 +776,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "Template"."LabelSheetID"<br/>
 		/// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Int64 LabelSheetID
 		{
 			get { return (System.Int64)GetValue((int)TemplateFieldIndex.LabelSheetID, true); }
@@ -771,6 +787,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "Template"."PrintCopies"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Int32 PrintCopies
 		{
 			get { return (System.Int32)GetValue((int)TemplateFieldIndex.PrintCopies, true); }
@@ -781,6 +798,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "Template"."PrintCollate"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Boolean PrintCollate
 		{
 			get { return (System.Boolean)GetValue((int)TemplateFieldIndex.PrintCollate, true); }
@@ -791,6 +809,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "Template"."SaveFileName"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 500<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.String SaveFileName
 		{
 			get { return (System.String)GetValue((int)TemplateFieldIndex.SaveFileName, true); }
@@ -801,6 +820,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "Template"."SaveFileFolder"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 500<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.String SaveFileFolder
 		{
 			get { return (System.String)GetValue((int)TemplateFieldIndex.SaveFileFolder, true); }
@@ -811,6 +831,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "Template"."SaveFilePrompt"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Int32 SaveFilePrompt
 		{
 			get { return (System.Int32)GetValue((int)TemplateFieldIndex.SaveFilePrompt, true); }
@@ -821,6 +842,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "Template"."SaveFileBOM"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Boolean SaveFileBOM
 		{
 			get { return (System.Boolean)GetValue((int)TemplateFieldIndex.SaveFileBOM, true); }
@@ -831,6 +853,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "Template"."SaveFileOnlineResources"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Boolean SaveFileOnlineResources
 		{
 			get { return (System.Boolean)GetValue((int)TemplateFieldIndex.SaveFileOnlineResources, true); }
@@ -839,6 +862,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 
 		/// <summary> Gets the EntityCollection with the related entities of type 'TemplateComputerSettingsEntity' which are related to this entity via a relation of type '1:n'. If the EntityCollection hasn't been fetched yet, the collection returned will be empty.<br/><br/></summary>
 		[TypeContainedAttribute(typeof(TemplateComputerSettingsEntity))]
+		[DataMember]
 		public virtual EntityCollection<TemplateComputerSettingsEntity> ComputerSettings
 		{
 			get { return GetOrCreateEntityCollection<TemplateComputerSettingsEntity, TemplateComputerSettingsEntityFactory>("Template", true, false, ref _computerSettings);	}
@@ -846,6 +870,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 
 		/// <summary> Gets the EntityCollection with the related entities of type 'TemplateStoreSettingsEntity' which are related to this entity via a relation of type '1:n'. If the EntityCollection hasn't been fetched yet, the collection returned will be empty.<br/><br/></summary>
 		[TypeContainedAttribute(typeof(TemplateStoreSettingsEntity))]
+		[DataMember]
 		public virtual EntityCollection<TemplateStoreSettingsEntity> StoreSettings
 		{
 			get { return GetOrCreateEntityCollection<TemplateStoreSettingsEntity, TemplateStoreSettingsEntityFactory>("Template", true, false, ref _storeSettings);	}
@@ -853,6 +878,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 
 		/// <summary> Gets the EntityCollection with the related entities of type 'TemplateUserSettingsEntity' which are related to this entity via a relation of type '1:n'. If the EntityCollection hasn't been fetched yet, the collection returned will be empty.<br/><br/></summary>
 		[TypeContainedAttribute(typeof(TemplateUserSettingsEntity))]
+		[DataMember]
 		public virtual EntityCollection<TemplateUserSettingsEntity> UserSettings
 		{
 			get { return GetOrCreateEntityCollection<TemplateUserSettingsEntity, TemplateUserSettingsEntityFactory>("Template", true, false, ref _userSettings);	}
@@ -860,6 +886,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 
 		/// <summary> Gets / sets related entity of type 'TemplateFolderEntity' which has to be set using a fetch action earlier. If no related entity is set for this property, null is returned..<br/><br/></summary>
 		[Browsable(true)]
+		[DataMember]
 		public virtual TemplateFolderEntity ParentFolder
 		{
 			get	{ return _parentFolder; }

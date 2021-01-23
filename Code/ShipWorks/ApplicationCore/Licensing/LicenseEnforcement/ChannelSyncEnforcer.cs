@@ -1,11 +1,11 @@
-﻿using Interapptive.Shared.Utility;
-using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Editions;
-using ShipWorks.Stores;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
 using Interapptive.Shared.UI;
+using Interapptive.Shared.Utility;
+using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Editions;
+using ShipWorks.Stores;
 
 namespace ShipWorks.ApplicationCore.Licensing.LicenseEnforcement
 {
@@ -111,7 +111,7 @@ namespace ShipWorks.ApplicationCore.Licensing.LicenseEnforcement
                 return new EnumResult<ComplianceLevel>(ComplianceLevel.NotCompliant,
                         EnumHelper.GetDescription(EditionFeature.ClientChannelsAccountedFor));
             }
-            
+
             // We got this far so we are compliant
             return new EnumResult<ComplianceLevel>(ComplianceLevel.Compliant);
         }

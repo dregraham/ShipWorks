@@ -410,6 +410,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "EtsyOrder"."WasPaid"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Boolean WasPaid
 		{
 			get { return (System.Boolean)GetValue((int)EtsyOrderFieldIndex.WasPaid, true); }
@@ -420,6 +421,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "EtsyOrder"."WasShipped"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Boolean WasShipped
 		{
 			get { return (System.Boolean)GetValue((int)EtsyOrderFieldIndex.WasShipped, true); }

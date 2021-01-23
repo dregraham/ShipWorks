@@ -376,6 +376,8 @@ namespace ShipWorks.Data.Model
 		Custom9,
 		///<summary>Custom10. Inherited from Order</summary>
 		Custom10,
+		///<summary>DeliverByDate. Inherited from Order</summary>
+		DeliverByDate,
 		///<summary>OrderID. </summary>
 		OrderID,
 		///<summary>AmazonOrderID. </summary>
@@ -1594,6 +1596,8 @@ namespace ShipWorks.Data.Model
 		Custom9,
 		///<summary>Custom10. Inherited from Order</summary>
 		Custom10,
+		///<summary>DeliverByDate. Inherited from Order</summary>
+		DeliverByDate,
 		///<summary>OrderID. </summary>
 		OrderID,
 		///<summary>CustomOrderIdentifier. </summary>
@@ -2014,6 +2018,8 @@ namespace ShipWorks.Data.Model
 		Custom9,
 		///<summary>Custom10. Inherited from Order</summary>
 		Custom10,
+		///<summary>DeliverByDate. Inherited from Order</summary>
+		DeliverByDate,
 		///<summary>OrderID. </summary>
 		OrderID,
 		///<summary>ClickCartProOrderID. </summary>
@@ -2222,6 +2228,8 @@ namespace ShipWorks.Data.Model
 		Custom9,
 		///<summary>Custom10. Inherited from Order</summary>
 		Custom10,
+		///<summary>DeliverByDate. Inherited from Order</summary>
+		DeliverByDate,
 		///<summary>OrderID. </summary>
 		OrderID,
 		///<summary>CommerceInterfaceOrderNumber. </summary>
@@ -2792,6 +2800,8 @@ namespace ShipWorks.Data.Model
 		Custom9,
 		///<summary>Custom10. Inherited from Order</summary>
 		Custom10,
+		///<summary>DeliverByDate. Inherited from Order</summary>
+		DeliverByDate,
 		///<summary>OrderID. </summary>
 		OrderID,
 		///<summary>EbayOrderID. </summary>
@@ -3542,6 +3552,8 @@ namespace ShipWorks.Data.Model
 		Custom9,
 		///<summary>Custom10. Inherited from Order</summary>
 		Custom10,
+		///<summary>DeliverByDate. Inherited from Order</summary>
+		DeliverByDate,
 		///<summary>OrderID. </summary>
 		OrderID,
 		///<summary>WasPaid. </summary>
@@ -4862,6 +4874,8 @@ namespace ShipWorks.Data.Model
 		Custom9,
 		///<summary>Custom10. Inherited from Order</summary>
 		Custom10,
+		///<summary>DeliverByDate. Inherited from Order</summary>
+		DeliverByDate,
 		///<summary>OrderID. </summary>
 		OrderID,
 		///<summary>AmazonOrderID. </summary>
@@ -4872,6 +4886,8 @@ namespace ShipWorks.Data.Model
 		IsPrime,
 		///<summary>IsSameDay. </summary>
 		IsSameDay,
+		///<summary>Marketplace. </summary>
+		Marketplace,
 		/// <summary></summary>
 		AmountOfFields
 	}
@@ -5318,6 +5334,8 @@ namespace ShipWorks.Data.Model
 		Custom9,
 		///<summary>Custom10. Inherited from Order</summary>
 		Custom10,
+		///<summary>DeliverByDate. Inherited from Order</summary>
+		DeliverByDate,
 		///<summary>OrderID. </summary>
 		OrderID,
 		///<summary>GrouponOrderID. </summary>
@@ -6022,6 +6040,8 @@ namespace ShipWorks.Data.Model
 		Custom9,
 		///<summary>Custom10. Inherited from Order</summary>
 		Custom10,
+		///<summary>DeliverByDate. Inherited from Order</summary>
+		DeliverByDate,
 		///<summary>OrderID. </summary>
 		OrderID,
 		///<summary>MerchantOrderId. </summary>
@@ -6426,6 +6446,8 @@ namespace ShipWorks.Data.Model
 		Custom9,
 		///<summary>Custom10. Inherited from Order</summary>
 		Custom10,
+		///<summary>DeliverByDate. Inherited from Order</summary>
+		DeliverByDate,
 		///<summary>OrderID. </summary>
 		OrderID,
 		///<summary>LemonStandOrderID. </summary>
@@ -6802,6 +6824,8 @@ namespace ShipWorks.Data.Model
 		Custom9,
 		///<summary>Custom10. Inherited from Order</summary>
 		Custom10,
+		///<summary>DeliverByDate. Inherited from Order</summary>
+		DeliverByDate,
 		///<summary>OrderID. Inherited from GenericModuleOrder</summary>
 		OrderID_GenericModuleOrder,
 		///<summary>AmazonOrderID. Inherited from GenericModuleOrder</summary>
@@ -6812,6 +6836,8 @@ namespace ShipWorks.Data.Model
 		IsPrime,
 		///<summary>IsSameDay. Inherited from GenericModuleOrder</summary>
 		IsSameDay,
+		///<summary>Marketplace. Inherited from GenericModuleOrder</summary>
+		Marketplace,
 		///<summary>OrderID. </summary>
 		OrderID,
 		///<summary>MagentoOrderID. </summary>
@@ -7150,6 +7176,8 @@ namespace ShipWorks.Data.Model
 		Custom9,
 		///<summary>Custom10. Inherited from Order</summary>
 		Custom10,
+		///<summary>DeliverByDate. Inherited from Order</summary>
+		DeliverByDate,
 		///<summary>OrderID. </summary>
 		OrderID,
 		///<summary>BuyerNumber. </summary>
@@ -7614,6 +7642,8 @@ namespace ShipWorks.Data.Model
 		Custom9,
 		///<summary>Custom10. Inherited from Order</summary>
 		Custom10,
+		///<summary>DeliverByDate. Inherited from Order</summary>
+		DeliverByDate,
 		///<summary>OrderID. </summary>
 		OrderID,
 		///<summary>NetworkSolutionsOrderID. </summary>
@@ -7906,6 +7936,8 @@ namespace ShipWorks.Data.Model
 		Custom9,
 		///<summary>Custom10. Inherited from Order</summary>
 		Custom10,
+		///<summary>DeliverByDate. Inherited from Order</summary>
+		DeliverByDate,
 		///<summary>OrderID. </summary>
 		OrderID,
 		///<summary>InvoiceNumber. </summary>
@@ -8556,6 +8588,8 @@ namespace ShipWorks.Data.Model
 		Custom9,
 		///<summary>Custom10. </summary>
 		Custom10,
+		///<summary>DeliverByDate. </summary>
+		DeliverByDate,
 		/// <summary></summary>
 		AmountOfFields
 	}
@@ -8864,6 +8898,8 @@ namespace ShipWorks.Data.Model
 		Custom9,
 		///<summary>Custom10. Inherited from Order</summary>
 		Custom10,
+		///<summary>DeliverByDate. Inherited from Order</summary>
+		DeliverByDate,
 		///<summary>OrderID. </summary>
 		OrderID,
 		///<summary>OrderMotionShipmentID. </summary>
@@ -9220,6 +9256,8 @@ namespace ShipWorks.Data.Model
 		Custom9,
 		///<summary>Custom10. Inherited from Order</summary>
 		Custom10,
+		///<summary>DeliverByDate. Inherited from Order</summary>
+		DeliverByDate,
 		///<summary>OrderID. </summary>
 		OrderID,
 		///<summary>WarehouseCode. </summary>
@@ -9620,6 +9658,8 @@ namespace ShipWorks.Data.Model
 		Custom9,
 		///<summary>Custom10. Inherited from Order</summary>
 		Custom10,
+		///<summary>DeliverByDate. Inherited from Order</summary>
+		DeliverByDate,
 		///<summary>OrderID. </summary>
 		OrderID,
 		///<summary>TransactionID. </summary>
@@ -10290,6 +10330,8 @@ namespace ShipWorks.Data.Model
 		Custom9,
 		///<summary>Custom10. Inherited from Order</summary>
 		Custom10,
+		///<summary>DeliverByDate. Inherited from Order</summary>
+		DeliverByDate,
 		///<summary>OrderID. </summary>
 		OrderID,
 		///<summary>ConfirmationNumber. </summary>
@@ -10610,6 +10652,8 @@ namespace ShipWorks.Data.Model
 		Custom9,
 		///<summary>Custom10. Inherited from Order</summary>
 		Custom10,
+		///<summary>DeliverByDate. Inherited from Order</summary>
+		DeliverByDate,
 		///<summary>OrderID. </summary>
 		OrderID,
 		///<summary>RakutenPackageID. </summary>
@@ -10948,6 +10992,8 @@ namespace ShipWorks.Data.Model
 		Custom9,
 		///<summary>Custom10. Inherited from Order</summary>
 		Custom10,
+		///<summary>DeliverByDate. Inherited from Order</summary>
+		DeliverByDate,
 		///<summary>OrderID. </summary>
 		OrderID,
 		///<summary>PoNumber. </summary>
@@ -11702,6 +11748,8 @@ namespace ShipWorks.Data.Model
 		OrderLookupFieldLayout,
 		///<summary>UpsAllowNoDims. </summary>
 		UpsAllowNoDims,
+		///<summary>ShipEngineAccountID. </summary>
+		ShipEngineAccountID,
 		/// <summary></summary>
 		AmountOfFields
 	}
@@ -11902,6 +11950,8 @@ namespace ShipWorks.Data.Model
 		Custom9,
 		///<summary>Custom10. Inherited from Order</summary>
 		Custom10,
+		///<summary>DeliverByDate. Inherited from Order</summary>
+		DeliverByDate,
 		///<summary>OrderID. </summary>
 		OrderID,
 		///<summary>ShopifyOrderID. </summary>
@@ -12726,6 +12776,8 @@ namespace ShipWorks.Data.Model
 		Custom9,
 		///<summary>Custom10. Inherited from Order</summary>
 		Custom10,
+		///<summary>DeliverByDate. Inherited from Order</summary>
+		DeliverByDate,
 		///<summary>OrderID. </summary>
 		OrderID,
 		///<summary>ThreeDCartOrderID. </summary>
@@ -13946,6 +13998,8 @@ namespace ShipWorks.Data.Model
 		Custom9,
 		///<summary>Custom10. Inherited from Order</summary>
 		Custom10,
+		///<summary>DeliverByDate. Inherited from Order</summary>
+		DeliverByDate,
 		///<summary>OrderID. </summary>
 		OrderID,
 		///<summary>PurchaseOrderID. </summary>
@@ -14636,6 +14690,8 @@ namespace ShipWorks.Data.Model
 		Custom9,
 		///<summary>Custom10. Inherited from Order</summary>
 		Custom10,
+		///<summary>DeliverByDate. Inherited from Order</summary>
+		DeliverByDate,
 		///<summary>OrderID. </summary>
 		OrderID,
 		///<summary>YahooOrderID. </summary>

@@ -271,6 +271,13 @@ namespace ShipWorks.Data.Grid.Columns.Definitions
                         "ShipSense", ShipSenseOrderRecognitionStatus.Recognized,
                         OrderFields.ShipSenseRecognitionStatus),
 
+                    new GridColumnDefinition("{847DC572-CBD8-49A4-AECC-6EA206AB30B6}", false,
+                        new GridTextDisplayType(), "Marketplace", "Store B",
+                        GenericModuleOrderFields.Marketplace)
+                        {
+                            StoreTypeCode = StoreTypeCode.GenericModule
+                        },
+
                     new GridColumnDefinition("{00B66937-CB98-4FE5-B916-8DA5BACC06B1}",
                         new GridEnumDisplayType<ChannelAdvisorCheckoutStatus>(EnumSortMethod.Description), "Checkout Status", ChannelAdvisorCheckoutStatus.Completed,
                         ChannelAdvisorOrderFields.OnlineCheckoutStatus)
@@ -811,13 +818,18 @@ namespace ShipWorks.Data.Grid.Columns.Definitions
                         StoreTypeCode = StoreTypeCode.Overstock
                     },
 
-                    new GridColumnDefinition("{5C7C3411-6B22-4DB5-BFCC-5131AFABD3DC}", 
+                    new GridColumnDefinition("{5C7C3411-6B22-4DB5-BFCC-5131AFABD3DC}",
                         new GridTextDisplayType(), "Channel Order ID", "ABC123", OrderFields.ChannelOrderID),
 
                     new GridColumnDefinition("{13F8DD60-0104-4575-9B9C-E3DCE4573FB0}",
                         new GridDateDisplayType { UseDescriptiveDates = true, TimeDisplayFormat = TimeDisplayFormat.None, DateFormat = "MMMM dd, yyyy"},
                         "Ship By Date", DateTimeUtility.ParseEnUS("01/01/9999 12:00 AM").ToUniversalTime(),
                         OrderFields.ShipByDate),
+                    
+                    new GridColumnDefinition("{55BDBA99-E087-4004-B7B8-0094F7E77B57}",
+                        new GridDateDisplayType { UseDescriptiveDates = true, TimeDisplayFormat = TimeDisplayFormat.None, DateFormat = "MMMM dd, yyyy"},
+                        "Deliver By Date", DateTimeUtility.ParseEnUS("01/01/9999 12:00 AM").ToUniversalTime(),
+                        OrderFields.DeliverByDate),
 
                     new GridColumnDefinition("{E4E7DC99-5FC4-46B7-93FA-4FB983B84EBC}",
                         new GridTextDisplayType(), "Custom Field 1", "Custom Field 1", OrderFields.Custom1),

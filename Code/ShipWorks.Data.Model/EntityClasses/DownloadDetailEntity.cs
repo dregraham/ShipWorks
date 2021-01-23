@@ -468,6 +468,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "DownloadDetail"."DownloadedDetailID"<br/>
 		/// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, true, true</remarks>
+		[DataMember]
 		public virtual System.Int64 DownloadedDetailID
 		{
 			get { return (System.Int64)GetValue((int)DownloadDetailFieldIndex.DownloadedDetailID, true); }
@@ -478,6 +479,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "DownloadDetail"."DownloadID"<br/>
 		/// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Int64 DownloadID
 		{
 			get { return (System.Int64)GetValue((int)DownloadDetailFieldIndex.DownloadID, true); }
@@ -488,6 +490,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "DownloadDetail"."OrderID"<br/>
 		/// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Int64 OrderID
 		{
 			get { return (System.Int64)GetValue((int)DownloadDetailFieldIndex.OrderID, true); }
@@ -498,6 +501,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "DownloadDetail"."InitialDownload"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Boolean InitialDownload
 		{
 			get { return (System.Boolean)GetValue((int)DownloadDetailFieldIndex.InitialDownload, true); }
@@ -508,6 +512,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "DownloadDetail"."OrderNumber"<br/>
 		/// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		[DataMember]
 		public virtual Nullable<System.Int64> OrderNumber
 		{
 			get { return (Nullable<System.Int64>)GetValue((int)DownloadDetailFieldIndex.OrderNumber, false); }
@@ -518,6 +523,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "DownloadDetail"."ExtraBigIntData1"<br/>
 		/// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		[DataMember]
 		public virtual Nullable<System.Int64> ExtraBigIntData1
 		{
 			get { return (Nullable<System.Int64>)GetValue((int)DownloadDetailFieldIndex.ExtraBigIntData1, false); }
@@ -528,6 +534,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "DownloadDetail"."ExtraBigIntData2"<br/>
 		/// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		[DataMember]
 		public virtual Nullable<System.Int64> ExtraBigIntData2
 		{
 			get { return (Nullable<System.Int64>)GetValue((int)DownloadDetailFieldIndex.ExtraBigIntData2, false); }
@@ -538,6 +545,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "DownloadDetail"."ExtraBigIntData3"<br/>
 		/// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		[DataMember]
 		public virtual Nullable<System.Int64> ExtraBigIntData3
 		{
 			get { return (Nullable<System.Int64>)GetValue((int)DownloadDetailFieldIndex.ExtraBigIntData3, false); }
@@ -548,6 +556,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "DownloadDetail"."ExtraStringData1"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 50<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		[DataMember]
 		public virtual System.String ExtraStringData1
 		{
 			get { return (System.String)GetValue((int)DownloadDetailFieldIndex.ExtraStringData1, true); }
@@ -556,6 +565,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 
 		/// <summary> Gets / sets related entity of type 'DownloadEntity' which has to be set using a fetch action earlier. If no related entity is set for this property, null is returned..<br/><br/></summary>
 		[Browsable(true)]
+		[DataMember]
 		public virtual DownloadEntity DownloadLog
 		{
 			get	{ return _downloadLog; }

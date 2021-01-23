@@ -628,6 +628,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "Audit"."AuditID"<br/>
 		/// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, true, true</remarks>
+		[DataMember]
 		public virtual System.Int64 AuditID
 		{
 			get { return (System.Int64)GetValue((int)AuditFieldIndex.AuditID, true); }
@@ -638,6 +639,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "Audit"."RowVersion"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Timestamp, 0, 0, 2147483647<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Byte[] RowVersion
 		{
 			get { return (System.Byte[])GetValue((int)AuditFieldIndex.RowVersion, true); }
@@ -648,6 +650,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "Audit"."TransactionID"<br/>
 		/// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Int64 TransactionID
 		{
 			get { return (System.Int64)GetValue((int)AuditFieldIndex.TransactionID, true); }
@@ -658,6 +661,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "Audit"."UserID"<br/>
 		/// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Int64 UserID
 		{
 			get { return (System.Int64)GetValue((int)AuditFieldIndex.UserID, true); }
@@ -668,6 +672,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "Audit"."ComputerID"<br/>
 		/// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Int64 ComputerID
 		{
 			get { return (System.Int64)GetValue((int)AuditFieldIndex.ComputerID, true); }
@@ -678,6 +683,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "Audit"."Reason"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Int32 Reason
 		{
 			get { return (System.Int32)GetValue((int)AuditFieldIndex.Reason, true); }
@@ -688,6 +694,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "Audit"."ReasonDetail"<br/>
 		/// Table field type characteristics (type, precision, scale, length): VarChar, 0, 0, 100<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		[DataMember]
 		public virtual System.String ReasonDetail
 		{
 			get { return (System.String)GetValue((int)AuditFieldIndex.ReasonDetail, true); }
@@ -698,6 +705,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "Audit"."Date"<br/>
 		/// Table field type characteristics (type, precision, scale, length): DateTime, 0, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.DateTime Date
 		{
 			get { return (System.DateTime)GetValue((int)AuditFieldIndex.Date, true); }
@@ -708,6 +716,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "Audit"."Action"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Int32 Action
 		{
 			get { return (System.Int32)GetValue((int)AuditFieldIndex.Action, true); }
@@ -718,6 +727,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "Audit"."ObjectID"<br/>
 		/// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		[DataMember]
 		public virtual Nullable<System.Int64> EntityID
 		{
 			get { return (Nullable<System.Int64>)GetValue((int)AuditFieldIndex.EntityID, false); }
@@ -728,6 +738,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "Audit"."HasEvents"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Boolean HasEvents
 		{
 			get { return (System.Boolean)GetValue((int)AuditFieldIndex.HasEvents, true); }
@@ -736,6 +747,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 
 		/// <summary> Gets the EntityCollection with the related entities of type 'AuditChangeEntity' which are related to this entity via a relation of type '1:n'. If the EntityCollection hasn't been fetched yet, the collection returned will be empty.<br/><br/></summary>
 		[TypeContainedAttribute(typeof(AuditChangeEntity))]
+		[DataMember]
 		public virtual EntityCollection<AuditChangeEntity> AuditChanges
 		{
 			get { return GetOrCreateEntityCollection<AuditChangeEntity, AuditChangeEntityFactory>("Audit", true, false, ref _auditChanges);	}
@@ -743,6 +755,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 
 		/// <summary> Gets the EntityCollection with the related entities of type 'AuditChangeDetailEntity' which are related to this entity via a relation of type '1:n'. If the EntityCollection hasn't been fetched yet, the collection returned will be empty.<br/><br/></summary>
 		[TypeContainedAttribute(typeof(AuditChangeDetailEntity))]
+		[DataMember]
 		public virtual EntityCollection<AuditChangeDetailEntity> AuditChangeDetail
 		{
 			get { return GetOrCreateEntityCollection<AuditChangeDetailEntity, AuditChangeDetailEntityFactory>("Audit", true, false, ref _auditChangeDetail);	}
@@ -750,6 +763,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 
 		/// <summary> Gets / sets related entity of type 'ComputerEntity' which has to be set using a fetch action earlier. If no related entity is set for this property, null is returned..<br/><br/></summary>
 		[Browsable(true)]
+		[DataMember]
 		public virtual ComputerEntity Computer
 		{
 			get	{ return _computer; }
@@ -768,6 +782,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 
 		/// <summary> Gets / sets related entity of type 'UserEntity' which has to be set using a fetch action earlier. If no related entity is set for this property, null is returned..<br/><br/></summary>
 		[Browsable(true)]
+		[DataMember]
 		public virtual UserEntity User
 		{
 			get	{ return _user; }

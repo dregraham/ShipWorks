@@ -85,7 +85,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools
             using (ILifetimeScope scope = IoC.BeginLifetimeScope())
             {
                 bool onlyOneBalanceAccounts = scope.Resolve<ICarrierAccountRepository<UpsAccountEntity, IUpsAccountEntity>>()
-                    .AccountsReadOnly.All(a => a.ShipEngineCarrierId != null);
+                    .AccountsReadOnly.All(a => !string.IsNullOrEmpty(a.ShipEngineCarrierId));
 
                 if (onlyOneBalanceAccounts)
                 {

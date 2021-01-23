@@ -456,6 +456,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "UpsLocalRatingDeliveryAreaSurcharge"."DeliveryAreaSurchargeID"<br/>
 		/// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, true, true</remarks>
+		[DataMember]
 		public virtual System.Int64 DeliveryAreaSurchargeID
 		{
 			get { return (System.Int64)GetValue((int)UpsLocalRatingDeliveryAreaSurchargeFieldIndex.DeliveryAreaSurchargeID, true); }
@@ -466,6 +467,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "UpsLocalRatingDeliveryAreaSurcharge"."ZoneFileID"<br/>
 		/// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Int64 ZoneFileID
 		{
 			get { return (System.Int64)GetValue((int)UpsLocalRatingDeliveryAreaSurchargeFieldIndex.ZoneFileID, true); }
@@ -476,6 +478,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "UpsLocalRatingDeliveryAreaSurcharge"."DestinationZip"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Int32 DestinationZip
 		{
 			get { return (System.Int32)GetValue((int)UpsLocalRatingDeliveryAreaSurchargeFieldIndex.DestinationZip, true); }
@@ -486,6 +489,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "UpsLocalRatingDeliveryAreaSurcharge"."DeliveryAreaType"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Int32 DeliveryAreaType
 		{
 			get { return (System.Int32)GetValue((int)UpsLocalRatingDeliveryAreaSurchargeFieldIndex.DeliveryAreaType, true); }
@@ -494,6 +498,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 
 		/// <summary> Gets / sets related entity of type 'UpsLocalRatingZoneFileEntity' which has to be set using a fetch action earlier. If no related entity is set for this property, null is returned..<br/><br/></summary>
 		[Browsable(true)]
+		[DataMember]
 		public virtual UpsLocalRatingZoneFileEntity UpsLocalRatingZoneFile
 		{
 			get	{ return _upsLocalRatingZoneFile; }

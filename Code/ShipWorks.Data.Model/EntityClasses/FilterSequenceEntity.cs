@@ -575,6 +575,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "FilterSequence"."FilterSequenceID"<br/>
 		/// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, true, true</remarks>
+		[DataMember]
 		public virtual System.Int64 FilterSequenceID
 		{
 			get { return (System.Int64)GetValue((int)FilterSequenceFieldIndex.FilterSequenceID, true); }
@@ -585,6 +586,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "FilterSequence"."RowVersion"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Timestamp, 0, 0, 2147483647<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Byte[] RowVersion
 		{
 			get { return (System.Byte[])GetValue((int)FilterSequenceFieldIndex.RowVersion, true); }
@@ -595,6 +597,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "FilterSequence"."ParentFilterID"<br/>
 		/// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		[DataMember]
 		public virtual Nullable<System.Int64> ParentFilterID
 		{
 			get { return (Nullable<System.Int64>)GetValue((int)FilterSequenceFieldIndex.ParentFilterID, false); }
@@ -605,6 +608,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "FilterSequence"."FilterID"<br/>
 		/// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Int64 FilterID
 		{
 			get { return (System.Int64)GetValue((int)FilterSequenceFieldIndex.FilterID, true); }
@@ -615,6 +619,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "FilterSequence"."Position"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Int32 Position
 		{
 			get { return (System.Int32)GetValue((int)FilterSequenceFieldIndex.Position, true); }
@@ -623,6 +628,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 
 		/// <summary> Gets the EntityCollection with the related entities of type 'FilterNodeEntity' which are related to this entity via a relation of type '1:n'. If the EntityCollection hasn't been fetched yet, the collection returned will be empty.<br/><br/></summary>
 		[TypeContainedAttribute(typeof(FilterNodeEntity))]
+		[DataMember]
 		public virtual EntityCollection<FilterNodeEntity> NodesUsingSequence
 		{
 			get { return GetOrCreateEntityCollection<FilterNodeEntity, FilterNodeEntityFactory>("FilterSequence", true, false, ref _nodesUsingSequence);	}
@@ -630,6 +636,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 
 		/// <summary> Gets / sets related entity of type 'FilterEntity' which has to be set using a fetch action earlier. If no related entity is set for this property, null is returned..<br/><br/></summary>
 		[Browsable(true)]
+		[DataMember]
 		public virtual FilterEntity Filter
 		{
 			get	{ return _filter; }
@@ -648,6 +655,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 
 		/// <summary> Gets / sets related entity of type 'FilterEntity' which has to be set using a fetch action earlier. If no related entity is set for this property, null is returned..<br/><br/></summary>
 		[Browsable(true)]
+		[DataMember]
 		public virtual FilterEntity Parent
 		{
 			get	{ return _parent; }

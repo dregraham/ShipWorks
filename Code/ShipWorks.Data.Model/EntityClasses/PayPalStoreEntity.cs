@@ -402,6 +402,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "PayPalStore"."ApiCredentialType"<br/>
 		/// Table field type characteristics (type, precision, scale, length): SmallInt, 5, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Int16 ApiCredentialType
 		{
 			get { return (System.Int16)GetValue((int)PayPalStoreFieldIndex.ApiCredentialType, true); }
@@ -412,6 +413,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "PayPalStore"."ApiUserName"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 255<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.String ApiUserName
 		{
 			get { return (System.String)GetValue((int)PayPalStoreFieldIndex.ApiUserName, true); }
@@ -422,6 +424,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "PayPalStore"."ApiPassword"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 80<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.String ApiPassword
 		{
 			get { return (System.String)GetValue((int)PayPalStoreFieldIndex.ApiPassword, true); }
@@ -432,6 +435,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "PayPalStore"."ApiSignature"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 80<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.String ApiSignature
 		{
 			get { return (System.String)GetValue((int)PayPalStoreFieldIndex.ApiSignature, true); }
@@ -442,6 +446,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "PayPalStore"."ApiCertificate"<br/>
 		/// Table field type characteristics (type, precision, scale, length): VarBinary, 0, 0, 4096<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		[DataMember]
 		public virtual System.Byte[] ApiCertificate
 		{
 			get { return (System.Byte[])GetValue((int)PayPalStoreFieldIndex.ApiCertificate, true); }
@@ -452,6 +457,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "PayPalStore"."LastTransactionDate"<br/>
 		/// Table field type characteristics (type, precision, scale, length): DateTime, 0, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.DateTime LastTransactionDate
 		{
 			get { return (System.DateTime)GetValue((int)PayPalStoreFieldIndex.LastTransactionDate, true); }
@@ -462,6 +468,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "PayPalStore"."LastValidTransactionDate"<br/>
 		/// Table field type characteristics (type, precision, scale, length): DateTime, 0, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.DateTime LastValidTransactionDate
 		{
 			get { return (System.DateTime)GetValue((int)PayPalStoreFieldIndex.LastValidTransactionDate, true); }

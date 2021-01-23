@@ -150,10 +150,25 @@
     </SettingValues>
   </OutputSettingValues>
   <CodeGenerationMetaDataDefaults>
+    <TargetElement Type="64">
+      <Defaults>
+        <Attributes>
+          <Attribute Value="DataMember" />
+        </Attributes>
+      </Defaults>
+    </TargetElement>
     <TargetElement Type="256">
       <Defaults>
         <Attributes>
           <Attribute Value="Browsable($true)" />
+          <Attribute Value="DataMember" />
+        </Attributes>
+      </Defaults>
+    </TargetElement>
+    <TargetElement Type="512">
+      <Defaults>
+        <Attributes>
+          <Attribute Value="DataMember" />
         </Attributes>
       </Defaults>
     </TargetElement>
@@ -1515,6 +1530,7 @@
           <Field Name="IsFBA" Type="bool" FieldIndex="1" />
           <Field Name="IsPrime" Type="AmazonIsPrime" FieldIndex="2" />
           <Field Name="IsSameDay" Type="bool" FieldIndex="3" />
+          <Field Name="Marketplace" Type="string" MaxLength="50" FieldIndex="4" />
         </Fields>
       </EntityDefinition>
       <EntityDefinition Name="GenericModuleOrderItem" ObjectID="3f76a303-a9a3-4ede-a743-3d09e2c7e4ca" InheritanceType="2">
@@ -2030,6 +2046,7 @@
           <Field Name="Custom8" Type="string" MaxLength="50" FieldIndex="89" />
           <Field Name="Custom9" Type="string" MaxLength="50" FieldIndex="90" />
           <Field Name="CustomerID" Type="long" IsAutoCreated="true" FieldIndex="3" />
+          <Field Name="DeliverByDate" Type="datetime" IsOptional="true" FieldIndex="92" />
           <Field Name="HubOrderID" Type="guid" IsOptional="true" FieldIndex="82" />
           <Field Name="HubSequence" Type="long" IsOptional="true" Precision="19" FieldIndex="83" />
           <Field Name="IsManual" Type="bool" FieldIndex="9" />
@@ -2859,6 +2876,7 @@
           <Field Name="OnTracInsurancePennyOne" Type="bool" FieldIndex="36" />
           <Field Name="OnTracInsuranceProvider" Type="int" FieldIndex="35" />
           <Field Name="OrderLookupFieldLayout" Type="string" MaxLength="2147483647" FieldIndex="55" />
+          <Field Name="ShipEngineAccountID" Type="string" MaxLength="20" FieldIndex="57" />
           <Field Name="ShipEngineApiKey" Type="string" MaxLength="50" FieldIndex="53" />
           <Field Name="ShipmentDateCutoffJson" Type="string" MaxLength="1000" FieldIndex="54" />
           <Field Name="ShipmentEditLimit" Type="int" FieldIndex="51" />
@@ -4656,7 +4674,7 @@
       <Catalogs>
         <Catalog Name="ShipWorksLocal">
           <Schemas>
-            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2020-10-07T15:00:12.7342723Z">
+            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2021-01-19T22:04:31.967395Z">
               <Tables>
                 <Table Name="Action">
                   <PkConstraintName Name="PK_Action" />
@@ -6927,6 +6945,7 @@
                     <Field Name="IsFBA" Ordinal="3" DbType="2" />
                     <Field Name="IsPrime" Ordinal="4" DbType="8" Precision="10" />
                     <Field Name="IsSameDay" Ordinal="5" DbType="2" />
+                    <Field Name="Marketplace" Ordinal="6" DbType="12" Length="50" />
                   </Fields>
                 </Table>
                 <Table Name="GenericModuleOrderItem">
@@ -7660,6 +7679,7 @@
                     <Field Name="Custom8" Ordinal="90" HasDefaultValue="true" DefaultValue="''" DbType="12" Length="50" />
                     <Field Name="Custom9" Ordinal="91" HasDefaultValue="true" DefaultValue="''" DbType="12" Length="50" />
                     <Field Name="Custom10" Ordinal="92" HasDefaultValue="true" DefaultValue="''" DbType="12" Length="50" />
+                    <Field Name="DeliverByDate" Ordinal="93" IsOptional="true" DbType="4" />
                   </Fields>
                 </Table>
                 <Table Name="OrderCharge">
@@ -8738,6 +8758,7 @@
                     <Field Name="ShipEngineApiKey" Ordinal="55" DbType="12" Length="50" />
                     <Field Name="OrderLookupFieldLayout" Ordinal="56" HasDefaultValue="true" DefaultValue="''" DbType="12" Length="2147483647" />
                     <Field Name="UpsAllowNoDims" Ordinal="57" HasDefaultValue="true" DefaultValue="(0)" DbType="2" />
+                    <Field Name="ShipEngineAccountID" Ordinal="58" HasDefaultValue="true" DefaultValue="''" DbType="12" Length="20" />
                   </Fields>
                 </Table>
                 <Table Name="ShipSenseKnowledgeBase">
@@ -9477,7 +9498,6 @@
                     <Field Name="ShipEngineCarrierId" Ordinal="27" IsOptional="true" DbType="12" Length="50" />
                     <Field Name="HubVersion" Ordinal="28" IsOptional="true" DbType="8" Precision="10" />
                     <Field Name="HubCarrierId" Ordinal="29" IsOptional="true" DbType="25" />
-                    <Field Name="HubSequence" Ordinal="30" IsOptional="true" DbType="0" Precision="19" />
                   </Fields>
                 </Table>
                 <Table Name="UspsProfile">
@@ -12461,6 +12481,7 @@
             <FieldMapping FieldName="IsFBA" TargetFieldName="IsFBA" />
             <FieldMapping FieldName="IsPrime" TargetFieldName="IsPrime" />
             <FieldMapping FieldName="IsSameDay" TargetFieldName="IsSameDay" />
+            <FieldMapping FieldName="Marketplace" TargetFieldName="Marketplace" />
             <FieldMapping FieldName="OrderID" TargetFieldName="OrderID" />
           </FieldMappings>
         </EntityMapping>
@@ -13002,6 +13023,7 @@
             <FieldMapping FieldName="Custom8" TargetFieldName="Custom8" />
             <FieldMapping FieldName="Custom9" TargetFieldName="Custom9" />
             <FieldMapping FieldName="CustomerID" TargetFieldName="CustomerID" />
+            <FieldMapping FieldName="DeliverByDate" TargetFieldName="DeliverByDate" />
             <FieldMapping FieldName="HubOrderID" TargetFieldName="HubOrderID" />
             <FieldMapping FieldName="HubSequence" TargetFieldName="HubSequence" />
             <FieldMapping FieldName="IsManual" TargetFieldName="IsManual" />
@@ -13839,6 +13861,7 @@
             <FieldMapping FieldName="OnTracInsurancePennyOne" TargetFieldName="OnTracInsurancePennyOne" />
             <FieldMapping FieldName="OnTracInsuranceProvider" TargetFieldName="OnTracInsuranceProvider" />
             <FieldMapping FieldName="OrderLookupFieldLayout" TargetFieldName="OrderLookupFieldLayout" />
+            <FieldMapping FieldName="ShipEngineAccountID" TargetFieldName="ShipEngineAccountID" />
             <FieldMapping FieldName="ShipEngineApiKey" TargetFieldName="ShipEngineApiKey" />
             <FieldMapping FieldName="ShipmentDateCutoffJson" TargetFieldName="ShipmentDateCutoffJson" />
             <FieldMapping FieldName="ShipmentEditLimit" TargetFieldName="ShipmentEditLimit" />

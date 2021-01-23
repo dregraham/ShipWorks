@@ -456,6 +456,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "NetworkSolutionsOrderSearch"."NetworkSolutionsOrderSearchID"<br/>
 		/// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, true, true</remarks>
+		[DataMember]
 		public virtual System.Int64 NetworkSolutionsOrderSearchID
 		{
 			get { return (System.Int64)GetValue((int)NetworkSolutionsOrderSearchFieldIndex.NetworkSolutionsOrderSearchID, true); }
@@ -466,6 +467,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "NetworkSolutionsOrderSearch"."OrderID"<br/>
 		/// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Int64 OrderID
 		{
 			get { return (System.Int64)GetValue((int)NetworkSolutionsOrderSearchFieldIndex.OrderID, true); }
@@ -476,6 +478,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "NetworkSolutionsOrderSearch"."NetworkSolutionsOrderID"<br/>
 		/// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Int64 NetworkSolutionsOrderID
 		{
 			get { return (System.Int64)GetValue((int)NetworkSolutionsOrderSearchFieldIndex.NetworkSolutionsOrderID, true); }
@@ -486,6 +489,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "NetworkSolutionsOrderSearch"."OriginalOrderID"<br/>
 		/// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Int64 OriginalOrderID
 		{
 			get { return (System.Int64)GetValue((int)NetworkSolutionsOrderSearchFieldIndex.OriginalOrderID, true); }
@@ -494,6 +498,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 
 		/// <summary> Gets / sets related entity of type 'NetworkSolutionsOrderEntity' which has to be set using a fetch action earlier. If no related entity is set for this property, null is returned..<br/><br/></summary>
 		[Browsable(true)]
+		[DataMember]
 		public virtual NetworkSolutionsOrderEntity NetworkSolutionsOrder
 		{
 			get	{ return _networkSolutionsOrder; }

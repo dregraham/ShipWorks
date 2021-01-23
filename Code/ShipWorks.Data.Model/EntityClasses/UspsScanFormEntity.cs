@@ -462,6 +462,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "UspsScanForm"."UspsScanFormID"<br/>
 		/// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, true, true</remarks>
+		[DataMember]
 		public virtual System.Int64 UspsScanFormID
 		{
 			get { return (System.Int64)GetValue((int)UspsScanFormFieldIndex.UspsScanFormID, true); }
@@ -472,6 +473,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "UspsScanForm"."UspsAccountID"<br/>
 		/// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Int64 UspsAccountID
 		{
 			get { return (System.Int64)GetValue((int)UspsScanFormFieldIndex.UspsAccountID, true); }
@@ -482,6 +484,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "UspsScanForm"."ScanFormTransactionID"<br/>
 		/// Table field type characteristics (type, precision, scale, length): VarChar, 0, 0, 100<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.String ScanFormTransactionID
 		{
 			get { return (System.String)GetValue((int)UspsScanFormFieldIndex.ScanFormTransactionID, true); }
@@ -492,6 +495,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "UspsScanForm"."ScanFormUrl"<br/>
 		/// Table field type characteristics (type, precision, scale, length): VarChar, 0, 0, 2048<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.String ScanFormUrl
 		{
 			get { return (System.String)GetValue((int)UspsScanFormFieldIndex.ScanFormUrl, true); }
@@ -502,6 +506,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "UspsScanForm"."CreatedDate"<br/>
 		/// Table field type characteristics (type, precision, scale, length): DateTime, 0, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.DateTime CreatedDate
 		{
 			get { return (System.DateTime)GetValue((int)UspsScanFormFieldIndex.CreatedDate, true); }
@@ -512,6 +517,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "UspsScanForm"."ScanFormBatchID"<br/>
 		/// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Int64 ScanFormBatchID
 		{
 			get { return (System.Int64)GetValue((int)UspsScanFormFieldIndex.ScanFormBatchID, true); }
@@ -522,6 +528,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "UspsScanForm"."Description"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 100<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.String Description
 		{
 			get { return (System.String)GetValue((int)UspsScanFormFieldIndex.Description, true); }
@@ -530,6 +537,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 
 		/// <summary> Gets / sets related entity of type 'ScanFormBatchEntity' which has to be set using a fetch action earlier. If no related entity is set for this property, null is returned..<br/><br/></summary>
 		[Browsable(true)]
+		[DataMember]
 		public virtual ScanFormBatchEntity ScanFormBatch
 		{
 			get	{ return _scanFormBatch; }

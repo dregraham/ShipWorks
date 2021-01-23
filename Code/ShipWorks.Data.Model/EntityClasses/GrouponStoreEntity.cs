@@ -392,6 +392,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "GrouponStore"."SupplierID"<br/>
 		/// Table field type characteristics (type, precision, scale, length): VarChar, 0, 0, 255<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.String SupplierID
 		{
 			get { return (System.String)GetValue((int)GrouponStoreFieldIndex.SupplierID, true); }
@@ -402,6 +403,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "GrouponStore"."Token"<br/>
 		/// Table field type characteristics (type, precision, scale, length): VarChar, 0, 0, 255<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.String Token
 		{
 			get { return (System.String)GetValue((int)GrouponStoreFieldIndex.Token, true); }

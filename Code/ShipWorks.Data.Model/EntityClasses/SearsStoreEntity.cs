@@ -396,6 +396,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "SearsStore"."SearsEmail"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 75<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.String SearsEmail
 		{
 			get { return (System.String)GetValue((int)SearsStoreFieldIndex.SearsEmail, true); }
@@ -406,6 +407,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "SearsStore"."Password"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 75<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.String Password
 		{
 			get { return (System.String)GetValue((int)SearsStoreFieldIndex.Password, true); }
@@ -416,6 +418,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "SearsStore"."SecretKey"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 255<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.String SecretKey
 		{
 			get { return (System.String)GetValue((int)SearsStoreFieldIndex.SecretKey, true); }
@@ -426,6 +429,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "SearsStore"."SellerID"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 15<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.String SellerID
 		{
 			get { return (System.String)GetValue((int)SearsStoreFieldIndex.SellerID, true); }

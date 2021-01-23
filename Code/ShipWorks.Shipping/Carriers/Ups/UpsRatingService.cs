@@ -64,7 +64,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
 
                 var account = accountRepository.GetAccount(shipment);
 
-                if (account?.ShipEngineCarrierId != null)
+                if (!string.IsNullOrEmpty(account?.ShipEngineCarrierId))
                 {
                     return shipEngineRatingService.GetRates(shipment);
                 }

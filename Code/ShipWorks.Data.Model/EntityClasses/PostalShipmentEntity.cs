@@ -653,6 +653,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "PostalShipment"."ShipmentID"<br/>
 		/// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, true, false</remarks>
+		[DataMember]
 		public virtual System.Int64 ShipmentID
 		{
 			get { return (System.Int64)GetValue((int)PostalShipmentFieldIndex.ShipmentID, true); }
@@ -663,6 +664,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "PostalShipment"."Service"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Int32 Service
 		{
 			get { return (System.Int32)GetValue((int)PostalShipmentFieldIndex.Service, true); }
@@ -673,6 +675,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "PostalShipment"."Confirmation"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Int32 Confirmation
 		{
 			get { return (System.Int32)GetValue((int)PostalShipmentFieldIndex.Confirmation, true); }
@@ -683,6 +686,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "PostalShipment"."PackagingType"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Int32 PackagingType
 		{
 			get { return (System.Int32)GetValue((int)PostalShipmentFieldIndex.PackagingType, true); }
@@ -693,6 +697,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "PostalShipment"."DimsProfileID"<br/>
 		/// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Int64 DimsProfileID
 		{
 			get { return (System.Int64)GetValue((int)PostalShipmentFieldIndex.DimsProfileID, true); }
@@ -703,6 +708,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "PostalShipment"."DimsLength"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Float, 38, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Double DimsLength
 		{
 			get { return (System.Double)GetValue((int)PostalShipmentFieldIndex.DimsLength, true); }
@@ -713,6 +719,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "PostalShipment"."DimsWidth"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Float, 38, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Double DimsWidth
 		{
 			get { return (System.Double)GetValue((int)PostalShipmentFieldIndex.DimsWidth, true); }
@@ -723,6 +730,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "PostalShipment"."DimsHeight"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Float, 38, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Double DimsHeight
 		{
 			get { return (System.Double)GetValue((int)PostalShipmentFieldIndex.DimsHeight, true); }
@@ -733,6 +741,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "PostalShipment"."DimsWeight"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Float, 38, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Double DimsWeight
 		{
 			get { return (System.Double)GetValue((int)PostalShipmentFieldIndex.DimsWeight, true); }
@@ -743,6 +752,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "PostalShipment"."DimsAddWeight"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Boolean DimsAddWeight
 		{
 			get { return (System.Boolean)GetValue((int)PostalShipmentFieldIndex.DimsAddWeight, true); }
@@ -753,6 +763,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "PostalShipment"."NonRectangular"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Boolean NonRectangular
 		{
 			get { return (System.Boolean)GetValue((int)PostalShipmentFieldIndex.NonRectangular, true); }
@@ -763,6 +774,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "PostalShipment"."NonMachinable"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Boolean NonMachinable
 		{
 			get { return (System.Boolean)GetValue((int)PostalShipmentFieldIndex.NonMachinable, true); }
@@ -773,6 +785,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "PostalShipment"."CustomsContentType"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Int32 CustomsContentType
 		{
 			get { return (System.Int32)GetValue((int)PostalShipmentFieldIndex.CustomsContentType, true); }
@@ -783,6 +796,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "PostalShipment"."CustomsContentDescription"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 50<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.String CustomsContentDescription
 		{
 			get { return (System.String)GetValue((int)PostalShipmentFieldIndex.CustomsContentDescription, true); }
@@ -793,6 +807,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "PostalShipment"."InsuranceValue"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Money, 19, 4, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Decimal InsuranceValue
 		{
 			get { return (System.Decimal)GetValue((int)PostalShipmentFieldIndex.InsuranceValue, true); }
@@ -803,6 +818,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "PostalShipment"."ExpressSignatureWaiver"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Boolean ExpressSignatureWaiver
 		{
 			get { return (System.Boolean)GetValue((int)PostalShipmentFieldIndex.ExpressSignatureWaiver, true); }
@@ -813,6 +829,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "PostalShipment"."SortType"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Int32 SortType
 		{
 			get { return (System.Int32)GetValue((int)PostalShipmentFieldIndex.SortType, true); }
@@ -823,6 +840,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "PostalShipment"."EntryFacility"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Int32 EntryFacility
 		{
 			get { return (System.Int32)GetValue((int)PostalShipmentFieldIndex.EntryFacility, true); }
@@ -833,6 +851,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "PostalShipment"."Memo1"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 300<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.String Memo1
 		{
 			get { return (System.String)GetValue((int)PostalShipmentFieldIndex.Memo1, true); }
@@ -843,6 +862,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "PostalShipment"."Memo2"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 300<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.String Memo2
 		{
 			get { return (System.String)GetValue((int)PostalShipmentFieldIndex.Memo2, true); }
@@ -853,6 +873,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "PostalShipment"."Memo3"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 300<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.String Memo3
 		{
 			get { return (System.String)GetValue((int)PostalShipmentFieldIndex.Memo3, true); }
@@ -863,6 +884,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "PostalShipment"."NoPostage"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Boolean NoPostage
 		{
 			get { return (System.Boolean)GetValue((int)PostalShipmentFieldIndex.NoPostage, true); }
@@ -873,6 +895,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "PostalShipment"."Insurance"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Boolean Insurance
 		{
 			get { return (System.Boolean)GetValue((int)PostalShipmentFieldIndex.Insurance, true); }
@@ -882,6 +905,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <summary> Gets / sets related entity of type 'EndiciaShipmentEntity' which has to be set using a fetch action earlier. If no related entity is set for this property, null is returned.<br/><br/>
 		/// </summary>
 		[Browsable(true)]
+		[DataMember]
 		public virtual EndiciaShipmentEntity Endicia
 		{
 			get { return _endicia; }
@@ -918,6 +942,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <summary> Gets / sets related entity of type 'ShipmentEntity' which has to be set using a fetch action earlier. If no related entity is set for this property, null is returned.<br/><br/>
 		/// </summary>
 		[Browsable(true)]
+		[DataMember]
 		public virtual ShipmentEntity Shipment
 		{
 			get { return _shipment; }
@@ -954,6 +979,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <summary> Gets / sets related entity of type 'UspsShipmentEntity' which has to be set using a fetch action earlier. If no related entity is set for this property, null is returned.<br/><br/>
 		/// </summary>
 		[Browsable(true)]
+		[DataMember]
 		public virtual UspsShipmentEntity Usps
 		{
 			get { return _usps; }

@@ -847,6 +847,8 @@ namespace ShipWorks.Data.Model.EntityClasses
 			_fieldsCustomProperties.Add("Custom9", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
 			_fieldsCustomProperties.Add("Custom10", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+			_fieldsCustomProperties.Add("DeliverByDate", fieldHashtable);
 		}
 		#endregion
 
@@ -1051,6 +1053,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "Order"."OrderID"<br/>
 		/// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, true, true</remarks>
+		[DataMember]
 		public virtual System.Int64 OrderID
 		{
 			get { return (System.Int64)GetValue((int)OrderFieldIndex.OrderID, true); }
@@ -1061,6 +1064,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "Order"."RowVersion"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Timestamp, 0, 0, 2147483647<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Byte[] RowVersion
 		{
 			get { return (System.Byte[])GetValue((int)OrderFieldIndex.RowVersion, true); }
@@ -1071,6 +1075,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "Order"."StoreID"<br/>
 		/// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Int64 StoreID
 		{
 			get { return (System.Int64)GetValue((int)OrderFieldIndex.StoreID, true); }
@@ -1081,6 +1086,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "Order"."CustomerID"<br/>
 		/// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Int64 CustomerID
 		{
 			get { return (System.Int64)GetValue((int)OrderFieldIndex.CustomerID, true); }
@@ -1091,6 +1097,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "Order"."OrderNumber"<br/>
 		/// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Int64 OrderNumber
 		{
 			get { return (System.Int64)GetValue((int)OrderFieldIndex.OrderNumber, true); }
@@ -1101,6 +1108,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "Order"."OrderNumberComplete"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 50<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.String OrderNumberComplete
 		{
 			get { return (System.String)GetValue((int)OrderFieldIndex.OrderNumberComplete, true); }
@@ -1111,6 +1119,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "Order"."OrderDate"<br/>
 		/// Table field type characteristics (type, precision, scale, length): DateTime, 0, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.DateTime OrderDate
 		{
 			get { return (System.DateTime)GetValue((int)OrderFieldIndex.OrderDate, true); }
@@ -1121,6 +1130,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "Order"."OrderTotal"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Money, 19, 4, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Decimal OrderTotal
 		{
 			get { return (System.Decimal)GetValue((int)OrderFieldIndex.OrderTotal, true); }
@@ -1131,6 +1141,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "Order"."LocalStatus"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 100<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.String LocalStatus
 		{
 			get { return (System.String)GetValue((int)OrderFieldIndex.LocalStatus, true); }
@@ -1141,6 +1152,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "Order"."IsManual"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Boolean IsManual
 		{
 			get { return (System.Boolean)GetValue((int)OrderFieldIndex.IsManual, true); }
@@ -1151,6 +1163,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "Order"."OnlineLastModified"<br/>
 		/// Table field type characteristics (type, precision, scale, length): DateTime2, 7, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.DateTime OnlineLastModified
 		{
 			get { return (System.DateTime)GetValue((int)OrderFieldIndex.OnlineLastModified, true); }
@@ -1161,6 +1174,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "Order"."OnlineCustomerID"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Variant, 0, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		[DataMember]
 		public virtual System.Object OnlineCustomerID
 		{
 			get { return (System.Object)GetValue((int)OrderFieldIndex.OnlineCustomerID, true); }
@@ -1171,6 +1185,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "Order"."OnlineStatus"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 100<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.String OnlineStatus
 		{
 			get { return (System.String)GetValue((int)OrderFieldIndex.OnlineStatus, true); }
@@ -1181,6 +1196,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "Order"."OnlineStatusCode"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Variant, 0, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		[DataMember]
 		public virtual System.Object OnlineStatusCode
 		{
 			get { return (System.Object)GetValue((int)OrderFieldIndex.OnlineStatusCode, true); }
@@ -1191,6 +1207,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "Order"."RequestedShipping"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 50<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.String RequestedShipping
 		{
 			get { return (System.String)GetValue((int)OrderFieldIndex.RequestedShipping, true); }
@@ -1201,6 +1218,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "Order"."BillFirstName"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 30<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.String BillFirstName
 		{
 			get { return (System.String)GetValue((int)OrderFieldIndex.BillFirstName, true); }
@@ -1211,6 +1229,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "Order"."BillMiddleName"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 30<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.String BillMiddleName
 		{
 			get { return (System.String)GetValue((int)OrderFieldIndex.BillMiddleName, true); }
@@ -1221,6 +1240,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "Order"."BillLastName"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 30<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.String BillLastName
 		{
 			get { return (System.String)GetValue((int)OrderFieldIndex.BillLastName, true); }
@@ -1231,6 +1251,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "Order"."BillCompany"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 60<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.String BillCompany
 		{
 			get { return (System.String)GetValue((int)OrderFieldIndex.BillCompany, true); }
@@ -1241,6 +1262,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "Order"."BillStreet1"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 60<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.String BillStreet1
 		{
 			get { return (System.String)GetValue((int)OrderFieldIndex.BillStreet1, true); }
@@ -1251,6 +1273,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "Order"."BillStreet2"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 60<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.String BillStreet2
 		{
 			get { return (System.String)GetValue((int)OrderFieldIndex.BillStreet2, true); }
@@ -1261,6 +1284,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "Order"."BillStreet3"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 60<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.String BillStreet3
 		{
 			get { return (System.String)GetValue((int)OrderFieldIndex.BillStreet3, true); }
@@ -1271,6 +1295,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "Order"."BillCity"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 50<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.String BillCity
 		{
 			get { return (System.String)GetValue((int)OrderFieldIndex.BillCity, true); }
@@ -1281,6 +1306,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "Order"."BillStateProvCode"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 50<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.String BillStateProvCode
 		{
 			get { return (System.String)GetValue((int)OrderFieldIndex.BillStateProvCode, true); }
@@ -1291,6 +1317,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "Order"."BillPostalCode"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 20<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.String BillPostalCode
 		{
 			get { return (System.String)GetValue((int)OrderFieldIndex.BillPostalCode, true); }
@@ -1301,6 +1328,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "Order"."BillCountryCode"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 50<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.String BillCountryCode
 		{
 			get { return (System.String)GetValue((int)OrderFieldIndex.BillCountryCode, true); }
@@ -1311,6 +1339,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "Order"."BillPhone"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 35<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.String BillPhone
 		{
 			get { return (System.String)GetValue((int)OrderFieldIndex.BillPhone, true); }
@@ -1321,6 +1350,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "Order"."BillFax"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 35<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.String BillFax
 		{
 			get { return (System.String)GetValue((int)OrderFieldIndex.BillFax, true); }
@@ -1331,6 +1361,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "Order"."BillEmail"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 100<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.String BillEmail
 		{
 			get { return (System.String)GetValue((int)OrderFieldIndex.BillEmail, true); }
@@ -1341,6 +1372,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "Order"."BillWebsite"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 50<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.String BillWebsite
 		{
 			get { return (System.String)GetValue((int)OrderFieldIndex.BillWebsite, true); }
@@ -1351,6 +1383,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "Order"."BillAddressValidationSuggestionCount"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Int32 BillAddressValidationSuggestionCount
 		{
 			get { return (System.Int32)GetValue((int)OrderFieldIndex.BillAddressValidationSuggestionCount, true); }
@@ -1361,6 +1394,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "Order"."BillAddressValidationStatus"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Int32 BillAddressValidationStatus
 		{
 			get { return (System.Int32)GetValue((int)OrderFieldIndex.BillAddressValidationStatus, true); }
@@ -1371,6 +1405,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "Order"."BillAddressValidationError"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 300<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.String BillAddressValidationError
 		{
 			get { return (System.String)GetValue((int)OrderFieldIndex.BillAddressValidationError, true); }
@@ -1381,6 +1416,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "Order"."BillResidentialStatus"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Int32 BillResidentialStatus
 		{
 			get { return (System.Int32)GetValue((int)OrderFieldIndex.BillResidentialStatus, true); }
@@ -1391,6 +1427,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "Order"."BillPOBox"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Int32 BillPOBox
 		{
 			get { return (System.Int32)GetValue((int)OrderFieldIndex.BillPOBox, true); }
@@ -1401,6 +1438,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "Order"."BillUSTerritory"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Int32 BillUSTerritory
 		{
 			get { return (System.Int32)GetValue((int)OrderFieldIndex.BillUSTerritory, true); }
@@ -1411,6 +1449,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "Order"."BillMilitaryAddress"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Int32 BillMilitaryAddress
 		{
 			get { return (System.Int32)GetValue((int)OrderFieldIndex.BillMilitaryAddress, true); }
@@ -1421,6 +1460,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "Order"."ShipFirstName"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 30<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.String ShipFirstName
 		{
 			get { return (System.String)GetValue((int)OrderFieldIndex.ShipFirstName, true); }
@@ -1431,6 +1471,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "Order"."ShipMiddleName"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 30<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.String ShipMiddleName
 		{
 			get { return (System.String)GetValue((int)OrderFieldIndex.ShipMiddleName, true); }
@@ -1441,6 +1482,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "Order"."ShipLastName"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 30<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.String ShipLastName
 		{
 			get { return (System.String)GetValue((int)OrderFieldIndex.ShipLastName, true); }
@@ -1451,6 +1493,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "Order"."ShipCompany"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 60<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.String ShipCompany
 		{
 			get { return (System.String)GetValue((int)OrderFieldIndex.ShipCompany, true); }
@@ -1461,6 +1504,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "Order"."ShipStreet1"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 60<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.String ShipStreet1
 		{
 			get { return (System.String)GetValue((int)OrderFieldIndex.ShipStreet1, true); }
@@ -1471,6 +1515,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "Order"."ShipStreet2"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 60<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.String ShipStreet2
 		{
 			get { return (System.String)GetValue((int)OrderFieldIndex.ShipStreet2, true); }
@@ -1481,6 +1526,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "Order"."ShipStreet3"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 60<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.String ShipStreet3
 		{
 			get { return (System.String)GetValue((int)OrderFieldIndex.ShipStreet3, true); }
@@ -1491,6 +1537,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "Order"."ShipCity"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 50<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.String ShipCity
 		{
 			get { return (System.String)GetValue((int)OrderFieldIndex.ShipCity, true); }
@@ -1501,6 +1548,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "Order"."ShipStateProvCode"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 50<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.String ShipStateProvCode
 		{
 			get { return (System.String)GetValue((int)OrderFieldIndex.ShipStateProvCode, true); }
@@ -1511,6 +1559,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "Order"."ShipPostalCode"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 20<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.String ShipPostalCode
 		{
 			get { return (System.String)GetValue((int)OrderFieldIndex.ShipPostalCode, true); }
@@ -1521,6 +1570,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "Order"."ShipCountryCode"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 50<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.String ShipCountryCode
 		{
 			get { return (System.String)GetValue((int)OrderFieldIndex.ShipCountryCode, true); }
@@ -1531,6 +1581,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "Order"."ShipPhone"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 35<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.String ShipPhone
 		{
 			get { return (System.String)GetValue((int)OrderFieldIndex.ShipPhone, true); }
@@ -1541,6 +1592,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "Order"."ShipFax"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 35<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.String ShipFax
 		{
 			get { return (System.String)GetValue((int)OrderFieldIndex.ShipFax, true); }
@@ -1551,6 +1603,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "Order"."ShipEmail"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 100<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.String ShipEmail
 		{
 			get { return (System.String)GetValue((int)OrderFieldIndex.ShipEmail, true); }
@@ -1561,6 +1614,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "Order"."ShipWebsite"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 50<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.String ShipWebsite
 		{
 			get { return (System.String)GetValue((int)OrderFieldIndex.ShipWebsite, true); }
@@ -1571,6 +1625,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "Order"."ShipAddressValidationSuggestionCount"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Int32 ShipAddressValidationSuggestionCount
 		{
 			get { return (System.Int32)GetValue((int)OrderFieldIndex.ShipAddressValidationSuggestionCount, true); }
@@ -1581,6 +1636,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "Order"."ShipAddressValidationStatus"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Int32 ShipAddressValidationStatus
 		{
 			get { return (System.Int32)GetValue((int)OrderFieldIndex.ShipAddressValidationStatus, true); }
@@ -1591,6 +1647,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "Order"."ShipAddressValidationError"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 300<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.String ShipAddressValidationError
 		{
 			get { return (System.String)GetValue((int)OrderFieldIndex.ShipAddressValidationError, true); }
@@ -1601,6 +1658,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "Order"."ShipResidentialStatus"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Int32 ShipResidentialStatus
 		{
 			get { return (System.Int32)GetValue((int)OrderFieldIndex.ShipResidentialStatus, true); }
@@ -1611,6 +1669,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "Order"."ShipPOBox"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Int32 ShipPOBox
 		{
 			get { return (System.Int32)GetValue((int)OrderFieldIndex.ShipPOBox, true); }
@@ -1621,6 +1680,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "Order"."ShipUSTerritory"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Int32 ShipUSTerritory
 		{
 			get { return (System.Int32)GetValue((int)OrderFieldIndex.ShipUSTerritory, true); }
@@ -1631,6 +1691,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "Order"."ShipMilitaryAddress"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Int32 ShipMilitaryAddress
 		{
 			get { return (System.Int32)GetValue((int)OrderFieldIndex.ShipMilitaryAddress, true); }
@@ -1641,6 +1702,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "Order"."RollupItemCount"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Int32 RollupItemCount
 		{
 			get { return (System.Int32)GetValue((int)OrderFieldIndex.RollupItemCount, true); }
@@ -1651,6 +1713,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "Order"."RollupItemName"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 300<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		[DataMember]
 		public virtual System.String RollupItemName
 		{
 			get { return (System.String)GetValue((int)OrderFieldIndex.RollupItemName, true); }
@@ -1661,6 +1724,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "Order"."RollupItemCode"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 300<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		[DataMember]
 		public virtual System.String RollupItemCode
 		{
 			get { return (System.String)GetValue((int)OrderFieldIndex.RollupItemCode, true); }
@@ -1671,6 +1735,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "Order"."RollupItemSKU"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 100<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		[DataMember]
 		public virtual System.String RollupItemSKU
 		{
 			get { return (System.String)GetValue((int)OrderFieldIndex.RollupItemSKU, true); }
@@ -1681,6 +1746,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "Order"."RollupItemLocation"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 255<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		[DataMember]
 		public virtual System.String RollupItemLocation
 		{
 			get { return (System.String)GetValue((int)OrderFieldIndex.RollupItemLocation, true); }
@@ -1691,6 +1757,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "Order"."RollupItemQuantity"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Float, 38, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		[DataMember]
 		public virtual Nullable<System.Double> RollupItemQuantity
 		{
 			get { return (Nullable<System.Double>)GetValue((int)OrderFieldIndex.RollupItemQuantity, false); }
@@ -1701,6 +1768,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "Order"."RollupItemTotalWeight"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Decimal, 29, 9, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Double RollupItemTotalWeight
 		{
 			get { return (System.Double)GetValue((int)OrderFieldIndex.RollupItemTotalWeight, true); }
@@ -1711,6 +1779,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "Order"."RollupNoteCount"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Int32 RollupNoteCount
 		{
 			get { return (System.Int32)GetValue((int)OrderFieldIndex.RollupNoteCount, true); }
@@ -1721,6 +1790,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "Order"."BillNameParseStatus"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Int32 BillNameParseStatus
 		{
 			get { return (System.Int32)GetValue((int)OrderFieldIndex.BillNameParseStatus, true); }
@@ -1731,6 +1801,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "Order"."BillUnparsedName"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 100<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.String BillUnparsedName
 		{
 			get { return (System.String)GetValue((int)OrderFieldIndex.BillUnparsedName, true); }
@@ -1741,6 +1812,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "Order"."ShipNameParseStatus"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Int32 ShipNameParseStatus
 		{
 			get { return (System.Int32)GetValue((int)OrderFieldIndex.ShipNameParseStatus, true); }
@@ -1751,6 +1823,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "Order"."ShipUnparsedName"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 100<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.String ShipUnparsedName
 		{
 			get { return (System.String)GetValue((int)OrderFieldIndex.ShipUnparsedName, true); }
@@ -1761,6 +1834,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "Order"."ShipSenseHashKey"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 64<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.String ShipSenseHashKey
 		{
 			get { return (System.String)GetValue((int)OrderFieldIndex.ShipSenseHashKey, true); }
@@ -1771,6 +1845,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "Order"."ShipSenseRecognitionStatus"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Int32 ShipSenseRecognitionStatus
 		{
 			get { return (System.Int32)GetValue((int)OrderFieldIndex.ShipSenseRecognitionStatus, true); }
@@ -1781,6 +1856,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "Order"."ShipAddressType"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Int32 ShipAddressType
 		{
 			get { return (System.Int32)GetValue((int)OrderFieldIndex.ShipAddressType, true); }
@@ -1791,6 +1867,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "Order"."CombineSplitStatus"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual Interapptive.Shared.Enums.CombineSplitStatusType CombineSplitStatus
 		{
 			get { return (Interapptive.Shared.Enums.CombineSplitStatusType)GetValue((int)OrderFieldIndex.CombineSplitStatus, true); }
@@ -1801,6 +1878,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "Order"."ChannelOrderID"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 50<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.String ChannelOrderID
 		{
 			get { return (System.String)GetValue((int)OrderFieldIndex.ChannelOrderID, true); }
@@ -1811,6 +1889,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "Order"."ShipByDate"<br/>
 		/// Table field type characteristics (type, precision, scale, length): DateTime, 0, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		[DataMember]
 		public virtual Nullable<System.DateTime> ShipByDate
 		{
 			get { return (Nullable<System.DateTime>)GetValue((int)OrderFieldIndex.ShipByDate, false); }
@@ -1821,6 +1900,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "Order"."Custom1"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 50<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.String Custom1
 		{
 			get { return (System.String)GetValue((int)OrderFieldIndex.Custom1, true); }
@@ -1831,6 +1911,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "Order"."Custom2"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 50<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.String Custom2
 		{
 			get { return (System.String)GetValue((int)OrderFieldIndex.Custom2, true); }
@@ -1841,6 +1922,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "Order"."Custom3"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 50<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.String Custom3
 		{
 			get { return (System.String)GetValue((int)OrderFieldIndex.Custom3, true); }
@@ -1851,6 +1933,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "Order"."Custom4"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 50<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.String Custom4
 		{
 			get { return (System.String)GetValue((int)OrderFieldIndex.Custom4, true); }
@@ -1861,6 +1944,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "Order"."Custom5"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 50<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.String Custom5
 		{
 			get { return (System.String)GetValue((int)OrderFieldIndex.Custom5, true); }
@@ -1871,6 +1955,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "Order"."HubOrderID"<br/>
 		/// Table field type characteristics (type, precision, scale, length): UniqueIdentifier, 0, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		[DataMember]
 		public virtual Nullable<System.Guid> HubOrderID
 		{
 			get { return (Nullable<System.Guid>)GetValue((int)OrderFieldIndex.HubOrderID, false); }
@@ -1881,6 +1966,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "Order"."HubSequence"<br/>
 		/// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		[DataMember]
 		public virtual Nullable<System.Int64> HubSequence
 		{
 			get { return (Nullable<System.Int64>)GetValue((int)OrderFieldIndex.HubSequence, false); }
@@ -1891,6 +1977,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "Order"."Verified"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Boolean Verified
 		{
 			get { return (System.Boolean)GetValue((int)OrderFieldIndex.Verified, true); }
@@ -1901,6 +1988,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "Order"."VerifiedBy"<br/>
 		/// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		[DataMember]
 		public virtual Nullable<System.Int64> VerifiedBy
 		{
 			get { return (Nullable<System.Int64>)GetValue((int)OrderFieldIndex.VerifiedBy, false); }
@@ -1911,6 +1999,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "Order"."VerifiedDate"<br/>
 		/// Table field type characteristics (type, precision, scale, length): DateTime, 0, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		[DataMember]
 		public virtual Nullable<System.DateTime> VerifiedDate
 		{
 			get { return (Nullable<System.DateTime>)GetValue((int)OrderFieldIndex.VerifiedDate, false); }
@@ -1921,6 +2010,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "Order"."Custom6"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 50<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.String Custom6
 		{
 			get { return (System.String)GetValue((int)OrderFieldIndex.Custom6, true); }
@@ -1931,6 +2021,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "Order"."Custom7"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 50<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.String Custom7
 		{
 			get { return (System.String)GetValue((int)OrderFieldIndex.Custom7, true); }
@@ -1941,6 +2032,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "Order"."Custom8"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 50<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.String Custom8
 		{
 			get { return (System.String)GetValue((int)OrderFieldIndex.Custom8, true); }
@@ -1951,6 +2043,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "Order"."Custom9"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 50<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.String Custom9
 		{
 			get { return (System.String)GetValue((int)OrderFieldIndex.Custom9, true); }
@@ -1961,14 +2054,26 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "Order"."Custom10"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 50<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.String Custom10
 		{
 			get { return (System.String)GetValue((int)OrderFieldIndex.Custom10, true); }
 			set	{ SetValue((int)OrderFieldIndex.Custom10, value); }
 		}
 
+		/// <summary> The DeliverByDate property of the Entity Order<br/><br/></summary>
+		/// <remarks>Mapped on  table field: "Order"."DeliverByDate"<br/>
+		/// Table field type characteristics (type, precision, scale, length): DateTime, 0, 0, 0<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		public virtual Nullable<System.DateTime> DeliverByDate
+		{
+			get { return (Nullable<System.DateTime>)GetValue((int)OrderFieldIndex.DeliverByDate, false); }
+			set	{ SetValue((int)OrderFieldIndex.DeliverByDate, value); }
+		}
+
 		/// <summary> Gets the EntityCollection with the related entities of type 'NoteEntity' which are related to this entity via a relation of type '1:n'. If the EntityCollection hasn't been fetched yet, the collection returned will be empty.<br/><br/></summary>
 		[TypeContainedAttribute(typeof(NoteEntity))]
+		[DataMember]
 		public virtual EntityCollection<NoteEntity> Notes
 		{
 			get { return GetOrCreateEntityCollection<NoteEntity, NoteEntityFactory>("Order", true, false, ref _notes);	}
@@ -1976,6 +2081,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 
 		/// <summary> Gets the EntityCollection with the related entities of type 'OrderChargeEntity' which are related to this entity via a relation of type '1:n'. If the EntityCollection hasn't been fetched yet, the collection returned will be empty.<br/><br/></summary>
 		[TypeContainedAttribute(typeof(OrderChargeEntity))]
+		[DataMember]
 		public virtual EntityCollection<OrderChargeEntity> OrderCharges
 		{
 			get { return GetOrCreateEntityCollection<OrderChargeEntity, OrderChargeEntityFactory>("Order", true, false, ref _orderCharges);	}
@@ -1983,6 +2089,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 
 		/// <summary> Gets the EntityCollection with the related entities of type 'OrderItemEntity' which are related to this entity via a relation of type '1:n'. If the EntityCollection hasn't been fetched yet, the collection returned will be empty.<br/><br/></summary>
 		[TypeContainedAttribute(typeof(OrderItemEntity))]
+		[DataMember]
 		public virtual EntityCollection<OrderItemEntity> OrderItems
 		{
 			get { return GetOrCreateEntityCollection<OrderItemEntity, OrderItemEntityFactory>("Order", true, false, ref _orderItems);	}
@@ -1990,6 +2097,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 
 		/// <summary> Gets the EntityCollection with the related entities of type 'OrderPaymentDetailEntity' which are related to this entity via a relation of type '1:n'. If the EntityCollection hasn't been fetched yet, the collection returned will be empty.<br/><br/></summary>
 		[TypeContainedAttribute(typeof(OrderPaymentDetailEntity))]
+		[DataMember]
 		public virtual EntityCollection<OrderPaymentDetailEntity> OrderPaymentDetails
 		{
 			get { return GetOrCreateEntityCollection<OrderPaymentDetailEntity, OrderPaymentDetailEntityFactory>("Order", true, false, ref _orderPaymentDetails);	}
@@ -1997,6 +2105,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 
 		/// <summary> Gets the EntityCollection with the related entities of type 'OrderSearchEntity' which are related to this entity via a relation of type '1:n'. If the EntityCollection hasn't been fetched yet, the collection returned will be empty.<br/><br/></summary>
 		[TypeContainedAttribute(typeof(OrderSearchEntity))]
+		[DataMember]
 		public virtual EntityCollection<OrderSearchEntity> OrderSearch
 		{
 			get { return GetOrCreateEntityCollection<OrderSearchEntity, OrderSearchEntityFactory>("Order", true, false, ref _orderSearch);	}
@@ -2004,6 +2113,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 
 		/// <summary> Gets the EntityCollection with the related entities of type 'ShipmentEntity' which are related to this entity via a relation of type '1:n'. If the EntityCollection hasn't been fetched yet, the collection returned will be empty.<br/><br/></summary>
 		[TypeContainedAttribute(typeof(ShipmentEntity))]
+		[DataMember]
 		public virtual EntityCollection<ShipmentEntity> Shipments
 		{
 			get { return GetOrCreateEntityCollection<ShipmentEntity, ShipmentEntityFactory>("Order", true, false, ref _shipments);	}
@@ -2011,6 +2121,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 
 		/// <summary> Gets the EntityCollection with the related entities of type 'ValidatedAddressEntity' which are related to this entity via a relation of type '1:n'. If the EntityCollection hasn't been fetched yet, the collection returned will be empty.<br/><br/></summary>
 		[TypeContainedAttribute(typeof(ValidatedAddressEntity))]
+		[DataMember]
 		public virtual EntityCollection<ValidatedAddressEntity> ValidatedAddress
 		{
 			get { return GetOrCreateEntityCollection<ValidatedAddressEntity, ValidatedAddressEntityFactory>("Order", true, false, ref _validatedAddress);	}
@@ -2018,6 +2129,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 
 		/// <summary> Gets the EntityCollection with the related entities of type 'ShipmentEntity' which are related to this entity via a relation of type 'm:n'. If the EntityCollection hasn't been fetched yet, the collection returned will be empty.<br/><br/></summary>
 		[TypeContainedAttribute(typeof(ShipmentEntity))]
+		[DataMember]
 		public virtual EntityCollection<ShipmentEntity> ShipmentCollectionViaValidatedAddress
 		{
 			get { return GetOrCreateEntityCollection<ShipmentEntity, ShipmentEntityFactory>("OrderCollectionViaValidatedAddress", false, true, ref _shipmentCollectionViaValidatedAddress);	}
@@ -2025,6 +2137,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 
 		/// <summary> Gets / sets related entity of type 'CustomerEntity' which has to be set using a fetch action earlier. If no related entity is set for this property, null is returned..<br/><br/></summary>
 		[Browsable(true)]
+		[DataMember]
 		public virtual CustomerEntity Customer
 		{
 			get	{ return _customer; }
@@ -2043,6 +2156,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 
 		/// <summary> Gets / sets related entity of type 'StoreEntity' which has to be set using a fetch action earlier. If no related entity is set for this property, null is returned..<br/><br/></summary>
 		[Browsable(true)]
+		[DataMember]
 		public virtual StoreEntity Store
 		{
 			get	{ return _store; }

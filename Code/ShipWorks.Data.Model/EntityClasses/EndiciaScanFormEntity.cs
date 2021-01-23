@@ -462,6 +462,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "EndiciaScanForm"."EndiciaScanFormID"<br/>
 		/// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, true, true</remarks>
+		[DataMember]
 		public virtual System.Int64 EndiciaScanFormID
 		{
 			get { return (System.Int64)GetValue((int)EndiciaScanFormFieldIndex.EndiciaScanFormID, true); }
@@ -472,6 +473,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "EndiciaScanForm"."EndiciaAccountID"<br/>
 		/// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Int64 EndiciaAccountID
 		{
 			get { return (System.Int64)GetValue((int)EndiciaScanFormFieldIndex.EndiciaAccountID, true); }
@@ -482,6 +484,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "EndiciaScanForm"."EndiciaAccountNumber"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 50<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.String EndiciaAccountNumber
 		{
 			get { return (System.String)GetValue((int)EndiciaScanFormFieldIndex.EndiciaAccountNumber, true); }
@@ -492,6 +495,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "EndiciaScanForm"."SubmissionID"<br/>
 		/// Table field type characteristics (type, precision, scale, length): VarChar, 0, 0, 100<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.String SubmissionID
 		{
 			get { return (System.String)GetValue((int)EndiciaScanFormFieldIndex.SubmissionID, true); }
@@ -502,6 +506,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "EndiciaScanForm"."CreatedDate"<br/>
 		/// Table field type characteristics (type, precision, scale, length): DateTime, 0, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.DateTime CreatedDate
 		{
 			get { return (System.DateTime)GetValue((int)EndiciaScanFormFieldIndex.CreatedDate, true); }
@@ -512,6 +517,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "EndiciaScanForm"."ScanFormBatchID"<br/>
 		/// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Int64 ScanFormBatchID
 		{
 			get { return (System.Int64)GetValue((int)EndiciaScanFormFieldIndex.ScanFormBatchID, true); }
@@ -522,6 +528,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "EndiciaScanForm"."Description"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 100<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.String Description
 		{
 			get { return (System.String)GetValue((int)EndiciaScanFormFieldIndex.Description, true); }
@@ -530,6 +537,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 
 		/// <summary> Gets / sets related entity of type 'ScanFormBatchEntity' which has to be set using a fetch action earlier. If no related entity is set for this property, null is returned..<br/><br/></summary>
 		[Browsable(true)]
+		[DataMember]
 		public virtual ScanFormBatchEntity ScanFormBatch
 		{
 			get	{ return _scanFormBatch; }
