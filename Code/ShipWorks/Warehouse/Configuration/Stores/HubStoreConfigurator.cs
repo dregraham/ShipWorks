@@ -67,9 +67,26 @@ namespace ShipWorks.Warehouse.Configuration.Stores
 
             foreach (var config in storeConfigurations)
             {
-                var existingStore = storeManager.GetAllStores()
+                var allStores = storeManager.GetAllStores();
+                var existingStore = allStores
                 .FirstOrDefault(x => x.StoreTypeCode == config.StoreType &&
                     storeTypeManager.GetType(x).LicenseIdentifier == config.UniqueIdentifier);
+
+                //If we have two stores that come from two different dbs with the same name
+                //We have to differentiate them so we just add a number on the end here
+                var storesWithSimilarNames = allStores.Select(s => s.StoreName.Contains(config.Name)).Count();
+                if (storesWithSimilarNames > 0 && existingStore == null)
+                {
+                    var newName = config.Name + storesWithSimilarNames;
+                    config.SyncPayload = config.SyncPayload.Replace(config.Name, newName);
+                    config.Name = newName;
+                }
+                else if(storesWithSimilarNames > 0 && existingStore != null)
+                {
+                    var newName = existingStore.StoreName;
+                    config.SyncPayload = config.SyncPayload.Replace(config.Name, newName);
+                    config.Name = newName;
+                }
 
                 storeProgress.Detail = $"{(existingStore == null ? "Importing" : "Updating")} '{config.Name}' ({index} of {totalStoresToImport})";
 
