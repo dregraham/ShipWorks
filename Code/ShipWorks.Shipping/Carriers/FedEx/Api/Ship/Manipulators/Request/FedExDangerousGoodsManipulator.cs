@@ -242,7 +242,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Ship.Manipulators.Request
                 return GenericResult.FromSuccess(dangerousGoods);
             }
 
-            // We  need to supply a description of the hazardous commodity when shipment contains hazardous materials
+            // We need to supply a description of the hazardous commodity when shipment contains hazardous materials
             dangerousGoods.Containers = new[]
             {
                 new DangerousGoodsContainer
