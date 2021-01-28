@@ -392,7 +392,7 @@
             this.hazardousMaterialGroupBox.Controls.Add(this.hazardClassLabel);
             this.hazardousMaterialGroupBox.Location = new System.Drawing.Point(9, 344);
             this.hazardousMaterialGroupBox.Name = "hazardousMaterialGroupBox";
-            this.hazardousMaterialGroupBox.Size = new System.Drawing.Size(294, 238);
+            this.hazardousMaterialGroupBox.Size = new System.Drawing.Size(294, 265);
             this.hazardousMaterialGroupBox.TabIndex = 18;
             this.hazardousMaterialGroupBox.TabStop = false;
             this.hazardousMaterialGroupBox.Text = "Hazardous Material Details";
@@ -414,17 +414,17 @@
             this.packingInstructionsLabel.Text = "Packing Instructions:";
             this.packingInstructionsLabel.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
-            // DangerousGoodsAuthorization
+            // dangerousGoodsAuthorization
             // 
-            this.dangerousGoodsAuthorization.Location = new System.Drawing.Point(109, 215);
+            this.dangerousGoodsAuthorization.Location = new System.Drawing.Point(109, 235);
             this.dangerousGoodsAuthorization.Name = "dangerousGoodAuthorization";
             this.dangerousGoodsAuthorization.Size = new System.Drawing.Size(171, 21);
             this.dangerousGoodsAuthorization.TabIndex = 15;
             // 
-            // packingInstructionsLabel
+            // dangerousGoodsAuthorizationLabel
             // 
             this.dangerousGoodsAuthorizationLabel.AutoSize = true;
-            this.dangerousGoodsAuthorizationLabel.Location = new System.Drawing.Point(1, 218);
+            this.dangerousGoodsAuthorizationLabel.Location = new System.Drawing.Point(32, 238);
             this.dangerousGoodsAuthorizationLabel.Name = "dangerousGoodAuthorizationLabel";
             this.dangerousGoodsAuthorizationLabel.Size = new System.Drawing.Size(107, 13);
             this.dangerousGoodsAuthorizationLabel.TabIndex = 14;
