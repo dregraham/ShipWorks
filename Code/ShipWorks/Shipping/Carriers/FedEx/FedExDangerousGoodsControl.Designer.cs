@@ -56,7 +56,9 @@
             this.dangerousGoodsAccessibility = new ShipWorks.UI.Controls.MultiValueComboBox();
             this.hazardousMaterialGroupBox = new System.Windows.Forms.GroupBox();
             this.packingInstructions = new ShipWorks.UI.Controls.MultiValueTextBox();
+            this.dangerousGoodsAuthorization = new ShipWorks.UI.Controls.MultiValueTextBox();
             this.packingInstructionsLabel = new System.Windows.Forms.Label();
+            this.dangerousGoodsAuthorizationLabel = new System.Windows.Forms.Label();
             this.packingDetailsAircraftOnlyLabel = new System.Windows.Forms.Label();
             this.packingDetailsAircraftOnly = new System.Windows.Forms.CheckBox();
             this.hazardousMaterialTechnicalName = new ShipWorks.UI.Controls.MultiValueTextBox();
@@ -372,6 +374,8 @@
             // 
             this.hazardousMaterialGroupBox.Controls.Add(this.packingInstructions);
             this.hazardousMaterialGroupBox.Controls.Add(this.packingInstructionsLabel);
+            this.hazardousMaterialGroupBox.Controls.Add(this.dangerousGoodsAuthorization);
+            this.hazardousMaterialGroupBox.Controls.Add(this.dangerousGoodsAuthorizationLabel);
             this.hazardousMaterialGroupBox.Controls.Add(this.packingDetailsAircraftOnlyLabel);
             this.hazardousMaterialGroupBox.Controls.Add(this.packingDetailsAircraftOnly);
             this.hazardousMaterialGroupBox.Controls.Add(this.hazardousMaterialTechnicalName);
@@ -409,6 +413,23 @@
             this.packingInstructionsLabel.TabIndex = 14;
             this.packingInstructionsLabel.Text = "Packing Instructions:";
             this.packingInstructionsLabel.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            // 
+            // DangerousGoodsAuthorization
+            // 
+            this.dangerousGoodsAuthorization.Location = new System.Drawing.Point(109, 215);
+            this.dangerousGoodsAuthorization.Name = "dangerousGoodAuthorization";
+            this.dangerousGoodsAuthorization.Size = new System.Drawing.Size(171, 21);
+            this.dangerousGoodsAuthorization.TabIndex = 15;
+            // 
+            // packingInstructionsLabel
+            // 
+            this.dangerousGoodsAuthorizationLabel.AutoSize = true;
+            this.dangerousGoodsAuthorizationLabel.Location = new System.Drawing.Point(1, 218);
+            this.dangerousGoodsAuthorizationLabel.Name = "dangerousGoodAuthorizationLabel";
+            this.dangerousGoodsAuthorizationLabel.Size = new System.Drawing.Size(107, 13);
+            this.dangerousGoodsAuthorizationLabel.TabIndex = 14;
+            this.dangerousGoodsAuthorizationLabel.Text = "Authorization:";
+            this.dangerousGoodsAuthorizationLabel.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
             // packingDetailsAircraftOnlyLabel
             // 
@@ -679,6 +700,8 @@
         private System.Windows.Forms.CheckBox packingDetailsAircraftOnly;
         private UI.Controls.MultiValueTextBox packingInstructions;
         private System.Windows.Forms.Label packingInstructionsLabel;
+        private UI.Controls.MultiValueTextBox dangerousGoodsAuthorization;
+        private System.Windows.Forms.Label dangerousGoodsAuthorizationLabel;
         private System.Windows.Forms.GroupBox batteryDetailsGroup;
         private UI.Controls.MultiValueComboBox batteryMaterial;
         private System.Windows.Forms.Label batteryMaterialLabel;
