@@ -1755,7 +1755,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             this.sectionPackageDetails.Name = "sectionPackageDetails";
             this.sectionPackageDetails.SectionName = "Other Package Details";
             this.sectionPackageDetails.SettingsKey = "{ce947713-e7de-463b-b583-9106a542cd24}";
-            this.sectionPackageDetails.Size = new System.Drawing.Size(487, 24);
+            this.sectionPackageDetails.Size = new System.Drawing.Size(487, 40);
             this.sectionPackageDetails.TabIndex = 3;
             // 
             // otherPackageHolder
