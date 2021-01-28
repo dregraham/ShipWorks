@@ -273,7 +273,8 @@ namespace ShipWorks.Shipping.Tests.Carriers.FedEx
                 HazardousMaterialQuantityValue = 12,
                 HazardousMaterialQuanityUnits = 5,
                 PackingDetailsCargoAircraftOnly = true,
-                PackingDetailsPackingInstructions = "shoe box"
+                PackingDetailsPackingInstructions = "shoe box",
+                DangerousGoodsAuthorization = "foo"
             });
 
             mock.Create<FedExShippingProfileApplicationStrategy>().ApplyProfile(profile, shipment);
@@ -286,6 +287,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.FedEx
             Assert.Equal(5, shipment.FedEx.Packages[0].HazardousMaterialQuanityUnits);
             Assert.True(shipment.FedEx.Packages[0].PackingDetailsCargoAircraftOnly);
             Assert.Equal("shoe box", shipment.FedEx.Packages[0].PackingDetailsPackingInstructions);
+            Assert.Equal("foo", shipment.FedEx.Packages[0].DangerousGoodsAuthorization);
         }
 
         [Fact]
