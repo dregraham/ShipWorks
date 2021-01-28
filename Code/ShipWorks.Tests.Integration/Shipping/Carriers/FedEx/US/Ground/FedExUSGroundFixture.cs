@@ -326,6 +326,7 @@ namespace ShipWorks.Tests.Integration.Shipping.Carriers.FedEx.US.Ground
 
                         package.PackingDetailsCargoAircraftOnly = PackingDetailsCargoAircraftOnly == "1";
                         package.PackingDetailsPackingInstructions = PackingDetailsPackingInstructions;
+                        package.DangerousGoodsAuthorization = DangerousGoodsAuthorization;
                     }
                 }
             }
