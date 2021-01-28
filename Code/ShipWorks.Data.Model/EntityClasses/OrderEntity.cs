@@ -2065,6 +2065,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "Order"."DeliverByDate"<br/>
 		/// Table field type characteristics (type, precision, scale, length): DateTime, 0, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		[DataMember]
 		public virtual Nullable<System.DateTime> DeliverByDate
 		{
 			get { return (Nullable<System.DateTime>)GetValue((int)OrderFieldIndex.DeliverByDate, false); }
