@@ -156,7 +156,8 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Rate.Manipulators.Request
                                     PackingInstructions = package.PackingDetailsPackingInstructions
                                 },
                                 ProperShippingName = package.HazardousMaterialProperName,
-                                TechnicalName = package.HazardousMaterialTechnicalName
+                                TechnicalName = package.HazardousMaterialTechnicalName,
+                                Authorization = package.DangerousGoodsAuthorization
                             },
                             Quantity = new HazardousCommodityQuantityDetail
                             {
