@@ -12,7 +12,7 @@
     <DelaySign>true</DelaySign>
     <SnExe>C:\Program Files (x86)\Microsoft SDKs\Windows\v10.0A\bin\NETFX 4.6 Tools\sn.exe</SnExe>
     <SignToolExe>C:\Program Files (x86)\Windows Kits\10\bin\x64\signtool.exe</SignToolExe>
-    <SignCommand>"$(SignToolExe)" sign /v /sm /n Interapptive /d "ShipWorks" /du "http://www.shipworks.com" /t "http://timestamp.globalsign.com/scripts/timstamp.dll"</SignCommand>
+    <SignCommand>"$(SignToolExe)" sign /v /sm /n Interapptive /d "ShipWorks" /du "http://www.shipworks.com" /t "http://timestamp.digicert.com"</SignCommand>
   </PropertyGroup>
 
   <Target Name="SignInstaller" Condition=" $(ReleaseType) != 'None' ">
