@@ -1441,7 +1441,7 @@ namespace ShipWorks.Data.Model
 			this.AddElementFieldMapping("FedExPackageEntity", "BatteryRegulatorySubtype", "BatteryRegulatorySubtype", false, "Int", 0, 10, 0, false, "", null, typeof(System.Int32), 44);
 			this.AddElementFieldMapping("FedExPackageEntity", "FreightPackaging", "FreightPackaging", false, "Int", 0, 10, 0, false, "", null, typeof(System.Int32), 45);
 			this.AddElementFieldMapping("FedExPackageEntity", "FreightPieces", "FreightPieces", false, "Int", 0, 10, 0, false, "", null, typeof(System.Int32), 46);
-			this.AddElementFieldMapping("FedExPackageEntity", "DangerousGoodsAuthorization", "DangerousGoodsAuthorization", true, "NVarChar", 50, 0, 0, false, "", null, typeof(System.String), 47);
+			this.AddElementFieldMapping("FedExPackageEntity", "DangerousGoodsAuthorization", "DangerousGoodsAuthorization", false, "NVarChar", 50, 0, 0, false, "", null, typeof(System.String), 47);
 		}
 
 		/// <summary>Inits FedExProfileEntity's mappings</summary>

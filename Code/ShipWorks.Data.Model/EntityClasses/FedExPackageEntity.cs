@@ -1060,7 +1060,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <summary> The DangerousGoodsAuthorization property of the Entity FedExPackage<br/><br/></summary>
 		/// <remarks>Mapped on  table field: "FedExPackage"."DangerousGoodsAuthorization"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 50<br/>
-		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
 		[DataMember]
 		public virtual System.String DangerousGoodsAuthorization
 		{

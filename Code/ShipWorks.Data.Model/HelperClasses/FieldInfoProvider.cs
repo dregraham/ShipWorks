@@ -1377,7 +1377,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 			this.AddElementFieldInfo("FedExPackageEntity", "BatteryRegulatorySubtype", typeof(ShipWorks.Shipping.FedEx.FedExBatteryRegulatorySubType), false, false, false, false,  (int)FedExPackageFieldIndex.BatteryRegulatorySubtype, 0, 0, 10);
 			this.AddElementFieldInfo("FedExPackageEntity", "FreightPackaging", typeof(ShipWorks.Shipping.FedEx.FedExFreightPhysicalPackagingType), false, false, false, false,  (int)FedExPackageFieldIndex.FreightPackaging, 0, 0, 10);
 			this.AddElementFieldInfo("FedExPackageEntity", "FreightPieces", typeof(System.Int32), false, false, false, false,  (int)FedExPackageFieldIndex.FreightPieces, 0, 0, 10);
-			this.AddElementFieldInfo("FedExPackageEntity", "DangerousGoodsAuthorization", typeof(System.String), false, false, false, true,  (int)FedExPackageFieldIndex.DangerousGoodsAuthorization, 50, 0, 0);
+			this.AddElementFieldInfo("FedExPackageEntity", "DangerousGoodsAuthorization", typeof(System.String), false, false, false, false,  (int)FedExPackageFieldIndex.DangerousGoodsAuthorization, 50, 0, 0);
 		}
 		/// <summary>Inits FedExProfileEntity's FieldInfo objects</summary>
 		private void InitFedExProfileEntityInfos()

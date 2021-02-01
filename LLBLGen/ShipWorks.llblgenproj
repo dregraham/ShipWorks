@@ -1133,7 +1133,7 @@
           <Field Name="ContainerType" Type="string" MaxLength="100" FieldIndex="38" />
           <Field Name="ContainsAlcohol" Type="bool" FieldIndex="19" />
           <Field Name="DangerousGoodsAccessibilityType" Type="int" FieldIndex="22" />
-          <Field Name="DangerousGoodsAuthorization" Type="string" IsOptional="true" MaxLength="50" FieldIndex="47" />
+          <Field Name="DangerousGoodsAuthorization" Type="string" MaxLength="50" FieldIndex="47" />
           <Field Name="DangerousGoodsCargoAircraftOnly" Type="bool" FieldIndex="23" />
           <Field Name="DangerousGoodsEmergencyContactPhone" Type="string" MaxLength="16" FieldIndex="24" />
           <Field Name="DangerousGoodsEnabled" Type="bool" FieldIndex="20" />
@@ -4676,7 +4676,7 @@
       <Catalogs>
         <Catalog Name="ShipWorksLocal">
           <Schemas>
-            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2021-01-28T02:01:08.1986601Z">
+            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2021-02-01T16:31:56.4700456Z">
               <Tables>
                 <Table Name="Action">
                   <PkConstraintName Name="PK_Action" />
@@ -5952,7 +5952,7 @@
                     <Field Name="BatteryRegulatorySubtype" Ordinal="45" DbType="8" Precision="10" />
                     <Field Name="FreightPackaging" Ordinal="46" DbType="8" Precision="10" />
                     <Field Name="FreightPieces" Ordinal="47" DbType="8" Precision="10" />
-                    <Field Name="DangerousGoodsAuthorization" Ordinal="48" IsOptional="true" DbType="12" Length="50" />
+                    <Field Name="DangerousGoodsAuthorization" Ordinal="48" DbType="12" Length="50" />
                   </Fields>
                 </Table>
                 <Table Name="FedExProfile">
