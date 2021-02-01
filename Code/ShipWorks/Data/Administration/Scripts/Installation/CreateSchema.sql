@@ -91,7 +91,7 @@ CREATE TABLE [dbo].[FedExPackage]
 [BatteryRegulatorySubtype] [int] NOT NULL,
 [FreightPackaging] [int] NOT NULL,
 [FreightPieces] [int] NOT NULL,
-[DangerousGoodsAuthorization] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NULL
+[DangerousGoodsAuthorization] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL
 )
 GO
 PRINT N'Creating primary key [PK_FedExPackage] on [dbo].[FedExPackage]'
