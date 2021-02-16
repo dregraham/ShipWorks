@@ -198,7 +198,10 @@ ShipWorks.sln.vsext
 build-times*.txt
 .idea/
 ShipWorks.sln.vsext.disable
-tools
+tools/*
+# don't ignore packages.config. We used to download this but version 1.0 introduced breaking
+# changes
+!tools/packages.config 
 
 # SpecFlow feature generated C# files
 **/*.Specs/**/*.feature.cs
