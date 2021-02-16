@@ -587,6 +587,7 @@ namespace ShipWorks.Stores.Platforms.GenericModule
             order.IsPrime = AmazonIsPrime.No;
             order.AmazonOrderID = string.Empty;
             order.IsSameDay = false;
+            order.Marketplace = string.Empty;
             return order;
         }
 
