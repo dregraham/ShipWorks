@@ -426,6 +426,11 @@ namespace ShipWorks.Stores
         [Description("Rakuten")]
         [StoreTypeIdentity("RAKUTEN", "RAK")]
         [StoreTypeIcon("rakuten")]
-        Rakuten = 86
+        Rakuten = 86,
+
+        [Description("API")]
+        [StoreTypeIdentity("API", "API")]
+        [StoreTypeIcon("Api")]
+        Api = 87
     }
 }
