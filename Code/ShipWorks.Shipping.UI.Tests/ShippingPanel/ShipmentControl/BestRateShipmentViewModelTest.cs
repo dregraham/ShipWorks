@@ -437,7 +437,7 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel.ShipmentControl
             BestRateShipmentViewModel testObject = mock.Create<BestRateShipmentViewModel>();
             testObject.Load(shipmentAdapter.Object);
 
-            testObject.ShipDate = testObject.ShipDate.AddDays(1);
+            testObject.ShipDate = testObject.ShipDate.AddDays(1).ToUniversalTime();
             testObject.ServiceLevel = (int) ServiceLevelType.Anytime;
 
             testObject.SelectedDimensionsProfile = dimensionsManager.Object.ProfilesReadOnly(testObject.PackageAdapters.First()).FirstOrDefault();
