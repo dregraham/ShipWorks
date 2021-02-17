@@ -63,7 +63,7 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel.ShipmentControl
             BestRateShipmentViewModel testObject = mock.Create<BestRateShipmentViewModel>();
             testObject.Load(shipmentAdapter.Object);
 
-            Assert.Equal(shipmentAdapter.Object.ShipDate, testObject.ShipDate);
+            Assert.Equal(shipmentAdapter.Object.ShipDate, testObject.ShipDate.ToUniversalTime());
         }
 
         [Fact]
