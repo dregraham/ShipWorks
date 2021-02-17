@@ -305,12 +305,12 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ShipmentControl
             SaveDimensionsToSelectedPackageAdapter();
             SaveInsuranceToSelectedPackageAdapter();
 
-            shipmentAdapter.ShipDate = ShipDate;
+            shipmentAdapter.ShipDate = ShipDate.ToUniversalTime();
             shipmentAdapter.ServiceType = ServiceType;
             shipmentAdapter.ContentWeight = PackageAdapters.Sum(pa => pa.Weight);
 
             if (shipmentAdapter.Shipment.ResidentialDetermination == (int) ResidentialDeterminationType.FedExAddressLookup &&
-                            shipmentAdapter.Shipment.ShipmentTypeCode !=  ShipmentTypeCode.FedEx)
+                            shipmentAdapter.Shipment.ShipmentTypeCode != ShipmentTypeCode.FedEx)
             {
                 // Prevent FedEx specific Residential Determination Type from being saved for non-FedEx shipment
                 shipmentAdapter.Shipment.ResidentialDetermination = (int) ResidentialDeterminationType.FromAddressValidation;
