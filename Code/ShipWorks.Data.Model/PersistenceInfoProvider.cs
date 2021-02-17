@@ -46,7 +46,7 @@ namespace ShipWorks.Data.Model
 		/// <summary>Method which initializes the internal datastores with the structure of hierarchical types.</summary>
 		private void Init()
 		{
-			this.InitClass(243);
+			this.InitClass(244);
 			InitActionEntityMappings();
 			InitActionFilterTriggerEntityMappings();
 			InitActionQueueEntityMappings();
@@ -195,6 +195,7 @@ namespace ShipWorks.Data.Model
 			InitPayPalOrderSearchEntityMappings();
 			InitPayPalStoreEntityMappings();
 			InitPermissionEntityMappings();
+			InitPlatformStoreEntityMappings();
 			InitPostalProfileEntityMappings();
 			InitPostalShipmentEntityMappings();
 			InitPrintResultEntityMappings();
@@ -2757,6 +2758,14 @@ namespace ShipWorks.Data.Model
 			this.AddElementFieldMapping("PermissionEntity", "UserID", "UserID", false, "BigInt", 0, 19, 0, false, "", null, typeof(System.Int64), 1);
 			this.AddElementFieldMapping("PermissionEntity", "PermissionType", "PermissionType", false, "Int", 0, 10, 0, false, "", null, typeof(System.Int32), 2);
 			this.AddElementFieldMapping("PermissionEntity", "EntityID", "ObjectID", true, "BigInt", 0, 19, 0, false, "", null, typeof(System.Int64), 3);
+		}
+
+		/// <summary>Inits PlatformStoreEntity's mappings</summary>
+		private void InitPlatformStoreEntityMappings()
+		{
+			this.AddElementMapping("PlatformStoreEntity", @"ShipWorksLocal", @"dbo", "PlatformStore", 2, 0);
+			this.AddElementFieldMapping("PlatformStoreEntity", "StoreID", "StoreID", false, "BigInt", 0, 19, 0, false, "", null, typeof(System.Int64), 0);
+			this.AddElementFieldMapping("PlatformStoreEntity", "OrderSourceID", "OrderSourceID", false, "NVarChar", 50, 0, 0, false, "", null, typeof(System.String), 1);
 		}
 
 		/// <summary>Inits PostalProfileEntity's mappings</summary>

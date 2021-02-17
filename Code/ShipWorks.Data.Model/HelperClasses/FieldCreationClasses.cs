@@ -22984,6 +22984,191 @@ namespace ShipWorks.Data.Model.HelperClasses
 		}
 	}
 
+	/// <summary>Field Creation Class for entity PlatformStoreEntity</summary>
+	public partial class PlatformStoreFields
+	{
+		/// <summary>Creates a new PlatformStoreEntity.StoreID field instance</summary>
+		public static EntityField2 StoreID_Store
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(PlatformStoreFieldIndex.StoreID_Store);}
+		}
+		/// <summary>Creates a new PlatformStoreEntity.RowVersion field instance</summary>
+		public static EntityField2 RowVersion
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(PlatformStoreFieldIndex.RowVersion);}
+		}
+		/// <summary>Creates a new PlatformStoreEntity.License field instance</summary>
+		public static EntityField2 License
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(PlatformStoreFieldIndex.License);}
+		}
+		/// <summary>Creates a new PlatformStoreEntity.Edition field instance</summary>
+		public static EntityField2 Edition
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(PlatformStoreFieldIndex.Edition);}
+		}
+		/// <summary>Creates a new PlatformStoreEntity.TypeCode field instance</summary>
+		public static EntityField2 TypeCode
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(PlatformStoreFieldIndex.TypeCode);}
+		}
+		/// <summary>Creates a new PlatformStoreEntity.Enabled field instance</summary>
+		public static EntityField2 Enabled
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(PlatformStoreFieldIndex.Enabled);}
+		}
+		/// <summary>Creates a new PlatformStoreEntity.SetupComplete field instance</summary>
+		public static EntityField2 SetupComplete
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(PlatformStoreFieldIndex.SetupComplete);}
+		}
+		/// <summary>Creates a new PlatformStoreEntity.StoreName field instance</summary>
+		public static EntityField2 StoreName
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(PlatformStoreFieldIndex.StoreName);}
+		}
+		/// <summary>Creates a new PlatformStoreEntity.Company field instance</summary>
+		public static EntityField2 Company
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(PlatformStoreFieldIndex.Company);}
+		}
+		/// <summary>Creates a new PlatformStoreEntity.Street1 field instance</summary>
+		public static EntityField2 Street1
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(PlatformStoreFieldIndex.Street1);}
+		}
+		/// <summary>Creates a new PlatformStoreEntity.Street2 field instance</summary>
+		public static EntityField2 Street2
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(PlatformStoreFieldIndex.Street2);}
+		}
+		/// <summary>Creates a new PlatformStoreEntity.Street3 field instance</summary>
+		public static EntityField2 Street3
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(PlatformStoreFieldIndex.Street3);}
+		}
+		/// <summary>Creates a new PlatformStoreEntity.City field instance</summary>
+		public static EntityField2 City
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(PlatformStoreFieldIndex.City);}
+		}
+		/// <summary>Creates a new PlatformStoreEntity.StateProvCode field instance</summary>
+		public static EntityField2 StateProvCode
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(PlatformStoreFieldIndex.StateProvCode);}
+		}
+		/// <summary>Creates a new PlatformStoreEntity.PostalCode field instance</summary>
+		public static EntityField2 PostalCode
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(PlatformStoreFieldIndex.PostalCode);}
+		}
+		/// <summary>Creates a new PlatformStoreEntity.CountryCode field instance</summary>
+		public static EntityField2 CountryCode
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(PlatformStoreFieldIndex.CountryCode);}
+		}
+		/// <summary>Creates a new PlatformStoreEntity.Phone field instance</summary>
+		public static EntityField2 Phone
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(PlatformStoreFieldIndex.Phone);}
+		}
+		/// <summary>Creates a new PlatformStoreEntity.Fax field instance</summary>
+		public static EntityField2 Fax
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(PlatformStoreFieldIndex.Fax);}
+		}
+		/// <summary>Creates a new PlatformStoreEntity.Email field instance</summary>
+		public static EntityField2 Email
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(PlatformStoreFieldIndex.Email);}
+		}
+		/// <summary>Creates a new PlatformStoreEntity.Website field instance</summary>
+		public static EntityField2 Website
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(PlatformStoreFieldIndex.Website);}
+		}
+		/// <summary>Creates a new PlatformStoreEntity.AutoDownload field instance</summary>
+		public static EntityField2 AutoDownload
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(PlatformStoreFieldIndex.AutoDownload);}
+		}
+		/// <summary>Creates a new PlatformStoreEntity.AutoDownloadMinutes field instance</summary>
+		public static EntityField2 AutoDownloadMinutes
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(PlatformStoreFieldIndex.AutoDownloadMinutes);}
+		}
+		/// <summary>Creates a new PlatformStoreEntity.AutoDownloadOnlyAway field instance</summary>
+		public static EntityField2 AutoDownloadOnlyAway
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(PlatformStoreFieldIndex.AutoDownloadOnlyAway);}
+		}
+		/// <summary>Creates a new PlatformStoreEntity.DomesticAddressValidationSetting field instance</summary>
+		public static EntityField2 DomesticAddressValidationSetting
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(PlatformStoreFieldIndex.DomesticAddressValidationSetting);}
+		}
+		/// <summary>Creates a new PlatformStoreEntity.InternationalAddressValidationSetting field instance</summary>
+		public static EntityField2 InternationalAddressValidationSetting
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(PlatformStoreFieldIndex.InternationalAddressValidationSetting);}
+		}
+		/// <summary>Creates a new PlatformStoreEntity.ComputerDownloadPolicy field instance</summary>
+		public static EntityField2 ComputerDownloadPolicy
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(PlatformStoreFieldIndex.ComputerDownloadPolicy);}
+		}
+		/// <summary>Creates a new PlatformStoreEntity.DefaultEmailAccountID field instance</summary>
+		public static EntityField2 DefaultEmailAccountID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(PlatformStoreFieldIndex.DefaultEmailAccountID);}
+		}
+		/// <summary>Creates a new PlatformStoreEntity.ManualOrderPrefix field instance</summary>
+		public static EntityField2 ManualOrderPrefix
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(PlatformStoreFieldIndex.ManualOrderPrefix);}
+		}
+		/// <summary>Creates a new PlatformStoreEntity.ManualOrderPostfix field instance</summary>
+		public static EntityField2 ManualOrderPostfix
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(PlatformStoreFieldIndex.ManualOrderPostfix);}
+		}
+		/// <summary>Creates a new PlatformStoreEntity.InitialDownloadDays field instance</summary>
+		public static EntityField2 InitialDownloadDays
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(PlatformStoreFieldIndex.InitialDownloadDays);}
+		}
+		/// <summary>Creates a new PlatformStoreEntity.InitialDownloadOrder field instance</summary>
+		public static EntityField2 InitialDownloadOrder
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(PlatformStoreFieldIndex.InitialDownloadOrder);}
+		}
+		/// <summary>Creates a new PlatformStoreEntity.InsureShipClientID field instance</summary>
+		public static EntityField2 InsureShipClientID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(PlatformStoreFieldIndex.InsureShipClientID);}
+		}
+		/// <summary>Creates a new PlatformStoreEntity.InsureShipApiKey field instance</summary>
+		public static EntityField2 InsureShipApiKey
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(PlatformStoreFieldIndex.InsureShipApiKey);}
+		}
+		/// <summary>Creates a new PlatformStoreEntity.WarehouseStoreID field instance</summary>
+		public static EntityField2 WarehouseStoreID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(PlatformStoreFieldIndex.WarehouseStoreID);}
+		}
+		/// <summary>Creates a new PlatformStoreEntity.StoreID field instance</summary>
+		public static EntityField2 StoreID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(PlatformStoreFieldIndex.StoreID);}
+		}
+		/// <summary>Creates a new PlatformStoreEntity.OrderSourceID field instance</summary>
+		public static EntityField2 OrderSourceID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(PlatformStoreFieldIndex.OrderSourceID);}
+		}
+	}
+
 	/// <summary>Field Creation Class for entity PostalProfileEntity</summary>
 	public partial class PostalProfileFields
 	{

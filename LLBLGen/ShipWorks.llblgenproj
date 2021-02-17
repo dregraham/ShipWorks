@@ -269,7 +269,7 @@
         <Fields>
           <Field Name="AmazonASIN" Type="string" MaxLength="32" FieldIndex="2" />
           <Field Name="SKU" Type="string" MaxLength="100" IsPrimaryKey="true" FieldIndex="1" />
-          <Field Name="StoreID" Type="long" IsPrimaryKey="true" FieldIndex="0" />
+          <Field Name="StoreID" Type="long" Precision="19" IsPrimaryKey="true" FieldIndex="0" />
         </Fields>
       </EntityDefinition>
       <EntityDefinition Name="AmazonOrder" ObjectID="92a81b2f-5e44-4c10-94db-c84c4733eec5" InheritanceType="2">
@@ -808,7 +808,7 @@
           <Field Name="Result" Type="int" FieldIndex="11" />
           <Field Name="RowVersion" Type="byte[]" IsReadOnly="true" FieldIndex="1" />
           <Field Name="Started" Type="datetime" FieldIndex="6" />
-          <Field Name="StoreID" Type="long" IsAutoCreated="true" FieldIndex="2" />
+          <Field Name="StoreID" Type="long" Precision="19" IsAutoCreated="true" FieldIndex="2" />
           <Field Name="UserID" Type="long" IsAutoCreated="true" FieldIndex="4" />
         </Fields>
       </EntityDefinition>
@@ -830,7 +830,7 @@
           <Field Name="EbayCombinedOrderRelationID" Type="long" IsReadOnly="true" IsPrimaryKey="true" FieldIndex="0" />
           <Field Name="EbayOrderID" Type="long" FieldIndex="2" />
           <Field Name="OrderID" Type="long" IsAutoCreated="true" FieldIndex="1" />
-          <Field Name="StoreID" Type="long" IsAutoCreated="true" FieldIndex="3" />
+          <Field Name="StoreID" Type="long" Precision="19" IsAutoCreated="true" FieldIndex="3" />
         </Fields>
       </EntityDefinition>
       <EntityDefinition Name="EbayOrder" ObjectID="50bb3735-6ae1-46b1-9abb-5b4a3875414d" InheritanceType="2">
@@ -2098,7 +2098,7 @@
           <Field Name="ShipUnparsedName" Type="string" MaxLength="100" FieldIndex="70" />
           <Field Name="ShipUSTerritory" Type="int" FieldIndex="57" />
           <Field Name="ShipWebsite" Type="string" MaxLength="50" FieldIndex="51" />
-          <Field Name="StoreID" Type="long" IsAutoCreated="true" FieldIndex="2" />
+          <Field Name="StoreID" Type="long" Precision="19" IsAutoCreated="true" FieldIndex="2" />
           <Field Name="Verified" Type="bool" FieldIndex="84" />
           <Field Name="VerifiedBy" Type="long" IsOptional="true" Precision="19" FieldIndex="85" />
           <Field Name="VerifiedDate" Type="datetime" IsOptional="true" FieldIndex="86" />
@@ -2204,7 +2204,7 @@
           <Field Name="OrderNumberComplete" Type="string" MaxLength="50" FieldIndex="4" />
           <Field Name="OrderSearchID" Type="long" IsReadOnly="true" Precision="19" IsPrimaryKey="true" FieldIndex="0" />
           <Field Name="OriginalOrderID" Type="long" Precision="19" FieldIndex="6" />
-          <Field Name="StoreID" Type="long" FieldIndex="2" />
+          <Field Name="StoreID" Type="long" Precision="19" FieldIndex="2" />
         </Fields>
       </EntityDefinition>
       <EntityDefinition Name="OtherProfile" ObjectID="b611235c-2e48-49d7-be0a-f533ce64e34d">
@@ -2296,6 +2296,11 @@
           <Field Name="PermissionID" Type="long" IsReadOnly="true" IsPrimaryKey="true" FieldIndex="0" />
           <Field Name="PermissionType" Type="int" FieldIndex="2" />
           <Field Name="UserID" Type="long" IsAutoCreated="true" FieldIndex="1" />
+        </Fields>
+      </EntityDefinition>
+      <EntityDefinition Name="PlatformStore" ObjectID="2b09576a-9fa8-4615-b224-9449426e9af9" InheritanceType="2">
+        <Fields>
+          <Field Name="OrderSourceID" Type="string" MaxLength="50" FieldIndex="0" />
         </Fields>
       </EntityDefinition>
       <EntityDefinition Name="PostalProfile" ObjectID="9a3253aa-3a35-438a-9773-a14bb7c7a0c0">
@@ -2978,7 +2983,7 @@
           <Field Name="StatusPresetID" Type="long" IsReadOnly="true" IsPrimaryKey="true" FieldIndex="0" />
           <Field Name="StatusTarget" Type="int" FieldIndex="3" />
           <Field Name="StatusText" Type="string" MaxLength="300" FieldIndex="4" />
-          <Field Name="StoreID" Type="long" IsOptional="true" FieldIndex="2" />
+          <Field Name="StoreID" Type="long" IsOptional="true" Precision="19" FieldIndex="2" />
         </Fields>
       </EntityDefinition>
       <EntityDefinition Name="Store" ObjectID="b04d13e2-55da-409e-b8f3-7bd29f22cb15" InheritanceType="2">
@@ -3009,7 +3014,7 @@
           <Field Name="RowVersion" Type="byte[]" IsReadOnly="true" FieldIndex="1" />
           <Field Name="SetupComplete" Type="bool" FieldIndex="6" />
           <Field Name="StateProvCode" Type="string" MaxLength="50" FieldIndex="13" />
-          <Field Name="StoreID" Type="long" IsPrimaryKey="true" FieldIndex="0" />
+          <Field Name="StoreID" Type="long" Precision="19" IsPrimaryKey="true" FieldIndex="0" />
           <Field Name="StoreName" Type="string" MaxLength="75" FieldIndex="7" />
           <Field Name="Street1" Type="string" MaxLength="60" FieldIndex="9" />
           <Field Name="Street2" Type="string" MaxLength="60" FieldIndex="10" />
@@ -3732,7 +3737,7 @@
       </EntityDefinition>
       <EntityDefinition Name="YahooProduct" ObjectID="6fb35d53-1a92-4c54-97ea-f6787f239f3e">
         <Fields>
-          <Field Name="StoreID" Type="long" IsPrimaryKey="true" FieldIndex="0" />
+          <Field Name="StoreID" Type="long" Precision="19" IsPrimaryKey="true" FieldIndex="0" />
           <Field Name="Weight" Type="double" FieldIndex="2" />
           <Field Name="YahooProductID" Type="string" MaxLength="255" IsPrimaryKey="true" FieldIndex="1" />
         </Fields>
@@ -4590,6 +4595,7 @@
       <InheritanceHierarchy SuperType=":Store" SubType=":OverstockStore" />
       <InheritanceHierarchy SuperType=":Order" SubType=":PayPalOrder" />
       <InheritanceHierarchy SuperType=":Store" SubType=":PayPalStore" />
+      <InheritanceHierarchy SuperType=":Store" SubType=":PlatformStore" />
       <InheritanceHierarchy SuperType=":Order" SubType=":ProStoresOrder" />
       <InheritanceHierarchy SuperType=":Store" SubType=":ProStoresStore" />
       <InheritanceHierarchy SuperType=":Order" SubType=":RakutenOrder" />
@@ -4674,7 +4680,7 @@
       <Catalogs>
         <Catalog Name="ShipWorksLocal">
           <Schemas>
-            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2021-01-19T22:04:31.967395Z">
+            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2021-02-17T20:02:04.2621302Z">
               <Tables>
                 <Table Name="Action">
                   <PkConstraintName Name="PK_Action" />
@@ -7927,6 +7933,13 @@
                     <Field Name="ObjectID" Ordinal="4" IsOptional="true" DbType="0" Precision="19" />
                   </Fields>
                 </Table>
+                <Table Name="PlatformStore">
+                  <PkConstraintName Name="PK_PlatformStore" />
+                  <Fields>
+                    <Field Name="StoreID" Ordinal="1" IsPrimaryKey="true" DbType="0" Precision="19" />
+                    <Field Name="OrderSourceID" Ordinal="2" DbType="12" Length="50" />
+                  </Fields>
+                </Table>
                 <Table Name="PostalProfile">
                   <PkConstraintName Name="PK_PostalProfile" />
                   <Fields>
@@ -10670,6 +10683,11 @@
                 <FieldPair PkField="dbo:User:UserID" FkField="dbo:Permission:UserID" />
               </FieldPairs>
             </ForeignKeyConstraint>
+            <ForeignKeyConstraint Name="dbo:PlatformStore:FK_PlatformStore_Store">
+              <FieldPairs>
+                <FieldPair PkField="dbo:Store:StoreID" FkField="dbo:PlatformStore:StoreID" />
+              </FieldPairs>
+            </ForeignKeyConstraint>
             <ForeignKeyConstraint Name="dbo:PostalProfile:FK_PostalProfile_ShippingProfile" DeleteRuleAction="1">
               <FieldPairs>
                 <FieldPair PkField="dbo:ShippingProfile:ShippingProfileID" FkField="dbo:PostalProfile:ShippingProfileID" />
@@ -13280,6 +13298,12 @@
             <FieldMapping FieldName="PermissionID" TargetFieldName="PermissionID" SequenceToUse="SCOPE_IDENTITY()" />
             <FieldMapping FieldName="PermissionType" TargetFieldName="PermissionType" />
             <FieldMapping FieldName="UserID" TargetFieldName="UserID" />
+          </FieldMappings>
+        </EntityMapping>
+        <EntityMapping EntityName=":PlatformStore" TargetName="ShipWorksLocal:dbo:PlatformStore">
+          <FieldMappings>
+            <FieldMapping FieldName="OrderSourceID" TargetFieldName="OrderSourceID" />
+            <FieldMapping FieldName="StoreID" TargetFieldName="StoreID" />
           </FieldMappings>
         </EntityMapping>
         <EntityMapping EntityName=":PostalProfile" TargetName="ShipWorksLocal:dbo:PostalProfile">

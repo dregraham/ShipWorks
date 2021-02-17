@@ -25,16 +25,19 @@ namespace ShipWorks.Data.Model.EntityClasses
 {
 	// __LLBLGENPRO_USER_CODE_REGION_START AdditionalNamespaces
 	// __LLBLGENPRO_USER_CODE_REGION_END
-	/// <summary>Entity class which represents the entity 'GenericModuleOrder'.<br/><br/></summary>
+	
+	/// <summary>Entity class which represents the entity 'PlatformStore'.<br/><br/></summary>
 	[Serializable]
-	public partial class GenericModuleOrderEntity : OrderEntity
+	public partial class PlatformStoreEntity : StoreEntity
 		// __LLBLGENPRO_USER_CODE_REGION_START AdditionalInterfaces
-		// __LLBLGENPRO_USER_CODE_REGION_END	
+		// __LLBLGENPRO_USER_CODE_REGION_END
+			
 	{
 		#region Class Member Declarations
 
 		// __LLBLGENPRO_USER_CODE_REGION_START PrivateMembers
 		// __LLBLGENPRO_USER_CODE_REGION_END
+		
 		#endregion
 
 		#region Statics
@@ -44,92 +47,75 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <summary>All names of fields mapped onto a relation. Usable for in-memory filtering</summary>
 		public static new partial class MemberNames
 		{
-			/// <summary>Member name Customer</summary>
-			public static readonly string Customer = "Customer";
-			/// <summary>Member name Store</summary>
-			public static readonly string Store = "Store";
-			/// <summary>Member name Notes</summary>
-			public static readonly string Notes = "Notes";
-			/// <summary>Member name OrderCharges</summary>
-			public static readonly string OrderCharges = "OrderCharges";
-			/// <summary>Member name OrderItems</summary>
-			public static readonly string OrderItems = "OrderItems";
-			/// <summary>Member name OrderPaymentDetails</summary>
-			public static readonly string OrderPaymentDetails = "OrderPaymentDetails";
 			/// <summary>Member name OrderSearch</summary>
 			public static readonly string OrderSearch = "OrderSearch";
-			/// <summary>Member name Shipments</summary>
-			public static readonly string Shipments = "Shipments";
-			/// <summary>Member name ValidatedAddress</summary>
-			public static readonly string ValidatedAddress = "ValidatedAddress";
-			/// <summary>Member name ShipmentCollectionViaValidatedAddress</summary>
-			public static readonly string ShipmentCollectionViaValidatedAddress = "ShipmentCollectionViaValidatedAddress";
 		}
 		#endregion
 		
 		/// <summary> Static CTor for setting up custom property hashtables. Is executed before the first instance of this entity class or derived classes is constructed. </summary>
-		static GenericModuleOrderEntity()
+		static PlatformStoreEntity()
 		{
 			SetupCustomPropertyHashtables();
 		}
 		
 		/// <summary> CTor</summary>
-		public GenericModuleOrderEntity()
+		public PlatformStoreEntity()
 		{
 			InitClassEmpty();
-			SetName("GenericModuleOrderEntity");
+			SetName("PlatformStoreEntity");
 		}
 
 		/// <summary> CTor</summary>
 		/// <remarks>For framework usage.</remarks>
 		/// <param name="fields">Fields object to set as the fields for this entity.</param>
-		public GenericModuleOrderEntity(IEntityFields2 fields):base(fields)
+		public PlatformStoreEntity(IEntityFields2 fields):base(fields)
 		{
 			InitClassEmpty();
-			SetName("GenericModuleOrderEntity");
+			SetName("PlatformStoreEntity");
 		}
 
 		/// <summary> CTor</summary>
-		/// <param name="validator">The custom validator object for this GenericModuleOrderEntity</param>
-		public GenericModuleOrderEntity(IValidator validator):base(validator)
+		/// <param name="validator">The custom validator object for this PlatformStoreEntity</param>
+		public PlatformStoreEntity(IValidator validator):base(validator)
 		{
 			InitClassEmpty();
-			SetName("GenericModuleOrderEntity");
+			SetName("PlatformStoreEntity");
 		}
 				
 		/// <summary> CTor</summary>
-		/// <param name="orderID">PK value for GenericModuleOrder which data should be fetched into this GenericModuleOrder object</param>
+		/// <param name="storeID">PK value for PlatformStore which data should be fetched into this PlatformStore object</param>
 		/// <remarks>The entity is not fetched by this constructor. Use a DataAccessAdapter for that.</remarks>
-		public GenericModuleOrderEntity(System.Int64 orderID):base(orderID)
+		public PlatformStoreEntity(System.Int64 storeID):base(storeID)
 		{
 			InitClassEmpty();
 
-			SetName("GenericModuleOrderEntity");
+			SetName("PlatformStoreEntity");
 		}
 
 		/// <summary> CTor</summary>
-		/// <param name="orderID">PK value for GenericModuleOrder which data should be fetched into this GenericModuleOrder object</param>
-		/// <param name="validator">The custom validator object for this GenericModuleOrderEntity</param>
+		/// <param name="storeID">PK value for PlatformStore which data should be fetched into this PlatformStore object</param>
+		/// <param name="validator">The custom validator object for this PlatformStoreEntity</param>
 		/// <remarks>The entity is not fetched by this constructor. Use a DataAccessAdapter for that.</remarks>
-		public GenericModuleOrderEntity(System.Int64 orderID, IValidator validator):base(orderID, validator)
+		public PlatformStoreEntity(System.Int64 storeID, IValidator validator):base(storeID, validator)
 		{
 			InitClassEmpty();
 
-			SetName("GenericModuleOrderEntity");
+			SetName("PlatformStoreEntity");
 		}
 
 		/// <summary> Protected CTor for deserialization</summary>
 		/// <param name="info"></param>
 		/// <param name="context"></param>
 		[EditorBrowsable(EditorBrowsableState.Never)]
-		protected GenericModuleOrderEntity(SerializationInfo info, StreamingContext context) : base(info, context)
+		protected PlatformStoreEntity(SerializationInfo info, StreamingContext context) : base(info, context)
 		{
 			if(SerializationHelper.Optimization != SerializationOptimization.Fast) 
 			{
-
+				this.FixupDeserialization(FieldInfoProviderSingleton.GetInstance());
 			}
 			// __LLBLGENPRO_USER_CODE_REGION_START DeserializationConstructor
 			// __LLBLGENPRO_USER_CODE_REGION_END
+			
 		}
 
 
@@ -164,7 +150,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 			switch(fieldName)
 			{
 				default:
-					toReturn = OrderEntity.GetRelationsForField(fieldName);
+					toReturn = StoreEntity.GetRelationsForField(fieldName);
 					break;				
 			}
 			return toReturn;
@@ -245,7 +231,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Only useful in entity fetches.</remarks>
 		public new static IPredicateExpression GetEntityTypeFilter()
 		{
-			return InheritanceInfoProviderSingleton.GetInstance().GetEntityTypeFilter("GenericModuleOrderEntity", false);
+			return InheritanceInfoProviderSingleton.GetInstance().GetEntityTypeFilter("PlatformStoreEntity", false);
 		}
 		
 		/// <summary>Gets a predicateexpression which filters on this entity</summary>
@@ -254,7 +240,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Only useful in entity fetches.</remarks>
 		public new static IPredicateExpression GetEntityTypeFilter(bool negate)
 		{
-			return InheritanceInfoProviderSingleton.GetInstance().GetEntityTypeFilter("GenericModuleOrderEntity", negate);
+			return InheritanceInfoProviderSingleton.GetInstance().GetEntityTypeFilter("PlatformStoreEntity", negate);
 		}
 
 		/// <summary>ISerializable member. Does custom serialization so event handlers do not get serialized. Serializes members of this entity class and uses the base class' implementation to serialize the rest.</summary>
@@ -268,6 +254,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 			}
 			// __LLBLGENPRO_USER_CODE_REGION_START GetObjectInfo
 			// __LLBLGENPRO_USER_CODE_REGION_END
+			
 			base.GetObjectData(info, context);
 		}
 
@@ -277,21 +264,21 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <returns>true if the passed in type is a supertype of this entity, otherwise false</returns>
 		protected override bool CheckIfIsSubTypeOf(int typeOfEntity)
 		{
-			return InheritanceInfoProviderSingleton.GetInstance().CheckIfIsSubTypeOf("GenericModuleOrderEntity", ((ShipWorks.Data.Model.EntityType)typeOfEntity).ToString());
+			return InheritanceInfoProviderSingleton.GetInstance().CheckIfIsSubTypeOf("PlatformStoreEntity", ((ShipWorks.Data.Model.EntityType)typeOfEntity).ToString());
 		}
 				
 		/// <summary>Gets a list of all the EntityRelation objects the type of this instance has.</summary>
 		/// <returns>A list of all the EntityRelation objects the type of this instance has. Hierarchy relations are excluded.</returns>
 		protected override List<IEntityRelation> GetAllRelations()
 		{
-			return new GenericModuleOrderRelations().GetAllRelations();
+			return new PlatformStoreRelations().GetAllRelations();
 		}
 		
 
 		/// <summary>Creates a new instance of the factory related to this entity</summary>
 		protected override IEntityFactory2 CreateEntityFactory()
 		{
-			return EntityFactoryCache2.GetEntityFactory(typeof(GenericModuleOrderEntityFactory));
+			return EntityFactoryCache2.GetEntityFactory(typeof(PlatformStoreEntityFactory));
 		}
 #if !CF
 		/// <summary>Adds the member collections to the collections queue (base first)</summary>
@@ -339,6 +326,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 			
 			// __LLBLGENPRO_USER_CODE_REGION_START InitClassMembers
 			// __LLBLGENPRO_USER_CODE_REGION_END
+			
 		}
 
 
@@ -350,35 +338,28 @@ namespace ShipWorks.Data.Model.EntityClasses
 			_fieldsCustomProperties = new Dictionary<string, Dictionary<string, string>>();
 			Dictionary<string, string> fieldHashtable;
 			fieldHashtable = new Dictionary<string, string>();
-			_fieldsCustomProperties.Add("AmazonOrderID", fieldHashtable);
-			fieldHashtable = new Dictionary<string, string>();
-			_fieldsCustomProperties.Add("IsFBA", fieldHashtable);
-			fieldHashtable = new Dictionary<string, string>();
-			_fieldsCustomProperties.Add("IsPrime", fieldHashtable);
-			fieldHashtable = new Dictionary<string, string>();
-			_fieldsCustomProperties.Add("IsSameDay", fieldHashtable);
-			fieldHashtable = new Dictionary<string, string>();
-			_fieldsCustomProperties.Add("Marketplace", fieldHashtable);
+			_fieldsCustomProperties.Add("OrderSourceID", fieldHashtable);
 		}
 		#endregion
 
 		/// <summary> Initializes the class with empty data, as if it is a new Entity.</summary>
-		/// <param name="validator">The validator object for this GenericModuleOrderEntity</param>
+		/// <param name="validator">The validator object for this PlatformStoreEntity</param>
 		private void InitClassEmpty()
 		{
 			InitClassMembers();
 
 			// __LLBLGENPRO_USER_CODE_REGION_START InitClassEmpty
 			// __LLBLGENPRO_USER_CODE_REGION_END
+			
 
 
 		}
 
 		#region Class Property Declarations
 		/// <summary> The relations object holding all relations of this entity with other entity classes.</summary>
-		public new static GenericModuleOrderRelations Relations
+		public new static PlatformStoreRelations Relations
 		{
-			get	{ return new GenericModuleOrderRelations(); }
+			get	{ return new PlatformStoreRelations(); }
 		}
 		
 		/// <summary> The custom properties for this entity type.</summary>
@@ -412,59 +393,15 @@ namespace ShipWorks.Data.Model.EntityClasses
 			get { return FieldsCustomProperties;}
 		}
 
-		/// <summary> The AmazonOrderID property of the Entity GenericModuleOrder<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "GenericModuleOrder"."AmazonOrderID"<br/>
-		/// Table field type characteristics (type, precision, scale, length): VarChar, 0, 0, 32<br/>
-		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
-		[DataMember]
-		public virtual System.String AmazonOrderID
-		{
-			get { return (System.String)GetValue((int)GenericModuleOrderFieldIndex.AmazonOrderID, true); }
-			set	{ SetValue((int)GenericModuleOrderFieldIndex.AmazonOrderID, value); }
-		}
-
-		/// <summary> The IsFBA property of the Entity GenericModuleOrder<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "GenericModuleOrder"."IsFBA"<br/>
-		/// Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
-		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
-		[DataMember]
-		public virtual System.Boolean IsFBA
-		{
-			get { return (System.Boolean)GetValue((int)GenericModuleOrderFieldIndex.IsFBA, true); }
-			set	{ SetValue((int)GenericModuleOrderFieldIndex.IsFBA, value); }
-		}
-
-		/// <summary> The IsPrime property of the Entity GenericModuleOrder<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "GenericModuleOrder"."IsPrime"<br/>
-		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
-		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
-		[DataMember]
-		public virtual Interapptive.Shared.Enums.AmazonIsPrime IsPrime
-		{
-			get { return (Interapptive.Shared.Enums.AmazonIsPrime)GetValue((int)GenericModuleOrderFieldIndex.IsPrime, true); }
-			set	{ SetValue((int)GenericModuleOrderFieldIndex.IsPrime, value); }
-		}
-
-		/// <summary> The IsSameDay property of the Entity GenericModuleOrder<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "GenericModuleOrder"."IsSameDay"<br/>
-		/// Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
-		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
-		[DataMember]
-		public virtual System.Boolean IsSameDay
-		{
-			get { return (System.Boolean)GetValue((int)GenericModuleOrderFieldIndex.IsSameDay, true); }
-			set	{ SetValue((int)GenericModuleOrderFieldIndex.IsSameDay, value); }
-		}
-
-		/// <summary> The Marketplace property of the Entity GenericModuleOrder<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "GenericModuleOrder"."Marketplace"<br/>
+		/// <summary> The OrderSourceID property of the Entity PlatformStore<br/><br/></summary>
+		/// <remarks>Mapped on  table field: "PlatformStore"."OrderSourceID"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 50<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
 		[DataMember]
-		public virtual System.String Marketplace
+		public virtual System.String OrderSourceID
 		{
-			get { return (System.String)GetValue((int)GenericModuleOrderFieldIndex.Marketplace, true); }
-			set	{ SetValue((int)GenericModuleOrderFieldIndex.Marketplace, value); }
+			get { return (System.String)GetValue((int)PlatformStoreFieldIndex.OrderSourceID, true); }
+			set	{ SetValue((int)PlatformStoreFieldIndex.OrderSourceID, value); }
 		}
 	
 		/// <summary> Gets the type of the hierarchy this entity is in. </summary>
@@ -483,7 +420,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		[Browsable(false), XmlIgnore]
 		protected override int LLBLGenProEntityTypeValue 
 		{ 
-			get { return (int)ShipWorks.Data.Model.EntityType.GenericModuleOrderEntity; }
+			get { return (int)ShipWorks.Data.Model.EntityType.PlatformStoreEntity; }
 		}
 
 		#endregion
@@ -493,6 +430,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		
 		// __LLBLGENPRO_USER_CODE_REGION_START CustomEntityCode
 		// __LLBLGENPRO_USER_CODE_REGION_END
+		
 		#endregion
 
 		#region Included code
