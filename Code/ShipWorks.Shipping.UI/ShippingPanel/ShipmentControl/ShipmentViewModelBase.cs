@@ -198,7 +198,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ShipmentControl
             shipmentAdapter = newShipmentAdapter;
 
             ShipmentType = newShipmentAdapter.ShipmentTypeCode;
-            ShipDate = shipmentAdapter.ShipDate;
+            ShipDate = shipmentAdapter.ShipDate.ToLocalTime();
             ContentWeight = shipmentAdapter.ContentWeight;
             SupportsPackageTypes = shipmentAdapter.SupportsPackageTypes;
             SupportsMultiplePackages = shipmentAdapter.SupportsMultiplePackages;
