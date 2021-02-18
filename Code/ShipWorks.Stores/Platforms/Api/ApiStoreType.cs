@@ -24,16 +24,35 @@ namespace ShipWorks.Stores.Platforms.Api
         /// <summary>
         /// Gets the license identifier for this store
         /// </summary>
-        protected override string InternalLicenseIdentifier => throw new NotImplementedException();
-
-        public override OrderIdentifier CreateOrderIdentifier(IOrderEntity order)
+        protected override string InternalLicenseIdentifier
         {
-            throw new NotImplementedException();
+            get
+            {
+                PlatformStoreEntity store = (PlatformStoreEntity) Store;
+                return store.OrderSourceID;
+            }
         }
 
+        /// <summary>
+        /// Creates the OrderIdentifier for locating Api orders
+        /// </summary>
+        public override OrderIdentifier CreateOrderIdentifier(IOrderEntity order)
+        {
+            return new OrderNumberIdentifier(order.OrderNumber);
+        }
+
+        /// <summary>
+        /// Create the store entity
+        /// </summary>
         public override StoreEntity CreateStoreInstance()
         {
-            throw new NotImplementedException();
+            PlatformStoreEntity store = new PlatformStoreEntity();
+
+            InitializeStoreDefaults(store);
+
+            store.OrderSourceID = "";
+
+            return store;
         }
     }
 }
