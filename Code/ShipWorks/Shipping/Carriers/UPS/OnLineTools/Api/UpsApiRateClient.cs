@@ -276,11 +276,6 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api
 
             UpsApiCore.WriteCarbonNeutralXml(xmlWriter, ups);
 
-            if (shipment.ShipDate.DayOfWeek == DayOfWeek.Saturday)
-            {
-                xmlWriter.WriteElementString("SaturdayPickup", "");
-            }
-
             // Close element
             xmlWriter.WriteEndElement();
 
