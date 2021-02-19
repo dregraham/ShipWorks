@@ -430,7 +430,7 @@ namespace ShipWorks.Stores
 
         [Description("API")]
         [StoreTypeIdentity("API", "API")]
-        [StoreTypeIcon("Api")]
+        [StoreTypeIcon("api")]
         Api = 87
     }
 }

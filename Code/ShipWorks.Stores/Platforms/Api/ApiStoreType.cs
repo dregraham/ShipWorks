@@ -14,8 +14,28 @@ namespace ShipWorks.Stores.Platforms.Api
     /// Volusion integration type
     /// </summary>
     [KeyedComponent(typeof(StoreType), StoreTypeCode.Api)]
+    [Component(RegistrationType.Self)]
     public class ApiStoreType : StoreType
     {
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        public ApiStoreType() : base()
+        {
+        }
+
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        public ApiStoreType(StoreEntity store)
+            : base(store)
+        {
+            if (store != null && !(store is PlatformStoreEntity))
+            {
+                throw new ArgumentException("ApiStoretype - StoreEntity is not instance of PlatformStoreEntity.");
+            }
+        }
+
         /// <summary>
         /// Api StoreTypeCode
         /// </summary>

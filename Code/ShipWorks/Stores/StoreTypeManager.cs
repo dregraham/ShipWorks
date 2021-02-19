@@ -66,7 +66,7 @@ namespace ShipWorks.Stores
         {
             if (lifetimeScope.IsRegisteredWithKey<StoreType>(typeCode))
             {
-                return lifetimeScope.ResolveKeyed<StoreType>(typeCode, TypedParameter.From(store));
+                return lifetimeScope.ResolveKeyed<StoreType>(typeCode, new TypedParameter(typeof(StoreEntity), store));
             }
 
             throw new InvalidOperationException("Invalid store type. " + typeCode);
