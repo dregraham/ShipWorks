@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Net;
+using ShipWorks.ApplicationCore.Licensing.WebClientEnvironments;
 using ShipWorks.Stores.Management;
 
 namespace ShipWorks.Stores.UI.Platforms.Api
@@ -19,12 +20,15 @@ namespace ShipWorks.Stores.UI.Platforms.Api
     [KeyedComponent(typeof(AccountSettingsControlBase), StoreTypeCode.Api, ExternallyOwned = true)]
     public partial class ApiAccountSettingsControl : AccountSettingsControlBase
     {
+        private readonly WebClientEnvironmentFactory webClientEnvironmentFactory;
+
         /// <summary>
         /// Constructor
         /// </summary>
-        public ApiAccountSettingsControl()
+        public ApiAccountSettingsControl(WebClientEnvironmentFactory webClientEnvironmentFactory)
         {
             InitializeComponent();
+            this.webClientEnvironmentFactory = webClientEnvironmentFactory;
         }
 
         /// <summary>
@@ -32,7 +36,10 @@ namespace ShipWorks.Stores.UI.Platforms.Api
         /// </summary>
         private void OnSettingsLabelClick(object sender, EventArgs e)
         {
-            WebHelper.OpenUrl("https://hub.shipworks.com/products", this);
+            string url = webClientEnvironmentFactory.SelectedEnvironment.WarehouseUrl;
+            var builder = new UriBuilder(url);
+            builder.Path = "/apiSettings";
+            WebHelper.OpenUrl(builder.Uri, this);
         }
 
         /// <summary>

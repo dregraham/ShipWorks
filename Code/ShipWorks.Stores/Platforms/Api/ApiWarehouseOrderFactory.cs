@@ -37,11 +37,9 @@ namespace ShipWorks.Stores.Platforms.Api
         /// </summary>
         protected override async Task<GenericResult<OrderEntity>> CreateStoreOrderEntity(IStoreEntity store, StoreType storeType, WarehouseOrder warehouseOrder)
         {
-            long orderNumber = long.Parse(warehouseOrder.OrderNumber);
-
             // get the order instance
             GenericResult<OrderEntity> result = await orderElementFactory
-                .CreateOrder(new OrderNumberIdentifier(orderNumber)).ConfigureAwait(false);
+                .CreateOrder(new AlphaNumericOrderIdentifier(warehouseOrder.OrderNumber)).ConfigureAwait(false);
 
             return result.OnFailure(x => log.InfoFormat("Skipping order '{0}': {1}.", warehouseOrder.OrderNumber, x.Message));
         }

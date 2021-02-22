@@ -63,7 +63,7 @@ namespace ShipWorks.Stores.Platforms.Api
         /// </summary>
         public override OrderIdentifier CreateOrderIdentifier(IOrderEntity order)
         {
-            return new OrderNumberIdentifier(order.OrderNumber);
+            return new AlphaNumericOrderIdentifier(order.OrderNumberComplete);
         }
 
         /// <summary>
