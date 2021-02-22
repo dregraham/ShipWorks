@@ -168,6 +168,11 @@ namespace ShipWorks.Stores
         public virtual bool IsOnDemandDownloadEnabled => false;
 
         /// <summary>
+        /// Can this store be added via the SW client
+        /// </summary>
+        public virtual bool CanAddStoreType => true;
+
+        /// <summary>
         /// Creates a store-specific instance of a StoreEntity
         /// </summary>
         public abstract StoreEntity CreateStoreInstance();

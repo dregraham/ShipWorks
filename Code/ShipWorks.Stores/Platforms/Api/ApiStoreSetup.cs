@@ -12,18 +12,34 @@ using ShipWorks.Warehouse.Configuration.Stores.DTO;
 
 namespace ShipWorks.Stores.Platforms.Api
 {
+    /// <summary>
+    /// Given a config, create an API Store
+    /// </summary>
     [KeyedComponent(typeof(IStoreSetup), StoreTypeCode.Api)]
-    public class ApiStoreSetup : IStoreSetup
+    public class ApiStoreSetup : BaseStoreSetup
     {
         private readonly ApiStoreType apiStoreType;
 
+        /// <summary>
+        /// Constructor
+        /// </summary>
         public ApiStoreSetup(ApiStoreType apiStoreType)
         {
             this.apiStoreType = apiStoreType;
         }
 
-        public StoreEntity Setup(StoreConfiguration config, Type storeType, StoreEntity existingStore)
+        /// <summary>
+        /// Setup the API Store
+        /// </summary>
+        public override StoreEntity Setup(StoreConfiguration config, Type storeType, StoreEntity existingStore)
         {
+            // When a user first adds a store, there will be no payload. When SW syncs, there will be a payload
+            // and we want to sync like any other store.
+            if(!string.IsNullOrWhiteSpace(config.SyncPayload))
+            {
+                return base.Setup(config, storeType, existingStore);
+            }
+
             var store = (PlatformStoreEntity) apiStoreType.CreateStoreInstance();
 
             if (existingStore != null)

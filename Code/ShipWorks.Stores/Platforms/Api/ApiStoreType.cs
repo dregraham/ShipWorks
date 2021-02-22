@@ -11,7 +11,7 @@ using ShipWorks.Stores.Content;
 namespace ShipWorks.Stores.Platforms.Api
 {
     /// <summary>
-    /// Volusion integration type
+    /// API Store type
     /// </summary>
     [KeyedComponent(typeof(StoreType), StoreTypeCode.Api)]
     [Component(RegistrationType.Self)]
@@ -40,6 +40,11 @@ namespace ShipWorks.Stores.Platforms.Api
         /// Api StoreTypeCode
         /// </summary>
         public override StoreTypeCode TypeCode => StoreTypeCode.Api;
+
+        /// <summary>
+        /// API store type must be added via the HUB
+        /// </summary>
+        public override bool CanAddStoreType => false;
 
         /// <summary>
         /// Gets the license identifier for this store
