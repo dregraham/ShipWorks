@@ -9102,6 +9102,11 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(FedExPackageFieldIndex.FreightPieces);}
 		}
+		/// <summary>Creates a new FedExPackageEntity.DangerousGoodsAuthorization field instance</summary>
+		public static EntityField2 DangerousGoodsAuthorization
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(FedExPackageFieldIndex.DangerousGoodsAuthorization);}
+		}
 	}
 
 	/// <summary>Field Creation Class for entity FedExProfileEntity</summary>
@@ -9496,6 +9501,11 @@ namespace ShipWorks.Data.Model.HelperClasses
 		public static EntityField2 BatteryRegulatorySubtype
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(FedExProfilePackageFieldIndex.BatteryRegulatorySubtype);}
+		}
+		/// <summary>Creates a new FedExProfilePackageEntity.DangerousGoodsAuthorization field instance</summary>
+		public static EntityField2 DangerousGoodsAuthorization
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(FedExProfilePackageFieldIndex.DangerousGoodsAuthorization);}
 		}
 	}
 

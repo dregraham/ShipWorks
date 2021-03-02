@@ -189,6 +189,12 @@ namespace ShipWorks.Data.Model.EntityInterfaces
         /// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
         Nullable<ShipWorks.Shipping.FedEx.FedExBatteryRegulatorySubType> BatteryRegulatorySubtype { get; }
+        /// <summary> The DangerousGoodsAuthorization property of the Entity FedExProfilePackage<br/><br/>
+        /// </summary>
+        /// <remarks>Mapped on table field: "FedExProfilePackage"."DangerousGoodsAuthorization"<br/>
+        /// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 50<br/>
+        /// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+        System.String DangerousGoodsAuthorization { get; }
         
         
         

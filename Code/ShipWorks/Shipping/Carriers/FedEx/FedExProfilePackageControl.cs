@@ -89,6 +89,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             AddValueMapping(fedexPackageProfile, FedExProfilePackageFields.HazardousMaterialPackingGroup, packingGroupState, packingGroup);
             AddValueMapping(fedexPackageProfile, FedExProfilePackageFields.PackingDetailsCargoAircraftOnly, packingCargoAircraftOnlyState, packingCargoAircraftOnly);
             AddValueMapping(fedexPackageProfile, FedExProfilePackageFields.PackingDetailsPackingInstructions, packingInstructionsState, packingInstructions);
+            AddValueMapping(fedexPackageProfile, FedExProfilePackageFields.DangerousGoodsAuthorization, dangerousGoodsAuthorizationState, dangerousGoodsAuthorization);
             AddValueMapping(fedexPackageProfile, FedExProfilePackageFields.DangerousGoodsPackagingCount, packagingCountState, packagingCount);
             AddValueMapping(fedexPackageProfile, FedExProfilePackageFields.HazardousMaterialQuantityValue, quantityState, quantity);
             AddValueMapping(fedexPackageProfile, FedExProfilePackageFields.BatteryMaterial, batteryMaterialState, batteryMaterial);

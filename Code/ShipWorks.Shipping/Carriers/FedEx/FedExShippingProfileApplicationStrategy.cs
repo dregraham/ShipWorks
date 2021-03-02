@@ -274,6 +274,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             ApplyProfileValue(fedexPackageProfile.HazardousMaterialQuanityUnits, package, FedExPackageFields.HazardousMaterialQuanityUnits);
             ApplyProfileValue(fedexPackageProfile.PackingDetailsCargoAircraftOnly, package, FedExPackageFields.PackingDetailsCargoAircraftOnly);
             ApplyProfileValue(fedexPackageProfile.PackingDetailsPackingInstructions, package, FedExPackageFields.PackingDetailsPackingInstructions);
+            ApplyProfileValue(fedexPackageProfile.DangerousGoodsAuthorization, package, FedExPackageFields.DangerousGoodsAuthorization);
         }
 
         /// <summary>
