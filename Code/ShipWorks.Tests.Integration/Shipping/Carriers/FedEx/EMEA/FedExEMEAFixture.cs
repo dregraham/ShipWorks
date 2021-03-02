@@ -73,9 +73,7 @@ namespace ShipWorks.Tests.Integration.Shipping.Carriers.FedEx.EMEA
         public string DangerousGoodsContainerType { get; set; }
         public string PackageCargoAircraftOnly { get; set; }
         public string PackagePackingInstructions { get; set; }
-        public string DangerousGoodsAuthorization { get; set; }
-
-
+        
         private static List<ColumnPropertyMapDefinition> columnPropertyMap = new List<ColumnPropertyMapDefinition>();
 
         public static List<ColumnPropertyMapDefinition> Mapping
