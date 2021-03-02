@@ -81,7 +81,7 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel.ShipmentControl
             ShipmentViewModel testObject = mock.Create<ShipmentViewModel>();
             testObject.Load(shipmentAdapter.Object);
 
-            Assert.Equal(shipmentAdapter.Object.ShipDate, testObject.ShipDate);
+            Assert.Equal(shipmentAdapter.Object.ShipDate, testObject.ShipDate.ToUniversalTime());
         }
 
         [Fact]
@@ -600,7 +600,7 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel.ShipmentControl
             ShipmentViewModel testObject = mock.Create<ShipmentViewModel>();
             testObject.Load(shipmentAdapter.Object);
 
-            testObject.ShipDate = testObject.ShipDate.AddDays(1);
+            testObject.ShipDate = testObject.ShipDate.AddDays(1).ToUniversalTime();
             testObject.ServiceType = testObject.ServiceType++;
 
             testObject.SelectedDimensionsProfile = dimensionsManager.Object.ProfilesReadOnly(testObject.PackageAdapters.First()).FirstOrDefault();

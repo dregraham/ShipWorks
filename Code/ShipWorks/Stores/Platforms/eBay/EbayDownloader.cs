@@ -1228,7 +1228,7 @@ namespace ShipWorks.Stores.Platforms.Ebay
                 string message = string.Format("eBay did not provide a reference ID for an order designated for the Global Shipping Program. The order was placed on {0} from buyer {1}.",
                                     StringUtility.FormatFriendlyDateTime(order.OrderDate), order.BillUnparsedName);
 
-                throw new EbayMissingGspReferenceException(message);
+                log.Error(message);
             }
         }
 

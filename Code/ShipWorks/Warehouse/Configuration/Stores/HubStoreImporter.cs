@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Threading;
@@ -51,8 +52,16 @@ namespace ShipWorks.Warehouse.Configuration.Stores
                     storeProgress.Starting();
                     storeProgress.PercentComplete = 0;
 
-                    hubConfig = await webClient.GetConfig(warehouseID).ConfigureAwait(false);
-                    storeConfigurator.Configure(hubConfig.StoreConfigurations, storeProgress);
+                    try
+                    {
+                        hubConfig = await webClient.GetConfig(warehouseID).ConfigureAwait(false);
+                        storeConfigurator.Configure(hubConfig.StoreConfigurations, storeProgress);
+                    }
+                    catch (Exception ex)
+                    {
+                        storeProgress.Detail = "Done";
+                        storeProgress.Failed(ex);
+                    }
                 });
 
                 progressDialog.ShowDialog(owner);
