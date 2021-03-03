@@ -27,7 +27,11 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
         /// <summary>
         /// Get the profile
         /// </summary>
-        ChannelAdvisorProfilesResponse GetProfiles(string refreshToken);
+        /// <remarks>
+        /// Expanding sites throws errors for some customers. If setting expandSites to true, make sure to 
+        /// catch any error that comes of it.
+        /// </remarks>
+        ChannelAdvisorProfilesResponse GetProfiles(string refreshToken, bool expandSites);
 
         /// <summary>
         /// Gets the distribution centers.

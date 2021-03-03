@@ -139,12 +139,19 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
         /// <summary>
         /// Get profile info for the given token
         /// </summary>
-        public ChannelAdvisorProfilesResponse GetProfiles(string refreshToken)
+        /// <remarks>
+        /// Expanding sites throws errors for some customers. If setting expandSites to true, make sure to 
+        /// catch any error that comes of it.
+        /// </remarks>
+        public ChannelAdvisorProfilesResponse GetProfiles(string refreshToken, bool expandSites)
         {
             IHttpVariableRequestSubmitter submitter = CreateRequest(profilesEndpoint, HttpVerb.Get);
 
             submitter.Variables.Add("access_token", GetAccessToken(refreshToken));
-            submitter.Variables.Add("$expand", "SiteAccounts");
+            if (expandSites)
+            {
+                submitter.Variables.Add("$expand", "SiteAccounts");
+            }
 
             return ProcessRequest<ChannelAdvisorProfilesResponse>(submitter, "GetProfiles", refreshToken);
         }

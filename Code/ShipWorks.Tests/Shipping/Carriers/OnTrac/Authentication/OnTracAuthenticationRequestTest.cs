@@ -71,7 +71,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.OnTrac.Authentication
 
             //validate url
             Assert.True(
-                mockedSubmitter.Object.Uri.ToString().EndsWith("/OnTracServices.svc/v2/42/zips?pw=test&lastupdate=3000-1-1"));
+                mockedSubmitter.Object.Uri.ToString().EndsWith("/rates?pw=test&packages=ID1;90210;90001;false;0.00;false;0;5;4X3X10;S;0;0"));
         }
 
         void SuccessfullyValidateUser()
@@ -90,12 +90,12 @@ namespace ShipWorks.Tests.Shipping.Carriers.OnTrac.Authentication
         public void AuthenticateUser_AuthenticationFail_ReceiveInvalidResponseFromOnTrac()
         {
             const string invalidResponse =
-                "<OnTracZXXXipResponse xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\"><Zips/><Error>No Zip Updates Available</Error></OnTracZipResponse>";
+                "<OnTracRateResponse><Shipments><Error>Invalid Username or Password</Error></Shipments></OnTracRateResponse>";
 
             //Setup mock object that holds response from request
             mockedHttpResponseReader.Setup(x => x.ReadResult()).Returns(invalidResponse);
 
-            Assert.Throws<OnTracException>(() => testObject.IsValidUser());
+            Assert.Throws<OnTracApiErrorException>(() => testObject.IsValidUser());
         }
     }
 }
