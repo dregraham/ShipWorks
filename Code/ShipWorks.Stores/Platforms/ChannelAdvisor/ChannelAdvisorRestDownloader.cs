@@ -75,7 +75,17 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
 
                 UpdateDistributionCenters();
 
-                var profilesResponse = restClient.GetProfiles(refreshToken);
+                ChannelAdvisorProfilesResponse profilesResponse;
+
+                try
+                {
+                    profilesResponse = restClient.GetProfiles(refreshToken, true);
+                } 
+                catch(Exception ex)
+                {
+                    log.Warn("Failed to get profiles. Likely due to expanding Sites in the request.", ex);
+                    profilesResponse = null;
+                }
 
                 Dictionary<int, string> siteNames = new Dictionary<int, string>();
 

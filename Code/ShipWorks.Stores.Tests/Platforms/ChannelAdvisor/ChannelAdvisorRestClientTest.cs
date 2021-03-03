@@ -217,7 +217,7 @@ namespace ShipWorks.Stores.Tests.Platforms.ChannelAdvisor
         public void GetProfiles_UsesProfilesEndpoint()
         {
             var testObject = mock.Create<ChannelAdvisorRestClient>();
-            testObject.GetProfiles("blah");
+            testObject.GetProfiles("blah", false);
             variableRequestSubmitter.VerifySet(s => s.Uri =
                 It.Is<Uri>(u => u.ToString() == "https://api.channeladvisor.com/v1/Profiles"));
         }

@@ -152,7 +152,7 @@ namespace ShipWorks.Stores.Tests.Platforms.ChannelAdvisor
             testObject.AccessCode = "accessCode";
             testObject.Save(store, false);
 
-            mock.Mock<IChannelAdvisorRestClient>().Verify(c=>c.GetProfiles("refreshToken"), Times.Once);
+            mock.Mock<IChannelAdvisorRestClient>().Verify(c=>c.GetProfiles("refreshToken", false), Times.Once);
         }
 
         [Fact]
@@ -166,7 +166,7 @@ namespace ShipWorks.Stores.Tests.Platforms.ChannelAdvisor
             var store = new ChannelAdvisorStoreEntity { StoreTypeCode = StoreTypeCode.ChannelAdvisor };
 
             mock.Mock<IChannelAdvisorRestClient>()
-                .Setup(c => c.GetProfiles("refreshToken"))
+                .Setup(c => c.GetProfiles("refreshToken", false))
                 .Returns(new ChannelAdvisorProfilesResponse()
                 {
                     Profiles = new List<ChannelAdvisorProfile>()
@@ -200,7 +200,7 @@ namespace ShipWorks.Stores.Tests.Platforms.ChannelAdvisor
             testObject.AccessCode = "accessCode";
             testObject.Save(store, false);
 
-            mock.Mock<IChannelAdvisorRestClient>().Verify(c => c.GetProfiles("refreshToken"), Times.Never);
+            mock.Mock<IChannelAdvisorRestClient>().Verify(c => c.GetProfiles("refreshToken", It.IsAny<bool>()), Times.Never);
         }
 
         [Fact]
