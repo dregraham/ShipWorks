@@ -1305,6 +1305,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
 
             rate.PackageType = UspsUtility.GetApiPackageType((PostalPackagingType) shipment.Postal.PackagingType, new DimensionsAdapter(shipment.Postal));
             rate.NonMachinable = shipment.Postal.NonMachinable;
+            rate.RectangularShaped = !shipment.Postal.NonRectangular;
 
             rate.Length = shipment.Postal.DimsLength;
             rate.Width = shipment.Postal.DimsWidth;
@@ -1363,6 +1364,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
             {
                 rate.AddOns = addOns.ToArray();
             }
+
+            rate.RectangularShaped = !shipment.Postal.NonRectangular;
 
             // For APO/FPO, we have to specifically ask for customs docs
             if (PostalUtility.IsMilitaryState(shipment.ShipStateProvCode) || ShipmentTypeManager.GetType(shipment).IsCustomsRequired(shipment))
