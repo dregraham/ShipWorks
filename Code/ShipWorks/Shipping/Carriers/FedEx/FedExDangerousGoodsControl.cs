@@ -70,6 +70,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             hazardousMaterialQuantityValue.ApplyMultiText(package.HazardousMaterialQuantityValue.ToString());
             packingDetailsAircraftOnly.ApplyMultiCheck(package.PackingDetailsCargoAircraftOnly);
             packingInstructions.ApplyMultiText(package.PackingDetailsPackingInstructions);
+            dangerousGoodsAuthorization.ApplyMultiText(package.DangerousGoodsAuthorization);
 
             batteryMaterial.ApplyMultiValue(package.BatteryMaterial);
             batteryPacking.ApplyMultiValue(package.BatteryPacking);
@@ -135,6 +136,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             hazardousMaterialQuantityValue.ReadMultiText(t => package.HazardousMaterialQuantityValue = ReadDoubleValue(t));
             packingDetailsAircraftOnly.ReadMultiCheck(t => package.PackingDetailsCargoAircraftOnly = t);
             packingInstructions.ReadMultiText(t => package.PackingDetailsPackingInstructions = t);
+            dangerousGoodsAuthorization.ReadMultiText(x => package.DangerousGoodsAuthorization = x);
         }
 
         /// <summary>

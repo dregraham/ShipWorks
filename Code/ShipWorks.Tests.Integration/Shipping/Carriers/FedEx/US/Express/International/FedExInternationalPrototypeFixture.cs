@@ -51,6 +51,7 @@ namespace ShipWorks.Tests.Integration.Shipping.Carriers.FedEx.US.Express.Interna
         public string NumberOfContainers { get; set; }
         public string PackingDetailsCargoAircraftOnly { get; set; }
         public string PackingDetailsPackingInstructions { get; set; }
+        public string DangerousGoodsAuthorization { get; set; }
 
         /// <summary>
         /// Creates the shipment.

@@ -387,6 +387,8 @@ namespace ShipWorks.Data.Model.EntityClasses
 			_fieldsCustomProperties.Add("BatteryPacking", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
 			_fieldsCustomProperties.Add("BatteryRegulatorySubtype", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+			_fieldsCustomProperties.Add("DangerousGoodsAuthorization", fieldHashtable);
 		}
 		#endregion
 
@@ -746,6 +748,17 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			get { return (Nullable<ShipWorks.Shipping.FedEx.FedExBatteryRegulatorySubType>)GetValue((int)FedExProfilePackageFieldIndex.BatteryRegulatorySubtype, false); }
 			set	{ SetValue((int)FedExProfilePackageFieldIndex.BatteryRegulatorySubtype, value); }
+		}
+
+		/// <summary> The DangerousGoodsAuthorization property of the Entity FedExProfilePackage<br/><br/></summary>
+		/// <remarks>Mapped on  table field: "FedExProfilePackage"."DangerousGoodsAuthorization"<br/>
+		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 50<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		[DataMember]
+		public virtual System.String DangerousGoodsAuthorization
+		{
+			get { return (System.String)GetValue((int)FedExProfilePackageFieldIndex.DangerousGoodsAuthorization, true); }
+			set	{ SetValue((int)FedExProfilePackageFieldIndex.DangerousGoodsAuthorization, value); }
 		}
 	
 		/// <summary> Gets the type of the hierarchy this entity is in. </summary>

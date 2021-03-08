@@ -1393,7 +1393,7 @@ namespace ShipWorks.Data.Model
 		/// <summary>Inits FedExPackageEntity's mappings</summary>
 		private void InitFedExPackageEntityMappings()
 		{
-			this.AddElementMapping("FedExPackageEntity", @"ShipWorksLocal", @"dbo", "FedExPackage", 47, 0);
+			this.AddElementMapping("FedExPackageEntity", @"ShipWorksLocal", @"dbo", "FedExPackage", 48, 0);
 			this.AddElementFieldMapping("FedExPackageEntity", "FedExPackageID", "FedExPackageID", false, "BigInt", 0, 19, 0, true, "SCOPE_IDENTITY()", null, typeof(System.Int64), 0);
 			this.AddElementFieldMapping("FedExPackageEntity", "ShipmentID", "ShipmentID", false, "BigInt", 0, 19, 0, false, "", null, typeof(System.Int64), 1);
 			this.AddElementFieldMapping("FedExPackageEntity", "Weight", "Weight", false, "Float", 0, 38, 0, false, "", null, typeof(System.Double), 2);
@@ -1441,6 +1441,7 @@ namespace ShipWorks.Data.Model
 			this.AddElementFieldMapping("FedExPackageEntity", "BatteryRegulatorySubtype", "BatteryRegulatorySubtype", false, "Int", 0, 10, 0, false, "", null, typeof(System.Int32), 44);
 			this.AddElementFieldMapping("FedExPackageEntity", "FreightPackaging", "FreightPackaging", false, "Int", 0, 10, 0, false, "", null, typeof(System.Int32), 45);
 			this.AddElementFieldMapping("FedExPackageEntity", "FreightPieces", "FreightPieces", false, "Int", 0, 10, 0, false, "", null, typeof(System.Int32), 46);
+			this.AddElementFieldMapping("FedExPackageEntity", "DangerousGoodsAuthorization", "DangerousGoodsAuthorization", false, "NVarChar", 50, 0, 0, false, "", null, typeof(System.String), 47);
 		}
 
 		/// <summary>Inits FedExProfileEntity's mappings</summary>
@@ -1491,7 +1492,7 @@ namespace ShipWorks.Data.Model
 		/// <summary>Inits FedExProfilePackageEntity's mappings</summary>
 		private void InitFedExProfilePackageEntityMappings()
 		{
-			this.AddElementMapping("FedExProfilePackageEntity", @"ShipWorksLocal", @"dbo", "FedExProfilePackage", 29, 0);
+			this.AddElementMapping("FedExProfilePackageEntity", @"ShipWorksLocal", @"dbo", "FedExProfilePackage", 30, 0);
 			this.AddElementFieldMapping("FedExProfilePackageEntity", "PackageProfileID", "PackageProfileID", false, "BigInt", 0, 19, 0, false, "", null, typeof(System.Int64), 0);
 			this.AddElementFieldMapping("FedExProfilePackageEntity", "PriorityAlert", "PriorityAlert", true, "Bit", 0, 0, 0, false, "", null, typeof(System.Boolean), 1);
 			this.AddElementFieldMapping("FedExProfilePackageEntity", "PriorityAlertEnhancementType", "PriorityAlertEnhancementType", true, "Int", 0, 10, 0, false, "", null, typeof(System.Int32), 2);
@@ -1521,6 +1522,7 @@ namespace ShipWorks.Data.Model
 			this.AddElementFieldMapping("FedExProfilePackageEntity", "BatteryMaterial", "BatteryMaterial", true, "Int", 0, 10, 0, false, "", null, typeof(System.Int32), 26);
 			this.AddElementFieldMapping("FedExProfilePackageEntity", "BatteryPacking", "BatteryPacking", true, "Int", 0, 10, 0, false, "", null, typeof(System.Int32), 27);
 			this.AddElementFieldMapping("FedExProfilePackageEntity", "BatteryRegulatorySubtype", "BatteryRegulatorySubtype", true, "Int", 0, 10, 0, false, "", null, typeof(System.Int32), 28);
+			this.AddElementFieldMapping("FedExProfilePackageEntity", "DangerousGoodsAuthorization", "DangerousGoodsAuthorization", true, "NVarChar", 50, 0, 0, false, "", null, typeof(System.String), 29);
 		}
 
 		/// <summary>Inits FedExShipmentEntity's mappings</summary>

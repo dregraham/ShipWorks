@@ -83,6 +83,7 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
             BatteryRegulatorySubtype = source.BatteryRegulatorySubtype;
             FreightPackaging = source.FreightPackaging;
             FreightPieces = source.FreightPieces;
+            DangerousGoodsAuthorization = source.DangerousGoodsAuthorization;
             
             
             FedExShipment = (IFedExShipmentEntity) source.FedExShipment?.AsReadOnly(objectMap);
@@ -374,6 +375,12 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
         /// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
         public System.Int32 FreightPieces { get; }
+        /// <summary> The DangerousGoodsAuthorization property of the Entity FedExPackage<br/><br/>
+        /// </summary>
+        /// <remarks>Mapped on table field: "FedExPackage"."DangerousGoodsAuthorization"<br/>
+        /// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 50<br/>
+        /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+        public System.String DangerousGoodsAuthorization { get; }
         
         
         public IFedExShipmentEntity FedExShipment { get; }

@@ -440,6 +440,8 @@ namespace ShipWorks.Data.Model.EntityClasses
 			_fieldsCustomProperties.Add("FreightPackaging", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
 			_fieldsCustomProperties.Add("FreightPieces", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+			_fieldsCustomProperties.Add("DangerousGoodsAuthorization", fieldHashtable);
 		}
 		#endregion
 
@@ -1053,6 +1055,17 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			get { return (System.Int32)GetValue((int)FedExPackageFieldIndex.FreightPieces, true); }
 			set	{ SetValue((int)FedExPackageFieldIndex.FreightPieces, value); }
+		}
+
+		/// <summary> The DangerousGoodsAuthorization property of the Entity FedExPackage<br/><br/></summary>
+		/// <remarks>Mapped on  table field: "FedExPackage"."DangerousGoodsAuthorization"<br/>
+		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 50<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
+		public virtual System.String DangerousGoodsAuthorization
+		{
+			get { return (System.String)GetValue((int)FedExPackageFieldIndex.DangerousGoodsAuthorization, true); }
+			set	{ SetValue((int)FedExPackageFieldIndex.DangerousGoodsAuthorization, value); }
 		}
 
 		/// <summary> Gets / sets related entity of type 'FedExShipmentEntity' which has to be set using a fetch action earlier. If no related entity is set for this property, null is returned..<br/><br/></summary>

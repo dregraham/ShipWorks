@@ -107,6 +107,8 @@ BEGIN
 	DELETE FROM [dbo].[@tableName@] WHERE @tablePrimaryKeyName@ IN (SELECT EntityID FROM DeletePurgeBatch)
 				
 	DELETE FROM ObjectReference WHERE ConsumerID in (SELECT EntityID from DeletePurgeBatch);
+				
+	DELETE FROM EmailOutboundRelation WHERE ObjectID in (SELECT EntityID from DeletePurgeBatch);
 		
     DROP TABLE DeletePurgeBatch
 

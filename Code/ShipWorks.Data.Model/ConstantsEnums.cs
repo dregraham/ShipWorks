@@ -3920,6 +3920,8 @@ namespace ShipWorks.Data.Model
 		FreightPackaging,
 		///<summary>FreightPieces. </summary>
 		FreightPieces,
+		///<summary>DangerousGoodsAuthorization. </summary>
+		DangerousGoodsAuthorization,
 		/// <summary></summary>
 		AmountOfFields
 	}
@@ -4086,6 +4088,8 @@ namespace ShipWorks.Data.Model
 		BatteryPacking,
 		///<summary>BatteryRegulatorySubtype. </summary>
 		BatteryRegulatorySubtype,
+		///<summary>DangerousGoodsAuthorization. </summary>
+		DangerousGoodsAuthorization,
 		/// <summary></summary>
 		AmountOfFields
 	}
