@@ -275,7 +275,7 @@ namespace ShipWorks.Warehouse.Configuration.Stores
         /// </summary>
         private void ConfigureDefaultAction(long storeID, string actionPayload)
         {
-            if (string.IsNullOrWhiteSpace(actionPayload))
+            if (string.IsNullOrWhiteSpace(actionPayload) || actionPayload.Equals("null", StringComparison.OrdinalIgnoreCase))
             {
                 return;
             }
