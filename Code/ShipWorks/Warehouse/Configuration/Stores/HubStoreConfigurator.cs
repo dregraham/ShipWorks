@@ -74,18 +74,16 @@ namespace ShipWorks.Warehouse.Configuration.Stores
 
                 //If we have two stores that come from two different dbs with the same name
                 //We have to differentiate them so we just add a number on the end here
-                var storesWithSimilarNames = allStores.Select(s => s.StoreName.Contains(config.Name)).Count();
-                if (storesWithSimilarNames > 0 && existingStore == null)
+                string originalName = config.Name;
+                int differentiater = 1;
+
+                if (existingStore == null || existingStore.StoreName != config.Name)
                 {
-                    var newName = config.Name + storesWithSimilarNames;
-                    config.SyncPayload = config.SyncPayload.Replace(config.Name, newName);
-                    config.Name = newName;
-                }
-                else if(storesWithSimilarNames > 0 && existingStore != null)
-                {
-                    var newName = existingStore.StoreName;
-                    config.SyncPayload = config.SyncPayload.Replace(config.Name, newName);
-                    config.Name = newName;
+                    while (allStores.Any(s => s.StoreName == config.Name))
+                    {
+                        config.Name = $"{originalName}{differentiater}";
+                        differentiater++;
+                    }
                 }
 
                 storeProgress.Detail = $"{(existingStore == null ? "Importing" : "Updating")} '{config.Name}' ({index} of {totalStoresToImport})";
@@ -98,6 +96,7 @@ namespace ShipWorks.Warehouse.Configuration.Stores
                     if (storeSetupFactory.TryGetValue(config.StoreType, out storeSetup))
                     {
                         var deserializedStore = storeSetup.Setup(config, storeType, existingStore);
+                        deserializedStore.StoreName = config.Name;
 
                         // Make sure we don't add a store that won't actually show
                         if (!deserializedStore.SetupComplete)
