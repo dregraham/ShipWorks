@@ -77,9 +77,9 @@ namespace ShipWorks.Warehouse.Configuration.Stores
                 string originalName = config.Name;
                 int differentiater = 1;
 
-                if (existingStore == null || existingStore.StoreName != config.Name)
+                if (existingStore == null || !existingStore.StoreName.Equals(config.Name, StringComparison.OrdinalIgnoreCase))
                 {
-                    while (allStores.Any(s => s.StoreName == config.Name))
+                    while (allStores.Any(s => s.StoreName.Equals(config.Name, StringComparison.OrdinalIgnoreCase)))
                     {
                         config.Name = $"{originalName}{differentiater}";
                         differentiater++;
