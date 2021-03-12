@@ -1516,6 +1516,9 @@
 
         /// <remarks/>
         Refund,
+
+        /// <remarks/>
+        Delivered,
     }
 
     /// <remarks/>
