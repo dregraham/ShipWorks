@@ -138,7 +138,7 @@ namespace ShipWorks.Stores.UI.Platforms.ChannelAdvisor
             // if we already have a profile id don't do anything
             if (store.ProfileID <= 0)
             {
-                ChannelAdvisorProfile profile = webClient.GetProfiles(refreshToken)?.Profiles?.FirstOrDefault();
+                ChannelAdvisorProfile profile = webClient.GetProfiles(refreshToken, false)?.Profiles?.FirstOrDefault();
 
                 store.ProfileID = profile?.ProfileId ?? 0;
                 store.StoreName = profile?.AccountName ?? string.Empty;

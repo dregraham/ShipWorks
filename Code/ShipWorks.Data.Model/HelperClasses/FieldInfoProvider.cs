@@ -1378,6 +1378,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 			this.AddElementFieldInfo("FedExPackageEntity", "BatteryRegulatorySubtype", typeof(ShipWorks.Shipping.FedEx.FedExBatteryRegulatorySubType), false, false, false, false,  (int)FedExPackageFieldIndex.BatteryRegulatorySubtype, 0, 0, 10);
 			this.AddElementFieldInfo("FedExPackageEntity", "FreightPackaging", typeof(ShipWorks.Shipping.FedEx.FedExFreightPhysicalPackagingType), false, false, false, false,  (int)FedExPackageFieldIndex.FreightPackaging, 0, 0, 10);
 			this.AddElementFieldInfo("FedExPackageEntity", "FreightPieces", typeof(System.Int32), false, false, false, false,  (int)FedExPackageFieldIndex.FreightPieces, 0, 0, 10);
+			this.AddElementFieldInfo("FedExPackageEntity", "DangerousGoodsAuthorization", typeof(System.String), false, false, false, false,  (int)FedExPackageFieldIndex.DangerousGoodsAuthorization, 50, 0, 0);
 		}
 		/// <summary>Inits FedExProfileEntity's FieldInfo objects</summary>
 		private void InitFedExProfileEntityInfos()
@@ -1456,6 +1457,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 			this.AddElementFieldInfo("FedExProfilePackageEntity", "BatteryMaterial", typeof(Nullable<ShipWorks.Shipping.FedEx.FedExBatteryMaterialType>), false, false, false, true,  (int)FedExProfilePackageFieldIndex.BatteryMaterial, 0, 0, 10);
 			this.AddElementFieldInfo("FedExProfilePackageEntity", "BatteryPacking", typeof(Nullable<ShipWorks.Shipping.FedEx.FedExBatteryPackingType>), false, false, false, true,  (int)FedExProfilePackageFieldIndex.BatteryPacking, 0, 0, 10);
 			this.AddElementFieldInfo("FedExProfilePackageEntity", "BatteryRegulatorySubtype", typeof(Nullable<ShipWorks.Shipping.FedEx.FedExBatteryRegulatorySubType>), false, false, false, true,  (int)FedExProfilePackageFieldIndex.BatteryRegulatorySubtype, 0, 0, 10);
+			this.AddElementFieldInfo("FedExProfilePackageEntity", "DangerousGoodsAuthorization", typeof(System.String), false, false, false, true,  (int)FedExProfilePackageFieldIndex.DangerousGoodsAuthorization, 50, 0, 0);
 		}
 		/// <summary>Inits FedExShipmentEntity's FieldInfo objects</summary>
 		private void InitFedExShipmentEntityInfos()

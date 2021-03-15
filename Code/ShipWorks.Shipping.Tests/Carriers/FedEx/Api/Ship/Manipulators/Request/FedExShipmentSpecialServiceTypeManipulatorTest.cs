@@ -130,7 +130,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.FedEx.Api.Ship.Manipulators.Request
         }
 
         [Fact]
-        public void Manipulate_AddsSaturdayPickup_WhenShipmentIsSaturday()
+        public void Manipulate_DoesNotAddSaturdayPickup_WhenShipmentIsSaturday()
         {
             // Setup the test by adjusting the ship date to be a Saturday
             shipment.ShipDate = GetNext(DateTime.Now, DayOfWeek.Saturday);
@@ -142,7 +142,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.FedEx.Api.Ship.Manipulators.Request
             List<ShipmentSpecialServiceType> serviceTypes = new List<ShipmentSpecialServiceType>();
             serviceTypes.AddRange(processShipmentRequest.RequestedShipment.SpecialServicesRequested.SpecialServiceTypes);
 
-            Assert.True(serviceTypes.Contains(ShipmentSpecialServiceType.SATURDAY_PICKUP));
+            Assert.False(serviceTypes.Contains(ShipmentSpecialServiceType.SATURDAY_PICKUP));
         }
 
         [Fact]
@@ -181,7 +181,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.FedEx.Api.Ship.Manipulators.Request
 
 
         [Fact]
-        public void Manipulate_AddsSaturdayDelivery_WhenSaturdayDeliveryIsAvailable()
+        public void Manipulate_DoesNotAddSaturdayDelivery_WhenSaturdayDeliveryIsAvailable()
         {
             // A little tricky because we have to setup the test by making sure that the shipment 
             // is eligible for Saturday delivery; since this determination is in a class ouside of the
@@ -198,8 +198,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.FedEx.Api.Ship.Manipulators.Request
             List<ShipmentSpecialServiceType> serviceTypes = new List<ShipmentSpecialServiceType>();
             serviceTypes.AddRange(processShipmentRequest.RequestedShipment.SpecialServicesRequested.SpecialServiceTypes);
 
-            // The Saturday delivery service type should have been added
-            Assert.True(serviceTypes.Contains(ShipmentSpecialServiceType.SATURDAY_DELIVERY));
+            Assert.False(serviceTypes.Contains(ShipmentSpecialServiceType.SATURDAY_DELIVERY));
         }
 
         [Fact]
@@ -221,12 +220,11 @@ namespace ShipWorks.Shipping.Tests.Carriers.FedEx.Api.Ship.Manipulators.Request
             List<ShipmentSpecialServiceType> serviceTypes = new List<ShipmentSpecialServiceType>();
             serviceTypes.AddRange(processShipmentRequest.RequestedShipment.SpecialServicesRequested.SpecialServiceTypes);
 
-            // The Saturday delivery service type should NOT have been added
             Assert.False(serviceTypes.Contains(ShipmentSpecialServiceType.SATURDAY_DELIVERY));
         }
 
         [Fact]
-        public void Manipulate_AddsFutureShipmentAndSaturdayPickup_WhenShipDateIsSaturdayInFuture()
+        public void Manipulate_AddsFutureShipmentButNotSaturdayPickup_WhenShipDateIsSaturdayInFuture()
         {
             // Setup the test by adjusting the ship date to be a Saturday at least a week away
             shipment.ShipDate = GetNext(DateTime.Now.AddDays(7), DayOfWeek.Saturday);
@@ -239,7 +237,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.FedEx.Api.Ship.Manipulators.Request
             serviceTypes.AddRange(processShipmentRequest.RequestedShipment.SpecialServicesRequested.SpecialServiceTypes);
 
             Assert.True(serviceTypes.Contains(ShipmentSpecialServiceType.FUTURE_DAY_SHIPMENT));
-            Assert.True(serviceTypes.Contains(ShipmentSpecialServiceType.SATURDAY_PICKUP));
+            Assert.False(serviceTypes.Contains(ShipmentSpecialServiceType.SATURDAY_PICKUP));
         }
 
         [Fact]
@@ -260,7 +258,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.FedEx.Api.Ship.Manipulators.Request
         }
 
         [Fact]
-        public void Manipulate_AddsFutureShipmentAndSaturdayDelivery_WhenFutureSaturdayDeliveryRequested()
+        public void Manipulate_AddsFutureShipmentButNotSaturdayDelivery_WhenFutureSaturdayDeliveryRequested()
         {
             // A little tricky because we have to setup the test by making sure that the shipment 
             // is eligible for Saturday delivery; since this determination is in a class ouside of the
@@ -281,7 +279,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.FedEx.Api.Ship.Manipulators.Request
             serviceTypes.AddRange(processShipmentRequest.RequestedShipment.SpecialServicesRequested.SpecialServiceTypes);
 
             Assert.True(serviceTypes.Contains(ShipmentSpecialServiceType.FUTURE_DAY_SHIPMENT));
-            Assert.True(serviceTypes.Contains(ShipmentSpecialServiceType.SATURDAY_DELIVERY));
+            Assert.False(serviceTypes.Contains(ShipmentSpecialServiceType.SATURDAY_DELIVERY));
         }
 
         /// <summary>

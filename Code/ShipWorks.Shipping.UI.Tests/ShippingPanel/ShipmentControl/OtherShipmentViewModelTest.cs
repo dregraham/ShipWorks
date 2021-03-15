@@ -36,7 +36,7 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel.ShipmentControl
             OtherShipmentViewModel testObject = mock.Create<OtherShipmentViewModel>();
             testObject.Load(shipmentAdapter.Object);
 
-            Assert.Equal(shipmentAdapter.Object.ShipDate, testObject.ShipDate);
+            Assert.Equal(shipmentAdapter.Object.ShipDate, testObject.ShipDate.ToUniversalTime());
         }
 
         [Fact]

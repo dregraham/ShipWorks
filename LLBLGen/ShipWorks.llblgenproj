@@ -1133,6 +1133,7 @@
           <Field Name="ContainerType" Type="string" MaxLength="100" FieldIndex="38" />
           <Field Name="ContainsAlcohol" Type="bool" FieldIndex="19" />
           <Field Name="DangerousGoodsAccessibilityType" Type="int" FieldIndex="22" />
+          <Field Name="DangerousGoodsAuthorization" Type="string" MaxLength="50" FieldIndex="47" />
           <Field Name="DangerousGoodsCargoAircraftOnly" Type="bool" FieldIndex="23" />
           <Field Name="DangerousGoodsEmergencyContactPhone" Type="string" MaxLength="16" FieldIndex="24" />
           <Field Name="DangerousGoodsEnabled" Type="bool" FieldIndex="20" />
@@ -1226,6 +1227,7 @@
           <Field Name="ContainerType" Type="string" IsOptional="true" MaxLength="100" FieldIndex="21" />
           <Field Name="ContainsAlcohol" Type="bool" IsOptional="true" FieldIndex="4" />
           <Field Name="DangerousGoodsAccessibilityType" Type="int" IsOptional="true" FieldIndex="7" />
+          <Field Name="DangerousGoodsAuthorization" Type="string" IsOptional="true" MaxLength="50" FieldIndex="28" />
           <Field Name="DangerousGoodsCargoAircraftOnly" Type="bool" IsOptional="true" FieldIndex="8" />
           <Field Name="DangerousGoodsEmergencyContactPhone" Type="string" IsOptional="true" MaxLength="16" FieldIndex="9" />
           <Field Name="DangerousGoodsEnabled" Type="bool" IsOptional="true" FieldIndex="5" />
@@ -5956,6 +5958,7 @@
                     <Field Name="BatteryRegulatorySubtype" Ordinal="45" DbType="8" Precision="10" />
                     <Field Name="FreightPackaging" Ordinal="46" DbType="8" Precision="10" />
                     <Field Name="FreightPieces" Ordinal="47" DbType="8" Precision="10" />
+                    <Field Name="DangerousGoodsAuthorization" Ordinal="48" DbType="12" Length="50" />
                   </Fields>
                 </Table>
                 <Table Name="FedExProfile">
@@ -6034,6 +6037,7 @@
                     <Field Name="BatteryMaterial" Ordinal="27" IsOptional="true" DbType="8" Precision="10" />
                     <Field Name="BatteryPacking" Ordinal="28" IsOptional="true" DbType="8" Precision="10" />
                     <Field Name="BatteryRegulatorySubtype" Ordinal="29" IsOptional="true" DbType="8" Precision="10" />
+                    <Field Name="DangerousGoodsAuthorization" Ordinal="30" IsOptional="true" DbType="12" Length="50" />
                   </Fields>
                 </Table>
                 <Table Name="FedExShipment">
@@ -12100,6 +12104,7 @@
             <FieldMapping FieldName="ContainerType" TargetFieldName="ContainerType" />
             <FieldMapping FieldName="ContainsAlcohol" TargetFieldName="ContainsAlcohol" />
             <FieldMapping FieldName="DangerousGoodsAccessibilityType" TargetFieldName="DangerousGoodsAccessibilityType" />
+            <FieldMapping FieldName="DangerousGoodsAuthorization" TargetFieldName="DangerousGoodsAuthorization" />
             <FieldMapping FieldName="DangerousGoodsCargoAircraftOnly" TargetFieldName="DangerousGoodsCargoAircraftOnly" />
             <FieldMapping FieldName="DangerousGoodsEmergencyContactPhone" TargetFieldName="DangerousGoodsEmergencyContactPhone" />
             <FieldMapping FieldName="DangerousGoodsEnabled" TargetFieldName="DangerousGoodsEnabled" />
@@ -12193,6 +12198,7 @@
             <FieldMapping FieldName="ContainerType" TargetFieldName="ContainerType" />
             <FieldMapping FieldName="ContainsAlcohol" TargetFieldName="ContainsAlcohol" />
             <FieldMapping FieldName="DangerousGoodsAccessibilityType" TargetFieldName="DangerousGoodsAccessibilityType" />
+            <FieldMapping FieldName="DangerousGoodsAuthorization" TargetFieldName="DangerousGoodsAuthorization" />
             <FieldMapping FieldName="DangerousGoodsCargoAircraftOnly" TargetFieldName="DangerousGoodsCargoAircraftOnly" />
             <FieldMapping FieldName="DangerousGoodsEmergencyContactPhone" TargetFieldName="DangerousGoodsEmergencyContactPhone" />
             <FieldMapping FieldName="DangerousGoodsEnabled" TargetFieldName="DangerousGoodsEnabled" />

@@ -48,17 +48,18 @@ namespace ShipWorks.Warehouse.Configuration.Stores
 
                 Task.Run(async () =>
                 {
+                    storeProgress.Detail = "Getting list of stores to import";
+                    storeProgress.Starting();
+                    storeProgress.PercentComplete = 0;
+
                     try
                     {
-                        storeProgress.Detail = "Getting list of stores to import";
-                        storeProgress.Starting();
-                        storeProgress.PercentComplete = 0;
-
                         hubConfig = await webClient.GetConfig(warehouseID).ConfigureAwait(false);
                         storeConfigurator.Configure(hubConfig.StoreConfigurations, storeProgress);
                     }
                     catch (Exception ex)
                     {
+                        storeProgress.Detail = "Done";
                         storeProgress.Failed(ex);
                     }
                 });

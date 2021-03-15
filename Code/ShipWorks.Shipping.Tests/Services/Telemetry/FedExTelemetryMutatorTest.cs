@@ -70,6 +70,7 @@ namespace ShipWorks.Shipping.Tests.Services.Telemetry
             package.SetupGet(x => x.NumberOfContainers).Returns(11);
             package.SetupGet(x => x.PackingDetailsCargoAircraftOnly).Returns(true);
             package.SetupGet(x => x.PackingDetailsPackingInstructions).Returns("PackingDetailsPackingInstructions");
+            package.SetupGet(x => x.DangerousGoodsAuthorization).Returns("DangerousGoodsAuthorization");
             package.SetupGet(x => x.PriorityAlert).Returns(true);
             package.SetupGet(x => x.PriorityAlertDetailContent).Returns("PriorityAlertDetailContent");
             package.SetupGet(x => x.PriorityAlertEnhancementType).Returns((int) FedExPriorityAlertEnhancementType.PriorityAlert);
@@ -482,6 +483,7 @@ namespace ShipWorks.Shipping.Tests.Services.Telemetry
             trackedDurationEventMock.Verify(x => x.AddProperty("Label.FedEx.Package.1.PackingDetailsCargoAircraftOnly", "True"));
             package.VerifyGet(x => x.PackingDetailsCargoAircraftOnly, Times.Once);
             trackedDurationEventMock.Verify(x => x.AddProperty("Label.FedEx.Package.1.PackingDetailsPackingInstructions", "PackingDetailsPackingInstructions"));
+            trackedDurationEventMock.Verify(x => x.AddProperty("Label.FedEx.Package.1.DangerousGoodsAuthorization", "DangerousGoodAuthorization"));
             trackedDurationEventMock.Verify(x => x.AddProperty("Label.FedEx.Package.1.PriorityAlert", "True"));
             package.VerifyGet(x => x.PriorityAlert, Times.Once);
             trackedDurationEventMock.Verify(x => x.AddProperty("Label.FedEx.Package.1.PriorityAlertDetailContent", "PriorityAlertDetailContent"));

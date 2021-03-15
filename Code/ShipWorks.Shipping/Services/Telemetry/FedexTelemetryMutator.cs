@@ -243,6 +243,7 @@ namespace ShipWorks.Shipping.Services.Telemetry
                 telemetryEvent.AddProperty($"Label.FedEx.Package.{packageIndex}.NumberOfContainers", package.NumberOfContainers.ToString());
                 telemetryEvent.AddProperty($"Label.FedEx.Package.{packageIndex}.PackingDetailsCargoAircraftOnly", package.PackingDetailsCargoAircraftOnly.ToString());
                 telemetryEvent.AddProperty($"Label.FedEx.Package.{packageIndex}.PackingDetailsPackingInstructions", package.PackingDetailsPackingInstructions);
+                telemetryEvent.AddProperty($"Label.FedEx.Package.{packageIndex}.PackingDetailsDangerousGoodsAuthorization", package.DangerousGoodsAuthorization);
                 telemetryEvent.AddProperty($"Label.FedEx.Package.{packageIndex}.PriorityAlert", package.PriorityAlert.ToString());
                 telemetryEvent.AddProperty($"Label.FedEx.Package.{packageIndex}.PriorityAlertDetailContent", package.PriorityAlertDetailContent);
                 telemetryEvent.AddProperty($"Label.FedEx.Package.{packageIndex}.PriorityAlertEnhancementType", EnumHelper.GetDescription((FedExPriorityAlertEnhancementType) package.PriorityAlertEnhancementType));
