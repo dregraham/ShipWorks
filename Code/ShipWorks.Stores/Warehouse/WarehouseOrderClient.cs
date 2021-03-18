@@ -122,6 +122,36 @@ namespace ShipWorks.Stores.Warehouse
         }
 
         /// <summary>
+        /// Upload shipment notification information to Hub. This will only work for orders from shipengine
+        /// </summary>
+        public async Task<Result> NotifyShipped(string salesOrderId, string trackingNumber, string carrier)
+        {
+            try
+            {
+                IRestRequest request = new RestRequest(WarehouseEndpoints.NotifyShipped(salesOrderId), Method.POST);
+                request.AddJsonBody(new ShipmentNotification(trackingNumber, carrier));
+
+                GenericResult<IRestResponse> response = await warehouseRequestClient
+                    .MakeRequest(request, "Notify Shipped")
+                    .ConfigureAwait(true);
+
+                if (response.Failure)
+                {
+                    log.Error($"Failed to notify shipment {salesOrderId} on the hub. {response.Message}",
+                              response.Exception);
+                    return Result.FromError(response.Exception);
+                }
+
+                return Result.FromSuccess();
+            }
+            catch (Exception ex)
+            {
+                log.Error($"Failed to notify shipment {salesOrderId} on the hub.", ex);
+                return Result.FromError(ex);
+            }
+        }
+
+        /// <summary>
         /// Send a shipment to the hub
         /// </summary>
         public async Task<Result> UploadShipment(ShipmentEntity shipmentEntity, Guid hubOrderID, string tangoShipmentID)

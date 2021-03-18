@@ -21,7 +21,8 @@ namespace ShipWorks.ApplicationCore.Licensing.Warehouse
         public const string AddProduct = "api/products";
         public const string SetActivationBulk = "api/products/activation";
         public const string GetConfig = "api/config";
-
+        
+        private const string notifyShipped = "api/customer/notifyShipped/{0}";
         private const string linkWarehouse = "api/warehouses/{0}/link";
         private const string orders = "api/warehouses/{0}/orders";
         private const string shipOrder = "api/orders/{0}/ship";
@@ -86,5 +87,8 @@ namespace ShipWorks.ApplicationCore.Licensing.Warehouse
         /// </summary>
         public static string GetProductsAfterSequence(string warehouseId, long sequence) =>
             $"api/products/sync/{warehouseId}/after/{sequence}";
+
+        public static string NotifyShipped(string salesOrderId) =>
+            string.Format(notifyShipped, salesOrderId);
     }
 }

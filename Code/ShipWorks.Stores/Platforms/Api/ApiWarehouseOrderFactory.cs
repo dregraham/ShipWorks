@@ -40,8 +40,16 @@ namespace ShipWorks.Stores.Platforms.Api
             // get the order instance
             GenericResult<OrderEntity> result = await orderElementFactory
                 .CreateOrder(new AlphaNumericOrderIdentifier(warehouseOrder.OrderNumber)).ConfigureAwait(false);
-
+            
             return result.OnFailure(x => log.InfoFormat("Skipping order '{0}': {1}.", warehouseOrder.OrderNumber, x.Message));
+        }
+
+        /// <summary>
+        /// Load Api order details
+        /// </summary>
+        protected override void LoadStoreOrderDetails(IStoreEntity store, OrderEntity orderEntity, WarehouseOrder warehouseOrder)
+        {
+            orderEntity.ChannelOrderID = warehouseOrder.SalesOrderId;
         }
     }
 }
