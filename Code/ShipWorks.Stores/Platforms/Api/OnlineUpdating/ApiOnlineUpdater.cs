@@ -30,7 +30,7 @@ namespace ShipWorks.Stores.Platforms.Api.OnlineUpdating
         /// Constructor
         /// </summary>
         public ApiOnlineUpdater(IOrderManager orderManager, IShippingManager shippingManager,
-            ISqlAdapterFactory sqlAdapterFactory, Func<IWarehouseOrderClient> warehouseOrderClientCreator)
+            ISqlAdapterFactory sqlAdapterFactory, Func<IWarehouseOrderClient> createWarehouseOrderClient)
         {
             this.sqlAdapterFactory = sqlAdapterFactory;
             this.createWarehouseOrderClient = createWarehouseOrderClient;
@@ -112,7 +112,7 @@ namespace ShipWorks.Stores.Platforms.Api.OnlineUpdating
             foreach (var shipment in shipments)
             {
                 var result = await client.NotifyShipped(shipment.Order.ChannelOrderID, shipment.TrackingNumber, ShippingManager.GetCarrierName(shipment.ShipmentTypeCode)).ConfigureAwait(false);
-                result.OnFailure(ex => throw new ApiStoreException("Error uploading shipment details.", ex));
+                result.OnFailure(ex => throw new ApiStoreException($"Error uploading shipment details: {ex.Message}", ex));
             }            
         }
     }

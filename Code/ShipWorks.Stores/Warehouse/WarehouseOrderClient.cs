@@ -11,6 +11,7 @@ using RestSharp;
 using ShipWorks.ApplicationCore.Licensing;
 using ShipWorks.ApplicationCore.Licensing.Warehouse;
 using ShipWorks.ApplicationCore.Licensing.Warehouse.DTO;
+using ShipWorks.Common.Net;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Editions;
@@ -130,6 +131,7 @@ namespace ShipWorks.Stores.Warehouse
             {
                 IRestRequest request = new RestRequest(WarehouseEndpoints.NotifyShipped(salesOrderId), Method.POST);
                 request.AddJsonBody(new ShipmentNotification(trackingNumber, carrier));
+                request.JsonSerializer = RestSharpJsonNetSerializer.CreateHubDefault();
 
                 GenericResult<IRestResponse> response = await warehouseRequestClient
                     .MakeRequest(request, "Notify Shipped")

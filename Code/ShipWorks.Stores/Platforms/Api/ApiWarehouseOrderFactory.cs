@@ -49,7 +49,7 @@ namespace ShipWorks.Stores.Platforms.Api
         /// </summary>
         protected override void LoadStoreOrderDetails(IStoreEntity store, OrderEntity orderEntity, WarehouseOrder warehouseOrder)
         {
-            orderEntity.ChannelOrderID = warehouseOrder.SalesOrderId;
+            orderEntity.ChannelOrderID = warehouseOrder.ShipEngineSalesOrderId;
         }
     }
 }
