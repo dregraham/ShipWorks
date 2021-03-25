@@ -98,7 +98,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.FedEx.Api.Rate.Manipulators.Request
         }
 
         [Fact]
-        public void Manipulate_DoesNotAddSaturdayDelivery_WhenSaturdayDeliveryIsAvailable()
+        public void Manipulate_AddSaturdayDelivery_WhenSaturdayDeliveryIsAvailable()
         {
             // A little tricky because we have to setup the test by making sure that the shipment 
             // is eligible for Saturday delivery; since this determination is in a class outside of the
@@ -111,7 +111,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.FedEx.Api.Rate.Manipulators.Request
 
             var result = testObject.Manipulate(shipment, new RateRequest());
 
-            Assert.DoesNotContain(ShipmentSpecialServiceType.SATURDAY_DELIVERY,
+            Assert.Contains(ShipmentSpecialServiceType.SATURDAY_DELIVERY,
                 result.RequestedShipment.SpecialServicesRequested.SpecialServiceTypes);
         }
 
@@ -165,7 +165,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.FedEx.Api.Rate.Manipulators.Request
         }
 
         [Fact]
-        public void Manipulate_AddsFutureShipmentButNotSaturdayDelivery_WhenFutureSaturdayDeliveryRequested()
+        public void Manipulate_AddsFutureShipmentAndSaturdayDelivery_WhenFutureSaturdayDeliveryRequested()
         {
             // A little tricky because we have to setup the test by making sure that the shipment 
             // is eligible for Saturday delivery; since this determination is in a class outside of the
@@ -183,7 +183,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.FedEx.Api.Rate.Manipulators.Request
 
             Assert.Contains(ShipmentSpecialServiceType.FUTURE_DAY_SHIPMENT,
                 result.RequestedShipment.SpecialServicesRequested.SpecialServiceTypes);
-            Assert.DoesNotContain(ShipmentSpecialServiceType.SATURDAY_DELIVERY,
+            Assert.Contains(ShipmentSpecialServiceType.SATURDAY_DELIVERY,
                 result.RequestedShipment.SpecialServicesRequested.SpecialServiceTypes);
         }
 
