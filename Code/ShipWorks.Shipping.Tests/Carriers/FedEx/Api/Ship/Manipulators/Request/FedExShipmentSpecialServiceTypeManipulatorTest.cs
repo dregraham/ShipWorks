@@ -181,7 +181,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.FedEx.Api.Ship.Manipulators.Request
 
 
         [Fact]
-        public void Manipulate_DoesNotAddSaturdayDelivery_WhenSaturdayDeliveryIsAvailable()
+        public void Manipulate_AddsSaturdayDelivery_WhenSaturdayDeliveryIsAvailable()
         {
             // A little tricky because we have to setup the test by making sure that the shipment 
             // is eligible for Saturday delivery; since this determination is in a class ouside of the
@@ -198,7 +198,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.FedEx.Api.Ship.Manipulators.Request
             List<ShipmentSpecialServiceType> serviceTypes = new List<ShipmentSpecialServiceType>();
             serviceTypes.AddRange(processShipmentRequest.RequestedShipment.SpecialServicesRequested.SpecialServiceTypes);
 
-            Assert.False(serviceTypes.Contains(ShipmentSpecialServiceType.SATURDAY_DELIVERY));
+            Assert.True(serviceTypes.Contains(ShipmentSpecialServiceType.SATURDAY_DELIVERY));
         }
 
         [Fact]
@@ -258,7 +258,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.FedEx.Api.Ship.Manipulators.Request
         }
 
         [Fact]
-        public void Manipulate_AddsFutureShipmentButNotSaturdayDelivery_WhenFutureSaturdayDeliveryRequested()
+        public void Manipulate_AddsFutureShipmentAndSaturdayDelivery_WhenFutureSaturdayDeliveryRequested()
         {
             // A little tricky because we have to setup the test by making sure that the shipment 
             // is eligible for Saturday delivery; since this determination is in a class ouside of the
@@ -279,7 +279,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.FedEx.Api.Ship.Manipulators.Request
             serviceTypes.AddRange(processShipmentRequest.RequestedShipment.SpecialServicesRequested.SpecialServiceTypes);
 
             Assert.True(serviceTypes.Contains(ShipmentSpecialServiceType.FUTURE_DAY_SHIPMENT));
-            Assert.False(serviceTypes.Contains(ShipmentSpecialServiceType.SATURDAY_DELIVERY));
+            Assert.True(serviceTypes.Contains(ShipmentSpecialServiceType.SATURDAY_DELIVERY));
         }
 
         /// <summary>

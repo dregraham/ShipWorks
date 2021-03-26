@@ -62,6 +62,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Ship.Manipulators.Request
             }
 
             IFedExShipmentEntity fedExShipmentEntity = shipment.FedEx;
+            if (fedExShipmentEntity.SaturdayDelivery && FedExUtility.CanDeliverOnSaturday((FedExServiceType) fedExShipmentEntity.Service, shipTimestamp))
+            {
+                specialServiceTypes.Add(ShipmentSpecialServiceType.SATURDAY_DELIVERY);
+            }
+
             if (fedExShipmentEntity.ThirdPartyConsignee)
             {
                 specialServiceTypes.Add(ShipmentSpecialServiceType.THIRD_PARTY_CONSIGNEE);
