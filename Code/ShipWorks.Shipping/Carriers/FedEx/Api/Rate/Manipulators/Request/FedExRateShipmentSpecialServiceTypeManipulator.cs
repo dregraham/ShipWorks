@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using Interapptive.Shared.Extensions;
 using Interapptive.Shared.Utility;
 using ShipWorks.Data.Model.EntityInterfaces;
-using ShipWorks.Shipping.Carriers.FedEx.Api.Enums;
 using ShipWorks.Shipping.Carriers.FedEx.Enums;
 using ShipWorks.Shipping.Carriers.FedEx.WebServices.Rate;
 
@@ -60,6 +59,10 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Rate.Manipulators.Request
             // Pull out the FedEx shipment info from the shipment entity and check if they want Saturday 
             // delivery and whether it could be delivered on a Saturday
             var fedExShipmentEntity = shipment.FedEx;
+            if (fedExShipmentEntity.SaturdayDelivery && FedExUtility.CanDeliverOnSaturday((FedExServiceType) fedExShipmentEntity.Service, shipTimestamp))
+            {
+                specialServiceTypes.Add(ShipmentSpecialServiceType.SATURDAY_DELIVERY);
+            }
 
             if (shipment.FedEx.ReturnsClearance)
             {
