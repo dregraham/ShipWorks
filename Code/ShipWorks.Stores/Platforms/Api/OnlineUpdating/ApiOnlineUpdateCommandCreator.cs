@@ -14,7 +14,7 @@ using ShipWorks.Warehouse.Orders;
 namespace ShipWorks.Stores.Platforms.Api.OnlineUpdating
 {
     /// <summary>
-    /// Create online update commands for Amazon stores
+    /// Create online update commands for API stores
     /// </summary>
     [KeyedComponent(typeof(IOnlineUpdateCommandCreator), StoreTypeCode.Api)]
     public class ApiUpdateCommandCreator : IOnlineUpdateCommandCreator
@@ -82,17 +82,8 @@ namespace ShipWorks.Stores.Platforms.Api.OnlineUpdating
                     return Result.FromSuccess();
                 }
             }
-            catch (ApiStoreException ex)
-            {
-                // log it
-                log.ErrorFormat("Error uploading shipment information for orders {0}", ex.Message);
-
-                return Result.FromError(ex);
-            }
             catch(Exception ex)
             {
-                // Todo: remove this section. If you see this in code review, remind me. :)
-                // log it
                 log.ErrorFormat("Error uploading shipment information for orders {0}", ex.Message);
 
                 return Result.FromError(ex);
