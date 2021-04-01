@@ -179,7 +179,7 @@ namespace ShipWorks.Stores.Platforms.Api.OnlineUpdating
                     return "asendia";
 
                 default:
-                    return "apicode-dummy-carrier";                
+                    return "other";                
             }
         }
     }
