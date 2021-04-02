@@ -108,11 +108,11 @@ namespace ShipWorks.Stores.Platforms.Api.OnlineUpdating
         /// </summary>
         public async Task UploadShipmentDetails(List<ShipmentEntity> shipments)
         {
-            // upload the feed using the MWS API
             var client = createWarehouseOrderClient();
 
             foreach (var shipment in shipments)
             {
+                await shippingManager.EnsureShipmentLoadedAsync(shipment).ConfigureAwait(false);
                 string carrier = GetCarrierName(shipment);
                 var result = await client.NotifyShipped(shipment.Order.ChannelOrderID, shipment.TrackingNumber, carrier).ConfigureAwait(false);
                 result.OnFailure(ex => throw new ApiStoreException($"Error uploading shipment details: {ex.Message}", ex));
