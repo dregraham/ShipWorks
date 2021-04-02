@@ -155,7 +155,7 @@ namespace ShipWorks.Stores.Platforms.Api.OnlineUpdating
                 case true when sfpName.Equals("STAMPS_DOT_COM", StringComparison.OrdinalIgnoreCase):
                     return "stamps_com";
                     
-                case true when ShipmentTypeManager.IsFedEx(ShipmentTypeCode.FedEx):
+                case true when ShipmentTypeManager.IsFedEx(shipmentTypeCode):
                 case true when otherDesc?.IsFedEx ?? false:
                 case true when sfpName.Equals("FEDEX", StringComparison.OrdinalIgnoreCase):
                     return "fedex";
