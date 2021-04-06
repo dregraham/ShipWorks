@@ -8,6 +8,8 @@ using SD.LLBLGen.Pro.QuerySpec;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping;
+using ShipWorks.Shipping.Carriers;
+using ShipWorks.Shipping.Carriers.Postal;
 using ShipWorks.Stores.Content;
 using ShipWorks.Warehouse.Orders;
 
@@ -106,14 +108,79 @@ namespace ShipWorks.Stores.Platforms.Api.OnlineUpdating
         /// </summary>
         public async Task UploadShipmentDetails(List<ShipmentEntity> shipments)
         {
-            // upload the feed using the MWS API
             var client = createWarehouseOrderClient();
 
             foreach (var shipment in shipments)
             {
-                var result = await client.NotifyShipped(shipment.Order.ChannelOrderID, shipment.TrackingNumber, ShippingManager.GetCarrierName(shipment.ShipmentTypeCode)).ConfigureAwait(false);
+                await shippingManager.EnsureShipmentLoadedAsync(shipment).ConfigureAwait(false);
+                string carrier = GetCarrierName(shipment);
+                var result = await client.NotifyShipped(shipment.Order.ChannelOrderID, shipment.TrackingNumber, carrier).ConfigureAwait(false);
                 result.OnFailure(ex => throw new ApiStoreException($"Error uploading shipment details: {ex.Message}", ex));
             }            
+        }
+
+        /// <summary>
+        /// Gets the carrier name that is allowed in shipengine
+        /// </summary>
+        private string GetCarrierName(ShipmentEntity shipment)
+        {
+            CarrierDescription otherDesc = null;
+            ShipmentTypeCode shipmentTypeCode = shipment.ShipmentTypeCode;
+
+            if (shipmentTypeCode == ShipmentTypeCode.Other)
+            {
+                otherDesc = shippingManager.GetOtherCarrierDescription(shipment);
+            }
+
+            string sfpName = string.Empty;
+            if(shipmentTypeCode == ShipmentTypeCode.AmazonSFP)
+            {
+                sfpName = shipment.AmazonSFP.CarrierName.ToUpperInvariant();
+            }
+
+            switch (true)
+            {
+                case true when otherDesc?.IsDHL ?? false:
+                case true when ShipmentTypeManager.ShipmentTypeCodeSupportsDhl(shipmentTypeCode) &&
+                        ShipmentTypeManager.IsDhl((PostalServiceType) shipment.Postal.Service):
+                    return "dhl_ecommerce";
+
+                case true when shipmentTypeCode == ShipmentTypeCode.Endicia:
+                case true when shipmentTypeCode == ShipmentTypeCode.Express1Endicia:
+                    return "endicia";
+
+                case true when ShipmentTypeManager.IsPostal(shipmentTypeCode):
+                case true when otherDesc?.IsUSPS ?? false:
+                case true when sfpName.Equals("USPS", StringComparison.OrdinalIgnoreCase):
+                case true when sfpName.Equals("STAMPS_DOT_COM", StringComparison.OrdinalIgnoreCase):
+                    return "stamps_com";
+                    
+                case true when ShipmentTypeManager.IsFedEx(shipmentTypeCode):
+                case true when otherDesc?.IsFedEx ?? false:
+                case true when sfpName.Equals("FEDEX", StringComparison.OrdinalIgnoreCase):
+                    return "fedex";
+                    
+                case true when ShipmentTypeManager.IsUps(shipmentTypeCode):
+                case true when otherDesc?.IsUPS ?? false:
+                case true when sfpName.Equals("UPS", StringComparison.OrdinalIgnoreCase):
+                    return "ups";
+                    
+                case true when shipmentTypeCode == ShipmentTypeCode.DhlExpress:
+                    return "dhl_express";
+                    
+                case true when shipmentTypeCode == ShipmentTypeCode.OnTrac:
+                case true when sfpName.Equals("ONTRAC", StringComparison.OrdinalIgnoreCase):
+                    return "ontrac";
+
+                case true when shipmentTypeCode == ShipmentTypeCode.AmazonSWA:
+                    return "amazon_shipping";
+
+                case true when shipmentTypeCode == ShipmentTypeCode.Asendia:
+                    return "asendia";
+
+                default:
+                    return "other";                
+            }
         }
     }
 }
