@@ -48,7 +48,7 @@ namespace ShipWorks.Stores.Platforms.BigCommerce
 
                 using (ISqlAdapter sqlAdapter = sqlAdapterFactory.CreateTransacted())
                 {
-                    sqlAdapter.SaveEntity(store);
+                    sqlAdapter.SaveAndRefetch(store);
                     sqlAdapter.Commit();
                 }
             }

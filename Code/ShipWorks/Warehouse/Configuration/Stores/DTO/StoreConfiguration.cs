@@ -12,6 +12,11 @@ namespace ShipWorks.Warehouse.Configuration.Stores.DTO
     public class StoreConfiguration
     {
         /// <summary>
+        /// Warehouse store Id
+        /// </summary>
+        public string Id { get; set; }
+
+        /// <summary>
         /// The type code of this store
         /// </summary>
         public StoreTypeCode StoreType { get; set; }

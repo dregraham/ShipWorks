@@ -361,7 +361,7 @@ namespace ShipWorks.Stores.Management
             comboStoreType.Items.Add("Choose...");
 
             // Add each store type as a radio
-            foreach (StoreType storeType in StoreTypeManager.StoreTypes)
+            foreach (StoreType storeType in StoreTypeManager.StoreTypes.Where(s=>s.CanAddStoreType))
             {
                 comboStoreType.Items.Add(new ImageComboBoxItem(storeType.StoreTypeName, storeType, EnumHelper.GetImage(storeType.TypeCode)));
             }

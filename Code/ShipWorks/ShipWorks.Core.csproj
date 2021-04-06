@@ -11177,6 +11177,7 @@
     <None Include="Resources\bonanza.png" />
     <Resource Include="Resources\box_closed_redo_16_16.png" />
     <Resource Include="Resources\box_closed_redo_32_32.png" />
+    <None Include="Resources\api.png" />
     <Content Include="Resources\box_tall_32.png" />
     <Resource Include="Resources\buttonEndSearchDisabled.png" />
     <None Include="Resources\checkbox_circle_32.png" />
