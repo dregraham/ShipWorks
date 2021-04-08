@@ -11,7 +11,7 @@ namespace ShipWorks.Warehouse.Configuration.Stores
     /// <summary>
     /// Base class for setting up a store from a getConfig call
     /// </summary>
-    [KeyAllComponent(typeof(IStoreSetup), typeof(StoreTypeCode), new object[] { StoreTypeCode.Manual, StoreTypeCode.Odbc, StoreTypeCode.GenericFile, StoreTypeCode.ThreeDCart })]
+    [KeyAllComponent(typeof(IStoreSetup), typeof(StoreTypeCode), new object[] { StoreTypeCode.Manual, StoreTypeCode.Odbc, StoreTypeCode.GenericFile, StoreTypeCode.ThreeDCart, StoreTypeCode.Api })]
     public class BaseStoreSetup : IStoreSetup
     {
         /// <summary>

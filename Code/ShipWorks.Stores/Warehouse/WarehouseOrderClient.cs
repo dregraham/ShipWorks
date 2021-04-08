@@ -11,6 +11,7 @@ using RestSharp;
 using ShipWorks.ApplicationCore.Licensing;
 using ShipWorks.ApplicationCore.Licensing.Warehouse;
 using ShipWorks.ApplicationCore.Licensing.Warehouse.DTO;
+using ShipWorks.Common.Net;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Editions;
@@ -118,6 +119,37 @@ namespace ShipWorks.Stores.Warehouse
             {
                 log.Error($"Failed to upload order to hub. First Order ID was {orders.FirstOrDefault()?.OrderID.ToString() ?? "???"}", ex);
                 return GenericResult.FromError<IEnumerable<WarehouseUploadOrderResponse>>(ex);
+            }
+        }
+
+        /// <summary>
+        /// Upload shipment notification information to Hub. This will only work for orders from shipengine
+        /// </summary>
+        public async Task<Result> NotifyShipped(string salesOrderId, string trackingNumber, string carrier)
+        {
+            try
+            {
+                IRestRequest request = new RestRequest(WarehouseEndpoints.NotifyShipped(salesOrderId), Method.POST);
+                request.AddJsonBody(new ShipmentNotification(trackingNumber, carrier));
+                request.JsonSerializer = RestSharpJsonNetSerializer.CreateHubDefault();
+
+                GenericResult<IRestResponse> response = await warehouseRequestClient
+                    .MakeRequest(request, "Notify Shipped")
+                    .ConfigureAwait(true);
+
+                if (response.Failure)
+                {
+                    log.Error($"Failed to notify shipment {salesOrderId} on the hub. {response.Message}",
+                              response.Exception);
+                    return Result.FromError(response.Exception);
+                }
+
+                return Result.FromSuccess();
+            }
+            catch (Exception ex)
+            {
+                log.Error($"Failed to notify shipment {salesOrderId} on the hub.", ex);
+                return Result.FromError(ex);
             }
         }
 

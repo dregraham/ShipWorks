@@ -269,6 +269,15 @@
     <Compile Include="Platforms\Amazon\Warehouse\AmazonWarehouseOrder.cs" />
     <Compile Include="Platforms\Amazon\Warehouse\AmazonWarehouseOrderFactory.cs" />
     <Compile Include="Platforms\Amazon\Warehouse\AmazonStoreDtoFactory.cs" />
+    <Compile Include="Platforms\Api\ApiStoreDowloader.cs" />
+    <Compile Include="Platforms\Api\ApiStoreException.cs" />
+    <Compile Include="Platforms\Api\ApiStoreSetup.cs" />
+    <Compile Include="Platforms\Api\ApiStoreType.cs" />
+    <Compile Include="Platforms\Api\ApiWarehouseOrderFactory.cs" />
+    <Compile Include="Platforms\Api\OnlineUpdating\ApiOnlineUpdateCommandCreator.cs" />
+    <Compile Include="Platforms\Api\OnlineUpdating\ApiOnlineUpdater.cs" />
+    <Compile Include="Platforms\Api\CoreExtensions\Actions\ApiShipmentUploadTask.cs" />
+    <Compile Include="Platforms\Api\OnlineUpdating\IApiOnlineUpdater.cs" />
     <Compile Include="Platforms\BigCommerce\Warehouse\BigCommerceStore.cs" />
     <Compile Include="Platforms\BigCommerce\Warehouse\BigCommerceStoreDtoFactory.cs" />
     <Compile Include="Platforms\BigCommerce\Warehouse\BigCommerceWarehouseItem.cs" />
@@ -1007,6 +1016,7 @@
     <Compile Include="Warehouse\IStoreDtoFactory.cs" />
     <Compile Include="Warehouse\IUploadOrdersRequest.cs" />
     <Compile Include="Warehouse\IWarehouseOrderDtoFactory.cs" />
+    <Compile Include="Warehouse\ShipmentNotification.cs" />
     <Compile Include="Warehouse\StoreData\RakutenStore.cs" />
     <Compile Include="Warehouse\StoreData\VolusionStore.cs" />
     <Compile Include="Warehouse\UploadOrdersRequest.cs" />

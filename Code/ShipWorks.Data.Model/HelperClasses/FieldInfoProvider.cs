@@ -49,7 +49,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 		/// <summary>Method which initializes the internal datastores.</summary>
 		private void Init()
 		{
-			this.InitClass( (241 + 2));
+			this.InitClass( (242 + 2));
 			InitActionEntityInfos();
 			InitActionFilterTriggerEntityInfos();
 			InitActionQueueEntityInfos();
@@ -198,6 +198,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 			InitPayPalOrderSearchEntityInfos();
 			InitPayPalStoreEntityInfos();
 			InitPermissionEntityInfos();
+			InitPlatformStoreEntityInfos();
 			InitPostalProfileEntityInfos();
 			InitPostalShipmentEntityInfos();
 			InitPrintResultEntityInfos();
@@ -2616,6 +2617,13 @@ namespace ShipWorks.Data.Model.HelperClasses
 			this.AddElementFieldInfo("PermissionEntity", "UserID", typeof(System.Int64), false, true, false, false,  (int)PermissionFieldIndex.UserID, 0, 0, 19);
 			this.AddElementFieldInfo("PermissionEntity", "PermissionType", typeof(System.Int32), false, false, false, false,  (int)PermissionFieldIndex.PermissionType, 0, 0, 10);
 			this.AddElementFieldInfo("PermissionEntity", "EntityID", typeof(Nullable<System.Int64>), false, false, false, true,  (int)PermissionFieldIndex.EntityID, 0, 0, 19);
+		}
+		/// <summary>Inits PlatformStoreEntity's FieldInfo objects</summary>
+		private void InitPlatformStoreEntityInfos()
+		{
+			this.AddFieldIndexEnumForElementName(typeof(PlatformStoreFieldIndex), "PlatformStoreEntity");
+			this.AddElementFieldInfo("PlatformStoreEntity", "StoreID", typeof(System.Int64), true, false, false, false,  (int)PlatformStoreFieldIndex.StoreID, 0, 0, 19);
+			this.AddElementFieldInfo("PlatformStoreEntity", "OrderSourceID", typeof(System.String), false, false, false, false,  (int)PlatformStoreFieldIndex.OrderSourceID, 50, 0, 0);
 		}
 		/// <summary>Inits PostalProfileEntity's FieldInfo objects</summary>
 		private void InitPostalProfileEntityInfos()
