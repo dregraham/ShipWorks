@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
-using Autofac;
+﻿using System.Windows.Forms;
 using Autofac.Extras.Moq;
 using Interapptive.Shared.UI;
 using Moq;
@@ -64,7 +58,7 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing.FeatureRestrictions
 
                 testObject.Handle(owner.Object, It.IsAny<ILicenseCapabilities>(), null);
 
-                messageHelper.Verify(m => m.ShowError(owner.Object, "You must contact Interapptive to use additional shipping carriers."), Times.Once);
+                messageHelper.Verify(m => m.ShowError(owner.Object, "You must contact ShipWorks support to use additional shipping carriers."), Times.Once);
             }
         }
     }

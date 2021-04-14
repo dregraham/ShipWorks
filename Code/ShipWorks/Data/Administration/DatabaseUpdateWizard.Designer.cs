@@ -113,34 +113,34 @@ namespace ShipWorks.Data.Administration
             this.wizardPagePrerequisitePlaceholder = new ShipWorks.UI.Wizard.WizardPage();
             this.fieldLengthProvider = new ShipWorks.Data.Utility.EntityFieldLengthProvider(this.components);
             this.mainPanel.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize) (this.pictureBox)).BeginInit();
             this.topPanel.SuspendLayout();
             this.wizardPageBackup.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBackupComplete)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize) (this.pictureBackupComplete)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize) (this.pictureBox1)).BeginInit();
             this.wizardPageUpgrade.SuspendLayout();
             this.panelUpgradingDatabase.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox3)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize) (this.pictureBox3)).BeginInit();
             this.wizardPageComplete.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.iconSetupComplete)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize) (this.iconSetupComplete)).BeginInit();
             this.wizardPageLogin.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.headerImage)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize) (this.headerImage)).BeginInit();
             this.wizardPageServerUpgradeInfo.SuspendLayout();
             this.panelCanUpgrade.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize) (this.pictureBox2)).BeginInit();
             this.wizardPageServerUpgradeDownload.SuspendLayout();
             this.wizardPageServerUpgradeInstall.SuspendLayout();
             this.panelUpgradeSqlServer.SuspendLayout();
             this.panelUpgradingSqlServer.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox7)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize) (this.pictureBox7)).BeginInit();
             this.wizardPageShipWorksAdmin.SuspendLayout();
             this.wizardPageIntro.SuspendLayout();
             this.wizardPageWelcome.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox5)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize) (this.pictureBox5)).BeginInit();
             this.wizardPageWindowsFirewall.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.firewallUpdatedPicture)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox6)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.fieldLengthProvider)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize) (this.firewallUpdatedPicture)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize) (this.pictureBox6)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize) (this.fieldLengthProvider)).BeginInit();
             this.SuspendLayout();
             // 
             // next
@@ -186,7 +186,7 @@ namespace ShipWorks.Data.Administration
             this.wizardPageBackup.Controls.Add(this.labelBackupInfo);
             this.wizardPageBackup.Description = "Backup the ShipWorks database before updating.";
             this.wizardPageBackup.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.wizardPageBackup.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.wizardPageBackup.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (0)));
             this.wizardPageBackup.Location = new System.Drawing.Point(0, 0);
             this.wizardPageBackup.Name = "wizardPageBackup";
             this.wizardPageBackup.Size = new System.Drawing.Size(507, 234);
@@ -218,9 +218,9 @@ namespace ShipWorks.Data.Administration
             // 
             // pictureBox1
             // 
-            this.pictureBox1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.pictureBox1.Anchor = ((System.Windows.Forms.AnchorStyles) ((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.pictureBox1.Cursor = System.Windows.Forms.Cursors.Default;
-            this.pictureBox1.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox1.Image")));
+            this.pictureBox1.Image = ((System.Drawing.Image) (resources.GetObject("pictureBox1.Image")));
             this.pictureBox1.Location = new System.Drawing.Point(51, 52);
             this.pictureBox1.Name = "pictureBox1";
             this.pictureBox1.Size = new System.Drawing.Size(48, 48);
@@ -231,7 +231,7 @@ namespace ShipWorks.Data.Administration
             // labelBackupNoPermission
             // 
             this.labelBackupNoPermission.AutoSize = true;
-            this.labelBackupNoPermission.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.labelBackupNoPermission.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (0)));
             this.labelBackupNoPermission.ForeColor = System.Drawing.Color.Red;
             this.labelBackupNoPermission.Location = new System.Drawing.Point(103, 83);
             this.labelBackupNoPermission.Name = "labelBackupNoPermission";
@@ -265,7 +265,7 @@ namespace ShipWorks.Data.Administration
             this.wizardPageUpgrade.Controls.Add(this.panelUpgradingDatabase);
             this.wizardPageUpgrade.Description = "Update your ShipWorks database.";
             this.wizardPageUpgrade.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.wizardPageUpgrade.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.wizardPageUpgrade.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (0)));
             this.wizardPageUpgrade.Location = new System.Drawing.Point(0, 0);
             this.wizardPageUpgrade.Name = "wizardPageUpgrade";
             this.wizardPageUpgrade.Size = new System.Drawing.Size(507, 234);
@@ -304,7 +304,7 @@ namespace ShipWorks.Data.Administration
             // 
             // pictureBox3
             // 
-            this.pictureBox3.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox3.Image")));
+            this.pictureBox3.Image = ((System.Drawing.Image) (resources.GetObject("pictureBox3.Image")));
             this.pictureBox3.Location = new System.Drawing.Point(11, 9);
             this.pictureBox3.Name = "pictureBox3";
             this.pictureBox3.Size = new System.Drawing.Size(16, 16);
@@ -326,7 +326,7 @@ namespace ShipWorks.Data.Administration
             this.wizardPageComplete.Controls.Add(this.labelSetupComplete);
             this.wizardPageComplete.Controls.Add(this.iconSetupComplete);
             this.wizardPageComplete.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.wizardPageComplete.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.wizardPageComplete.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (0)));
             this.wizardPageComplete.Location = new System.Drawing.Point(0, 0);
             this.wizardPageComplete.Name = "wizardPageComplete";
             this.wizardPageComplete.Size = new System.Drawing.Size(507, 234);
@@ -366,7 +366,7 @@ namespace ShipWorks.Data.Administration
             this.wizardPageLogin.Controls.Add(this.label7);
             this.wizardPageLogin.Description = "Log on as a user with update rights.";
             this.wizardPageLogin.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.wizardPageLogin.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.wizardPageLogin.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (0)));
             this.wizardPageLogin.Location = new System.Drawing.Point(0, 0);
             this.wizardPageLogin.Name = "wizardPageLogin";
             this.wizardPageLogin.Size = new System.Drawing.Size(507, 234);
@@ -379,7 +379,7 @@ namespace ShipWorks.Data.Administration
             // 
             this.forgotPassword.AutoSize = true;
             this.forgotPassword.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.forgotPassword.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.forgotPassword.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point, ((byte) (0)));
             this.forgotPassword.ForeColor = System.Drawing.Color.Blue;
             this.forgotPassword.Location = new System.Drawing.Point(231, 123);
             this.forgotPassword.Name = "forgotPassword";
@@ -392,7 +392,7 @@ namespace ShipWorks.Data.Administration
             // 
             this.forgotUsername.AutoSize = true;
             this.forgotUsername.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.forgotUsername.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.forgotUsername.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point, ((byte) (0)));
             this.forgotUsername.ForeColor = System.Drawing.Color.Blue;
             this.forgotUsername.Location = new System.Drawing.Point(143, 123);
             this.forgotUsername.Name = "forgotUsername";
@@ -472,7 +472,7 @@ namespace ShipWorks.Data.Administration
             this.wizardPageServerUpgradeInfo.Controls.Add(this.labelSqlServer08Required);
             this.wizardPageServerUpgradeInfo.Description = "An older version of SQL Server needs to be upgraded.";
             this.wizardPageServerUpgradeInfo.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.wizardPageServerUpgradeInfo.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.wizardPageServerUpgradeInfo.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (0)));
             this.wizardPageServerUpgradeInfo.Location = new System.Drawing.Point(0, 0);
             this.wizardPageServerUpgradeInfo.Name = "wizardPageServerUpgradeInfo";
             this.wizardPageServerUpgradeInfo.Size = new System.Drawing.Size(507, 234);
@@ -514,7 +514,7 @@ namespace ShipWorks.Data.Administration
             // label9
             // 
             this.label9.AutoSize = true;
-            this.label9.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label9.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte) (0)));
             this.label9.Location = new System.Drawing.Point(36, 87);
             this.label9.Name = "label9";
             this.label9.Size = new System.Drawing.Size(66, 13);
@@ -561,7 +561,7 @@ namespace ShipWorks.Data.Administration
             // labelSqlServer08Required
             // 
             this.labelSqlServer08Required.AutoSize = true;
-            this.labelSqlServer08Required.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.labelSqlServer08Required.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte) (0)));
             this.labelSqlServer08Required.Location = new System.Drawing.Point(20, 8);
             this.labelSqlServer08Required.Name = "labelSqlServer08Required";
             this.labelSqlServer08Required.Size = new System.Drawing.Size(244, 13);
@@ -576,7 +576,7 @@ namespace ShipWorks.Data.Administration
             this.wizardPageServerUpgradeDownload.Controls.Add(this.labelDownloadSqlServer);
             this.wizardPageServerUpgradeDownload.Description = "ShipWorks needs to download Microsoft SQL Server.";
             this.wizardPageServerUpgradeDownload.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.wizardPageServerUpgradeDownload.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.wizardPageServerUpgradeDownload.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (0)));
             this.wizardPageServerUpgradeDownload.Location = new System.Drawing.Point(0, 0);
             this.wizardPageServerUpgradeDownload.Name = "wizardPageServerUpgradeDownload";
             this.wizardPageServerUpgradeDownload.Size = new System.Drawing.Size(507, 234);
@@ -625,7 +625,7 @@ namespace ShipWorks.Data.Administration
             this.wizardPageServerUpgradeInstall.Controls.Add(this.panelUpgradingSqlServer);
             this.wizardPageServerUpgradeInstall.Description = "ShipWorks is ready to upgrade Microsoft SQL Server.";
             this.wizardPageServerUpgradeInstall.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.wizardPageServerUpgradeInstall.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.wizardPageServerUpgradeInstall.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (0)));
             this.wizardPageServerUpgradeInstall.Location = new System.Drawing.Point(0, 0);
             this.wizardPageServerUpgradeInstall.Name = "wizardPageServerUpgradeInstall";
             this.wizardPageServerUpgradeInstall.NextRequiresElevation = true;
@@ -648,7 +648,7 @@ namespace ShipWorks.Data.Administration
             // 
             // labelNote
             // 
-            this.labelNote.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.labelNote.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte) (0)));
             this.labelNote.Location = new System.Drawing.Point(9, 33);
             this.labelNote.Name = "labelNote";
             this.labelNote.Size = new System.Drawing.Size(38, 22);
@@ -684,7 +684,7 @@ namespace ShipWorks.Data.Administration
             // 
             // pictureBox7
             // 
-            this.pictureBox7.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox7.Image")));
+            this.pictureBox7.Image = ((System.Drawing.Image) (resources.GetObject("pictureBox7.Image")));
             this.pictureBox7.Location = new System.Drawing.Point(429, 11);
             this.pictureBox7.Name = "pictureBox7";
             this.pictureBox7.Size = new System.Drawing.Size(16, 16);
@@ -717,7 +717,7 @@ namespace ShipWorks.Data.Administration
             this.wizardPageShipWorksAdmin.Controls.Add(this.label19);
             this.wizardPageShipWorksAdmin.Description = "Create an administrator account to log on to ShipWorks.";
             this.wizardPageShipWorksAdmin.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.wizardPageShipWorksAdmin.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.wizardPageShipWorksAdmin.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (0)));
             this.wizardPageShipWorksAdmin.Location = new System.Drawing.Point(0, 0);
             this.wizardPageShipWorksAdmin.Name = "wizardPageShipWorksAdmin";
             this.wizardPageShipWorksAdmin.Size = new System.Drawing.Size(507, 234);
@@ -877,7 +877,7 @@ namespace ShipWorks.Data.Administration
             this.wizardPageIntro.Controls.Add(this.label1);
             this.wizardPageIntro.Description = "ShipWorks needs to upgrade your database.";
             this.wizardPageIntro.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.wizardPageIntro.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.wizardPageIntro.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (0)));
             this.wizardPageIntro.Location = new System.Drawing.Point(0, 0);
             this.wizardPageIntro.Name = "wizardPageIntro";
             this.wizardPageIntro.Size = new System.Drawing.Size(497, 234);
@@ -893,7 +893,7 @@ namespace ShipWorks.Data.Administration
             this.wizardPageWelcome.Controls.Add(this.label22);
             this.wizardPageWelcome.Description = "ShipWorks needs to update your database.";
             this.wizardPageWelcome.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.wizardPageWelcome.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.wizardPageWelcome.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (0)));
             this.wizardPageWelcome.Location = new System.Drawing.Point(0, 0);
             this.wizardPageWelcome.Name = "wizardPageWelcome";
             this.wizardPageWelcome.Size = new System.Drawing.Size(507, 234);
@@ -907,7 +907,7 @@ namespace ShipWorks.Data.Administration
             this.noSingleUserMode.Name = "noSingleUserMode";
             this.noSingleUserMode.Size = new System.Drawing.Size(314, 17);
             this.noSingleUserMode.TabIndex = 4;
-            this.noSingleUserMode.Text = "Do not use SINGLE_USER mode (Interapptive Internal Only)";
+            this.noSingleUserMode.Text = "Do not use SINGLE_USER mode (ShipWorks Internal Only)";
             this.noSingleUserMode.UseVisualStyleBackColor = true;
             this.noSingleUserMode.Visible = false;
             // 
@@ -956,7 +956,7 @@ namespace ShipWorks.Data.Administration
             this.wizardPageWindowsFirewall.Controls.Add(this.pictureBox6);
             this.wizardPageWindowsFirewall.Description = "Enable ShipWorks to work through Windows Firewall.";
             this.wizardPageWindowsFirewall.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.wizardPageWindowsFirewall.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.wizardPageWindowsFirewall.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (0)));
             this.wizardPageWindowsFirewall.Location = new System.Drawing.Point(0, 0);
             this.wizardPageWindowsFirewall.Name = "wizardPageWindowsFirewall";
             this.wizardPageWindowsFirewall.Size = new System.Drawing.Size(507, 234);
@@ -1028,7 +1028,7 @@ namespace ShipWorks.Data.Administration
             // wizardPagePrerequisitePlaceholder
             // 
             this.wizardPagePrerequisitePlaceholder.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.wizardPagePrerequisitePlaceholder.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.wizardPagePrerequisitePlaceholder.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (0)));
             this.wizardPagePrerequisitePlaceholder.Location = new System.Drawing.Point(0, 0);
             this.wizardPagePrerequisitePlaceholder.Name = "wizardPagePrerequisitePlaceholder";
             this.wizardPagePrerequisitePlaceholder.Size = new System.Drawing.Size(507, 234);
@@ -1059,48 +1059,48 @@ namespace ShipWorks.Data.Administration
             this.Text = "ShipWorks Database Update";
             this.Load += new System.EventHandler(this.OnLoad);
             this.mainPanel.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox)).EndInit();
+            ((System.ComponentModel.ISupportInitialize) (this.pictureBox)).EndInit();
             this.topPanel.ResumeLayout(false);
             this.topPanel.PerformLayout();
             this.wizardPageBackup.ResumeLayout(false);
             this.wizardPageBackup.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBackupComplete)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize) (this.pictureBackupComplete)).EndInit();
+            ((System.ComponentModel.ISupportInitialize) (this.pictureBox1)).EndInit();
             this.wizardPageUpgrade.ResumeLayout(false);
             this.wizardPageUpgrade.PerformLayout();
             this.panelUpgradingDatabase.ResumeLayout(false);
             this.panelUpgradingDatabase.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox3)).EndInit();
+            ((System.ComponentModel.ISupportInitialize) (this.pictureBox3)).EndInit();
             this.wizardPageComplete.ResumeLayout(false);
             this.wizardPageComplete.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.iconSetupComplete)).EndInit();
+            ((System.ComponentModel.ISupportInitialize) (this.iconSetupComplete)).EndInit();
             this.wizardPageLogin.ResumeLayout(false);
             this.wizardPageLogin.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.headerImage)).EndInit();
+            ((System.ComponentModel.ISupportInitialize) (this.headerImage)).EndInit();
             this.wizardPageServerUpgradeInfo.ResumeLayout(false);
             this.wizardPageServerUpgradeInfo.PerformLayout();
             this.panelCanUpgrade.ResumeLayout(false);
             this.panelCanUpgrade.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).EndInit();
+            ((System.ComponentModel.ISupportInitialize) (this.pictureBox2)).EndInit();
             this.wizardPageServerUpgradeDownload.ResumeLayout(false);
             this.wizardPageServerUpgradeInstall.ResumeLayout(false);
             this.panelUpgradeSqlServer.ResumeLayout(false);
             this.panelUpgradeSqlServer.PerformLayout();
             this.panelUpgradingSqlServer.ResumeLayout(false);
             this.panelUpgradingSqlServer.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox7)).EndInit();
+            ((System.ComponentModel.ISupportInitialize) (this.pictureBox7)).EndInit();
             this.wizardPageShipWorksAdmin.ResumeLayout(false);
             this.wizardPageShipWorksAdmin.PerformLayout();
             this.wizardPageIntro.ResumeLayout(false);
             this.wizardPageIntro.PerformLayout();
             this.wizardPageWelcome.ResumeLayout(false);
             this.wizardPageWelcome.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox5)).EndInit();
+            ((System.ComponentModel.ISupportInitialize) (this.pictureBox5)).EndInit();
             this.wizardPageWindowsFirewall.ResumeLayout(false);
             this.wizardPageWindowsFirewall.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.firewallUpdatedPicture)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox6)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.fieldLengthProvider)).EndInit();
+            ((System.ComponentModel.ISupportInitialize) (this.firewallUpdatedPicture)).EndInit();
+            ((System.ComponentModel.ISupportInitialize) (this.pictureBox6)).EndInit();
+            ((System.ComponentModel.ISupportInitialize) (this.fieldLengthProvider)).EndInit();
             this.ResumeLayout(false);
 
         }

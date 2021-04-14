@@ -137,7 +137,7 @@ namespace ShipWorks.ApplicationCore
                         "ShipWorks could not load the ComputerID.\n\n" +
                         "To fix this problem:\n" +
                             "   (1)  Reinstall the application.\n" +
-                            "   (2)  For further support, contact Interapptive.");
+                            "   (2)  For further assistance, contact ShipWorks support.");
         }
 
         /// <summary>
@@ -150,7 +150,7 @@ namespace ShipWorks.ApplicationCore
                         "ShipWorks could not load the InstanceID.\n\n" +
                         "To fix this problem:\n" +
                             "   (1)  Reinstall the application.\n" +
-                            "   (2)  For further support, contact Interapptive.");
+                            "   (2)  For further assistance, contact ShipWorks support.");
         }
 
         /// <summary>
