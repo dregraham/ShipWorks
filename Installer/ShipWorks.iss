@@ -28,7 +28,7 @@
 AppName=ShipWorks®
 AppVersion={#= Version} {#= EditionName}
 AppVerName=ShipWorks® {#= Version} {#= EditionName}
-AppPublisher=Auctane®, Inc.
+AppPublisher=Auctane®, LLC
 AppPublisherURL=http://www.shipworks.com
 AppSupportURL=http://www.shipworks.com
 AppUpdatesURL=http://www.shipworks.com
@@ -56,10 +56,10 @@ AlwaysRestart=false
 ShowLanguageDialog=no
 AllowUNCPath=false
 VersionInfoVersion={#= Version}
-VersionInfoCompany=Auctane®, Inc.
+VersionInfoCompany=Auctane®, LLC
 VersionInfoDescription=Auctane® ShipWorks®
 VersionInfoTextVersion=ShipWorks® {#= Version}
-VersionInfoCopyright=Copyright © Auctane®, Inc. 2003-{#= CurrentYear}
+VersionInfoCopyright=Copyright © Auctane®, LLC 2003-{#= CurrentYear}
 ArchitecturesInstallIn64BitMode=x64
 AppendDefaultDirName=false
 DisableDirPage=no
