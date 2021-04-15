@@ -247,7 +247,7 @@ namespace ShipWorks.ApplicationCore.Licensing
                 case LicenseActivationState.Invalid:
                 {
                     return "The license entered is a valid ShipWorks license, but was\n" +
-                           "not found in the ShipWorks database.\n\n" +
+                           "not found.\n\n" +
                            "Please contact ShipWorks support for assistance.";
                 }
                 default:
