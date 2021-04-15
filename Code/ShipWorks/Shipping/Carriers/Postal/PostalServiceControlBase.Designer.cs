@@ -1,4 +1,6 @@
-﻿namespace ShipWorks.Shipping.Carriers.Postal
+﻿using static ShipWorks.UI.Controls.WeightControl;
+
+namespace ShipWorks.Shipping.Carriers.Postal
 {
     partial class PostalServiceControlBase
     {
@@ -214,7 +216,7 @@
             this.weight.Size = new System.Drawing.Size(269, 21);
             this.weight.TabIndex = 7;
             this.weight.Weight = 0D;
-            this.weight.WeightChanged += new System.EventHandler(this.OnRateCriteriaChanged);
+            this.weight.WeightChanged += new System.EventHandler<WeightChangedEventArgs>(this.OnRateCriteriaChanged);
             this.weight.WeightChanged += OnShipSenseFieldChanged;
             //
             // labelWeight

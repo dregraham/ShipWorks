@@ -1,4 +1,6 @@
-﻿namespace ShipWorks.Shipping.Editing
+﻿using static ShipWorks.UI.Controls.WeightControl;
+
+namespace ShipWorks.Shipping.Editing
 {
     partial class CustomsControlBase
     {
@@ -199,7 +201,7 @@
             this.weight.Size = new System.Drawing.Size(269, 24);
             this.weight.TabIndex = 5;
             this.weight.Weight = 0D;
-            this.weight.WeightChanged += new System.EventHandler(this.OnShipSenseFieldChanged);
+            this.weight.WeightChanged += new System.EventHandler<WeightChangedEventArgs>(this.OnShipSenseFieldChanged);
             // 
             // value
             // 

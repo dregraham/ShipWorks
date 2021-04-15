@@ -1,4 +1,6 @@
-﻿namespace ShipWorks.Shipping.Carriers.Dhl
+﻿using static ShipWorks.UI.Controls.WeightControl;
+
+namespace ShipWorks.Shipping.Carriers.Dhl
 {
     partial class DhlExpressPackageControl
     {
@@ -126,7 +128,7 @@
             this.weight.Size = new System.Drawing.Size(269, 24);
             this.weight.TabIndex = 2;
             this.weight.Weight = 0D;
-            this.weight.WeightChanged += new System.EventHandler(this.OnRateCriteriaChanged);
+            this.weight.WeightChanged += new System.EventHandler<WeightChangedEventArgs>(this.OnRateCriteriaChanged);
             // 
             // dimensionsControl
             // 

@@ -1,4 +1,6 @@
-﻿namespace ShipWorks.Shipping.Carriers.FedEx
+﻿using static ShipWorks.UI.Controls.WeightControl;
+
+namespace ShipWorks.Shipping.Carriers.FedEx
 {
     partial class FedExPackageControl
     {
@@ -131,7 +133,7 @@
             this.weight.Size = new System.Drawing.Size(269, 21);
             this.weight.TabIndex = 2;
             this.weight.Weight = 0D;
-            this.weight.WeightChanged += new System.EventHandler(this.OnRateCriteriaChanged);
+            this.weight.WeightChanged += new System.EventHandler<WeightChangedEventArgs>(this.OnRateCriteriaChanged);
             this.weight.WeightChanged += OnShipSenseFieldChanged;
             this.weight.ShowShortcutInfo = true;
             //

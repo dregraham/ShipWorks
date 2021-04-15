@@ -57,7 +57,7 @@
         /// <summary>
         /// Returns true when length, width, and height have values
         /// </summary>
-        public bool HasVolumeDimensions() =>
+        public bool HasVolumeDimensions =>
             Length != noValue && Width != noValue && Height != noValue;
 
         /// <summary>

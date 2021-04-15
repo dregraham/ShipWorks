@@ -9,6 +9,7 @@ using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.UI.Controls;
 using ShipWorks.Users;
 using ShipWorks.Users.Security;
+using static ShipWorks.UI.Controls.WeightControl;
 
 namespace ShipWorks.Shipping.Editing
 {
@@ -85,14 +86,14 @@ namespace ShipWorks.Shipping.Editing
             {
                 if (shipmentWeightBox != null)
                 {
-                    shipmentWeightBox.WeightChanged -= new EventHandler(OnShipmentWeightChanged);
+                    shipmentWeightBox.WeightChanged -= new EventHandler<WeightChangedEventArgs>(OnShipmentWeightChanged);
                 }
 
                 shipmentWeightBox = value;
 
                 if (shipmentWeightBox != null)
                 {
-                    shipmentWeightBox.WeightChanged += new EventHandler(OnShipmentWeightChanged);
+                    shipmentWeightBox.WeightChanged += new EventHandler<WeightChangedEventArgs>(OnShipmentWeightChanged);
                 }
             }
         }
@@ -138,9 +139,19 @@ namespace ShipWorks.Shipping.Editing
         /// <summary>
         /// The user has manually changed the overal weight of the shipment
         /// </summary>
-        void OnShipmentWeightChanged(object sender, EventArgs e)
+        void OnShipmentWeightChanged(object sender, WeightChangedEventArgs e)
         {
             addToWeight.Checked = false;
+            if(e?.Result.HasVolumeDimensions ?? false)
+            {
+                suspendChangedEvent = true;
+                length.Text = e.Result.Length.ToString();
+                width.Text = e.Result.Width.ToString();
+                height.Text = e.Result.Height.ToString();
+                suspendChangedEvent = false;
+
+                OnDimensionsChanged(null, null);
+            }
         }
 
         /// <summary>

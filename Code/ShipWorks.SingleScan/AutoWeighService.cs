@@ -98,7 +98,7 @@ namespace ShipWorks.SingleScan
                         log.Debug($"{scaleResult.Weight} lbs was applied to package {packageAdapter.PackageId} in shipment {shipment.ShipmentID}");
                         packageAdapter.Weight = scaleResult.Weight;
                         
-                        if(scaleResult.HasVolumeDimensions())
+                        if(scaleResult.HasVolumeDimensions)
                         {
                             packageAdapter.DimsLength = scaleResult.Length;
                             packageAdapter.DimsWidth = scaleResult.Width;

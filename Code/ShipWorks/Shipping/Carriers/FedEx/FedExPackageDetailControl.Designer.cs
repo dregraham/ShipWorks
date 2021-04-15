@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Windows.Forms;
+using static ShipWorks.UI.Controls.WeightControl;
 
 namespace ShipWorks.Shipping.Carriers.FedEx
 {
@@ -177,7 +178,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             this.dryIceWeight.Size = new System.Drawing.Size(218, 24);
             this.dryIceWeight.TabIndex = 2;
             this.dryIceWeight.Weight = 0D;
-            this.dryIceWeight.WeightChanged += new System.EventHandler(this.OnPackageDetailsChanged);
+            this.dryIceWeight.WeightChanged += new System.EventHandler<WeightChangedEventArgs>(this.OnPackageDetailsChanged);
             // 
             // dangerousGoodsControl
             // 

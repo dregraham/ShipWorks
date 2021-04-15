@@ -1,5 +1,6 @@
 ﻿using System.Security.AccessControl;
 using ShipWorks.Shipping.Settings.Origin;
+using static ShipWorks.UI.Controls.WeightControl;
 
 namespace ShipWorks.Shipping.Carriers.BestRate
 {
@@ -160,7 +161,7 @@ namespace ShipWorks.Shipping.Carriers.BestRate
             this.weight.Size = new System.Drawing.Size(269, 21);
             this.weight.TabIndex = 68;
             this.weight.Weight = 0D;
-            this.weight.WeightChanged += new System.EventHandler(this.OnRateCriteriaChanged);
+            this.weight.WeightChanged += new System.EventHandler<WeightChangedEventArgs>(this.OnRateCriteriaChanged);
             this.weight.WeightChanged += OnShipSenseFieldChanged;
             this.weight.ShowShortcutInfo = true;
             //
