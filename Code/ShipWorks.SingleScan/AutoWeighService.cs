@@ -69,19 +69,19 @@ namespace ShipWorks.SingleScan
                 return false;
             }
 
-            ScaleReadResult weighResult = scaleReaderTask.Result;
+            ScaleReadResult scaleResult = scaleReaderTask.Result;
 
-            if (weighResult.Status != ScaleReadStatus.Success)
+            if (scaleResult.Status != ScaleReadStatus.Success)
             {
-                log.Error($"Error from scale: {weighResult.Message}");
+                log.Error($"Error from scale: {scaleResult.Message}");
                 CollectTelemetryData(trackedDurationEvent, "No");
-                messageHelper.ShowError(weighResult.Message);
+                messageHelper.ShowError(scaleResult.Message);
                 return false;
             }
 
-            if (weighResult.Weight < MinimumWeight)
+            if (scaleResult.Weight < MinimumWeight)
             {
-                log.Info($"Weight not used because under weightMinimum = {weighResult.Weight}");
+                log.Info($"Weight not used because under weightMinimum = {scaleResult.Weight}");
                 CollectTelemetryData(trackedDurationEvent, "No");
                 return true;
             }
@@ -92,11 +92,18 @@ namespace ShipWorks.SingleScan
 
                 foreach (IPackageAdapter packageAdapter in shipmentAdapter.GetPackageAdaptersAndEnsureShipmentIsLoaded())
                 {
-                    if (Math.Round(Math.Abs(weighResult.Weight - packageAdapter.Weight), 6) > WeightDifferenceToIgnore ||
+                    if (Math.Round(Math.Abs(scaleResult.Weight - packageAdapter.Weight), 6) > WeightDifferenceToIgnore ||
                         packageAdapter.Weight < MinimumWeight)
                     {
-                        log.Debug($"{weighResult.Weight} lbs was applied to package {packageAdapter.PackageId} in shipment {shipment.ShipmentID}");
-                        packageAdapter.Weight = weighResult.Weight;
+                        log.Debug($"{scaleResult.Weight} lbs was applied to package {packageAdapter.PackageId} in shipment {shipment.ShipmentID}");
+                        packageAdapter.Weight = scaleResult.Weight;
+                        
+                        if(scaleResult.HasVolumeDimensions())
+                        {
+                            packageAdapter.DimsLength = scaleResult.Length;
+                            packageAdapter.DimsWidth = scaleResult.Width;
+                            packageAdapter.DimsHeight = scaleResult.Height;
+                        }
                     }
                 }
 

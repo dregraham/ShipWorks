@@ -256,6 +256,7 @@
     <Compile Include="IO\FileSelector.cs" />
     <Compile Include="IO\Hardware\IVirtualKeyboard.cs" />
     <Compile Include="IO\Hardware\Scales\IScaleReader.cs" />
+    <Compile Include="IO\Hardware\Scales\ScaleCubiscanReader.cs" />
     <Compile Include="IO\Hardware\Scales\ScaleReaderWrapper.cs" />
     <Compile Include="IO\Hardware\VirtualKeyboard.cs" />
     <Compile Include="IO\IFileSelector.cs" />

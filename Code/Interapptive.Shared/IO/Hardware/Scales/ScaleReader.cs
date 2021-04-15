@@ -25,6 +25,7 @@ namespace Interapptive.Shared.IO.Hardware.Scales
 
         private static ScaleUsbReader usbReader;
         private static ScaleSerialPortReader serialReader;
+        private static ScaleCubiscanReader cubiscanReader;
 
         private static readonly object ThreadLock = new object();
         static readonly DeviceListener DeviceListener = new DeviceListener();
@@ -44,6 +45,9 @@ namespace Interapptive.Shared.IO.Hardware.Scales
                 SetUsbScale();
                 DeviceListener.Start();
             });
+
+            // TODO: Figure out how to get this from configuration once we get to that story
+            cubiscanReader = new ScaleCubiscanReader();
 
             ReadEvents = Observable.Create<bool>(x =>
             {
@@ -208,7 +212,8 @@ namespace Interapptive.Shared.IO.Hardware.Scales
         /// </summary>
         private static ScaleReadResult ReadExisting()
         {
-            return usbReader?.ReadScale() ??
+            return cubiscanReader?.ReadScale() ??
+                usbReader?.ReadScale() ??
                 serialReader?.ReadScale() ??
                 UnknownNotFoundResult;
         }
