@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Windows.Forms;
-using static ShipWorks.UI.Controls.WeightControl;
+using ShipWorks.UI.Controls;
 
 namespace ShipWorks.Shipping.Carriers.FedEx
 {

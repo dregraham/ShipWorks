@@ -1,4 +1,4 @@
-﻿using static ShipWorks.UI.Controls.WeightControl;
+﻿using ShipWorks.UI.Controls;
 
 namespace ShipWorks.Shipping.Carriers.UPS
 {

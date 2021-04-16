@@ -1,6 +1,6 @@
 ﻿using System.Security.AccessControl;
 using ShipWorks.Shipping.Settings.Origin;
-using static ShipWorks.UI.Controls.WeightControl;
+using ShipWorks.UI.Controls;
 
 namespace ShipWorks.Shipping.Carriers.BestRate
 {

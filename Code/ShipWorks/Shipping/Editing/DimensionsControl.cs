@@ -9,7 +9,7 @@ using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.UI.Controls;
 using ShipWorks.Users;
 using ShipWorks.Users.Security;
-using static ShipWorks.UI.Controls.WeightControl;
+using ShipWorks.UI.Controls;
 
 namespace ShipWorks.Shipping.Editing
 {

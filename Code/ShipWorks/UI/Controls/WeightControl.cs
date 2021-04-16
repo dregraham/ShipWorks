@@ -39,6 +39,9 @@ namespace ShipWorks.UI.Controls
         // The last valid weight that was entered
         private double currentWeight;
 
+        // The last valid result that was provided
+        private ScaleReadResult? currentResult = null;
+
         // The last display we showed to the user.  Sometimes the display is a rounded (inaccurate)
         // version of the actual.  This allows us to see if the display has not changed, and instead
         // of parsing it (the rounded version) we just keep the accurate version.
@@ -565,16 +568,20 @@ namespace ShipWorks.UI.Controls
             }
         }
 
-        private ScaleReadResult? currentResult = null;
         /// <summary>
-        /// 
+        /// Sets the current weight. Raises event if it has changed
         /// </summary>
         private void SetCurrentWeight(ScaleReadResult result)
         {
-            if(currentResult==null || currentResult.Value.Weight != result.Weight)
+            if (currentResult == null || 
+                currentResult.Value.Weight != result.Weight ||
+                (result.HasVolumeDimensions &&
+                    (currentResult.Value.Length != result.Length ||
+                    currentResult.Value.Width != result.Width ||
+                    currentResult.Value.Height != result.Height)))
             {
+                currentResult = result;
                 currentWeight = result.Weight;
-
                 OnWeightChanged(result);
             }
         }
@@ -585,16 +592,6 @@ namespace ShipWorks.UI.Controls
         private void SetCurrentWeight(double newWeight)
         {
             SetCurrentWeight(ScaleReadResult.Success(newWeight, ScaleType.None));
-        }
-
-        public class WeightChangedEventArgs : EventArgs
-        {
-            public WeightChangedEventArgs(ScaleReadResult result)
-            {
-                Result = result;
-            }
-
-            public ScaleReadResult Result { get; }
         }
 
         /// <summary>
