@@ -100,7 +100,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api
             if (!AccountAllowed(account.AccountNumber))
             {
                 throw new UpsException(
-                    $"You must contact Interapptive to enable use of UPS account '{account.AccountNumber}'.");
+                    $"You must contact ShipWorks support to enable use of UPS account '{account.AccountNumber}'.");
             }
 
             using (ILifetimeScope scope = IoC.BeginLifetimeScope())
@@ -393,10 +393,14 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api
         {
             switch (confirmationType)
             {
-                case UpsDeliveryConfirmationType.NoSignature: return "";
-                case UpsDeliveryConfirmationType.Signature: return "1";
-                case UpsDeliveryConfirmationType.AdultSignature: return "2";
-                case UpsDeliveryConfirmationType.UspsDeliveryConfirmation: return "";
+                case UpsDeliveryConfirmationType.NoSignature:
+                    return "";
+                case UpsDeliveryConfirmationType.Signature:
+                    return "1";
+                case UpsDeliveryConfirmationType.AdultSignature:
+                    return "2";
+                case UpsDeliveryConfirmationType.UspsDeliveryConfirmation:
+                    return "";
             }
 
             throw new InvalidOperationException("Invalid UPS DC Type: " + confirmationType);
@@ -409,10 +413,14 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api
         {
             switch (confirmationType)
             {
-                case UpsDeliveryConfirmationType.NoSignature: return "1";
-                case UpsDeliveryConfirmationType.Signature: return "2";
-                case UpsDeliveryConfirmationType.AdultSignature: return "3";
-                case UpsDeliveryConfirmationType.UspsDeliveryConfirmation: return "4";
+                case UpsDeliveryConfirmationType.NoSignature:
+                    return "1";
+                case UpsDeliveryConfirmationType.Signature:
+                    return "2";
+                case UpsDeliveryConfirmationType.AdultSignature:
+                    return "3";
+                case UpsDeliveryConfirmationType.UspsDeliveryConfirmation:
+                    return "4";
             }
 
             throw new InvalidOperationException("Invalid UPS DC Type: " + confirmationType);
@@ -425,11 +433,16 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api
         {
             switch (returnServiceType)
             {
-                case UpsReturnServiceType.PrintAndMail: return "2";
-                case UpsReturnServiceType.ReturnPlus1: return "3";
-                case UpsReturnServiceType.ReturnPlus3: return "5";
-                case UpsReturnServiceType.ElectronicReturnLabel: return "8";
-                case UpsReturnServiceType.PrintReturnLabel: return "9";
+                case UpsReturnServiceType.PrintAndMail:
+                    return "2";
+                case UpsReturnServiceType.ReturnPlus1:
+                    return "3";
+                case UpsReturnServiceType.ReturnPlus3:
+                    return "5";
+                case UpsReturnServiceType.ElectronicReturnLabel:
+                    return "8";
+                case UpsReturnServiceType.PrintReturnLabel:
+                    return "9";
             }
 
             throw new InvalidOperationException("Invalid UPS Return Service Type: " + returnServiceType);

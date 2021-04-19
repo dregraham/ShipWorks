@@ -72,7 +72,7 @@ namespace ShipWorks.ApplicationCore.Licensing.MessageBoxes
             this.label2.Size = new System.Drawing.Size(368, 41);
             this.label2.TabIndex = 3;
             this.label2.Text = "A license that is billed monthly is required to use the current version of ShipWo" +
-                "rks.  Use the link below to go to the Interapptive website and sign up for a new" +
+                "rks.  Use the link below to go to the ShipWorks website and sign up for a new" +
                 " license.";
             // 
             // linkInterapptiveStore

@@ -332,7 +332,7 @@
             this.wizardPageTerms.Controls.Add(this.linkServiceFees);
             this.wizardPageTerms.Controls.Add(this.label1);
             this.wizardPageTerms.Controls.Add(this.checkBoxTerms);
-            this.wizardPageTerms.Description = "Agree to the Interapptive pricing and service terms.";
+            this.wizardPageTerms.Description = "Agree to the Auctane pricing and service terms.";
             this.wizardPageTerms.Dock = System.Windows.Forms.DockStyle.Fill;
             this.wizardPageTerms.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (0)));
             this.wizardPageTerms.Location = new System.Drawing.Point(0, 0);
@@ -384,7 +384,7 @@
             this.checkBoxTerms.Name = "checkBoxTerms";
             this.checkBoxTerms.Size = new System.Drawing.Size(226, 17);
             this.checkBoxTerms.TabIndex = 0;
-            this.checkBoxTerms.Text = "I understand and accept the Interapptive";
+            this.checkBoxTerms.Text = "I understand and accept the Auctane";
             this.checkBoxTerms.UseVisualStyleBackColor = true;
             // 
             // wizardPageEndicia

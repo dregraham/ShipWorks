@@ -1,17 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
 using System.Windows.Forms;
-using ShipWorks.UI.Wizard;
 using Interapptive.Shared.Net;
 using Interapptive.Shared.UI;
 using ShipWorks.ApplicationCore.Licensing;
-using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Stores;
+using ShipWorks.UI.Wizard;
 
 namespace ShipWorks.Editions.Freemium
 {
@@ -72,7 +64,7 @@ namespace ShipWorks.Editions.Freemium
                 e.NextPage = wizardPageTerms;
             }
         }
-       
+
         /// <summary>
         /// Click the terms of service link
         /// </summary>
@@ -104,7 +96,7 @@ namespace ShipWorks.Editions.Freemium
         {
             if (!checkBoxTerms.Checked)
             {
-                MessageHelper.ShowError(this,  "You must agree to the Interapptive terms of service to proceed.");
+                MessageHelper.ShowError(this, "You must agree to the Auctane terms of service to proceed.");
 
                 e.NextPage = CurrentPage;
                 return;

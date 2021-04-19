@@ -1,12 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using ShipWorks.Properties;
+﻿using System.Collections.Generic;
 using System.Windows.Forms;
-using ShipWorks.Email.Outlook;
-using ShipWorks.Email;
-using ShipWorks.Actions;
+using ShipWorks.Properties;
 
 namespace ShipWorks.ApplicationCore.Dashboard.Content
 {
@@ -24,7 +18,7 @@ namespace ShipWorks.ApplicationCore.Dashboard.Content
             base.Initialize(dashboardBar);
 
             DashboardBar.Image = Resources.information16;
-            DashboardBar.PrimaryText = "Save up to 62% on shipping through UPS from ShipWorks.";
+            DashboardBar.PrimaryText = "Save up to 66% on shipping through UPS from ShipWorks.";
             DashboardBar.SecondaryText = string.Empty;
             DashboardBar.ApplyActions(new List<DashboardAction> { new DashboardActionMethod("Click here to [link]learn more.[/link]", OnViewHelpArticle) });
 
