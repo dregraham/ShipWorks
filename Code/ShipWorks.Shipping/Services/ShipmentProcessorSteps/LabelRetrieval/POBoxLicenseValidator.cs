@@ -30,7 +30,7 @@ namespace ShipWorks.Shipping.Services.ShipmentProcessorSteps.LabelRetrieval
             return restrictionLevel == EditionRestrictionLevel.None ?
                 Result.FromSuccess() :
                 Result.FromError("Your ShipWorks account is only enabled for using APO, FPO, and P.O. " +
-                    "Box postal services.  Please contact Interapptive to enable use of all postal services.");
+                    "Box postal services.  Please contact ShipWorks support to enable use of all postal services.");
         }
     }
 }

@@ -200,7 +200,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
                 }
                 else
                 {
-                    rates.Add(new RateResult("* Negotiated rates were not returned. Contact Interapptive.", ""));
+                    rates.Add(new RateResult("* Negotiated rates were not returned. Contact ShipWorks support.", ""));
                 }
             }
 

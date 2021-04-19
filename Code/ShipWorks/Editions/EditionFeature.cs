@@ -1,5 +1,5 @@
-﻿using System.Reflection;
-using System.ComponentModel;
+﻿using System.ComponentModel;
+using System.Reflection;
 
 namespace ShipWorks.Editions
 {
@@ -78,7 +78,7 @@ namespace ShipWorks.Editions
         /// <summary>
         /// ShipmentType, can be forbidden or just restricted to upgrade
         /// </summary>
-        [Description("You must upgrade your ShipWorks edition to use {0}.|You must contact Interapptive to use additional shipping carriers.")]
+        [Description("You must upgrade your ShipWorks edition to use {0}.|You must contact ShipWorks support to use additional shipping carriers.")]
         ShipmentType,
 
         /// <summary>
@@ -90,19 +90,19 @@ namespace ShipWorks.Editions
         /// <summary>
         /// Restricted to a specific number of UPS accounts
         /// </summary>
-        [Description("You must contact Interapptive to use additional UPS accounts.")]
+        [Description("You must contact ShipWorks support to use additional UPS accounts.")]
         UpsAccountLimit,
 
         /// <summary>
         /// Restricted to a specific UPS account number
         /// </summary>
-        [Description("You must contact Interapptive to enable use of UPS account '{1}'.")]
+        [Description("You must contact ShipWorks support to enable use of UPS account '{1}'.")]
         UpsAccountNumbers,
 
         /// <summary>
         /// Restricted to using only postal APO\FPO\POBox services
         /// </summary>
-        [Description("Your ShipWorks account is only enabled for using APO, FPO, and P.O. Box postal services.  Please contact Interapptive to enable use of all postal services.")]
+        [Description("Your ShipWorks account is only enabled for using APO, FPO, and P.O. Box postal services.  Please contact ShipWorks support to enable use of all postal services.")]
         PostalApoFpoPoboxOnly,
 
         /// <summary>
@@ -120,13 +120,13 @@ namespace ShipWorks.Editions
         /// <summary>
         /// Endicia Scan Based Returns can be Restricted
         /// </summary>
-        [Description("You must contact Interapptive to use Endicia Scan Based Returns.")]
+        [Description("You must contact ShipWorks support to use Endicia Scan Based Returns.")]
         EndiciaScanBasedReturns,
 
         /// <summary>
         /// The ability to add shipping accounts can be restricted.
         /// </summary>
-        [Description("You must contact Interapptive to be able to add a new account to ShipWorks.")]
+        [Description("You must contact ShipWorks support to be able to add a new account to ShipWorks.")]
         ShipmentTypeRegistration,
 
         /// <summary>

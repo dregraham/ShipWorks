@@ -1,17 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using ShipWorks.Data.Model.EntityClasses;
+using System.Text.RegularExpressions;
 using log4net;
+using Rebex.Mail;
 using Rebex.Net;
+using ShipWorks.ApplicationCore;
+using ShipWorks.Data.Connection;
+using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Email;
 using ShipWorks.Email.Accounts;
-using ShipWorks.Data.Connection;
-using Interapptive.Shared.Utility;
-using Rebex.Mail;
-using System.Text.RegularExpressions;
-using ShipWorks.ApplicationCore;
 
 namespace ShipWorks.Stores.Platforms.GenericFile.Sources.Email
 {
@@ -98,7 +96,7 @@ namespace ShipWorks.Stores.Platforms.GenericFile.Sources.Email
                 {
                     if (store.EmailFolderValidityID != imap.CurrentFolder.ValidityId)
                     {
-                        throw new GenericFileLoadException("The ValidityID of the IMAP folder has changed.  Please contact Interapptive at 1-800-95-APPTIVE for assistance.");
+                        throw new GenericFileLoadException("The ValidityID of the IMAP folder has changed.  Please contact ShipWorks support at 1-314-821-5888 for assistance.");
                     }
                 }
 
@@ -211,33 +209,33 @@ namespace ShipWorks.Stores.Platforms.GenericFile.Sources.Email
                 {
                     // Move the message and mark it as unread
                     case GenericFileSuccessAction.Move:
-                        {
-                            // For success we mark it as read - i think that makes sense, since they are done with it
-                            imap.SetMessageFlags(email.RebexID, ImapFlagAction.Add, ImapMessageFlags.Seen);
-                            imap.CopyMessage(email.RebexID, store.SuccessMoveFolder);
-                            imap.DeleteMessage(email.RebexID);
-                            imap.Purge();
+                    {
+                        // For success we mark it as read - i think that makes sense, since they are done with it
+                        imap.SetMessageFlags(email.RebexID, ImapFlagAction.Add, ImapMessageFlags.Seen);
+                        imap.CopyMessage(email.RebexID, store.SuccessMoveFolder);
+                        imap.DeleteMessage(email.RebexID);
+                        imap.Purge();
 
-                            break;
-                        }
+                        break;
+                    }
 
                     // Delete the message completely
                     case GenericFileSuccessAction.Delete:
-                        {
-                            imap.DeleteMessage(email.RebexID);
-                            imap.Purge();
+                    {
+                        imap.DeleteMessage(email.RebexID);
+                        imap.Purge();
 
-                            break;
-                        }
+                        break;
+                    }
 
                     // Mark as read
                     case GenericFileSuccessAction.MarkAsRead:
-                        {
-                            imap.SetMessageFlags(email.RebexID, ImapFlagAction.Add, ImapMessageFlags.Seen);
+                    {
+                        imap.SetMessageFlags(email.RebexID, ImapFlagAction.Add, ImapMessageFlags.Seen);
 
-                            break;
-                        }
-                    
+                        break;
+                    }
+
                     default:
                         throw new InvalidOperationException("Unhandled success action: " + successAction);
                 }
@@ -268,29 +266,29 @@ namespace ShipWorks.Stores.Platforms.GenericFile.Sources.Email
                 {
                     // Stop and display the error
                     case GenericFileErrorAction.Stop:
-                        {
-                            throw new GenericFileStoreException(string.Format("There was an error reading email '{0}':\n\n{1}", email.Name, ex.Message), ex);
-                        }
+                    {
+                        throw new GenericFileStoreException(string.Format("There was an error reading email '{0}':\n\n{1}", email.Name, ex.Message), ex);
+                    }
 
                     // Move and mark unread
                     case GenericFileErrorAction.Move:
-                        {
-                            // For error's we make sure its unread, so it shows up
-                            imap.SetMessageFlags(email.RebexID, ImapFlagAction.Remove, ImapMessageFlags.Seen);
-                            imap.CopyMessage(email.RebexID, store.ErrorMoveFolder);
-                            imap.DeleteMessage(email.RebexID);
-                            imap.Purge();
+                    {
+                        // For error's we make sure its unread, so it shows up
+                        imap.SetMessageFlags(email.RebexID, ImapFlagAction.Remove, ImapMessageFlags.Seen);
+                        imap.CopyMessage(email.RebexID, store.ErrorMoveFolder);
+                        imap.DeleteMessage(email.RebexID);
+                        imap.Purge();
 
-                            break;
-                        }
+                        break;
+                    }
 
                     // Just mark unread
                     case GenericFileErrorAction.MarkAsRead:
-                        {
-                            imap.SetMessageFlags(email.RebexID, ImapFlagAction.Add, ImapMessageFlags.Seen);
+                    {
+                        imap.SetMessageFlags(email.RebexID, ImapFlagAction.Add, ImapMessageFlags.Seen);
 
-                            break;
-                        }
+                        break;
+                    }
 
                     default:
                         throw new InvalidOperationException("Unhandled error action: " + errorAction);

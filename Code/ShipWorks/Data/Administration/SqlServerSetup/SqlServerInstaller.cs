@@ -997,7 +997,7 @@ namespace ShipWorks.Data.Administration.SqlServerSetup
             {
                 return
                     "An error occurred that ShipWorks could not handle.  The error has been logged.\n\n" +
-                    "Please contact Interapptive for further assistance with this issue.";
+                    "Please contact ShipWorks support for further assistance with this issue.";
             }
 
             if (code == msdeUpgrade08Failed)
@@ -1005,7 +1005,7 @@ namespace ShipWorks.Data.Administration.SqlServerSetup
                 return
                     "SQL Server failed to install, but the previous version of SQL Server\n" +
                     "was already removed.\n\n" +
-                    "Please contact Interapptive for assistance with completing the upgrade.";
+                    "Please contact ShipWorks support for assistance with completing the upgrade.";
             }
 
             if (IsErrorCodeRebootRequiredBeforeInstall(code))
@@ -1107,63 +1107,63 @@ namespace ShipWorks.Data.Administration.SqlServerSetup
                     switch (action)
                     {
                         case "upgrade":
-                            {
-                                log.InfoFormat("Processing request to upgrade SQL Sever");
+                        {
+                            log.InfoFormat("Processing request to upgrade SQL Sever");
 
-                                // We need to initialize an installer to get the correct installer package exe's
-                                ISqlInstallerInfo sqlInstallerInfo = installer.GetSqlInstaller(SqlServerInstallerPurpose.Upgrade);
+                            // We need to initialize an installer to get the correct installer package exe's
+                            ISqlInstallerInfo sqlInstallerInfo = installer.GetSqlInstaller(SqlServerInstallerPurpose.Upgrade);
 
-                                UpgradeSqlServerInternal(
-                                    installer.GetInstallerLocalFilePath(sqlInstallerInfo),
-                                    SqlSession.Current);
+                            UpgradeSqlServerInternal(
+                                installer.GetInstallerLocalFilePath(sqlInstallerInfo),
+                                SqlSession.Current);
 
-                                break;
-                            }
+                            break;
+                        }
 
                         case "install":
-                            {
-                                log.InfoFormat("Processing request to install sql server. {0}", instance);
+                        {
+                            log.InfoFormat("Processing request to install sql server. {0}", instance);
 
-                                // We need to initialize an installer to get the correct installer package exe's
-                                installer.InstallSqlServerInternal(instance, sapassword);
+                            // We need to initialize an installer to get the correct installer package exe's
+                            installer.InstallSqlServerInternal(instance, sapassword);
 
-                                break;
-                            }
+                            break;
+                        }
 
                         case "localdb":
-                            {
-                                log.InfoFormat("Processing request to install LocalDB.");
+                        {
+                            log.InfoFormat("Processing request to install LocalDB.");
 
-                                // We need to initialize an installer to get the correct installer package exe's
-                                installer.InstallLocalDbInternal();
+                            // We need to initialize an installer to get the correct installer package exe's
+                            installer.InstallLocalDbInternal();
 
-                                break;
-                            }
+                            break;
+                        }
 
                         case "upgradelocaldb":
-                            {
-                                log.InfoFormat("Processing request to upgrade local db. {0}", instance);
+                        {
+                            log.InfoFormat("Processing request to upgrade local db. {0}", instance);
 
-                                // We need to initialize an installer to get the correct installer package exe's
-                                await installer.UpgradeLocalDbInternal(instance).ConfigureAwait(true);
+                            // We need to initialize an installer to get the correct installer package exe's
+                            await installer.UpgradeLocalDbInternal(instance).ConfigureAwait(true);
 
-                                break;
-                            }
+                            break;
+                        }
 
                         case "assignautomaticdbname":
-                            {
-                                log.InfoFormat("Processing request to assign automatic database name.");
+                        {
+                            log.InfoFormat("Processing request to assign automatic database name.");
 
-                                // We need to initialize an installer to get the correct installer package exe's
-                                await installer.AssignAutomaticDatabaseNameInternal().ConfigureAwait(true);
+                            // We need to initialize an installer to get the correct installer package exe's
+                            await installer.AssignAutomaticDatabaseNameInternal().ConfigureAwait(true);
 
-                                break;
-                            }
+                            break;
+                        }
 
                         default:
-                            {
-                                throw new CommandLineCommandArgumentException(CommandName, "action", string.Format("Invalid value passed to 'action' parameter: {0}", action));
-                            }
+                        {
+                            throw new CommandLineCommandArgumentException(CommandName, "action", string.Format("Invalid value passed to 'action' parameter: {0}", action));
+                        }
                     }
                 }
                 catch (Win32Exception ex)
@@ -1181,49 +1181,49 @@ namespace ShipWorks.Data.Administration.SqlServerSetup
                 switch (action)
                 {
                     case "upgrade":
+                    {
+                        // Can't specific instance or password for upgrade - we use SqlSession
+                        if (instance != null || sapassword != null)
                         {
-                            // Can't specific instance or password for upgrade - we use SqlSession
-                            if (instance != null || sapassword != null)
-                            {
-                                throw new CommandLineCommandArgumentException(CommandName, "instance\\password", "Invalid arguments passed to command.");
-                            }
-
-                            break;
+                            throw new CommandLineCommandArgumentException(CommandName, "instance\\password", "Invalid arguments passed to command.");
                         }
+
+                        break;
+                    }
 
                     case "install":
+                    {
+                        if (instance == null)
                         {
-                            if (instance == null)
-                            {
-                                throw new CommandLineCommandArgumentException(CommandName, "instance", "The required 'instance' parameter was not specified.");
-                            }
-
-                            if (sapassword == null)
-                            {
-                                throw new CommandLineCommandArgumentException(CommandName, "password", "The required 'password' parameter was not specified.");
-                            }
-
-                            break;
+                            throw new CommandLineCommandArgumentException(CommandName, "instance", "The required 'instance' parameter was not specified.");
                         }
+
+                        if (sapassword == null)
+                        {
+                            throw new CommandLineCommandArgumentException(CommandName, "password", "The required 'password' parameter was not specified.");
+                        }
+
+                        break;
+                    }
 
                     case "upgradelocaldb":
+                    {
+                        if (instance == null)
                         {
-                            if (instance == null)
-                            {
-                                throw new CommandLineCommandArgumentException(CommandName, "instance", "The required 'instance' parameter was not specified.");
-                            }
-
-                            break;
+                            throw new CommandLineCommandArgumentException(CommandName, "instance", "The required 'instance' parameter was not specified.");
                         }
+
+                        break;
+                    }
                     case "localdb":
                     case "assignautomaticdbname":
                         // Nothing to validate here
                         break;
 
                     default:
-                        {
-                            throw new CommandLineCommandArgumentException(CommandName, "action", string.Format("Invalid value passed to 'action' parameter: {0}", action));
-                        }
+                    {
+                        throw new CommandLineCommandArgumentException(CommandName, "action", string.Format("Invalid value passed to 'action' parameter: {0}", action));
+                    }
                 }
             }
         }

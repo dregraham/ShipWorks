@@ -42,13 +42,13 @@
             this.labelAgreementInfo6 = new System.Windows.Forms.Label();
             this.labelAgreementInfo7 = new System.Windows.Forms.Label();
             this.labelAgreementInfo8 = new System.Windows.Forms.Label();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize) (this.pictureBox1)).BeginInit();
             this.SuspendLayout();
             // 
             // labelHeader
             // 
             this.labelHeader.AutoSize = true;
-            this.labelHeader.Font = new System.Drawing.Font("Tahoma", 11F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.labelHeader.Font = new System.Drawing.Font("Tahoma", 11F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte) (0)));
             this.labelHeader.Location = new System.Drawing.Point(70, 40);
             this.labelHeader.Name = "labelHeader";
             this.labelHeader.Size = new System.Drawing.Size(328, 18);
@@ -99,7 +99,7 @@
             this.labelAgreementInfo4.Name = "labelAgreementInfo4";
             this.labelAgreementInfo4.Size = new System.Drawing.Size(17, 13);
             this.labelAgreementInfo4.TabIndex = 5;
-            this.labelAgreementInfo4.Text = " up to 62% off";
+            this.labelAgreementInfo4.Text = " up to 66% off";
             // 
             // labelAgreementInfo5
             // 
@@ -196,7 +196,7 @@
             this.Name = "OneBalanceTermsAndConditionsPage";
             this.Size = new System.Drawing.Size(579, 474);
             this.Title = "Account Registration";
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize) (this.pictureBox1)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
         }

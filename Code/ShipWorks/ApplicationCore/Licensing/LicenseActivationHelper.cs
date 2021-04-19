@@ -169,7 +169,7 @@ namespace ShipWorks.ApplicationCore.Licensing
 
                         case LicenseActivationState.ActiveElsewhere:
                             throw new ShipWorksLicenseException(
-                                "Your ShipWorks license is activated to another store. Please contact Interapptive to reset your license activation.");
+                                "Your ShipWorks license is activated to another store. Please contact ShipWorks support to reset your license activation.");
 
                         case LicenseActivationState.Deactivated:
                             throw new ShipWorksLicenseException(
@@ -214,46 +214,46 @@ namespace ShipWorks.ApplicationCore.Licensing
             {
                 // Everything is ok
                 case LicenseActivationState.Active:
-                    {
-                        return string.Empty;
-                    }
+                {
+                    return string.Empty;
+                }
                 // This shouldn't happen - if it was active nowhere,
                 // then it should have been activated to us
                 case LicenseActivationState.ActiveNowhere:
-                    {
-                        return "An unknown problem occurred activating the license.\n\n" +
-                               "Please contact Interapptive for support.";
-                    }
+                {
+                    return "An unknown problem occurred activating the license.\n\n" +
+                           "Please contact ShipWorks support for assistance.";
+                }
                 case LicenseActivationState.ActiveElsewhere:
-                    {
-                        return "The ShipWorks license you entered is already being used by another store. \n\n" +
-                               "You can reset the license and make it available for use by logging in to your \n" +
-                               "Interapptive account using the following link.\n\n" +
-                               "https://www.interapptive.com/account";
-                    }
+                {
+                    return "The ShipWorks license you entered is already being used by another store. \n\n" +
+                           "You can reset the license and make it available for use by logging in to your \n" +
+                           "ShipWorks account using the following link.\n\n" +
+                           "https://www.interapptive.com/account";
+                }
                 case LicenseActivationState.Deactivated:
-                    {
-                        return "Your ShipWorks license has been disabled.\n\n" +
-                               $"Reason: {accountDetail.DisabledReason}";
+                {
+                    return "Your ShipWorks license has been disabled.\n\n" +
+                           $"Reason: {accountDetail.DisabledReason}";
 
-                    }
+                }
                 case LicenseActivationState.Canceled:
-                    {
-                        return "The ShipWorks license you entered has been canceled. \n\n" +
-                               "You can activate the license and by logging in to your\n" +
-                               " Interapptive account using the following link. \n\n" +
-                               "https://www.interapptive.com/account";
-                    }
+                {
+                    return "The ShipWorks license you entered has been canceled. \n\n" +
+                           "You can activate the license and by logging in to your\n" +
+                           " ShipWorks account using the following link. \n\n" +
+                           "https://www.interapptive.com/account";
+                }
                 case LicenseActivationState.Invalid:
-                    {
-                        return "The license entered is a valid ShipWorks license, but was\n" +
-                               "not found in the Interapptive database.\n\n" +
-                               "Please contact Interapptive for support.";
-                    }
+                {
+                    return "The license entered is a valid ShipWorks license, but was\n" +
+                           "not found.\n\n" +
+                           "Please contact ShipWorks support for assistance.";
+                }
                 default:
-                    {
-                        return string.Empty;
-                    }
+                {
+                    return string.Empty;
+                }
             }
         }
 
@@ -293,7 +293,7 @@ namespace ShipWorks.ApplicationCore.Licensing
                 return new EnumResult<LicenseActivationState>(LicenseActivationState.Invalid,
                     "Your ShipWorks license is not valid for this version of ShipWorks. \n\n" +
                     "A license that is billed monthly is required to use the current version " +
-                    "of ShipWorks.  Use the link below to go to the Interapptive website and " +
+                    "of ShipWorks.  Use the link below to go to the ShipWorks website and " +
                     "sign up for a new license.\n\n" +
                     "https://www.interapptive.com/store");
             }
