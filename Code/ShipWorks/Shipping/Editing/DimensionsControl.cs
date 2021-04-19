@@ -145,11 +145,18 @@ namespace ShipWorks.Shipping.Editing
             if(e?.Result.HasVolumeDimensions ?? false)
             {
                 suspendChangedEvent = true;
-                length.Text = e.Result.Length.ToString();
-                width.Text = e.Result.Width.ToString();
-                height.Text = e.Result.Height.ToString();
+                profiles.SelectedIndexChanged -= this.OnChangeProfile;
+                using (MultiValueScope scope = new MultiValueScope())
+                {
+                   
+                    profiles.ApplyMultiValue(0);
+                    length.ApplyMultiText(e.Result.Length.ToString());
+                    width.ApplyMultiText(e.Result.Width.ToString());
+                    height.ApplyMultiText(e.Result.Height.ToString());
+                    addToWeight.ApplyMultiCheck(false);
+                }
+                profiles.SelectedIndexChanged += this.OnChangeProfile;
                 suspendChangedEvent = false;
-
                 OnDimensionsChanged(null, null);
             }
         }

@@ -89,6 +89,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ShipmentControl
         {
             if(message.ScaleReadResult.HasVolumeDimensions)
             {
+                UpdateSelectedDimensionsProfile(0);
                 DimsLength = message.ScaleReadResult.Length;
                 DimsWidth = message.ScaleReadResult.Width;
                 DimsHeight = message.ScaleReadResult.Height;
@@ -384,9 +385,25 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ShipmentControl
         /// </summary>
         private void UpdateSelectedDimensionsProfile()
         {
-            SelectedDimensionsProfile = DimensionsProfiles.Any(dp => dp.DimensionsProfileID == SelectedPackageAdapter?.DimsProfileID) ?
-                DimensionsProfiles.FirstOrDefault(dp => dp.DimensionsProfileID == SelectedPackageAdapter?.DimsProfileID) :
-                DimensionsProfiles.FirstOrDefault(dp => dp.DimensionsProfileID == 0);
+            if (DimensionsProfiles.Any(dp => dp.DimensionsProfileID == SelectedPackageAdapter?.DimsProfileID))
+            {
+                UpdateSelectedDimensionsProfile(SelectedPackageAdapter?.DimsProfileID ?? 0);
+            }
+            else
+            {
+                UpdateSelectedDimensionsProfile(0);
+            }
+        }
+
+        /// <summary>
+        /// Updates the selected dimensions profile based on parameter
+        /// </summary>
+        /// <remarks>
+        /// Will throw if profile doesn't exist
+        /// </remarks>
+        private void UpdateSelectedDimensionsProfile(long profileId)
+        {
+            SelectedDimensionsProfile = DimensionsProfiles.First(dp => dp.DimensionsProfileID == profileId);
         }
 
         /// <summary>
