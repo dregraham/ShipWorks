@@ -148,7 +148,6 @@ namespace ShipWorks.Shipping.Editing
                 profiles.SelectedIndexChanged -= this.OnChangeProfile;
                 using (MultiValueScope scope = new MultiValueScope())
                 {
-                   
                     profiles.ApplyMultiValue(0);
                     length.ApplyMultiText(e.Result.Length.ToString());
                     width.ApplyMultiText(e.Result.Width.ToString());

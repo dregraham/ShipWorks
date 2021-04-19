@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Autofac.Extras.Moq;
+using Interapptive.Shared.IO.Hardware.Scales;
 using Moq;
 using ShipWorks.Core.Messaging;
 using ShipWorks.Data.Model.EntityClasses;
@@ -346,6 +347,32 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel.ShipmentControl
             testMessenger.Send(message);
 
             Assert.Equal(profiles.Count, testObject.DimensionsProfiles.Count);
+
+            testMessenger.Dispose();
+        }
+
+        [Fact]
+        public void DimensionsAreUpdated_WhenChangeDimensionsMessageReceived()
+        {
+            TestMessenger testMessenger = new TestMessenger();
+            mock.Provide<IMessenger>(testMessenger);
+
+            CreateDefaultShipmentAdapter(mock, 1);
+            CreateDimensionsProfilesManager(mock);
+
+            ShipmentViewModel testObject = mock.Create<ShipmentViewModel>();
+            testObject.Load(shipmentAdapter.Object);
+
+            var result = ScaleReadResult.Success(1D, 2D, 3D, 4D, ScaleType.None);
+            var changeDimensionMessage = new ChangeDimensionsMessage(this, result);
+            testMessenger.Send(changeDimensionMessage);
+
+            testObject.Save();
+            
+            Assert.Equal(packageAdapters[0].DimsLength, result.Length);
+            Assert.Equal(packageAdapters[0].DimsWidth, result.Width);
+            Assert.Equal(packageAdapters[0].DimsHeight, result.Height);
+            Assert.Equal(packageAdapters[0].DimsProfileID, 0);
 
             testMessenger.Dispose();
         }
