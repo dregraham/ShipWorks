@@ -74,11 +74,26 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ShipmentControl
             baseSubscriptions = new CompositeDisposable(
                 messenger.OfType<DimensionsProfilesChangedMessage>().Subscribe(ManageDimensionsProfiles),
                 messenger.OfType<ShippingSettingsChangedMessage>().Subscribe(HandleShippingSettingsChangedMessage),
+                messenger.OfType<ChangeDimensionsMessage>().Subscribe(HandleChangeDimensionsMessage),
                 handler.PropertyChangingStream
                     .Where(x => nameof(SelectedPackageAdapter).Equals(x, StringComparison.Ordinal))
                     .Subscribe(_ => SaveDimensionsToSelectedPackageAdapter()),
                 handler.Where(x => nameof(SelectedPackageAdapter).Equals(x, StringComparison.Ordinal))
                     .Subscribe(_ => LoadDimensionsFromSelectedPackageAdapter()));
+        }
+
+        /// <summary>
+        /// Handle the change dimensions message
+        /// </summary>
+        private void HandleChangeDimensionsMessage(ChangeDimensionsMessage message)
+        {
+            if(message.ScaleReadResult.HasVolumeDimensions)
+            {
+                DimsLength = message.ScaleReadResult.Length;
+                DimsWidth = message.ScaleReadResult.Width;
+                DimsHeight = message.ScaleReadResult.Height;
+                DimsAddWeight = false;
+            }
         }
 
         /// <summary>

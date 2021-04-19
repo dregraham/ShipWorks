@@ -973,6 +973,7 @@
     <Compile Include="Data\ProductCatalogTelemetryService.cs" />
     <Compile Include="Filters\Content\Conditions\Orders\VerifiedCondition.cs" />
     <Compile Include="Filters\Content\Conditions\Shipments\AccountCondition.cs" />
+    <Compile Include="Messaging\Messages\ChangeDimensionsMessage.cs" />
     <Compile Include="Messaging\Messages\Orders\OrderLookupUnverifyMessage.cs" />
     <Compile Include="Messaging\Messages\Orders\OrderVerifiedMessage.cs" />
     <Compile Include="OrderLookup\CoreOrderLookupRegistrationOverride.cs" />
