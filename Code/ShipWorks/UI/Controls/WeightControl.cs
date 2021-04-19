@@ -36,9 +36,6 @@ namespace ShipWorks.UI.Controls
         // Display formatting
         private WeightDisplayFormat displayFormat = WeightDisplayFormat.FractionalPounds;
 
-        // The last valid weight that was entered
-        private double currentWeight;
-
         // The last valid result that was provided
         private ScaleReadResult? currentResult = null;
 
@@ -161,7 +158,7 @@ namespace ShipWorks.UI.Controls
                 // Always return the current weight rather than the parsed weight since
                 // the current weight will be the most precise (i.e. it is not impacted
                 // by rounding for display purposes).
-                return currentWeight;
+                return currentResult?.Weight ?? 0D;
             }
             set
             {
@@ -339,13 +336,13 @@ namespace ShipWorks.UI.Controls
                 {
                     textBox.Text = "";
                     lastDisplay = "";
-                    currentWeight = 0;
+                    SetCurrentWeight(0);
 
                     cleared = true;
                 }
                 else
                 {
-                    currentWeight = 0;
+                    SetCurrentWeight(0);
                     cleared = false;
 
                     FormatWeightText();
@@ -441,12 +438,12 @@ namespace ShipWorks.UI.Controls
         {
             if (MultiValued || cleared)
             {
-                currentWeight = 0;
+                SetCurrentWeight(0);
                 lastDisplay = "";
                 return;
             }
 
-            FormatWeightText(currentWeight);
+            FormatWeightText(currentResult?.Weight ?? 0);
         }
 
         /// <summary>
@@ -581,7 +578,6 @@ namespace ShipWorks.UI.Controls
                     currentResult.Value.Height != result.Height)))
             {
                 currentResult = result;
-                currentWeight = result.Weight;
                 OnWeightChanged(result);
             }
         }
