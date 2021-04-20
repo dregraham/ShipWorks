@@ -35,8 +35,8 @@ namespace Interapptive.Shared.IO.Hardware.Scales
             }
             catch(Exception ex)
             {
-                log.Warn($"Unable to read weight from cubiscan scale.", ex);
-                return ScaleReadResult.ReadError("Unable to read weight from cubiscan scale.", ScaleType.Cubiscan);
+                log.Warn($"Unable to read weight from Cubiscan device.", ex);
+                return ScaleReadResult.ReadError("Unable to read weight from Cubiscan device.", ScaleType.Cubiscan);
             }
         }
 
@@ -45,15 +45,18 @@ namespace Interapptive.Shared.IO.Hardware.Scales
         /// </summary>
         private ScaleReadResult ReadCubiScan(string value)
         {
-            if ((value?.Length ?? 0) < 35)
+            if ((value?.Length ?? 0) < 42)
             {
-                return ScaleReadResult.ReadError($"Invalid response from Cubiscan. (Response: {value})", ScaleType.Cubiscan);
+                return ScaleReadResult.ReadError($"Invalid response from Cubiscan device. (Response: {value})", ScaleType.Cubiscan);
             }
 
-            double weight = double.Parse(value.Substring(35, 6));
-            double length = double.Parse(value.Substring(12, 5));
-            double width = double.Parse(value.Substring(19, 5));
-            double height = double.Parse(value.Substring(26, 5));
+            if (!double.TryParse(value.Substring(35, 6), out double weight) ||
+                !double.TryParse(value.Substring(12, 5), out double length) ||
+                !double.TryParse(value.Substring(19, 5), out double width) ||
+                !double.TryParse(value.Substring(26, 5), out double height))
+            {
+                return ScaleReadResult.ReadError($"Could not parse dimension from Cubiscan device. (Response: {value})", ScaleType.Cubiscan);
+            }
 
             return ScaleReadResult.Success(weight, length, width, height, ScaleType.Cubiscan);
         }
