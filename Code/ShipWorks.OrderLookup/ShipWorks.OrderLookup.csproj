@@ -368,6 +368,7 @@
     <Compile Include="ScanToShip\ScanToShipTab.cs" />
     <Compile Include="ScanToShip\ScanToShipTabItem.cs" />
     <Compile Include="ScanToShip\ScanToShipViewModel.cs" />
+    <Compile Include="ShipmentModelPipelines\ChangeDimensionsPipeline.cs" />
     <Compile Include="ShipmentModelPipelines\CreateLabelShortcutPipeline.cs" />
     <Compile Include="OrderLookupModule.cs" />
     <Compile Include="OrderLookupPanelFactory.cs" />
