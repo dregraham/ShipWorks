@@ -67,11 +67,15 @@ namespace ShipWorks.Shipping.Carriers.BestRate
 
             base.LoadShipments(shipments, enableEditing, enableShippingAddress);
 
+            dimensionsControl.ShipmentWeightBox = null;
+
             RecipientDestinationChanged += OnRecipientDestinationChanged;
             originControl.DestinationChanged += OnOriginDestinationChanged;
 
             LoadShipmentDetails();
             UpdateInsuranceDisplay();
+
+            dimensionsControl.ShipmentWeightBox = weight;
 
             ResumeRateCriteriaChangeEvent();
             ResumeShipSenseFieldChangeEvent();
