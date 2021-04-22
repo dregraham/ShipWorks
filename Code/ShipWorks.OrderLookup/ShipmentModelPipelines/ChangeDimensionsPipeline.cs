@@ -36,6 +36,9 @@ namespace ShipWorks.OrderLookup.ShipmentModelPipelines
                 .Do(message => HandleChangeDimensionsMessage(model, message))
                 .Subscribe();
 
+        /// <summary>
+        /// Handle the dimension change message
+        /// </summary>
         private void HandleChangeDimensionsMessage(IOrderLookupShipmentModel model, ChangeDimensionsMessage message)
         {
             if (message.ScaleReadResult.HasVolumeDimensions)
