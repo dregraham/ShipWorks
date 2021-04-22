@@ -1128,6 +1128,9 @@ PRINT N'Creating index [IX_SWDefault_AuditChange_AuditID] on [dbo].[AuditChange]
 GO
 CREATE NONCLUSTERED INDEX [IX_SWDefault_AuditChange_AuditID] ON [dbo].[AuditChange] ([AuditID])
 GO
+PRINT N'Creating index [IX_SWDefault_AuditChange_ObjectID] on [dbo].[AuditChange]'
+CREATE NONCLUSTERED INDEX [IX_SWDefault_AuditChange_ObjectID] ON [dbo].[AuditChange] ([ObjectID])
+GO
 PRINT N'Creating [dbo].[AuditChangeDetail]'
 GO
 CREATE TABLE [dbo].[AuditChangeDetail]
