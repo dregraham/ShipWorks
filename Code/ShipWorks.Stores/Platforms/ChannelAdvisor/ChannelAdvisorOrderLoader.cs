@@ -159,7 +159,15 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
             itemToSave.SKU = downloadedItem.Sku;
 
             // CA specific
-            itemToSave.MarketplaceSalesID = downloadedItem.SiteOrderItemID;
+            if (string.IsNullOrWhiteSpace(downloadedItem.SiteOrderItemID))
+            {
+                itemToSave.MarketplaceSalesID = downloadedItem.SiteListingID;
+            }
+            else
+            {
+                itemToSave.MarketplaceSalesID = downloadedItem.SiteOrderItemID;
+            }
+            
             itemToSave.MarketplaceName = downloadedOrder.SiteName;
             itemToSave.MarketplaceBuyerID = downloadedOrder.BuyerUserID;
 
