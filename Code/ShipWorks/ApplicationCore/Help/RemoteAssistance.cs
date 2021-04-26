@@ -27,7 +27,7 @@ namespace ShipWorks.ApplicationCore.Help
             // Create the progress window
             ProgressDlg progressDlg = new ProgressDlg(progressProvider);
             progressDlg.Title = "Remote Assistance";
-            progressDlg.Description = "Connecting to Interapptive support representative.";
+            progressDlg.Description = "Connecting to ShipWorks support representative.";
             progressDlg.AutoCloseWhenComplete = true;
             progressDlg.Show(parent);
 

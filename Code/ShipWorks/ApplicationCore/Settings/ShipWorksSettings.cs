@@ -74,7 +74,7 @@ namespace ShipWorks.ApplicationCore.Settings
 
             if (InterapptiveOnly.IsInterapptiveUser || InterapptiveOnly.MagicKeysDown)
             {
-                settingsPages["Interapptive"] = InitializeSettingsPage(new SettingsPageInterapptive());
+                settingsPages["Internal"] = InitializeSettingsPage(new SettingsPageInterapptive());
             }
 
             menuList.Items.Clear();
@@ -104,7 +104,7 @@ namespace ShipWorks.ApplicationCore.Settings
         /// </summary>
         private void OnChangeSettingsPage(object sender, EventArgs e)
         {
-            if (apiSettingsPage != null && apiSettingsPage.Control.Visible  && apiSettingsPage.IsSaving == true)
+            if (apiSettingsPage != null && apiSettingsPage.Control.Visible && apiSettingsPage.IsSaving == true)
             {
                 MessageHelper.ShowError(this, "ShipWorks is currently updating API settings. Please wait.");
                 return;

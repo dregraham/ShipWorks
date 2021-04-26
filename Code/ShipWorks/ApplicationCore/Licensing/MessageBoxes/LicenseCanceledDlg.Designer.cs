@@ -55,7 +55,7 @@ namespace ShipWorks.ApplicationCore.Licensing.MessageBoxes
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(368, 36);
             this.label2.TabIndex = 13;
-            this.label2.Text = "You can activate the license and by logging in to your Interapptive account using" +
+            this.label2.Text = "You can activate the license by logging in to your ShipWorks account using" +
                 " the following link.";
             // 
             // label1

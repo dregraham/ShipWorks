@@ -1,17 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Windows.Forms;
 using Autofac;
 using Interapptive.Shared;
 using Interapptive.Shared.Business;
+using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Net;
 using Interapptive.Shared.Security;
 using Interapptive.Shared.UI;
 using Interapptive.Shared.Utility;
 using ShipWorks.ApplicationCore;
-using Interapptive.Shared.ComponentRegistration;
 using ShipWorks.ApplicationCore.Licensing;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
@@ -375,7 +374,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
         private void OnStepNextPayment(object sender, WizardStepEventArgs e)
         {
             if (!ValidatePaymentInfo(e))
-            {                    
+            {
                 e.NextPage = CurrentPage;
                 return;
             }
@@ -396,7 +395,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
                 }
                 catch (Exception ex) when (ex is TangoException || ex is ShipWorksLicenseException)
                 {
-                    MessageHelper.ShowError( this, "ShipWorks was unable to create your ShipWorks account:\n\n" + ex.Message);
+                    MessageHelper.ShowError(this, "ShipWorks was unable to create your ShipWorks account:\n\n" + ex.Message);
 
                     e.NextPage = CurrentPage;
                     return;
@@ -447,8 +446,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
                 internetPassword.Text, softwarePassword.Text, challengeQuestion.Text.Trim(),
                 challengeAnswer.Text.Trim());
 
-            EndiciaAccountType accountType = freemiumEdition != null ? 
-                EndiciaAccountType.Freemium : 
+            EndiciaAccountType accountType = freemiumEdition != null ?
+                EndiciaAccountType.Freemium :
                 (radioPlanPremium.Checked ? EndiciaAccountType.Premium : EndiciaAccountType.Standard);
 
             endiciaApiClient.Signup(account, accountType, accountAddress, credentials, paymentInfo);
@@ -466,13 +465,13 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
             if (freemiumEdition != null && !shipworksFeesAgree.Checked)
             {
                 MessageHelper.ShowInformation(this,
-                    "You must agree that Interapptive can use your credit card to pay for insurance if you optionally choose to use ShipWorks Shipping Insurance.");
+                    "You must agree that Auctane can use your credit card to pay for insurance if you optionally choose to use ShipWorks Shipping Insurance.");
 
                 e.NextPage = CurrentPage;
                 // return here instead of setting isValid, because we want this message to be displayed seperately
                 return false;
             }
-            
+
             RequiredFieldChecker fieldChecker = new RequiredFieldChecker();
             fieldChecker.Check("Street address", creditPerson.Street1.Trim());
             fieldChecker.Check("City", creditPerson.City.Trim());
