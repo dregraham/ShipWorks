@@ -32,6 +32,7 @@ namespace ShipWorks.Data.Model.RelationClasses
 			List<IEntityRelation> toReturn = new List<IEntityRelation>();
 			toReturn.Add(this.ActionQueueEntityUsingTriggerComputerID);
 			toReturn.Add(this.AuditEntityUsingComputerID);
+			toReturn.Add(this.DeviceEntityUsingComputerID);
 			toReturn.Add(this.DownloadEntityUsingComputerID);
 			toReturn.Add(this.PrintResultEntityUsingComputerID);
 			toReturn.Add(this.ProcessedShipmentEntityUsingProcessedComputerID);
@@ -73,6 +74,21 @@ namespace ShipWorks.Data.Model.RelationClasses
 				relation.AddEntityFieldPair(ComputerFields.ComputerID, AuditFields.ComputerID);
 				relation.InheritanceInfoPkSideEntity = InheritanceInfoProviderSingleton.GetInstance().GetInheritanceInfo("ComputerEntity", true);
 				relation.InheritanceInfoFkSideEntity = InheritanceInfoProviderSingleton.GetInstance().GetInheritanceInfo("AuditEntity", false);
+				return relation;
+			}
+		}
+
+		/// <summary>Returns a new IEntityRelation object, between ComputerEntity and DeviceEntity over the 1:n relation they have, using the relation between the fields:
+		/// Computer.ComputerID - Device.ComputerID
+		/// </summary>
+		public virtual IEntityRelation DeviceEntityUsingComputerID
+		{
+			get
+			{
+				IEntityRelation relation = new EntityRelation(SD.LLBLGen.Pro.ORMSupportClasses.RelationType.OneToMany, "Device" , true);
+				relation.AddEntityFieldPair(ComputerFields.ComputerID, DeviceFields.ComputerID);
+				relation.InheritanceInfoPkSideEntity = InheritanceInfoProviderSingleton.GetInstance().GetInheritanceInfo("ComputerEntity", true);
+				relation.InheritanceInfoFkSideEntity = InheritanceInfoProviderSingleton.GetInstance().GetInheritanceInfo("DeviceEntity", false);
 				return relation;
 			}
 		}
@@ -244,6 +260,7 @@ namespace ShipWorks.Data.Model.RelationClasses
 	{
 		internal static readonly IEntityRelation ActionQueueEntityUsingTriggerComputerIDStatic = new ComputerRelations().ActionQueueEntityUsingTriggerComputerID;
 		internal static readonly IEntityRelation AuditEntityUsingComputerIDStatic = new ComputerRelations().AuditEntityUsingComputerID;
+		internal static readonly IEntityRelation DeviceEntityUsingComputerIDStatic = new ComputerRelations().DeviceEntityUsingComputerID;
 		internal static readonly IEntityRelation DownloadEntityUsingComputerIDStatic = new ComputerRelations().DownloadEntityUsingComputerID;
 		internal static readonly IEntityRelation PrintResultEntityUsingComputerIDStatic = new ComputerRelations().PrintResultEntityUsingComputerID;
 		internal static readonly IEntityRelation ProcessedShipmentEntityUsingProcessedComputerIDStatic = new ComputerRelations().ProcessedShipmentEntityUsingProcessedComputerID;

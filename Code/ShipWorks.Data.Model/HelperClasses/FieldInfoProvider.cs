@@ -49,7 +49,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 		/// <summary>Method which initializes the internal datastores.</summary>
 		private void Init()
 		{
-			this.InitClass( (242 + 2));
+			this.InitClass( (243 + 2));
 			InitActionEntityInfos();
 			InitActionFilterTriggerEntityInfos();
 			InitActionQueueEntityInfos();
@@ -92,6 +92,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 			InitComputerEntityInfos();
 			InitConfigurationEntityInfos();
 			InitCustomerEntityInfos();
+			InitDeviceEntityInfos();
 			InitDhlExpressAccountEntityInfos();
 			InitDhlExpressPackageEntityInfos();
 			InitDhlExpressProfileEntityInfos();
@@ -885,6 +886,16 @@ namespace ShipWorks.Data.Model.HelperClasses
 			this.AddElementFieldInfo("CustomerEntity", "RollupOrderCount", typeof(System.Int32), false, false, false, false,  (int)CustomerFieldIndex.RollupOrderCount, 0, 0, 10);
 			this.AddElementFieldInfo("CustomerEntity", "RollupOrderTotal", typeof(System.Decimal), false, false, false, false,  (int)CustomerFieldIndex.RollupOrderTotal, 0, 4, 19);
 			this.AddElementFieldInfo("CustomerEntity", "RollupNoteCount", typeof(System.Int32), false, false, false, false,  (int)CustomerFieldIndex.RollupNoteCount, 0, 0, 10);
+		}
+		/// <summary>Inits DeviceEntity's FieldInfo objects</summary>
+		private void InitDeviceEntityInfos()
+		{
+			this.AddFieldIndexEnumForElementName(typeof(DeviceFieldIndex), "DeviceEntity");
+			this.AddElementFieldInfo("DeviceEntity", "DeviceID", typeof(System.Int64), true, false, true, false,  (int)DeviceFieldIndex.DeviceID, 0, 0, 19);
+			this.AddElementFieldInfo("DeviceEntity", "ComputerID", typeof(System.Int64), false, true, false, false,  (int)DeviceFieldIndex.ComputerID, 0, 0, 19);
+			this.AddElementFieldInfo("DeviceEntity", "Model", typeof(System.Int16), false, false, false, false,  (int)DeviceFieldIndex.Model, 0, 0, 5);
+			this.AddElementFieldInfo("DeviceEntity", "IPAddress", typeof(System.String), false, false, false, false,  (int)DeviceFieldIndex.IPAddress, 50, 0, 0);
+			this.AddElementFieldInfo("DeviceEntity", "PortNumber", typeof(System.Int16), false, false, false, false,  (int)DeviceFieldIndex.PortNumber, 0, 0, 5);
 		}
 		/// <summary>Inits DhlExpressAccountEntity's FieldInfo objects</summary>
 		private void InitDhlExpressAccountEntityInfos()

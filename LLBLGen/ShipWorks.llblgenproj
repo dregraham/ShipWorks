@@ -715,6 +715,15 @@
           <Field Name="ShipWebsite" Type="string" MaxLength="50" FieldIndex="31" />
         </Fields>
       </EntityDefinition>
+      <EntityDefinition Name="Device" ObjectID="edbc7497-5fb4-4ee0-ad5c-aa79fbd4d119">
+        <Fields>
+          <Field Name="ComputerID" Type="long" FieldIndex="1" />
+          <Field Name="DeviceID" Type="long" IsReadOnly="true" Precision="19" IsPrimaryKey="true" FieldIndex="0" />
+          <Field Name="IPAddress" Type="string" MaxLength="50" FieldIndex="3" />
+          <Field Name="Model" Type="short" Precision="5" FieldIndex="2" />
+          <Field Name="PortNumber" Type="short" Precision="5" FieldIndex="4" />
+        </Fields>
+      </EntityDefinition>
       <EntityDefinition Name="DhlExpressAccount" ObjectID="37d7aa88-e504-4c62-9bf1-890724dd2ec7">
         <Fields>
           <Field Name="AccountNumber" Type="long" FieldIndex="2" />
@@ -3875,6 +3884,11 @@
           <FieldFieldRelationship FkField="OrderID" PkField="OrderID" />
         </FieldRelationships>
       </NormalRelationship>
+      <NormalRelationship Name="Device.Computer-Computer.Device" Start=":Device" End=":Computer" StartNavigator="Computer" EndNavigator="Device" Type="4" DeleteRuleAction="1">
+        <FieldRelationships>
+          <FieldFieldRelationship FkField="ComputerID" PkField="ComputerID" />
+        </FieldRelationships>
+      </NormalRelationship>
       <NormalRelationship Name="DhlExpressPackage.DhlExpressShipment-DhlExpressShipment.Packages" Start=":DhlExpressPackage" End=":DhlExpressShipment" StartNavigator="DhlExpressShipment" EndNavigator="Packages" Type="4" DeleteRuleAction="1">
         <FieldRelationships>
           <FieldFieldRelationship FkField="ShipmentID" PkField="ShipmentID" />
@@ -4682,7 +4696,7 @@
       <Catalogs>
         <Catalog Name="ShipWorksLocal">
           <Schemas>
-            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2021-02-17T20:02:04.2621302Z">
+            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2021-04-26T12:57:11.9419847Z">
               <Tables>
                 <Table Name="Action">
                   <PkConstraintName Name="PK_Action" />
@@ -5374,6 +5388,16 @@
                     <Field Name="RollupOrderCount" Ordinal="33" DbType="8" Precision="10" />
                     <Field Name="RollupOrderTotal" Ordinal="34" DbType="9" Precision="19" Scale="4" />
                     <Field Name="RollupNoteCount" Ordinal="35" DbType="8" Precision="10" />
+                  </Fields>
+                </Table>
+                <Table Name="Device">
+                  <PkConstraintName Name="PK_Device" />
+                  <Fields>
+                    <Field Name="DeviceID" Ordinal="1" IsIdentity="true" IsPrimaryKey="true" DbType="0" Precision="19" />
+                    <Field Name="ComputerID" Ordinal="2" DbType="0" Precision="19" />
+                    <Field Name="Model" Ordinal="3" DbType="16" Precision="5" />
+                    <Field Name="IPAddress" Ordinal="4" DbType="12" Length="50" />
+                    <Field Name="PortNumber" Ordinal="5" DbType="16" Precision="5" />
                   </Fields>
                 </Table>
                 <Table Name="DhlExpressAccount">
@@ -10182,6 +10206,11 @@
                 <FieldPair PkField="dbo:CommerceInterfaceOrder:OrderID" FkField="dbo:CommerceInterfaceOrderSearch:OrderID" />
               </FieldPairs>
             </ForeignKeyConstraint>
+            <ForeignKeyConstraint Name="dbo:Device:FK_Device_Computer" DeleteRuleAction="1">
+              <FieldPairs>
+                <FieldPair PkField="dbo:Computer:ComputerID" FkField="dbo:Device:ComputerID" />
+              </FieldPairs>
+            </ForeignKeyConstraint>
             <ForeignKeyConstraint Name="dbo:DhlExpressPackage:FK_DhlExpressPackage_DhlExpressShipment" DeleteRuleAction="1">
               <FieldPairs>
                 <FieldPair PkField="dbo:DhlExpressShipment:ShipmentID" FkField="dbo:DhlExpressPackage:ShipmentID" />
@@ -11678,6 +11707,15 @@
             <FieldMapping FieldName="ShipStreet2" TargetFieldName="ShipStreet2" />
             <FieldMapping FieldName="ShipStreet3" TargetFieldName="ShipStreet3" />
             <FieldMapping FieldName="ShipWebsite" TargetFieldName="ShipWebsite" />
+          </FieldMappings>
+        </EntityMapping>
+        <EntityMapping EntityName=":Device" TargetName="ShipWorksLocal:dbo:Device">
+          <FieldMappings>
+            <FieldMapping FieldName="ComputerID" TargetFieldName="ComputerID" />
+            <FieldMapping FieldName="DeviceID" TargetFieldName="DeviceID" SequenceToUse="SCOPE_IDENTITY()" />
+            <FieldMapping FieldName="IPAddress" TargetFieldName="IPAddress" />
+            <FieldMapping FieldName="Model" TargetFieldName="Model" />
+            <FieldMapping FieldName="PortNumber" TargetFieldName="PortNumber" />
           </FieldMappings>
         </EntityMapping>
         <EntityMapping EntityName=":DhlExpressAccount" TargetName="ShipWorksLocal:dbo:DhlExpressAccount">

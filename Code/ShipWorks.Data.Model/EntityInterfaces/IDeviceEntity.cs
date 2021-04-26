@@ -15,54 +15,58 @@ using System.Linq;
 namespace ShipWorks.Data.Model.EntityInterfaces
 {
     /// <summary>
-    /// Entity interface which represents the entity 'Computer'. <br/><br/>
+    /// Entity interface which represents the entity 'Device'. <br/><br/>
     /// 
     /// </summary>
-    public partial interface IComputerEntity
+    public partial interface IDeviceEntity
     {
         
-        /// <summary> The ComputerID property of the Entity Computer<br/><br/>
+        /// <summary> The DeviceID property of the Entity Device<br/><br/>
         /// </summary>
-        /// <remarks>Mapped on table field: "Computer"."ComputerID"<br/>
+        /// <remarks>Mapped on table field: "Device"."DeviceID"<br/>
         /// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): false, true, true</remarks>
+        System.Int64 DeviceID { get; }
+        /// <summary> The ComputerID property of the Entity Device<br/><br/>
+        /// </summary>
+        /// <remarks>Mapped on table field: "Device"."ComputerID"<br/>
+        /// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
+        /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
         System.Int64 ComputerID { get; }
-        /// <summary> The RowVersion property of the Entity Computer<br/><br/>
+        /// <summary> The Model property of the Entity Device<br/><br/>
         /// </summary>
-        /// <remarks>Mapped on table field: "Computer"."RowVersion"<br/>
-        /// Table field type characteristics (type, precision, scale, length): Timestamp, 0, 0, 2147483647<br/>
+        /// <remarks>Mapped on table field: "Device"."Model"<br/>
+        /// Table field type characteristics (type, precision, scale, length): SmallInt, 5, 0, 0<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
-        System.Byte[] RowVersion { get; }
-        /// <summary> The Identifier property of the Entity Computer<br/><br/>
+        System.Int16 Model { get; }
+        /// <summary> The IPAddress property of the Entity Device<br/><br/>
         /// </summary>
-        /// <remarks>Mapped on table field: "Computer"."Identifier"<br/>
-        /// Table field type characteristics (type, precision, scale, length): UniqueIdentifier, 0, 0, 0<br/>
-        /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
-        System.Guid Identifier { get; }
-        /// <summary> The Name property of the Entity Computer<br/><br/>
-        /// </summary>
-        /// <remarks>Mapped on table field: "Computer"."Name"<br/>
+        /// <remarks>Mapped on table field: "Device"."IPAddress"<br/>
         /// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 50<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
-        System.String Name { get; }
+        System.String IPAddress { get; }
+        /// <summary> The PortNumber property of the Entity Device<br/><br/>
+        /// </summary>
+        /// <remarks>Mapped on table field: "Device"."PortNumber"<br/>
+        /// Table field type characteristics (type, precision, scale, length): SmallInt, 5, 0, 0<br/>
+        /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+        System.Int16 PortNumber { get; }
         
         
+        IComputerEntity Computer { get; }
         
-        IEnumerable<IAuditEntity> Audit { get; }
-        IEnumerable<IDeviceEntity> Device { get; }
-        IEnumerable<IServiceStatusEntity> ServiceStatus { get; }
 
         
 
         /// <summary>
         /// Get a read only version of the entity
         /// </summary>
-        IComputerEntity AsReadOnly();
+        IDeviceEntity AsReadOnly();
 
         /// <summary>
         /// Get a read only version of the entity
         /// </summary>
-        IComputerEntity AsReadOnly(IDictionary<object, object> objectMap);
+        IDeviceEntity AsReadOnly(IDictionary<object, object> objectMap);
     }
 }
 
@@ -72,36 +76,34 @@ namespace ShipWorks.Data.Model.EntityClasses
     using ShipWorks.Data.Model.ReadOnlyEntityClasses;
 
     /// <summary>
-    /// Entity interface which represents the entity 'Computer'. <br/><br/>
+    /// Entity interface which represents the entity 'Device'. <br/><br/>
     /// 
     /// </summary>
-    public partial class ComputerEntity : IComputerEntity
+    public partial class DeviceEntity : IDeviceEntity
     {
         
+        IComputerEntity IDeviceEntity.Computer => Computer;
         
-        IEnumerable<IAuditEntity> IComputerEntity.Audit => Audit;
-        IEnumerable<IDeviceEntity> IComputerEntity.Device => Device;
-        IEnumerable<IServiceStatusEntity> IComputerEntity.ServiceStatus => ServiceStatus;
 
         /// <summary>
         /// Get a read only version of the entity
         /// </summary>
-        public virtual IComputerEntity AsReadOnly() =>
+        public virtual IDeviceEntity AsReadOnly() =>
             AsReadOnly(new Dictionary<object, object>());
 
         /// <summary>
         /// Get a read only version of the entity that handles cyclic references
         /// </summary>
-        public virtual IComputerEntity AsReadOnly(IDictionary<object, object> objectMap)
+        public virtual IDeviceEntity AsReadOnly(IDictionary<object, object> objectMap)
         {
             if (objectMap.ContainsKey(this))
             {
-                return (IComputerEntity) objectMap[this];
+                return (IDeviceEntity) objectMap[this];
             }
 
             objectMap.Add(this, null);
 
-            return new ReadOnlyComputerEntity(this, objectMap);
+            return new ReadOnlyDeviceEntity(this, objectMap);
         }
 
         

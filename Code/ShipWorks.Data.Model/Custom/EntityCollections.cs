@@ -2400,6 +2400,63 @@ namespace ShipWorks.Data.Model.Custom
 
 	
 	/// <summary>
+	/// Strongly typed collection of DeviceEntity
+	/// </summary>
+	public class DeviceCollection : EntityCollection<DeviceEntity>
+	{
+        /// <summary>
+        /// Gets the count of all DeviceEntity rows
+        /// </summary>
+        public static int GetCount(IDataAccessAdapter adapter)
+        {
+            return GetCount(adapter, null);
+        }
+
+        /// <summary>
+        /// Gets the count of all DeviceEntity rows filtered by the given predicate
+        /// </summary>
+        public static int GetCount(IDataAccessAdapter adapter, IPredicate filter)
+        {
+            RelationPredicateBucket bucket = null;
+
+            if (filter != null)
+            {
+                bucket = new RelationPredicateBucket(filter);
+            }
+
+            return adapter.GetDbCount(new DeviceEntityFactory().CreateFields(), bucket);
+        }
+
+        /// <summary>
+        /// Fetch a new collection object that matches the specified filter.
+        /// </summary>
+        public static DeviceCollection Fetch(IDataAccessAdapter adapter, IPredicate filter)
+        {
+			return Fetch(adapter, filter, null);
+        }
+
+		/// <summary>
+        /// Fetch a new collection object that matches the specified filter and uses the given prefetch.
+        /// </summary>
+        public static DeviceCollection Fetch(IDataAccessAdapter adapter, IPredicate filter, IPrefetchPath2 prefetchPath)
+        {
+            DeviceCollection collection = new DeviceCollection();
+
+            RelationPredicateBucket bucket = null;
+
+            if (filter != null)
+            {
+                bucket = new RelationPredicateBucket(filter);
+            }
+
+            adapter.FetchEntityCollection(collection, bucket, prefetchPath);
+
+            return collection;
+        }
+	}
+
+	
+	/// <summary>
 	/// Strongly typed collection of DhlExpressAccountEntity
 	/// </summary>
 	public class DhlExpressAccountCollection : EntityCollection<DhlExpressAccountEntity>

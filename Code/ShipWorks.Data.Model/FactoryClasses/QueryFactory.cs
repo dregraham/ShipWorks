@@ -358,6 +358,12 @@ namespace ShipWorks.Data.Model.FactoryClasses
 			get { return Create<CustomerEntity>(); }
 		}
 
+		/// <summary>Creates and returns a new EntityQuery for the Device entity</summary>
+		public EntityQuery<DeviceEntity> Device
+		{
+			get { return Create<DeviceEntity>(); }
+		}
+
 		/// <summary>Creates and returns a new EntityQuery for the DhlExpressAccount entity</summary>
 		public EntityQuery<DhlExpressAccountEntity> DhlExpressAccount
 		{

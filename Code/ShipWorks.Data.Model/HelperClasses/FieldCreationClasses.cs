@@ -5549,6 +5549,36 @@ namespace ShipWorks.Data.Model.HelperClasses
 		}
 	}
 
+	/// <summary>Field Creation Class for entity DeviceEntity</summary>
+	public partial class DeviceFields
+	{
+		/// <summary>Creates a new DeviceEntity.DeviceID field instance</summary>
+		public static EntityField2 DeviceID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(DeviceFieldIndex.DeviceID);}
+		}
+		/// <summary>Creates a new DeviceEntity.ComputerID field instance</summary>
+		public static EntityField2 ComputerID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(DeviceFieldIndex.ComputerID);}
+		}
+		/// <summary>Creates a new DeviceEntity.Model field instance</summary>
+		public static EntityField2 Model
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(DeviceFieldIndex.Model);}
+		}
+		/// <summary>Creates a new DeviceEntity.IPAddress field instance</summary>
+		public static EntityField2 IPAddress
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(DeviceFieldIndex.IPAddress);}
+		}
+		/// <summary>Creates a new DeviceEntity.PortNumber field instance</summary>
+		public static EntityField2 PortNumber
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(DeviceFieldIndex.PortNumber);}
+		}
+	}
+
 	/// <summary>Field Creation Class for entity DhlExpressAccountEntity</summary>
 	public partial class DhlExpressAccountFields
 	{

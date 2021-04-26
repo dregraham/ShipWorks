@@ -46,7 +46,7 @@ namespace ShipWorks.Data.Model
 		/// <summary>Method which initializes the internal datastores with the structure of hierarchical types.</summary>
 		private void Init()
 		{
-			this.InitClass(244);
+			this.InitClass(245);
 			InitActionEntityMappings();
 			InitActionFilterTriggerEntityMappings();
 			InitActionQueueEntityMappings();
@@ -89,6 +89,7 @@ namespace ShipWorks.Data.Model
 			InitComputerEntityMappings();
 			InitConfigurationEntityMappings();
 			InitCustomerEntityMappings();
+			InitDeviceEntityMappings();
 			InitDhlExpressAccountEntityMappings();
 			InitDhlExpressPackageEntityMappings();
 			InitDhlExpressProfileEntityMappings();
@@ -922,6 +923,17 @@ namespace ShipWorks.Data.Model
 			this.AddElementFieldMapping("CustomerEntity", "RollupOrderCount", "RollupOrderCount", false, "Int", 0, 10, 0, false, "", null, typeof(System.Int32), 32);
 			this.AddElementFieldMapping("CustomerEntity", "RollupOrderTotal", "RollupOrderTotal", false, "Money", 0, 19, 4, false, "", null, typeof(System.Decimal), 33);
 			this.AddElementFieldMapping("CustomerEntity", "RollupNoteCount", "RollupNoteCount", false, "Int", 0, 10, 0, false, "", null, typeof(System.Int32), 34);
+		}
+
+		/// <summary>Inits DeviceEntity's mappings</summary>
+		private void InitDeviceEntityMappings()
+		{
+			this.AddElementMapping("DeviceEntity", @"ShipWorksLocal", @"dbo", "Device", 5, 0);
+			this.AddElementFieldMapping("DeviceEntity", "DeviceID", "DeviceID", false, "BigInt", 0, 19, 0, true, "SCOPE_IDENTITY()", null, typeof(System.Int64), 0);
+			this.AddElementFieldMapping("DeviceEntity", "ComputerID", "ComputerID", false, "BigInt", 0, 19, 0, false, "", null, typeof(System.Int64), 1);
+			this.AddElementFieldMapping("DeviceEntity", "Model", "Model", false, "SmallInt", 0, 5, 0, false, "", null, typeof(System.Int16), 2);
+			this.AddElementFieldMapping("DeviceEntity", "IPAddress", "IPAddress", false, "NVarChar", 50, 0, 0, false, "", null, typeof(System.String), 3);
+			this.AddElementFieldMapping("DeviceEntity", "PortNumber", "PortNumber", false, "SmallInt", 0, 5, 0, false, "", null, typeof(System.Int16), 4);
 		}
 
 		/// <summary>Inits DhlExpressAccountEntity's mappings</summary>
