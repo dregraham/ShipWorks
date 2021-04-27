@@ -11,6 +11,7 @@ using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Orders.Archive;
 using ShipWorks.Tests.Shared;
 using Xunit;
+using Xunit.Abstractions;
 using static ShipWorks.Tests.Shared.ExtensionMethods.ParameterShorteners;
 
 namespace ShipWorks.Stores.Tests.Orders.Archive
@@ -20,8 +21,11 @@ namespace ShipWorks.Stores.Tests.Orders.Archive
         private readonly AutoMock mock;
         private readonly OrderArchiveSqlGenerator testObject;
 
-        public OrderArchiveSqlGeneratorTest()
+        private readonly ITestOutputHelper output;
+
+        public OrderArchiveSqlGeneratorTest(ITestOutputHelper output)
         {
+            this.output = output;
             mock = AutoMockExtensions.GetLooseThatReturnsMocks();
 
             testObject = mock.Create<OrderArchiveSqlGenerator>();
@@ -89,8 +93,8 @@ namespace ShipWorks.Stores.Tests.Orders.Archive
                               $"test properties, CurrentlySupportedEntities or ExcludedEntities. If adding new " +
                               $"entities that should be archived, be sure to update ArchiveOrderData.sql." +
                               $"{Environment.NewLine}{Environment.NewLine}{newEntities}";
-            }
-
+                output.WriteLine(newEntities);
+            }            
             Assert.Equal(string.Empty, newEntities);
         }
 
@@ -290,6 +294,7 @@ namespace ShipWorks.Stores.Tests.Orders.Archive
                     typeof(PayPalStoreEntity),
                     typeof(PermissionEntity),
                     typeof(PostalProfileEntity),
+                    typeof(PlatformStoreEntity),
                     typeof(ProcessedShipmentEntity),
                     typeof(ProductEntity),
                     typeof(ProductVariantEntity),
