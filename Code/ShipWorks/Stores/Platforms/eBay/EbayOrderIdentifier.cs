@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Text.RegularExpressions;
+using log4net;
 using SD.LLBLGen.Pro.QuerySpec;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.FactoryClasses;
@@ -15,6 +16,9 @@ namespace ShipWorks.Stores.Platforms.Ebay
     /// </summary>
     public class EbayOrderIdentifier : OrderIdentifier
     {
+        // Logger
+        private static readonly ILog log = LogManager.GetLogger(typeof(EbayOrderIdentifier));
+
         /// <summary>
         /// Get EbayOrderIdentifier based on OrderType
         /// </summary>
@@ -93,12 +97,14 @@ namespace ShipWorks.Stores.Platforms.Ebay
 
             if (!long.TryParse(transactionId, out tranId))
             {
-                // What to do?
+                log.Error($"TransactionID, {transactionId}, received from eBay for orderId, {orderId} is invalid.");
+                throw new ArgumentException($"TransactionID, {transactionId}, received from eBay for orderId, {orderId} is invalid.");
             }
 
             if (!long.TryParse(ebayItemId, out itemId))
             {
-                // What to do?
+                log.Error($"EbayItemId, {ebayItemId}, received from eBay for orderId, {orderId} is invalid.");
+                throw new ArgumentException($"EbayItemId, {ebayItemId}, received from eBay for orderId, {orderId} is invalid.");
             }
 
             if (!orderId.Contains("-"))
