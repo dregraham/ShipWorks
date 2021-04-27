@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Linq;
+using ShipWorks.Users;
 
 namespace ShipWorks.ApplicationCore
 {

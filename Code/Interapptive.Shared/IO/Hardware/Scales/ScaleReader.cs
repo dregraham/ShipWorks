@@ -29,6 +29,8 @@ namespace Interapptive.Shared.IO.Hardware.Scales
 
         private static readonly object ThreadLock = new object();
         static readonly DeviceListener DeviceListener = new DeviceListener();
+        private static ICubiscanConfigurationManager CubiscanConfigurationManager;
+        
         private static IObserver<bool> scaleObserver;
 
         public static IObservable<ScaleReadResult> ReadEvents { get; }
@@ -45,10 +47,7 @@ namespace Interapptive.Shared.IO.Hardware.Scales
                 SetUsbScale();
                 DeviceListener.Start();
             });
-
-            // TODO: Figure out how to get this from configuration once we get to that story
-            cubiscanReader = new ScaleCubiscanReader();
-
+            
             ReadEvents = Observable.Create<bool>(x =>
             {
                 scaleObserver = x;
@@ -64,9 +63,11 @@ namespace Interapptive.Shared.IO.Hardware.Scales
         /// <summary>
         /// Call Initialize to explicitly trigger static constructor
         /// </summary>
-        public static void Initialize()
+        public static void Initialize(ICubiscanConfigurationManager cubiscanConfigurationManager)
         {
             Log.Info("ScaleReader.Initialize called to explicitly trigger static constructor");
+            CubiscanConfigurationManager = cubiscanConfigurationManager;
+            cubiscanReader = new ScaleCubiscanReader(CubiscanConfigurationManager);
         }
 
         /// <summary>
@@ -82,7 +83,7 @@ namespace Interapptive.Shared.IO.Hardware.Scales
             Log.InfoFormat("Device attached or changed");
 
             // Don't bother setting up the scale if we already have one
-            if (usbReader != null)
+            if (usbReader != null || CubiscanConfigurationManager.GetConfiguration().IsConfigured)
             {
                 return;
             }
@@ -153,13 +154,19 @@ namespace Interapptive.Shared.IO.Hardware.Scales
         /// </summary>
         private static ScaleReadResult InternalReadScale(bool isPolling)
         {
+            var cubiscanConfiguration = CubiscanConfigurationManager.GetConfiguration();
+            if (cubiscanConfiguration.IsConfigured)
+            {
+                return cubiscanReader.ReadScale(cubiscanConfiguration);
+            }
+            
             // We may be in a situation where both scales are plugged in, so we should still poll the USB scale
-            if (isPolling && serialReader != null && usbReader == null)
+            if (isPolling && serialReader != null && usbReader == null && cubiscanConfiguration.IsConfigured)
             {
                 return SerialScalesNotPolledResult;
             }
 
-            ScaleReadResult existingResult = ReadExisting();
+            ScaleReadResult existingResult = ReadExistingUsbOrSerial();
             if (existingResult.Status != ScaleReadStatus.NotFound)
             {
                 return existingResult;
@@ -210,9 +217,9 @@ namespace Interapptive.Shared.IO.Hardware.Scales
         /// <summary>
         /// Read from an existing previously successful scale
         /// </summary>
-        private static ScaleReadResult ReadExisting()
+        private static ScaleReadResult ReadExistingUsbOrSerial()
         {
-            return cubiscanReader?.ReadScale() ??
+            return
                 usbReader?.ReadScale() ??
                 serialReader?.ReadScale() ??
                 UnknownNotFoundResult;

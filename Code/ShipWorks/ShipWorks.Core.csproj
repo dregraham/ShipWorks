@@ -926,6 +926,9 @@
     <Compile Include="ApplicationCore\MainForm.BasicUIHeartbeat.cs">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="Common\IO\Hardware\CubiscanConfigurationManager.cs" />
+    <Compile Include="Common\IO\Hardware\DeviceManager.cs" />
+    <Compile Include="Common\IO\Hardware\IDeviceManager.cs" />
     <Compile Include="Common\IO\Hardware\Printers\IPrintUtility.cs" />
     <Compile Include="Common\IO\Hardware\Printers\PrintUtilityWrapper.cs" />
     <Compile Include="AutoInstall\AutoInstaller.cs" />
@@ -1226,6 +1229,8 @@
     <Compile Include="Products\Import\IImportProductsResult.cs" />
     <Compile Include="Products\ProductSelectionChangedEventArgs.cs" />
     <Compile Include="UI\Controls\WeightChangedEventArgs.cs" />
+    <Compile Include="Users\ComputerManagerWrapper.cs" />
+    <Compile Include="Users\IComputerManager.cs" />
     <Compile Include="Warehouse\Configuration\Carriers\BaseCarrierSetup.cs" />
     <Compile Include="Warehouse\Configuration\Carriers\DhlCarrierSetup.cs" />
     <Compile Include="Warehouse\Configuration\Carriers\EndiciaCarrierSetup.cs" />

@@ -241,6 +241,7 @@ namespace ShipWorks.Stores.Tests.Orders.Archive
                     typeof(ComputerEntity),
                     typeof(ConfigurationEntity),
                     typeof(CustomerEntity),
+                    typeof(DeviceEntity),
                     typeof(DhlExpressAccountEntity),
                     typeof(DhlExpressProfileEntity),
                     typeof(DimensionsProfileEntity),

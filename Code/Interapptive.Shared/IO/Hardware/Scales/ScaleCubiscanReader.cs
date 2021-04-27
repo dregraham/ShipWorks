@@ -12,13 +12,13 @@ namespace Interapptive.Shared.IO.Hardware.Scales
     /// </summary>
     public class ScaleCubiscanReader
     {
-        private ILog log;
+        private readonly ILog log;
         private static readonly string measureRequestString = $"{Convert.ToChar(2)}M{Convert.ToChar(3)}{Convert.ToChar(13)}{Convert.ToChar(10)}";
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public ScaleCubiscanReader()
+        public ScaleCubiscanReader(ICubiscanConfigurationManager cubiscanConfigurationManager)
         {
             log = LogManager.GetLogger(typeof(ScaleCubiscanReader));
         }
@@ -26,11 +26,17 @@ namespace Interapptive.Shared.IO.Hardware.Scales
         /// <summary>
         /// Requests dimensions from a Cubiscan and returns the result
         /// </summary>
-        public ScaleReadResult ReadScale()
+        /// <param name="config">Current cubiscan configuration</param>
+        public ScaleReadResult ReadScale(CubiscanConfiguration config)
         {
             try
             {
-                var result = Functional.RetryAsync(GetScaleReadResult, 3, _ => true).Result;
+                if (!config.IsConfigured)
+                {
+                    return ScaleReadResult.NotFound("No cubiscan device configured.");
+                }
+                
+                var result = Functional.RetryAsync(() => GetScaleReadResult(config), 3, _ => true).Result;
                 return ReadCubiScan(result.Value);
             }
             catch(Exception ex)
@@ -64,13 +70,14 @@ namespace Interapptive.Shared.IO.Hardware.Scales
         /// <summary>
         /// Opens a port, sends a measure request, and returns the result
         /// </summary>
+        /// <param name="cubiscanConfiguration"></param>
         /// <returns>Raw result from cubiscan</returns>
-        private async Task<GenericResult<string>> GetScaleReadResult()
+        private async Task<GenericResult<string>> GetScaleReadResult(CubiscanConfiguration cubiscanConfiguration)
         {
             using (TcpClient client = new TcpClient())
             {
                 // todo: get this value from the configuration when we get to that story
-                await client.ConnectAsync("127.0.0.1", 1050).ConfigureAwait(false);
+                await client.ConnectAsync(cubiscanConfiguration.IpAddress, cubiscanConfiguration.Port).ConfigureAwait(false);
 
                 NetworkStream networkStream = client.GetStream();
                 string response;
