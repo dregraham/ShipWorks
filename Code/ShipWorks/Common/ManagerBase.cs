@@ -3,14 +3,12 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using Interapptive.Shared.Collections;
 using SD.LLBLGen.Pro.ORMSupportClasses;
-using ShipWorks.ApplicationCore;
 using ShipWorks.Data.Connection;
-using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Utility;
 
 namespace ShipWorks.Common
 {
-    public abstract class ManagerBase<TEntity, TEntityInterface>: IInitializeForCurrentSession, ICheckForChangesNeeded where TEntity : EntityBase2
+    public abstract class ManagerBase<TEntity, TEntityInterface> where TEntity : EntityBase2
     {
         private TableSynchronizer<TEntity> tableSynchronizer;
         private bool needCheckForChanges;

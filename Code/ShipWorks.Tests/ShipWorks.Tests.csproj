@@ -310,6 +310,7 @@
     <Compile Include="ApplicationCore\Security\LicenseEncryptionProviderTest.cs" />
     <Compile Include="Common\KeyboardShortcuts\KeyboardShortcutKeyFilterTest.cs" />
     <Compile Include="Common\KeyboardShortcuts\ShortcutSessionTest.cs" />
+    <Compile Include="Common\ManagerBaseTest.cs" />
     <Compile Include="Core\AssemblyDateTests.cs" />
     <Compile Include="Core\Certificates\ClientCertificateTests.cs" />
     <Compile Include="Core\EnumTest.cs" />

@@ -23,7 +23,7 @@ namespace ShipWorks.ApplicationCore.Settings
         // Maps list item name to the settings page that should be displayed for it
         private Dictionary<string, ISettingsPage> settingsPages = new Dictionary<string, ISettingsPage>();
         private readonly IMessenger messenger;
-        private IApiSettingsPage apiSettingsPage;
+        private readonly IApiSettingsPage apiSettingsPage;
 
         /// <summary>
         /// Indicates if warehouse is allowed
