@@ -37,10 +37,7 @@ namespace ShipWorks.Stores.Platforms.Ebay.Warehouse
         protected override async Task<GenericResult<OrderEntity>> CreateStoreOrderEntity(IStoreEntity store, StoreType storeType, WarehouseOrder warehouseOrder)
         {
             var ebayWarehouseOrder = warehouseOrder.AdditionalData[ebayEntryKey].ToObject<EbayWarehouseOrder>();
-
-            string orderID = ebayWarehouseOrder.EbayOrderID == null ? warehouseOrder.OrderNumber : ebayWarehouseOrder.EbayOrderID;
-
-            var identifier = new EbayOrderIdentifier(orderID);
+            var identifier = GetEbayOrderIdentifier(warehouseOrder, ebayWarehouseOrder);
 
             // get the order instance
             GenericResult<OrderEntity> result = await orderElementFactory
@@ -52,6 +49,20 @@ namespace ShipWorks.Stores.Platforms.Ebay.Warehouse
             }
 
             return result;
+        }
+
+        /// <summary>
+        /// Get an EbayOrderIdentifier for the warehouse order
+        /// </summary>
+        public static EbayOrderIdentifier GetEbayOrderIdentifier(WarehouseOrder warehouseOrder, EbayWarehouseOrder ebayWarehouseOrder)
+        {
+            string orderID = ebayWarehouseOrder.EbayOrderID ?? warehouseOrder.OrderNumber;
+            var items = warehouseOrder.Items.Select(i => i.AdditionalData[ebayEntryKey].ToObject<EbayWarehouseItem>());
+            var item = items?.FirstOrDefault();
+            var transactionId = item.EbayTransactionID;
+            var itemId = item.EbayItemID;
+
+           return EbayOrderIdentifier.GetIdentifier(orderID, transactionId.ToString(), itemId.ToString());
         }
 
         /// <summary>

@@ -1,10 +1,13 @@
 ﻿using System;
+using System.Linq;
 using System.Text.RegularExpressions;
+using log4net;
 using SD.LLBLGen.Pro.QuerySpec;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.FactoryClasses;
 using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Stores.Content;
+using ShipWorks.Stores.Platforms.Ebay.WebServices;
 
 namespace ShipWorks.Stores.Platforms.Ebay
 {
@@ -13,6 +16,43 @@ namespace ShipWorks.Stores.Platforms.Ebay
     /// </summary>
     public class EbayOrderIdentifier : OrderIdentifier
     {
+        // Logger
+        private static readonly ILog log = LogManager.GetLogger(typeof(EbayOrderIdentifier));
+
+        /// <summary>
+        /// Get EbayOrderIdentifier based on OrderType
+        /// </summary>
+        public EbayOrderIdentifier(OrderType orderType)
+        {
+            var transaction = orderType.TransactionArray?.FirstOrDefault();
+
+            var id = GetIdentifier(
+                orderType.OrderID,
+                transaction?.TransactionID,
+                transaction?.Item.ItemID
+            );
+
+            EbayOrderID = id.EbayOrderID;
+            TransactionID = id.TransactionID;
+            EbayItemID = id.EbayItemID;
+        }
+
+        /// <summary>
+        /// Get EbayOrderIdentifier based on FeedbackDetailType
+        /// </summary>
+        public EbayOrderIdentifier(FeedbackDetailType feedbackDetailType)
+        {
+            var id = GetIdentifier(
+                feedbackDetailType.OrderLineItemID,
+                feedbackDetailType.TransactionID,
+                feedbackDetailType.ItemID
+            );
+
+            EbayOrderID = id.EbayOrderID;
+            TransactionID = id.TransactionID;
+            EbayItemID = id.EbayItemID;
+        }
+
         /// <summary>
         /// Constructor
         /// </summary>
@@ -24,33 +64,60 @@ namespace ShipWorks.Stores.Platforms.Ebay
         }
 
         /// <summary>
-        /// Create the identifier from the given eBay API object
-        /// </summary>
-        public EbayOrderIdentifier(string orderID)
-        {
-            // The - prefix is from a case where eBay had a bug that prefixed items with a -
-            Match match = Regex.Match(orderID, @"^-?(\d+)-(\d+)$");
-
-            // "Combined" orders have an Int64 ID, whereas single-line auctions are represented by an ItemID-TransactionID hyphenation
-            if (match.Success)
-            {
-                EbayItemID = Int64.Parse(match.Groups[1].Value);
-                TransactionID = Int64.Parse(match.Groups[2].Value);
-                EbayOrderID = TransactionID;
-            }
-            else
-            {
-                EbayOrderID = Int64.Parse(orderID);
-            }
-        }
-
-        /// <summary>
         /// Create the identifier based on itemID and transactionID which are provided as strings from eBay
         /// </summary>
         public EbayOrderIdentifier(string itemID, string transactionID)
         {
             EbayItemID = long.Parse(itemID);
             TransactionID = long.Parse(transactionID);
+        }
+
+        /// <summary>
+        /// Parse the values to get an EbayOrderIdentifier
+        /// </summary>
+        public static EbayOrderIdentifier GetIdentifier(string orderId, string transactionId, string ebayItemId)
+        {
+            long tranId = 0;
+            long ebayOrderId = 0;
+            long itemId = 0;
+
+            if (orderId.Split('-')?.Length == 2)
+            {
+                // The - prefix is from a case where eBay had a bug that prefixed items with a -
+                Match match = Regex.Match(orderId, @"^-?(\d+)-(\d+)$");
+
+                // "Combined" orders have an Int64 ID, whereas single-line auctions are represented by an ItemID-TransactionID hyphenation
+                if (match.Success)
+                {
+                    tranId = long.Parse(match.Groups[2].Value);
+                    itemId = long.Parse(match.Groups[1].Value);
+                    return new EbayOrderIdentifier(tranId, itemId, tranId);
+                }
+            }
+
+            if (!long.TryParse(transactionId, out tranId))
+            {
+                log.Error($"TransactionID, {transactionId}, received from eBay for orderId, {orderId} is invalid.");
+                throw new ArgumentException($"TransactionID, {transactionId}, received from eBay for orderId, {orderId} is invalid.");
+            }
+
+            if (!long.TryParse(ebayItemId, out itemId))
+            {
+                log.Error($"EbayItemId, {ebayItemId}, received from eBay for orderId, {orderId} is invalid.");
+                throw new ArgumentException($"EbayItemId, {ebayItemId}, received from eBay for orderId, {orderId} is invalid.");
+            }
+
+            if (!orderId.Contains("-"))
+            {
+                long.TryParse(orderId, out ebayOrderId);
+            }
+            else
+            {
+                // OrderID isn't a long, so use transactionId instead
+                ebayOrderId = tranId;
+            }
+
+            return new EbayOrderIdentifier(ebayOrderId, itemId, tranId);
         }
 
         /// <summary>
