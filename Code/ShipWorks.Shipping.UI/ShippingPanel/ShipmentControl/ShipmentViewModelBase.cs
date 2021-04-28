@@ -426,7 +426,10 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ShipmentControl
         private void RefreshDimensionsProfiles()
         {
             DimensionsProfiles = new ObservableCollection<IDimensionsProfileEntity>();
-            foreach (var dimensionsProfileEntity in dimensionsManager.ProfilesReadOnly(SelectedPackageAdapter))
+
+            var profiles = dimensionsManager.ProfilesReadOnly(SelectedPackageAdapter).ToList();
+            
+            foreach (var dimensionsProfileEntity in profiles)
             {
                 DimensionsProfiles.Add(dimensionsProfileEntity);
             }
