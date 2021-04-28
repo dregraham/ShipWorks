@@ -5,6 +5,7 @@ using Interapptive.Shared.Threading;
 using log4net;
 using ShipWorks.Core.Messaging;
 using ShipWorks.Messaging.Messages;
+using ShipWorks.OrderLookup.Controls.ShipmentDetails;
 using ShipWorks.Shipping.Services;
 
 namespace ShipWorks.OrderLookup.ShipmentModelPipelines
@@ -56,6 +57,8 @@ namespace ShipWorks.OrderLookup.ShipmentModelPipelines
                 packageAdapter.DimsWidth = message.ScaleReadResult.Width;
                 packageAdapter.DimsHeight = message.ScaleReadResult.Height;
                 packageAdapter.ApplyAdditionalWeight = false;
+                
+                model.RaisePropertyChanged(nameof(model.PackageAdapters));
             }
         }
     }
