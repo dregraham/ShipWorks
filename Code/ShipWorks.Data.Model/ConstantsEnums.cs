@@ -2406,6 +2406,8 @@ namespace ShipWorks.Data.Model
 		IPAddress,
 		///<summary>PortNumber. </summary>
 		PortNumber,
+		///<summary>RowVersion. </summary>
+		RowVersion,
 		/// <summary></summary>
 		AmountOfFields
 	}

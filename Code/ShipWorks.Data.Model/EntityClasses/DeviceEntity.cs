@@ -25,20 +25,17 @@ namespace ShipWorks.Data.Model.EntityClasses
 {
 	// __LLBLGENPRO_USER_CODE_REGION_START AdditionalNamespaces
 	// __LLBLGENPRO_USER_CODE_REGION_END
-	
 	/// <summary>Entity class which represents the entity 'Device'.<br/><br/></summary>
 	[Serializable]
 	public partial class DeviceEntity : CommonEntityBase
 		// __LLBLGENPRO_USER_CODE_REGION_START AdditionalInterfaces
-		// __LLBLGENPRO_USER_CODE_REGION_END
-			
+		// __LLBLGENPRO_USER_CODE_REGION_END	
 	{
 		#region Class Member Declarations
 		private ComputerEntity _computer;
 
 		// __LLBLGENPRO_USER_CODE_REGION_START PrivateMembers
 		// __LLBLGENPRO_USER_CODE_REGION_END
-		
 		#endregion
 
 		#region Statics
@@ -116,7 +113,6 @@ namespace ShipWorks.Data.Model.EntityClasses
 			}
 			// __LLBLGENPRO_USER_CODE_REGION_START DeserializationConstructor
 			// __LLBLGENPRO_USER_CODE_REGION_END
-			
 		}
 
 		
@@ -264,7 +260,6 @@ namespace ShipWorks.Data.Model.EntityClasses
 			}
 			// __LLBLGENPRO_USER_CODE_REGION_START GetObjectInfo
 			// __LLBLGENPRO_USER_CODE_REGION_END
-			
 			base.GetObjectData(info, context);
 		}
 
@@ -340,7 +335,6 @@ namespace ShipWorks.Data.Model.EntityClasses
 			
 			// __LLBLGENPRO_USER_CODE_REGION_START InitClassMembers
 			// __LLBLGENPRO_USER_CODE_REGION_END
-			
 			OnInitClassMembersComplete();
 		}
 
@@ -362,6 +356,8 @@ namespace ShipWorks.Data.Model.EntityClasses
 			_fieldsCustomProperties.Add("IPAddress", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
 			_fieldsCustomProperties.Add("PortNumber", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+			_fieldsCustomProperties.Add("RowVersion", fieldHashtable);
 		}
 		#endregion
 
@@ -410,7 +406,6 @@ namespace ShipWorks.Data.Model.EntityClasses
 
 			// __LLBLGENPRO_USER_CODE_REGION_START InitClassEmpty
 			// __LLBLGENPRO_USER_CODE_REGION_END
-			
 
 			OnInitialized();
 
@@ -516,6 +511,17 @@ namespace ShipWorks.Data.Model.EntityClasses
 			set	{ SetValue((int)DeviceFieldIndex.PortNumber, value); }
 		}
 
+		/// <summary> The RowVersion property of the Entity Device<br/><br/></summary>
+		/// <remarks>Mapped on  table field: "Device"."RowVersion"<br/>
+		/// Table field type characteristics (type, precision, scale, length): Timestamp, 0, 0, 2147483647<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
+		public virtual System.Byte[] RowVersion
+		{
+			get { return (System.Byte[])GetValue((int)DeviceFieldIndex.RowVersion, true); }
+
+		}
+
 		/// <summary> Gets / sets related entity of type 'ComputerEntity' which has to be set using a fetch action earlier. If no related entity is set for this property, null is returned..<br/><br/></summary>
 		[Browsable(true)]
 		[DataMember]
@@ -561,7 +567,6 @@ namespace ShipWorks.Data.Model.EntityClasses
 		
 		// __LLBLGENPRO_USER_CODE_REGION_START CustomEntityCode
 		// __LLBLGENPRO_USER_CODE_REGION_END
-		
 		#endregion
 
 		#region Included code

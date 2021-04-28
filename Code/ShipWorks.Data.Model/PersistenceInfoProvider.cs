@@ -928,12 +928,13 @@ namespace ShipWorks.Data.Model
 		/// <summary>Inits DeviceEntity's mappings</summary>
 		private void InitDeviceEntityMappings()
 		{
-			this.AddElementMapping("DeviceEntity", @"ShipWorksLocal", @"dbo", "Device", 5, 0);
+			this.AddElementMapping("DeviceEntity", @"ShipWorksLocal", @"dbo", "Device", 6, 0);
 			this.AddElementFieldMapping("DeviceEntity", "DeviceID", "DeviceID", false, "BigInt", 0, 19, 0, true, "SCOPE_IDENTITY()", null, typeof(System.Int64), 0);
 			this.AddElementFieldMapping("DeviceEntity", "ComputerID", "ComputerID", false, "BigInt", 0, 19, 0, false, "", null, typeof(System.Int64), 1);
 			this.AddElementFieldMapping("DeviceEntity", "Model", "Model", false, "SmallInt", 0, 5, 0, false, "", null, typeof(System.Int16), 2);
 			this.AddElementFieldMapping("DeviceEntity", "IPAddress", "IPAddress", false, "NVarChar", 50, 0, 0, false, "", null, typeof(System.String), 3);
 			this.AddElementFieldMapping("DeviceEntity", "PortNumber", "PortNumber", false, "SmallInt", 0, 5, 0, false, "", null, typeof(System.Int16), 4);
+			this.AddElementFieldMapping("DeviceEntity", "RowVersion", "RowVersion", false, "Timestamp", 2147483647, 0, 0, false, "", null, typeof(System.Byte[]), 5);
 		}
 
 		/// <summary>Inits DhlExpressAccountEntity's mappings</summary>

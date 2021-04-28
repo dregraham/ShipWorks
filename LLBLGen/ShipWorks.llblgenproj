@@ -722,6 +722,7 @@
           <Field Name="IPAddress" Type="string" MaxLength="50" FieldIndex="3" />
           <Field Name="Model" Type="short" Precision="5" FieldIndex="2" />
           <Field Name="PortNumber" Type="short" Precision="5" FieldIndex="4" />
+          <Field Name="RowVersion" Type="byte[]" IsReadOnly="true" FieldIndex="5" />
         </Fields>
       </EntityDefinition>
       <EntityDefinition Name="DhlExpressAccount" ObjectID="37d7aa88-e504-4c62-9bf1-890724dd2ec7">
@@ -4696,7 +4697,7 @@
       <Catalogs>
         <Catalog Name="ShipWorksLocal">
           <Schemas>
-            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2021-04-26T12:57:11.9419847Z">
+            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2021-04-28T14:50:37.122391Z">
               <Tables>
                 <Table Name="Action">
                   <PkConstraintName Name="PK_Action" />
@@ -5394,10 +5395,11 @@
                   <PkConstraintName Name="PK_Device" />
                   <Fields>
                     <Field Name="DeviceID" Ordinal="1" IsIdentity="true" IsPrimaryKey="true" DbType="0" Precision="19" />
-                    <Field Name="ComputerID" Ordinal="2" DbType="0" Precision="19" />
-                    <Field Name="Model" Ordinal="3" DbType="16" Precision="5" />
-                    <Field Name="IPAddress" Ordinal="4" DbType="12" Length="50" />
-                    <Field Name="PortNumber" Ordinal="5" DbType="16" Precision="5" />
+                    <Field Name="RowVersion" Ordinal="2" IsTimestamp="true" DbType="21" />
+                    <Field Name="ComputerID" Ordinal="3" DbType="0" Precision="19" />
+                    <Field Name="Model" Ordinal="4" DbType="16" Precision="5" />
+                    <Field Name="IPAddress" Ordinal="5" DbType="12" Length="50" />
+                    <Field Name="PortNumber" Ordinal="6" DbType="16" Precision="5" />
                   </Fields>
                 </Table>
                 <Table Name="DhlExpressAccount">
@@ -11716,6 +11718,7 @@
             <FieldMapping FieldName="IPAddress" TargetFieldName="IPAddress" />
             <FieldMapping FieldName="Model" TargetFieldName="Model" />
             <FieldMapping FieldName="PortNumber" TargetFieldName="PortNumber" />
+            <FieldMapping FieldName="RowVersion" TargetFieldName="RowVersion" />
           </FieldMappings>
         </EntityMapping>
         <EntityMapping EntityName=":DhlExpressAccount" TargetName="ShipWorksLocal:dbo:DhlExpressAccount">

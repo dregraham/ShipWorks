@@ -896,6 +896,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 			this.AddElementFieldInfo("DeviceEntity", "Model", typeof(System.Int16), false, false, false, false,  (int)DeviceFieldIndex.Model, 0, 0, 5);
 			this.AddElementFieldInfo("DeviceEntity", "IPAddress", typeof(System.String), false, false, false, false,  (int)DeviceFieldIndex.IPAddress, 50, 0, 0);
 			this.AddElementFieldInfo("DeviceEntity", "PortNumber", typeof(System.Int16), false, false, false, false,  (int)DeviceFieldIndex.PortNumber, 0, 0, 5);
+			this.AddElementFieldInfo("DeviceEntity", "RowVersion", typeof(System.Byte[]), false, false, true, false,  (int)DeviceFieldIndex.RowVersion, 2147483647, 0, 0);
 		}
 		/// <summary>Inits DhlExpressAccountEntity's FieldInfo objects</summary>
 		private void InitDhlExpressAccountEntityInfos()

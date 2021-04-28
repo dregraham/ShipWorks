@@ -4,6 +4,7 @@ IF OBJECT_ID(N'[dbo].[Device]', 'U') IS NULL
 CREATE TABLE [dbo].[Device]
 (
 [DeviceID] [bigint] NOT NULL IDENTITY(1106, 1000),
+[RowVersion] [timestamp] NOT NULL,
 [ComputerID] [bigint] NOT NULL,
 [Model] [smallint] NOT NULL,
 [IPAddress] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
@@ -19,4 +20,8 @@ PRINT N'Adding foreign keys to [dbo].[Device]'
 GO
 IF NOT EXISTS (SELECT 1 FROM sys.foreign_keys WHERE object_id = OBJECT_ID(N'[dbo].[FK_Device_Computer]','F') AND parent_object_id = OBJECT_ID(N'[dbo].[Device]', 'U'))
 ALTER TABLE [dbo].[Device] ADD CONSTRAINT [FK_Device_Computer] FOREIGN KEY ([ComputerID]) REFERENCES [dbo].[Computer] ([ComputerID]) ON DELETE CASCADE
+GO
+PRINT N'Enabling Change Tracking for [dbo].[Device]'
+GO
+ALTER TABLE [dbo].[Device] ENABLE CHANGE_TRACKING
 GO

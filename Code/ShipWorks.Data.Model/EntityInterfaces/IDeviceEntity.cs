@@ -18,7 +18,7 @@ namespace ShipWorks.Data.Model.EntityInterfaces
     /// Entity interface which represents the entity 'Device'. <br/><br/>
     /// 
     /// </summary>
-    public partial interface IDeviceEntity : IEntityBase<IDeviceEntity>
+    public partial interface IDeviceEntity
     {
         
         /// <summary> The DeviceID property of the Entity Device<br/><br/>
@@ -51,6 +51,12 @@ namespace ShipWorks.Data.Model.EntityInterfaces
         /// Table field type characteristics (type, precision, scale, length): SmallInt, 5, 0, 0<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
         System.Int16 PortNumber { get; }
+        /// <summary> The RowVersion property of the Entity Device<br/><br/>
+        /// </summary>
+        /// <remarks>Mapped on table field: "Device"."RowVersion"<br/>
+        /// Table field type characteristics (type, precision, scale, length): Timestamp, 0, 0, 2147483647<br/>
+        /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+        System.Byte[] RowVersion { get; }
         
         
         IComputerEntity Computer { get; }
@@ -67,11 +73,6 @@ namespace ShipWorks.Data.Model.EntityInterfaces
         /// Get a read only version of the entity
         /// </summary>
         IDeviceEntity AsReadOnly(IDictionary<object, object> objectMap);
-    }
-    
-    public interface IEntityBase<T>
-    {
-        T AsReadOnly(IDictionary<object, object> objectMap);
     }
 }
 

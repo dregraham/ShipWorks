@@ -5577,6 +5577,11 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(DeviceFieldIndex.PortNumber);}
 		}
+		/// <summary>Creates a new DeviceEntity.RowVersion field instance</summary>
+		public static EntityField2 RowVersion
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(DeviceFieldIndex.RowVersion);}
+		}
 	}
 
 	/// <summary>Field Creation Class for entity DhlExpressAccountEntity</summary>
