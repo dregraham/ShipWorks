@@ -74,23 +74,26 @@ namespace Interapptive.Shared.IO.Hardware.Scales
         /// <returns>Raw result from cubiscan</returns>
         private async Task<GenericResult<string>> GetScaleReadResult(CubiscanConfiguration cubiscanConfiguration)
         {
-            using var client = new TcpClient();
-            
-            await client.ConnectAsync(cubiscanConfiguration.IpAddress, cubiscanConfiguration.Port).ConfigureAwait(false);
-
-            var networkStream = client.GetStream();
-            string response;
-
-            using (var writer = new StreamWriter(networkStream))
-            using (var reader = new StreamReader(networkStream))
+            using (var client = new TcpClient())
             {
-                writer.AutoFlush = true;
+                await client.ConnectAsync(cubiscanConfiguration.IpAddress, cubiscanConfiguration.Port)
+                    .ConfigureAwait(false);
 
-                await writer.WriteLineAsync(measureRequestString).ConfigureAwait(false);
-                response = await reader.ReadLineAsync().ConfigureAwait(false);
+                var networkStream = client.GetStream();
+                string response;
+
+                using (var writer = new StreamWriter(networkStream))
+                using (var reader = new StreamReader(networkStream))
+                {
+                    writer.AutoFlush = true;
+
+                    await writer.WriteLineAsync(measureRequestString).ConfigureAwait(false);
+                    response = await reader.ReadLineAsync().ConfigureAwait(false);
+                }
+
+                client.Close();
+                return GenericResult.FromSuccess(response);
             }
-            client.Close();
-            return GenericResult.FromSuccess<string>(response);
         }
     }
 }

@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Reactive.Linq;
 using Interapptive.Shared.Threading;
+using log4net;
 using ShipWorks.Core.Messaging;
 using ShipWorks.Messaging.Messages;
 using ShipWorks.Shipping.Services;
@@ -15,16 +16,19 @@ namespace ShipWorks.OrderLookup.ShipmentModelPipelines
     {
         private readonly IMessenger messenger;
         private readonly ISchedulerProvider schedulerProvider;
-        
+        private readonly ILog log;
+
         /// <summary>
         /// Constructor
         /// </summary>
         public ChangeDimensionsPipeline(
             IMessenger messenger,
-            ISchedulerProvider schedulerProvider)
+            ISchedulerProvider schedulerProvider,
+            Func<Type, ILog> logCreator)
         {
             this.schedulerProvider = schedulerProvider;
             this.messenger = messenger;
+            log = logCreator(typeof(ChangeDimensionsPipeline));
         }
 
         /// <summary>
@@ -41,7 +45,9 @@ namespace ShipWorks.OrderLookup.ShipmentModelPipelines
         /// </summary>
         private void HandleChangeDimensionsMessage(IOrderLookupShipmentModel model, ChangeDimensionsMessage message)
         {
-            if (message.ScaleReadResult.HasVolumeDimensions)
+            var hasVolumeDimensions = message.ScaleReadResult.HasVolumeDimensions;
+            log.Info($"Received ChangeDimensions message. hasVolumeDimensions = {hasVolumeDimensions}");
+            if (hasVolumeDimensions)
             {
                 IPackageAdapter packageAdapter = model.PackageAdapters.First();
 
