@@ -97,7 +97,7 @@ namespace ShipWorks.Common
         {
             lock (tableSynchronizer)
             {
-                if (tableSynchronizer.Synchronize())
+                if (tableSynchronizer.Synchronize() || (readOnlyEntities == null && tableSynchronizer.EntityCollection != null))
                 {
                     readOnlyEntities = tableSynchronizer.EntityCollection.Select(AsReadOnly).ToReadOnly();
                 }
