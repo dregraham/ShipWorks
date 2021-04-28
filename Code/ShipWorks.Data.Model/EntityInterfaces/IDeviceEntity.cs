@@ -18,7 +18,7 @@ namespace ShipWorks.Data.Model.EntityInterfaces
     /// Entity interface which represents the entity 'Device'. <br/><br/>
     /// 
     /// </summary>
-    public partial interface IDeviceEntity
+    public partial interface IDeviceEntity : IEntityBase<IDeviceEntity>
     {
         
         /// <summary> The DeviceID property of the Entity Device<br/><br/>
@@ -67,6 +67,11 @@ namespace ShipWorks.Data.Model.EntityInterfaces
         /// Get a read only version of the entity
         /// </summary>
         IDeviceEntity AsReadOnly(IDictionary<object, object> objectMap);
+    }
+    
+    public interface IEntityBase<T>
+    {
+        T AsReadOnly(IDictionary<object, object> objectMap);
     }
 }
 

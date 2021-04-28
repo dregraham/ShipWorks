@@ -3,7 +3,7 @@
 namespace ShipWorks.Users
 {
     /// <summary>
-    /// 
+    /// Manage computers
     /// </summary>
     public interface IComputerManager
     {

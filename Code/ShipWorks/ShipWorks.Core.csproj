@@ -933,6 +933,7 @@
     <Compile Include="Common\IO\Hardware\Printers\PrintUtilityWrapper.cs" />
     <Compile Include="AutoInstall\AutoInstaller.cs" />
     <Compile Include="AutoInstall\AutoInstallerExitCodes.cs" />
+    <Compile Include="Common\ManagerBase.cs" />
     <Compile Include="Common\Net\RestSharpJsonNetSerializer.cs" />
     <Compile Include="Common\Threading\BackgroundExecutorWithoutDialog.cs" />
     <Compile Include="Common\Threading\BackgroundProgressProvider.cs" />

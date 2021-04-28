@@ -67,7 +67,7 @@ namespace Interapptive.Shared.IO.Hardware.Scales
         {
             Log.Info("ScaleReader.Initialize called to explicitly trigger static constructor");
             CubiscanConfigurationManager = cubiscanConfigurationManager;
-            cubiscanReader = new ScaleCubiscanReader(CubiscanConfigurationManager);
+            cubiscanReader = new ScaleCubiscanReader();
         }
 
         /// <summary>
@@ -161,7 +161,7 @@ namespace Interapptive.Shared.IO.Hardware.Scales
             }
             
             // We may be in a situation where both scales are plugged in, so we should still poll the USB scale
-            if (isPolling && serialReader != null && usbReader == null && cubiscanConfiguration.IsConfigured)
+            if (isPolling && serialReader != null && usbReader == null)
             {
                 return SerialScalesNotPolledResult;
             }

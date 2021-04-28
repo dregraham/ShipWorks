@@ -1,13 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Interapptive.Shared.IO.Hardware.Scales
+﻿namespace Interapptive.Shared.IO.Hardware.Scales
 {
+    /// <summary>
+    /// Cubiscan Configuration
+    /// </summary>
     public class CubiscanConfiguration
     {
+        /// <summary>
+        /// Constructor
+        /// </summary>
         public CubiscanConfiguration(bool isConfigured, string ipAddress, int port)
         {
             IsConfigured = isConfigured;
@@ -15,10 +15,19 @@ namespace Interapptive.Shared.IO.Hardware.Scales
             Port = port;
         }
 
+        /// <summary>
+        /// Is a cubiscan configured for this computer
+        /// </summary>
         public bool IsConfigured { get; }
 
+        /// <summary>
+        /// IP Address of the Cubiscan
+        /// </summary>
         public string IpAddress { get; }
 
+        /// <summary>
+        /// Port of the Cubiscan
+        /// </summary>
         public int Port { get; }
     }
 }
