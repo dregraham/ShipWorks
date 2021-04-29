@@ -15,10 +15,15 @@ namespace ShipWorks.Common.IO.Hardware
     public class DeviceManager : ManagerBase<DeviceEntity, IDeviceEntity>, IDeviceManager, IInitializeForCurrentSession, ICheckForChangesNeeded
     {
         /// <summary>
-        /// All the devices
+        /// All the devices - Readonly
         /// </summary>
         public IEnumerable<IDeviceEntity> DevicesReadOnly => EntitiesReadOnly;
-        
+
+        /// <summary>
+        /// All the devices
+        /// </summary>
+        public IEnumerable<DeviceEntity> Devices => Entities;
+
         /// <summary>
         /// Used by the base class to create the readonly version of the entity 
         /// </summary>

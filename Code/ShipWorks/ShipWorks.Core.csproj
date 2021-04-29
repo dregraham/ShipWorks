@@ -795,6 +795,7 @@
     <Compile Include="Api\IApiService.cs" />
     <Compile Include="ApplicationCore\CommandLineOptions\AutoUpgradeFailureSubmitter.cs" />
     <Compile Include="ApplicationCore\Licensing\Warehouse\DTO\SqlConfigChangedDto.cs" />
+    <Compile Include="ApplicationCore\Settings\ICubiscanSettingsPage.cs" />
     <Compile Include="AutoInstall\DTO\AutoInstallShipWorksDto.cs" />
     <Compile Include="ApplicationCore\CommandLineOptions\GetUpdateWindowCommandLineOption.cs" />
     <Compile Include="ApplicationCore\CommandLineOptions\GetUpgradeLockCommandLineOption.cs" />
@@ -927,6 +928,7 @@
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Common\IO\Hardware\CubiscanConfigurationManager.cs" />
+    <Compile Include="Common\IO\Hardware\CubiscanModel.cs" />
     <Compile Include="Common\IO\Hardware\DeviceManager.cs" />
     <Compile Include="Common\IO\Hardware\IDeviceManager.cs" />
     <Compile Include="Common\IO\Hardware\Printers\IPrintUtility.cs" />

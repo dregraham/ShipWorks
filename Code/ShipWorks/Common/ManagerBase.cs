@@ -87,6 +87,7 @@ namespace ShipWorks.Common
         public void InitializeForCurrentSession()
         {
             tableSynchronizer = new TableSynchronizer<TEntity>();
+            readOnlyEntities = tableSynchronizer.EntityCollection.Select(AsReadOnly).ToReadOnly();
             CheckForChanges();
         }
 
@@ -97,7 +98,7 @@ namespace ShipWorks.Common
         {
             lock (tableSynchronizer)
             {
-                if (tableSynchronizer.Synchronize() || (readOnlyEntities == null && tableSynchronizer.EntityCollection != null))
+                if (tableSynchronizer.Synchronize())
                 {
                     readOnlyEntities = tableSynchronizer.EntityCollection.Select(AsReadOnly).ToReadOnly();
                 }

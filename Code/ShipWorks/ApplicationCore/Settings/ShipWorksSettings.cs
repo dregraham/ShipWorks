@@ -68,8 +68,12 @@ namespace ShipWorks.ApplicationCore.Settings
             if (UserSession.IsLoggedOn && UserSession.User.IsAdmin)
             {
                 settingsPages["Advanced"] = InitializeSettingsPage(new SettingsPageAdvanced());
+                
                 apiSettingsPage = scope.Resolve<IApiSettingsPage>();
                 settingsPages["API"] = InitializeSettingsPage(apiSettingsPage);
+                
+                var cubiscanSettingsPage = scope.Resolve<ICubiscanSettingsPage>();
+                settingsPages["Cubiscan"] = InitializeSettingsPage(cubiscanSettingsPage);
             }
 
             if (InterapptiveOnly.IsInterapptiveUser || InterapptiveOnly.MagicKeysDown)

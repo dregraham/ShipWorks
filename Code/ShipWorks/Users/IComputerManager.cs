@@ -1,4 +1,5 @@
-﻿using ShipWorks.Data.Model.EntityClasses;
+﻿using System.Collections.Generic;
+using ShipWorks.Data.Model.EntityClasses;
 
 namespace ShipWorks.Users
 {
@@ -11,5 +12,10 @@ namespace ShipWorks.Users
         /// Returns this computer
         /// </summary>
         ComputerEntity GetComputer();
+        
+        /// <summary>
+        /// Gets list of computers
+        /// </summary>
+        List<ComputerEntity> GetComputers();
     }
 }

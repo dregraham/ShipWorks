@@ -1,4 +1,5 @@
-﻿using Interapptive.Shared.ComponentRegistration;
+﻿using System.Collections.Generic;
+using Interapptive.Shared.ComponentRegistration;
 using ShipWorks.Data.Model.EntityClasses;
 
 namespace ShipWorks.Users
@@ -13,5 +14,10 @@ namespace ShipWorks.Users
         /// Gets the current computer
         /// </summary>
         public ComputerEntity GetComputer() => ComputerManager.GetComputer();
+
+        /// <summary>
+        /// Gets list of computers
+        /// </summary>
+        public List<ComputerEntity> GetComputers() => ComputerManager.Computers;
     }
 }
