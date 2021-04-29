@@ -8,6 +8,10 @@ using ShipWorks.Data.Utility;
 
 namespace ShipWorks.Common
 {
+    /// <summary>
+    /// Base class for "Manager" classes. Those classes used mainly for keeping
+    /// the local copy of the configuration up to date.
+    /// </summary>
     public abstract class ManagerBase<TEntity, TEntityInterface> where TEntity : EntityBase2
     {
         private TableSynchronizer<TEntity> tableSynchronizer;

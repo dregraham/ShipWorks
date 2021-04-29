@@ -9,6 +9,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
 using Autofac;
+using GalaSoft.MvvmLight.CommandWpf;
 using Interapptive.Shared.IO.Hardware.Scales;
 using Interapptive.Shared.Metrics;
 using Interapptive.Shared.Win32;
@@ -49,6 +50,12 @@ namespace ShipWorks.UI.Controls.Weight
             DependencyProperty.Register("TelemetrySource",
                 typeof(string),
                 typeof(ScaleButton));
+        
+        public static readonly DependencyProperty ChangeDimensionsProperty =
+            DependencyProperty.Register("ChangeDimensions",
+                typeof(RelayCommand<ScaleReadResult>),
+                typeof(ScaleButton),
+                new PropertyMetadata(default(RelayCommand<ScaleReadResult>)));
 
         public static readonly DependencyProperty AcceptApplyWeightKeyboardShortcutProperty =
             DependencyProperty.Register("AcceptApplyWeightKeyboardShortcut", typeof(bool), typeof(ScaleButton),
@@ -129,7 +136,10 @@ namespace ShipWorks.UI.Controls.Weight
         /// <summary>
         /// Function gets called when dimensions received from a dimensionalizer
         /// </summary>
-        public Action<ScaleReadResult> ChangeDimensions { get; set; }
+        public RelayCommand<ScaleReadResult> ChangeDimensions { 
+            get => (RelayCommand<ScaleReadResult>) GetValue(ChangeDimensionsProperty);
+            set => SetValue(ChangeDimensionsProperty, value);
+        }
         
         /// <summary>
         /// Most recent error message
@@ -269,7 +279,7 @@ namespace ShipWorks.UI.Controls.Weight
                 if (AcceptApplyWeightKeyboardShortcut)
                 {
                     Messenger.Current.Send<ChangeDimensionsMessage>(new ChangeDimensionsMessage(this, result));
-                    ChangeDimensions(result);
+                    ChangeDimensions?.Execute(result);
                 }
 
                 RaiseEvent(new RoutedEventArgs(ScaleReadEvent, this));

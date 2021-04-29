@@ -8,7 +8,8 @@
     xmlns:ui="http://schemas.shipworks.com/ui"
     xmlns:ns="clr-namespace:ShipWorks.OrderLookup.FieldManager;assembly=ShipWorks.Core"
     FontFamily="/ShipWorks.OrderLookup;component/#Roboto"
-    mc:Ignorable="d">
+    mc:Ignorable="d"
+    d:DataContext="{d:DesignInstance local:BestRateShipmentDetailsViewModel}">
     <UserControl.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>

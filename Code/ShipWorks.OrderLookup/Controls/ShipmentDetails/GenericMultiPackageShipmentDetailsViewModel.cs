@@ -64,6 +64,9 @@ namespace ShipWorks.OrderLookup.Controls.ShipmentDetails
             RefreshProviders();
         }
 
+        /// <summary>
+        /// Updates dimensions based on ScaleReadResult
+        /// </summary>
         private void ChangeDimensionsAction(ScaleReadResult scaleReadResult)
         {
             if (scaleReadResult.HasVolumeDimensions)
@@ -155,6 +158,9 @@ namespace ShipWorks.OrderLookup.Controls.ShipmentDetails
         [Obfuscation(Exclude = true)]
         public ICommand ManageDimensionalProfiles { get; set; }
         
+        /// <summary>
+        /// Updates dimensions based on ScaleReadResult
+        /// </summary>
         [Obfuscation]
         public RelayCommand<ScaleReadResult> ChangeDimensions { get; }
 
