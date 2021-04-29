@@ -127,6 +127,11 @@ namespace ShipWorks.UI.Controls.Weight
         }
 
         /// <summary>
+        /// Function gets called when dimensions received from a dimensionalizer
+        /// </summary>
+        public Action<ScaleReadResult> ChangeDimensions { get; set; }
+        
+        /// <summary>
         /// Most recent error message
         /// </summary>
         public string ErrorMessage => (string) GetValue(WeightControl.ErrorMessageProperty);
@@ -264,6 +269,7 @@ namespace ShipWorks.UI.Controls.Weight
                 if (AcceptApplyWeightKeyboardShortcut)
                 {
                     Messenger.Current.Send<ChangeDimensionsMessage>(new ChangeDimensionsMessage(this, result));
+                    ChangeDimensions(result);
                 }
 
                 RaiseEvent(new RoutedEventArgs(ScaleReadEvent, this));

@@ -21,7 +21,7 @@ namespace ShipWorks.OrderLookup.Controls.ShipmentDetails
     /// </summary>
     [KeyedComponent(typeof(IDetailsViewModel), ShipmentTypeCode.BestRate)]
     [WpfView(typeof(BestRateShipmentDetailsControl))]
-    public class BestRateShipmentDetailsViewModel : OrderLookupViewModelBase, IDetailsViewModel, INotifyPropertyChanged, IDataErrorInfo
+    public class BestRateShipmentDetailsViewModel : GenericSinglePackageShipmentDetailsViewModel, IDataErrorInfo
     {
         private readonly Func<DimensionsManagerDlg> getDimensionsManagerDlg;
         private readonly ICarrierShipmentAdapterOptionsProvider carrierShipmentAdapterOptionsProvider;

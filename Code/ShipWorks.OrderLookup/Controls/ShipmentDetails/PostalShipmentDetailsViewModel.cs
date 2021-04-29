@@ -25,7 +25,7 @@ namespace ShipWorks.OrderLookup.Controls.ShipmentDetails
     [KeyedComponent(typeof(IDetailsViewModel), ShipmentTypeCode.Usps)]
     [KeyedComponent(typeof(IDetailsViewModel), ShipmentTypeCode.Endicia)]
     [WpfView(typeof(PostalShipmentDetailsControl))]
-    public class PostalShipmentDetailsViewModel : OrderLookupViewModelBase, IDetailsViewModel, INotifyPropertyChanged
+    public class PostalShipmentDetailsViewModel : GenericSinglePackageShipmentDetailsViewModel, IDetailsViewModel
     {
         private readonly IShipmentTypeManager shipmentTypeManager;
         private readonly Func<DimensionsManagerDlg> getDimensionsManagerDlg;

@@ -27,7 +27,7 @@ namespace ShipWorks.OrderLookup.Controls.ShipmentDetails
     /// </summary>
     [KeyedComponent(typeof(IDetailsViewModel), ShipmentTypeCode.AmazonSFP)]
     [WpfView(typeof(AmazonSFPShipmentDetailsControl))]
-    public class AmazonSFPShipmentDetailsViewModel : OrderLookupViewModelBase, IDetailsViewModel, INotifyPropertyChanged, IDataErrorInfo
+    public class AmazonSFPShipmentDetailsViewModel : GenericSinglePackageShipmentDetailsViewModel, IDataErrorInfo
     {
         private readonly Func<DimensionsManagerDlg> getDimensionsManagerDlg;
         private readonly ICarrierShipmentAdapterOptionsProvider carrierShipmentAdapterOptionsProvider;
