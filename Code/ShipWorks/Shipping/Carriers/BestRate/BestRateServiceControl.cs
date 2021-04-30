@@ -67,6 +67,7 @@ namespace ShipWorks.Shipping.Carriers.BestRate
 
             base.LoadShipments(shipments, enableEditing, enableShippingAddress);
 
+            // Stop the dimensions control from listening to weight changes
             dimensionsControl.ShipmentWeightBox = null;
 
             RecipientDestinationChanged += OnRecipientDestinationChanged;
@@ -75,6 +76,7 @@ namespace ShipWorks.Shipping.Carriers.BestRate
             LoadShipmentDetails();
             UpdateInsuranceDisplay();
 
+            // Start the dimensions control listening to weight changes
             dimensionsControl.ShipmentWeightBox = weight;
 
             ResumeRateCriteriaChangeEvent();
