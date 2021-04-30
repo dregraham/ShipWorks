@@ -1,11 +1,10 @@
 ﻿using System.ComponentModel;
 using System.Reflection;
 
-
-namespace ShipWorks.Common.IO.Hardware
+namespace Interapptive.Shared.IO.Hardware
 {
     [Obfuscation]
-    public enum CubiscanModel
+    public enum DeviceModel
     {
         [Description("100L")]
         Model100L = 0,

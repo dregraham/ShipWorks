@@ -483,9 +483,9 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// Table field type characteristics (type, precision, scale, length): SmallInt, 5, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
 		[DataMember]
-		public virtual System.Int16 Model
+		public virtual Interapptive.Shared.IO.Hardware.DeviceModel Model
 		{
-			get { return (System.Int16)GetValue((int)DeviceFieldIndex.Model, true); }
+			get { return (Interapptive.Shared.IO.Hardware.DeviceModel)GetValue((int)DeviceFieldIndex.Model, true); }
 			set	{ SetValue((int)DeviceFieldIndex.Model, value); }
 		}
 

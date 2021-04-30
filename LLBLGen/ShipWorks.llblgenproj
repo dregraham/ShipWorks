@@ -90,6 +90,7 @@
     <TypeShortcut Shortcut="BigCommerceAuthenticationType" Type="Interapptive.Shared.Enums.BigCommerceAuthenticationType, Interapptive.Shared, Version=0.0.0.0, Culture=neutral, PublicKeyToken=6a464ecbd35cd6df" />
     <TypeShortcut Shortcut="CombineSplitStatusType" Type="Interapptive.Shared.Enums.CombineSplitStatusType, Interapptive.Shared, Version=0.0.0.0, Culture=neutral, PublicKeyToken=6a464ecbd35cd6df" />
     <TypeShortcut Shortcut="DayOfWeek" Type="System.DayOfWeek" />
+    <TypeShortcut Shortcut="DeviceModel" Type="Interapptive.Shared.IO.Hardware.DeviceModel, Interapptive.Shared, Version=0.0.0.0, Culture=neutral, PublicKeyToken=6a464ecbd35cd6df" />
     <TypeShortcut Shortcut="FedExBatteryMaterialType" Type="ShipWorks.Shipping.FedEx.FedExBatteryMaterialType, ShipWorks.Shared, Version=0.0.0.0, Culture=neutral, PublicKeyToken=6a464ecbd35cd6df" />
     <TypeShortcut Shortcut="FedExBatteryPackingType" Type="ShipWorks.Shipping.FedEx.FedExBatteryPackingType, ShipWorks.Shared, Version=0.0.0.0, Culture=neutral, PublicKeyToken=6a464ecbd35cd6df" />
     <TypeShortcut Shortcut="FedExBatteryRegulatorySubType" Type="ShipWorks.Shipping.FedEx.FedExBatteryRegulatorySubType, ShipWorks.Shared, Version=0.0.0.0, Culture=neutral, PublicKeyToken=6a464ecbd35cd6df" />
@@ -720,7 +721,7 @@
           <Field Name="ComputerID" Type="long" FieldIndex="1" />
           <Field Name="DeviceID" Type="long" IsReadOnly="true" Precision="19" IsPrimaryKey="true" FieldIndex="0" />
           <Field Name="IPAddress" Type="string" MaxLength="50" FieldIndex="3" />
-          <Field Name="Model" Type="short" Precision="5" FieldIndex="2" />
+          <Field Name="Model" Type="DeviceModel" FieldIndex="2" />
           <Field Name="PortNumber" Type="short" Precision="5" FieldIndex="4" />
           <Field Name="RowVersion" Type="byte[]" IsReadOnly="true" FieldIndex="5" />
         </Fields>

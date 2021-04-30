@@ -928,7 +928,6 @@
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Common\IO\Hardware\CubiscanConfigurationManager.cs" />
-    <Compile Include="Common\IO\Hardware\CubiscanModel.cs" />
     <Compile Include="Common\IO\Hardware\DeviceManager.cs" />
     <Compile Include="Common\IO\Hardware\IDeviceManager.cs" />
     <Compile Include="Common\IO\Hardware\Printers\IPrintUtility.cs" />

@@ -68,7 +68,7 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
         /// <remarks>Mapped on table field: "Device"."Model"<br/>
         /// Table field type characteristics (type, precision, scale, length): SmallInt, 5, 0, 0<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
-        public System.Int16 Model { get; }
+        public Interapptive.Shared.IO.Hardware.DeviceModel Model { get; }
         /// <summary> The IPAddress property of the Entity Device<br/><br/>
         /// </summary>
         /// <remarks>Mapped on table field: "Device"."IPAddress"<br/>

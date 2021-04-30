@@ -254,6 +254,7 @@
     <Compile Include="IInterapptiveOnly.cs" />
     <Compile Include="InterapptiveOnlyWrapper.cs" />
     <Compile Include="IO\FileSelector.cs" />
+    <Compile Include="IO\Hardware\DeviceModel.cs" />
     <Compile Include="IO\Hardware\ICubiscanConfigurationManager.cs" />
     <Compile Include="IO\Hardware\IVirtualKeyboard.cs" />
     <Compile Include="IO\Hardware\Scales\CubiscanConfiguration.cs" />
