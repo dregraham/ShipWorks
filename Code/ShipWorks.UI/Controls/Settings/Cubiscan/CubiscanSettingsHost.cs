@@ -9,17 +9,18 @@ namespace ShipWorks.UI.Controls.Settings.Cubiscan
     [Component(RegistrationType.SpecificService, Service = typeof(ICubiscanSettingsPage))]
     public partial class CubiscanSettingsHost : SettingsPageBase, ICubiscanSettingsPage
     {
-        private readonly CubiscanSettingsViewModel viewModel;
+        private readonly Func<IWin32Window, ICubiscanSettingsViewModel> settingsViewModelFactory;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public CubiscanSettingsHost(CubiscanSettingsViewModel viewModel)
+        public CubiscanSettingsHost(Func<IWin32Window, ICubiscanSettingsViewModel> settingsViewModelFactory)
         {
-            this.viewModel = viewModel;
+            this.settingsViewModelFactory = settingsViewModelFactory;
+
             InitializeComponent();
         }
-        
+
         /// <summary>
         /// When the control loads, set and load the view model
         /// </summary>
@@ -33,8 +34,9 @@ namespace ShipWorks.UI.Controls.Settings.Cubiscan
             elementHost.Child = apiSettingsControl;
             Controls.Add(elementHost);
 
-            apiSettingsControl.DataContext = viewModel;
-            viewModel.Load();
+            var settingsViewModel = settingsViewModelFactory(this);
+            apiSettingsControl.DataContext = settingsViewModel;
+            settingsViewModel.Load();
 
             Visible = true;
         }

@@ -3,7 +3,7 @@ using System.Reflection;
 
 namespace Interapptive.Shared.IO.Hardware
 {
-    [Obfuscation]
+    [Obfuscation(Feature = "PreserveLiteralValues", Exclude = false, StripAfterObfuscation = false)]
     public enum DeviceModel
     {
         [Description("100L")]
