@@ -42,6 +42,12 @@ namespace ShipWorks.UI.Controls.Weight
                 typeof(string),
                 typeof(WeightControl));
 
+        public static readonly DependencyProperty ChangeDimensionsProperty =
+            DependencyProperty.Register("ChangeDimensions",
+                typeof(RelayCommand<ScaleReadResult>),
+                typeof(WeightControl),
+                new PropertyMetadata(default(RelayCommand<ScaleReadResult>)));
+            
         private ScaleButton scaleButton;
 
         /// <summary>
@@ -56,8 +62,8 @@ namespace ShipWorks.UI.Controls.Weight
         [Obfuscation(Exclude = true)]
         public RelayCommand<ScaleReadResult> ChangeDimensions
         {
-            get => scaleButton.ChangeDimensions;
-            set => scaleButton.ChangeDimensions = value;
+            get => (RelayCommand<ScaleReadResult>) GetValue(ChangeDimensionsProperty);
+            set => SetValue(ChangeDimensionsProperty, value);
         }
 
         /// <summary>
@@ -134,7 +140,8 @@ namespace ShipWorks.UI.Controls.Weight
             // Remove any existing handlers before adding another
             scaleButton.ScaleRead -= OnScaleButtonScaleRead;
             scaleButton.ScaleRead += OnScaleButtonScaleRead;
-           
+            scaleButton.ChangeDimensions = result => ChangeDimensions?.Execute(result);
+
             AddErrorMessageValueChangedHandler(scaleButton);
             AddErrorMessageValueChangedHandler(entry);
         }
