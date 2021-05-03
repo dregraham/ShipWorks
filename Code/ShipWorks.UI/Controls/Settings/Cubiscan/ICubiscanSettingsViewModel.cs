@@ -4,8 +4,14 @@ using ShipWorks.Data.Model.EntityClasses;
 
 namespace ShipWorks.UI.Controls.Settings.Cubiscan
 {
+    /// <summary>
+    /// ViewModel for a CubiscanSettings View
+    /// </summary>
     public interface ICubiscanSettingsViewModel
     {
+        /// <summary>
+        /// List of configured devices
+        /// </summary>
         ObservableCollection<DeviceEntity> Devices { get; set; }
 
         /// <summary>
@@ -23,6 +29,9 @@ namespace ShipWorks.UI.Controls.Settings.Cubiscan
         /// </summary>
         ICommand DeleteCommand { get; }
 
+        /// <summary>
+        /// Load the viewmodel
+        /// </summary>
         void Load();
     }
 }

@@ -15,6 +15,9 @@ using ShipWorks.Users;
 
 namespace ShipWorks.UI.Controls.Settings.Cubiscan
 {
+    /// <summary>
+    /// ViewModel for a CubiscanSettings View
+    /// </summary>
     [Component]
     public class CubiscanSettingsViewModel : ViewModelBase, ICubiscanSettingsViewModel
     {
@@ -27,6 +30,9 @@ namespace ShipWorks.UI.Controls.Settings.Cubiscan
         private List<ComputerEntity> computers;
         private DeviceEntity selectedDevice;
 
+        /// <summary>
+        /// Constructor
+        /// </summary>
         public CubiscanSettingsViewModel(
             IWin32Window owner,
             IComputerManager computerManager, 
@@ -57,8 +63,11 @@ namespace ShipWorks.UI.Controls.Settings.Cubiscan
         /// Command to delete a device
         /// </summary>
         [Obfuscation(Exclude = true)]
-        public ICommand DeleteCommand { get; } 
-        
+        public ICommand DeleteCommand { get; }
+
+        /// <summary>
+        /// Load the viewmodel
+        /// </summary>
         public void Load()
         {
             computers = computerManager.GetComputers();
@@ -100,7 +109,10 @@ namespace ShipWorks.UI.Controls.Settings.Cubiscan
 
             Devices.Remove(SelectedDevice);
         }
-        
+
+        /// <summary>
+        /// List of configured devices
+        /// </summary>
         [Obfuscation]
         public ObservableCollection<DeviceEntity> Devices
         {

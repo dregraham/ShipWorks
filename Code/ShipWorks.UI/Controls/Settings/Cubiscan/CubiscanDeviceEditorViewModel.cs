@@ -18,6 +18,9 @@ using ShipWorks.Users;
 
 namespace ShipWorks.UI.Controls.Settings.Cubiscan
 {
+    /// <summary>
+    /// ViewModel for a CubiscanDeviceEditor View
+    /// </summary>
     [Component]
     public class CubiscanDeviceEditorViewModel : ViewModelBase, ICubiscanDeviceEditorViewModel
     {
@@ -32,6 +35,9 @@ namespace ShipWorks.UI.Controls.Settings.Cubiscan
         private string portNumber;
         private bool showSpinner;
 
+        /// <summary>
+        /// Constructor
+        /// </summary>
         public CubiscanDeviceEditorViewModel(DeviceEntity newDevice, IDeviceManager deviceManager,
             IComputerManager computerManager, ISqlAdapterFactory sqlAdapterFactory, IHttpValidator httpValidator, IMessageHelper messageHelper)
         {
@@ -55,11 +61,20 @@ namespace ShipWorks.UI.Controls.Settings.Cubiscan
             SelectedModel = DeviceModel.Model110;
         }
 
+        /// <summary>
+        /// Action to run when the editor is completed
+        /// </summary>
         public Action OnComplete { get; set; }
-        
+
+        /// <summary>
+        /// List of computers connected to ShipWorks
+        /// </summary>
         [Obfuscation]
         public IEnumerable<ComputerEntity> Computers { get; set; }
 
+        /// <summary>
+        /// The currently selected computer
+        /// </summary>
         [Obfuscation]
         public ComputerEntity SelectedComputer
         {
@@ -67,9 +82,15 @@ namespace ShipWorks.UI.Controls.Settings.Cubiscan
             set => Set(ref selectedComputer, value);
         }
 
+        /// <summary>
+        /// List of models currently supported by ShipWorks 
+        /// </summary>
         [Obfuscation]
         public Dictionary<DeviceModel, string> Models { get; set; }
 
+        /// <summary>
+        /// The currently selected model
+        /// </summary>
         [Obfuscation]
         public DeviceModel SelectedModel
         {
@@ -77,6 +98,9 @@ namespace ShipWorks.UI.Controls.Settings.Cubiscan
             set => Set(ref selectedModel, value);
         }
 
+        /// <summary>
+        /// The IP address
+        /// </summary>
         [Obfuscation]
         public string IPAddress
         {
@@ -84,26 +108,41 @@ namespace ShipWorks.UI.Controls.Settings.Cubiscan
             set => Set(ref ipAddress, value);
         }
 
+        /// <summary>
+        /// The port number
+        /// </summary>
         [Obfuscation]
         public string PortNumber
         {
             get => portNumber;
             set => Set(ref portNumber, value);
         }
-        
+
+        /// <summary>
+        /// Whether or not to show the spinner
+        /// </summary>
         [Obfuscation]
         public bool ShowSpinner
         {
             get => showSpinner;
             set => Set(ref showSpinner, value);
         }
-        
+
+        /// <summary>
+        /// Command to cancel editing
+        /// </summary>
         [Obfuscation]
         public ICommand CancelCommand { get; }
-        
+
+        /// <summary>
+        /// Command to save new device
+        /// </summary>
         [Obfuscation]
         public ICommand SaveCommand { get; }
 
+        /// <summary>
+        /// Validate, then save the current device configuration
+        /// </summary>
         private void Save()
         {
             ShowSpinner = true;
@@ -125,6 +164,9 @@ namespace ShipWorks.UI.Controls.Settings.Cubiscan
             ShowSpinner = false;
         }
 
+        /// <summary>
+        /// Validate the current device configuration
+        /// </summary>
         private GenericResult<DeviceEntity> Validate()
         {
             var errors = new List<string>();
@@ -188,6 +230,9 @@ namespace ShipWorks.UI.Controls.Settings.Cubiscan
             return GenericResult.FromSuccess(newDevice);
         }
 
+        /// <summary>
+        /// Close the view
+        /// </summary>
         private void Close() => OnComplete?.Invoke();
     }
 }
