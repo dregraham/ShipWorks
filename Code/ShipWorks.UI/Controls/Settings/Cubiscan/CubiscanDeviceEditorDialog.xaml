@@ -10,7 +10,7 @@
                   mc:Ignorable="d"
                   SizeToContent="Height"
                   Width="300"
-                  Title="Edit Cubiscan Device"
+                  Title="Add Cubiscan Device"
                   d:DataContext="{d:DesignInstance local:ICubiscanDeviceEditorViewModel}">
     <Window.Resources>
         <ResourceDictionary>
