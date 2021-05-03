@@ -205,7 +205,9 @@ namespace ShipWorks.Stores.Platforms.Ebay
         private async Task ProcessOrder(OrderType orderType)
         {
             // Get the ShipWorks order.  This ends up calling our overridden FindOrder implementation
-            GenericResult<OrderEntity> result = await InstantiateOrder(new EbayOrderIdentifier(orderType.OrderID)).ConfigureAwait(false);
+            var ebayOrderIdentifier = new EbayOrderIdentifier(orderType);
+
+            GenericResult<OrderEntity> result = await InstantiateOrder(ebayOrderIdentifier).ConfigureAwait(false);
             if (result.Failure)
             {
                 log.InfoFormat("Skipping order '{0}': {1}.", orderType.OrderID, result.Message);
@@ -1685,7 +1687,7 @@ namespace ShipWorks.Stores.Platforms.Ebay
         /// </summary>
         private void ProcessFeedbackInternal(FeedbackDetailType feedback, ISqlAdapter adapter)
         {
-            EbayOrderItemEntity item = FindItem(new EbayOrderIdentifier(feedback.OrderLineItemID));
+            EbayOrderItemEntity item = FindItem(new EbayOrderIdentifier(feedback));
 
             if (item == null)
             {
