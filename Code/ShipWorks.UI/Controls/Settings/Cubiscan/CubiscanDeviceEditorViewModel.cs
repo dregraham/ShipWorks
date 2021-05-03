@@ -52,12 +52,12 @@ namespace ShipWorks.UI.Controls.Settings.Cubiscan
 
             Computers = computerManager.GetComputers();
             SelectedComputer = computerManager.GetComputer();
-            IPAddress = "127.0.0.1";
-            PortNumber = "1050";
             
             Models = EnumHelper.GetEnumList<DeviceModel>()
                 .Select(x => x.Value).ToDictionary(s => s, s => EnumHelper.GetDescription(s));
-            
+
+            IPAddress = "127.0.0.1";
+            PortNumber = "1050";
             SelectedModel = DeviceModel.Model110;
         }
 
