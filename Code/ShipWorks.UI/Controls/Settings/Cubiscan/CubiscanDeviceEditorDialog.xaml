@@ -2,8 +2,17 @@
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:ui="clr-namespace:Interapptive.Shared.UI;assembly=Interapptive.Shared"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:controls="clr-namespace:ShipWorks.UI.Controls"
+        xmlns:local="clr-namespace:ShipWorks.UI.Controls.Settings.Cubiscan"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:valueConverters="clr-namespace:ShipWorks.UI.ValueConverters"
+        mc:Ignorable="d"
         SizeToContent="Height"
-        Title="CubiscanDeviceEditorDialog" Width="300">
+        Width="300"
+        Title="Edit Cubiscan Device" 
+        d:DataContext="{d:DesignInstance local:ICubiscanDeviceEditorViewModel}"
+        >
     <Window.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
@@ -12,6 +21,8 @@
                 <ResourceDictionary Source="/ShipWorks.UI;component/Styles/BlueSteel/ButtonStyle.xaml" />
                 <ResourceDictionary Source="/ShipWorks.UI;component/Styles/BlueSteel/ComboBoxStyle.xaml" />
             </ResourceDictionary.MergedDictionaries>
+            <valueConverters:BooleanToVisibilityConverter x:Key="BooleanToVisibility" />
+            <valueConverters:InverseBooleanConverter x:Key="InverseBoolean" />
         </ResourceDictionary>
     </Window.Resources>
     <Grid Margin="10">
@@ -90,8 +101,8 @@
                 <ColumnDefinition Width="auto" SharedSizeGroup="A"/>
                 <ColumnDefinition Width="auto" SharedSizeGroup="A"/>
             </Grid.ColumnDefinitions>
-            <!--<controls:WaitSpinner Visibility="{Binding CanEdit, Converter={StaticResource HideWhenTrue}}"
-                                  BorderThickness="0"/>-->
+            <controls:WaitSpinner Visibility="{Binding ShowSpinner, Converter={StaticResource BooleanToVisibility}}"
+                                  BorderThickness="0" Margin="0 0 10 0 "/>
 
             <Button
                 Grid.Column="1"
@@ -105,7 +116,8 @@
                 Grid.Column="2"
                 Command="{Binding SaveCommand}"
                 Style="{StaticResource SmallPrimaryButton}"
-                Content="Save"/>
+                Content="Save"
+                IsEnabled="{Binding ShowSpinner, Converter={StaticResource InverseBoolean}}"/>
         </Grid>
     </Grid>
 </ui:InteropWindow>

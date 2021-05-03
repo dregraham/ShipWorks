@@ -30,6 +30,7 @@ namespace ShipWorks.UI.Controls.Settings.Cubiscan
         private DeviceModel selectedModel;
         private string ipAddress;
         private string portNumber;
+        private bool showSpinner;
 
         public CubiscanDeviceEditorViewModel(DeviceEntity newDevice, IDeviceManager deviceManager,
             IComputerManager computerManager, ISqlAdapterFactory sqlAdapterFactory, IHttpValidator httpValidator, IMessageHelper messageHelper)
@@ -39,7 +40,7 @@ namespace ShipWorks.UI.Controls.Settings.Cubiscan
             this.sqlAdapterFactory = sqlAdapterFactory;
             this.httpValidator = httpValidator;
             this.messageHelper = messageHelper;
-
+            ShowSpinner = false;
             SaveCommand = new RelayCommand(Save);
             CancelCommand = new RelayCommand(Close);
 
@@ -47,7 +48,7 @@ namespace ShipWorks.UI.Controls.Settings.Cubiscan
             SelectedComputer = computerManager.GetComputer();
             IPAddress = "127.0.0.1";
             PortNumber = "1050";
-
+            
             Models = EnumHelper.GetEnumList<DeviceModel>()
                 .Select(x => x.Value).ToDictionary(s => s, s => EnumHelper.GetDescription(s));
         }
@@ -87,7 +88,14 @@ namespace ShipWorks.UI.Controls.Settings.Cubiscan
             get => portNumber;
             set => Set(ref portNumber, value);
         }
-
+        
+        [Obfuscation]
+        public bool ShowSpinner
+        {
+            get => showSpinner;
+            set => Set(ref showSpinner, value);
+        }
+        
         [Obfuscation]
         public ICommand CancelCommand { get; }
         
@@ -96,6 +104,8 @@ namespace ShipWorks.UI.Controls.Settings.Cubiscan
 
         private void Save()
         {
+            ShowSpinner = true;
+            
             var validationResult = Validate();
             if (validationResult.Success)
             {
@@ -109,6 +119,8 @@ namespace ShipWorks.UI.Controls.Settings.Cubiscan
             {
                 messageHelper.ShowError(validationResult.Message);
             }
+
+            ShowSpinner = false;
         }
 
         private GenericResult<DeviceEntity> Validate()

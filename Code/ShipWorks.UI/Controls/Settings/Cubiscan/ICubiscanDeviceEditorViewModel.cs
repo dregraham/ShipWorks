@@ -17,5 +17,6 @@ namespace ShipWorks.UI.Controls.Settings.Cubiscan
         Dictionary<DeviceModel, string> Models { get; set; }
         ICommand CancelCommand { get; }
         ICommand SaveCommand { get; }
+        bool ShowSpinner { get; set; }
     }
 }
