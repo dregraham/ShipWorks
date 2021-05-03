@@ -332,7 +332,7 @@ CREATE TABLE [dbo].[Device]
 [ComputerID] [bigint] NOT NULL,
 [Model] [smallint] NOT NULL,
 [IPAddress] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
-[PortNumber] [smallint] NOT NULL
+[PortNumber] [int] NOT NULL
 )
 GO
 PRINT N'Creating primary key [PK_Device] on [dbo].[Device]'

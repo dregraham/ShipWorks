@@ -78,9 +78,9 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
         /// <summary> The PortNumber property of the Entity Device<br/><br/>
         /// </summary>
         /// <remarks>Mapped on table field: "Device"."PortNumber"<br/>
-        /// Table field type characteristics (type, precision, scale, length): SmallInt, 5, 0, 0<br/>
+        /// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
-        public System.Int16 PortNumber { get; }
+        public System.Int32 PortNumber { get; }
         /// <summary> The RowVersion property of the Entity Device<br/><br/>
         /// </summary>
         /// <remarks>Mapped on table field: "Device"."RowVersion"<br/>

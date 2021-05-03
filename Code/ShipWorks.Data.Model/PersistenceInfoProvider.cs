@@ -933,7 +933,7 @@ namespace ShipWorks.Data.Model
 			this.AddElementFieldMapping("DeviceEntity", "ComputerID", "ComputerID", false, "BigInt", 0, 19, 0, false, "", null, typeof(System.Int64), 1);
 			this.AddElementFieldMapping("DeviceEntity", "Model", "Model", false, "SmallInt", 0, 5, 0, false, "", null, typeof(System.Int16), 2);
 			this.AddElementFieldMapping("DeviceEntity", "IPAddress", "IPAddress", false, "NVarChar", 50, 0, 0, false, "", null, typeof(System.String), 3);
-			this.AddElementFieldMapping("DeviceEntity", "PortNumber", "PortNumber", false, "SmallInt", 0, 5, 0, false, "", null, typeof(System.Int16), 4);
+			this.AddElementFieldMapping("DeviceEntity", "PortNumber", "PortNumber", false, "Int", 0, 10, 0, false, "", null, typeof(System.Int32), 4);
 			this.AddElementFieldMapping("DeviceEntity", "RowVersion", "RowVersion", false, "Timestamp", 2147483647, 0, 0, false, "", null, typeof(System.Byte[]), 5);
 		}
 

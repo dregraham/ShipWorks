@@ -51,6 +51,8 @@ namespace ShipWorks.UI.Controls.Settings.Cubiscan
             
             Models = EnumHelper.GetEnumList<DeviceModel>()
                 .Select(x => x.Value).ToDictionary(s => s, s => EnumHelper.GetDescription(s));
+            
+            SelectedModel = DeviceModel.Model110;
         }
 
         public Action OnComplete { get; set; }
@@ -180,7 +182,7 @@ namespace ShipWorks.UI.Controls.Settings.Cubiscan
 
             newDevice.Model = SelectedModel;
             newDevice.IPAddress = ipValidationResult.Value;
-            newDevice.PortNumber = (short) portValidationResult.Value;
+            newDevice.PortNumber = (int) portValidationResult.Value;
             newDevice.Computer = SelectedComputer;
 
             return GenericResult.FromSuccess(newDevice);

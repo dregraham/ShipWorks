@@ -502,12 +502,12 @@ namespace ShipWorks.Data.Model.EntityClasses
 
 		/// <summary> The PortNumber property of the Entity Device<br/><br/></summary>
 		/// <remarks>Mapped on  table field: "Device"."PortNumber"<br/>
-		/// Table field type characteristics (type, precision, scale, length): SmallInt, 5, 0, 0<br/>
+		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
 		[DataMember]
-		public virtual System.Int16 PortNumber
+		public virtual System.Int32 PortNumber
 		{
-			get { return (System.Int16)GetValue((int)DeviceFieldIndex.PortNumber, true); }
+			get { return (System.Int32)GetValue((int)DeviceFieldIndex.PortNumber, true); }
 			set	{ SetValue((int)DeviceFieldIndex.PortNumber, value); }
 		}
 

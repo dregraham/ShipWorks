@@ -721,8 +721,8 @@
           <Field Name="ComputerID" Type="long" FieldIndex="1" />
           <Field Name="DeviceID" Type="long" IsReadOnly="true" Precision="19" IsPrimaryKey="true" FieldIndex="0" />
           <Field Name="IPAddress" Type="string" MaxLength="50" FieldIndex="3" />
-          <Field Name="Model" Type="DeviceModel" FieldIndex="2" />
-          <Field Name="PortNumber" Type="short" Precision="5" FieldIndex="4" />
+          <Field Name="Model" Type="DeviceModel" Precision="5" FieldIndex="2" />
+          <Field Name="PortNumber" Type="int" FieldIndex="4" />
           <Field Name="RowVersion" Type="byte[]" IsReadOnly="true" FieldIndex="5" />
         </Fields>
       </EntityDefinition>
@@ -4698,7 +4698,7 @@
       <Catalogs>
         <Catalog Name="ShipWorksLocal">
           <Schemas>
-            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2021-04-28T14:50:37.122391Z">
+            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2021-05-03T17:57:11.5853204Z">
               <Tables>
                 <Table Name="Action">
                   <PkConstraintName Name="PK_Action" />
@@ -5400,7 +5400,7 @@
                     <Field Name="ComputerID" Ordinal="3" DbType="0" Precision="19" />
                     <Field Name="Model" Ordinal="4" DbType="16" Precision="5" />
                     <Field Name="IPAddress" Ordinal="5" DbType="12" Length="50" />
-                    <Field Name="PortNumber" Ordinal="6" DbType="16" Precision="5" />
+                    <Field Name="PortNumber" Ordinal="6" DbType="8" Precision="10" />
                   </Fields>
                 </Table>
                 <Table Name="DhlExpressAccount">
