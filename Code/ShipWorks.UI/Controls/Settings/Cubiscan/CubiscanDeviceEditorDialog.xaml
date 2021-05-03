@@ -73,7 +73,7 @@
 
             <TextBlock Grid.Row="3"
                        Grid.Column="0"
-                       Text="IP Address"
+                       Text="Device IP Address"
                        Style="{StaticResource FieldLabel}" />
 
             <TextBox Grid.Row="3"

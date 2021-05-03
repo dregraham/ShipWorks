@@ -56,7 +56,6 @@ namespace ShipWorks.UI.Controls.Settings.Cubiscan
             Models = EnumHelper.GetEnumList<DeviceModel>()
                 .Select(x => x.Value).ToDictionary(s => s, s => EnumHelper.GetDescription(s));
 
-            IPAddress = "127.0.0.1";
             PortNumber = "1050";
             SelectedModel = DeviceModel.Model110;
         }
@@ -191,12 +190,20 @@ namespace ShipWorks.UI.Controls.Settings.Cubiscan
                 errors.Add(ipValidationResult.Message);
             }
 
+            var devices = deviceManager.DevicesReadOnly.ToList();
+            
+            // Ensure device with same computer does not already exist
+            if (devices.Any(existingDevice => existingDevice.ComputerID == SelectedComputer.ComputerID))
+            {
+                errors.Add("There is already a device registered to this computer.");
+            }
+            
             // Ensure device with same port and IP address does not already exist
-            if (deviceManager.DevicesReadOnly.Any(existingDevice =>
+            if (devices.Any(existingDevice =>
                 existingDevice.PortNumber == portValidationResult.Value &&
                 existingDevice.IPAddress == ipValidationResult.Value))
             {
-                errors.Add("There is a device currently registered to this IP address and port number.");
+                errors.Add("There is a device currently to this IP address and port number.");
             }
 
             return BuildValidationResult(errors, ipValidationResult, portValidationResult);
