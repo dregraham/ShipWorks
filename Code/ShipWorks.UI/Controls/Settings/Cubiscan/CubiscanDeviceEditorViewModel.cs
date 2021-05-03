@@ -2,11 +2,14 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using System.Text;
 using System.Windows.Input;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.CommandWpf;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.IO.Hardware;
+using Interapptive.Shared.Net;
+using Interapptive.Shared.UI;
 using Interapptive.Shared.Utility;
 using ShipWorks.Common.IO.Hardware;
 using ShipWorks.Data.Connection;
@@ -21,17 +24,22 @@ namespace ShipWorks.UI.Controls.Settings.Cubiscan
         private readonly DeviceEntity newDevice;
         private readonly IDeviceManager deviceManager;
         private readonly ISqlAdapterFactory sqlAdapterFactory;
+        private readonly IHttpValidator httpValidator;
+        private readonly IMessageHelper messageHelper;
         private ComputerEntity selectedComputer;
         private DeviceModel selectedModel;
         private string ipAddress;
         private string portNumber;
 
         public CubiscanDeviceEditorViewModel(DeviceEntity newDevice, IDeviceManager deviceManager,
-            IComputerManager computerManager, ISqlAdapterFactory sqlAdapterFactory)
+            IComputerManager computerManager, ISqlAdapterFactory sqlAdapterFactory, IHttpValidator httpValidator, IMessageHelper messageHelper)
         {
             this.newDevice = newDevice;
             this.deviceManager = deviceManager;
             this.sqlAdapterFactory = sqlAdapterFactory;
+            this.httpValidator = httpValidator;
+            this.messageHelper = messageHelper;
+
             SaveCommand = new RelayCommand(Save);
             CancelCommand = new RelayCommand(Close);
 
@@ -88,16 +96,82 @@ namespace ShipWorks.UI.Controls.Settings.Cubiscan
 
         private void Save()
         {
-            newDevice.Model = SelectedModel;
-            newDevice.IPAddress = IPAddress;
-            newDevice.PortNumber = short.Parse(PortNumber);
-            newDevice.Computer = SelectedComputer;
-            
-            using (ISqlAdapter adapter = sqlAdapterFactory.Create())
+            var validationResult = Validate();
+            if (validationResult.Success)
             {
-                deviceManager.Save(newDevice, adapter);
-                Close();
+                using (ISqlAdapter adapter = sqlAdapterFactory.Create())
+                {
+                    deviceManager.Save(validationResult.Value, adapter);
+                    Close();
+                }
             }
+            else
+            {
+                messageHelper.ShowError(validationResult.Message);
+            }
+        }
+
+        private GenericResult<DeviceEntity> Validate()
+        {
+            var errors = new List<string>();
+            
+            // Ensure computer selected
+            if (SelectedComputer == null)
+            {
+                errors.Add("Please select a computer");
+            }
+
+            // Validate port number
+            var portValidationResult = httpValidator.ValidatePort(PortNumber);
+            if (portValidationResult.Failure)
+            {
+                errors.Add(portValidationResult.Message);
+            }
+
+            // Validate IP address
+            var ipValidationResult = httpValidator.ValidateIPAddress(IPAddress);
+            if (ipValidationResult.Failure)
+            {
+                errors.Add(ipValidationResult.Message);
+            }
+
+            // Ensure device with same port and IP address does not already exist
+            if (deviceManager.DevicesReadOnly.Any(existingDevice =>
+                existingDevice.PortNumber == portValidationResult.Value &&
+                existingDevice.IPAddress == ipValidationResult.Value))
+            {
+                errors.Add("There is a device currently registered to this IP address and port number.");
+            }
+
+            return BuildValidationResult(errors, ipValidationResult, portValidationResult);
+        }
+
+        private GenericResult<DeviceEntity> BuildValidationResult(List<string> errors, GenericResult<string> ipValidationResult, GenericResult<long> portValidationResult)
+        {
+            if (errors.Count > 0)
+            {
+                string message;
+                if (errors.Count == 1)
+                {
+                    message = errors[0];
+                }
+                else
+                {
+                    StringBuilder errorBuilder = new StringBuilder("The following errors occured:");
+                    errorBuilder.AppendLine();
+                    errors.ForEach(x => errorBuilder.AppendLine($"- {x}"));
+                    message = errorBuilder.ToString();
+                }
+
+                return GenericResult.FromError<DeviceEntity>(message);
+            }
+
+            newDevice.Model = SelectedModel;
+            newDevice.IPAddress = ipValidationResult.Value;
+            newDevice.PortNumber = (short) portValidationResult.Value;
+            newDevice.Computer = SelectedComputer;
+
+            return GenericResult.FromSuccess(newDevice);
         }
 
         private void Close() => OnComplete?.Invoke();
