@@ -61,7 +61,13 @@ namespace ShipWorks.Common
         /// </summary>
         public void Delete(TEntity toDelete, ISqlAdapter adapter)
         {
-            adapter.DeleteEntity(toDelete);
+            lock (tableSynchronizer)
+            {
+                tableSynchronizer.EntityCollection.Remove(toDelete);
+                readOnlyEntities = tableSynchronizer.EntityCollection.Select(AsReadOnly).ToReadOnly();
+                adapter.DeleteEntity(toDelete);
+            }
+
             CheckForChangesNeeded();
         }
 
