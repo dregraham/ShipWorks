@@ -5,6 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:local="clr-namespace:ShipWorks.UI.Controls.Settings.Cubiscan"
              xmlns:valueConverters="clr-namespace:ShipWorks.UI.ValueConverters"
+             xmlns:attachedProperties="clr-namespace:ShipWorks.UI.AttachedProperties"
              mc:Ignorable="d"
              d:DesignHeight="300"
              d:DesignWidth="400"
@@ -29,6 +30,7 @@
     </UserControl.Resources>
     <Grid Margin="10">
         <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
@@ -97,5 +99,7 @@
                         Style="{StaticResource Button.Delete}" />
             </Grid>
         </Grid>
+        <TextBlock Grid.Row="2" Margin="10 0 0 0"><Hyperlink attachedProperties:Link.OpenInBrowser="True" NavigateUri="https://support.shipworks.com/hc/en-us/articles/360060818971">Click here</Hyperlink>
+            for help with adding your Cubiscan device.</TextBlock>
     </Grid>
 </UserControl>

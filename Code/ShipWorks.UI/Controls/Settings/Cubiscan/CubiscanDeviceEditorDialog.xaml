@@ -41,11 +41,6 @@
                 <ColumnDefinition Width="Auto" />
                 <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
-            <TextBlock Grid.Row="0"
-                       Grid.Column="0"
-                       Grid.ColumnSpan="2"
-                       Text="Cubiscan Device Details"
-                       Style="{StaticResource Header}" />
             <TextBlock Grid.Row="1"
                        Grid.Column="0"
                        Text="Computer"
@@ -73,7 +68,7 @@
 
             <TextBlock Grid.Row="3"
                        Grid.Column="0"
-                       Text="Device IP Address"
+                       Text="Cubiscan IP Address"
                        Style="{StaticResource FieldLabel}" />
 
             <TextBox Grid.Row="3"

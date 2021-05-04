@@ -15,10 +15,11 @@ namespace ShipWorks.Common.IO.Hardware
     /// Responsible for retrieving CubiscanConfiguration
     /// </summary>
     [Component(SingleInstance = true)]
-    public class CubiscanConfigurationManager : ICubiscanConfigurationManager
+    public class CubiscanConfigurationManager : ICubiscanConfigurationManager, IInitializeForCurrentUISession
     {
         private readonly IComputerManager computerManager;
         private readonly IDeviceManager deviceManager;
+        private bool initialized = false;
 
         /// <summary>
         /// Constructor
@@ -34,7 +35,7 @@ namespace ShipWorks.Common.IO.Hardware
         /// </summary>
         public CubiscanConfiguration GetConfiguration()
         {
-            if (!computerManager.IsInitialized || !deviceManager.IsInitialized)
+            if (!initialized)
             {
                 return new CubiscanConfiguration(false, null, 0);
             }
@@ -42,6 +43,30 @@ namespace ShipWorks.Common.IO.Hardware
             var computer = computerManager.GetComputer().ComputerID;
             var device = deviceManager.DevicesReadOnly.FirstOrDefault(d => d.ComputerID == computer);
             return new CubiscanConfiguration(device != null, device?.IPAddress, device?.PortNumber ?? 0);
+        }
+
+        /// <summary>
+        /// Set as initialized
+        /// </summary>
+        public void InitializeForCurrentSession()
+        {
+            initialized = true;
+        }
+
+        /// <summary>
+        /// Set as uninitialized
+        /// </summary>
+        public void EndSession()
+        {
+            initialized = false;
+        }
+
+        /// <summary>
+        /// Nothing to dispose
+        /// </summary>
+        public void Dispose()
+        {
+            // nothing to dispose
         }
     }
 }

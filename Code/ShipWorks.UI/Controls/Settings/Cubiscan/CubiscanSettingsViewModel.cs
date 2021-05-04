@@ -8,6 +8,7 @@ using System.Windows.Input;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.CommandWpf;
 using Interapptive.Shared.ComponentRegistration;
+using Interapptive.Shared.IO.Hardware.Scales;
 using Interapptive.Shared.UI;
 using ShipWorks.Common.IO.Hardware;
 using ShipWorks.Data.Connection;
