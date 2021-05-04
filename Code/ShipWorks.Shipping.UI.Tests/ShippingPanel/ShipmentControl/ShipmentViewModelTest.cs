@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Autofac.Extras.Moq;
+using Interapptive.Shared.IO.Hardware.Scales;
 using Moq;
 using ShipWorks.Core.Messaging;
 using ShipWorks.Data.Model.EntityClasses;
@@ -32,12 +33,13 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel.ShipmentControl
         private readonly List<IPackageAdapter> packageAdapters = new List<IPackageAdapter>();
         private readonly AutoMock mock;
         private TestMessenger messenger;
+        private readonly List<DimensionsProfileEntity> dimsProfiles;
 
         public ShipmentViewModelTest()
         {
             mock = AutoMockExtensions.GetLooseThatReturnsMocks();
 
-            List<DimensionsProfileEntity> dimensionsProfileEntities = new List<DimensionsProfileEntity>()
+            dimsProfiles = new List<DimensionsProfileEntity>()
             {
                 new DimensionsProfileEntity(0)
                 {
@@ -49,8 +51,8 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel.ShipmentControl
                 }
             };
 
-            dimensionsManager = mock.CreateMock<IDimensionsManager>();
-            dimensionsManager.Setup(dm => dm.ProfilesReadOnly(It.IsAny<IPackageAdapter>())).Returns(dimensionsProfileEntities);
+            dimensionsManager = mock.Mock<IDimensionsManager>();
+            dimensionsManager.Setup(dm => dm.ProfilesReadOnly(It.IsAny<IPackageAdapter>())).Returns(dimsProfiles);
 
             expectedPackageTypes = new Dictionary<int, string>();
             expectedPackageTypes.Add(0, "Package Type 0");
@@ -330,22 +332,42 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel.ShipmentControl
             CreateDefaultShipmentAdapter(mock, 2);
             CreateDimensionsProfilesManager(mock);
 
-            IDimensionsManager dimsMgr = mock.Build<IDimensionsManager>();
             DimensionsProfileEntity dimsProfileEntity = new DimensionsProfileEntity(10);
-            List<IDimensionsProfileEntity> profiles = dimsMgr.ProfilesReadOnly(It.IsAny<IPackageAdapter>()).ToList();
-
-            Mock<IDimensionsManager> mockedDimsMgr = mock.Mock<IDimensionsManager>();
-            mockedDimsMgr.Setup(d => d.ProfilesReadOnly(It.IsAny<IPackageAdapter>())).Returns(profiles);
-
+            
             ShipmentViewModel testObject = mock.Create<ShipmentViewModel>();
             testObject.Load(shipmentAdapter.Object);
-            profiles.Add(dimsProfileEntity);
-            mockedDimsMgr.Setup(d => d.ProfilesReadOnly(It.IsAny<IPackageAdapter>())).Returns(profiles);
-
+            dimsProfiles.Add(dimsProfileEntity);
+            
             DimensionsProfilesChangedMessage message = new DimensionsProfilesChangedMessage(this);
             testMessenger.Send(message);
 
-            Assert.Equal(profiles.Count, testObject.DimensionsProfiles.Count);
+            Assert.Equal(dimsProfiles.Count, testObject.DimensionsProfiles.Count);
+
+            testMessenger.Dispose();
+        }
+
+        [Fact]
+        public void DimensionsAreUpdated_WhenChangeDimensionsMessageReceived()
+        {
+            TestMessenger testMessenger = new TestMessenger();
+            mock.Provide<IMessenger>(testMessenger);
+
+            CreateDefaultShipmentAdapter(mock, 1);
+            CreateDimensionsProfilesManager(mock);
+
+            ShipmentViewModel testObject = mock.Create<ShipmentViewModel>();
+            testObject.Load(shipmentAdapter.Object);
+
+            var result = ScaleReadResult.Success(1D, 2D, 3D, 4D, ScaleType.None);
+            var changeDimensionMessage = new ChangeDimensionsMessage(this, result);
+            testMessenger.Send(changeDimensionMessage);
+
+            testObject.Save();
+            
+            Assert.Equal(packageAdapters[0].DimsLength, result.Length);
+            Assert.Equal(packageAdapters[0].DimsWidth, result.Width);
+            Assert.Equal(packageAdapters[0].DimsHeight, result.Height);
+            Assert.Equal(packageAdapters[0].DimsProfileID, 0);
 
             testMessenger.Dispose();
         }
@@ -359,24 +381,18 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel.ShipmentControl
             CreateDefaultShipmentAdapter(mock, 2);
             CreateDimensionsProfilesManager(mock);
 
-            IDimensionsManager dimsMgr = mock.Build<IDimensionsManager>();
             DimensionsProfileEntity dimsProfileEntity = new DimensionsProfileEntity(10);
-            List<IDimensionsProfileEntity> profiles = dimsMgr.ProfilesReadOnly(It.IsAny<IPackageAdapter>()).ToList();
-
-            Mock<IDimensionsManager> mockedDimsMgr = mock.Mock<IDimensionsManager>();
-            mockedDimsMgr.Setup(d => d.ProfilesReadOnly(It.IsAny<IPackageAdapter>())).Returns(profiles);
-
+            
             ShipmentViewModel testObject = mock.Create<ShipmentViewModel>();
             testObject.Load(shipmentAdapter.Object);
             testObject.SelectedDimensionsProfile = new DimensionsProfileEntity(999);
 
-            profiles.Add(dimsProfileEntity);
-            mockedDimsMgr.Setup(d => d.ProfilesReadOnly(It.IsAny<IPackageAdapter>())).Returns(profiles);
-
+            dimsProfiles.Add(dimsProfileEntity);
+            
             DimensionsProfilesChangedMessage message = new DimensionsProfilesChangedMessage(this);
             testMessenger.Send(message);
 
-            Assert.Equal(profiles.Count, testObject.DimensionsProfiles.Count);
+            Assert.Equal(dimsProfiles.Count, testObject.DimensionsProfiles.Count);
 
             testMessenger.Dispose();
         }
@@ -1076,7 +1092,8 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel.ShipmentControl
 
         private void CreateDimensionsProfilesManager(AutoMock autoMock)
         {
-            List<DimensionsProfileEntity> dims = new List<DimensionsProfileEntity>()
+            dimsProfiles.Clear();
+            var newDims = new List<DimensionsProfileEntity>()
             {
                 new DimensionsProfileEntity(0)
                 {
@@ -1103,9 +1120,8 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel.ShipmentControl
                     Name = "Dims profile 2"
                 }
             };
-
-            Mock<IDimensionsManager> dimsMgr = autoMock.Mock<IDimensionsManager>();
-            dimsMgr.Setup(d => d.ProfilesReadOnly(It.IsAny<IPackageAdapter>())).Returns(dims);
+            
+            dimsProfiles.AddRange(newDims);
         }
 
         public void Dispose()

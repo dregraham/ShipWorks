@@ -323,6 +323,17 @@ namespace ShipWorks.Data.Model.RelationClasses
 				return relation;
 			}
 		}
+		/// <summary>Returns a new IEntityRelation object, between StoreEntity and PlatformStoreEntity over the 1:1 relation they have, which is used to build a target per entity hierarchy</summary>		
+		internal IEntityRelation RelationToSubTypePlatformStoreEntity
+		{
+			get
+			{
+				IEntityRelation relation = new EntityRelation(SD.LLBLGen.Pro.ORMSupportClasses.RelationType.OneToOne, true);
+				relation.AddEntityFieldPair(StoreFields.StoreID, PlatformStoreFields.StoreID);
+				relation.IsHierarchyRelation=true;
+				return relation;
+			}
+		}
 		/// <summary>Returns a new IEntityRelation object, between StoreEntity and ProStoresStoreEntity over the 1:1 relation they have, which is used to build a target per entity hierarchy</summary>		
 		internal IEntityRelation RelationToSubTypeProStoresStoreEntity
 		{
@@ -433,17 +444,6 @@ namespace ShipWorks.Data.Model.RelationClasses
 				return relation;
 			}
 		}
-		/// <summary>Returns a new IEntityRelation object, between StoreEntity and PlatformStoreEntity over the 1:1 relation they have, which is used to build a target per entity hierarchy</summary>		
-		internal IEntityRelation RelationToSubTypePlatformStoreEntity
-		{
-			get
-			{
-				IEntityRelation relation = new EntityRelation(SD.LLBLGen.Pro.ORMSupportClasses.RelationType.OneToOne, true);
-				relation.AddEntityFieldPair(StoreFields.StoreID, PlatformStoreFields.StoreID);
-				relation.IsHierarchyRelation=true;
-				return relation;
-			}
-		}
 		
 		/// <summary>Returns the relation object the entity, to which this relation factory belongs, has with the subtype with the specified name</summary>
 		/// <param name="subTypeEntityName">name of direct subtype which is a subtype of the current entity through the relation to return.</param>
@@ -492,6 +492,8 @@ namespace ShipWorks.Data.Model.RelationClasses
 					return this.RelationToSubTypeOverstockStoreEntity;
 				case "PayPalStoreEntity":
 					return this.RelationToSubTypePayPalStoreEntity;
+				case "PlatformStoreEntity":
+					return this.RelationToSubTypePlatformStoreEntity;
 				case "ProStoresStoreEntity":
 					return this.RelationToSubTypeProStoresStoreEntity;
 				case "RakutenStoreEntity":
@@ -512,8 +514,6 @@ namespace ShipWorks.Data.Model.RelationClasses
 					return this.RelationToSubTypeWalmartStoreEntity;
 				case "YahooStoreEntity":
 					return this.RelationToSubTypeYahooStoreEntity;
-				case "PlatformStoreEntity":
-					return this.RelationToSubTypePlatformStoreEntity;
 				default:
 					return null;
 			}

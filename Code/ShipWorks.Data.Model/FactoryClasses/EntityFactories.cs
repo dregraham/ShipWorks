@@ -939,6 +939,26 @@ namespace ShipWorks.Data.Model.FactoryClasses
 		#endregion
 	}
 
+	/// <summary>Factory to create new, empty DeviceEntity objects.</summary>
+	[Serializable]
+	public partial class DeviceEntityFactory : EntityFactoryBase2<DeviceEntity> {
+		/// <summary>CTor</summary>
+		public DeviceEntityFactory() : base("DeviceEntity", ShipWorks.Data.Model.EntityType.DeviceEntity, false) { }
+		
+		/// <summary>Creates a new DeviceEntity instance but uses a special constructor which will set the Fields object of the new IEntity2 instance to the passed in fields object.</summary>
+		/// <param name="fields">Populated IEntityFields2 object for the new IEntity2 to create</param>
+		/// <returns>Fully created and populated (due to the IEntityFields2 object) IEntity2 object</returns>
+		public override IEntity2 Create(IEntityFields2 fields) {
+			IEntity2 toReturn = new DeviceEntity(fields);
+			// __LLBLGENPRO_USER_CODE_REGION_START CreateNewDeviceUsingFields
+			// __LLBLGENPRO_USER_CODE_REGION_END
+			return toReturn;
+		}
+		#region Included Code
+
+		#endregion
+	}
+
 	/// <summary>Factory to create new, empty DhlExpressAccountEntity objects.</summary>
 	[Serializable]
 	public partial class DhlExpressAccountEntityFactory : EntityFactoryBase2<DhlExpressAccountEntity> {
@@ -3072,7 +3092,6 @@ namespace ShipWorks.Data.Model.FactoryClasses
 			IEntity2 toReturn = new PlatformStoreEntity(fields);
 			// __LLBLGENPRO_USER_CODE_REGION_START CreateNewPlatformStoreUsingFields
 			// __LLBLGENPRO_USER_CODE_REGION_END
-			
 			return toReturn;
 		}
 		#region Included Code
@@ -5077,6 +5096,9 @@ namespace ShipWorks.Data.Model.FactoryClasses
 					break;
 				case ShipWorks.Data.Model.EntityType.CustomerEntity:
 					factoryToUse = new CustomerEntityFactory();
+					break;
+				case ShipWorks.Data.Model.EntityType.DeviceEntity:
+					factoryToUse = new DeviceEntityFactory();
 					break;
 				case ShipWorks.Data.Model.EntityType.DhlExpressAccountEntity:
 					factoryToUse = new DhlExpressAccountEntityFactory();

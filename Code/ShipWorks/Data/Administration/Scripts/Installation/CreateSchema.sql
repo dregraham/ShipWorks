@@ -318,10 +318,36 @@ PRINT N'Creating primary key [PK_Computer] on [dbo].[Computer]'
 GO
 ALTER TABLE [dbo].[Computer] ADD CONSTRAINT [PK_Computer] PRIMARY KEY CLUSTERED  ([ComputerID])
 GO
-ALTER TABLE [dbo].[Computer] ENABLE CHANGE_TRACKING
-GO
 PRINT N'Altering [dbo].[Computer]'
 GO
+ALTER TABLE [dbo].[Computer] ENABLE CHANGE_TRACKING
+GO
+
+PRINT N'Creating [dbo].[Device]'
+GO
+CREATE TABLE [dbo].[Device]
+(
+[DeviceID] [bigint] NOT NULL IDENTITY(1106, 1000),
+[RowVersion] [timestamp] NOT NULL,
+[ComputerID] [bigint] NOT NULL,
+[Model] [smallint] NOT NULL,
+[IPAddress] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+[PortNumber] [int] NOT NULL
+)
+GO
+PRINT N'Creating primary key [PK_Device] on [dbo].[Device]'
+GO
+ALTER TABLE [dbo].[Device] ADD CONSTRAINT [PK_Device] PRIMARY KEY CLUSTERED  ([DeviceID])
+GO
+PRINT N'Adding foreign keys to [dbo].[Device]'
+GO
+ALTER TABLE [dbo].[Device] ADD CONSTRAINT [FK_Device_Computer] FOREIGN KEY ([ComputerID]) REFERENCES [dbo].[Computer] ([ComputerID]) ON DELETE CASCADE
+GO
+PRINT N'Enabling Change Tracking for [dbo].[Device]'
+GO
+ALTER TABLE [dbo].[Device] ENABLE CHANGE_TRACKING
+GO
+
 PRINT N'Creating [dbo].[ActionQueueSelection]'
 GO
 CREATE TABLE [dbo].[ActionQueueSelection]

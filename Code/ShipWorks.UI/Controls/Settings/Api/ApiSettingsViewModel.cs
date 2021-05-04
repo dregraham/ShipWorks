@@ -5,6 +5,7 @@ using System.Windows.Input;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.CommandWpf;
 using Interapptive.Shared.ComponentRegistration;
+using Interapptive.Shared.Net;
 using Interapptive.Shared.UI;
 using Interapptive.Shared.Utility;
 using log4net;
@@ -20,13 +21,11 @@ namespace ShipWorks.UI.Controls.Settings.Api
     [Component(RegistrationType.Self)]
     public class ApiSettingsViewModel : ViewModelBase
     {
-        private const int MinPort = 1024;
-        private const int MaxPort = 65535;
-
         private readonly IApiService apiService;
         private readonly IApiSettingsRepository settingsRepository;
         private readonly IMessageHelper messageHelper;
         private readonly IApiPortRegistrationService apiPortRegistrationService;
+        private readonly IHttpValidator httpValidator;
         private readonly ILog log;
         private ApiStatus status;
         private string port;
@@ -43,15 +42,20 @@ namespace ShipWorks.UI.Controls.Settings.Api
             IApiSettingsRepository settingsRepository,
             IMessageHelper messageHelper,
             IApiPortRegistrationService apiPortRegistrationService,
-            Func<Type, ILog> logFactory)
+            IHttpValidator httpValidator,
+            Func<Type, ILog> logFactory
+        )
         {
             this.apiService = apiService;
             this.settingsRepository = settingsRepository;
             this.messageHelper = messageHelper;
             this.apiPortRegistrationService = apiPortRegistrationService;
+            this.httpValidator = httpValidator;
             this.log = logFactory(typeof(ApiSettingsViewModel));
+
             StartCommand = new RelayCommand(async () => await ToggleEnabled().ConfigureAwait(true));
-            UpdateCommand = new RelayCommand(async () => await Update().ConfigureAwait(true), () => Status != ApiStatus.Updating);
+            UpdateCommand = new RelayCommand(async () => await Update().ConfigureAwait(true),
+                () => Status != ApiStatus.Updating);
             SaveButtonText = "Save";
         }
 
@@ -297,16 +301,13 @@ namespace ShipWorks.UI.Controls.Settings.Api
         /// </summary>
         private GenericResult<long> ValidatePort()
         {
-            Port = Port.TrimStart('0');
-
-            // validate port number
-            if (!long.TryParse(Port, out long portNumber) || portNumber < MinPort || portNumber > MaxPort)
+            var result = httpValidator.ValidatePort(Port);
+            if (result.Failure)
             {
-                messageHelper.ShowError($"Please enter a valid port number between {MinPort} and {MaxPort}.");
-                return GenericResult.FromError<long>(string.Empty);
+                messageHelper.ShowError(result.Message);
             }
 
-            return GenericResult.FromSuccess(portNumber);
+            return result;
         }
 
         /// <summary>

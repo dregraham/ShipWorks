@@ -8,6 +8,7 @@ using System.Reflection;
 using System.Windows.Input;
 using GalaSoft.MvvmLight.CommandWpf;
 using Interapptive.Shared.Collections;
+using Interapptive.Shared.IO.Hardware.Scales;
 using Shared.System.ComponentModel.DataAnnotations;
 using ShipWorks.OrderLookup.FieldManager;
 using ShipWorks.Shipping;
@@ -51,6 +52,8 @@ namespace ShipWorks.OrderLookup.Controls.ShipmentDetails
             DeletePackageCommand = new RelayCommand(DeletePackageAction,
                 () => SelectedPackage != null && Packages.Count > 1);
 
+            ChangeDimensions = new RelayCommand<ScaleReadResult>(ChangeDimensionsAction);
+
             Packages = new System.Collections.ObjectModel.ObservableCollection<PackageAdapterWrapper>(ShipmentModel.PackageAdapters.Select(x => new PackageAdapterWrapper(x)));
             SelectedPackage = Packages.FirstOrDefault();
 
@@ -59,6 +62,25 @@ namespace ShipWorks.OrderLookup.Controls.ShipmentDetails
             RefreshPackageTypes();
             RefreshServiceTypes();
             RefreshProviders();
+        }
+
+        /// <summary>
+        /// Updates dimensions based on ScaleReadResult
+        /// </summary>
+        private void ChangeDimensionsAction(ScaleReadResult scaleReadResult)
+        {
+            if (scaleReadResult.HasVolumeDimensions)
+            {
+                if (SelectedPackageDimsProfileID != 0)
+                {
+                    SelectedPackageDimsProfileID = 0;
+                }
+                SelectedPackage.DimsLength = scaleReadResult.Length;
+                SelectedPackage.DimsWidth = scaleReadResult.Width;
+                SelectedPackage.DimsHeight = scaleReadResult.Height;
+                SelectedPackage.ApplyAdditionalWeight = false;
+                RaisePropertyChanged(nameof(SelectedPackage));
+            }
         }
 
         /// <summary>
@@ -135,6 +157,12 @@ namespace ShipWorks.OrderLookup.Controls.ShipmentDetails
         /// </summary>
         [Obfuscation(Exclude = true)]
         public ICommand ManageDimensionalProfiles { get; set; }
+        
+        /// <summary>
+        /// Updates dimensions based on ScaleReadResult
+        /// </summary>
+        [Obfuscation]
+        public RelayCommand<ScaleReadResult> ChangeDimensions { get; }
 
         /// <summary>
         /// Delete a package

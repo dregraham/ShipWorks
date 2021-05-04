@@ -36,8 +36,8 @@ namespace ShipWorks.UI.Controls
         // Display formatting
         private WeightDisplayFormat displayFormat = WeightDisplayFormat.FractionalPounds;
 
-        // The last valid weight that was entered
-        private double currentWeight;
+        // The last valid result that was provided
+        private ScaleReadResult? currentResult = null;
 
         // The last display we showed to the user.  Sometimes the display is a rounded (inaccurate)
         // version of the actual.  This allows us to see if the display has not changed, and instead
@@ -54,7 +54,7 @@ namespace ShipWorks.UI.Controls
         private IDisposable scaleSubscription;
 
         // Raised whenever the value changes
-        public event EventHandler WeightChanged;
+        public event EventHandler<WeightChangedEventArgs> WeightChanged;
 
         private bool showShortcutInfo;
         private string weighShortcutText;
@@ -158,7 +158,7 @@ namespace ShipWorks.UI.Controls
                 // Always return the current weight rather than the parsed weight since
                 // the current weight will be the most precise (i.e. it is not impacted
                 // by rounding for display purposes).
-                return currentWeight;
+                return currentResult?.Weight ?? 0D;
             }
             set
             {
@@ -336,13 +336,13 @@ namespace ShipWorks.UI.Controls
                 {
                     textBox.Text = "";
                     lastDisplay = "";
-                    currentWeight = 0;
+                    SetCurrentWeight(0);
 
                     cleared = true;
                 }
                 else
                 {
-                    currentWeight = 0;
+                    SetCurrentWeight(0);
                     cleared = false;
 
                     FormatWeightText();
@@ -438,12 +438,12 @@ namespace ShipWorks.UI.Controls
         {
             if (MultiValued || cleared)
             {
-                currentWeight = 0;
+                SetCurrentWeight(0);
                 lastDisplay = "";
                 return;
             }
 
-            FormatWeightText(currentWeight);
+            FormatWeightText(currentResult?.Weight ?? 0);
         }
 
         /// <summary>
@@ -496,7 +496,7 @@ namespace ShipWorks.UI.Controls
                         cleared = false;
 
                         FormatWeightText(newWeight);
-                        SetCurrentWeight(newWeight);
+                        SetCurrentWeight(result);
                         ClearError();
                         appliedWeight = true;
 
@@ -566,24 +566,36 @@ namespace ShipWorks.UI.Controls
         }
 
         /// <summary>
+        /// Sets the current weight. Raises event if it has changed
+        /// </summary>
+        private void SetCurrentWeight(ScaleReadResult result)
+        {
+            if (currentResult == null || 
+                currentResult.Value.Weight != result.Weight ||
+                (result.HasVolumeDimensions &&
+                    (currentResult.Value.Length != result.Length ||
+                    currentResult.Value.Width != result.Width ||
+                    currentResult.Value.Height != result.Height)))
+            {
+                currentResult = result;
+                OnWeightChanged(result);
+            }
+        }
+
+        /// <summary>
         /// Set the value of the current weight to the given value.
         /// </summary>
         private void SetCurrentWeight(double newWeight)
         {
-            if (currentWeight != newWeight)
-            {
-                currentWeight = newWeight;
-
-                OnWeightChanged();
-            }
+            SetCurrentWeight(ScaleReadResult.Success(newWeight, ScaleType.None));
         }
 
         /// <summary>
         /// Called whenever the weight changes.  Raises the WeightChanged event.
         /// </summary>
-        protected virtual void OnWeightChanged()
+        protected virtual void OnWeightChanged(ScaleReadResult result)
         {
-            WeightChanged?.Invoke(this, EventArgs.Empty);
+            WeightChanged?.Invoke(this, new WeightChangedEventArgs(result));
         }
 
         /// <summary>
@@ -670,10 +682,11 @@ namespace ShipWorks.UI.Controls
         /// </summary>
         private void OnTextBoxChanged(object sender, EventArgs e)
         {
-            if (WeightConverter.Current.ParseWeight(textBox.Text).HasValue)
+            var weight = WeightConverter.Current.ParseWeight(textBox.Text);
+            if (weight.HasValue)
             {
                 ignoreWeightChanges = true;
-                OnWeightChanged();
+                OnWeightChanged(ScaleReadResult.Success(weight.Value, ScaleType.None));
                 ignoreWeightChanges = false;
             }
         }

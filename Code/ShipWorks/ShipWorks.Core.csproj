@@ -795,6 +795,7 @@
     <Compile Include="Api\IApiService.cs" />
     <Compile Include="ApplicationCore\CommandLineOptions\AutoUpgradeFailureSubmitter.cs" />
     <Compile Include="ApplicationCore\Licensing\Warehouse\DTO\SqlConfigChangedDto.cs" />
+    <Compile Include="ApplicationCore\Settings\ICubiscanSettingsPage.cs" />
     <Compile Include="AutoInstall\DTO\AutoInstallShipWorksDto.cs" />
     <Compile Include="ApplicationCore\CommandLineOptions\GetUpdateWindowCommandLineOption.cs" />
     <Compile Include="ApplicationCore\CommandLineOptions\GetUpgradeLockCommandLineOption.cs" />
@@ -926,10 +927,14 @@
     <Compile Include="ApplicationCore\MainForm.BasicUIHeartbeat.cs">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="Common\IO\Hardware\CubiscanConfigurationManager.cs" />
+    <Compile Include="Common\IO\Hardware\DeviceManager.cs" />
+    <Compile Include="Common\IO\Hardware\IDeviceManager.cs" />
     <Compile Include="Common\IO\Hardware\Printers\IPrintUtility.cs" />
     <Compile Include="Common\IO\Hardware\Printers\PrintUtilityWrapper.cs" />
     <Compile Include="AutoInstall\AutoInstaller.cs" />
     <Compile Include="AutoInstall\AutoInstallerExitCodes.cs" />
+    <Compile Include="Common\ManagerBase.cs" />
     <Compile Include="Common\Net\RestSharpJsonNetSerializer.cs" />
     <Compile Include="Common\Threading\BackgroundExecutorWithoutDialog.cs" />
     <Compile Include="Common\Threading\BackgroundProgressProvider.cs" />
@@ -973,6 +978,7 @@
     <Compile Include="Data\ProductCatalogTelemetryService.cs" />
     <Compile Include="Filters\Content\Conditions\Orders\VerifiedCondition.cs" />
     <Compile Include="Filters\Content\Conditions\Shipments\AccountCondition.cs" />
+    <Compile Include="Messaging\Messages\ChangeDimensionsMessage.cs" />
     <Compile Include="Messaging\Messages\Orders\OrderLookupUnverifyMessage.cs" />
     <Compile Include="Messaging\Messages\Orders\OrderVerifiedMessage.cs" />
     <Compile Include="OrderLookup\CoreOrderLookupRegistrationOverride.cs" />
@@ -1224,6 +1230,9 @@
     <Compile Include="Products\Import\FailedProductImportException.cs" />
     <Compile Include="Products\Import\IImportProductsResult.cs" />
     <Compile Include="Products\ProductSelectionChangedEventArgs.cs" />
+    <Compile Include="UI\Controls\WeightChangedEventArgs.cs" />
+    <Compile Include="Users\ComputerManagerWrapper.cs" />
+    <Compile Include="Users\IComputerManager.cs" />
     <Compile Include="Warehouse\Configuration\Carriers\BaseCarrierSetup.cs" />
     <Compile Include="Warehouse\Configuration\Carriers\DhlCarrierSetup.cs" />
     <Compile Include="Warehouse\Configuration\Carriers\EndiciaCarrierSetup.cs" />

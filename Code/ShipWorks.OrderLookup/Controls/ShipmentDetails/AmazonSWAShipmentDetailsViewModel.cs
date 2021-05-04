@@ -24,7 +24,7 @@ namespace ShipWorks.OrderLookup.Controls.ShipmentDetails
     /// </summary>
     [KeyedComponent(typeof(IDetailsViewModel), ShipmentTypeCode.AmazonSWA)]
     [WpfView(typeof(AmazonSWAShipmentDetailsControl))]
-    public class AmazonSWAShipmentDetailsViewModel : OrderLookupViewModelBase, IDetailsViewModel, INotifyPropertyChanged, IDataErrorInfo
+    public class AmazonSWAShipmentDetailsViewModel : GenericSinglePackageShipmentDetailsViewModel, IDataErrorInfo
     {
         private readonly Func<DimensionsManagerDlg> getDimensionsManagerDlg;
         private readonly ICarrierShipmentAdapterOptionsProvider carrierShipmentAdapterOptionsProvider;

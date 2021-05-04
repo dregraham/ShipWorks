@@ -23,7 +23,7 @@ namespace ShipWorks.ApplicationCore.Settings
         // Maps list item name to the settings page that should be displayed for it
         private Dictionary<string, ISettingsPage> settingsPages = new Dictionary<string, ISettingsPage>();
         private readonly IMessenger messenger;
-        private IApiSettingsPage apiSettingsPage;
+        private readonly IApiSettingsPage apiSettingsPage;
 
         /// <summary>
         /// Indicates if warehouse is allowed
@@ -68,8 +68,12 @@ namespace ShipWorks.ApplicationCore.Settings
             if (UserSession.IsLoggedOn && UserSession.User.IsAdmin)
             {
                 settingsPages["Advanced"] = InitializeSettingsPage(new SettingsPageAdvanced());
+                
                 apiSettingsPage = scope.Resolve<IApiSettingsPage>();
                 settingsPages["API"] = InitializeSettingsPage(apiSettingsPage);
+                
+                var cubiscanSettingsPage = scope.Resolve<ICubiscanSettingsPage>();
+                settingsPages["Cubiscan"] = InitializeSettingsPage(cubiscanSettingsPage);
             }
 
             if (InterapptiveOnly.IsInterapptiveUser || InterapptiveOnly.MagicKeysDown)

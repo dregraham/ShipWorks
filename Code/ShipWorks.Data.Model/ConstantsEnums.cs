@@ -2393,6 +2393,24 @@ namespace ShipWorks.Data.Model
 		/// <summary></summary>
 		AmountOfFields
 	}
+	/// <summary>Index enum to fast-access EntityFields in the IEntityFields collection for the entity: Device.</summary>
+	public enum DeviceFieldIndex
+	{
+		///<summary>DeviceID. </summary>
+		DeviceID,
+		///<summary>ComputerID. </summary>
+		ComputerID,
+		///<summary>Model. </summary>
+		Model,
+		///<summary>IPAddress. </summary>
+		IPAddress,
+		///<summary>PortNumber. </summary>
+		PortNumber,
+		///<summary>RowVersion. </summary>
+		RowVersion,
+		/// <summary></summary>
+		AmountOfFields
+	}
 	/// <summary>Index enum to fast-access EntityFields in the IEntityFields collection for the entity: DhlExpressAccount.</summary>
 	public enum DhlExpressAccountFieldIndex
 	{
@@ -15107,6 +15125,8 @@ namespace ShipWorks.Data.Model
 		ConfigurationEntity,
 		///<summary>Customer</summary>
 		CustomerEntity,
+		///<summary>Device</summary>
+		DeviceEntity,
 		///<summary>DhlExpressAccount</summary>
 		DhlExpressAccountEntity,
 		///<summary>DhlExpressPackage</summary>
