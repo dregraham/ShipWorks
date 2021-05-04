@@ -8,6 +8,7 @@ using System.Windows.Input;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.CommandWpf;
 using Interapptive.Shared.ComponentRegistration;
+using Interapptive.Shared.UI;
 using ShipWorks.Common.IO.Hardware;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
@@ -26,6 +27,7 @@ namespace ShipWorks.UI.Controls.Settings.Cubiscan
         private readonly IDeviceManager deviceManager;
         private readonly ISqlAdapterFactory sqlAdapterFactory;
         private readonly Func<DeviceEntity, ICubiscanDeviceEditorViewModel> deviceEditorViewModelFactory;
+        private readonly IMessageHelper messageHelper;
         private ObservableCollection<DeviceEntity> devices;
         private List<ComputerEntity> computers;
         private DeviceEntity selectedDevice;
@@ -38,13 +40,15 @@ namespace ShipWorks.UI.Controls.Settings.Cubiscan
             IComputerManager computerManager, 
             IDeviceManager deviceManager,
             ISqlAdapterFactory sqlAdapterFactory,
-            Func<DeviceEntity, ICubiscanDeviceEditorViewModel> deviceEditorViewModelFactory)
+            Func<DeviceEntity, ICubiscanDeviceEditorViewModel> deviceEditorViewModelFactory,
+            IMessageHelper messageHelper)
         {
             this.owner = owner;
             this.computerManager = computerManager;
             this.deviceManager = deviceManager;
             this.sqlAdapterFactory = sqlAdapterFactory;
             this.deviceEditorViewModelFactory = deviceEditorViewModelFactory;
+            this.messageHelper = messageHelper;
 
             Devices = new ObservableCollection<DeviceEntity>();
             
@@ -102,12 +106,16 @@ namespace ShipWorks.UI.Controls.Settings.Cubiscan
         /// </summary>
         private void Delete()
         {
-            using (ISqlAdapter sqlAdapter = sqlAdapterFactory.Create())
+            if (messageHelper.ShowQuestion($"Do you want to delete the device for {SelectedDevice.Computer.Name}?") ==
+                DialogResult.Yes)
             {
-                deviceManager.Delete(SelectedDevice, sqlAdapter);
-            }
+                using (ISqlAdapter sqlAdapter = sqlAdapterFactory.Create())
+                {
+                    deviceManager.Delete(SelectedDevice, sqlAdapter);
+                }
 
-            Devices.Remove(SelectedDevice);
+                Devices.Remove(SelectedDevice);
+            }
         }
 
         /// <summary>
