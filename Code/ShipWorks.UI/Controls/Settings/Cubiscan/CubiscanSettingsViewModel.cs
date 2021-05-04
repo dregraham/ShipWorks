@@ -107,7 +107,7 @@ namespace ShipWorks.UI.Controls.Settings.Cubiscan
         private void Delete()
         {
             if (messageHelper.ShowQuestion($"Do you want to delete the device for {SelectedDevice.Computer.Name}?") ==
-                DialogResult.Yes)
+                DialogResult.OK)
             {
                 using (ISqlAdapter sqlAdapter = sqlAdapterFactory.Create())
                 {

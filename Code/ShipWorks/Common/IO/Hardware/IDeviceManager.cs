@@ -8,7 +8,7 @@ namespace ShipWorks.Common.IO.Hardware
     /// <summary>
     /// Manage devices
     /// </summary>
-    public interface IDeviceManager
+    public interface IDeviceManager : IManagerBase
     {
         /// <summary>
         /// All the devices - Read Only

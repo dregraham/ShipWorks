@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Windows.Forms;
 using Interapptive.Shared.Collections;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Data.Connection;
@@ -12,7 +13,7 @@ namespace ShipWorks.Common
     /// Base class for "Manager" classes. Those classes used mainly for keeping
     /// the local copy of the configuration up to date.
     /// </summary>
-    public abstract class ManagerBase<TEntity, TEntityInterface> where TEntity : EntityBase2
+    public abstract class ManagerBase<TEntity, TEntityInterface> : IManagerBase where TEntity : EntityBase2
     {
         private TableSynchronizer<TEntity> tableSynchronizer;
         private bool needCheckForChanges;
@@ -99,7 +100,14 @@ namespace ShipWorks.Common
             tableSynchronizer = new TableSynchronizer<TEntity>();
             readOnlyEntities = tableSynchronizer.EntityCollection.Select(AsReadOnly).ToReadOnly();
             CheckForChanges();
+
+            IsInitialized = true;
         }
+
+        /// <summary>
+        /// Is Initialized
+        /// </summary>
+        public bool IsInitialized { get; private set; }
 
         /// <summary>
         /// Update local version from the database

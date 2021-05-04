@@ -34,6 +34,11 @@ namespace ShipWorks.Common.IO.Hardware
         /// </summary>
         public CubiscanConfiguration GetConfiguration()
         {
+            if (!computerManager.IsInitialized || !deviceManager.IsInitialized)
+            {
+                return new CubiscanConfiguration(false, null, 0);
+            }
+            
             var computer = computerManager.GetComputer().ComputerID;
             var device = deviceManager.DevicesReadOnly.FirstOrDefault(d => d.ComputerID == computer);
             return new CubiscanConfiguration(device != null, device?.IPAddress, device?.PortNumber ?? 0);

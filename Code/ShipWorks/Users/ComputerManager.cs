@@ -32,7 +32,13 @@ namespace ShipWorks.Users
         {
             synchronizer = new TableSynchronizer<ComputerEntity>();
             InternalCheckForChanges();
+            IsInitialized = true;
         }
+
+        /// <summary>
+        /// Is the computer manager initialized
+        /// </summary>
+        public static bool IsInitialized { get; private set; } = false;
 
         /// <summary>
         /// Check for any changes made in the database since initialization or the last check

@@ -203,7 +203,7 @@ namespace ShipWorks.UI.Controls.Settings.Cubiscan
                 existingDevice.PortNumber == portValidationResult.Value &&
                 existingDevice.IPAddress == ipValidationResult.Value))
             {
-                errors.Add("There is a device currently to this IP address and port number.");
+                errors.Add("There is a device currently connected to this IP address and port number.");
             }
 
             return BuildValidationResult(errors, ipValidationResult, portValidationResult);

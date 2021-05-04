@@ -17,5 +17,10 @@ namespace ShipWorks.Users
         /// Gets list of computers
         /// </summary>
         List<ComputerEntity> GetComputers();
+        
+        /// <summary>
+        /// Has the computer manager been initialized
+        /// </summary>
+        bool IsInitialized { get; }
     }
 }
