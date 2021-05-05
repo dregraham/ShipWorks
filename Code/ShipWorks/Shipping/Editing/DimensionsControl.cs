@@ -9,6 +9,7 @@ using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.UI.Controls;
 using ShipWorks.Users;
 using ShipWorks.Users.Security;
+using ShipWorks.UI.Controls;
 
 namespace ShipWorks.Shipping.Editing
 {
@@ -85,14 +86,14 @@ namespace ShipWorks.Shipping.Editing
             {
                 if (shipmentWeightBox != null)
                 {
-                    shipmentWeightBox.WeightChanged -= new EventHandler(OnShipmentWeightChanged);
+                    shipmentWeightBox.WeightChanged -= new EventHandler<WeightChangedEventArgs>(OnShipmentWeightChanged);
                 }
 
                 shipmentWeightBox = value;
 
                 if (shipmentWeightBox != null)
                 {
-                    shipmentWeightBox.WeightChanged += new EventHandler(OnShipmentWeightChanged);
+                    shipmentWeightBox.WeightChanged += new EventHandler<WeightChangedEventArgs>(OnShipmentWeightChanged);
                 }
             }
         }
@@ -138,9 +139,25 @@ namespace ShipWorks.Shipping.Editing
         /// <summary>
         /// The user has manually changed the overal weight of the shipment
         /// </summary>
-        void OnShipmentWeightChanged(object sender, EventArgs e)
+        void OnShipmentWeightChanged(object sender, WeightChangedEventArgs e)
         {
             addToWeight.Checked = false;
+            if(e?.Result.HasVolumeDimensions ?? false)
+            {
+                suspendChangedEvent = true;
+                profiles.SelectedIndexChanged -= this.OnChangeProfile;
+                using (MultiValueScope scope = new MultiValueScope())
+                {
+                    profiles.ApplyMultiValue(0);
+                    length.ApplyMultiText(e.Result.Length.ToString());
+                    width.ApplyMultiText(e.Result.Width.ToString());
+                    height.ApplyMultiText(e.Result.Height.ToString());
+                    addToWeight.ApplyMultiCheck(false);
+                }
+                profiles.SelectedIndexChanged += this.OnChangeProfile;
+                suspendChangedEvent = false;
+                OnDimensionsChanged(null, null);
+            }
         }
 
         /// <summary>

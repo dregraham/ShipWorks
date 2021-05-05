@@ -223,6 +223,22 @@
       <DependentUpon>ApiSettingsHost.cs</DependentUpon>
     </Compile>
     <Compile Include="Controls\Settings\Api\ApiSettingsViewModel.cs" />
+    <Compile Include="Controls\Settings\Cubiscan\CubiscanDeviceEditorDialog.xaml.cs">
+      <DependentUpon>CubiscanDeviceEditorDialog.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\Settings\Cubiscan\CubiscanDeviceEditorViewModel.cs" />
+    <Compile Include="Controls\Settings\Cubiscan\CubiscanSettingsControl.xaml.cs">
+      <DependentUpon>CubiscanSettingsControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\Settings\Cubiscan\CubiscanSettingsHost.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\Settings\Cubiscan\CubiscanSettingsHost.Designer.cs">
+      <DependentUpon>CubiscanSettingsHost.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\Settings\Cubiscan\CubiscanSettingsViewModel.cs" />
+    <Compile Include="Controls\Settings\Cubiscan\ICubiscanDeviceEditorViewModel.cs" />
+    <Compile Include="Controls\Settings\Cubiscan\ICubiscanSettingsViewModel.cs" />
     <Compile Include="Controls\Settings\DesignModeWarehouseListViewModel.cs" />
     <Compile Include="Controls\Settings\DesignModeWarehouseSettingsViewModel.cs" />
     <Compile Include="Controls\Settings\WarehouseListDialog.xaml.cs">
@@ -416,6 +432,8 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Controls\Settings\Cubiscan\CubiscanDeviceEditorDialog.xaml" />
+    <Page Include="Controls\Settings\Cubiscan\CubiscanSettingsControl.xaml" />
     <Page Include="Controls\Settings\WarehouseListDialog.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -631,6 +649,9 @@
     <EmbeddedResource Include="Controls\Settings\Api\ApiSettingsHost.resx">
       <DependentUpon>ApiSettingsHost.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Controls\Settings\Cubiscan\CubiscanSettingsHost.resx">
+      <DependentUpon>CubiscanSettingsHost.cs</DependentUpon>
+    </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\add-carrier.png" />
@@ -670,7 +691,6 @@
     <Resource Include="Resources\endicia.png" />
     <Resource Include="Resources\ontrac.png" />
   </ItemGroup>
-  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>

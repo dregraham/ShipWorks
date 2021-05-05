@@ -1,4 +1,6 @@
-﻿namespace ShipWorks.Shipping.Editing
+﻿using ShipWorks.UI.Controls;
+
+namespace ShipWorks.Shipping.Editing
 {
     partial class DimensionsControl
     {
@@ -74,7 +76,7 @@
             this.weight.Size = new System.Drawing.Size(87, 24);
             this.weight.TabIndex = 7;
             this.weight.Weight = 0;
-            this.weight.WeightChanged += new System.EventHandler(this.OnDimensionsChanged);
+            this.weight.WeightChanged += new System.EventHandler<WeightChangedEventArgs>(this.OnDimensionsChanged);
             // 
             // linkManageProfiles
             // 

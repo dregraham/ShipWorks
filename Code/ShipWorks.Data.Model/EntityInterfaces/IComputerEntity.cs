@@ -49,6 +49,7 @@ namespace ShipWorks.Data.Model.EntityInterfaces
         
         
         IEnumerable<IAuditEntity> Audit { get; }
+        IEnumerable<IDeviceEntity> Device { get; }
         IEnumerable<IServiceStatusEntity> ServiceStatus { get; }
 
         
@@ -79,6 +80,7 @@ namespace ShipWorks.Data.Model.EntityClasses
         
         
         IEnumerable<IAuditEntity> IComputerEntity.Audit => Audit;
+        IEnumerable<IDeviceEntity> IComputerEntity.Device => Device;
         IEnumerable<IServiceStatusEntity> IComputerEntity.ServiceStatus => ServiceStatus;
 
         /// <summary>

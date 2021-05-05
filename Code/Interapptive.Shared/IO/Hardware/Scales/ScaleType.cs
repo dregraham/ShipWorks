@@ -12,6 +12,7 @@ namespace Interapptive.Shared.IO.Hardware.Scales
     {
         None,
         Usb,
-        Serial
+        Serial,
+        Cubiscan
     }
 }

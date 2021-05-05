@@ -8,7 +8,9 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Windows.Interop;
 using ActiproSoftware.SyntaxEditor;
+using Autofac;
 using Interapptive.Shared.Data;
+using Interapptive.Shared.IO.Hardware;
 using Interapptive.Shared.IO.Hardware.Scales;
 using Interapptive.Shared.Metrics;
 using Interapptive.Shared.UI;
@@ -154,7 +156,7 @@ namespace ShipWorks.ApplicationCore.ExecutionMode
 
             // This kicks off scale detection when SW starts instead of waiting for the the scale to initialize the first time
             // it is used which can take upwards to 1 minute.
-            ScaleReader.Initialize();
+            ScaleReader.Initialize(IoC.UnsafeGlobalLifetimeScope.Resolve<ICubiscanConfigurationManager>());
 
             // Initialize window state
             WindowStateSaver.Initialize(Path.Combine(DataPath.WindowsUserSettings, "windows.xml"));

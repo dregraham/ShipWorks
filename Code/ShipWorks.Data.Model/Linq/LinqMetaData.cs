@@ -188,6 +188,9 @@ namespace ShipWorks.Data.Model.Linq
 				case ShipWorks.Data.Model.EntityType.CustomerEntity:
 					toReturn = this.Customer;
 					break;
+				case ShipWorks.Data.Model.EntityType.DeviceEntity:
+					toReturn = this.Device;
+					break;
 				case ShipWorks.Data.Model.EntityType.DhlExpressAccountEntity:
 					toReturn = this.DhlExpressAccount;
 					break;
@@ -1054,6 +1057,12 @@ namespace ShipWorks.Data.Model.Linq
 		public DataSource2<CustomerEntity> Customer
 		{
 			get { return new DataSource2<CustomerEntity>(_adapterToUse, new ElementCreator(), _customFunctionMappings, _contextToUse); }
+		}
+		
+		/// <summary>returns the datasource to use in a Linq query when targeting DeviceEntity instances in the database.</summary>
+		public DataSource2<DeviceEntity> Device
+		{
+			get { return new DataSource2<DeviceEntity>(_adapterToUse, new ElementCreator(), _customFunctionMappings, _contextToUse); }
 		}
 		
 		/// <summary>returns the datasource to use in a Linq query when targeting DhlExpressAccountEntity instances in the database.</summary>

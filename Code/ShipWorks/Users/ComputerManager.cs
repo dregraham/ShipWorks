@@ -89,6 +89,14 @@ namespace ShipWorks.Users
         }
 
         /// <summary>
+        /// Returns this computer
+        /// </summary>
+        public static ComputerEntity GetComputer()
+        {
+            return Computers.SingleOrDefault((c => c.Identifier == ShipWorksSession.ComputerID));
+        }
+
+        /// <summary>
         /// Gets the computer that Sql Server is currently running on.
         /// </summary>
         public static ComputerEntity SqlServerComputer

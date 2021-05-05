@@ -254,8 +254,12 @@
     <Compile Include="IInterapptiveOnly.cs" />
     <Compile Include="InterapptiveOnlyWrapper.cs" />
     <Compile Include="IO\FileSelector.cs" />
+    <Compile Include="IO\Hardware\DeviceModel.cs" />
+    <Compile Include="IO\Hardware\ICubiscanConfigurationManager.cs" />
     <Compile Include="IO\Hardware\IVirtualKeyboard.cs" />
+    <Compile Include="IO\Hardware\Scales\CubiscanConfiguration.cs" />
     <Compile Include="IO\Hardware\Scales\IScaleReader.cs" />
+    <Compile Include="IO\Hardware\Scales\ScaleCubiscanReader.cs" />
     <Compile Include="IO\Hardware\Scales\ScaleReaderWrapper.cs" />
     <Compile Include="IO\Hardware\VirtualKeyboard.cs" />
     <Compile Include="IO\IFileSelector.cs" />
@@ -276,7 +280,9 @@
     <Compile Include="Net\IHttpRequestSubmitter.cs" />
     <Compile Include="Net\IHttpVariableCollection.cs" />
     <Compile Include="Net\IHttpVariableRequestSubmitter.cs" />
+    <Compile Include="Net\IHttpValidator.cs" />
     <Compile Include="Net\IWebHelper.cs" />
+    <Compile Include="Net\HttpValidator.cs" />
     <Compile Include="Net\RestSharp\IRestClientFactory.cs" />
     <Compile Include="Net\RestSharp\IRestRequestFactory.cs" />
     <Compile Include="Net\RestSharp\RestClientFactory.cs" />

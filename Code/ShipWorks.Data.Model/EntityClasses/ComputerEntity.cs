@@ -33,6 +33,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 	{
 		#region Class Member Declarations
 		private EntityCollection<AuditEntity> _audit;
+		private EntityCollection<DeviceEntity> _device;
 		private EntityCollection<ServiceStatusEntity> _serviceStatus;
 
 		// __LLBLGENPRO_USER_CODE_REGION_START PrivateMembers
@@ -48,6 +49,8 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			/// <summary>Member name Audit</summary>
 			public static readonly string Audit = "Audit";
+			/// <summary>Member name Device</summary>
+			public static readonly string Device = "Device";
 			/// <summary>Member name ServiceStatus</summary>
 			public static readonly string ServiceStatus = "ServiceStatus";
 		}
@@ -108,6 +111,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 			if(SerializationHelper.Optimization != SerializationOptimization.Fast) 
 			{
 				_audit = (EntityCollection<AuditEntity>)info.GetValue("_audit", typeof(EntityCollection<AuditEntity>));
+				_device = (EntityCollection<DeviceEntity>)info.GetValue("_device", typeof(EntityCollection<DeviceEntity>));
 				_serviceStatus = (EntityCollection<ServiceStatusEntity>)info.GetValue("_serviceStatus", typeof(EntityCollection<ServiceStatusEntity>));
 				this.FixupDeserialization(FieldInfoProviderSingleton.GetInstance());
 			}
@@ -126,6 +130,9 @@ namespace ShipWorks.Data.Model.EntityClasses
 			{
 				case "Audit":
 					this.Audit.Add((AuditEntity)entity);
+					break;
+				case "Device":
+					this.Device.Add((DeviceEntity)entity);
 					break;
 				case "ServiceStatus":
 					this.ServiceStatus.Add((ServiceStatusEntity)entity);
@@ -154,6 +161,9 @@ namespace ShipWorks.Data.Model.EntityClasses
 			{
 				case "Audit":
 					toReturn.Add(Relations.AuditEntityUsingComputerID);
+					break;
+				case "Device":
+					toReturn.Add(Relations.DeviceEntityUsingComputerID);
 					break;
 				case "ServiceStatus":
 					toReturn.Add(Relations.ServiceStatusEntityUsingComputerID);
@@ -189,6 +199,9 @@ namespace ShipWorks.Data.Model.EntityClasses
 				case "Audit":
 					this.Audit.Add((AuditEntity)relatedEntity);
 					break;
+				case "Device":
+					this.Device.Add((DeviceEntity)relatedEntity);
+					break;
 				case "ServiceStatus":
 					this.ServiceStatus.Add((ServiceStatusEntity)relatedEntity);
 					break;
@@ -207,6 +220,9 @@ namespace ShipWorks.Data.Model.EntityClasses
 			{
 				case "Audit":
 					this.PerformRelatedEntityRemoval(this.Audit, relatedEntity, signalRelatedEntityManyToOne);
+					break;
+				case "Device":
+					this.PerformRelatedEntityRemoval(this.Device, relatedEntity, signalRelatedEntityManyToOne);
 					break;
 				case "ServiceStatus":
 					this.PerformRelatedEntityRemoval(this.ServiceStatus, relatedEntity, signalRelatedEntityManyToOne);
@@ -239,6 +255,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			List<IEntityCollection2> toReturn = new List<IEntityCollection2>();
 			toReturn.Add(this.Audit);
+			toReturn.Add(this.Device);
 			toReturn.Add(this.ServiceStatus);
 			return toReturn;
 		}
@@ -252,6 +269,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 			if (SerializationHelper.Optimization != SerializationOptimization.Fast) 
 			{
 				info.AddValue("_audit", ((_audit!=null) && (_audit.Count>0) && !this.MarkedForDeletion)?_audit:null);
+				info.AddValue("_device", ((_device!=null) && (_device.Count>0) && !this.MarkedForDeletion)?_device:null);
 				info.AddValue("_serviceStatus", ((_serviceStatus!=null) && (_serviceStatus.Count>0) && !this.MarkedForDeletion)?_serviceStatus:null);
 			}
 			// __LLBLGENPRO_USER_CODE_REGION_START GetObjectInfo
@@ -287,6 +305,15 @@ namespace ShipWorks.Data.Model.EntityClasses
 			return bucket;
 		}
 
+		/// <summary> Creates a new IRelationPredicateBucket object which contains the predicate expression and relation collection to fetch the related entities of type 'Device' to this entity.</summary>
+		/// <returns></returns>
+		public virtual IRelationPredicateBucket GetRelationInfoDevice()
+		{
+			IRelationPredicateBucket bucket = new RelationPredicateBucket();
+			bucket.PredicateExpression.Add(new FieldCompareValuePredicate(DeviceFields.ComputerID, null, ComparisonOperator.Equal, this.ComputerID));
+			return bucket;
+		}
+
 		/// <summary> Creates a new IRelationPredicateBucket object which contains the predicate expression and relation collection to fetch the related entities of type 'ServiceStatus' to this entity.</summary>
 		/// <returns></returns>
 		public virtual IRelationPredicateBucket GetRelationInfoServiceStatus()
@@ -309,6 +336,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			base.AddToMemberEntityCollectionsQueue(collectionsQueue);
 			collectionsQueue.Enqueue(this._audit);
+			collectionsQueue.Enqueue(this._device);
 			collectionsQueue.Enqueue(this._serviceStatus);
 		}
 		
@@ -318,6 +346,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			base.GetFromMemberEntityCollectionsQueue(collectionsQueue);
 			this._audit = (EntityCollection<AuditEntity>) collectionsQueue.Dequeue();
+			this._device = (EntityCollection<DeviceEntity>) collectionsQueue.Dequeue();
 			this._serviceStatus = (EntityCollection<ServiceStatusEntity>) collectionsQueue.Dequeue();
 
 		}
@@ -328,6 +357,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			bool toReturn = false;
 			toReturn |=(this._audit != null);
+			toReturn |=(this._device != null);
 			toReturn |=(this._serviceStatus != null);
 			return toReturn ? true : base.HasPopulatedMemberEntityCollections();
 		}
@@ -339,6 +369,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			base.CreateMemberEntityCollectionsQueue(collectionsQueue, requiredQueue);
 			collectionsQueue.Enqueue(requiredQueue.Dequeue() ? new EntityCollection<AuditEntity>(EntityFactoryCache2.GetEntityFactory(typeof(AuditEntityFactory))) : null);
+			collectionsQueue.Enqueue(requiredQueue.Dequeue() ? new EntityCollection<DeviceEntity>(EntityFactoryCache2.GetEntityFactory(typeof(DeviceEntityFactory))) : null);
 			collectionsQueue.Enqueue(requiredQueue.Dequeue() ? new EntityCollection<ServiceStatusEntity>(EntityFactoryCache2.GetEntityFactory(typeof(ServiceStatusEntityFactory))) : null);
 		}
 #endif
@@ -348,6 +379,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			Dictionary<string, object> toReturn = new Dictionary<string, object>();
 			toReturn.Add("Audit", _audit);
+			toReturn.Add("Device", _device);
 			toReturn.Add("ServiceStatus", _serviceStatus);
 			return toReturn;
 		}
@@ -417,6 +449,13 @@ namespace ShipWorks.Data.Model.EntityClasses
 		public static IPrefetchPathElement2 PrefetchPathAudit
 		{
 			get	{ return new PrefetchPathElement2( new EntityCollection<AuditEntity>(EntityFactoryCache2.GetEntityFactory(typeof(AuditEntityFactory))), (IEntityRelation)GetRelationsForField("Audit")[0], (int)ShipWorks.Data.Model.EntityType.ComputerEntity, (int)ShipWorks.Data.Model.EntityType.AuditEntity, 0, null, null, null, null, "Audit", SD.LLBLGen.Pro.ORMSupportClasses.RelationType.OneToMany);	}
+		}
+
+		/// <summary> Creates a new PrefetchPathElement2 object which contains all the information to prefetch the related entities of type 'Device' for this entity.</summary>
+		/// <returns>Ready to use IPrefetchPathElement2 implementation.</returns>
+		public static IPrefetchPathElement2 PrefetchPathDevice
+		{
+			get	{ return new PrefetchPathElement2( new EntityCollection<DeviceEntity>(EntityFactoryCache2.GetEntityFactory(typeof(DeviceEntityFactory))), (IEntityRelation)GetRelationsForField("Device")[0], (int)ShipWorks.Data.Model.EntityType.ComputerEntity, (int)ShipWorks.Data.Model.EntityType.DeviceEntity, 0, null, null, null, null, "Device", SD.LLBLGen.Pro.ORMSupportClasses.RelationType.OneToMany);	}
 		}
 
 		/// <summary> Creates a new PrefetchPathElement2 object which contains all the information to prefetch the related entities of type 'ServiceStatus' for this entity.</summary>
@@ -500,6 +539,14 @@ namespace ShipWorks.Data.Model.EntityClasses
 		public virtual EntityCollection<AuditEntity> Audit
 		{
 			get { return GetOrCreateEntityCollection<AuditEntity, AuditEntityFactory>("Computer", true, false, ref _audit);	}
+		}
+
+		/// <summary> Gets the EntityCollection with the related entities of type 'DeviceEntity' which are related to this entity via a relation of type '1:n'. If the EntityCollection hasn't been fetched yet, the collection returned will be empty.<br/><br/></summary>
+		[TypeContainedAttribute(typeof(DeviceEntity))]
+		[DataMember]
+		public virtual EntityCollection<DeviceEntity> Device
+		{
+			get { return GetOrCreateEntityCollection<DeviceEntity, DeviceEntityFactory>("Computer", true, false, ref _device);	}
 		}
 
 		/// <summary> Gets the EntityCollection with the related entities of type 'ServiceStatusEntity' which are related to this entity via a relation of type '1:n'. If the EntityCollection hasn't been fetched yet, the collection returned will be empty.<br/><br/></summary>

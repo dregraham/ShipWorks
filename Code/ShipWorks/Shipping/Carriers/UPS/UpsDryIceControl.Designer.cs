@@ -1,4 +1,6 @@
-﻿namespace ShipWorks.Shipping.Carriers.UPS
+﻿using ShipWorks.UI.Controls;
+
+namespace ShipWorks.Shipping.Carriers.UPS
 {
     partial class UpsDryIceControl
     {
@@ -125,7 +127,7 @@
             this.weight.Size = new System.Drawing.Size(269, 21);
             this.weight.TabIndex = 3;
             this.weight.Weight = 0D;
-            this.weight.WeightChanged += new System.EventHandler(this.OnRateCriteriaChanged);
+            this.weight.WeightChanged += new System.EventHandler<WeightChangedEventArgs>(this.OnRateCriteriaChanged);
             //
             // UpsDryIceControl
             //

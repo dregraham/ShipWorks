@@ -17,6 +17,7 @@ using ShipWorks.Common.IO.KeyboardShortcuts;
 using ShipWorks.Common.IO.KeyboardShortcuts.Messages;
 using ShipWorks.Core.Messaging;
 using ShipWorks.IO.KeyboardShortcuts;
+using ShipWorks.Messaging.Messages;
 using ShipWorks.UI.Controls.Design;
 
 namespace ShipWorks.UI.Controls.Weight
@@ -125,6 +126,11 @@ namespace ShipWorks.UI.Controls.Weight
             remove { RemoveHandler(ScaleReadEvent, value); }
         }
 
+        /// <summary>
+        /// Function gets called when dimensions received from a dimensionalizer
+        /// </summary>
+        public Action<ScaleReadResult> ChangeDimensions { get; set; }
+        
         /// <summary>
         /// Most recent error message
         /// </summary>
@@ -256,6 +262,15 @@ namespace ShipWorks.UI.Controls.Weight
                 }
 
                 SetCurrentValue(WeightProperty, result.Weight);
+
+                // Only send the message if this is a field that supports autoweight shortcut.
+                // We only accept the shortcut when it is a shipment field. This keeps us from
+                // updating dimensions in the customs control 
+                if (AcceptApplyWeightKeyboardShortcut)
+                {
+                    Messenger.Current.Send<ChangeDimensionsMessage>(new ChangeDimensionsMessage(this, result));
+                    ChangeDimensions(result);
+                }
 
                 RaiseEvent(new RoutedEventArgs(ScaleReadEvent, this));
             }

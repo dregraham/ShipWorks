@@ -45,6 +45,8 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
             
             Audit = source.Audit?.Select(x => x.AsReadOnly(objectMap)).OfType<IAuditEntity>().ToReadOnly() ??
                 Enumerable.Empty<IAuditEntity>();
+            Device = source.Device?.Select(x => x.AsReadOnly(objectMap)).OfType<IDeviceEntity>().ToReadOnly() ??
+                Enumerable.Empty<IDeviceEntity>();
             ServiceStatus = source.ServiceStatus?.Select(x => x.AsReadOnly(objectMap)).OfType<IServiceStatusEntity>().ToReadOnly() ??
                 Enumerable.Empty<IServiceStatusEntity>();
 
@@ -80,6 +82,8 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
         
         
         public IEnumerable<IAuditEntity> Audit { get; }
+        
+        public IEnumerable<IDeviceEntity> Device { get; }
         
         public IEnumerable<IServiceStatusEntity> ServiceStatus { get; }
         

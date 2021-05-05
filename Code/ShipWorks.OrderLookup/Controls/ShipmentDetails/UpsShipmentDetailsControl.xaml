@@ -196,7 +196,8 @@
             AcceptApplyWeightKeyboardShortcut="True"
             ErrorMessage="{Binding WeightErrorMessage}"
             Style="{StaticResource OrderLookupWeightControl}"
-            Weight="{Binding SelectedPackageWeight, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=true, NotifyOnValidationError=true}" />
+            Weight="{Binding SelectedPackageWeight, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=true, NotifyOnValidationError=true}"
+            ChangeDimensions="{Binding ChangeDimensions}" />
 
         <TextBlock
             Grid.Row="7"

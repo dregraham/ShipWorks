@@ -74,11 +74,27 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ShipmentControl
             baseSubscriptions = new CompositeDisposable(
                 messenger.OfType<DimensionsProfilesChangedMessage>().Subscribe(ManageDimensionsProfiles),
                 messenger.OfType<ShippingSettingsChangedMessage>().Subscribe(HandleShippingSettingsChangedMessage),
+                messenger.OfType<ChangeDimensionsMessage>().Subscribe(HandleChangeDimensionsMessage),
                 handler.PropertyChangingStream
                     .Where(x => nameof(SelectedPackageAdapter).Equals(x, StringComparison.Ordinal))
                     .Subscribe(_ => SaveDimensionsToSelectedPackageAdapter()),
                 handler.Where(x => nameof(SelectedPackageAdapter).Equals(x, StringComparison.Ordinal))
                     .Subscribe(_ => LoadDimensionsFromSelectedPackageAdapter()));
+        }
+
+        /// <summary>
+        /// Handle the change dimensions message
+        /// </summary>
+        private void HandleChangeDimensionsMessage(ChangeDimensionsMessage message)
+        {
+            if(message.ScaleReadResult.HasVolumeDimensions)
+            {
+                UpdateSelectedDimensionsProfile(0);
+                DimsLength = message.ScaleReadResult.Length;
+                DimsWidth = message.ScaleReadResult.Width;
+                DimsHeight = message.ScaleReadResult.Height;
+                DimsAddWeight = false;
+            }
         }
 
         /// <summary>
@@ -369,9 +385,25 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ShipmentControl
         /// </summary>
         private void UpdateSelectedDimensionsProfile()
         {
-            SelectedDimensionsProfile = DimensionsProfiles.Any(dp => dp.DimensionsProfileID == SelectedPackageAdapter?.DimsProfileID) ?
-                DimensionsProfiles.FirstOrDefault(dp => dp.DimensionsProfileID == SelectedPackageAdapter?.DimsProfileID) :
-                DimensionsProfiles.FirstOrDefault(dp => dp.DimensionsProfileID == 0);
+            if (DimensionsProfiles.Any(dp => dp.DimensionsProfileID == SelectedPackageAdapter?.DimsProfileID))
+            {
+                UpdateSelectedDimensionsProfile(SelectedPackageAdapter?.DimsProfileID ?? 0);
+            }
+            else
+            {
+                UpdateSelectedDimensionsProfile(0);
+            }
+        }
+
+        /// <summary>
+        /// Updates the selected dimensions profile based on parameter
+        /// </summary>
+        /// <remarks>
+        /// Will throw if profile doesn't exist
+        /// </remarks>
+        private void UpdateSelectedDimensionsProfile(long profileId)
+        {
+            SelectedDimensionsProfile = DimensionsProfiles.First(dp => dp.DimensionsProfileID == profileId);
         }
 
         /// <summary>
@@ -394,7 +426,9 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ShipmentControl
         private void RefreshDimensionsProfiles()
         {
             DimensionsProfiles = new ObservableCollection<IDimensionsProfileEntity>();
-            foreach (var dimensionsProfileEntity in dimensionsManager.ProfilesReadOnly(SelectedPackageAdapter))
+
+            var profiles = dimensionsManager.ProfilesReadOnly(SelectedPackageAdapter).ToList();
+            foreach (var dimensionsProfileEntity in profiles)
             {
                 DimensionsProfiles.Add(dimensionsProfileEntity);
             }

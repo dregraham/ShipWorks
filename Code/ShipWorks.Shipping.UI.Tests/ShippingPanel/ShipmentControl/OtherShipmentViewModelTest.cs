@@ -5,6 +5,7 @@ using Autofac.Extras.Moq;
 using Moq;
 using ShipWorks.Core.Messaging;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Shipping.Carriers.Other;
 using ShipWorks.Shipping.Carriers.UPS.Enums;
 using ShipWorks.Shipping.Services;
@@ -26,6 +27,23 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel.ShipmentControl
         {
             shipment.Other = new OtherShipmentEntity(shipment.ShipmentID);
             mock = AutoMockExtensions.GetLooseThatReturnsMocks();
+
+            
+            var dimProfiles = new List<IDimensionsProfileEntity>()
+            {
+                new DimensionsProfileEntity(0)
+                {
+                    Name = "Profile 1",
+                    Length = 6,
+                    Width = 4,
+                    Height = 1,
+                    Weight = 0.5
+                },
+                new DimensionsProfileEntity()
+            };
+
+            var dimensionsManager = mock.Mock<IDimensionsManager>();
+            dimensionsManager.Setup(dm => dm.ProfilesReadOnly(It.IsAny<IPackageAdapter>())).Returns(dimProfiles);
         }
 
         [Fact]
