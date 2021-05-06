@@ -273,7 +273,7 @@ namespace ShipWorks.Stores.Platforms.Magento.OnlineUpdating
             request.Items = itemsToProcess.Select(i => new ShipmentItem()
             {
                 Qty = GetQuantity(i.OrderItem, i.MagentoItem, originalOrderID),
-                OrderItemId = i.MagentoItem.ItemId
+                OrderItemId = i.MagentoItem.ParentItemId == null ? i.MagentoItem.ItemId : i.MagentoItem.ParentItemId.Value
             }).ToList();
 
             return JsonConvert.SerializeObject(request);
