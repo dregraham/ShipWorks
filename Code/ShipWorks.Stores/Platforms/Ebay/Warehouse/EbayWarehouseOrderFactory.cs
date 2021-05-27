@@ -59,10 +59,10 @@ namespace ShipWorks.Stores.Platforms.Ebay.Warehouse
             string orderID = ebayWarehouseOrder.EbayOrderID ?? warehouseOrder.OrderNumber;
             var items = warehouseOrder.Items.Select(i => i.AdditionalData[ebayEntryKey].ToObject<EbayWarehouseItem>());
             var item = items?.FirstOrDefault();
-            var transactionId = item.EbayTransactionID;
-            var itemId = item.EbayItemID;
+            var transactionId = item?.EbayTransactionID.ToString() ?? string.Empty;
+            var itemId = item?.EbayItemID.ToString() ?? string.Empty;
 
-           return EbayOrderIdentifier.GetIdentifier(orderID, transactionId.ToString(), itemId.ToString());
+           return EbayOrderIdentifier.GetIdentifier(orderID, transactionId, itemId);
         }
 
         /// <summary>
