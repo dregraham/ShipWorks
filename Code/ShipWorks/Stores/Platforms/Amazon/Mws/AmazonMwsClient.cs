@@ -18,6 +18,7 @@ using Interapptive.Shared.Security;
 using Interapptive.Shared.Threading;
 using Interapptive.Shared.Utility;
 using log4net;
+using ShipEngine.ApiClient.Model;
 using ShipWorks.ApplicationCore.Licensing.WebClientEnvironments;
 using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Data.Connection;
@@ -51,6 +52,7 @@ namespace ShipWorks.Stores.Platforms.Amazon.Mws
         private readonly IShippingManager shippingManager;
         private readonly WebClientEnvironmentFactory webClientEnvironmentFactory;
         private readonly AmazonStoreType storeType;
+        private static readonly HashSet<string> validCarrierCodes = GetValidCarrierCodes();
 
         /// <summary>
         /// Constructor
@@ -248,7 +250,7 @@ namespace ShipWorks.Stores.Platforms.Amazon.Mws
             }
             while (nextToken != null && nextToken.Length > 0);
         }
-
+        
         /// <summary>
         /// Reads the NextToken for use in subsequent requests
         /// </summary>
@@ -510,36 +512,85 @@ namespace ShipWorks.Stores.Platforms.Amazon.Mws
         {
             using (writer.WriteStartElementDisposable("FulfillmentData"))
             {
-                // Per an email on 9/11/07, Amazon will only respond correctly if the code is in upper case, and if its also apart of the method.
-                ShipmentTypeCode shipmentType = (ShipmentTypeCode) shipment.ShipmentType;
-                string trackingNumber = shipment.TrackingNumber;
-
                 // Get the service used and strip out any non-ascii characters
                 string serviceUsed = shippingManager.GetOverriddenServiceUsed(shipment);
                 serviceUsed = Regex.Replace(serviceUsed, @"[^\u001F-\u007F]", string.Empty);
 
-                // Get the carrier based on what we currently know, we'll check it in the DetermineAlternateTracking below
-                string carrier = GetCarrierName(shipment, shipmentType);
-
-                // Adjust tracking details per Mail Innovations and others
-                WorldShipUtility.DetermineAlternateTracking(shipment, (track, service) =>
+                (string carrier, string trackingNumber) = GetCarrierNameAndTrackingNumber(shipment);
+                if (validCarrierCodes.Contains(carrier))
                 {
-                    if (track.Length > 0)
-                    {
-                        trackingNumber = track;
-                        carrier = "UPS Mail Innovations";
-                    }
-                    else
-                    {
-                        shipmentType = ShipmentTypeCode.Other;
-                    }
-                });
+                    writer.WriteElementString("CarrierCode", carrier);
+                }
+                else
+                {
+                    writer.WriteElementString("CarrierCode", "Other");
+                    writer.WriteElementString("CarrierName", carrier);
+                }
 
-                writer.WriteElementString("CarrierName", carrier);
                 writer.WriteElementString("ShippingMethod", serviceUsed);
-
                 writer.WriteElementString("ShipperTrackingNumber", trackingNumber);
             }
+        }
+        
+        /// <summary>
+        /// List of valid carrier codes from: https://sellercentral.amazon.com/gp/help/help.html?itemID=G200137470&
+        /// </summary>
+        /// <returns></returns>
+        private static HashSet<string> GetValidCarrierCodes() =>
+            new HashSet<string>
+            {
+                "Blue Package",
+                "Canada Post",
+                "City Link",
+                "DHL",
+                "DHL Global Mail",
+                "Fastway",
+                "FedEx",
+                "FedEx SmartPost",
+                "GLS",
+                "GO!",
+                "Hermes Logistik Gruppe",
+                "Newgistics",
+                "NipponExpress",
+                "OnTrac",
+                "OSM",
+                "Parcelforce",
+                "Royal Mail",
+                "SagawaExpress",
+                "Streamlite",
+                "Target",
+                "TNT",
+                "UPS",
+                "UPS Mail Innovations",
+                "USPS",
+                "YamatoTransport"
+            };
+
+        public (string carrier, string trackingNumber) GetCarrierNameAndTrackingNumber(ShipmentEntity shipment)
+        {
+            // Per an email on 9/11/07, Amazon will only respond correctly if the code is in upper case, and if its also apart of the method.
+            ShipmentTypeCode shipmentType = (ShipmentTypeCode) shipment.ShipmentType;
+            
+            string trackingNumber = shipment.TrackingNumber;
+            
+            // Get the carrier based on what we currently know, we'll check it in the DetermineAlternateTracking below
+            string carrier = GetCarrierName(shipment, shipmentType);
+
+            // Adjust tracking details per Mail Innovations and others
+            WorldShipUtility.DetermineAlternateTracking(shipment, (track, service) =>
+            {
+                if (track.Length > 0)
+                {
+                    trackingNumber = track;
+                    carrier = "UPS Mail Innovations";
+                }
+                else
+                {
+                    shipmentType = ShipmentTypeCode.Other;
+                }
+            });
+
+            return (carrier, trackingNumber);
         }
 
         /// <summary>
