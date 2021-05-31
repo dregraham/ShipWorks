@@ -1565,6 +1565,19 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
         }
 
         /// <summary>
+        /// FinishAccountVerification
+        /// </summary>
+        public void FinishAccountVerification(UspsAccountEntity account)
+        {
+            using (ISwsimV90 webService = CreateWebService("GetContractType"))
+            {
+                CheckCertificate(webService.Url);
+
+                webService.FinishAccountVerification(GetCredentials(account));
+            }
+        }
+
+        /// <summary>
         /// The internal GetContractType implementation that is intended to be wrapped by the auth wrapper
         /// </summary>
         private UspsAccountContractType InternalGetContractType(UspsAccountEntity account)

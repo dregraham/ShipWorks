@@ -1,4 +1,5 @@
 ﻿using System;
+using Interapptive.Shared.Security;
 using ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net;
 
 namespace ShipWorks.Shipping.Carriers.Postal.Usps.WebServices
@@ -8,6 +9,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.WebServices
     /// </summary>
     public partial class SwsimV90 : ISwsimV90
     {
+        private const string salt = "StampsVCode";
+        
         /// <summary>
         /// Get account info
         /// </summary>
@@ -19,6 +22,14 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.WebServices
             GetAccountInfo(credentials, out accountInfo, out address, out string customerEmail, out string accountStatus, out DateAdvance dateAdvanceConfig, out string verificationPhoneNumber, out string verificationPhoneExtension);
 
             return new AccountInfoResult(accountInfo, address, customerEmail);
+        }
+
+        /// <summary>
+        /// Finish Account Verification - only use if SMS verified account (not legacy) - also make sure to check the cert before
+        /// </summary>
+        public void FinishAccountVerification(Credentials credentials)
+        {
+            FinishAccountVerification(credentials, SecureText.Decrypt("WAkHl82fviriKU0aikqfFoj7UvCFtphC", salt));   
         }
 
         /// <summary>

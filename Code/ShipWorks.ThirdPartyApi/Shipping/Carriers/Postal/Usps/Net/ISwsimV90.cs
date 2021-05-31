@@ -148,5 +148,10 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
         /// Set automatic funding settings
         /// </summary>
         string SetAutoBuy(object Item, AutoBuySettings AutoBuySettings);
+
+        /// <summary>
+        /// Finish Account Verification - only use if SMS verified account (not legacy) - also make sure to check the cert before
+        /// </summary>
+        void FinishAccountVerification(Credentials credentials);
     }
 }

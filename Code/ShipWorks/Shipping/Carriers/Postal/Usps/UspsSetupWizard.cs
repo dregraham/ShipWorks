@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using Autofac;
@@ -11,6 +12,7 @@ using Interapptive.Shared.Net;
 using Interapptive.Shared.Security;
 using Interapptive.Shared.UI;
 using Interapptive.Shared.Utility;
+using log4net;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.ApplicationCore;
 using ShipWorks.ApplicationCore.Licensing;
@@ -40,6 +42,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
     [Component(RegistrationType.Self)]
     public partial class UspsSetupWizard : WizardForm, IShipmentTypeSetupWizard
     {
+        static readonly ILog log = LogManager.GetLogger(typeof(UspsSetupWizard));
+        
         private UspsRegistration uspsRegistration;
         private readonly ShipmentTypeCode shipmentTypeCode = ShipmentTypeCode.Usps;
         private readonly Dictionary<long, long> profileMap = new Dictionary<long, long>();
@@ -432,6 +436,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
 
                     // Save the USPS account now that it has been successfully created
                     SaveUspsAccount(uspsRegistration.UserName, SecureText.Encrypt(uspsRegistration.Password, uspsRegistration.UserName));
+                    
+                    FinishRegistration();
 
                     registrationComplete = true;
                 }
@@ -445,6 +451,46 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
             {
                 MessageHelper.ShowError(this, ex.Message);
                 e.NextPage = CurrentPage;
+            }
+        }
+
+        /// <summary>
+        /// Disables SMS verification for non-legacy customers (can't do this for legacy)
+        /// </summary>
+        private void FinishRegistration()
+        {
+            try
+            {
+                Thread.Sleep(TimeSpan.FromSeconds(10));
+                FinishRegistrationThatThrows();
+            }
+            catch (Exception ex)
+            {
+                log.Error("Error finishing account verification. Retrying...", ex);
+                Thread.Sleep(TimeSpan.FromSeconds(21));
+                try
+                {
+                    FinishRegistrationThatThrows();
+                }
+                catch (Exception e)
+                {
+                    log.Error("Error finishing account verification. Giving up...", e);
+                }
+            }
+        }
+        
+        /// <summary>
+        /// Actually calls FinishRegistration, but has no retry logic.
+        /// </summary>
+        void FinishRegistrationThatThrows()
+        {
+            // Try to associate the Stamps account with the license
+            using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
+            {
+                if (!lifetimeScope.Resolve<ILicenseService>().IsLegacy)
+                {
+                    new UspsWebClient(lifetimeScope, UspsResellerType.None).FinishAccountVerification(UspsAccount);
+                }
             }
         }
 
