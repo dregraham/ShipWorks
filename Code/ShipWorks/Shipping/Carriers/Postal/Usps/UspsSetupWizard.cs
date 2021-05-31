@@ -461,12 +461,13 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         {
             try
             {
+                log.Info("FinishRegistration starting");
                 Thread.Sleep(TimeSpan.FromSeconds(10));
                 FinishRegistrationThatThrows();
             }
             catch (Exception ex)
             {
-                log.Error("Error finishing account verification. Retrying...", ex);
+                log.Error("Error FinishRegistration. Retrying...", ex);
                 Thread.Sleep(TimeSpan.FromSeconds(21));
                 try
                 {
@@ -474,7 +475,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
                 }
                 catch (Exception e)
                 {
-                    log.Error("Error finishing account verification. Giving up...", e);
+                    log.Error("Error FinishRegistration. Giving up...", e);
                 }
             }
         }
@@ -490,6 +491,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
                 if (!lifetimeScope.Resolve<ILicenseService>().IsLegacy)
                 {
                     new UspsWebClient(lifetimeScope, UspsResellerType.None).FinishAccountVerification(UspsAccount);
+                    log.Info("FinishRegistration succeeded.");
                 }
             }
         }
