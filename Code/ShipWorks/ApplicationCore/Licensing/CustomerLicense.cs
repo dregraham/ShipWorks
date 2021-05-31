@@ -112,6 +112,11 @@ namespace ShipWorks.ApplicationCore.Licensing
         public bool IsDisabled => (!string.IsNullOrEmpty(DisabledReason));
 
         /// <summary>
+        /// Is the license in trial
+        /// </summary>
+        public bool IsInTrial => LicenseCapabilities?.IsInTrial == true;
+
+        /// <summary>
         /// Gets or sets the user name of the SDC account associated with this license.
         /// </summary>
         public string AssociatedStampsUsername { get; set; }

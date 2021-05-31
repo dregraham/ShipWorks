@@ -66,6 +66,11 @@ namespace ShipWorks.ApplicationCore.Licensing
         public bool IsLegacy => true;
 
         /// <summary>
+        /// Is the license in trial
+        /// </summary>
+        public bool IsInTrial => new ShipWorksLicense(store.License).IsTrial;
+
+        /// <summary>
         /// Store licenses do not have channel limits
         /// </summary>
         /// <remarks>
