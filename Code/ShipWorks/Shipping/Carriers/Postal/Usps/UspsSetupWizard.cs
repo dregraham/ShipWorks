@@ -490,8 +490,14 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
             {
                 if (!lifetimeScope.Resolve<ILicenseService>().IsLegacy)
                 {
+                    log.Info("WebReg account. Calling FinishRegistration");
                     new UspsWebClient(lifetimeScope, UspsResellerType.None).FinishAccountVerification(UspsAccount);
                     log.Info("FinishRegistration succeeded.");
+                }
+                else
+                {
+                    // Legacy users never SMS verified, so don't run FinishRegistration
+                    log.Info("Legacy account. Not running FinishRegistration");
                 }
             }
         }
