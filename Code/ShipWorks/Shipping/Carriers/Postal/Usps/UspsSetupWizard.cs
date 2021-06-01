@@ -437,9 +437,9 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
 
                     // Save the USPS account now that it has been successfully created
                     SaveUspsAccount(uspsRegistration.UserName, SecureText.Encrypt(uspsRegistration.Password, uspsRegistration.UserName));
-                    
-                    FinishRegistration();
 
+                    FinishRegistration();
+                    
                     registrationComplete = true;
                 }
                 else
@@ -479,8 +479,12 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
                     log.Error("Error FinishRegistration. Giving up...", e);
                 }
             }
+            catch (UspsException ex)
+            {
+                log.Error("Unrecoverable error in FinishRegistration", ex);
+            }
         }
-        
+
         /// <summary>
         /// Actually calls FinishRegistration, but has no retry logic.
         /// </summary>
