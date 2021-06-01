@@ -83,10 +83,19 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
         /// </summary>
         /// <param name="uspsResellerType">Type of the USPS reseller.</param>
         public UspsWebClient(ILifetimeScope lifetimeScope, UspsResellerType uspsResellerType)
+            : this(lifetimeScope, uspsResellerType, new TrustingCertificateInspector())
+        {
+        }
+        
+        /// <summary>
+        /// Initializes a new instance of the <see cref="UspsWebClient" /> class.
+        /// </summary>
+        /// <param name="uspsResellerType">Type of the USPS reseller.</param>
+        public UspsWebClient(ILifetimeScope lifetimeScope, UspsResellerType uspsResellerType, ICertificateInspector certificateInspector)
             : this(new UspsAccountRepository(),
-                  lifetimeScope.Resolve<Owned<IUspsWebServiceFactory>>().Value,
-                  new TrustingCertificateInspector(),
-                  uspsResellerType)
+                lifetimeScope.Resolve<Owned<IUspsWebServiceFactory>>().Value,
+                certificateInspector,
+                uspsResellerType)
         {
         }
 
@@ -189,20 +198,21 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
         /// <summary>
         /// Makes a request to the specified url, and determines it's CertificateSecurityLevel
         /// </summary>
-        private void CheckCertificate(string url)
+        private void CheckCertificate(string url, bool force = false)
         {
 #if !DEBUG
             CertificateRequest certificateRequest = new CertificateRequest(new Uri(url), certificateInspector);
-            CertificateSecurityLevel certificateSecurityLevel = certificateRequest.Submit();
+            CertificateSecurityLevel certificateSecurityLevel = certificateRequest.Submit(force);
 
             if (certificateSecurityLevel != CertificateSecurityLevel.Trusted)
             {
                 string description = EnumHelper.GetDescription(ShipmentTypeCode.Usps);
-                throw new UspsException(string.Format("ShipWorks is unable to make a secure connection to {0}.", description));
+                throw new UspsException(string.Format("ShipWorks is unable to make a secure connection to {0}.",
+                    description));
             }
 #endif
         }
-
+        
         /// <summary>
         /// Get the account info for the given USPS user name
         /// </summary>
@@ -1571,7 +1581,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
         {
             using (ISwsimV90 webService = CreateWebService("GetContractType"))
             {
-                CheckCertificate(webService.Url);
+                CheckCertificate(webService.Url, true);
 
                 webService.FinishAccountVerification(GetCredentials(account));
             }

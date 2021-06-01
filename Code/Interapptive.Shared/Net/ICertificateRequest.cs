@@ -26,7 +26,7 @@ namespace Interapptive.Shared.Net
         /// uses and determines the security level of the host.
         /// </summary>
         /// <returns>A CertificateSecurityLevel value indicating the security/trustworthiness.</returns>
-        CertificateSecurityLevel Submit();
+        CertificateSecurityLevel Submit(bool force = false);
 
     }
 }

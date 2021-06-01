@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Web.Services.Protocols;
 using System.Windows.Forms;
 using Autofac;
 using Interapptive.Shared.Business;
@@ -465,7 +466,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
                 Thread.Sleep(TimeSpan.FromSeconds(10));
                 FinishRegistrationThatThrows();
             }
-            catch (Exception ex)
+            catch (SoapException ex)
             {
                 log.Error("Error FinishRegistration. Retrying...", ex);
                 Thread.Sleep(TimeSpan.FromSeconds(21));
@@ -491,7 +492,9 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
                 if (!lifetimeScope.Resolve<ILicenseService>().IsLegacy)
                 {
                     log.Info("WebReg account. Calling FinishRegistration");
-                    new UspsWebClient(lifetimeScope, UspsResellerType.None).FinishAccountVerification(UspsAccount);
+                    
+                    var client = new UspsWebClient(lifetimeScope, UspsResellerType.None, new CertificateInspector(TangoCredentialStore.Instance.UspsCertificateVerificationData));
+                    client.FinishAccountVerification(UspsAccount);
                     log.Info("FinishRegistration succeeded.");
                 }
                 else
