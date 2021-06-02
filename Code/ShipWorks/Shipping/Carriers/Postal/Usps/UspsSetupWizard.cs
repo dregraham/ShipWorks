@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IdentityModel;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -33,6 +34,7 @@ using ShipWorks.Shipping.Settings;
 using ShipWorks.Shipping.Settings.Defaults;
 using ShipWorks.Shipping.Settings.WizardPages;
 using ShipWorks.UI.Wizard;
+using ShipWorks.Warehouse.Configuration;
 
 namespace ShipWorks.Shipping.Carriers.Postal.Usps
 {
@@ -496,16 +498,42 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
                 if (!lifetimeScope.Resolve<ILicenseService>().IsLegacy)
                 {
                     log.Info("WebReg account. Calling FinishRegistration");
-                    
-                    var client = new UspsWebClient(lifetimeScope, UspsResellerType.None, new CertificateInspector(TangoCredentialStore.Instance.UspsCertificateVerificationData));
-                    client.FinishAccountVerification(UspsAccount);
-                    log.Info("FinishRegistration succeeded.");
+
+                    string smsPhoneNumber = GetSmsPhoneNumber(lifetimeScope.Resolve<IHubConfigurationWebClient>());
+
+                    if (string.IsNullOrEmpty(smsPhoneNumber))
+                    {
+                        log.Warn("Couldn't get the SMS Number. Not running FinishRegistration.");
+                    }
+                    else
+                    {
+                        var client = new UspsWebClient(lifetimeScope, UspsResellerType.None, new CertificateInspector(TangoCredentialStore.Instance.UspsCertificateVerificationData));
+                        client.FinishAccountVerification(UspsAccount, smsPhoneNumber);
+                        log.Info("FinishRegistration succeeded.");
+                    }
                 }
                 else
                 {
                     // Legacy users never SMS verified, so don't run FinishRegistration
                     log.Info("Legacy account. Not running FinishRegistration");
                 }
+            }
+        }
+
+        /// <summary>
+        /// Gets the SMS phone number, if we have one on file
+        /// </summary>
+        private string GetSmsPhoneNumber(IHubConfigurationWebClient hubClient)
+        {
+            try
+            {
+                var retVal = Task.Run(hubClient.GetSmsVerificationNumber).Result;
+                return retVal.SmsVerifiedPhoneNumber;
+            }
+            catch (Exception ex)
+            {
+                log.Error("Failed to get SMS number. Returning empty string", ex);
+                return string.Empty;
             }
         }
 

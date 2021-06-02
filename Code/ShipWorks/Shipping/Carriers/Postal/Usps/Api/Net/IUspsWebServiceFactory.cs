@@ -1,4 +1,6 @@
-﻿using ShipWorks.ApplicationCore.Logging;
+﻿using System.Web.UI.WebControls;
+using ShipWorks.ApplicationCore.Logging;
+using ShipWorks.Shipping.Carriers.Postal.Usps.Net;
 using ShipWorks.Shipping.Carriers.Postal.Usps.WebServices;
 
 namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
@@ -12,5 +14,11 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
         /// Create the web service
         /// </summary>
         IExtendedSwsimV90 Create(string logName, LogActionType logActionType);
+
+        /// <summary>
+        /// Create the webservice for FinishAccountVerification
+        /// </summary>
+        ISwimFinishAccountVerification CreateFinishAccountVerification(string logName, LogActionType logActionType,
+            string smsVerificationPhoneNumber);
     }
 }

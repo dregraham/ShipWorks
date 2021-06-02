@@ -30,6 +30,7 @@ using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Shipping.Carriers.BestRate;
 using ShipWorks.Shipping.Carriers.Postal.Usps.Contracts;
+using ShipWorks.Shipping.Carriers.Postal.Usps.Net;
 using ShipWorks.Shipping.Carriers.Postal.Usps.Registration;
 using ShipWorks.Shipping.Carriers.Postal.Usps.WebServices;
 using ShipWorks.Shipping.Carriers.Postal.WebTools;
@@ -1577,9 +1578,9 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
         /// <summary>
         /// FinishAccountVerification
         /// </summary>
-        public void FinishAccountVerification(UspsAccountEntity account)
+        public void FinishAccountVerification(UspsAccountEntity account, string smsVerificationNumber)
         {
-            using (ISwsimV90 webService = CreateWebService("GetContractType"))
+            using (ISwimFinishAccountVerification webService = webServiceFactory.CreateFinishAccountVerification("FinishAccountVerification", LogActionType.Other, smsVerificationNumber))
             {
                 CheckCertificate(webService.Url, true);
 

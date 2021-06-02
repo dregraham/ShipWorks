@@ -66,5 +66,44 @@ namespace ShipWorks.Warehouse.Configuration
                 throw new WebException($"An error occurred downloading the configuration for warehouse ID {warehouseID}", ex);
             }
         }
+        
+        /// <summary>
+        /// Get the configuration from Hub
+        /// </summary>
+        public async Task<SmsVerificationPhoneNumber> GetSmsVerificationNumber()
+        {
+            try
+            {
+                IRestRequest request = new RestRequest(WarehouseEndpoints.GetSmsVerificationNumber, Method.GET);
+                
+                GenericResult<IRestResponse> response = await warehouseRequestClient
+                    .MakeRequest(request, "Get SMS Verification Number")
+                    .ConfigureAwait(true);
+
+                if (response.Failure)
+                {
+                    throw new WebException(response.Message, response.Exception);
+                }
+
+                var smsVerificationPhoneNumber = JsonConvert.DeserializeObject<SmsVerificationPhoneNumber>(
+                    response.Value.Content,
+                    new JsonSerializerSettings
+                    {
+                        ContractResolver = new DefaultContractResolver
+                        {
+                            NamingStrategy = new CamelCaseNamingStrategy
+                            {
+                                OverrideSpecifiedNames = false
+                            }
+                        },
+                    });
+
+                return smsVerificationPhoneNumber;
+            }
+            catch (Exception ex)
+            {
+                throw new WebException($"An error occurred retrieving the SMS phone number", ex);
+            }
+        }
     }
 }
