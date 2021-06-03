@@ -18,13 +18,15 @@ namespace ShipWorks.Warehouse.Configuration
     public class HubConfigurationWebClient : IHubConfigurationWebClient
     {
         private readonly IWarehouseRequestClient warehouseRequestClient;
+        private readonly Func<IRestRequest> createRestRequest;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public HubConfigurationWebClient(IWarehouseRequestClient warehouseRequestClient)
+        public HubConfigurationWebClient(IWarehouseRequestClient warehouseRequestClient, Func<IRestRequest> createRestRequest)
         {
             this.warehouseRequestClient = warehouseRequestClient;
+            this.createRestRequest = createRestRequest;
         }
 
         /// <summary>
@@ -74,8 +76,10 @@ namespace ShipWorks.Warehouse.Configuration
         {
             try
             {
-                IRestRequest request = new RestRequest(WarehouseEndpoints.GetSmsVerificationNumber, Method.GET);
-                
+                var request = createRestRequest();
+                request.Method = Method.GET;
+                request.Resource = WarehouseEndpoints.GetSmsVerificationNumber;
+
                 GenericResult<IRestResponse> response = await warehouseRequestClient
                     .MakeRequest(request, "Get SMS Verification Number")
                     .ConfigureAwait(true);

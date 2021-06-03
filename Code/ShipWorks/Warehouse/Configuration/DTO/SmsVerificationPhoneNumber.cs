@@ -1,7 +1,9 @@
-﻿using Newtonsoft.Json;
+﻿using System.Reflection;
+using Newtonsoft.Json;
 
 namespace ShipWorks.Warehouse.Configuration.DTO
 {
+    [Obfuscation]
     public class SmsVerificationPhoneNumber
     {
         [JsonProperty("smsVerifiedPhoneNumber")]
