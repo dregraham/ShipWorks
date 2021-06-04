@@ -1588,6 +1588,7 @@
     <Compile Include="Warehouse\Configuration\Carriers\DTO\FedExAccountConfiguration.cs" />
     <Compile Include="Warehouse\Configuration\Carriers\DTO\OnTracAccountConfiguration.cs" />
     <Compile Include="Warehouse\Configuration\Carriers\DTO\UpsAccountConfiguration.cs" />
+    <Compile Include="Warehouse\Configuration\DTO\SmsVerificationPhoneNumber.cs" />
     <Compile Include="Warehouse\Configuration\HubConfigurationSynchronizer.cs" />
     <Compile Include="Warehouse\Configuration\HubConfigurator.cs" />
     <Compile Include="Warehouse\Configuration\IHubConfigurator.cs" />

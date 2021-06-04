@@ -18,8 +18,6 @@ namespace ShipWorks.Stores.Platforms.Api.CoreExtensions.Actions
     [ActionTask("Upload shipment details", "ApiShipmentUploadTask", ActionTaskCategory.UpdateOnline)]
     public class ApiShipmentUploadTask : StoreInstanceTaskBase
     {
-        static readonly ILog log = LogManager.GetLogger(typeof(ApiShipmentUploadTask));
-
         const long maxBatchSize = 1000;
         private readonly IApiOnlineUpdater onlineUpdater;
 
