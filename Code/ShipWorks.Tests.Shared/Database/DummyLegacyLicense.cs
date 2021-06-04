@@ -40,6 +40,8 @@ namespace ShipWorks.Tests.Shared.Database
             get { throw new NotImplementedException(); }
         }
 
+        public bool IsInTrial { get; }
+
         public string Key
         {
             get
