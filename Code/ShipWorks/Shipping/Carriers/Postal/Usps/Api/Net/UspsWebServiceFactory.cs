@@ -2,6 +2,7 @@
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Win32;
 using ShipWorks.ApplicationCore.Logging;
+using ShipWorks.Shipping.Carriers.Postal.Usps.Net;
 using ShipWorks.Shipping.Carriers.Postal.Usps.WebServices;
 
 namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
@@ -44,6 +45,26 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
                 Url = ServiceUrl
             };
 
+            if (requestTimeout.Value > 0)
+            {
+                client.Timeout = requestTimeout.Value;
+            }
+
+            return client;
+        }
+
+        /// <summary>
+        /// Create the webservice for FinishAccountVerification
+        /// </summary>
+        public ISwimFinishAccountVerification CreateFinishAccountVerification(string logName, LogActionType logActionType,
+            string smsVerificationPhoneNumber)
+        {
+            var client = new SwsimFinishAccountVerification(
+                logEntryFactory.GetLogEntry(ApiLogSource.Usps, logName, logActionType), smsVerificationPhoneNumber)
+            {
+                Url = ServiceUrl
+            };
+            
             if (requestTimeout.Value > 0)
             {
                 client.Timeout = requestTimeout.Value;
