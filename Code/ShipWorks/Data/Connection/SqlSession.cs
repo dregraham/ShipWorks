@@ -264,7 +264,7 @@ namespace ShipWorks.Data.Connection
         /// </summary>
         public bool IsLocalServer()
         {
-            return GetServerMachineName() == Environment.MachineName;
+            return GetServerMachineName().Equals(Environment.MachineName, StringComparison.OrdinalIgnoreCase);
         }
 
         /// <summary>
