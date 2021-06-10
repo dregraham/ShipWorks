@@ -866,7 +866,9 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
                         // due to missing parameters. This is likely because another instance of
                         // ShipWorks created a SCAN form.
                         if (!newTransactions.Any())
+                        {
                             throw new UspsException("All shipments have previously been scanned.");
+                        }
 
                         webService.CreateManifest
                         (
