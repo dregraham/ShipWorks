@@ -867,7 +867,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
                         // ShipWorks created a SCAN form.
                         if (!newTransactions.Any())
                         {
-                            throw new UspsException("All shipments have previously been scanned.");
+                            throw new UspsException("All shipments have been added to a previous SCAN form.");
                         }
 
                         webService.CreateManifest
