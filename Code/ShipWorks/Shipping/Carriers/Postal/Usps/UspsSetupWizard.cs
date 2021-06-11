@@ -1,7 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IdentityModel;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
+using System.Web.Services.Protocols;
 using System.Windows.Forms;
 using Autofac;
 using Interapptive.Shared.Business;
@@ -11,6 +14,7 @@ using Interapptive.Shared.Net;
 using Interapptive.Shared.Security;
 using Interapptive.Shared.UI;
 using Interapptive.Shared.Utility;
+using log4net;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.ApplicationCore;
 using ShipWorks.ApplicationCore.Licensing;
@@ -30,6 +34,7 @@ using ShipWorks.Shipping.Settings;
 using ShipWorks.Shipping.Settings.Defaults;
 using ShipWorks.Shipping.Settings.WizardPages;
 using ShipWorks.UI.Wizard;
+using ShipWorks.Warehouse.Configuration;
 
 namespace ShipWorks.Shipping.Carriers.Postal.Usps
 {
@@ -40,6 +45,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
     [Component(RegistrationType.Self)]
     public partial class UspsSetupWizard : WizardForm, IShipmentTypeSetupWizard
     {
+        static readonly ILog log = LogManager.GetLogger(typeof(UspsSetupWizard));
+        
         private UspsRegistration uspsRegistration;
         private readonly ShipmentTypeCode shipmentTypeCode = ShipmentTypeCode.Usps;
         private readonly Dictionary<long, long> profileMap = new Dictionary<long, long>();
@@ -433,6 +440,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
                     // Save the USPS account now that it has been successfully created
                     SaveUspsAccount(uspsRegistration.UserName, SecureText.Encrypt(uspsRegistration.Password, uspsRegistration.UserName));
 
+                    FinishRegistration();
+                    
                     registrationComplete = true;
                 }
                 else
@@ -445,6 +454,86 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
             {
                 MessageHelper.ShowError(this, ex.Message);
                 e.NextPage = CurrentPage;
+            }
+        }
+
+        /// <summary>
+        /// Disables SMS verification for non-legacy customers (can't do this for legacy)
+        /// </summary>
+        private void FinishRegistration()
+        {
+            try
+            {
+                log.Info("FinishRegistration starting");
+                Thread.Sleep(TimeSpan.FromSeconds(10));
+                FinishRegistrationThatThrows();
+            }
+            catch (SoapException ex)
+            {
+                log.Error("Error FinishRegistration. Retrying...", ex);
+                Thread.Sleep(TimeSpan.FromSeconds(21));
+                try
+                {
+                    FinishRegistrationThatThrows();
+                }
+                catch (Exception e)
+                {
+                    log.Error("Error FinishRegistration. Giving up...", e);
+                }
+            }
+            catch (UspsException ex)
+            {
+                log.Error("Unrecoverable error in FinishRegistration", ex);
+            }
+        }
+
+        /// <summary>
+        /// Actually calls FinishRegistration, but has no retry logic.
+        /// </summary>
+        void FinishRegistrationThatThrows()
+        {
+            // Try to associate the Stamps account with the license
+            using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
+            {
+                if (!lifetimeScope.Resolve<ILicenseService>().IsLegacy)
+                {
+                    log.Info("WebReg account. Calling FinishRegistration");
+
+                    string smsPhoneNumber = GetSmsPhoneNumber(lifetimeScope.Resolve<IHubConfigurationWebClient>());
+
+                    if (string.IsNullOrEmpty(smsPhoneNumber))
+                    {
+                        log.Warn("Couldn't get the SMS Number. Not running FinishRegistration.");
+                    }
+                    else
+                    {
+                        var client = new UspsWebClient(lifetimeScope, UspsResellerType.None, new CertificateInspector(TangoCredentialStore.Instance.UspsCertificateVerificationData));
+                        client.FinishAccountVerification(UspsAccount, smsPhoneNumber);
+                        log.Info("FinishRegistration succeeded.");
+                    }
+                }
+                else
+                {
+                    // Legacy users never SMS verified, so don't run FinishRegistration
+                    log.Info("Legacy account. Not running FinishRegistration");
+                }
+            }
+        }
+
+        /// <summary>
+        /// Gets the SMS phone number, if we have one on file
+        /// </summary>
+        private string GetSmsPhoneNumber(IHubConfigurationWebClient hubClient)
+        {
+            try
+            {
+                var retVal = Task.Run(hubClient.GetSmsVerificationNumber).Result;
+                return retVal.SmsVerifiedPhoneNumber;
+            }
+            catch (Exception ex)
+            {
+                log.Error("Failed to get SMS number. Returning empty string", ex);
+                return string.Empty;
             }
         }
 

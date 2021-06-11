@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Data;
 using System.Diagnostics;
 using System.Linq;
 using System.Windows.Forms;
@@ -9,7 +8,6 @@ using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.UI.Controls;
 using ShipWorks.Users;
 using ShipWorks.Users.Security;
-using ShipWorks.UI.Controls;
 
 namespace ShipWorks.Shipping.Editing
 {

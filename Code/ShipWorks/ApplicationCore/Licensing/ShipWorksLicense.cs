@@ -1,3 +1,7 @@
+using System;
+using System.Linq;
+using Autofac;
+using log4net;
 using ShipWorks.ApplicationCore.Licensing.Decoding;
 using ShipWorks.Stores;
 
@@ -8,6 +12,7 @@ namespace ShipWorks.ApplicationCore.Licensing
     /// </summary>
     public class ShipWorksLicense : IShipWorksLicense
     {
+        private static readonly ILog log = LogManager.GetLogger(typeof(ShipWorksLicense));
         StoreTypeCode typeCode = StoreTypeCode.Invalid;
 
         string key;
@@ -108,6 +113,7 @@ namespace ShipWorks.ApplicationCore.Licensing
 
             if (key.Length == 0)
             {
+                isTrial = HasInTrial(key);
                 return;
             }
 
@@ -152,6 +158,10 @@ namespace ShipWorks.ApplicationCore.Licensing
             {
                 isTrial = true;
             }
+            else
+            {
+                isTrial = HasInTrial(key);
+            }
 
             // Look for this store type
             foreach (StoreType storeType in StoreTypeManager.StoreTypes)
@@ -161,6 +171,37 @@ namespace ShipWorks.ApplicationCore.Licensing
                     typeCode = storeType.TypeCode;
                     break;
                 }
+            }
+        }
+
+        /// <summary>
+        /// Is there a license that is in trial
+        /// </summary>
+        private bool HasInTrial(string key)
+        {
+            // To be safe, if anything throws, just return false so that ShipWorks acts as it did before.
+            try
+            {
+                using (var lifetimeScope = IoC.BeginLifetimeScope())
+                {
+                    var licenseService = lifetimeScope.Resolve<ILicenseService>();
+                    var licenses = licenseService
+                        .GetLicenses();
+
+                    if (licenseService.IsLegacy)
+                    {
+                        return licenses?
+                            .FirstOrDefault(l => l.Key.Equals(key, StringComparison.InvariantCultureIgnoreCase))?
+                            .IsInTrial == true;
+                    }
+
+                    return licenses?.Any(l => l.IsInTrial) == true;
+                }
+            }
+            catch (Exception ex)
+            {
+                log.Error($"Error occurred in ShipWorksLicense.HasInTrial", ex);
+                return false;
             }
         }
     }

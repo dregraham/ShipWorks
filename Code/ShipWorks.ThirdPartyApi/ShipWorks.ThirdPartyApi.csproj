@@ -208,6 +208,8 @@
     <Compile Include="Shipping\Carriers\Postal\Usps\Express1\Net\RewriteScanFormMessageSoapExtension.cs" />
     <Compile Include="Shipping\Carriers\Postal\Usps\Net\AccountInfoResult.cs" />
     <Compile Include="Shipping\Carriers\Postal\Usps\Net\CreateEnvelopeIndiciumParameters.cs" />
+    <Compile Include="Shipping\Carriers\Postal\Usps\Net\ISwimFinishAccountVerification.cs" />
+    <Compile Include="Shipping\Carriers\Postal\Usps\Net\SwsimFinishAccountVerification.cs" />
     <Compile Include="Shipping\Carriers\UPS\Api\WebServices\OpenAccount\BillingAddressType.cs" />
     <Compile Include="Shipping\Carriers\UPS\Api\WebServices\OpenAccount\IAddressType.cs" />
     <Compile Include="Shipping\Carriers\UPS\Api\WebServices\OpenAccount\PickupAddressType.cs" />

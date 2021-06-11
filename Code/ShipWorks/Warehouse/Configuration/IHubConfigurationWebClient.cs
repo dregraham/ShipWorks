@@ -12,5 +12,10 @@ namespace ShipWorks.Warehouse.Configuration
         /// Get the configuration from Hub
         /// </summary>
         Task<HubConfiguration> GetConfig(string warehouseID);
+
+        /// <summary>
+        /// Get the configuration from Hub
+        /// </summary>
+        Task<SmsVerificationPhoneNumber> GetSmsVerificationNumber();
     }
 }

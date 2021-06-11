@@ -97,7 +97,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
             settingsRepository.Setup(r => r.GetAccountReadOnly(AnyIShipment)).Returns(new FedExAccountEntity() { MeterNumber = "123" });
 
             certificateRequest = new Mock<ICertificateRequest>();
-            certificateRequest.Setup(r => r.Submit()).Returns(CertificateSecurityLevel.Trusted);
+            certificateRequest.Setup(r => r.Submit(false)).Returns(CertificateSecurityLevel.Trusted);
 
             reply = new PostalCodeInquiryReply()
             {
@@ -1010,7 +1010,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
         [Fact]
         public void GetRates_WritesWarningToLog_WhenCertificateRequestReturnsNone()
         {
-            certificateRequest.Setup(r => r.Submit()).Returns(CertificateSecurityLevel.None);
+            certificateRequest.Setup(r => r.Submit(false)).Returns(CertificateSecurityLevel.None);
 
             try
             {
@@ -1025,14 +1025,14 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
         [Fact]
         public void GetRates_ThrowsFedExException_WhenCertificateRequestReturnsNone()
         {
-            certificateRequest.Setup(r => r.Submit()).Returns(CertificateSecurityLevel.None);
+            certificateRequest.Setup(r => r.Submit(false)).Returns(CertificateSecurityLevel.None);
             Assert.Throws<FedExException>(() => testObject.GetRates(shipmentEntity, new TrustingCertificateInspector()));
         }
 
         [Fact]
         public void GetRates_WritesWarningToLog_WhenCertificateRequestReturnsSpoofed()
         {
-            certificateRequest.Setup(r => r.Submit()).Returns(CertificateSecurityLevel.Spoofed);
+            certificateRequest.Setup(r => r.Submit(false)).Returns(CertificateSecurityLevel.Spoofed);
 
             try
             {
@@ -1047,14 +1047,14 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
         [Fact]
         public void GetRates_ThrowsFedExException_WhenCertificateRequestReturnsSpoofed()
         {
-            certificateRequest.Setup(r => r.Submit()).Returns(CertificateSecurityLevel.Spoofed);
+            certificateRequest.Setup(r => r.Submit(false)).Returns(CertificateSecurityLevel.Spoofed);
             Assert.Throws<FedExException>(() => testObject.GetRates(shipmentEntity, new TrustingCertificateInspector()));
         }
 
         [Fact]
         public void GetRates_PerformsVersionCapture_WhenCertificateRequestReturnsTrusted()
         {
-            certificateRequest.Setup(r => r.Submit()).Returns(CertificateSecurityLevel.Trusted);
+            certificateRequest.Setup(r => r.Submit(false)).Returns(CertificateSecurityLevel.Trusted);
 
             testObject.GetRates(shipmentEntity, new TrustingCertificateInspector());
 

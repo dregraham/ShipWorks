@@ -55,11 +55,11 @@ namespace Interapptive.Shared.Net
         /// Submits the request to the endpoint defined in the constructor and 
         /// uses the inspector to determine the security level of the host.
         /// </summary>
-        public CertificateSecurityLevel Submit()
+        public CertificateSecurityLevel Submit(bool force = false)
         {
             CertificateSecurityLevel level = CertificateSecurityLevel.Trusted;
 
-            if (nextSecureConnectionValidation >= DateTime.UtcNow)
+            if (nextSecureConnectionValidation >= DateTime.UtcNow && !force)
             {
                 return level;
             }

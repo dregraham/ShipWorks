@@ -661,6 +661,7 @@
     <Compile Include="Users\Security\ArchiveSecurityContextTest.cs" />
     <Compile Include="Users\Security\SecurityContextFactoryTest.cs" />
     <Compile Include="Users\UserServiceTest.cs" />
+    <Compile Include="Warehouse\Configuration\HubConfigurationWebClientTest.cs" />
     <Compile Include="Warehouse\Configuration\HubStoreSynchronizerTest.cs" />
   </ItemGroup>
   <ItemGroup>

@@ -36,6 +36,11 @@ namespace ShipWorks.ApplicationCore.Licensing
         bool IsLegacy { get; }
 
         /// <summary>
+        /// Is the license in trial
+        /// </summary>
+        bool IsInTrial { get; }
+
+        /// <summary>
         /// Refresh the license capabilities from Tango
         /// </summary>
         void Refresh();

@@ -79,6 +79,11 @@ namespace ShipWorks.ApplicationCore.Licensing
         public bool IsLegacy => false;
 
         /// <summary>
+        /// Is the license in trial
+        /// </summary>
+        public bool IsInTrial => false;
+
+        /// <summary>
         /// Not over limit, but I did debate throwing for this...
         /// </summary>
         public bool IsOverChannelLimit => true;

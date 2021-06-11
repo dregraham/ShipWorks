@@ -249,11 +249,37 @@ namespace ShipWorks.ApplicationCore.Dashboard
         }
 
         /// <summary>
+        /// Is the customer legacy
+        /// </summary>
+        private static bool IsLegacyCustomer()
+        {
+            // To be safe, if anything throws, just return false so that ShipWorks acts as it did before.
+            try
+            {
+                using (var lifetimeScope = IoC.BeginLifetimeScope())
+                {
+                    var licenseService = lifetimeScope.Resolve<ILicenseService>();
+                    return licenseService.IsLegacy;
+                }
+            }
+            catch (Exception ex)
+            {
+                log.Error($"Error occurred in ShipWorksLicense.HasInTrial", ex);
+                return false;
+            }
+        }
+
+        /// <summary>
         /// Update the trial display items
         /// </summary>
         private static void UpdateTrialItems()
         {
             Debug.Assert(!Program.MainForm.InvokeRequired);
+
+            if (!IsLegacyCustomer())
+            {
+                return;
+            }
 
             // Add in trial information for each store we don't have yet
             foreach (StoreEntity store in StoreManager.GetAllStores())
