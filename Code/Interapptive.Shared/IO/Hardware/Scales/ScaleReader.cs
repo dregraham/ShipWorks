@@ -4,6 +4,7 @@ using System.Reactive.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Interapptive.Shared.Usb;
+using Interapptive.Shared.Win32;
 using log4net;
 
 namespace Interapptive.Shared.IO.Hardware.Scales
@@ -13,8 +14,14 @@ namespace Interapptive.Shared.IO.Hardware.Scales
     /// </summary>
     public static class ScaleReader
     {
+        
         private const int MaxScaleConnectionAttempts = 20;
-
+        
+        // Override default delay by setting HKEY_CURRENT_USER\SOFTWARE\Interapptive\ShipWorks\Options\ScaleReadDelayOverrideMilliseconds
+        private const string DefaultScaleReadDelayMs = "250";
+        private const string ScaleReadDelayOverrideRegistryName = "ScaleReadDelayOverrideMilliseconds";
+        private const string RegistryKey = @"Software\Interapptive\ShipWorks\Options";
+        
         private static readonly ILog Log = LogManager.GetLogger(typeof(ScaleReader));
 
         private static readonly ScaleReadResult UnknownNotFoundResult = ScaleReadResult.NotFound(string.Empty);
@@ -32,7 +39,7 @@ namespace Interapptive.Shared.IO.Hardware.Scales
         private static ICubiscanConfigurationManager CubiscanConfigurationManager;
         
         private static IObserver<bool> scaleObserver;
-
+        
         public static IObservable<ScaleReadResult> ReadEvents { get; }
 
         /// <summary>
@@ -48,16 +55,35 @@ namespace Interapptive.Shared.IO.Hardware.Scales
                 DeviceListener.Start();
             });
             
+            TimeSpan scaleReadDelay = GetScaleReadDelay();
+            
             ReadEvents = Observable.Create<bool>(x =>
             {
                 scaleObserver = x;
                 x.OnNext(true);
                 return Disposable.Create(() => scaleObserver = null);
             })
-            .Delay(TimeSpan.FromMilliseconds(250))
+            .Delay(scaleReadDelay)
             .Select(_ => ReadScale(true))
             .Do(_ => scaleObserver?.OnNext(true))
             .Publish().RefCount();
+        }
+
+        /// <summary>
+        /// Get the time delay - allows override from registry
+        /// </summary>
+        private static TimeSpan GetScaleReadDelay()
+        {
+            var registry = new RegistryHelper(RegistryKey);
+            var delayInMilliseconds = registry.GetValue(ScaleReadDelayOverrideRegistryName, DefaultScaleReadDelayMs);
+            if (!int.TryParse(delayInMilliseconds, out int parsedDelay))
+            {
+                // This will crash ShipWorks. I'm ok with this. The only way this could happen is if the
+                // Registry is set to a unparsable int.
+                throw new Exception($"Couldn't parse Scale Delay value {delayInMilliseconds}. Set at HKEY_CURRENT_USER\\{RegistryKey}");
+            }
+
+            return TimeSpan.FromMilliseconds(parsedDelay);
         }
 
         /// <summary>
