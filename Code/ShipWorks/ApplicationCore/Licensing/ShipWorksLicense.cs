@@ -113,7 +113,7 @@ namespace ShipWorks.ApplicationCore.Licensing
 
             if (key.Length == 0)
             {
-                isTrial = HasInTrial(key);
+                isTrial = HasInTrial();
                 return;
             }
 
@@ -160,7 +160,7 @@ namespace ShipWorks.ApplicationCore.Licensing
             }
             else
             {
-                isTrial = HasInTrial(key);
+                isTrial = HasInTrial();
             }
 
             // Look for this store type
@@ -177,7 +177,7 @@ namespace ShipWorks.ApplicationCore.Licensing
         /// <summary>
         /// Is there a license that is in trial
         /// </summary>
-        private bool HasInTrial(string key)
+        private bool HasInTrial()
         {
             // To be safe, if anything throws, just return false so that ShipWorks acts as it did before.
             try
@@ -190,9 +190,9 @@ namespace ShipWorks.ApplicationCore.Licensing
 
                     if (licenseService.IsLegacy)
                     {
-                        return licenses?
-                            .FirstOrDefault(l => l.Key.Equals(key, StringComparison.InvariantCultureIgnoreCase))?
-                            .IsInTrial == true;
+                        // The calling code is checking the meter number and license number that indicate
+                        // the license code itself is or isn't a trial.
+                        return false;
                     }
 
                     return licenses?.Any(l => l.IsInTrial) == true;
