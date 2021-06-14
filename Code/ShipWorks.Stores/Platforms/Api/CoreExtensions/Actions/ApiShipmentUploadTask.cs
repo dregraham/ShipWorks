@@ -18,7 +18,7 @@ namespace ShipWorks.Stores.Platforms.Api.CoreExtensions.Actions
     [ActionTask("Upload shipment details", "ApiShipmentUploadTask", ActionTaskCategory.UpdateOnline)]
     public class ApiShipmentUploadTask : StoreInstanceTaskBase
     {
-        const long maxBatchSize = 1000;
+        private const long MaxBatchSize = 1000;
         private readonly IApiOnlineUpdater onlineUpdater;
 
         /// <summary>
@@ -76,7 +76,7 @@ namespace ShipWorks.Stores.Platforms.Api.CoreExtensions.Actions
             List<long> postponedKeys = context.GetPostponedData().SelectMany(d => (List<long>) d).ToList();
 
             // To avoid postponing forever on big selections, we only postpone up to maxBatchSize
-            if (context.CanPostpone && postponedKeys.Count < maxBatchSize)
+            if (context.CanPostpone && postponedKeys.Count < MaxBatchSize)
             {
                 context.Postpone(inputKeys);
             }
