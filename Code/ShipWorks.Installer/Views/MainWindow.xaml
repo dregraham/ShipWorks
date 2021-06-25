@@ -47,7 +47,7 @@
                     <ColumnDefinition Width="auto" />
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
-                <Border MinWidth="225" Background="White" Grid.RowSpan="2">
+                <Border MinWidth="225" Background="White" Grid.RowSpan="2" BorderBrush="DarkGray" BorderThickness="0,0,3,0">
                     <Grid>
                         <StackPanel Margin="10">
                             <StackPanel.Resources>
