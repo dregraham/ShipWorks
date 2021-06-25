@@ -79,7 +79,7 @@ namespace ShipWorks.ApplicationCore.Licensing.TangoRequests
             postRequest.Variables.Add("license", license.Key);
             postRequest.ForcePreCallCertificateValidation = true;
 
-            return ProcessRequest(shipment, license, postRequest, shipmentType, store)
+            return ProcessRequest(shipment, postRequest, shipmentType)
                 .Do(x =>
                 {
                     log.InfoFormat("Shipment {0}  - Accounted", shipment.ShipmentID);
@@ -98,22 +98,13 @@ namespace ShipWorks.ApplicationCore.Licensing.TangoRequests
         /// <summary>
         /// Process the request
         /// </summary>
-        private GenericResult<string> ProcessRequest(ShipmentEntity shipment, ShipWorksLicense license, IHttpVariableRequestSubmitter postRequest, ShipmentType shipmentType, StoreEntity storeEntity)
+        private GenericResult<string> ProcessRequest(ShipmentEntity shipment, IHttpVariableRequestSubmitter postRequest,
+            ShipmentType shipmentType)
         {
-            if (license.IsTrial)
-            {
-                // Trial shipment logging
-                PrepareLogTrialShipmentRequest(postRequest, shipmentType, storeEntity);
-                return client.ProcessXmlRequest(postRequest, "LogTrialShipments", false)
-                    .Map(_ => shipment.ShipmentID.ToString());
-            }
-            else
-            {
-                // Regular shipment logging
-                PrepareLogShipmentRequest(shipment, shipmentType, postRequest);
-                return client.ProcessXmlRequest(postRequest, "LogShipmentDetails", false)
-                    .Bind(x => GetOnlineShipmentID(x, shipment.ShipmentID));
-            }
+            PrepareLogShipmentRequest(shipment, shipmentType, postRequest);
+
+            return client.ProcessXmlRequest(postRequest, "LogShipmentDetails", false)
+                .Bind(x => GetOnlineShipmentID(x, shipment.ShipmentID));
         }
 
         /// <summary>
@@ -138,27 +129,6 @@ namespace ShipWorks.ApplicationCore.Licensing.TangoRequests
             }
 
             return result;
-        }
-
-        /// <summary>
-        /// Prepare the log shipment request for a trial shipment
-        /// </summary>
-        private void PrepareLogTrialShipmentRequest(IHttpVariableRequestSubmitter postRequest,
-                                                           ShipmentType shipmentType,
-                                                           StoreEntity store)
-        {
-            StoreType storeType = storeTypeManager.GetType(store);
-
-            postRequest.Variables.Add("action", "logtrialshipments");
-            postRequest.Variables.Add("shipments", "1");
-            postRequest.Variables.Add("service", shipmentType.ShipmentTypeName);
-            postRequest.Variables.Add("storecode", storeType.TangoCode);
-            postRequest.Variables.Add("identifier", storeType.LicenseIdentifier);
-
-            // If isretry is true, Tango will check to see if the shipment exists, and if it does
-            // it will not insert it into the database.  If it doesn't exist, it will do the
-            // insert.
-            postRequest.Variables.Add("isretry", "1");
         }
 
         /// <summary>
