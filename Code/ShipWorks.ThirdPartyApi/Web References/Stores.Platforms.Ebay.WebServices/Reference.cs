@@ -24946,6 +24946,9 @@ namespace ShipWorks.Stores.Platforms.Ebay.WebServices {
         
         /// <remarks/>
         CustomCode,
+
+        /// <remarks/>
+        VATIN,
     }
     
     /// <remarks/>

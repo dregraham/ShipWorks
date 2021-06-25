@@ -276,11 +276,6 @@ namespace ShipWorks.ApplicationCore.Dashboard
         {
             Debug.Assert(!Program.MainForm.InvokeRequired);
 
-            if (!IsLegacyCustomer())
-            {
-                return;
-            }
-
             // Add in trial information for each store we don't have yet
             foreach (StoreEntity store in StoreManager.GetAllStores())
             {
@@ -400,6 +395,12 @@ namespace ShipWorks.ApplicationCore.Dashboard
         {
             // Dashboard may have closed in the meantime
             if (!IsDashboardOpen)
+            {
+                return;
+            }
+
+            // If webreg, don't show trial details
+            if (!IsLegacyCustomer())
             {
                 return;
             }
