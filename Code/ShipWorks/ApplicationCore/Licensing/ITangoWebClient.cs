@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using Interapptive.Shared.Business;
 using Interapptive.Shared.Utility;
@@ -10,11 +9,6 @@ namespace ShipWorks.ApplicationCore.Licensing
 {
     public interface ITangoWebClient
     {
-        /// <summary>
-        /// Activate the given license key to the specified store identifier
-        /// </summary>
-        LicenseAccountDetail ActivateLicense(string licenseKey, StoreEntity store);
-
         /// <summary>
         /// Get the status of the specified license
         /// </summary>

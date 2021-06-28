@@ -66,29 +66,6 @@ namespace ShipWorks.ApplicationCore.Licensing
         public static string Version => version.Value.ToString(4);
 
         /// <summary>
-        /// Activate the given license key to the specified store identifier
-        /// </summary>
-        public static LicenseAccountDetail ActivateLicense(string licenseKey, StoreEntity store)
-        {
-            ShipWorksLicense license = new ShipWorksLicense(licenseKey);
-
-            if (!license.IsValid)
-            {
-                throw new ShipWorksLicenseException("The license key is not valid.");
-            }
-
-            if (!license.IsMetered)
-            {
-                throw new ShipWorksLicenseException("The license is not valid for this version of ShipWorks.");
-            }
-
-            HttpVariableRequestSubmitter postRequest = new HttpVariableRequestSubmitter();
-            postRequest.Variables.Add("action", "activate");
-
-            return ProcessAccountRequest(postRequest, store, license, false);
-        }
-
-        /// <summary>
         /// Associates a Usps account created in ShipWorks as the users free Stamps.com account
         /// </summary>
         internal static AssociateShipWorksWithItselfResponse AssociateShipworksWithItself(AssociateShipworksWithItselfRequest request)

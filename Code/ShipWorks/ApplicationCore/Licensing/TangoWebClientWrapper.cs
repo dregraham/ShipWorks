@@ -19,14 +19,6 @@ namespace ShipWorks.ApplicationCore.Licensing
     public class TangoWebClientWrapper : ITangoWebClient
     {
         /// <summary>
-        /// Activate the given license key to the specified store identifier
-        /// </summary>
-        public virtual LicenseAccountDetail ActivateLicense(string licenseKey, StoreEntity store)
-        {
-            return TangoWebClient.ActivateLicense(licenseKey, store);
-        }
-
-        /// <summary>
         /// Get the status of the specified license
         /// </summary>
         public virtual ILicenseAccountDetail GetLicenseStatus(string licenseKey, StoreEntity store)

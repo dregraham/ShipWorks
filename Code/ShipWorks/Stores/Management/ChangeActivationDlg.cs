@@ -48,7 +48,7 @@ namespace ShipWorks.Stores.Management
 
             try
             {
-                LicenseAccountDetail accountDetail = TangoWebClient.ActivateLicense(store.License, store);
+                ILicenseAccountDetail accountDetail = TangoWebClient.GetLicenseStatus(store.License, store, false);
 
                 // We dont want to use the default LicenseActivationHelper message that shows the reset link, because that would be confusing
                 // in the context of this window.

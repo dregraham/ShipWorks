@@ -50,11 +50,11 @@ namespace ShipWorks.ApplicationCore.Licensing
             }
 
             Cursor.Current = Cursors.WaitCursor;
-            LicenseAccountDetail accountDetail;
+            ILicenseAccountDetail accountDetail;
 
             try
             {
-                accountDetail = TangoWebClient.ActivateLicense(licenseKey, store);
+                accountDetail = TangoWebClient.GetLicenseStatus(licenseKey, store, false);
 
                 if (accountDetail.ActivationState == LicenseActivationState.Active)
                 {
@@ -195,7 +195,7 @@ namespace ShipWorks.ApplicationCore.Licensing
         /// <summary>
         /// Check the account detail for validity and return message for the user.
         /// </summary>
-        public static string GetActivationStateMessage(LicenseAccountDetail accountDetail)
+        public static string GetActivationStateMessage(ILicenseAccountDetail accountDetail)
         {
             if (accountDetail == null)
             {
