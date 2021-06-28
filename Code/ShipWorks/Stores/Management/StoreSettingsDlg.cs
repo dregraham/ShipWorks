@@ -130,24 +130,18 @@ namespace ShipWorks.Stores.Management
             UpdateStoreEnabledDisplay();
 
             // Check whether or not to display license tab
-            CheckLicense(store);
+            CheckLicense();
         }
 
         /// <summary>
         /// Checks the license to determine whether or not to display the license tab.
         /// </summary>
         /// <remarks>
-        /// If store license (legacy customer), display it.
-        /// If customer license (new customer), don't display it.
+        /// Only show when magic keys are down
         /// </remarks>
-        /// <param name="storeEntity">The store entity.</param>
-        private void CheckLicense(StoreEntity storeEntity)
+        private void CheckLicense()
         {
-            ILicenseService licenseService = IoC.UnsafeGlobalLifetimeScope.Resolve<ILicenseService>();
-            ILicense storeLicense = licenseService.GetLicense(storeEntity);
-
-            // If legacy customer or magic keys down, display license
-            if (!storeLicense.IsLegacy && !InterapptiveOnly.MagicKeysDown)
+            if (!InterapptiveOnly.MagicKeysDown)
             {
                 optionControl.Controls.Remove(optionPageLicense);
             }

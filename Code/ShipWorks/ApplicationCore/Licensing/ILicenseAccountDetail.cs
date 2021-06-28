@@ -41,5 +41,10 @@ namespace ShipWorks.ApplicationCore.Licensing
         /// The Tango CustomerID associated with this license
         /// </summary>
         string TangoCustomerID { get; }
+        
+        /// <summary>
+        /// Whether or not this license is in trial
+        /// </summary>
+        bool InTrial { get; }
     }
 }

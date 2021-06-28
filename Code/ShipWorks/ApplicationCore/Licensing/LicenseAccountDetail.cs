@@ -255,14 +255,7 @@ namespace ShipWorks.ApplicationCore.Licensing
                     // Active on this identifier
                     else
                     {
-                        if (identifier == desiredIdentifier)
-                        {
-                            licenseState = LicenseActivationState.Active;
-                        }
-                        else
-                        {
-                            licenseState = LicenseActivationState.ActiveElsewhere;
-                        }
+                        licenseState = LicenseActivationState.Active;
                     }
                 }
             }
@@ -410,5 +403,10 @@ namespace ShipWorks.ApplicationCore.Licensing
             get;
             private set;
         }
+
+        /// <summary>
+        /// Whether or not this license is in trial
+        /// </summary>
+        public bool InTrial { get; }
     }
 }
