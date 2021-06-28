@@ -41,14 +41,6 @@ namespace ShipWorks.Stores.Management
             this.wizardPageContactInfo = new ShipWorks.UI.Wizard.WizardPage();
             this.storeContactControl = new ShipWorks.Stores.Management.StoreContactControl();
             this.wizardPageFinished = new ShipWorks.Stores.Management.AddStoreWizardFinishPage();
-            this.wizardPageAlreadyActive = new ShipWorks.UI.Wizard.WizardPage();
-            this.label3 = new System.Windows.Forms.Label();
-            this.linkLicenseKeyHelp = new ShipWorks.UI.Controls.LinkControl();
-            this.labelLicenseKeyHelp = new System.Windows.Forms.Label();
-            this.pictureBoxLicense = new System.Windows.Forms.PictureBox();
-            this.licenseKey = new System.Windows.Forms.TextBox();
-            this.labelLicense = new System.Windows.Forms.Label();
-            this.labelWelcomeBack = new System.Windows.Forms.Label();
             this.wizardPageSettings = new ShipWorks.UI.Wizard.WizardPage();
             this.panelSettingsContainer = new System.Windows.Forms.Panel();
             this.panelUploadSettings = new System.Windows.Forms.Panel();
@@ -88,8 +80,6 @@ namespace ShipWorks.Stores.Management
             this.skipPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureShoppingCart)).BeginInit();
             this.wizardPageContactInfo.SuspendLayout();
-            this.wizardPageAlreadyActive.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxLicense)).BeginInit();
             this.wizardPageSettings.SuspendLayout();
             this.panelSettingsContainer.SuspendLayout();
             this.panelUploadSettings.SuspendLayout();
@@ -268,95 +258,6 @@ namespace ShipWorks.Stores.Management
             this.wizardPageFinished.Size = new System.Drawing.Size(548, 500);
             this.wizardPageFinished.TabIndex = 0;
             this.wizardPageFinished.Title = "Setup Complete";
-            // 
-            // wizardPageAlreadyActive
-            // 
-            this.wizardPageAlreadyActive.Controls.Add(this.label3);
-            this.wizardPageAlreadyActive.Controls.Add(this.linkLicenseKeyHelp);
-            this.wizardPageAlreadyActive.Controls.Add(this.labelLicenseKeyHelp);
-            this.wizardPageAlreadyActive.Controls.Add(this.pictureBoxLicense);
-            this.wizardPageAlreadyActive.Controls.Add(this.licenseKey);
-            this.wizardPageAlreadyActive.Controls.Add(this.labelLicense);
-            this.wizardPageAlreadyActive.Controls.Add(this.labelWelcomeBack);
-            this.wizardPageAlreadyActive.Description = "A ShipWorks account already exists.";
-            this.wizardPageAlreadyActive.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.wizardPageAlreadyActive.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.wizardPageAlreadyActive.Location = new System.Drawing.Point(0, 0);
-            this.wizardPageAlreadyActive.Name = "wizardPageAlreadyActive";
-            this.wizardPageAlreadyActive.Size = new System.Drawing.Size(548, 500);
-            this.wizardPageAlreadyActive.TabIndex = 0;
-            this.wizardPageAlreadyActive.Title = "ShipWorks Account";
-            this.wizardPageAlreadyActive.StepNext += new System.EventHandler<ShipWorks.UI.Wizard.WizardStepEventArgs>(this.OnStepNextAlreadyActive);
-            this.wizardPageAlreadyActive.SteppingInto += new System.EventHandler<ShipWorks.UI.Wizard.WizardSteppingIntoEventArgs>(this.OnSteppingIntoAlreadyActive);
-            // 
-            // label3
-            // 
-            this.label3.AutoSize = true;
-            this.label3.ForeColor = System.Drawing.SystemColors.GrayText;
-            this.label3.Location = new System.Drawing.Point(354, 75);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(11, 13);
-            this.label3.TabIndex = 60;
-            this.label3.Text = ")";
-            // 
-            // linkLicenseKeyHelp
-            // 
-            this.linkLicenseKeyHelp.AutoSize = true;
-            this.linkLicenseKeyHelp.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.linkLicenseKeyHelp.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Underline);
-            this.linkLicenseKeyHelp.ForeColor = System.Drawing.Color.Blue;
-            this.linkLicenseKeyHelp.Location = new System.Drawing.Point(328, 75);
-            this.linkLicenseKeyHelp.Name = "linkLicenseKeyHelp";
-            this.linkLicenseKeyHelp.Size = new System.Drawing.Size(29, 13);
-            this.linkLicenseKeyHelp.TabIndex = 59;
-            this.linkLicenseKeyHelp.Text = "here";
-            this.linkLicenseKeyHelp.Click += new System.EventHandler(this.OnHelpFindLicenseKey);
-            // 
-            // labelLicenseKeyHelp
-            // 
-            this.labelLicenseKeyHelp.AutoSize = true;
-            this.labelLicenseKeyHelp.ForeColor = System.Drawing.SystemColors.GrayText;
-            this.labelLicenseKeyHelp.Location = new System.Drawing.Point(77, 75);
-            this.labelLicenseKeyHelp.Name = "labelLicenseKeyHelp";
-            this.labelLicenseKeyHelp.Size = new System.Drawing.Size(253, 13);
-            this.labelLicenseKeyHelp.TabIndex = 58;
-            this.labelLicenseKeyHelp.Text = "(You can find it in your ShipWorks account online at";
-            // 
-            // pictureBoxLicense
-            // 
-            this.pictureBoxLicense.Image = global::ShipWorks.Properties.Resources.key1;
-            this.pictureBoxLicense.Location = new System.Drawing.Point(23, 9);
-            this.pictureBoxLicense.Name = "pictureBoxLicense";
-            this.pictureBoxLicense.Size = new System.Drawing.Size(48, 48);
-            this.pictureBoxLicense.SizeMode = System.Windows.Forms.PictureBoxSizeMode.AutoSize;
-            this.pictureBoxLicense.TabIndex = 57;
-            this.pictureBoxLicense.TabStop = false;
-            // 
-            // licenseKey
-            // 
-            this.licenseKey.Location = new System.Drawing.Point(80, 50);
-            this.licenseKey.Name = "licenseKey";
-            this.licenseKey.Size = new System.Drawing.Size(408, 21);
-            this.licenseKey.TabIndex = 6;
-            // 
-            // labelLicense
-            // 
-            this.labelLicense.AutoSize = true;
-            this.labelLicense.Location = new System.Drawing.Point(77, 32);
-            this.labelLicense.Name = "labelLicense";
-            this.labelLicense.Size = new System.Drawing.Size(227, 13);
-            this.labelLicense.TabIndex = 5;
-            this.labelLicense.Text = "Enter your ShipWorks license key to continue:";
-            // 
-            // labelWelcomeBack
-            // 
-            this.labelWelcomeBack.AutoSize = true;
-            this.labelWelcomeBack.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.labelWelcomeBack.Location = new System.Drawing.Point(77, 9);
-            this.labelWelcomeBack.Name = "labelWelcomeBack";
-            this.labelWelcomeBack.Size = new System.Drawing.Size(92, 13);
-            this.labelWelcomeBack.TabIndex = 4;
-            this.labelWelcomeBack.Text = "Welcome back!";
             // 
             // wizardPageSettings
             // 
@@ -703,7 +604,6 @@ namespace ShipWorks.Stores.Management
             this.NextVisible = true;
             this.Pages.AddRange(new ShipWorks.UI.Wizard.WizardPage[] {
             this.wizardPageStoreType,
-            this.wizardPageAlreadyActive,
             this.wizardPageAddress,
             this.wizardPageContactInfo,
             this.wizardPageSettings,
@@ -724,9 +624,6 @@ namespace ShipWorks.Stores.Management
             this.skipPanel.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureShoppingCart)).EndInit();
             this.wizardPageContactInfo.ResumeLayout(false);
-            this.wizardPageAlreadyActive.ResumeLayout(false);
-            this.wizardPageAlreadyActive.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxLicense)).EndInit();
             this.wizardPageSettings.ResumeLayout(false);
             this.panelSettingsContainer.ResumeLayout(false);
             this.panelUploadSettings.ResumeLayout(false);
@@ -757,10 +654,6 @@ namespace ShipWorks.Stores.Management
         private ShipWorks.UI.Controls.ImageComboBox comboStoreType;
         private ShipWorks.UI.Wizard.WizardPage wizardPageContactInfo;
         private AddStoreWizardFinishPage wizardPageFinished;
-        private ShipWorks.UI.Wizard.WizardPage wizardPageAlreadyActive;
-        private System.Windows.Forms.TextBox licenseKey;
-        private System.Windows.Forms.Label labelLicense;
-        private System.Windows.Forms.Label labelWelcomeBack;
         private ShipWorks.UI.Wizard.WizardPage wizardPageSettings;
         private System.Windows.Forms.Panel panelOnlineUpdatePlaceholder;
         private StoreContactControl storeContactControl;
@@ -768,10 +661,6 @@ namespace ShipWorks.Stores.Management
         private StoreAddressControl storeAddressControl;
         private System.Windows.Forms.Label labelStoreTypeHelp;
         private System.Windows.Forms.PictureBox pictureShoppingCart;
-        private System.Windows.Forms.PictureBox pictureBoxLicense;
-        private System.Windows.Forms.Label label3;
-        private UI.Controls.LinkControl linkLicenseKeyHelp;
-        private System.Windows.Forms.Label labelLicenseKeyHelp;
         private System.Windows.Forms.Label labelShipmentUpdate;
         private System.Windows.Forms.PictureBox pictureBoxShipmentUpdate;
         private System.Windows.Forms.PictureBox pictureBoxDownloadRange;

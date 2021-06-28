@@ -134,7 +134,7 @@ namespace ShipWorks.ApplicationCore.Licensing
         /// <summary>
         /// Makes a request to Tango to add a store
         /// </summary>
-        IAddStoreResponse AddStore(ICustomerLicense license, StoreEntity store);
+        IAddStoreResponse AddStore(string licenseKey, StoreEntity store);
 
         /// <summary>
         /// Associates a free Stamps.com account with a customer license.

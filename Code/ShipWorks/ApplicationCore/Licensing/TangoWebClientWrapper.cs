@@ -228,9 +228,9 @@ namespace ShipWorks.ApplicationCore.Licensing
         /// <summary>
         /// Makes a request to Tango to add a store
         /// </summary>
-        public virtual IAddStoreResponse AddStore(ICustomerLicense license, StoreEntity store)
+        public virtual IAddStoreResponse AddStore(string licenseKey, StoreEntity store)
         {
-            return TangoWebClient.AddStore(license, store);
+            return TangoWebClient.AddStore(licenseKey, store);
         }
 
         /// <summary>
