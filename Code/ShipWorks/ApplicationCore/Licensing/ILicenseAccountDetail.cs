@@ -1,4 +1,5 @@
-﻿using ShipWorks.Editions;
+﻿using System;
+using ShipWorks.Editions;
 
 namespace ShipWorks.ApplicationCore.Licensing
 {
@@ -46,5 +47,10 @@ namespace ShipWorks.ApplicationCore.Licensing
         /// Whether or not this license is in trial
         /// </summary>
         bool InTrial { get; }
+        
+        /// <summary>
+        /// The date the the recurly trial ends
+        /// </summary>
+        DateTime RecurlyTrialEndDate { get; }
     }
 }

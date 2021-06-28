@@ -23,6 +23,7 @@ using ShipWorks.Data.Administration.Recovery;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.Custom;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Editions;
 using ShipWorks.Editions.Freemium;
@@ -298,7 +299,7 @@ namespace ShipWorks.ApplicationCore.Dashboard
                     continue;
                 }
 
-                DashboardTrialItem trialItem = dashboardItems.OfType<DashboardTrialItem>().Where(i => i.TrialDetail.Store.StoreID == store.StoreID).SingleOrDefault();
+                DashboardTrialItem trialItem = dashboardItems.OfType<DashboardTrialItem>().SingleOrDefault(i => i.Store.StoreID == store.StoreID);
                 if (trialItem == null)
                 {
                     ThreadPool.QueueUserWorkItem(ExceptionMonitor.WrapWorkItem(AsyncLoadTrialDetail),
@@ -316,7 +317,7 @@ namespace ShipWorks.ApplicationCore.Dashboard
             // Go through each trial making sure they are all still valid stores and valid trials
             foreach (DashboardTrialItem trialItem in dashboardItems.OfType<DashboardTrialItem>().ToList())
             {
-                StoreEntity store = StoreManager.GetStore(trialItem.TrialDetail.Store.StoreID);
+                StoreEntity store = StoreManager.GetStore(trialItem.Store.StoreID);
                 if (store == null || !store.Enabled)
                 {
                     RemoveDashboardItem(trialItem);
@@ -359,7 +360,7 @@ namespace ShipWorks.ApplicationCore.Dashboard
         }
 
         /// <summary>
-        /// Load trial information asyncronously
+        /// Load trial information asynchronously
         /// </summary>
         private static void AsyncLoadTrialDetail(object state)
         {
@@ -370,9 +371,9 @@ namespace ShipWorks.ApplicationCore.Dashboard
 
             try
             {
-                TrialDetail trialDetail = TangoWebClient.GetTrial(store);
+                ILicenseAccountDetail accountDetail = TangoWebClient.GetLicenseStatus(store.License, store, false);
 
-                panel.BeginInvoke((MethodInvoker<TrialDetail>) AsyncLoadTrialDetailComplete, trialDetail);
+                panel.BeginInvoke((MethodInvoker<IStoreEntity, DateTime>) AsyncLoadTrialDetailComplete, store, accountDetail.RecurlyTrialEndDate);
             }
             catch (ShipWorksLicenseException ex)
             {
@@ -391,7 +392,7 @@ namespace ShipWorks.ApplicationCore.Dashboard
         /// <summary>
         /// The loading of a trial detail has completed.  This is back on the UI thread.
         /// </summary>
-        private static void AsyncLoadTrialDetailComplete(TrialDetail trialDetail)
+        private static void AsyncLoadTrialDetailComplete(IStoreEntity storeEntity, DateTime trialEndDate)
         {
             // Dashboard may have closed in the meantime
             if (!IsDashboardOpen)
@@ -405,13 +406,13 @@ namespace ShipWorks.ApplicationCore.Dashboard
                 return;
             }
 
-            DashboardTrialItem existing = dashboardItems.OfType<DashboardTrialItem>().Where(i => i.TrialDetail.Store.StoreID == trialDetail.Store.StoreID).SingleOrDefault();
+            DashboardTrialItem existing = dashboardItems.OfType<DashboardTrialItem>().SingleOrDefault(i => i.Store.StoreID == storeEntity.StoreID);
             if (existing != null)
             {
                 return;
             }
 
-            DashboardTrialItem trialItem = new DashboardTrialItem(trialDetail);
+            DashboardTrialItem trialItem = new DashboardTrialItem(storeEntity, trialEndDate);
             AddDashboardItem(trialItem);
         }
 
@@ -863,7 +864,7 @@ namespace ShipWorks.ApplicationCore.Dashboard
                 }
                 else if (left is DashboardTrialItem && right is DashboardTrialItem)
                 {
-                    return ((DashboardTrialItem) left).TrialDetail.Store.StoreName.CompareTo(((DashboardTrialItem) right).TrialDetail.Store.StoreName);
+                    return ((DashboardTrialItem) left).Store.StoreName.CompareTo(((DashboardTrialItem) right).Store.StoreName);
                 }
             }
 

@@ -408,5 +408,10 @@ namespace ShipWorks.ApplicationCore.Licensing
         /// Whether or not this license is in trial
         /// </summary>
         public bool InTrial { get; }
+        
+        /// <summary>
+        /// The date that the recurly trial ends
+        /// </summary>
+        public DateTime RecurlyTrialEndDate { get; }
     }
 }
