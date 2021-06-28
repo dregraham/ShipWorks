@@ -31,16 +31,6 @@ namespace ShipWorks.ApplicationCore.Licensing
         Dictionary<string, string> GetCarrierCertificateVerificationData(StoreEntity store);
 
         /// <summary>
-        /// Request a trial for use with the specified store. If a trial already exists, a new one will not be created.
-        /// </summary>
-        TrialDetail GetTrial(StoreEntity store);
-
-        /// <summary>
-        /// Extend the trial for the given store
-        /// </summary>
-        TrialDetail ExtendTrial(StoreEntity store);
-
-        /// <summary>
         /// Associates a Usps account created in ShipWorks as the users free Stamps.com account
         /// </summary>
         AssociateShipWorksWithItselfResponse AssociateShipworksWithItself(AssociateShipworksWithItselfRequest associateShipworksWithItselfRequest);

@@ -40,7 +40,6 @@ namespace ShipWorks.Stores.Management
 
         // License info
         private ShipWorksLicense license;
-        private TrialDetail trialDetail;
         private ILicenseAccountDetail accountDetail;
 
         // The account settings control
@@ -443,21 +442,26 @@ namespace ShipWorks.Stores.Management
 
             // Create the license instance
             license = new ShipWorksLicense(store.License);
-            trialDetail = null;
             accountDetail = null;
 
             try
             {
-                // May be a trial
-                if (license.IsTrial)
+                using (var lifetimeScope = IoC.BeginLifetimeScope())
                 {
-                    licenseKey.Text = string.Format("Trial ({0})", store.License.Substring(0, store.License.Replace("-TRIAL", "").LastIndexOf('-')));
+                    var tangoWebClient = lifetimeScope.Resolve<ITangoWebClient>();
+
+                    accountDetail = tangoWebClient.GetLicenseStatus(license.Key, store);
+                }
+
+                // May be a trial
+                if (accountDetail.InTrial)
+                {
+                    licenseKey.Text =
+                        $"Trial ({store.License.Substring(0, store.License.Replace("-TRIAL", "").LastIndexOf('-'))})";
 
                     if (!storeDisabled.Checked)
                     {
-                        trialDetail = TangoWebClient.GetTrial(store);
-                        licenseStatus.Text = trialDetail.Description;
-
+                        licenseStatus.Text = accountDetail.TrialIsExpired ? "Expired" : $"Expires in {accountDetail.DaysLeftInTrial} days.";
                         changeLicense.Text = "Enter License...";
                     }
                 }
@@ -467,13 +471,7 @@ namespace ShipWorks.Stores.Management
 
                     if (!storeDisabled.Checked)
                     {
-                        using (var lifetimeScope = IoC.BeginLifetimeScope())
-                        {
-                            var tangoWebClient = lifetimeScope.Resolve<ITangoWebClient>();
-
-                            accountDetail = tangoWebClient.GetLicenseStatus(license.Key, store);
-                            licenseStatus.Text = accountDetail.Description;
-                        }
+                        licenseStatus.Text = accountDetail.Description;
                         UpdateChangeLicenseText();
                     }
                 }

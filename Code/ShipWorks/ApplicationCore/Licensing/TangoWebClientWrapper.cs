@@ -51,22 +51,6 @@ namespace ShipWorks.ApplicationCore.Licensing
         }
 
         /// <summary>
-        /// Request a trial for use with the specified store. If a trial already exists, a new one will not be created.
-        /// </summary>
-        public virtual TrialDetail GetTrial(StoreEntity store)
-        {
-            return TangoWebClient.GetTrial(store);
-        }
-
-        /// <summary>
-        /// Extend the trial for the given store
-        /// </summary>
-        public virtual TrialDetail ExtendTrial(StoreEntity store)
-        {
-            return TangoWebClient.ExtendTrial(store);
-        }
-
-        /// <summary>
         /// Activates shipworks for the given user
         /// </summary>
         public GenericResult<IActivationResponse> ActivateLicense(string email, string password)

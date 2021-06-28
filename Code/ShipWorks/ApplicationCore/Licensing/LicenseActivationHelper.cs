@@ -124,25 +124,17 @@ namespace ShipWorks.ApplicationCore.Licensing
 
             if (license.IsTrial)
             {
-                TrialDetail trialDetail = TangoWebClient.GetTrial(store);
-
-                // If its converted, they have to enter their license
-                if (trialDetail.IsConverted)
-                {
-                    throw new ShipWorksLicenseException(
-                        "A ShipWorks license has been purchased for this trial.  Please enter " +
-                        "your license to continue using ShipWorks.");
-                }
+                var accountDetail = TangoWebClient.GetLicenseStatus(store.License, store, false);
 
                 // Trial expired
-                if (trialDetail.IsExpired)
+                if (accountDetail.TrialIsExpired)
                 {
                     throw new ShipWorksLicenseException(
                         "Your ShipWorks trial period has expired.\n\n" +
-                        "Please sign up at http://www.interapptive.com to continue using ShipWorks.");
+                        "Please enter a credit card at https://hub.shipworks.com/account to continue using ShipWorks.");
                 }
 
-                EditionManager.UpdateStoreEdition(store, trialDetail.Edition);
+                EditionManager.UpdateStoreEdition(store, accountDetail.Edition);
             }
             else
             {

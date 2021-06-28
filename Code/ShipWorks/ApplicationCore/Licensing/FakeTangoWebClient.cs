@@ -89,16 +89,6 @@ namespace ShipWorks.ApplicationCore.Licensing
         }
 
         /// <summary>
-        /// Request a trial for use with the specified store. If a trial already exists, a new one will not be created.
-        /// </summary>
-        public override TrialDetail GetTrial(StoreEntity store)
-        {
-            XmlDocument trialXml = GetXmlDocumentFromFile("Trial.xml", store.License);
-
-            return new TrialDetail(trialXml, store);
-        }
-
-        /// <summary>
         /// Gets the license capabilities.
         /// </summary>
         public override ILicenseCapabilities GetLicenseCapabilities(ICustomerLicense license)

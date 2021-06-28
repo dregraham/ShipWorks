@@ -52,5 +52,15 @@ namespace ShipWorks.ApplicationCore.Licensing
         /// The date the the recurly trial ends
         /// </summary>
         DateTime RecurlyTrialEndDate { get; }
+        
+        /// <summary>
+        /// How many days are left in the trial
+        /// </summary>
+        int DaysLeftInTrial { get; }
+        
+        /// <summary>
+        /// Whether or not the trial is expired
+        /// </summary>
+        bool TrialIsExpired { get; }
     }
 }

@@ -395,62 +395,6 @@ namespace ShipWorks.ApplicationCore.Licensing
         }
 
         /// <summary>
-        /// Request a trial for use with the specified store. If a trial already exists, a new one will not be created.
-        /// </summary>
-        public static TrialDetail GetTrial(StoreEntity store)
-        {
-            if (store == null)
-            {
-                throw new ArgumentNullException("store");
-            }
-
-            HttpVariableRequestSubmitter postRequest = new HttpVariableRequestSubmitter();
-            postRequest.Variables.Add("action", "gettrial");
-            postRequest.Variables.Add("license", store.License);
-            postRequest.Variables.Add("edition", EnumHelper.GetDescription(TrialDetail.EffectiveTrialEditionType));
-
-            // Process the request
-            TrialDetail trialDetail = ProcessTrialRequest(postRequest, store);
-
-            // This will happen when the user changes the identifier of the store, and the identifier they
-            // change to is one that is already used by an existing trial.  We update the store to use
-            // the license from the trial of the identifier they changed to.
-            if (trialDetail.License.Key != store.License)
-            {
-                bool alreadyDirty = store.IsDirty || store.IsNew;
-
-                store.License = trialDetail.License.Key;
-
-                // Dont save if its already dirty - whoever already made it dirty will save it.
-                if (!alreadyDirty)
-                {
-                    using (SqlAdapter adapter = new SqlAdapter())
-                    {
-                        adapter.SaveAndRefetch(store);
-                    }
-                }
-            }
-
-            return trialDetail;
-        }
-
-        /// <summary>
-        /// Extend the trial for the given store
-        /// </summary>
-        public static TrialDetail ExtendTrial(StoreEntity store)
-        {
-            if (store == null)
-            {
-                throw new ArgumentNullException("store");
-            }
-
-            HttpVariableRequestSubmitter postRequest = new HttpVariableRequestSubmitter();
-            postRequest.Variables.Add("action", "extendtrial");
-
-            return ProcessTrialRequest(postRequest, store);
-        }
-
-        /// <summary>
         /// Send the new password to the given user
         /// </summary>
         public static void SendAccountPassword(string email, string password)

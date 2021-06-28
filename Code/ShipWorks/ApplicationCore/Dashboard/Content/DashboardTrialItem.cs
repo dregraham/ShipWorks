@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using ShipWorks.ApplicationCore.Licensing;
 using ShipWorks.Properties;
 using ShipWorks.Data.Model.EntityInterfaces;
 
