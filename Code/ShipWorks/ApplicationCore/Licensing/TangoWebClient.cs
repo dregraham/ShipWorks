@@ -959,7 +959,7 @@ namespace ShipWorks.ApplicationCore.Licensing
         /// <summary>
         /// Makes a request to Tango to add a store
         /// </summary>
-        public static IAddStoreResponse AddStore(string licenseKey, StoreEntity store, bool convertTrial = false)
+        public static IAddStoreResponse AddStore(string licenseKey, StoreEntity store)
         {
             HttpVariableRequestSubmitter postRequest = new HttpVariableRequestSubmitter();
 
@@ -1076,6 +1076,32 @@ namespace ShipWorks.ApplicationCore.Licensing
             {
                 XmlDocument xmlResponse = ProcessXmlRequest(postRequest, "AssociateStampsUsernameWithLicense", false);
 
+                CheckResponseForErrors(xmlResponse);
+            }
+            catch (TangoException ex)
+            {
+                log.Error(ex.Message);
+            }
+        }
+        
+        /// <summary>
+        /// Convert a legacy trial store
+        /// </summary>
+        public static void ConvertLegacyTrialStore(StoreEntity store)
+        {
+            HttpVariableRequestSubmitter postRequest = new HttpVariableRequestSubmitter();
+
+            StoreType storeType = StoreTypeManager.GetType(store);
+
+            postRequest.Variables.Add("action", "converttrial");
+            postRequest.Variables.Add("storecode", storeType.TangoCode);
+            postRequest.Variables.Add("identifier", storeType.LicenseIdentifier);
+            postRequest.Variables.Add("version", Version);
+
+            XmlDocument xmlResponse = ProcessXmlRequest(postRequest, "ConvertLegacyTrialStore", false);
+
+            try
+            {
                 CheckResponseForErrors(xmlResponse);
             }
             catch (TangoException ex)

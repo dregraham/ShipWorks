@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using Interapptive.Shared.Business;
 using Interapptive.Shared.Utility;
@@ -238,5 +237,10 @@ namespace ShipWorks.ApplicationCore.Licensing
         /// </summary>
         public virtual void LogSubmitInsuranceClaim(ShipmentEntity shipment) =>
             TangoWebClient.LogSubmitInsuranceClaim(shipment);
+
+        /// <summary>
+        /// Convert a legacy trial store
+        /// </summary>
+        public void ConvertLegacyTrialStore(StoreEntity store) => TangoWebClient.ConvertLegacyTrialStore(store);
     }
 }

@@ -134,5 +134,10 @@ namespace ShipWorks.ApplicationCore.Licensing
         /// Log the given insurance claim to Tango.
         /// </summary>
         void LogSubmitInsuranceClaim(ShipmentEntity shipment);
+
+        /// <summary>
+        /// Convert a legacy trial store
+        /// </summary>
+        void ConvertLegacyTrialStore(StoreEntity store);
     }
 }
