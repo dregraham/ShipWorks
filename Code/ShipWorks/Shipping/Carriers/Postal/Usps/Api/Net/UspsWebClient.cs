@@ -872,21 +872,30 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
                     {
                         var newTransactions = uspsTransactions.Except(alreadyScanned);
 
+                        // If newTransactions is empty it means that there were no new ids
+                        // provided to the call, if called with an empty list it will error out
+                        // due to missing parameters. This is likely because another instance of
+                        // ShipWorks created a SCAN form.
+                        if (!newTransactions.Any())
+                        {
+                            throw new UspsException("All shipments have been added to a previous SCAN form.");
+                        }
+
                         webService.CreateManifest
                         (
-                        credentials,
-                        ref transactionID,
-                        newTransactions.ToArray(),
-                        null, // TrackingNumbers (not needed because we send the uspsTransactions)
-                        null, // ShipDate
-                        false, // ShipDateSpecified
-                        null, // PrintLayout
-                        address,
-                        ImageType.Png,
-                        false, // Don't print instructions
-                        ManifestType.All,
-                        0, // NumberOfLabels (wsdl shows it as optional and default is 0)
-                        out endOfDayManifests
+                            credentials,
+                            ref transactionID,
+                            newTransactions.ToArray(),
+                            null, // TrackingNumbers (not needed because we send the uspsTransactions)
+                            null, // ShipDate
+                            false, // ShipDateSpecified
+                            null, // PrintLayout
+                            address,
+                            ImageType.Png,
+                            false, // Don't print instructions
+                            ManifestType.All,
+                            0, // NumberOfLabels (wsdl shows it as optional and default is 0)
+                            out endOfDayManifests
                         );
                     }
                     else
