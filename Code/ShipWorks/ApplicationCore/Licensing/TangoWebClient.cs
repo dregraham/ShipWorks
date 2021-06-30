@@ -1087,15 +1087,12 @@ namespace ShipWorks.ApplicationCore.Licensing
         /// <summary>
         /// Convert a legacy trial store
         /// </summary>
-        public static void ConvertLegacyTrialStore(StoreEntity store)
+        public static void ConvertLegacyTrialStore(string trialLicenseKey)
         {
             HttpVariableRequestSubmitter postRequest = new HttpVariableRequestSubmitter();
 
-            StoreType storeType = StoreTypeManager.GetType(store);
-
             postRequest.Variables.Add("action", "converttrial");
-            postRequest.Variables.Add("storecode", storeType.TangoCode);
-            postRequest.Variables.Add("identifier", storeType.LicenseIdentifier);
+            postRequest.Variables.Add("triallicensekey", trialLicenseKey);
             postRequest.Variables.Add("version", Version);
 
             XmlDocument xmlResponse = ProcessXmlRequest(postRequest, "ConvertLegacyTrialStore", false);

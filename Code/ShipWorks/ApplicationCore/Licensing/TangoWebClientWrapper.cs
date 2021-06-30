@@ -241,6 +241,7 @@ namespace ShipWorks.ApplicationCore.Licensing
         /// <summary>
         /// Convert a legacy trial store
         /// </summary>
-        public void ConvertLegacyTrialStore(StoreEntity store) => TangoWebClient.ConvertLegacyTrialStore(store);
+        public void ConvertLegacyTrialStore(string trialLicenseKey) =>
+            TangoWebClient.ConvertLegacyTrialStore(trialLicenseKey);
     }
 }

@@ -5556,34 +5556,17 @@ namespace ShipWorks
                 log.Error("Failed to synchronize with Hub configuration", ex);
             }
         }
-        
+
         /// <summary>
         /// Convert legacy trial stores to non-trial stores. Trial status will be associated with the license moving forward
         /// </summary>
         private void ConvertLegacyTrialStores()
         {
-            try
+            using (var lifetimeScope = IoC.BeginLifetimeScope())
             {
-                using (var lifetimeScope = IoC.BeginLifetimeScope())
-                {
-                    var tangoWebClient = lifetimeScope.Resolve<ITangoWebClient>();
-                    var storeManager = lifetimeScope.Resolve<IStoreManager>();
-                    var trialStores = storeManager.GetAllStores().Where(x => x.License.IsNullOrWhiteSpace());
+                var legacyTrialStoreConverter = lifetimeScope.Resolve<ILegacyTrialStoreConverter>();
 
-                    foreach (var trialStore in trialStores)
-                    {
-                        var addStoreResponse = tangoWebClient.AddStore(trialStore.License, trialStore);
-                        trialStore.License = addStoreResponse.Key;
-                        
-                        storeManager.SaveStore(trialStore);
-                        
-                        tangoWebClient.ConvertLegacyTrialStore(trialStore);
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                log.Error("Failed to convert legacy trial stores", ex);
+                legacyTrialStoreConverter.ConvertTrials();
             }
         }
 

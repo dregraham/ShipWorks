@@ -355,6 +355,7 @@
     <Compile Include="Platforms\Odbc\Warehouse\IOdbcStoreClient.cs" />
     <Compile Include="Platforms\Odbc\Warehouse\OdbcStoreClient.cs" />
     <Compile Include="Platforms\Odbc\Warehouse\OdbcStoreDtoFactory.cs" />
+    <Compile Include="Services\LegacyTrialStoreConverter.cs" />
     <Compile Include="Warehouse\IStoreDtoHelpers.cs" />
     <Compile Include="Platforms\AmeriCommerce\AmeriCommerceCombineOrderNumberSearchProvider.cs" />
     <Compile Include="Platforms\AmeriCommerce\AmeriCommerceWebClient.cs" />
