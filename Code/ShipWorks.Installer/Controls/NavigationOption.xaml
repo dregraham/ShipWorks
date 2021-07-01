@@ -11,7 +11,7 @@
             <ColumnDefinition Width="auto"/>
             <ColumnDefinition Width="auto"/>
         </Grid.ColumnDefinitions>
-        <TextBlock Style="{StaticResource StandardText}" x:Name="Label" Text="Option 1" VerticalAlignment="Center" FontSize="15" Foreground="White"/>
+        <TextBlock Style="{StaticResource StandardText}" x:Name="Label" Text="Option 1" VerticalAlignment="Center" FontSize="15" Foreground="Black"/>
         <fa5:FontAwesome x:Name="CurrentIcon"
                          FontSize="15"
                          Icon="None" 

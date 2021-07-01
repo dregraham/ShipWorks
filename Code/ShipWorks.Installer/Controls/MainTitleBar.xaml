@@ -9,7 +9,7 @@
     <UserControl.Resources>
         <ResourceDictionary>
             <Style x:Key="TitleBarButtonStyle" TargetType="Button">
-                <Setter Property="Foreground" Value="White" />
+                <Setter Property="Foreground" Value="Black" />
                 <Setter Property="Padding" Value="0" />
                 <Setter Property="WindowChrome.IsHitTestVisibleInChrome" Value="True" />
                 <Setter Property="IsTabStop" Value="False" />
@@ -43,7 +43,7 @@
             </Style>
 
             <Style x:Key="TitleBarCloseButtonStyle" TargetType="Button">
-                <Setter Property="Foreground" Value="White" />
+                <Setter Property="Foreground" Value="Black" />
                 <Setter Property="Padding" Value="0" />
                 <Setter Property="WindowChrome.IsHitTestVisibleInChrome" Value="True" />
                 <Setter Property="IsTabStop" Value="False" />
@@ -80,7 +80,7 @@
         </ResourceDictionary>
     </UserControl.Resources>
     <Border BorderBrush="#FF404040" BorderThickness="0,0,0,1">
-        <Grid Background="#FF252526">
+        <Grid Background="White">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="Auto" />
                 <ColumnDefinition Width="*" />
@@ -98,7 +98,7 @@
             <TextBlock
         Grid.Column="1"
         Margin="4 0 0 0"
-        Foreground="White"
+        Foreground="Black"
         VerticalAlignment="Center"
         FontSize="14"
         x:Name="Title"
