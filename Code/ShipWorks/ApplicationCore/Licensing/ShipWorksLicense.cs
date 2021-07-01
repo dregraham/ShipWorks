@@ -13,135 +13,81 @@ namespace ShipWorks.ApplicationCore.Licensing
     public class ShipWorksLicense : IShipWorksLicense
     {
         private static readonly ILog log = LogManager.GetLogger(typeof(ShipWorksLicense));
-        StoreTypeCode typeCode = StoreTypeCode.Invalid;
-
-        string key;
-
-        bool isMetered = false;
-        bool isTrial = false;
 
         /// <summary>
         /// Creates a license from a key
         /// </summary>
         public ShipWorksLicense(string key)
         {
-            this.key = key;
+            Key = key;
 
-            ReadLicense(key);
+            ReadLicense();
         }
 
         /// <summary>
         /// The store type the license represents
         /// </summary>
-        public StoreTypeCode StoreTypeCode
-        {
-            get
-            {
-                return typeCode;
-            }
-        }
+        public StoreTypeCode StoreTypeCode { get; private set; } = StoreTypeCode.Invalid;
 
         /// <summary>
         /// The actual license key
         /// </summary>
-        public string Key
-        {
-            get
-            {
-                return key;
-            }
-        }
+        public string Key { get; }
 
         /// <summary>
-        /// Indiciates if this is a metered license that is billed monthly, as opposed
+        /// Indicates if this is a metered license that is billed monthly, as opposed
         /// to our old legacy licenses.
         /// </summary>
-        public bool IsMetered
-        {
-            get
-            {
-                return isMetered;
-            }
-        }
+        public bool IsMetered { get; private set; } = false;
 
         /// <summary>
-        /// Indiciates if this is a trial license.
+        /// Indicates if this is a trial license.
         /// </summary>
-        public bool IsTrial
-        {
-            get
-            {
-                return isTrial;
-            }
-        }
+        public bool IsTrial { get; private set; } = false;
 
         /// <summary>
         /// Indicates if this instance represents a valid license.
         /// </summary>
-        public bool IsValid
-        {
-            get
-            {
-                return StoreTypeCode != StoreTypeCode.Invalid;
-            }
-        }
-
-        /// <summary>
-        /// Gets a user-presentable string description of the license.
-        /// </summary>
-        public string Description
-        {
-            get
-            {
-                if (StoreTypeCode == StoreTypeCode.Invalid)
-                {
-                    return "No License";
-                }
-                else
-                {
-                    return StoreTypeManager.GetType(StoreTypeCode).StoreTypeName;
-                }
-            }
-        }
+        public bool IsValid => StoreTypeCode != StoreTypeCode.Invalid;
 
         /// <summary>
         /// Read the details out of the license.
         /// </summary>
-        private void ReadLicense(string key)
+        private void ReadLicense()
         {
-            typeCode = StoreTypeCode.Invalid;
+            StoreTypeCode = StoreTypeCode.Invalid;
 
-            if (key.Length == 0)
+            if (Key.Length == 0)
             {
-                isTrial = HasInTrial();
+                IsTrial = HasInTrial();
                 return;
             }
 
             // Try to decode it as the new metered version first.
-            RawLicense license = LicenseDecoder.Decode(key, "3.m");
+            RawLicense license = LicenseDecoder.Decode(Key, "3.m");
 
             // Now see if its a freemium license
             if (license == null)
             {
-                license = LicenseDecoder.Decode(key, "2.f");
+                license = LicenseDecoder.Decode(Key, "2.f");
             }
 
 	        // Now see if its a freemium license
             if (license == null)
             {
-                license = LicenseDecoder.Decode(key, "2.m");
+                license = LicenseDecoder.Decode(Key, "2.m");
             }
 
             // Try the new UPS Only salt
             if (license == null)
             {
-                license = LicenseDecoder.Decode(key, "3.u");
+                license = LicenseDecoder.Decode(Key, "3.u");
             }
 
             // Now try to decode as using the old legacy salt
             if (license == null)
             {
-                license = LicenseDecoder.Decode(key, "2.x");
+                license = LicenseDecoder.Decode(Key, "2.x");
             }
 
             // If it fails for any reason, its invalid
@@ -151,24 +97,17 @@ namespace ShipWorks.ApplicationCore.Licensing
             }
 
             // For our new metered licenses, there is always an M in the 4th location.
-            isMetered = license.Data1[3] == 'M';
+            IsMetered = license.Data1[3] == 'M';
 
             // See if its a trial
-            if (isMetered && license.Data2[0] == 'T')
-            {
-                isTrial = true;
-            }
-            else
-            {
-                isTrial = HasInTrial();
-            }
+            IsTrial = IsMetered && license.Data2[0] == 'T' || HasInTrial();
 
             // Look for this store type
             foreach (StoreType storeType in StoreTypeManager.StoreTypes)
             {
                 if (license.Data1.StartsWith(storeType.LicenseSalt))
                 {
-                    typeCode = storeType.TypeCode;
+                    StoreTypeCode = storeType.TypeCode;
                     break;
                 }
             }
@@ -190,9 +129,9 @@ namespace ShipWorks.ApplicationCore.Licensing
 
                     if (licenseService.IsLegacy)
                     {
-                        // The calling code is checking the meter number and license number that indicate
-                        // the license code itself is or isn't a trial.
-                        return false;
+                        return licenses?
+                            .FirstOrDefault(l => l.Key.Equals(Key, StringComparison.InvariantCultureIgnoreCase))?
+                            .IsInTrial == true;
                     }
 
                     return licenses?.Any(l => l.IsInTrial) == true;
@@ -200,7 +139,7 @@ namespace ShipWorks.ApplicationCore.Licensing
             }
             catch (Exception ex)
             {
-                log.Error($"Error occurred in ShipWorksLicense.HasInTrial", ex);
+                log.Error("Error occurred in ShipWorksLicense.HasInTrial", ex);
                 return false;
             }
         }

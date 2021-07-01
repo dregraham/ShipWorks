@@ -131,13 +131,8 @@ namespace ShipWorks.ApplicationCore.Licensing
         {
             try
             {
-                Func<StoreEntity> getStore = () =>
-                {
-                    return StoreManager.GetEnabledStores()
-                               .FirstOrDefault(s => new ShipWorksLicense(s.License).IsTrial == false) ??
-                           StoreManager.GetAllStores()
-                               .FirstOrDefault(s => new ShipWorksLicense(s.License).IsTrial == false);
-                };
+                Func<StoreEntity> getStore = () => StoreManager.GetEnabledStores().FirstOrDefault() ??
+                                                   StoreManager.GetAllStores().FirstOrDefault();
 
                 StoreEntity store = getStore();
 
@@ -223,25 +218,12 @@ namespace ShipWorks.ApplicationCore.Licensing
             // Get the license from the store so we know how to log
             ShipWorksLicense license = new ShipWorksLicense(store.License);
 
-            // Get the store type
-            StoreType storeType = StoreTypeManager.GetType(store);
-
             // Create our http variable request submitter
             HttpVariableRequestSubmitter postRequest = new HttpVariableRequestSubmitter();
 
             // Both methods use action
             postRequest.Variables.Add("action", action);
-
-            // Trial shipment logging
-            if (license.IsTrial)
-            {
-                postRequest.Variables.Add("storecode", storeType.TangoCode);
-                postRequest.Variables.Add("identifier", storeType.LicenseIdentifier);
-            }
-            else
-            {
-                postRequest.Variables.Add("license", license.Key);
-            }
+            postRequest.Variables.Add("license", license.Key);
 
             // Get the credentials from Tango
             XmlDocument responseXmlDocument = ProcessXmlRequest(postRequest, "GetCounterRatesCreds", false);
@@ -301,17 +283,8 @@ namespace ShipWorks.ApplicationCore.Licensing
 
             // Both methods use action
             postRequest.Variables.Add("action", action);
-
-            // Trial shipment logging
-            if (license.IsTrial)
-            {
-                postRequest.Variables.Add("storecode", storeType.TangoCode);
-                postRequest.Variables.Add("identifier", storeType.LicenseIdentifier);
-            }
-            else
-            {
-                postRequest.Variables.Add("license", license.Key);
-            }
+            postRequest.Variables.Add("license", license.Key);
+            
 
             // Get the certificate verification data from Tango
             XmlDocument responseXmlDocument = ProcessXmlRequest(postRequest, "CarrierCertificate", false);
@@ -479,48 +452,44 @@ namespace ShipWorks.ApplicationCore.Licensing
                 throw new ArgumentNullException("store");
             }
 
-            // Get the license from the store so we know how to log
-            ShipWorksLicense license = new ShipWorksLicense(store.License);
-
-            if (!license.IsTrial)
+            if (shipment.OnlineShipmentID.IsNullOrWhiteSpace())
             {
-                if (shipment.OnlineShipmentID.IsNullOrWhiteSpace())
+                // To void, Tango needs a shipment in its db, so since we don't have an OnlineShipmentID, we must
+                // assume that there isn't one, so log it now.
+                using (var lifetimeScope = IoC.BeginLifetimeScope())
                 {
-                    // To void, Tango needs a shipment in its db, so since we don't have an OnlineShipmentID, we must
-                    // assume that there isn't one, so log it now.
-                    using (var lifetimeScope = IoC.BeginLifetimeScope())
-                    {
-                        ISqlSession sqlSession = lifetimeScope.Resolve<ISqlSession>();
-                        ITangoLogShipmentRequest logShipmentRequest = lifetimeScope.Resolve<ITangoLogShipmentRequest>();
+                    ISqlSession sqlSession = lifetimeScope.Resolve<ISqlSession>();
+                    ITangoLogShipmentRequest logShipmentRequest = lifetimeScope.Resolve<ITangoLogShipmentRequest>();
 
-                        Result logShipmentResult = logShipmentRequest.LogShipment(sqlSession.OpenConnection(), store, shipment);
-                        if (logShipmentResult.Failure)
-                        {
-                            log.Error($"ShipWorks was unable to void the shipment.  {logShipmentResult.Message}", logShipmentResult.Exception);
-                            throw new TangoException("ShipWorks was unable to void the shipment.");
-                        }
+                    Result logShipmentResult =
+                        logShipmentRequest.LogShipment(sqlSession.OpenConnection(), store, shipment);
+                    if (logShipmentResult.Failure)
+                    {
+                        log.Error($"ShipWorks was unable to void the shipment.  {logShipmentResult.Message}",
+                            logShipmentResult.Exception);
+                        throw new TangoException("ShipWorks was unable to void the shipment.");
                     }
                 }
-
-                // Create the request
-                HttpVariableRequestSubmitter postRequest = new HttpVariableRequestSubmitter();
-
-                postRequest.Variables.Add("action", "logshipmentvoided");
-                postRequest.Variables.Add("swshipmentid", shipment.ShipmentID.ToString());
-
-                // There are some cases when we might log a shipment twice. In these instances, we don't know
-                // what the tango OnlineShipmentID is so we set the OnlineShipmentID with SWSet_ShipmentID. Tango
-                // won't know what to do with this, so no reason to send it. This may result in shipments being
-                // voided for another customer's warehouse.
-                if (!shipment.OnlineShipmentID.StartsWith("SWSet_", StringComparison.OrdinalIgnoreCase))
-                {
-                    postRequest.Variables.Add("tangoshipmentid", shipment.OnlineShipmentID);
-                }
-
-                postRequest.Variables.Add("license", license.Key);
-
-                ProcessXmlRequest(postRequest, "LogShipmentVoided", false);
             }
+
+            // Create the request
+            HttpVariableRequestSubmitter postRequest = new HttpVariableRequestSubmitter();
+
+            postRequest.Variables.Add("action", "logshipmentvoided");
+            postRequest.Variables.Add("swshipmentid", shipment.ShipmentID.ToString());
+
+            // There are some cases when we might log a shipment twice. In these instances, we don't know
+            // what the tango OnlineShipmentID is so we set the OnlineShipmentID with SWSet_ShipmentID. Tango
+            // won't know what to do with this, so no reason to send it. This may result in shipments being
+            // voided for another customer's warehouse.
+            if (!shipment.OnlineShipmentID.StartsWith("SWSet_", StringComparison.OrdinalIgnoreCase))
+            {
+                postRequest.Variables.Add("tangoshipmentid", shipment.OnlineShipmentID);
+            }
+
+            postRequest.Variables.Add("license", store.License);
+
+            ProcessXmlRequest(postRequest, "LogShipmentVoided", false);
         }
 
         /// <summary>
@@ -655,7 +624,8 @@ namespace ShipWorks.ApplicationCore.Licensing
         /// <summary>
         /// Update the platform, developer, and version info for the given generic store
         /// </summary>
-        public static void UpdateGenericModuleInfo(GenericModuleStoreEntity store, string platform, string developer, string version)
+        public static void UpdateGenericModuleInfo(GenericModuleStoreEntity store, string platform, string developer,
+            string version)
         {
             HttpVariableRequestSubmitter postRequest = new HttpVariableRequestSubmitter();
             postRequest.Variables.Add("platform", platform);
@@ -664,19 +634,9 @@ namespace ShipWorks.ApplicationCore.Licensing
 
             ShipWorksLicense license = new ShipWorksLicense(store.License);
 
-            if (license.IsTrial)
-            {
-                postRequest.Variables.Add("action", "updateTrialGenericModuleInfo");
-                postRequest.Variables.Add("license", store.License);
+            postRequest.Variables.Add("action", "updateStoreGenericModuleInfo");
 
-                ProcessXmlRequest(postRequest, "UpdateTrialGenericModuleInfo", false);
-            }
-            else
-            {
-                postRequest.Variables.Add("action", "updateStoreGenericModuleInfo");
-
-                ProcessAccountRequest(postRequest, store, license, false);
-            }
+            ProcessAccountRequest(postRequest, store, license, false);
         }
 
         /// <summary>

@@ -120,10 +120,8 @@ namespace ShipWorks.ApplicationCore.Licensing
         /// </summary>
         public override string GetTangoCustomerId()
         {
-            StoreEntity store = StoreManager.GetEnabledStores()
-                                    .FirstOrDefault(s => new ShipWorksLicense(s.License).IsTrial == false) ??
-                                StoreManager.GetAllStores()
-                                    .FirstOrDefault(s => new ShipWorksLicense(s.License).IsTrial == false);
+            StoreEntity store = StoreManager.GetEnabledStores().FirstOrDefault() ??
+                                StoreManager.GetAllStores().FirstOrDefault();
 
             try
             {
