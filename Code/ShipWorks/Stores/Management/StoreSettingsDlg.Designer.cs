@@ -80,7 +80,6 @@ namespace ShipWorks.Stores.Management
             this.labelLicense = new System.Windows.Forms.Label();
             this.labelStatus = new System.Windows.Forms.Label();
             this.licenseKey = new System.Windows.Forms.TextBox();
-            this.changeLicense = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize) (this.imageStore)).BeginInit();
             this.optionControl.SuspendLayout();
             this.optionPageStoreDetails.SuspendLayout();
@@ -613,7 +612,6 @@ namespace ShipWorks.Stores.Management
             this.optionPageLicense.Controls.Add(this.labelLicense);
             this.optionPageLicense.Controls.Add(this.labelStatus);
             this.optionPageLicense.Controls.Add(this.licenseKey);
-            this.optionPageLicense.Controls.Add(this.changeLicense);
             this.optionPageLicense.Location = new System.Drawing.Point(153, 0);
             this.optionPageLicense.Name = "optionPageLicense";
             this.optionPageLicense.Padding = new System.Windows.Forms.Padding(3);
@@ -658,16 +656,6 @@ namespace ShipWorks.Stores.Management
             this.licenseKey.ReadOnly = true;
             this.licenseKey.Size = new System.Drawing.Size(398, 21);
             this.licenseKey.TabIndex = 9;
-            // 
-            // changeLicense
-            // 
-            this.changeLicense.FlatStyle = System.Windows.Forms.FlatStyle.System;
-            this.changeLicense.Location = new System.Drawing.Point(345, 66);
-            this.changeLicense.Name = "changeLicense";
-            this.changeLicense.Size = new System.Drawing.Size(117, 23);
-            this.changeLicense.TabIndex = 13;
-            this.changeLicense.Text = "Change Activation...";
-            this.changeLicense.Click += new System.EventHandler(this.OnChangeLicense);
             // 
             // StoreSettingsDlg
             // 
@@ -728,7 +716,6 @@ namespace ShipWorks.Stores.Management
         private System.Windows.Forms.Button ok;
         private System.Windows.Forms.Button cancel;
         private System.Windows.Forms.Label labelStatus;
-        private System.Windows.Forms.Button changeLicense;
         private System.Windows.Forms.TextBox licenseKey;
         private System.Windows.Forms.Label labelLicense;
         private System.Windows.Forms.Label titleStoreType;

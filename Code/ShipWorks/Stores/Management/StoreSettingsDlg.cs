@@ -451,35 +451,35 @@ namespace ShipWorks.Stores.Management
                     var tangoWebClient = lifetimeScope.Resolve<ITangoWebClient>();
 
                     accountDetail = tangoWebClient.GetLicenseStatus(license.Key, store);
-                }
 
-                // May be a trial
-                if (accountDetail.InTrial)
-                {
-                    licenseKey.Text =
-                        $"Trial ({store.License.Substring(0, store.License.Replace("-TRIAL", "").LastIndexOf('-'))})";
-
-                    if (!storeDisabled.Checked)
+                    // May be a trial
+                    if (accountDetail.InTrial)
                     {
-                        licenseStatus.Text = accountDetail.TrialIsExpired ? "Expired" : $"Expires in {accountDetail.DaysLeftInTrial} days.";
-                        changeLicense.Text = "Enter License...";
+                        licenseKey.Text =
+                            $"Trial ({store.License.Substring(0, store.License.Replace("-TRIAL", "").LastIndexOf('-'))})";
+
+                        if (!storeDisabled.Checked)
+                        {
+                            licenseStatus.Text = accountDetail.TrialIsExpired
+                                ? "Expired"
+                                : $"Expires in {accountDetail.DaysLeftInTrial} days.";
+                        }
                     }
-                }
-                else
-                {
-                    licenseKey.Text = license.Key;
-
-                    if (!storeDisabled.Checked)
+                    else
                     {
-                        licenseStatus.Text = accountDetail.Description;
-                        UpdateChangeLicenseText();
+                        licenseKey.Text = license.Key;
+
+                        if (!storeDisabled.Checked)
+                        {
+                            licenseStatus.Text = accountDetail.Description;
+                        }
                     }
                 }
 
                 if (storeDisabled.Checked)
                 {
-                    changeLicense.Visible = false;
-                    licenseStatus.Text = "The store has been disabled for downloading and shipping on the 'Store Settings' tab.";
+                    licenseStatus.Text =
+                        "The store has been disabled for downloading and shipping on the 'Store Settings' tab.";
                 }
                 else
                 {
@@ -487,11 +487,6 @@ namespace ShipWorks.Stores.Management
                     if (EditionSerializer.Restore(store) is FreemiumFreeEdition)
                     {
                         licenseStatus.Text = "Free for eBay";
-                        changeLicense.Visible = false;
-                    }
-                    else
-                    {
-                        changeLicense.Visible = true;
                     }
                 }
             }
@@ -500,62 +495,6 @@ namespace ShipWorks.Stores.Management
                 MessageHelper.ShowError(this, ex.Message);
 
                 licenseStatus.Text = "Error";
-                changeLicense.Visible = false;
-            }
-        }
-
-        /// <summary>
-        /// Update the change license text
-        /// </summary>
-        private void UpdateChangeLicenseText()
-        {
-            if (accountDetail.ActivationState == LicenseActivationState.ActiveElsewhere)
-            {
-                changeLicense.Text = "Change Activation...";
-            }
-            else if (accountDetail.ActivationState == LicenseActivationState.ActiveNowhere)
-            {
-                changeLicense.Text = "Activate License...";
-            }
-            else
-            {
-                changeLicense.Text = "Change License...";
-            }
-        }
-
-        /// <summary>
-        /// Change \ enter \ activate a license
-        /// </summary>
-        private void OnChangeLicense(object sender, EventArgs e)
-        {
-            if (!license.IsTrial && accountDetail.ActivationState == LicenseActivationState.ActiveElsewhere)
-            {
-                using (ChangeActivationDlg dlg = new ChangeActivationDlg(store))
-                {
-                    if (dlg.ShowDialog(this) == DialogResult.OK)
-                    {
-                        LoadLicenseTab();
-                    }
-                }
-            }
-
-            else if (!license.IsTrial && accountDetail.ActivationState == LicenseActivationState.ActiveNowhere)
-            {
-                if (LicenseActivationHelper.ActivateAndSetLicense(store, store.License, this) != LicenseActivationState.ActiveNowhere)
-                {
-                    LoadLicenseTab();
-                }
-            }
-
-            else
-            {
-                using (ChangeLicenseDlg dlg = new ChangeLicenseDlg(store))
-                {
-                    if (dlg.ShowDialog(this) == DialogResult.OK)
-                    {
-                        LoadLicenseTab();
-                    }
-                }
             }
         }
 

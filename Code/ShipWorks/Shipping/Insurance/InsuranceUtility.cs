@@ -154,7 +154,8 @@ namespace ShipWorks.Shipping.Insurance
 
                 if (license.IsTrial)
                 {
-                    throw new ShippingException("ShipWorks Insurance is not available during the ShipWorks trial period.  Please signup for a ShipWorks license to take advantage of ShipWorks Insurance.");
+                    throw new ShippingException(
+                        "ShipWorks Insurance is not available during the ShipWorks trial period. Please go to https://hub.shipworks.com/account to add a credit card to your account.");
                 }
 
                 if (!license.IsMetered)

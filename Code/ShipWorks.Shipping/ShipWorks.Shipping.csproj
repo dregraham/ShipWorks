@@ -434,6 +434,7 @@
     <Compile Include="Services\IAutoReturnShipmentService.cs" />
     <Compile Include="Services\IScanPackOrderValidator.cs" />
     <Compile Include="Services\ProcessShipmentsWorkflow\SerialProcessShipmentsWorkflow.cs" />
+    <Compile Include="Services\ShipmentProcessorSteps\LabelRetrieval\AmazonSfpValidator.cs" />
     <Compile Include="Services\ShippingProfileRepository.cs" />
     <Compile Include="Services\ArchiveRatesRetrieverService.cs" />
     <Compile Include="Profiles\BaseShippingProfileApplicationStrategy.cs" />
