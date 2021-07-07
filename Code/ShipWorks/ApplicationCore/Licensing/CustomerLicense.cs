@@ -130,13 +130,13 @@ namespace ShipWorks.ApplicationCore.Licensing
         /// The license capabilities.
         /// </summary>
         private ILicenseCapabilities LicenseCapabilities { get; set; }
-
+        
         /// <summary>
         /// Activate a new store
         /// </summary>
         public EnumResult<LicenseActivationState> Activate(StoreEntity store)
         {
-            IAddStoreResponse response = tangoWebClient.AddStore(Key, store);
+            IAddStoreResponse response = tangoWebClient.AddStore(this, store);
             store.License = response.Key;
 
             return new EnumResult<LicenseActivationState>(response.Result, EnumHelper.GetDescription(response.Result));

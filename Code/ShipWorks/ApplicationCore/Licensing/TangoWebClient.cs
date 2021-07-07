@@ -919,18 +919,27 @@ namespace ShipWorks.ApplicationCore.Licensing
         /// <summary>
         /// Makes a request to Tango to add a store
         /// </summary>
-        public static IAddStoreResponse AddStore(string customerLicenseKey, StoreEntity store)
+        public static IAddStoreResponse AddStore(ILicense license, StoreEntity store)
         {
             HttpVariableRequestSubmitter postRequest = new HttpVariableRequestSubmitter();
 
             StoreType storeType = StoreTypeManager.GetType(store);
 
             postRequest.Variables.Add("action", "createstore");
-            postRequest.Variables.Add("customerlicense", customerLicenseKey);
             postRequest.Variables.Add("storecode", storeType.TangoCode);
             postRequest.Variables.Add("identifier", storeType.LicenseIdentifier);
             postRequest.Variables.Add("version", Version);
             postRequest.Variables.Add("storeinfo", store.StoreName);
+            
+            if (license.IsLegacy)
+            {
+                var tangoCustomerId = GetTangoCustomerId();
+                postRequest.Variables.Add("tangocustomerid", tangoCustomerId);
+            }
+            else
+            {
+                postRequest.Variables.Add("customerlicense", license.Key);
+            }
 
             XmlDocument xmlResponse = ProcessXmlRequest(postRequest, "AddStore", false);
 

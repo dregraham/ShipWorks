@@ -27,7 +27,7 @@ namespace ShipWorks.ApplicationCore.Licensing
         /// <summary>
         /// Makes a request to Tango to add a store
         /// </summary>
-        public override IAddStoreResponse AddStore(string licenseKey, StoreEntity store)
+        public override IAddStoreResponse AddStore(ILicense license, StoreEntity store)
         {
             XmlDocument doc = new XmlDocument();
             doc.LoadXml("<?xml version=\"1.0\" standalone=\"yes\" ?><License><Error><Description>Invalid Authentication</Description></Error></License>");

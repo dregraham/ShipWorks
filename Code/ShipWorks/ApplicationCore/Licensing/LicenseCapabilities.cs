@@ -47,6 +47,7 @@ namespace ShipWorks.ApplicationCore.Licensing
             // Determine the capabilities node to use and extract the current user levels
             userLevelsNode = xmlResponse.SelectSingleNode("//UserLevels");
             capabilitiesNode = GetPricingCapabilitiesNode(xmlResponse);
+            
             ValidateCapabilitiesAndUserLevels(xmlResponse);
 
             // parse the ShipmentTypeFunctionality node from the response
@@ -66,6 +67,8 @@ namespace ShipWorks.ApplicationCore.Licensing
 
             // Set if warehouse is enabled.
             Warehouse = XPathUtility.Evaluate(xmlResponse.CreateNavigator(), "//WarehouseEnabled/@status", 0) == 1;
+            
+            CustomerID = XPathUtility.Evaluate(xmlResponse.CreateNavigator(), "//CustomerStatus/CustomerId", "");
         }
 
         #region Properties
@@ -199,6 +202,11 @@ namespace ShipWorks.ApplicationCore.Licensing
         /// </summary>
         /// <value><c>true</c> if this the capabilities allows best rate; otherwise, <c>false</c>.</value>
         public bool IsBestRateAllowed { get; private set; }
+        
+        /// <summary>
+        /// Customer ID
+        /// </summary>
+        public string CustomerID { get; set; }
 
         /// <summary>
         /// Get the ShipmentType functionality for the given ShipmentType and ShippingPolicyType

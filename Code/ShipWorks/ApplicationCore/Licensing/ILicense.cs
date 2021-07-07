@@ -39,7 +39,7 @@ namespace ShipWorks.ApplicationCore.Licensing
         /// Is the license in trial
         /// </summary>
         bool IsInTrial { get; }
-
+        
         /// <summary>
         /// Refresh the license capabilities from Tango
         /// </summary>

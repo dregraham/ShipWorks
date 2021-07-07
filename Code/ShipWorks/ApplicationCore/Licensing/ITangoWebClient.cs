@@ -114,11 +114,11 @@ namespace ShipWorks.ApplicationCore.Licensing
         /// Deletes multiple stores from Tango.
         /// </summary>
         void DeleteStores(ICustomerLicense customerLicense, IEnumerable<string> storeLicenseKeys);
-
+        
         /// <summary>
         /// Makes a request to Tango to add a store
         /// </summary>
-        IAddStoreResponse AddStore(string licenseKey, StoreEntity store);
+        IAddStoreResponse AddStore(ILicense license, StoreEntity store);
 
         /// <summary>
         /// Associates a free Stamps.com account with a customer license.

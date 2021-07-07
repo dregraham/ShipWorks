@@ -1153,7 +1153,8 @@ namespace ShipWorks.Stores.Management
 
             if (license.IsLegacy)
             {
-                var response = TangoWebClient.AddStore(license.Key, store);
+                license.ForceRefresh();
+                var response = TangoWebClient.AddStore(license, store);
                 store.License = response.Key;
             }
             else

@@ -150,5 +150,7 @@ namespace ShipWorks.ApplicationCore.Licensing
         /// Controls if customer is allowed to use Warehouse Site
         /// </summary>
         bool Warehouse { get; set; }
+        
+        string CustomerID { get; }
     }
 }
