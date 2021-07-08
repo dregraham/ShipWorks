@@ -5564,7 +5564,7 @@ namespace ShipWorks
         {
             using (var lifetimeScope = IoC.BeginLifetimeScope())
             {
-                var legacyTrialStoreConverter = lifetimeScope.Resolve<ILegacyTrialStoreConverter>();
+                var legacyTrialStoreConverter = lifetimeScope.Resolve<ILegacyStoreTrialKeyConverter>();
 
                 legacyTrialStoreConverter.ConvertTrials();
             }

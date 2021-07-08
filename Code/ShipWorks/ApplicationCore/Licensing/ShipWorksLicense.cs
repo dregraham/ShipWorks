@@ -33,6 +33,11 @@ namespace ShipWorks.ApplicationCore.Licensing
         /// to our old legacy licenses.
         /// </summary>
         public bool IsMetered { get; private set; } = false;
+        
+        /// <summary>
+        /// Indicates if this is a trial license.
+        /// </summary>
+        public bool IsLegacyTrialKey { get; private set; } = false;
 
         /// <summary>
         /// Indicates if this instance represents a valid license.
@@ -87,6 +92,12 @@ namespace ShipWorks.ApplicationCore.Licensing
             // For our new metered licenses, there is always an M in the 4th location.
             IsMetered = license.Data1[3] == 'M';
 
+            // See if its a trial
+            if (IsMetered && license.Data2[0] == 'T')
+            {
+                IsLegacyTrialKey = true;
+            }
+            
             // Look for this store type
             foreach (StoreType storeType in StoreTypeManager.StoreTypes)
             {

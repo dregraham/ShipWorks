@@ -1,6 +1,6 @@
 ﻿namespace ShipWorks.Stores
 {
-    public interface ILegacyTrialStoreConverter
+    public interface ILegacyStoreTrialKeyConverter
     {
         void ConvertTrials();
     }

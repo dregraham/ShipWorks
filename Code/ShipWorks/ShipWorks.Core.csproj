@@ -1230,7 +1230,7 @@
     <Compile Include="Products\Import\FailedProductImportException.cs" />
     <Compile Include="Products\Import\IImportProductsResult.cs" />
     <Compile Include="Products\ProductSelectionChangedEventArgs.cs" />
-    <Compile Include="Stores\ILegacyTrialStoreConverter.cs" />
+    <Compile Include="Stores\ILegacyStoreTrialKeyConverter.cs" />
     <Compile Include="UI\Controls\WeightChangedEventArgs.cs" />
     <Compile Include="Users\ComputerManagerWrapper.cs" />
     <Compile Include="Users\IComputerManager.cs" />

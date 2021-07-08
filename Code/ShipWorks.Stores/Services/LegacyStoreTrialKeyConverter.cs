@@ -6,15 +6,21 @@ using ShipWorks.ApplicationCore.Licensing;
 
 namespace ShipWorks.Stores.Services
 {
+    /// <summary>
+    /// Service to convert legacy trial store keys
+    /// </summary>
     [Component]
-    public class LegacyTrialStoreConverter : ILegacyTrialStoreConverter
+    public class LegacyStoreTrialKeyConverter : ILegacyStoreTrialKeyConverter
     {
         private readonly ILicenseService licenseService;
         private readonly ITangoWebClient tangoWebClient;
         private readonly IStoreManager storeManager;
         private readonly ILog log;
 
-        public LegacyTrialStoreConverter(ILicenseService licenseService, ITangoWebClient tangoWebClient, IStoreManager storeManager, Func<Type, ILog> logFactory)
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        public LegacyStoreTrialKeyConverter(ILicenseService licenseService, ITangoWebClient tangoWebClient, IStoreManager storeManager, Func<Type, ILog> logFactory)
         {
             this.licenseService = licenseService;
             this.tangoWebClient = tangoWebClient;
@@ -22,6 +28,9 @@ namespace ShipWorks.Stores.Services
             log = logFactory(GetType());
         }
 
+        /// <summary>
+        /// Convert legacy store trial keys into real keys
+        /// </summary>
         public void ConvertTrials()
         {
             try
@@ -30,7 +39,8 @@ namespace ShipWorks.Stores.Services
                 if (licenseService.IsLegacy)
                 {
                     // grab all trial stores
-                    var trialStores = storeManager.GetAllStores().Where(x => licenseService.GetLicense(x).IsInTrial);
+                    var trialStores = storeManager.GetAllStores()
+                        .Where(x => new ShipWorksLicense(x.License).IsLegacyTrialKey);
 
                     foreach (var trialStore in trialStores)
                     {
