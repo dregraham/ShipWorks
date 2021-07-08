@@ -57,18 +57,13 @@ namespace ShipWorks.Shipping.Insurance
         /// <summary>
         /// The URL to the customer agreement file online
         /// </summary>
-        public static string OnlineCustomerAgreementFile
-        {
-            get { return "https://www.insureship.com/policies/shipworks.txt"; }
-        }
+        public static string OnlineCustomerAgreementFile => "https://www.insureship.com/policies/shipworks.txt";
 
         /// <summary>
         /// The URL toe the excluded country list online
         /// </summary>
-        public static string OnlineExcludedCountriesFile
-        {
-            get { return "https://www.interapptive.com/insurance/insuranceExcludedCountries.xml"; }
-        }
+        public static string OnlineExcludedCountriesFile =>
+            "https://www.interapptive.com/insurance/insuranceExcludedCountries.xml";
 
         /// <summary>
         /// Configure anything about our insurance display and interaction based on online data about rate tables, countries, etc.
@@ -132,7 +127,7 @@ namespace ShipWorks.Shipping.Insurance
         /// Check for any insurance issues in the given list
         /// </summary>
         [NDependIgnoreLongMethodAttribute]
-        public async static Task ValidateShipment(ShipmentEntity shipment, IAsyncMessageHelper messageHelper)
+        public static async Task ValidateShipment(ShipmentEntity shipment, IAsyncMessageHelper messageHelper)
         {
             StoreEntity store = StoreManager.GetStore(shipment.Order.StoreID);
 
@@ -141,7 +136,6 @@ namespace ShipWorks.Shipping.Insurance
                 throw new ShippingException("The store for the shipment has gone away.");
             }
 
-            ShipWorksLicense license = new ShipWorksLicense(store.License);
             ShipmentType shipmentType = ShipmentTypeManager.GetType(shipment);
 
             // Trying to insure
@@ -151,14 +145,20 @@ namespace ShipWorks.Shipping.Insurance
                     Enumerable.Range(0, shipmentType.GetParcelCount(shipment))
                     .Select(parcelIndex => shipmentType.GetParcelDetail(shipment, parcelIndex).Insurance)
                     .Where(choice => choice.Insured).ToList();
-
-                if (license.IsTrial)
+                
+                using (var lifetimeScope = IoC.BeginLifetimeScope())
                 {
-                    throw new ShippingException(
-                        "ShipWorks Insurance is not available during the ShipWorks trial period. Please go to https://hub.shipworks.com/account to add a credit card to your account.");
+                    var license = lifetimeScope.Resolve<ILicenseService>().GetLicense(store);
+                    if (license.IsInTrial)
+                    {
+                        throw new ShippingException(
+                            "ShipWorks Insurance is not available during the ShipWorks trial period. Please go to https://hub.shipworks.com/account to add a credit card to your account.");
+                    }
                 }
 
-                if (!license.IsMetered)
+                ShipWorksLicense shipWorksLicense = new ShipWorksLicense(store.License);
+                
+                if (!shipWorksLicense.IsMetered)
                 {
                     Debug.Fail("Should never get here on a non-metered license. The ShippingManager should have already validated that.");
                     throw new InvalidOperationException("Cannot insure on a non-metered license.");

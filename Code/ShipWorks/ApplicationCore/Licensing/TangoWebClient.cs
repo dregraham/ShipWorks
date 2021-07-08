@@ -502,12 +502,14 @@ namespace ShipWorks.ApplicationCore.Licensing
                 throw new ArgumentNullException("store");
             }
 
-            // Get the license from the store so we know how to log
-            ShipWorksLicense license = new ShipWorksLicense(store.License);
-
-            if (license.IsTrial)
+            using (var lifetimeScope = IoC.BeginLifetimeScope())
             {
-                throw new InvalidOperationException("Should not get here for trials.");
+                var license = lifetimeScope.Resolve<ILicenseService>().GetLicense(store);
+
+                if (license.IsInTrial)
+                {
+                    throw new InvalidOperationException("Should not get here for trials.");
+                }
             }
 
             // Create the request
@@ -515,7 +517,7 @@ namespace ShipWorks.ApplicationCore.Licensing
             postRequest.Variables.Add("action", "upicpolicy");
 
             postRequest.Variables.Add("machine", StoreTypeManager.GetType(store).LicenseIdentifier);
-            postRequest.Variables.Add("license", license.Key);
+            postRequest.Variables.Add("license", store.License);
 
             // Process the request
             XmlDocument xmlResponse = ProcessXmlRequest(postRequest, "UpicPolicy", false);
