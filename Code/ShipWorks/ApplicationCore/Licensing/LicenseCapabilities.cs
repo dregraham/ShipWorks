@@ -206,7 +206,7 @@ namespace ShipWorks.ApplicationCore.Licensing
         /// <summary>
         /// Customer ID
         /// </summary>
-        public string CustomerID { get; set; }
+        public string CustomerID { get; private set; }
 
         /// <summary>
         /// Get the ShipmentType functionality for the given ShipmentType and ShippingPolicyType

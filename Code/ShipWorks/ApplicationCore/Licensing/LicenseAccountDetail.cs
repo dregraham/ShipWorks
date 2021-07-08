@@ -100,6 +100,12 @@ namespace ShipWorks.ApplicationCore.Licensing
 
             // Get the Tango CustomerID
             TangoCustomerID = XPathUtility.Evaluate(xpath, "//CustomerID", "");
+            
+            // Get the trial status
+            InTrial = XPathUtility.Evaluate(xpath, "//InTrial", false);
+            
+            // Get the trial end date
+            RecurlyTrialEndDate = DateTime.Parse(XPathUtility.Evaluate(xpath, "//RecurlyTrialEndDate", ""));
         }
 
         /// <summary>

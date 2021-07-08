@@ -24,9 +24,8 @@ namespace ShipWorks.ApplicationCore.Licensing
         private readonly Func<StoreEntity, StoreLicense> storeLicenseFactory;
         private readonly IStoreManager storeManager;
         private readonly Func<Owned<IUserSession>> getUserSession;
-
+        private readonly IList<ILicense> cachedStoreLicenses;
         private ICustomerLicense cachedCustomerLicense;
-
         private bool? isLegacy = null;
 
         /// <summary>
@@ -40,6 +39,8 @@ namespace ShipWorks.ApplicationCore.Licensing
             this.storeLicenseFactory = storeLicenseFactory;
             this.storeManager = storeManager;
             this.getUserSession = getUserSession;
+
+            cachedStoreLicenses = new List<ILicense>();
         }
 
         /// <summary>
@@ -91,7 +92,7 @@ namespace ShipWorks.ApplicationCore.Licensing
             try
             {
                 // If Legacy, return store license, else return customer license
-                return IsLegacy ? (ILicense) storeLicenseFactory(store) : GetCustomerLicense();
+                return IsLegacy ? GetStoreLicense(store) : GetCustomerLicense();
             }
             catch (ShipWorksLicenseException ex)
             {
@@ -185,6 +186,21 @@ namespace ShipWorks.ApplicationCore.Licensing
                 new EnumResult<LogOnRestrictionLevel>(LogOnRestrictionLevel.None);
         }
 
+        private ILicense GetStoreLicense(StoreEntity store)
+        {
+            var cachedStoreLicense = cachedStoreLicenses.SingleOrDefault(x =>
+                x.Key.Equals(store.License, StringComparison.InvariantCultureIgnoreCase));
+
+            // If cached license is null, add it
+            if (cachedStoreLicense == null)
+            {
+                cachedStoreLicense = storeLicenseFactory(store);
+                cachedStoreLicenses.Add(cachedStoreLicense);
+            }
+
+            return cachedStoreLicense;
+        }
+        
         /// <summary>
         /// Returns the cached customer license or creates a new license if there is no cache
         /// </summary>
