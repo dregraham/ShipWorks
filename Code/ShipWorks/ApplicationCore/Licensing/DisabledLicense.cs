@@ -89,12 +89,6 @@ namespace ShipWorks.ApplicationCore.Licensing
         public bool IsOverChannelLimit => true;
 
         /// <summary>
-        /// The hub account id associated with this license. This could be the Tango account ID or the Hub account ID,
-        /// based on the customers status 
-        /// </summary>
-        public string HubAccountId => string.Empty;
-
-        /// <summary>
         /// Throws - We shouldn't try to activate a disabled license.
         /// </summary>
         public EnumResult<LicenseActivationState> Activate(StoreEntity store)

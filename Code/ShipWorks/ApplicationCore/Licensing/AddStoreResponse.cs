@@ -17,12 +17,6 @@ namespace ShipWorks.ApplicationCore.Licensing
             XPathNamespaceNavigator xpath = new XPathNamespaceNavigator(xmlResponse);
 
             int error = XPathUtility.Evaluate(xpath, "//Error/Code", 0);
-
-            if (error == 0)
-            {
-                // check a different format
-                error = XPathUtility.Evaluate(xpath, "//License/Error", 0);
-            }
             
             try
             {

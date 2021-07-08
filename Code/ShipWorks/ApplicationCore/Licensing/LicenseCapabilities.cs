@@ -67,8 +67,6 @@ namespace ShipWorks.ApplicationCore.Licensing
 
             // Set if warehouse is enabled.
             Warehouse = XPathUtility.Evaluate(xmlResponse.CreateNavigator(), "//WarehouseEnabled/@status", 0) == 1;
-            
-            CustomerID = XPathUtility.Evaluate(xmlResponse.CreateNavigator(), "//CustomerStatus/CustomerId", "");
         }
 
         #region Properties
@@ -203,11 +201,6 @@ namespace ShipWorks.ApplicationCore.Licensing
         /// <value><c>true</c> if this the capabilities allows best rate; otherwise, <c>false</c>.</value>
         public bool IsBestRateAllowed { get; private set; }
         
-        /// <summary>
-        /// Customer ID
-        /// </summary>
-        public string CustomerID { get; private set; }
-
         /// <summary>
         /// Get the ShipmentType functionality for the given ShipmentType and ShippingPolicyType
         /// </summary>
