@@ -7745,12 +7745,6 @@
     <Compile Include="Stores\Management\AccountSettingsControlBase.Designer.cs">
       <DependentUpon>AccountSettingsControlBase.cs</DependentUpon>
     </Compile>
-    <Compile Include="Stores\Management\ChangeActivationDlg.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Stores\Management\ChangeActivationDlg.Designer.cs">
-      <DependentUpon>ChangeActivationDlg.cs</DependentUpon>
-    </Compile>
     <Compile Include="Stores\Management\ChangeLicenseDlg.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -10427,10 +10421,6 @@
     <EmbeddedResource Include="Stores\Management\AccountSettingsControlBase.resx">
       <SubType>Designer</SubType>
       <DependentUpon>AccountSettingsControlBase.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Stores\Management\ChangeActivationDlg.resx">
-      <SubType>Designer</SubType>
-      <DependentUpon>ChangeActivationDlg.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Stores\Management\ChangeLicenseDlg.resx">
       <SubType>Designer</SubType>

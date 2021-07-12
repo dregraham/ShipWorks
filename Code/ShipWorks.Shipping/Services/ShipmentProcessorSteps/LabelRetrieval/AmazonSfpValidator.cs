@@ -4,6 +4,9 @@ using ShipWorks.Data.Model.EntityClasses;
 
 namespace ShipWorks.Shipping.Services.ShipmentProcessorSteps.LabelRetrieval
 {
+    /// <summary>
+    /// Validate that the user is allowed to process Amazon SFP shipments
+    /// </summary>
     public class AmazonSfpValidator : ILabelRetrievalShipmentValidator
     {
         private readonly ILicenseService licenseService;
@@ -21,16 +24,16 @@ namespace ShipWorks.Shipping.Services.ShipmentProcessorSteps.LabelRetrieval
         /// </summary>
         public Result Validate(ShipmentEntity shipment)
         {
-            if (shipment.ShipmentTypeCode == ShipmentTypeCode.AmazonSFP)
+            if (shipment.ShipmentTypeCode != ShipmentTypeCode.AmazonSFP)
             {
-                var license = licenseService.GetLicense(shipment.Order.Store);
-
-                return license.IsInTrial ?
-                    Result.FromError("Amazon SFP shipments are not available during the ShipWorks trial period. Please go to https://hub.shipworks.com/account to add a credit card to your account.") :
-                    Result.FromSuccess();    
+                return Result.FromSuccess();
             }
 
-            return Result.FromSuccess();
+            var license = licenseService.GetLicense(shipment.Order.Store);
+
+            return license.IsInTrial ?
+                Result.FromError("Amazon SFP shipments are not available during the ShipWorks trial period. Please go to https://hub.shipworks.com/account to add a credit card to your account.") :
+                Result.FromSuccess();
         }
     }
 }

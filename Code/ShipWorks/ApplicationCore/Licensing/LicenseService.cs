@@ -186,6 +186,9 @@ namespace ShipWorks.ApplicationCore.Licensing
                 new EnumResult<LogOnRestrictionLevel>(LogOnRestrictionLevel.None);
         }
 
+        /// <summary>
+        /// Try to get store license from cache. If it's not in the cache, create one, add it to the cache, and return it
+        /// </summary>
         private ILicense GetStoreLicense(StoreEntity store)
         {
             var cachedStoreLicense = cachedStoreLicenses.SingleOrDefault(x =>
