@@ -51,12 +51,20 @@ namespace ShipWorks.Stores.Services
                         
                         // add store to account and save new key
                         var addStoreResponse = tangoWebClient.AddStore(license, trialStore);
-                        trialStore.License = addStoreResponse.Key;
-                        
-                        storeManager.SaveStore(trialStore);
 
-                        // make call to convert trial
-                        tangoWebClient.ConvertLegacyTrialStore(trialLicenseKey);
+                        if (!string.IsNullOrWhiteSpace(addStoreResponse.Key))
+                        {
+                            trialStore.License = addStoreResponse.Key;
+                        
+                            storeManager.SaveStore(trialStore);
+
+                            // make call to convert trial
+                            tangoWebClient.ConvertLegacyTrialStore(trialLicenseKey);
+                        }
+                        else
+                        {
+                            log.Error($"Add store did not return license key for store id {trialStore.StoreID}");
+                        }
                     }
                 }
             }

@@ -131,8 +131,8 @@ namespace ShipWorks.ApplicationCore.Licensing
         {
             try
             {
-                Func<StoreEntity> getStore = () => StoreManager.GetEnabledStores().FirstOrDefault() ??
-                                                   StoreManager.GetAllStores().FirstOrDefault();
+                Func<StoreEntity> getStore = () => StoreManager.GetEnabledStores().FirstOrDefault(s => new ShipWorksLicense(s.License).IsLegacyTrialKey == false) ??
+                                                   StoreManager.GetAllStores().FirstOrDefault(s => new ShipWorksLicense(s.License).IsLegacyTrialKey == false);
 
                 StoreEntity store = getStore();
 
@@ -1063,7 +1063,7 @@ namespace ShipWorks.ApplicationCore.Licensing
             HttpVariableRequestSubmitter postRequest = new HttpVariableRequestSubmitter();
 
             postRequest.Variables.Add("action", "converttrial");
-            postRequest.Variables.Add("triallicensekey", trialLicenseKey);
+            postRequest.Variables.Add("license", trialLicenseKey);
             postRequest.Variables.Add("version", Version);
 
             XmlDocument xmlResponse = ProcessXmlRequest(postRequest, "ConvertLegacyTrialStore", false);
