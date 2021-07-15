@@ -57,7 +57,7 @@ namespace ShipWorks.ApplicationCore.Licensing
 
                 if (accountDetail.ActivationState == LicenseActivationState.Active)
                 {
-                    store.License = licenseKey;
+                    store.License = accountDetail.Key;
                     store.Edition = accountDetail.Edition.Serialize();
                 }
 

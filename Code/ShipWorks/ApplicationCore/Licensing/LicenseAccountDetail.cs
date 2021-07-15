@@ -103,9 +103,11 @@ namespace ShipWorks.ApplicationCore.Licensing
             
             // Get the trial status
             InTrial = XPathUtility.Evaluate(xpath, "//InTrial", false);
-            
+
             // Get the trial end date
-            RecurlyTrialEndDate = DateTime.Parse(XPathUtility.Evaluate(xpath, "//RecurlyTrialEndDate", ""));
+            RecurlyTrialEndDate = DateTime.TryParse(XPathUtility.Evaluate(xpath, "//RecurlyTrialEndDate", ""), out var trialEndDate)
+                ? trialEndDate
+                : DateTime.MinValue;
         }
 
         /// <summary>
