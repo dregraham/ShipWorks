@@ -23,6 +23,7 @@ using ShipWorks.Data.Administration.Recovery;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.Custom;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Editions;
 using ShipWorks.Editions.Freemium;
@@ -276,57 +277,65 @@ namespace ShipWorks.ApplicationCore.Dashboard
         {
             Debug.Assert(!Program.MainForm.InvokeRequired);
 
-            // Add in trial information for each store we don't have yet
-            foreach (StoreEntity store in StoreManager.GetAllStores())
+            using (var lifetimeScope = IoC.BeginLifetimeScope())
             {
-                // If it's not enabled, we ignore it
-                if (!store.Enabled)
+                var licenseService = lifetimeScope.Resolve<ILicenseService>();
+                
+                // Add in trial information for each store we don't have yet
+                foreach (StoreEntity store in StoreManager.GetAllStores())
                 {
-                    continue;
+                    // If it's not enabled, we ignore it
+                    if (!store.Enabled)
+                    {
+                        continue;
+                    }
+
+                    var license = licenseService.GetLicense(store);
+                    if (!license.IsInTrial)
+                    {
+                        continue;
+                    }
+
+                    // Freemium installs can be in a weird state of signed up for eBay - but not yet for ELS.  But it's not really a trial (from a user perspective) its just
+                    // what it is in tango b\c it was the simplest way to implement it until we get unified billing.
+                    if (EditionSerializer.Restore(store) is FreemiumFreeEdition)
+                    {
+                        continue;
+                    }
+
+                    DashboardTrialItem trialItem = dashboardItems.OfType<DashboardTrialItem>()
+                        .SingleOrDefault(i => i.Store.StoreID == store.StoreID);
+                    if (trialItem == null)
+                    {
+                        ThreadPool.QueueUserWorkItem(ExceptionMonitor.WrapWorkItem(AsyncLoadTrialDetail),
+                            new object[]
+                            {
+                                store,
+                                ApplicationBusyManager.OperationStarting(busyText)
+                            });
+                    }
+                    // Refresh the UI in case the days has changed or its now expired.
+                    else
+                    {
+                        trialItem.UpdateTrialDisplay();
+                    }
                 }
 
-                ShipWorksLicense license = new ShipWorksLicense(store.License);
-                if (!license.IsTrial)
+                // Go through each trial making sure they are all still valid stores and valid trials
+                foreach (DashboardTrialItem trialItem in dashboardItems.OfType<DashboardTrialItem>().ToList())
                 {
-                    continue;
-                }
-
-                // Freemium installs can be in a weird state of signed up for eBay - but not yet for ELS.  But it's not really a trial (from a user perspective) its just
-                // what it is in tango b\c it was the simplest way to implement it until we get unified billing.
-                if (EditionSerializer.Restore(store) is FreemiumFreeEdition)
-                {
-                    continue;
-                }
-
-                DashboardTrialItem trialItem = dashboardItems.OfType<DashboardTrialItem>().Where(i => i.TrialDetail.Store.StoreID == store.StoreID).SingleOrDefault();
-                if (trialItem == null)
-                {
-                    ThreadPool.QueueUserWorkItem(ExceptionMonitor.WrapWorkItem(AsyncLoadTrialDetail),
-                        new object[] {
-                            store,
-                            ApplicationBusyManager.OperationStarting(busyText) });
-                }
-                // Refresh the UI in case the days has changed or its now expired.
-                else
-                {
-                    trialItem.UpdateTrialDisplay();
-                }
-            }
-
-            // Go through each trial making sure they are all still valid stores and valid trials
-            foreach (DashboardTrialItem trialItem in dashboardItems.OfType<DashboardTrialItem>().ToList())
-            {
-                StoreEntity store = StoreManager.GetStore(trialItem.TrialDetail.Store.StoreID);
-                if (store == null || !store.Enabled)
-                {
-                    RemoveDashboardItem(trialItem);
-                }
-                else
-                {
-                    ShipWorksLicense license = new ShipWorksLicense(store.License);
-                    if (!license.IsTrial)
+                    StoreEntity store = StoreManager.GetStore(trialItem.Store.StoreID);
+                    if (store == null || !store.Enabled)
                     {
                         RemoveDashboardItem(trialItem);
+                    }
+                    else
+                    {
+                        var license = licenseService.GetLicense(store);
+                        if (!license.IsInTrial)
+                        {
+                            RemoveDashboardItem(trialItem);
+                        }
                     }
                 }
             }
@@ -359,7 +368,7 @@ namespace ShipWorks.ApplicationCore.Dashboard
         }
 
         /// <summary>
-        /// Load trial information asyncronously
+        /// Load trial information asynchronously
         /// </summary>
         private static void AsyncLoadTrialDetail(object state)
         {
@@ -370,9 +379,9 @@ namespace ShipWorks.ApplicationCore.Dashboard
 
             try
             {
-                TrialDetail trialDetail = TangoWebClient.GetTrial(store);
+                ILicenseAccountDetail accountDetail = TangoWebClient.GetLicenseStatus(store.License, store, false);
 
-                panel.BeginInvoke((MethodInvoker<TrialDetail>) AsyncLoadTrialDetailComplete, trialDetail);
+                panel.BeginInvoke((MethodInvoker<IStoreEntity, DateTime>) AsyncLoadTrialDetailComplete, store, accountDetail.RecurlyTrialEndDate);
             }
             catch (ShipWorksLicenseException ex)
             {
@@ -391,7 +400,7 @@ namespace ShipWorks.ApplicationCore.Dashboard
         /// <summary>
         /// The loading of a trial detail has completed.  This is back on the UI thread.
         /// </summary>
-        private static void AsyncLoadTrialDetailComplete(TrialDetail trialDetail)
+        private static void AsyncLoadTrialDetailComplete(IStoreEntity storeEntity, DateTime trialEndDate)
         {
             // Dashboard may have closed in the meantime
             if (!IsDashboardOpen)
@@ -405,13 +414,13 @@ namespace ShipWorks.ApplicationCore.Dashboard
                 return;
             }
 
-            DashboardTrialItem existing = dashboardItems.OfType<DashboardTrialItem>().Where(i => i.TrialDetail.Store.StoreID == trialDetail.Store.StoreID).SingleOrDefault();
+            DashboardTrialItem existing = dashboardItems.OfType<DashboardTrialItem>().SingleOrDefault(i => i.Store.StoreID == storeEntity.StoreID);
             if (existing != null)
             {
                 return;
             }
 
-            DashboardTrialItem trialItem = new DashboardTrialItem(trialDetail);
+            DashboardTrialItem trialItem = new DashboardTrialItem(storeEntity, trialEndDate);
             AddDashboardItem(trialItem);
         }
 
@@ -863,7 +872,7 @@ namespace ShipWorks.ApplicationCore.Dashboard
                 }
                 else if (left is DashboardTrialItem && right is DashboardTrialItem)
                 {
-                    return ((DashboardTrialItem) left).TrialDetail.Store.StoreName.CompareTo(((DashboardTrialItem) right).TrialDetail.Store.StoreName);
+                    return ((DashboardTrialItem) left).Store.StoreName.CompareTo(((DashboardTrialItem) right).Store.StoreName);
                 }
             }
 

@@ -1,5 +1,4 @@
 ﻿using Interapptive.Shared.Utility;
-using Interapptive.Shared.Collections;
 using log4net;
 using ShipWorks.ApplicationCore.Dashboard.Content;
 using ShipWorks.ApplicationCore.Licensing.LicenseEnforcement;
@@ -68,7 +67,7 @@ namespace ShipWorks.ApplicationCore.Licensing
         /// <summary>
         /// Is the license in trial
         /// </summary>
-        public bool IsInTrial => new ShipWorksLicense(store.License).IsTrial;
+        public bool IsInTrial { get; private set; }
 
         /// <summary>
         /// Store licenses do not have channel limits
@@ -100,14 +99,8 @@ namespace ShipWorks.ApplicationCore.Licensing
         /// <remarks>
         /// Make sure store is populated with the appropriate license key.
         /// </remarks>
-        public EnumResult<LicenseActivationState> Activate(StoreEntity newStore)
-        {
-            ShipWorksLicense license = new ShipWorksLicense(store.License);
-
-            return license.IsTrial ?
-                new EnumResult<LicenseActivationState>(LicenseActivationState.Active) :
-                LicenseActivationHelper.ActivateAndSetLicense(newStore, newStore.License);
-        }
+        public EnumResult<LicenseActivationState> Activate(StoreEntity newStore) =>
+            LicenseActivationHelper.ActivateAndSetLicense(newStore, newStore.License);
 
         /// <summary>
         /// Nothing to enforce
@@ -131,9 +124,10 @@ namespace ShipWorks.ApplicationCore.Licensing
         {
             try
             {
-                LicenseActivationHelper.EnsureActive(store);
+                var accountDetail = LicenseActivationHelper.EnsureActive(store);
                 DisabledReason = string.Empty;
-
+                IsInTrial = accountDetail.InTrial;
+                
                 nextStoreLicenseCheckTime[store.StoreID] = dateTimeProvider.UtcNow.Add(nextStoreLicenseCheckTimeToLive);
 
                 // Let anyone who cares know that enabled carriers may have changed.

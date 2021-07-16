@@ -50,15 +50,14 @@ namespace ShipWorks.ApplicationCore.Licensing
             }
 
             Cursor.Current = Cursors.WaitCursor;
-            LicenseAccountDetail accountDetail;
 
             try
             {
-                accountDetail = TangoWebClient.ActivateLicense(licenseKey, store);
+                var accountDetail = TangoWebClient.GetLicenseStatus(licenseKey, store, false);
 
                 if (accountDetail.ActivationState == LicenseActivationState.Active)
                 {
-                    store.License = licenseKey;
+                    store.License = accountDetail.Key;
                     store.Edition = accountDetail.Edition.Serialize();
                 }
 
@@ -86,7 +85,7 @@ namespace ShipWorks.ApplicationCore.Licensing
         /// not, a LicenseException is thrown.
         /// </summary>
         [NDependIgnoreLongMethod]
-        public static void EnsureActive(StoreEntity store)
+        public static ILicenseAccountDetail EnsureActive(StoreEntity store)
         {
             if (store == null)
             {
@@ -122,88 +121,82 @@ namespace ShipWorks.ApplicationCore.Licensing
                     "for a new license.");
             }
 
-            if (license.IsTrial)
+            using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
             {
-                TrialDetail trialDetail = TangoWebClient.GetTrial(store);
+                var accountDetail = lifetimeScope.Resolve<ITangoWebClient>().GetLicenseStatus(store.License, store);
 
-                // If its converted, they have to enter their license
-                if (trialDetail.IsConverted)
+                if (accountDetail.InTrial)
                 {
-                    throw new ShipWorksLicenseException(
-                        "A ShipWorks license has been purchased for this trial.  Please enter " +
-                        "your license to continue using ShipWorks.");
-                }
+                    // Trial expired
+                    if (accountDetail.TrialIsExpired)
+                    {
+                        throw new ShipWorksLicenseException(
+                            "Your ShipWorks trial period has expired.\n\n" +
+                            "Please enter a credit card at https://hub.shipworks.com/account to continue using ShipWorks.");
+                    }
 
-                // Trial expired
-                if (trialDetail.IsExpired)
-                {
-                    throw new ShipWorksLicenseException(
-                        "Your ShipWorks trial period has expired.\n\n" +
-                        "Please sign up at http://www.interapptive.com to continue using ShipWorks.");
-                }
-
-                EditionManager.UpdateStoreEdition(store, trialDetail.Edition);
-            }
-            else
-            {
-                ILicenseAccountDetail accountDetail;
-                using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
-                {
-                    accountDetail = lifetimeScope.Resolve<ITangoWebClient>().GetLicenseStatus(store.License, store);
-                }
-
-                if (accountDetail.ActivationState == LicenseActivationState.Active ||
-                    accountDetail.ActivationState == LicenseActivationState.ActiveElsewhere ||
-                    accountDetail.ActivationState == LicenseActivationState.ActiveNowhere)
-                {
                     EditionManager.UpdateStoreEdition(store, accountDetail.Edition);
                 }
-
-                if (accountDetail.ActivationState != LicenseActivationState.Active)
+                else
                 {
-                    switch (accountDetail.ActivationState)
+                    if (accountDetail.ActivationState == LicenseActivationState.Active ||
+                        accountDetail.ActivationState == LicenseActivationState.ActiveElsewhere ||
+                        accountDetail.ActivationState == LicenseActivationState.ActiveNowhere)
                     {
-                        case LicenseActivationState.ActiveNowhere:
-                            throw new ShipWorksLicenseException(
-                                "Your ShipWorks license is not activated. The license can be activated in the Store Manager.");
+                        EditionManager.UpdateStoreEdition(store, accountDetail.Edition);
+                    }
 
-                        case LicenseActivationState.ActiveElsewhere:
-                            throw new ShipWorksLicenseException(
-                                "Your ShipWorks license is activated to another store. Please contact ShipWorks support to reset your license activation.");
+                    if (accountDetail.ActivationState != LicenseActivationState.Active)
+                    {
+                        switch (accountDetail.ActivationState)
+                        {
+                            case LicenseActivationState.ActiveNowhere:
+                                throw new ShipWorksLicenseException(
+                                    "Your ShipWorks license is not activated. The license can be activated in the Store Manager.");
 
-                        case LicenseActivationState.Deactivated:
-                            throw new ShipWorksLicenseException(
-                                "Your ShipWorks license has been disabled.\n\n" +
-                                "Reason: " + accountDetail.DisabledReason);
+                            case LicenseActivationState.ActiveElsewhere:
+                                throw new ShipWorksLicenseException(
+                                    "Your ShipWorks license is activated to another store. Please contact ShipWorks support to reset your license activation.");
 
-                        case LicenseActivationState.Canceled:
-                            throw new ShipWorksLicenseException(
-                                "Your ShipWorks account for this license has been canceled.\n\n" +
-                                "Please log on to your account at https://www.interapptive.com/account " +
-                                "to activate your license.");
+                            case LicenseActivationState.Deactivated:
+                                throw new ShipWorksLicenseException(
+                                    "Your ShipWorks license has been disabled.\n\n" +
+                                    "Reason: " + accountDetail.DisabledReason);
 
-                        case LicenseActivationState.Invalid:
-                            throw new ShipWorksLicenseException(
-                                "The ShipWorks license is not valid.");
+                            case LicenseActivationState.Canceled:
+                                throw new ShipWorksLicenseException(
+                                    "Your ShipWorks account for this license has been canceled.\n\n" +
+                                    "Please log on to your account at https://www.interapptive.com/account " +
+                                    "to activate your license.");
+
+                            case LicenseActivationState.Invalid:
+                                throw new ShipWorksLicenseException(
+                                    "The ShipWorks license is not valid.");
+                        }
                     }
                 }
-            }
 
-            // Check store count limitation
-            EditionRestrictionIssue issue = EditionManager.ActiveRestrictions.CheckRestriction(EditionFeature.SingleStore);
-            if (issue.Level != EditionRestrictionLevel.None)
-            {
-                if (StoreManager.GetAllStores().Count > 1)
+
+                // Check store count limitation
+                EditionRestrictionIssue issue =
+                    EditionManager.ActiveRestrictions.CheckRestriction(EditionFeature.SingleStore);
+                if (issue.Level != EditionRestrictionLevel.None)
                 {
-                    throw new ShipWorksLicenseException("Your ShipWorks license only supports a single store. You must delete extra stores, or contact us at 1-800-95-APPTIVE to upgrade your ShipWorks edition.");
+                    if (StoreManager.GetAllStores().Count > 1)
+                    {
+                        throw new ShipWorksLicenseException(
+                            "Your ShipWorks license only supports a single store. You must delete extra stores, or contact us at 1-800-95-APPTIVE to upgrade your ShipWorks edition.");
+                    }
                 }
+
+                return accountDetail;
             }
         }
 
         /// <summary>
         /// Check the account detail for validity and return message for the user.
         /// </summary>
-        public static string GetActivationStateMessage(LicenseAccountDetail accountDetail)
+        public static string GetActivationStateMessage(ILicenseAccountDetail accountDetail)
         {
             if (accountDetail == null)
             {

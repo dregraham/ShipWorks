@@ -100,6 +100,14 @@ namespace ShipWorks.ApplicationCore.Licensing
 
             // Get the Tango CustomerID
             TangoCustomerID = XPathUtility.Evaluate(xpath, "//CustomerID", "");
+            
+            // Get the trial status
+            InTrial = XPathUtility.Evaluate(xpath, "//InTrial", false);
+
+            // Get the trial end date
+            RecurlyTrialEndDate = DateTime.TryParse(XPathUtility.Evaluate(xpath, "//RecurlyTrialEndDate", ""), out var trialEndDate)
+                ? trialEndDate
+                : DateTime.MinValue;
         }
 
         /// <summary>
@@ -255,14 +263,7 @@ namespace ShipWorks.ApplicationCore.Licensing
                     // Active on this identifier
                     else
                     {
-                        if (identifier == desiredIdentifier)
-                        {
-                            licenseState = LicenseActivationState.Active;
-                        }
-                        else
-                        {
-                            licenseState = LicenseActivationState.ActiveElsewhere;
-                        }
+                        licenseState = LicenseActivationState.Active;
                     }
                 }
             }
@@ -410,5 +411,25 @@ namespace ShipWorks.ApplicationCore.Licensing
             get;
             private set;
         }
+
+        /// <summary>
+        /// Whether or not this license is in trial
+        /// </summary>
+        public bool InTrial { get; }
+        
+        /// <summary>
+        /// The date that the recurly trial ends
+        /// </summary>
+        public DateTime RecurlyTrialEndDate { get; }
+
+        /// <summary>
+        /// How many days are left in the trial
+        /// </summary>
+        public int DaysLeftInTrial => (RecurlyTrialEndDate - DateTime.UtcNow).Days;
+
+        /// <summary>
+        /// Whether or not the trial is expired
+        /// </summary>
+        public bool TrialIsExpired => DaysLeftInTrial < 0;
     }
 }

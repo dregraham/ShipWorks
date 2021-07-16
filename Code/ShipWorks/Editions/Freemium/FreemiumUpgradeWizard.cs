@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Windows.Forms;
+using Autofac;
 using Interapptive.Shared.Net;
 using Interapptive.Shared.UI;
+using ShipWorks.ApplicationCore;
 using ShipWorks.ApplicationCore.Licensing;
 using ShipWorks.UI.Wizard;
 
@@ -55,13 +57,12 @@ namespace ShipWorks.Editions.Freemium
         /// </summary>
         private void OnStepNextWelcome(object sender, WizardStepEventArgs e)
         {
-            if (new ShipWorksLicense(edition.Store.License).IsTrial)
+            // Try to associate the Stamps account with the license
+            using (var lifetimeScope = IoC.BeginLifetimeScope())
             {
-                e.NextPage = wizardPageTrial;
-            }
-            else
-            {
-                e.NextPage = wizardPageTerms;
+                e.NextPage = lifetimeScope.Resolve<ILicenseService>().GetLicense(edition.Store).IsInTrial
+                    ? wizardPageTrial
+                    : wizardPageTerms;
             }
         }
 

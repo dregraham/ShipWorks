@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using Interapptive.Shared.Business;
 using Interapptive.Shared.Utility;
@@ -18,14 +17,6 @@ namespace ShipWorks.ApplicationCore.Licensing
     /// </summary>
     public class TangoWebClientWrapper : ITangoWebClient
     {
-        /// <summary>
-        /// Activate the given license key to the specified store identifier
-        /// </summary>
-        public virtual LicenseAccountDetail ActivateLicense(string licenseKey, StoreEntity store)
-        {
-            return TangoWebClient.ActivateLicense(licenseKey, store);
-        }
-
         /// <summary>
         /// Get the status of the specified license
         /// </summary>
@@ -48,22 +39,6 @@ namespace ShipWorks.ApplicationCore.Licensing
         public virtual Dictionary<string, string> GetCarrierCertificateVerificationData(StoreEntity store)
         {
             return TangoWebClient.GetCarrierCertificateVerificationData(store);
-        }
-
-        /// <summary>
-        /// Request a trial for use with the specified store. If a trial already exists, a new one will not be created.
-        /// </summary>
-        public virtual TrialDetail GetTrial(StoreEntity store)
-        {
-            return TangoWebClient.GetTrial(store);
-        }
-
-        /// <summary>
-        /// Extend the trial for the given store
-        /// </summary>
-        public virtual TrialDetail ExtendTrial(StoreEntity store)
-        {
-            return TangoWebClient.ExtendTrial(store);
         }
 
         /// <summary>
@@ -224,15 +199,15 @@ namespace ShipWorks.ApplicationCore.Licensing
         {
             TangoWebClient.DeleteStores(customerLicense, storeLicenseKeys);
         }
-
+        
         /// <summary>
         /// Makes a request to Tango to add a store
         /// </summary>
-        public virtual IAddStoreResponse AddStore(ICustomerLicense license, StoreEntity store)
+        public virtual IAddStoreResponse AddStore(ILicense license, StoreEntity store)
         {
             return TangoWebClient.AddStore(license, store);
         }
-
+        
         /// <summary>
         /// Associates a free Stamps.com account with a customer license.
         /// </summary>
@@ -262,5 +237,11 @@ namespace ShipWorks.ApplicationCore.Licensing
         /// </summary>
         public virtual void LogSubmitInsuranceClaim(ShipmentEntity shipment) =>
             TangoWebClient.LogSubmitInsuranceClaim(shipment);
+
+        /// <summary>
+        /// Convert a legacy trial store
+        /// </summary>
+        public void ConvertLegacyTrialStore(string trialLicenseKey) =>
+            TangoWebClient.ConvertLegacyTrialStore(trialLicenseKey);
     }
 }

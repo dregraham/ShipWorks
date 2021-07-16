@@ -130,7 +130,7 @@ namespace ShipWorks.ApplicationCore.Licensing
         /// The license capabilities.
         /// </summary>
         private ILicenseCapabilities LicenseCapabilities { get; set; }
-
+        
         /// <summary>
         /// Activate a new store
         /// </summary>

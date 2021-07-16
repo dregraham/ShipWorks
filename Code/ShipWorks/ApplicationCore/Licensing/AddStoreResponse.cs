@@ -17,7 +17,7 @@ namespace ShipWorks.ApplicationCore.Licensing
             XPathNamespaceNavigator xpath = new XPathNamespaceNavigator(xmlResponse);
 
             int error = XPathUtility.Evaluate(xpath, "//Error/Code", 0);
-
+            
             try
             {
                 Result = EnumHelper.GetEnumByApiValue<LicenseActivationState>(error.ToString());

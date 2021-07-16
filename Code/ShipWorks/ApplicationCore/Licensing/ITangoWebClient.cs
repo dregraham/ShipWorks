@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using Interapptive.Shared.Business;
 using Interapptive.Shared.Utility;
@@ -10,11 +9,6 @@ namespace ShipWorks.ApplicationCore.Licensing
 {
     public interface ITangoWebClient
     {
-        /// <summary>
-        /// Activate the given license key to the specified store identifier
-        /// </summary>
-        LicenseAccountDetail ActivateLicense(string licenseKey, StoreEntity store);
-
         /// <summary>
         /// Get the status of the specified license
         /// </summary>
@@ -29,16 +23,6 @@ namespace ShipWorks.ApplicationCore.Licensing
         /// Get the status of the specified license
         /// </summary>
         Dictionary<string, string> GetCarrierCertificateVerificationData(StoreEntity store);
-
-        /// <summary>
-        /// Request a trial for use with the specified store. If a trial already exists, a new one will not be created.
-        /// </summary>
-        TrialDetail GetTrial(StoreEntity store);
-
-        /// <summary>
-        /// Extend the trial for the given store
-        /// </summary>
-        TrialDetail ExtendTrial(StoreEntity store);
 
         /// <summary>
         /// Associates a Usps account created in ShipWorks as the users free Stamps.com account
@@ -130,11 +114,11 @@ namespace ShipWorks.ApplicationCore.Licensing
         /// Deletes multiple stores from Tango.
         /// </summary>
         void DeleteStores(ICustomerLicense customerLicense, IEnumerable<string> storeLicenseKeys);
-
+        
         /// <summary>
         /// Makes a request to Tango to add a store
         /// </summary>
-        IAddStoreResponse AddStore(ICustomerLicense license, StoreEntity store);
+        IAddStoreResponse AddStore(ILicense license, StoreEntity store);
 
         /// <summary>
         /// Associates a free Stamps.com account with a customer license.
@@ -150,5 +134,10 @@ namespace ShipWorks.ApplicationCore.Licensing
         /// Log the given insurance claim to Tango.
         /// </summary>
         void LogSubmitInsuranceClaim(ShipmentEntity shipment);
+
+        /// <summary>
+        /// Convert a legacy trial store
+        /// </summary>
+        void ConvertLegacyTrialStore(string trialLicenseKey);
     }
 }
