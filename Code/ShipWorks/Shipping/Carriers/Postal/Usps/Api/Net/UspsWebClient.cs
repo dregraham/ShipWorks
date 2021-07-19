@@ -716,7 +716,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
                         }
                     };
 
-                    webService.CleanseAddressAsync(GetCredentials(account, true), address, null, callState);
+                    var credentials = GetCredentials(account, true);
+                    webService.CleanseAddressAsync(credentials, address, null, callState);
 
                     return taskCompletion.Task;
                 });
