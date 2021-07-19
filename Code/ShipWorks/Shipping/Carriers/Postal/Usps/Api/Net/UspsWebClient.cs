@@ -716,12 +716,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
                         }
                     };
 
-                    var credentials = new Credentials { 
-                        IntegrationID = integrationID, 
-                        Username = account?.Username ?? string.Empty,
-                        Password = string.Empty //Password is not required for CleanseAddress and causes the request to fail
-                    };
-
+                    var credentials = GetCredentials(account, true);
                     webService.CleanseAddressAsync(credentials, address, null, callState);
 
                     return taskCompletion.Task;
