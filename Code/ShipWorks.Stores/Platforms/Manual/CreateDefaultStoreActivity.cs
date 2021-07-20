@@ -61,7 +61,7 @@ namespace ShipWorks.Stores.Platforms.Manual
                     PersonAdapter address = store.Address;
 
                     store.StoreName = "My Test Store";
-                    licenseService.GetLicenses().Single().Activate(store);
+                    licenseService.GetLicense(store).Activate(store);
 
                     address.UnparsedName = warehouse.details.Name;
                     address.Company = "";

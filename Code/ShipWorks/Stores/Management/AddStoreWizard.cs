@@ -61,9 +61,6 @@ namespace ShipWorks.Stores.Management
         // All of the store specific wizard pages currently added.
         private List<WizardPage> storePages = new List<WizardPage>();
 
-        // If doing a trial, this is the current trial data
-        private TrialDetail trialDetail;
-
         // So we know when to update the config of the pages
         private long initialDownloadConfiguredStoreID = 0;
         private long onlineUpdateConfiguredStoreID = 0;
@@ -496,110 +493,6 @@ namespace ShipWorks.Stores.Management
                     Pages.Insert(Pages.IndexOf(CurrentPage) + 1, storePages[i]);
                 }
             }
-        }
-
-        #endregion
-
-        #region Already Active
-
-        /// <summary>
-        /// Stepping into the page that determines if the store is already active
-        /// </summary>
-        private void OnSteppingIntoAlreadyActive(object sender, WizardSteppingIntoEventArgs e)
-        {
-            Cursor.Current = Cursors.WaitCursor;
-
-            try
-            {
-                ILicense license = licenseService.GetLicense(store);
-
-                // If we are legacy or are in freemium mode, and we already have a valid freemium edition store, then don't try to get a trial - it would fail anyway saying they aren't eligible
-                if (!license.IsLegacy || (isFreemiumMode && (EditionSerializer.Restore(store) is FreemiumFreeEdition) && new ShipWorksLicense(store.License).IsValid))
-                {
-                    // We already have their license
-                    e.Skip = true;
-                    e.RaiseStepEventWhenSkipping = false;
-                }
-                else
-                {
-                    // Create a license for the given store
-                    trialDetail = TangoWebClient.GetTrial(store);
-
-                    // Save the license
-                    store.License = trialDetail.License.Key;
-                    store.Edition = EditionSerializer.Serialize(trialDetail.Edition);
-
-                    // If it's not converted, then we can skip this page
-                    if (!trialDetail.IsConverted)
-                    {
-                        // Can't attach to a freemium trial if not freemium mode
-                        if (trialDetail.Edition is FreemiumFreeEdition && StoreManager.GetDatabaseStoreCount() > 0)
-                        {
-                            MessageHelper.ShowError(this, string.Format("You are already using ShipWorks with eBay ID '{0}' with the Endicia Free for eBay edition. That edition only supports a single store, and you already have some stores in ShipWorks.", StoreTypeManager.GetType(store).LicenseIdentifier));
-
-                            // Go back to the previous page
-                            e.Skip = true;
-                            e.SkipToPage = Pages[CurrentIndex - 1];
-                        }
-
-                        // No license, just skip
-                        e.Skip = true;
-                        e.RaiseStepEventWhenSkipping = false;
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                if (ex is ShipWorksLicenseException || ex is TangoException)
-                {
-                    MessageHelper.ShowError(this, ex.Message);
-
-                    // Go back to the previous page
-                    e.Skip = true;
-                    e.SkipToPage = Pages[CurrentIndex - 1];
-                }
-                else
-                {
-                    throw;
-                }
-            }
-        }
-
-        /// <summary>
-        /// Stepping next from the already active license page
-        /// </summary>
-        private void OnStepNextAlreadyActive(object sender, WizardStepEventArgs e)
-        {
-            if (string.IsNullOrWhiteSpace(licenseKey.Text))
-            {
-                MessageHelper.ShowError(this, "Please enter the license key for your store to continue");
-                e.NextPage = CurrentPage;
-                return;
-            }
-
-            LicenseActivationState licenseState = LicenseActivationHelper.ActivateAndSetLicense(store, licenseKey.Text.Trim(), this);
-
-            if (licenseState != LicenseActivationState.Active)
-            {
-                e.NextPage = CurrentPage;
-            }
-            else
-            {
-                if (EditionSerializer.Restore(store) is FreemiumFreeEdition && StoreManager.GetDatabaseStoreCount() > 0)
-                {
-                    MessageHelper.ShowError(this, "The license you entered is for the Endicia Free for eBay ShipWorks edition.  That edition only supports a single store, and you already have some stores in ShipWorks.");
-
-                    e.NextPage = CurrentPage;
-                }
-            }
-        }
-
-        /// <summary>
-        /// Open the link for a user to get their license key
-        /// </summary>
-        private void OnHelpFindLicenseKey(object sender, EventArgs e)
-        {
-            WebHelper.OpenUrl("https://www.interapptive.com/account", this);
         }
 
         #endregion
@@ -1056,11 +949,6 @@ namespace ShipWorks.Stores.Management
                 // Make sure we have a fresh up-to-date layout context in case we need to create store-specific filters
                 FilterLayoutContext.PushScope();
 
-                if (!string.IsNullOrWhiteSpace(licenseKey.Text))
-                {
-                    store.License = licenseKey.Text.Trim();
-                }
-
                 if (!ValidateLicense(e))
                 {
                     return;
@@ -1262,27 +1150,28 @@ namespace ShipWorks.Stores.Management
             BackEnabled = false;
 
             ILicense license = licenseService.GetLicense(store);
-            EnumResult<LicenseActivationState> activateResult;
-            try
-            {
-                activateResult = license.Activate(store);
-            }
-            catch (TangoException)
-            {
-                activateResult = null;
-            }
 
-            if (activateResult?.Value != LicenseActivationState.Active)
+            if (license.IsLegacy)
             {
-                e.Skip = true;
-
-                if (license.IsLegacy)
+                var response = TangoWebClient.AddStore(license, store);
+                store.License = response.Key;
+            }
+            else
+            {
+                EnumResult<LicenseActivationState> activateResult;
+                try
                 {
-                    MessageHelper.ShowError(this, activateResult?.Message ?? "Error activating license.");
-                    e.SkipToPage = wizardPageAlreadyActive;
+                    activateResult = license.Activate(store);
                 }
-                else
+                catch (TangoException)
                 {
+                    activateResult = null;
+                }
+
+                if (activateResult?.Value != LicenseActivationState.Active)
+                {
+                    e.Skip = true;
+
                     if (activateResult?.Value == LicenseActivationState.MaxChannelsExceeded)
                     {
                         IChannelLimitFactory factory = channelLimitFactory();

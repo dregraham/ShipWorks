@@ -878,6 +878,8 @@ namespace ShipWorks
 
             MigrateSqlConfigToHub();
 
+            ConvertLegacyTrialStores();
+            
             // Update the custom actions UI.  Has to come before applying the layout, so the QAT can pickup the buttons
             UpdateCustomButtonsActionsUI();
 
@@ -5552,6 +5554,19 @@ namespace ShipWorks
             {
                 // Log a generic message here - more detailed error logging is done by the importer/synchronizer
                 log.Error("Failed to synchronize with Hub configuration", ex);
+            }
+        }
+
+        /// <summary>
+        /// Convert legacy trial stores to non-trial stores. Trial status will be associated with the license moving forward
+        /// </summary>
+        private void ConvertLegacyTrialStores()
+        {
+            using (var lifetimeScope = IoC.BeginLifetimeScope())
+            {
+                var legacyTrialStoreConverter = lifetimeScope.Resolve<ILegacyStoreTrialKeyConverter>();
+
+                legacyTrialStoreConverter.ConvertTrials();
             }
         }
 

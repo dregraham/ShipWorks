@@ -27,7 +27,7 @@ namespace ShipWorks.ApplicationCore.Licensing
         /// <summary>
         /// Makes a request to Tango to add a store
         /// </summary>
-        public override IAddStoreResponse AddStore(ICustomerLicense license, StoreEntity store)
+        public override IAddStoreResponse AddStore(ILicense license, StoreEntity store)
         {
             XmlDocument doc = new XmlDocument();
             doc.LoadXml("<?xml version=\"1.0\" standalone=\"yes\" ?><License><Error><Description>Invalid Authentication</Description></Error></License>");
@@ -89,16 +89,6 @@ namespace ShipWorks.ApplicationCore.Licensing
         }
 
         /// <summary>
-        /// Request a trial for use with the specified store. If a trial already exists, a new one will not be created.
-        /// </summary>
-        public override TrialDetail GetTrial(StoreEntity store)
-        {
-            XmlDocument trialXml = GetXmlDocumentFromFile("Trial.xml", store.License);
-
-            return new TrialDetail(trialXml, store);
-        }
-
-        /// <summary>
         /// Gets the license capabilities.
         /// </summary>
         public override ILicenseCapabilities GetLicenseCapabilities(ICustomerLicense license)
@@ -130,10 +120,8 @@ namespace ShipWorks.ApplicationCore.Licensing
         /// </summary>
         public override string GetTangoCustomerId()
         {
-            StoreEntity store = StoreManager.GetEnabledStores()
-                                    .FirstOrDefault(s => new ShipWorksLicense(s.License).IsTrial == false) ??
-                                StoreManager.GetAllStores()
-                                    .FirstOrDefault(s => new ShipWorksLicense(s.License).IsTrial == false);
+            StoreEntity store = StoreManager.GetEnabledStores().FirstOrDefault() ??
+                                StoreManager.GetAllStores().FirstOrDefault();
 
             try
             {
