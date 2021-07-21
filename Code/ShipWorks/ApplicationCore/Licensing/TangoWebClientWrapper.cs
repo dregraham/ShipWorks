@@ -114,14 +114,6 @@ namespace ShipWorks.ApplicationCore.Licensing
         }
 
         /// <summary>
-        /// Upgrade the given trial to not be in an 'Edition' mode
-        /// </summary>
-        public virtual void UpgradeEditionTrial(StoreEntity store)
-        {
-            TangoWebClient.UpgradeEditionTrial(store);
-        }
-
-        /// <summary>
         /// Gets the nudges.
         /// </summary>
         public virtual IEnumerable<Nudge> GetNudges(IEnumerable<StoreEntity> stores)

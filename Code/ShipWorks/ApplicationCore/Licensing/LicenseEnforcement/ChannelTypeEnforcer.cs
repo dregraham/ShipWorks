@@ -44,7 +44,7 @@ namespace ShipWorks.ApplicationCore.Licensing.LicenseEnforcement
         /// <summary>
         /// All Channel Types are allowed for trials.
         /// </summary>
-        public bool AppliesTo(ILicenseCapabilities capabilities) => !capabilities.IsInTrial;
+        public bool AppliesTo(ILicenseCapabilities capabilities) => !capabilities.TrialDetails.IsInTrial;
 
         /// <summary>
         /// Gets the store type code.

@@ -75,11 +75,6 @@ namespace ShipWorks.ApplicationCore.Licensing
         void UpgradeFreemiumStore(StoreEntity store, int endiciaServicePlan);
 
         /// <summary>
-        /// Upgrade the given trial to not be in an 'Edition' mode
-        /// </summary>
-        void UpgradeEditionTrial(StoreEntity store);
-
-        /// <summary>
         /// Gets a collection of nudges from Tango.
         /// </summary>
         IEnumerable<Nudge> GetNudges(IEnumerable<StoreEntity> stores);

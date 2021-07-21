@@ -227,8 +227,8 @@ namespace ShipWorks.ApplicationCore.Licensing.WebClientEnvironments
             return new WebClientEnvironment()
             {
                 Name = "Localhost",
-                TangoUrl = "http://localhost:4002/ShipWorksNet/ShipWorksV1.svc/account/shipworks",
-                ActivationUrl = "http://localhost:4002/ShipWorksNet/ActivationV1.svc",
+                TangoUrl = "http://localhost:3999/tango",
+                ActivationUrl = "http://localhost:3999/tango",
                 WarehouseUrl = "http://localhost:4001/",
                 ProxyUrl = "http://localhost:3999/",
                 HeaderShipWorksUsername = "none",

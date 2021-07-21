@@ -116,10 +116,10 @@ namespace ShipWorks.ApplicationCore.Licensing
         DateTime BillingEndDate { get; set; }
 
         /// <summary>
-        /// Gets or sets a value indicating whether this instance is in trial.
+        /// Details about the trial
         /// </summary>
-        bool IsInTrial { get; set; }
-
+        TrialDetails TrialDetails { get; set; }
+        
         /// <summary>
         /// The number of Active Channels in tango
         /// </summary>

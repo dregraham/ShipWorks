@@ -16,7 +16,7 @@ namespace ShipWorks.ApplicationCore.Licensing.LicenseEnforcement
         /// <summary>
         /// Channel Limit doesn't apply to trails.
         /// </summary>
-        public bool AppliesTo(ILicenseCapabilities capabilities) => !capabilities.IsInTrial;
+        public bool AppliesTo(ILicenseCapabilities capabilities) => !capabilities.TrialDetails.IsInTrial;
 
         /// <remarks>
         /// Adding a store will get an error from tango. We don't need to call enforce here.

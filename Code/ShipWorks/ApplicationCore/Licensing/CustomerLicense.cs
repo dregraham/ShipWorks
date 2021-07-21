@@ -66,7 +66,7 @@ namespace ShipWorks.ApplicationCore.Licensing
             // The license info/capabilities should be cached for 10 minutes
             capabilitiesTimeToLive = new TimeSpan(0, 10, 0);
             lastRefreshTimeInUtc = DateTime.MinValue;
-
+            
             EnsureOnlyOneFeatureRestrictionPerEditionFeature();
         }
 
@@ -112,10 +112,10 @@ namespace ShipWorks.ApplicationCore.Licensing
         public bool IsDisabled => (!string.IsNullOrEmpty(DisabledReason));
 
         /// <summary>
-        /// Is the license in trial
+        /// Details about the trial
         /// </summary>
-        public bool IsInTrial => LicenseCapabilities?.IsInTrial == true;
-
+        public TrialDetails TrialDetails => LicenseCapabilities?.TrialDetails ?? new TrialDetails();
+ 
         /// <summary>
         /// Gets or sets the user name of the SDC account associated with this license.
         /// </summary>
@@ -322,7 +322,7 @@ namespace ShipWorks.ApplicationCore.Licensing
 
             Refresh();
 
-            if (LicenseCapabilities != null && !LicenseCapabilities.IsInTrial)
+            if (LicenseCapabilities != null && !LicenseCapabilities.TrialDetails.IsInTrial)
             {
                 // The dashboard item should not be created when in the trial period since
                 // the shipment count is unlimited.

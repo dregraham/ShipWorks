@@ -43,9 +43,9 @@ namespace ShipWorks.ApplicationCore.Licensing.LicenseEnforcement
         public EditionFeature EditionFeature => EditionFeature.ShipmentCount;
 
         /// <summary>
-        /// Simpment Limit doesn't apply to trials.
+        /// Shimpment Limit doesn't apply to trials.
         /// </summary>
-        public bool AppliesTo(ILicenseCapabilities capabilities) => !capabilities.IsInTrial;
+        public bool AppliesTo(ILicenseCapabilities capabilities) => !capabilities.TrialDetails.IsInTrial;
 
         /// <summary>
         /// Displays upgrade dialog if the customer license is within 80% of its shipment limit

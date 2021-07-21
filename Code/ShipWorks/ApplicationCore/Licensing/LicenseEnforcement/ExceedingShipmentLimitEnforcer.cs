@@ -43,7 +43,7 @@ namespace ShipWorks.ApplicationCore.Licensing.LicenseEnforcement
         /// <summary>
         /// Shipment Limit doesn't apply to trails.
         /// </summary>
-        public bool AppliesTo(ILicenseCapabilities capabilities) => !capabilities.IsInTrial;
+        public bool AppliesTo(ILicenseCapabilities capabilities) => !capabilities.TrialDetails.IsInTrial;
 
         /// <summary>
         /// Displays a dlg on the given owner to enforce the shipment limit
