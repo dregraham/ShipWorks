@@ -43,7 +43,7 @@ namespace ShipWorks.ApplicationCore.Licensing.LicenseEnforcement
         public EditionFeature EditionFeature => EditionFeature.ShipmentCount;
 
         /// <summary>
-        /// Shimpment Limit doesn't apply to trials.
+        /// Shipment Limit doesn't apply to trials.
         /// </summary>
         public bool AppliesTo(ILicenseCapabilities capabilities) => !capabilities.TrialDetails.IsInTrial;
 

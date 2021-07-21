@@ -524,6 +524,9 @@ namespace ShipWorks.ApplicationCore.Licensing
             BillingEndDate = DateTime.Parse(date);
         }
 
+        /// <summary>
+        /// Get trial details from xml
+        /// </summary>
         private TrialDetails GetTrialDetails(XPathNavigator xpath)
         {
             var isInTrial = XPathUtility.Evaluate(xpath, "//IsInTrial", false);
