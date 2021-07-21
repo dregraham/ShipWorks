@@ -1,72 +1,32 @@
-﻿using System;
-using System.Collections.Generic;
-using ShipWorks.Properties;
+﻿using ShipWorks.ApplicationCore.Licensing;
 
 namespace ShipWorks.ApplicationCore.Dashboard.Content
 {
-    public class DashboardAccountTrialItem : DashboardItem
+    /// <summary>
+    /// Represents a single dashboard item representing a WebReg account trial
+    /// </summary>
+    public class DashboardAccountTrialItem : DashboardTrialItem
     {
-        private DateTime trialEndDate;
-        
-        // So we know when something has changed
-        private bool wasExpired = false;
-        private int days = 100;
-        private string storeName;
-
         /// <summary>
         /// Constructor
         /// </summary>
-        public DashboardAccountTrialItem(DateTime trialEndDate)
+        public DashboardAccountTrialItem(TrialDetails trialDetails) : base(trialDetails)
         {
-            this.trialEndDate = trialEndDate;
         }
 
         /// <summary>
-        /// Set the bar that the trial information will be displayed in
+        /// Whether or not the display should be updated
         /// </summary>
-        public override void Initialize(DashboardBar dashboardBar)
-        {
-            base.Initialize(dashboardBar);
-
-            dashboardBar.Image = Resources.clock;
-            dashboardBar.CanUserDismiss = false;
-
-            UpdateTrialDisplay();
-        }
+        protected override bool ShouldUpdate => days != trialDetails.DaysLeftInTrial || wasExpired != trialDetails.IsExpired;
 
         /// <summary>
-        /// Update the display of the trial information
+        /// Secondary text to display when the user is in a trial that has expired
         /// </summary>
-        public void UpdateTrialDisplay()
-        {
-            var daysLeftInTrial = (trialEndDate - DateTime.UtcNow).Days;
-            var trialIsExpired = daysLeftInTrial < 0;
+        protected override string TrialExpiredSecondaryText => "The trial for your ShipWorks subscription has expired.";
 
-            // See if the UI requires updating
-            if (days != daysLeftInTrial ||
-                wasExpired != trialIsExpired)
-            {
-                if (trialIsExpired)
-                {
-                    DashboardBar.Image = Resources.clock_stop;
-                    DashboardBar.PrimaryText = "Trial Expired";
-                    DashboardBar.SecondaryText = "The trial for your ShipWorks subscription has expired.";
-                }
-                else
-                {
-                    DashboardBar.Image = Resources.clock;
-                    DashboardBar.PrimaryText = $"{daysLeftInTrial} Days";
-                    DashboardBar.SecondaryText = "remaining in trial for your ShipWorks subscription.";
-                }
-
-                DashboardBar.ApplyActions(new List<DashboardAction> {
-                    new DashboardActionUrl(
-                        "[link]Click here[/link] to login to your account settings and enter your payment details.", 
-                        "https://hub.shipworks.com/account") });
-
-                days = daysLeftInTrial;
-                wasExpired = trialIsExpired;
-            }
-        }
+        /// <summary>
+        /// Secondary text to display when the user is in a trial that hasn't expired
+        /// </summary>
+        protected override string TrialDaysLeftSecondaryText => "remaining in trial for your ShipWorks subscription.";
     }
 }

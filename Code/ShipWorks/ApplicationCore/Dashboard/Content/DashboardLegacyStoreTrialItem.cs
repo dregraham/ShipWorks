@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using ShipWorks.Properties;
+﻿using ShipWorks.ApplicationCore.Licensing;
 using ShipWorks.Data.Model.EntityInterfaces;
 
 namespace ShipWorks.ApplicationCore.Dashboard.Content
@@ -8,22 +6,16 @@ namespace ShipWorks.ApplicationCore.Dashboard.Content
     /// <summary>
     /// Represents a single dashboard item representing a store trial
     /// </summary>
-    public class DashboardLegacyStoreTrialItem : DashboardItem
+    public class DashboardLegacyStoreTrialItem : DashboardTrialItem
     {
-        private DateTime trialEndDate;
-        
-        // So we know when something has changed
-        private bool wasExpired = false;
-        private int days = 100;
         private string storeName;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public DashboardLegacyStoreTrialItem(IStoreEntity store, DateTime trialEndDate)
+        public DashboardLegacyStoreTrialItem(IStoreEntity store, TrialDetails trialDetails) : base(trialDetails)
         {
             Store = store;
-            this.trialEndDate = trialEndDate;
         }
 
         /// <summary>
@@ -31,53 +23,34 @@ namespace ShipWorks.ApplicationCore.Dashboard.Content
         /// </summary>
         public IStoreEntity Store { get; }
 
+
         /// <summary>
-        /// Set the bar that the trial information will be displayed in
+        /// Whether or not the display should be updated
         /// </summary>
-        public override void Initialize(DashboardBar dashboardBar)
-        {
-            base.Initialize(dashboardBar);
+        protected override bool ShouldUpdate => storeName != Store.StoreName ||
+                                                days != trialDetails.DaysLeftInTrial ||
+                                                wasExpired != trialDetails.IsExpired;
 
-            dashboardBar.Image = Resources.clock;
-            dashboardBar.CanUserDismiss = false;
+        /// <summary>
+        /// Secondary text to display when the user is in a trial that has expired
+        /// </summary>
+        protected override string TrialExpiredSecondaryText => $"The trial for '{Store.StoreName}' has expired.";
 
-            UpdateTrialDisplay();
-        }
+        /// <summary>
+        /// Secondary text to display when the user is in a trial that hasn't expired
+        /// </summary>
+        protected override string TrialDaysLeftSecondaryText => $"remaining in trial for '{Store.StoreName}'.";
 
         /// <summary>
         /// Update the display of the trial information
         /// </summary>
         public void UpdateTrialDisplay()
         {
-            var daysLeftInTrial = (trialEndDate - DateTime.UtcNow).Days;
-            var trialIsExpired = daysLeftInTrial < 0;
+            base.UpdateTrialDisplay();
 
-            // See if the UI requires updating
-            if (storeName != Store.StoreName ||
-                days != daysLeftInTrial ||
-                wasExpired != trialIsExpired)
+            if (!storeName.Equals(Store.StoreName))
             {
-                if (trialIsExpired)
-                {
-                    DashboardBar.Image = Resources.clock_stop;
-                    DashboardBar.PrimaryText = "Trial Expired";
-                    DashboardBar.SecondaryText = $"The trial for '{Store.StoreName}' has expired.";
-                }
-                else
-                {
-                    DashboardBar.Image = Resources.clock;
-                    DashboardBar.PrimaryText = $"{daysLeftInTrial} Days";
-                    DashboardBar.SecondaryText = $"remaining in trial for '{Store.StoreName}'.";
-                }
-
-                DashboardBar.ApplyActions(new List<DashboardAction> {
-                    new DashboardActionUrl(
-                        "[link]Click here[/link] to login to your account settings and enter your payment details.", 
-                        "https://hub.shipworks.com/account") });
-
                 storeName = Store.StoreName;
-                days = daysLeftInTrial;
-                wasExpired = trialIsExpired;
             }
         }
     }

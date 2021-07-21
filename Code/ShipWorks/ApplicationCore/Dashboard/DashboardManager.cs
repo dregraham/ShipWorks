@@ -270,6 +270,11 @@ namespace ShipWorks.ApplicationCore.Dashboard
             }
         }
 
+        #region WebReg Account Trial
+
+        /// <summary>
+        /// Update the account trial item
+        /// </summary>
         private static void UpdateAccountTrialItem(ILicenseService licenseService)
         {
             var license = licenseService.GetLicense(null);
@@ -282,7 +287,7 @@ namespace ShipWorks.ApplicationCore.Dashboard
                     ThreadPool.QueueUserWorkItem(ExceptionMonitor.WrapWorkItem(AsyncLoadAccountTrialDetail),
                         new object[]
                         {
-                            license.TrialDetails.EndDate,
+                            license.TrialDetails,
                             ApplicationBusyManager.OperationStarting(busyText)
                         });
                 }
@@ -301,6 +306,54 @@ namespace ShipWorks.ApplicationCore.Dashboard
             }
         }
 
+        /// <summary>
+        /// Load account trial information asynchronously
+        /// </summary>
+        private static void AsyncLoadAccountTrialDetail(object state)
+        {
+            object[] data = (object[]) state;
+
+            TrialDetails trialDetails = (TrialDetails) data[0];
+            ApplicationBusyToken token = (ApplicationBusyToken) data[1];
+
+            try
+            {
+                panel.BeginInvoke((MethodInvoker<TrialDetails>) AsyncLoadAccountTrialDetailComplete, trialDetails);
+            }
+            catch (Exception ex) when (ex is ShipWorksLicenseException || ex is TangoException)
+            {
+                log.Error("Failed to load trial details for account", ex);
+            }
+            finally
+            {
+                token.Dispose();
+            }
+        }
+
+        /// <summary>
+        /// The loading of a trial detail has completed. This is back on the UI thread.
+        /// </summary>
+        private static void AsyncLoadAccountTrialDetailComplete(TrialDetails trialDetails)
+        {
+            // Dashboard may have closed in the meantime
+            if (!IsDashboardOpen)
+            {
+                return;
+            }
+
+            DashboardAccountTrialItem existing = dashboardItems.OfType<DashboardAccountTrialItem>().SingleOrDefault();
+            if (existing != null)
+            {
+                return;
+            }
+
+            DashboardAccountTrialItem accountTrialItem = new DashboardAccountTrialItem(trialDetails);
+            AddDashboardItem(accountTrialItem);
+        }
+
+        #endregion
+
+        #region Legacy Store Trials
 
         /// <summary>
         /// Update trial items for legacy customer stores
@@ -317,7 +370,6 @@ namespace ShipWorks.ApplicationCore.Dashboard
                 }
 
                 var license = licenseService.GetLicense(store);
-                license.Refresh();
                 if (!license.TrialDetails.IsInTrial)
                 {
                     continue;
@@ -338,6 +390,7 @@ namespace ShipWorks.ApplicationCore.Dashboard
                         new object[]
                         {
                             store,
+                            license.TrialDetails,
                             ApplicationBusyManager.OperationStarting(busyText)
                         });
                 }
@@ -366,7 +419,55 @@ namespace ShipWorks.ApplicationCore.Dashboard
                 }
             }
         }
+        
+        /// <summary>
+        /// Load trial information asynchronously
+        /// </summary>
+        private static void AsyncLoadLegacyStoreTrialDetail(object state)
+        {
+            object[] data = (object[]) state;
 
+            StoreEntity store = (StoreEntity) data[0];
+            TrialDetails trialDetails = (TrialDetails) data[1];
+            ApplicationBusyToken token = (ApplicationBusyToken) data[2];
+
+            try
+            {
+                panel.BeginInvoke((MethodInvoker<IStoreEntity, TrialDetails>) AsyncLoadLegacyStoreTrialDetailComplete, store, trialDetails);
+            }
+            catch (Exception ex) when (ex is ShipWorksLicenseException || ex is TangoException)
+            {
+                log.Error("Failed to load trial details for store " + store.StoreID, ex);
+            }
+            finally
+            {
+                token.Dispose();
+            }
+        }
+
+        /// <summary>
+        /// The loading of a trial detail has completed.  This is back on the UI thread.
+        /// </summary>
+        private static void AsyncLoadLegacyStoreTrialDetailComplete(IStoreEntity storeEntity, TrialDetails trialDetails)
+        {
+            // Dashboard may have closed in the meantime
+            if (!IsDashboardOpen)
+            {
+                return;
+            }
+
+            DashboardLegacyStoreTrialItem existing = dashboardItems.OfType<DashboardLegacyStoreTrialItem>().SingleOrDefault(i => i.Store.StoreID == storeEntity.StoreID);
+            if (existing != null)
+            {
+                return;
+            }
+
+            DashboardLegacyStoreTrialItem legacyStoreTrialItem = new DashboardLegacyStoreTrialItem(storeEntity, trialDetails);
+            AddDashboardItem(legacyStoreTrialItem);
+        }
+
+        #endregion
+        
         /// <summary>
         /// Update the day count displayed next to each trial.  For users who leave ShipWorks open all the time this helps them still
         /// see the days count down.
@@ -393,102 +494,6 @@ namespace ShipWorks.ApplicationCore.Dashboard
             }
 
             SortDashboardItems();
-        }
-
-        /// <summary>
-        /// Load trial information asynchronously
-        /// </summary>
-        private static void AsyncLoadLegacyStoreTrialDetail(object state)
-        {
-            object[] data = (object[]) state;
-
-            StoreEntity store = (StoreEntity) data[0];
-            ApplicationBusyToken token = (ApplicationBusyToken) data[1];
-
-            try
-            {
-                ILicenseAccountDetail accountDetail = TangoWebClient.GetLicenseStatus(store.License, store, false);
-
-                panel.BeginInvoke((MethodInvoker<IStoreEntity, DateTime>) AsyncLoadLegacyStoreTrialDetailComplete, store, accountDetail.RecurlyTrialEndDate);
-            }
-            catch (ShipWorksLicenseException ex)
-            {
-                log.Error("Failed to load trial details for store " + store.StoreID, ex);
-            }
-            catch (TangoException ex)
-            {
-                log.Error("Failed to load trial details for store " + store.StoreID, ex);
-            }
-            finally
-            {
-                token.Dispose();
-            }
-        }
-
-        /// <summary>
-        /// The loading of a trial detail has completed.  This is back on the UI thread.
-        /// </summary>
-        private static void AsyncLoadLegacyStoreTrialDetailComplete(IStoreEntity storeEntity, DateTime trialEndDate)
-        {
-            // Dashboard may have closed in the meantime
-            if (!IsDashboardOpen)
-            {
-                return;
-            }
-
-            DashboardLegacyStoreTrialItem existing = dashboardItems.OfType<DashboardLegacyStoreTrialItem>().SingleOrDefault(i => i.Store.StoreID == storeEntity.StoreID);
-            if (existing != null)
-            {
-                return;
-            }
-
-            DashboardLegacyStoreTrialItem legacyStoreTrialItem = new DashboardLegacyStoreTrialItem(storeEntity, trialEndDate);
-            AddDashboardItem(legacyStoreTrialItem);
-        }
-        
-        /// <summary>
-        /// Load trial information asynchronously
-        /// </summary>
-        private static void AsyncLoadAccountTrialDetail(object state)
-        {
-            object[] data = (object[]) state;
-
-            DateTime trialEndDate = (DateTime) data[0];
-            ApplicationBusyToken token = (ApplicationBusyToken) data[1];
-
-            try
-            {
-                panel.BeginInvoke((MethodInvoker<DateTime>) AsyncLoadAccountTrialDetailComplete, trialEndDate);
-            }
-            catch (Exception ex) when (ex is ShipWorksLicenseException || ex is TangoException)
-            {
-                log.Error("Failed to load trial details for account", ex);
-            }
-            finally
-            {
-                token.Dispose();
-            }
-        }
-
-        /// <summary>
-        /// The loading of a trial detail has completed.  This is back on the UI thread.
-        /// </summary>
-        private static void AsyncLoadAccountTrialDetailComplete(DateTime trialEndDate)
-        {
-            // Dashboard may have closed in the meantime
-            if (!IsDashboardOpen)
-            {
-                return;
-            }
-
-            DashboardAccountTrialItem existing = dashboardItems.OfType<DashboardAccountTrialItem>().SingleOrDefault();
-            if (existing != null)
-            {
-                return;
-            }
-
-            DashboardAccountTrialItem accountTrialItem = new DashboardAccountTrialItem(trialEndDate);
-            AddDashboardItem(accountTrialItem);
         }
 
         /// <summary>
