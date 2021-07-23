@@ -74,11 +74,6 @@ namespace ShipWorks.ApplicationCore.Licensing
         }
 
         /// <summary>
-        /// Not Legacy.
-        /// </summary>
-        public bool IsLegacy => false;
-
-        /// <summary>
         /// Details about the trial
         /// </summary>
         public TrialDetails TrialDetails => new TrialDetails();

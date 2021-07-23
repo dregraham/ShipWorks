@@ -858,7 +858,7 @@ namespace ShipWorks.Data.Model
 		/// <summary>Inits ConfigurationEntity's mappings</summary>
 		private void InitConfigurationEntityMappings()
 		{
-			this.AddElementMapping("ConfigurationEntity", @"ShipWorksLocal", @"dbo", "Configuration", 23, 0);
+			this.AddElementMapping("ConfigurationEntity", @"ShipWorksLocal", @"dbo", "Configuration", 24, 0);
 			this.AddElementFieldMapping("ConfigurationEntity", "ConfigurationID", "ConfigurationID", false, "Bit", 0, 0, 0, false, "", null, typeof(System.Boolean), 0);
 			this.AddElementFieldMapping("ConfigurationEntity", "RowVersion", "RowVersion", false, "Timestamp", 2147483647, 0, 0, false, "", null, typeof(System.Byte[]), 1);
 			this.AddElementFieldMapping("ConfigurationEntity", "LogOnMethod", "LogOnMethod", false, "Int", 0, 10, 0, false, "", null, typeof(System.Int32), 2);
@@ -882,6 +882,7 @@ namespace ShipWorks.Data.Model
 			this.AddElementFieldMapping("ConfigurationEntity", "AutoUpdateStartDate", "AutoUpdateStartDate", false, "DateTime2", 0, 7, 0, false, "", null, typeof(System.DateTime), 20);
 			this.AddElementFieldMapping("ConfigurationEntity", "WarehouseID", "WarehouseID", false, "NVarChar", 50, 0, 0, false, "", null, typeof(System.String), 21);
 			this.AddElementFieldMapping("ConfigurationEntity", "WarehouseName", "WarehouseName", false, "NVarChar", 50, 0, 0, false, "", null, typeof(System.String), 22);
+			this.AddElementFieldMapping("ConfigurationEntity", "LegacyCustomerKey", "LegacyCustomerKey", false, "NVarChar", 2147483647, 0, 0, false, "", null, typeof(System.String), 23);
 		}
 
 		/// <summary>Inits CustomerEntity's mappings</summary>

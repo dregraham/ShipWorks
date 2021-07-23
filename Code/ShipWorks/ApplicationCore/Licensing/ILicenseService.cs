@@ -11,6 +11,11 @@ namespace ShipWorks.ApplicationCore.Licensing
     /// </summary>
     public interface ILicenseService
     {
+        string CustomerKey { get; }
+        
+        string LegacyCustomerKey { get; }
+        
+        
         /// <summary>
         /// True if Legacy Customer
         /// </summary>

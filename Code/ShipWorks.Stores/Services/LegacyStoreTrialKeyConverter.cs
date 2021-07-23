@@ -46,11 +46,9 @@ namespace ShipWorks.Stores.Services
                     {
                         // stash trial license for later because we're about to override it
                         string trialLicenseKey = trialStore.License;
-
-                        var license = licenseService.GetLicense(trialStore);
                         
                         // add store to account and save new key
-                        var addStoreResponse = tangoWebClient.AddStore(license, trialStore);
+                        var addStoreResponse = tangoWebClient.AddStore(licenseService.LegacyCustomerKey, trialStore);
 
                         if (!string.IsNullOrWhiteSpace(addStoreResponse.Key))
                         {

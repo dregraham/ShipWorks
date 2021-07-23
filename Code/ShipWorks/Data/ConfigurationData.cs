@@ -6,6 +6,7 @@ using System.Xml;
 using System.Xml.Linq;
 using Interapptive.Shared.Utility;
 using SD.LLBLGen.Pro.ORMSupportClasses;
+using ShipWorks.ApplicationCore.Licensing;
 using ShipWorks.ApplicationCore.Settings;
 using ShipWorks.Data.Administration;
 using ShipWorks.Data.Connection;
@@ -27,6 +28,7 @@ namespace ShipWorks.Data
         private static IConfigurationEntity configReadOnly;
         private static bool needCheckForChanges;
         private static string customerKey;
+        private static string legacyCustomerKey;
         private static readonly Version archiveVersion = new Version(5, 23, 1, 6);
 
         /// <summary>
@@ -98,27 +100,46 @@ namespace ShipWorks.Data
         /// <summary>
         /// Gets the CustomerKey
         /// </summary>
-        public static string FetchCustomerKey()
+        public static string FetchCustomerKey(CustomerLicenseKeyType licenseKeyType)
         {
             lock (lockObj)
             {
+                if (licenseKeyType == CustomerLicenseKeyType.Legacy)
+                {
+                    if (string.IsNullOrEmpty(legacyCustomerKey))
+                    {
+                        legacyCustomerKey = GetConfigurationField(ConfigurationFields.LegacyCustomerKey, "LegacyCustomerKey");
+                    }
+
+                    return legacyCustomerKey;
+                }
+
                 if (string.IsNullOrEmpty(customerKey))
                 {
-                    ResultsetFields resultFields = new ResultsetFields(1);
-                    resultFields.DefineField(ConfigurationFields.CustomerKey, 0, "CustomerKey", "");
-
-                    using (var sqlAdapter = defaultGetSqlAdapter())
-                    {
-                        IDataReader reader = sqlAdapter.FetchDataReader(resultFields, null, CommandBehavior.CloseConnection, 0, null, true);
-                        while (reader.Read())
-                        {
-                            customerKey = reader.GetString(0).Trim();
-                            break;
-                        }
-                    }
+                    customerKey = GetConfigurationField(ConfigurationFields.CustomerKey, "CustomerKey");
                 }
 
                 return customerKey;
+            }
+        }
+
+        private static string GetConfigurationField(IEntityFieldCore entityField, string fieldName)
+        {
+            ResultsetFields resultFields = new ResultsetFields(1);
+            resultFields.DefineField(entityField, 0, fieldName, "");
+            
+            using (var sqlAdapter = defaultGetSqlAdapter())
+            {
+                string fieldValue = string.Empty;
+                IDataReader reader = sqlAdapter.FetchDataReader(resultFields, null, CommandBehavior.CloseConnection, 0,
+                    null, true);
+                while (reader.Read())
+                {
+                    fieldValue = reader.GetString(0).Trim();
+                    break;
+                }
+
+                return fieldValue;
             }
         }
 

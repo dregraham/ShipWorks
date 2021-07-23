@@ -1149,15 +1149,15 @@ namespace ShipWorks.Stores.Management
         {
             BackEnabled = false;
 
-            ILicense license = licenseService.GetLicense(store);
-
-            if (license.IsLegacy)
+            if (licenseService.IsLegacy)
             {
-                var response = TangoWebClient.AddStore(license, store);
+                var response = TangoWebClient.AddStore(licenseService.LegacyCustomerKey, store);
                 store.License = response.Key;
             }
             else
             {
+                ILicense license = licenseService.GetLicense(store);
+
                 EnumResult<LicenseActivationState> activateResult;
                 try
                 {

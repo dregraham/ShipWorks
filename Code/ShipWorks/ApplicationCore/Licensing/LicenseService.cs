@@ -47,7 +47,7 @@ namespace ShipWorks.ApplicationCore.Licensing
         /// Customer Key read from the reader.
         /// </summary>
         /// <exception cref="EncryptionException"></exception>
-        private string CustomerKey
+        public string CustomerKey
         {
             get
             {
@@ -56,6 +56,22 @@ namespace ShipWorks.ApplicationCore.Licensing
                 isLegacy = string.IsNullOrWhiteSpace(customerKey);
 
                 return customerKey;
+            }
+        }
+        
+        /// <summary>
+        /// Customer Key read from the reader.
+        /// </summary>
+        /// <exception cref="EncryptionException"></exception>
+        public string LegacyCustomerKey
+        {
+            get
+            {
+                string legacyCustomerKey = reader.Value.Read(CustomerLicenseKeyType.Legacy);
+
+                isLegacy = !string.IsNullOrWhiteSpace(legacyCustomerKey);
+
+                return legacyCustomerKey;
             }
         }
 

@@ -795,7 +795,8 @@
     <Compile Include="Api\IApiService.cs" />
     <Compile Include="ApplicationCore\CommandLineOptions\AutoUpgradeFailureSubmitter.cs" />
     <Compile Include="ApplicationCore\Dashboard\Content\DashboardAccountTrialItem.cs" />
-    <Compile Include="ApplicationCore\Dashboard\Content\DashboardTrialItem.cs" />    
+    <Compile Include="ApplicationCore\Dashboard\Content\DashboardTrialItem.cs" />
+    <Compile Include="ApplicationCore\Licensing\CustomerLicenseKeyType.cs" />    
     <Compile Include="ApplicationCore\Licensing\TrialDetails.cs" />
     <Compile Include="ApplicationCore\Licensing\Warehouse\DTO\SqlConfigChangedDto.cs" />
     <Compile Include="ApplicationCore\Settings\ICubiscanSettingsPage.cs" />

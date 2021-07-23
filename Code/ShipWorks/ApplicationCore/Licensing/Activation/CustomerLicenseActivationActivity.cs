@@ -12,14 +12,17 @@ namespace ShipWorks.ApplicationCore.Licensing.Activation
     {
         private readonly ITangoWebClient tangoWebClient;
         private readonly Func<string, ICustomerLicense> licenseFactory;
+        private readonly ICustomerLicenseWriter licenseWriter;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="CustomerLicenseActivationActivity"/> class.
         /// </summary>
-        public CustomerLicenseActivationActivity(ITangoWebClient tangoWebClient, Func<string, ICustomerLicense> licenseFactory)
+        public CustomerLicenseActivationActivity(ITangoWebClient tangoWebClient,
+            Func<string, ICustomerLicense> licenseFactory, ICustomerLicenseWriter licenseWriter)
         {
             this.tangoWebClient = tangoWebClient;
             this.licenseFactory = licenseFactory;
+            this.licenseWriter = licenseWriter;
         }
 
         /// <summary>
@@ -41,10 +44,25 @@ namespace ShipWorks.ApplicationCore.Licensing.Activation
                 throw new ShipWorksLicenseException(activateLicenseResponse.Message);
             }
 
-            ICustomerLicense license = licenseFactory(activateLicenseResponse.Value.Key);
-            license.AssociatedStampsUsername = activateLicenseResponse.Value.AssociatedStampsUsername;
-            license.StampsUsername = activateLicenseResponse.Value.StampsUsername;
-            license.Save();
+            var response = activateLicenseResponse.Value;
+            var customerLicenseKey = response.Key;
+
+            // todo: may not even need to create the license? It doesn't seem like it get used up the chain.
+            ICustomerLicense license;
+            if (response.IsLegacyUser)
+            {
+                // Don't want to create a real customer license for legacy users, so just pass empty key.
+                license = licenseFactory(string.Empty);
+            }
+            else
+            {
+                license = licenseFactory(customerLicenseKey);
+                license.AssociatedStampsUsername = response.AssociatedStampsUsername;
+                license.StampsUsername = response.StampsUsername;
+            }
+
+            licenseWriter.Write(customerLicenseKey,
+                response.IsLegacyUser ? CustomerLicenseKeyType.Legacy : CustomerLicenseKeyType.WebReg);
 
             return license;
         }

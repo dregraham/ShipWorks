@@ -5367,6 +5367,11 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(ConfigurationFieldIndex.WarehouseName);}
 		}
+		/// <summary>Creates a new ConfigurationEntity.LegacyCustomerKey field instance</summary>
+		public static EntityField2 LegacyCustomerKey
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ConfigurationFieldIndex.LegacyCustomerKey);}
+		}
 	}
 
 	/// <summary>Field Creation Class for entity CustomerEntity</summary>

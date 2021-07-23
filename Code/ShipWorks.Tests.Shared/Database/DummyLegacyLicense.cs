@@ -35,11 +35,6 @@ namespace ShipWorks.Tests.Shared.Database
             get { throw new NotImplementedException(); }
         }
 
-        public bool IsLegacy
-        {
-            get { throw new NotImplementedException(); }
-        }
-
         public bool IsInTrial { get; }
         
         public TrialDetails TrialDetails { get; }

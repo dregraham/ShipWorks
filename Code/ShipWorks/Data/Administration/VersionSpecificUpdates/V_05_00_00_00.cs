@@ -12,8 +12,8 @@ namespace ShipWorks.Data.Administration.VersionSpecificUpdates
     /// </remarks>
     public class V_05_00_00_00 : IVersionSpecificUpdate
     {
-        private readonly Func<string, ICustomerLicense> getCustomerLicense;
         private readonly IConfigurationData configurationData;
+        private readonly ICustomerLicenseWriter customerLicenseWriter;
 
         /// <summary>
         /// Always run just in case it has never been run before.
@@ -24,10 +24,10 @@ namespace ShipWorks.Data.Administration.VersionSpecificUpdates
         /// Constructor
         /// </summary>
         /// <param name="customerLicense"></param>
-        public V_05_00_00_00(Func<string, ICustomerLicense> getCustomerLicense, IConfigurationData configurationData)
+        public V_05_00_00_00(IConfigurationData configurationData, ICustomerLicenseWriter customerLicenseWriter)
         {
-            this.getCustomerLicense = getCustomerLicense;
             this.configurationData = configurationData;
+            this.customerLicenseWriter = customerLicenseWriter;
         }
 
         /// <summary>
@@ -44,9 +44,9 @@ namespace ShipWorks.Data.Administration.VersionSpecificUpdates
 
             if (string.IsNullOrEmpty(configurationData.FetchReadOnly().CustomerKey))
             {
-                ICustomerLicense customerLicense = getCustomerLicense(string.Empty);
-
-                customerLicense.Save();
+                // We're passing in an empty string, which seems pointless, but further down the method chain the 
+                // empty string gets overwritten and encrypted.
+                customerLicenseWriter.Write(string.Empty, CustomerLicenseKeyType.WebReg);
             } 
         }
     }

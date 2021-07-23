@@ -4641,7 +4641,8 @@ CREATE TABLE [dbo].[Configuration]
 [AutoUpdateHourOfDay] [int] NOT NULL,
 [AutoUpdateStartDate] [datetime2] NOT NULL,
 [WarehouseID] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL CONSTRAINT [DF_Configuration_WarehouseID] DEFAULT (''),
-[WarehouseName] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL CONSTRAINT [DF_Configuration_WarehouseName] DEFAULT ('')
+[WarehouseName] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL CONSTRAINT [DF_Configuration_WarehouseName] DEFAULT (''),
+[LegacyCustomerKey] [nvarchar] (max) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL CONSTRAINT [DF_Configuration_LegacyCustomerKey] DEFAULT ('')
 )
 GO
 PRINT N'Creating primary key [PK_Configuration] on [dbo].[Configuration]'

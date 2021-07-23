@@ -18,6 +18,7 @@ namespace ShipWorks.ApplicationCore.Licensing
             MethodConditions.EnsureArgumentIsNotNull(response, nameof(response));
 
             Key = response.CustomerLicenseKey;
+            IsLegacyUser = response.IsLegacyUser;
             AssociatedStampsUsername = response.AssociatedStampsUserName;
             StampsUsername = response.StampsUserName;
         }
@@ -27,6 +28,11 @@ namespace ShipWorks.ApplicationCore.Licensing
         /// </summary>
         public string Key { get;  }
 
+        /// <summary>
+        /// Whether or not this is a legacy account
+        /// </summary>
+        public bool IsLegacyUser { get; }
+        
         /// <summary>
         /// The associated stamps username. If empty, do not create new Stamps account in ShipWorks
         /// </summary>

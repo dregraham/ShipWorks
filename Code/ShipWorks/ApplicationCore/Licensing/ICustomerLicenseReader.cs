@@ -8,6 +8,6 @@
         /// <summary>
         /// Reads the customer license key from the database
         /// </summary>
-        string Read();
+        string Read(CustomerLicenseKeyType customerLicenseKeyType = CustomerLicenseKeyType.WebReg);
     }
 }

@@ -97,11 +97,6 @@ namespace ShipWorks.ApplicationCore.Licensing
         public string Key { get; }
 
         /// <summary>
-        /// Is the license legacy
-        /// </summary>
-        public bool IsLegacy => false;
-
-        /// <summary>
         /// Reason the license is Disabled
         /// </summary>
         public string DisabledReason { get; set; }
@@ -136,19 +131,10 @@ namespace ShipWorks.ApplicationCore.Licensing
         /// </summary>
         public EnumResult<LicenseActivationState> Activate(StoreEntity store)
         {
-            IAddStoreResponse response = tangoWebClient.AddStore(this, store);
+            IAddStoreResponse response = tangoWebClient.AddStore(Key, store);
             store.License = response.Key;
 
             return new EnumResult<LicenseActivationState>(response.Result, EnumHelper.GetDescription(response.Result));
-        }
-
-        /// <summary>
-        /// Uses the ILicenseWriter provided in the constructor to save this instance
-        /// to a data source.
-        /// </summary>
-        public void Save()
-        {
-            licenseWriter.Write(this);
         }
 
         /// <summary>

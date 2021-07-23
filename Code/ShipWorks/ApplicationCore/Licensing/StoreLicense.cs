@@ -59,11 +59,6 @@ namespace ShipWorks.ApplicationCore.Licensing
         /// </summary>
         public string Key { get; }
 
-        /// <summary>
-        /// Is the license legacy
-        /// </summary>
-        public bool IsLegacy => true;
-
         public TrialDetails TrialDetails { get; private set; }
         
         /// <summary>

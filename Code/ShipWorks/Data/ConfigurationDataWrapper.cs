@@ -7,6 +7,7 @@ using Interapptive.Shared.Utility;
 using ShipWorks.Actions;
 using ShipWorks.ApplicationCore;
 using ShipWorks.ApplicationCore.ExecutionMode;
+using ShipWorks.ApplicationCore.Licensing;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.UI;
@@ -34,7 +35,7 @@ namespace ShipWorks.Data
         /// <summary>
         /// Get the customer key
         /// </summary>
-        public string FetchCustomerKey() => ConfigurationData.FetchCustomerKey().Trim();
+        public string FetchCustomerKey(CustomerLicenseKeyType licenseKeyType) => ConfigurationData.FetchCustomerKey(licenseKeyType).Trim();
 
         /// <summary>
         /// Load the configuration from the database

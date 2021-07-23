@@ -151,7 +151,7 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing
             {
                 var writer = mock.Mock<ICustomerLicenseWriter>();
 
-                writer.Setup(w => w.Write(It.IsAny<ICustomerLicense>())).Throws(new Exception("some random exception"));
+                writer.Setup(w => w.Write(It.IsAny<string>(), It.IsAny<CustomerLicenseKeyType>())).Throws(new Exception("some random exception"));
 
                 CustomerLicense customerLicense = mock.Create<CustomerLicense>(new NamedParameter("key", "SomeKey"));
 
@@ -170,7 +170,7 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing
                     .Returns(true);
 
                 mock.Mock<ITangoWebClient>()
-                    .Setup(w => w.AddStore(It.IsAny<ILicense>(), It.IsAny<StoreEntity>()))
+                    .Setup(w => w.AddStore(It.IsAny<string>(), It.IsAny<StoreEntity>()))
                     .Returns(response.Object);
 
                 CustomerLicense testObject = mock.Create<CustomerLicense>(new NamedParameter("key", "SomeKey"));
@@ -194,7 +194,7 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing
                     .Returns(LicenseActivationState.CustIdDisabled);
 
                 mock.Mock<ITangoWebClient>()
-                    .Setup(w => w.AddStore(It.IsAny<ILicense>(), It.IsAny<StoreEntity>()))
+                    .Setup(w => w.AddStore(It.IsAny<string>(), It.IsAny<StoreEntity>()))
                     .Returns(response.Object);
 
                 CustomerLicense testObject = mock.Create<CustomerLicense>(new NamedParameter("key", "SomeKey"));
@@ -218,7 +218,7 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing
                     .Returns(LicenseActivationState.MaxChannelsExceeded);
 
                 mock.Mock<ITangoWebClient>()
-                    .Setup(w => w.AddStore(It.IsAny<ILicense>(), It.IsAny<StoreEntity>()))
+                    .Setup(w => w.AddStore(It.IsAny<string>(), It.IsAny<StoreEntity>()))
                     .Returns(response.Object);
 
                 CustomerLicense testObject = mock.Create<CustomerLicense>(new NamedParameter("key", "SomeKey"));
