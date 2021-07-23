@@ -231,8 +231,8 @@ namespace ShipWorks.ApplicationCore.Licensing.WebClientEnvironments
                 ActivationUrl = "http://localhost:3999/tango",
                 WarehouseUrl = "http://localhost:4001/",
                 ProxyUrl = "http://localhost:3999/",
-                HeaderShipWorksUsername = "none",
-                HeaderShipWorksPassword = "none",
+                HeaderShipWorksUsername = encryptionProvider.Decrypt("C5NOiKdNaM/324R7sIjFUA=="),
+                HeaderShipWorksPassword = encryptionProvider.Decrypt("lavEgsQoKGM="),
                 SoapAction = "",
                 ForcePreCallCertificationValidation = false,
                 TangoSecurityValidator = fakeTangoSecurityValidator
@@ -244,14 +244,6 @@ namespace ShipWorks.ApplicationCore.Licensing.WebClientEnvironments
         /// </summary>
         private WebClientEnvironment CreateOtherEnvironment(string tangoUrl, string warehouseUrl, string activationUrl, string proxyUrl)
         {
-            string username = "none";
-            string password = "none";
-            if (tangoUrl.IndexOf(".interapptive.com", StringComparison.InvariantCultureIgnoreCase) > 0)
-            {
-                username = encryptionProvider.Decrypt("C5NOiKdNaM/324R7sIjFUA==");
-                password = encryptionProvider.Decrypt("lavEgsQoKGM=");
-            }
-
             return new WebClientEnvironment()
             {
                 Name = "Other",
@@ -259,8 +251,8 @@ namespace ShipWorks.ApplicationCore.Licensing.WebClientEnvironments
                 WarehouseUrl = warehouseUrl,
                 ActivationUrl = activationUrl,
                 ProxyUrl = proxyUrl,
-                HeaderShipWorksUsername = username,
-                HeaderShipWorksPassword = password,
+                HeaderShipWorksUsername = encryptionProvider.Decrypt("C5NOiKdNaM/324R7sIjFUA=="),
+                HeaderShipWorksPassword = encryptionProvider.Decrypt("lavEgsQoKGM="),
                 SoapAction = "http://stamps.com/xml/namespace/2015/06/shipworks/shipworksv1/IShipWorks/ShipworksPost",
                 ForcePreCallCertificationValidation = false,
                 TangoSecurityValidator = fakeTangoSecurityValidator
