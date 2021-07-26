@@ -19,6 +19,7 @@ namespace ShipWorks.ApplicationCore.Licensing
         private string decryptedCustomerKey = string.Empty;
         private string currentLegacyCustomerKey = string.Empty;
         private string decryptedLegacyCustomerKey = string.Empty;
+        
         /// <summary>
         /// Constructor
         /// </summary>
@@ -43,6 +44,9 @@ namespace ShipWorks.ApplicationCore.Licensing
                 : ReadKey(CustomerLicenseKeyType.Legacy, ref currentLegacyCustomerKey, ref decryptedLegacyCustomerKey);
         }
 
+        /// <summary>
+        /// Read the customer license key based on the given type
+        /// </summary>
         private string ReadKey(CustomerLicenseKeyType keyType, ref string currentKey, ref string decryptedKey)
         {
             string key = configurationData.FetchCustomerKey(keyType);

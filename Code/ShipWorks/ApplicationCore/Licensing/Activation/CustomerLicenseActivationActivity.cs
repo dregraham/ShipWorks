@@ -47,7 +47,6 @@ namespace ShipWorks.ApplicationCore.Licensing.Activation
             var response = activateLicenseResponse.Value;
             var customerLicenseKey = response.Key;
 
-            // todo: may not even need to create the license? It doesn't seem like it get used up the chain.
             ICustomerLicense license;
             if (response.IsLegacyUser)
             {
