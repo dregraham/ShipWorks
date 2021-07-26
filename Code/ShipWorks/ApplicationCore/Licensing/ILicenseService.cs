@@ -11,11 +11,6 @@ namespace ShipWorks.ApplicationCore.Licensing
     /// </summary>
     public interface ILicenseService
     {
-        string CustomerKey { get; }
-        
-        string LegacyCustomerKey { get; }
-        
-        
         /// <summary>
         /// True if Legacy Customer
         /// </summary>
@@ -28,6 +23,11 @@ namespace ShipWorks.ApplicationCore.Licensing
         /// </summary>
         bool IsHub { get; }
 
+        /// <summary>
+        /// Get the customers license key
+        /// </summary>
+        string GetCustomerLicenseKey(CustomerLicenseKeyType licenseKeyType);
+        
         /// <summary>
         /// Gets all licenses for ShipWorks
         /// </summary>

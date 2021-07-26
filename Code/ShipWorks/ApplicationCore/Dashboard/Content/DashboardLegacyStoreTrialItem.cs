@@ -1,4 +1,5 @@
 ﻿using ShipWorks.ApplicationCore.Licensing;
+using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
 
 namespace ShipWorks.ApplicationCore.Dashboard.Content
@@ -16,18 +17,18 @@ namespace ShipWorks.ApplicationCore.Dashboard.Content
         public DashboardLegacyStoreTrialItem(IStoreEntity store, TrialDetails trialDetails) : base(trialDetails)
         {
             Store = store;
+            storeName = store.StoreName;
         }
 
         /// <summary>
         /// Store associated with the trial
         /// </summary>
-        public IStoreEntity Store { get; }
-
+        public IStoreEntity Store { get; private set; }
 
         /// <summary>
         /// Whether or not the display should be updated
         /// </summary>
-        protected override bool ShouldUpdate => storeName != Store.StoreName ||
+        protected override bool ShouldUpdate => !storeName.Equals(Store.StoreName) ||
                                                 days != trialDetails.DaysLeftInTrial ||
                                                 wasExpired != trialDetails.IsExpired;
 
@@ -44,14 +45,13 @@ namespace ShipWorks.ApplicationCore.Dashboard.Content
         /// <summary>
         /// Update the display of the trial information
         /// </summary>
-        public void UpdateTrialDisplay()
+        public void UpdateTrialDisplay(StoreEntity store)
         {
+            Store = store;
+            
             base.UpdateTrialDisplay();
-
-            if (!storeName.Equals(Store.StoreName))
-            {
-                storeName = Store.StoreName;
-            }
+            
+            storeName = Store.StoreName;
         }
     }
 }

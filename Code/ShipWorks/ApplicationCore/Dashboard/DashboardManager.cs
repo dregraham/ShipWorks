@@ -394,10 +394,10 @@ namespace ShipWorks.ApplicationCore.Dashboard
                             ApplicationBusyManager.OperationStarting(busyText)
                         });
                 }
-                // Refresh the UI in case the days has changed or its now expired.
+                // Refresh the UI in case the days has changed, its now expired, or the store name changed
                 else
                 {
-                    legacyStoreTrialItem.UpdateTrialDisplay();
+                    legacyStoreTrialItem.UpdateTrialDisplay(store);
                 }
             }
 
