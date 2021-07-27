@@ -172,6 +172,10 @@ namespace ShipWorks.ApplicationCore.Licensing
                 // Legacy users are always allowed to log on, only new pricing restricts logon
                 if (IsLegacy)
                 {
+                    // Ensures the legacy customer license key exists. If not, this will throw and trigger the 
+                    // activation flow, which will set it.
+                    GetCustomerLicenseKey(CustomerLicenseKeyType.Legacy);
+                    
                     return new EnumResult<LogOnRestrictionLevel>(LogOnRestrictionLevel.None);
                 }
             }

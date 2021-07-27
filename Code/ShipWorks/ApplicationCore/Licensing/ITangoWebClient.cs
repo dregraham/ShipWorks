@@ -134,5 +134,10 @@ namespace ShipWorks.ApplicationCore.Licensing
         /// Convert a legacy trial store
         /// </summary>
         void ConvertLegacyTrialStore(string trialLicenseKey);
+
+        /// <summary>
+        /// Get a customer license key from a store license key
+        /// </summary>
+        string GetCustomerLicenseKey(string storeLicenseKey);
     }
 }

@@ -22,7 +22,7 @@ namespace ShipWorks.ApplicationCore.Licensing
         /// <summary>
         /// Writes the customer license to the database
         /// </summary>
-        public void Write(string customerLicenseKey, CustomerLicenseKeyType licenseKeyType = CustomerLicenseKeyType.WebReg)
+        public void Write(string customerLicenseKey, CustomerLicenseKeyType licenseKeyType)
         {
             IEncryptionProvider encryptionProvider = encryptionProviderFactory.CreateLicenseEncryptionProvider();
 

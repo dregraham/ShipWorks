@@ -950,6 +950,7 @@
     <Compile Include="Data\Administration\SqlSchemaUpdaterWrapper.cs" />
     <Compile Include="Data\Administration\UpdateService.cs" />
     <Compile Include="Data\Administration\VersionSpecificUpdates\V_07_04_00_02.cs" />
+    <Compile Include="Data\Administration\VersionSpecificUpdates\V_09_01_01_00.cs" />
     <Compile Include="Data\Connection\DatabaseUpgradeTelemetry.cs" />
     <Compile Include="Data\Serialization\EntityJsonSerializerSettings.cs" />
     <Compile Include="Data\ShipmentNotProcessedIgnoreConcurrencyFactory.cs" />

@@ -235,5 +235,11 @@ namespace ShipWorks.ApplicationCore.Licensing
         /// </summary>
         public void ConvertLegacyTrialStore(string trialLicenseKey) =>
             TangoWebClient.ConvertLegacyTrialStore(trialLicenseKey);
+
+        /// <summary>
+        /// Get the customer license key, given a store license key
+        /// </summary>
+        public string GetCustomerLicenseKey(string storeLicenseKey) =>
+            TangoWebClient.GetCustomerLicenseKey(storeLicenseKey);
     }
 }

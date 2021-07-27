@@ -45,23 +45,20 @@ namespace ShipWorks.ApplicationCore.Licensing.Activation
             }
 
             var response = activateLicenseResponse.Value;
-            var customerLicenseKey = response.Key;
 
-            ICustomerLicense license;
+            ICustomerLicense license = licenseFactory(string.Empty);
             if (response.IsLegacyUser)
             {
-                // Don't want to create a real customer license for legacy users, so just pass empty key.
-                license = licenseFactory(string.Empty);
+                licenseWriter.Write(response.LegacyKey, CustomerLicenseKeyType.Legacy);
             }
             else
             {
+                var customerLicenseKey = response.Key;
                 license = licenseFactory(customerLicenseKey);
                 license.AssociatedStampsUsername = response.AssociatedStampsUsername;
                 license.StampsUsername = response.StampsUsername;
+                licenseWriter.Write(customerLicenseKey, CustomerLicenseKeyType.WebReg);
             }
-
-            licenseWriter.Write(customerLicenseKey,
-                response.IsLegacyUser ? CustomerLicenseKeyType.Legacy : CustomerLicenseKeyType.WebReg);
 
             return license;
         }

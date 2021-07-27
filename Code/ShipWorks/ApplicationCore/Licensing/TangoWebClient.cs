@@ -990,7 +990,33 @@ namespace ShipWorks.ApplicationCore.Licensing
                 log.Error(ex.Message);
             }
         }
+        
+        /// <summary>
+        /// Get the customer license key, given a store license key
+        /// </summary>
+        public static string GetCustomerLicenseKey(string storeLicenseKey)
+        {
+            HttpVariableRequestSubmitter postRequest = new HttpVariableRequestSubmitter();
 
+            postRequest.Variables.Add("action", "getcustomerkey");
+            postRequest.Variables.Add("license", storeLicenseKey);
+            postRequest.Variables.Add("version", Version);
+
+            XmlDocument xmlResponse = ProcessXmlRequest(postRequest, "GetCustomerKey", false);
+
+            try
+            {
+                CheckResponseForErrors(xmlResponse);
+                
+                return XPathUtility.Evaluate(xmlResponse.CreateNavigator(), "//CustomerLicenseKey", string.Empty);
+            }
+            catch (TangoException ex)
+            {
+                log.Error(ex.Message);
+                return string.Empty;
+            }
+        }
+        
         /// <summary>
         /// Checks the response for errors.
         /// </summary>

@@ -8,6 +8,11 @@
         string Key { get; }
         
         /// <summary>
+        /// The customer Key for legacy users
+        /// </summary>
+        string LegacyKey { get;  }
+        
+        /// <summary>
         /// Whether or not this is a legacy account
         /// </summary>
         bool IsLegacyUser { get; }

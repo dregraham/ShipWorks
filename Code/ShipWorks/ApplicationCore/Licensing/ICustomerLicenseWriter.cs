@@ -8,6 +8,6 @@
         /// <summary>
         /// Writes the license
         /// </summary>
-        void Write(string customerLicenseKey, CustomerLicenseKeyType licenseKeyType = CustomerLicenseKeyType.WebReg);
+        void Write(string customerLicenseKey, CustomerLicenseKeyType licenseKeyType);
     }
 }
