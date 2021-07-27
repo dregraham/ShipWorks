@@ -22,6 +22,7 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing
             {
                 Mock<ICustomerLicenseReader> customerLicenseReader = mock.Mock<ICustomerLicenseReader>();
                 customerLicenseReader.Setup(r => r.Read(CustomerLicenseKeyType.WebReg)).Returns("");
+                customerLicenseReader.Setup(r => r.Read(CustomerLicenseKeyType.Legacy)).Returns("legacy key");
 
                 Mock<ICustomerLicense> customerLicense = mock.Mock<ICustomerLicense>();
 

@@ -54,6 +54,7 @@ namespace ShipWorks.ApplicationCore.Licensing
             {
                 if (!isLegacy.HasValue)
                 {
+                    // Yes, this is duplicated code, but needed a way to get the initial value.
                     isLegacy = string.IsNullOrWhiteSpace(GetCustomerLicenseKey(CustomerLicenseKeyType.WebReg));
                 }
 
@@ -69,8 +70,24 @@ namespace ShipWorks.ApplicationCore.Licensing
         /// <summary>
         /// Get the customers license key
         /// </summary>
-        public string GetCustomerLicenseKey(CustomerLicenseKeyType licenseKeyType) => reader.Value.Read(licenseKeyType);
-
+        public string GetCustomerLicenseKey(CustomerLicenseKeyType licenseKeyType)
+        {
+            string customerKey = reader.Value.Read(licenseKeyType);
+            
+            if (licenseKeyType == CustomerLicenseKeyType.WebReg)
+            {
+                // if getting webreg key and key is blank, then customer is not legacy
+                isLegacy = string.IsNullOrWhiteSpace(customerKey);
+            }
+            else
+            {
+                // if getting legacy and key is not blank, then customer is legacy
+                isLegacy = !string.IsNullOrWhiteSpace(customerKey);
+            }
+            
+            return customerKey;
+        }
+        
         /// <summary>
         /// Returns the correct ILicense for the store
         /// </summary>
