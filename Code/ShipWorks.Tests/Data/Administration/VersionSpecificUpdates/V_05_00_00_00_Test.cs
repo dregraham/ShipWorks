@@ -34,8 +34,7 @@ namespace ShipWorks.Core.Tests.Integration.Data.Administration.VersionSpecificUp
             mock.Mock<IConfigurationData>().Setup(d => d.FetchReadOnly()).Returns(config.Object);
 
             mock.Create<V_05_00_00_00>().Update();
-
-            mock.Mock<ICustomerLicense>().Verify(l => l.Save(), Times.Never);
+            mock.Mock<ICustomerLicenseWriter>().Verify(l => l.Write(It.IsAny<string>(), It.IsAny<CustomerLicenseKeyType>()), Times.Never);
         }
 
         [Fact]
@@ -43,7 +42,7 @@ namespace ShipWorks.Core.Tests.Integration.Data.Administration.VersionSpecificUp
         {
             mock.Create<V_05_00_00_00>().Update();
 
-            mock.Mock<ICustomerLicense>().Verify(l => l.Save(), Times.Once);
+            mock.Mock<ICustomerLicenseWriter>().Verify(l => l.Write(It.IsAny<string>(), CustomerLicenseKeyType.WebReg), Times.Once);
         }
 
         [Fact]

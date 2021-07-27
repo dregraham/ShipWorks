@@ -29,7 +29,7 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing.Activation
         }
 
         [Fact]
-        public void Execute_DelegatesToCustomerLicense_ToSave()
+        public void Execute_DelegatesToCustomerLicenseWriter_ToSave()
         {
             using (var mock = AutoMock.GetLoose())
             {
@@ -38,13 +38,13 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing.Activation
                 tangoWebClient.Setup(w => w.ActivateLicense(It.IsAny<string>(), It.IsAny<string>()))
                     .Returns(GenericResult.FromSuccess(MockActivateLicense(mock, "originalKey", "bob")));
 
-                var customerLicense = mock.Mock<ICustomerLicense>();
+                var customerLicenseWriter = mock.Mock<ICustomerLicenseWriter>();
 
                 var testObject = mock.Create<CustomerLicenseActivationActivity>();
 
                 testObject.Execute("some@email.com", "randompassword");
 
-                customerLicense.Verify(c => c.Save(), Times.Once);
+                customerLicenseWriter.Verify(c => c.Write(It.IsAny<string>(), CustomerLicenseKeyType.WebReg), Times.Once);
             }
         }
 

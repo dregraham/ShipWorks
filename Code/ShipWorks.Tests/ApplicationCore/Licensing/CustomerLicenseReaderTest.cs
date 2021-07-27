@@ -39,7 +39,7 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing
                 SetupEncryption(mock);
 
                 var config = mock.Mock<IConfigurationData>();
-                config.Setup(c => c.FetchCustomerKey())
+                config.Setup(c => c.FetchCustomerKey(CustomerLicenseKeyType.WebReg))
                     .Returns(EncryptedCustomerKey);
 
                 var testObject = mock.Create<CustomerLicenseReader>();
@@ -58,7 +58,7 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing
                 SetupEncryption(mock);
 
                 mock.Mock<IConfigurationData>()
-                    .Setup(c => c.FetchCustomerKey())
+                    .Setup(c => c.FetchCustomerKey(CustomerLicenseKeyType.WebReg))
                     .Returns(EncryptedCustomerKey);
 
                 var testObject = mock.Create<CustomerLicenseReader>();

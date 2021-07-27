@@ -144,21 +144,6 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing
             }
         }
 
-        [Fact]
-        public void Save_RethrowsExceptionFromLicenseWriter()
-        {
-            using (var mock = AutoMock.GetLoose())
-            {
-                var writer = mock.Mock<ICustomerLicenseWriter>();
-
-                writer.Setup(w => w.Write(It.IsAny<string>(), It.IsAny<CustomerLicenseKeyType>())).Throws(new Exception("some random exception"));
-
-                CustomerLicense customerLicense = mock.Create<CustomerLicense>(new NamedParameter("key", "SomeKey"));
-
-                var ex = Assert.Throws<Exception>(() => customerLicense.Save());
-                Assert.Equal("some random exception", ex.Message);
-            }
-        }
 
         [Fact]
         public void Activate_ReturnsActive_WhenTangoReturnsSuccess()
