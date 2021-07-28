@@ -123,6 +123,9 @@ namespace ShipWorks.Data
             }
         }
 
+        /// <summary>
+        /// Get a field value from the configuration table
+        /// </summary>
         private static string GetConfigurationField(IEntityFieldCore entityField, string fieldName)
         {
             ResultsetFields resultFields = new ResultsetFields(1);
@@ -133,10 +136,10 @@ namespace ShipWorks.Data
                 string fieldValue = string.Empty;
                 IDataReader reader = sqlAdapter.FetchDataReader(resultFields, null, CommandBehavior.CloseConnection, 0,
                     null, true);
-                while (reader.Read())
+                
+                if (reader.Read())
                 {
                     fieldValue = reader.GetString(0).Trim();
-                    break;
                 }
 
                 return fieldValue;

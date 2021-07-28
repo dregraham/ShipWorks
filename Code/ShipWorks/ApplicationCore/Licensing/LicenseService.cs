@@ -76,12 +76,12 @@ namespace ShipWorks.ApplicationCore.Licensing
             
             if (licenseKeyType == CustomerLicenseKeyType.WebReg)
             {
-                // if getting webreg key and key is blank, then customer is not legacy
+                // if getting webreg key and it is blank, then customer is legacy
                 isLegacy = string.IsNullOrWhiteSpace(customerKey);
             }
             else
             {
-                // if getting legacy and key is not blank, then customer is legacy
+                // if getting legacy key and it is not blank, then customer is legacy
                 isLegacy = !string.IsNullOrWhiteSpace(customerKey);
             }
             
