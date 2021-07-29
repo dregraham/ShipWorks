@@ -90,7 +90,7 @@ namespace ShipWorks.ApplicationCore.Licensing
             valid = XPathUtility.Evaluate(xpath, "//Valid", false);
 
             // State
-            DetermineState(StoreTypeManager.GetType(store).LicenseIdentifier);
+            DetermineState();
 
             // Edition
             edition = DetermineEdition(xpath);
@@ -224,7 +224,7 @@ namespace ShipWorks.ApplicationCore.Licensing
         /// <summary>
         /// Determine the state of the license
         /// </summary>
-        private void DetermineState(string desiredIdentifier)
+        private void DetermineState()
         {
             // Invalid
             if (!valid)
@@ -251,20 +251,10 @@ namespace ShipWorks.ApplicationCore.Licensing
                         licenseState = LicenseActivationState.Deactivated;
                     }
                 }
-
                 // Active
                 else
                 {
-                    // Not activated
-                    if (identifier.Length == 0)
-                    {
-                        licenseState = LicenseActivationState.ActiveNowhere;
-                    }
-                    // Active on this identifier
-                    else
-                    {
-                        licenseState = LicenseActivationState.Active;
-                    }
+                    licenseState = LicenseActivationState.Active;
                 }
             }
         }
