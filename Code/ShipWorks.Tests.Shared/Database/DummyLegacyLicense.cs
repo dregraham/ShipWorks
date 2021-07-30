@@ -36,7 +36,7 @@ namespace ShipWorks.Tests.Shared.Database
         }
 
         public bool IsInTrial { get; }
-        
+
         public TrialDetails TrialDetails { get; }
 
         public string Key
