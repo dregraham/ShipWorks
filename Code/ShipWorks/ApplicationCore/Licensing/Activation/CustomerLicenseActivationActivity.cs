@@ -12,14 +12,17 @@ namespace ShipWorks.ApplicationCore.Licensing.Activation
     {
         private readonly ITangoWebClient tangoWebClient;
         private readonly Func<string, ICustomerLicense> licenseFactory;
+        private readonly ICustomerLicenseWriter licenseWriter;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="CustomerLicenseActivationActivity"/> class.
         /// </summary>
-        public CustomerLicenseActivationActivity(ITangoWebClient tangoWebClient, Func<string, ICustomerLicense> licenseFactory)
+        public CustomerLicenseActivationActivity(ITangoWebClient tangoWebClient,
+            Func<string, ICustomerLicense> licenseFactory, ICustomerLicenseWriter licenseWriter)
         {
             this.tangoWebClient = tangoWebClient;
             this.licenseFactory = licenseFactory;
+            this.licenseWriter = licenseWriter;
         }
 
         /// <summary>
@@ -41,10 +44,21 @@ namespace ShipWorks.ApplicationCore.Licensing.Activation
                 throw new ShipWorksLicenseException(activateLicenseResponse.Message);
             }
 
-            ICustomerLicense license = licenseFactory(activateLicenseResponse.Value.Key);
-            license.AssociatedStampsUsername = activateLicenseResponse.Value.AssociatedStampsUsername;
-            license.StampsUsername = activateLicenseResponse.Value.StampsUsername;
-            license.Save();
+            var response = activateLicenseResponse.Value;
+
+            ICustomerLicense license = licenseFactory(string.Empty);
+            if (response.IsLegacyUser)
+            {
+                licenseWriter.Write(response.LegacyKey, CustomerLicenseKeyType.Legacy);
+            }
+            else
+            {
+                var customerLicenseKey = response.Key;
+                license = licenseFactory(customerLicenseKey);
+                license.AssociatedStampsUsername = response.AssociatedStampsUsername;
+                license.StampsUsername = response.StampsUsername;
+                licenseWriter.Write(customerLicenseKey, CustomerLicenseKeyType.WebReg);
+            }
 
             return license;
         }

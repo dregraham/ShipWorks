@@ -66,7 +66,7 @@ namespace ShipWorks.ApplicationCore.Licensing
             // The license info/capabilities should be cached for 10 minutes
             capabilitiesTimeToLive = new TimeSpan(0, 10, 0);
             lastRefreshTimeInUtc = DateTime.MinValue;
-
+            
             EnsureOnlyOneFeatureRestrictionPerEditionFeature();
         }
 
@@ -97,11 +97,6 @@ namespace ShipWorks.ApplicationCore.Licensing
         public string Key { get; }
 
         /// <summary>
-        /// Is the license legacy
-        /// </summary>
-        public bool IsLegacy => false;
-
-        /// <summary>
         /// Reason the license is Disabled
         /// </summary>
         public string DisabledReason { get; set; }
@@ -112,10 +107,10 @@ namespace ShipWorks.ApplicationCore.Licensing
         public bool IsDisabled => (!string.IsNullOrEmpty(DisabledReason));
 
         /// <summary>
-        /// Is the license in trial
+        /// Details about the trial
         /// </summary>
-        public bool IsInTrial => LicenseCapabilities?.IsInTrial == true;
-
+        public TrialDetails TrialDetails => LicenseCapabilities?.TrialDetails ?? new TrialDetails();
+ 
         /// <summary>
         /// Gets or sets the user name of the SDC account associated with this license.
         /// </summary>
@@ -136,19 +131,10 @@ namespace ShipWorks.ApplicationCore.Licensing
         /// </summary>
         public EnumResult<LicenseActivationState> Activate(StoreEntity store)
         {
-            IAddStoreResponse response = tangoWebClient.AddStore(this, store);
+            IAddStoreResponse response = tangoWebClient.AddStore(Key, store);
             store.License = response.Key;
 
             return new EnumResult<LicenseActivationState>(response.Result, EnumHelper.GetDescription(response.Result));
-        }
-
-        /// <summary>
-        /// Uses the ILicenseWriter provided in the constructor to save this instance
-        /// to a data source.
-        /// </summary>
-        public void Save()
-        {
-            licenseWriter.Write(this);
         }
 
         /// <summary>
@@ -322,7 +308,7 @@ namespace ShipWorks.ApplicationCore.Licensing
 
             Refresh();
 
-            if (LicenseCapabilities != null && !LicenseCapabilities.IsInTrial)
+            if (LicenseCapabilities != null && !LicenseCapabilities.TrialDetails.IsInTrial)
             {
                 // The dashboard item should not be created when in the trial period since
                 // the shipment count is unlimited.

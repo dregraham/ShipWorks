@@ -75,11 +75,6 @@ namespace ShipWorks.ApplicationCore.Licensing
         void UpgradeFreemiumStore(StoreEntity store, int endiciaServicePlan);
 
         /// <summary>
-        /// Upgrade the given trial to not be in an 'Edition' mode
-        /// </summary>
-        void UpgradeEditionTrial(StoreEntity store);
-
-        /// <summary>
         /// Gets a collection of nudges from Tango.
         /// </summary>
         IEnumerable<Nudge> GetNudges(IEnumerable<StoreEntity> stores);
@@ -118,7 +113,7 @@ namespace ShipWorks.ApplicationCore.Licensing
         /// <summary>
         /// Makes a request to Tango to add a store
         /// </summary>
-        IAddStoreResponse AddStore(ILicense license, StoreEntity store);
+        IAddStoreResponse AddStore(string customerLicenseKey, StoreEntity store);
 
         /// <summary>
         /// Associates a free Stamps.com account with a customer license.
@@ -139,5 +134,10 @@ namespace ShipWorks.ApplicationCore.Licensing
         /// Convert a legacy trial store
         /// </summary>
         void ConvertLegacyTrialStore(string trialLicenseKey);
+
+        /// <summary>
+        /// Get a customer license key from a store license key
+        /// </summary>
+        string GetCustomerLicenseKey(string storeLicenseKey);
     }
 }

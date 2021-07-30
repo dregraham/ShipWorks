@@ -48,7 +48,7 @@ namespace ShipWorks.Shipping.Tests.Integration.Services
             mock.Provide(repo.Object);
 
             var writer = mock.MockRepository.Create<ICustomerLicenseWriter>();
-            writer.Setup(w => w.Write(It.IsAny<ICustomerLicense>())).Callback(() => { });
+            writer.Setup(w => w.Write(It.IsAny<string>(), It.IsAny<CustomerLicenseKeyType>())).Callback(() => { });
             mock.Provide(writer.Object);
 
             var licenseService = mock.MockRepository.Create<ILicenseService>();

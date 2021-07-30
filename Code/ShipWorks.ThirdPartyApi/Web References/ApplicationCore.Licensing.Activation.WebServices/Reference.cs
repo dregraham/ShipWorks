@@ -132,6 +132,8 @@ namespace ShipWorks.ApplicationCore.Licensing.Activation.WebServices
         
         private string customerLicenseKeyField;
         
+        private string legacyCustomerLicenseKeyField;
+        
         private bool isLegacyUserField;
         
         private string stampsUserNameField;
@@ -155,6 +157,17 @@ namespace ShipWorks.ApplicationCore.Licensing.Activation.WebServices
             }
             set {
                 this.customerLicenseKeyField = value;
+            }
+        }
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
+        public string LegacyCustomerLicenseKey {
+            get {
+                return this.legacyCustomerLicenseKeyField;
+            }
+            set {
+                this.legacyCustomerLicenseKeyField = value;
             }
         }
         

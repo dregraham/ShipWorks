@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Autofac.Extras.Moq;
 using Autofac.Features.Indexed;
 using Moq;
@@ -345,7 +346,7 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing.FeatureRestrictions
                 Mock<ILicenseCapabilities> licenseCapabilities = mock.Mock<ILicenseCapabilities>();
                 licenseCapabilities.SetupGet(c => c.ShipmentTypeRestriction).Returns(shipmentTypeRestriction);
                 licenseCapabilities.SetupGet(c => c.IsBestRateAllowed).Returns(false);
-                licenseCapabilities.SetupGet(c => c.IsInTrial).Returns(true);
+                licenseCapabilities.SetupGet(c => c.TrialDetails).Returns(new TrialDetails(true, DateTime.MinValue));
 
                 ShipmentTypeRestriction testObject = mock.Create<ShipmentTypeRestriction>();
                 EditionRestrictionLevel result = testObject.Check(licenseCapabilities.Object, ShipmentTypeCode.BestRate);
@@ -372,7 +373,7 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing.FeatureRestrictions
                 Mock<ILicenseCapabilities> licenseCapabilities = mock.Mock<ILicenseCapabilities>();
                 licenseCapabilities.SetupGet(c => c.ShipmentTypeRestriction).Returns(shipmentTypeRestriction);
                 licenseCapabilities.SetupGet(c => c.IsBestRateAllowed).Returns(false);
-
+                licenseCapabilities.SetupGet(c => c.TrialDetails).Returns(new TrialDetails(false, DateTime.MinValue));
 
                 ShipmentTypeRestriction testObject = mock.Create<ShipmentTypeRestriction>();
                 EditionRestrictionLevel result = testObject.Check(licenseCapabilities.Object, ShipmentTypeCode.BestRate);
@@ -401,7 +402,8 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing.FeatureRestrictions
                 Mock<ILicenseCapabilities> licenseCapabilities = mock.Mock<ILicenseCapabilities>();
                 licenseCapabilities.SetupGet(c => c.ShipmentTypeRestriction).Returns(shipmentTypeRestriction);
                 licenseCapabilities.SetupGet(c => c.IsBestRateAllowed).Returns(true);
-
+                licenseCapabilities.SetupGet(c => c.TrialDetails).Returns(new TrialDetails(false, DateTime.MinValue));
+                
                 ShipmentTypeRestriction testObject = mock.Create<ShipmentTypeRestriction>();
                 EditionRestrictionLevel result = testObject.Check(licenseCapabilities.Object, ShipmentTypeCode.BestRate);
 
@@ -428,7 +430,8 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing.FeatureRestrictions
                 licenseCapabilities.SetupGet(c => c.ShipmentTypeRestriction).Returns(shipmentTypeRestriction);
                 licenseCapabilities.SetupGet(c => c.UpsStatus).Returns(UpsStatus.None);
                 licenseCapabilities.SetupGet(c => c.IsBestRateAllowed).Returns(true);
-
+                licenseCapabilities.SetupGet(c => c.TrialDetails).Returns(new TrialDetails(false, DateTime.MinValue));
+                
                 ShipmentTypeRestriction testObject = mock.Create<ShipmentTypeRestriction>();
                 EditionRestrictionLevel result = testObject.Check(licenseCapabilities.Object, ShipmentTypeCode.BestRate);
 
@@ -460,6 +463,7 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing.FeatureRestrictions
                 licenseCapabilities.SetupGet(c => c.ShipmentTypeRestriction).Returns(shipmentTypeRestriction);
                 licenseCapabilities.SetupGet(c => c.UpsStatus).Returns(discount);
                 licenseCapabilities.SetupGet(c => c.IsBestRateAllowed).Returns(true);
+                licenseCapabilities.SetupGet(c => c.TrialDetails).Returns(new TrialDetails(false, DateTime.MinValue));
 
                 ShipmentTypeRestriction testObject = mock.Create<ShipmentTypeRestriction>();
                 EditionRestrictionLevel result = testObject.Check(licenseCapabilities.Object, ShipmentTypeCode.BestRate);

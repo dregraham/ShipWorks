@@ -62,7 +62,8 @@ namespace ShipWorks.ApplicationCore.Dashboard
                 typeof(DashboardEmailItem),
                 typeof(DashboardStoreItem),
                 typeof(DashboardMessageItem),
-                typeof(DashboardTrialItem),
+                typeof(DashboardAccountTrialItem),
+                typeof(DashboardLegacyStoreTrialItem),
                 typeof(DashboardOnlineVersionItem),
                 typeof(DashboardOneBalancePromoItem)
             };
@@ -205,10 +206,8 @@ namespace ShipWorks.ApplicationCore.Dashboard
         /// <summary>
         /// Update all dashboard items that are dependent on the current set of StoreType's
         /// </summary>
-        public static void UpdateStoreDependentItems()
+        public static void UpdateStoreTypeDependentItems()
         {
-            UpdateTrialItems();
-
             List<DashboardStoreItem> currentItems = new List<DashboardStoreItem>();
 
             // Give each store a chance to create its messages, but only the ones that are enabled
@@ -250,97 +249,225 @@ namespace ShipWorks.ApplicationCore.Dashboard
         }
 
         /// <summary>
-        /// Is the customer legacy
-        /// </summary>
-        private static bool IsLegacyCustomer()
-        {
-            // To be safe, if anything throws, just return false so that ShipWorks acts as it did before.
-            try
-            {
-                using (var lifetimeScope = IoC.BeginLifetimeScope())
-                {
-                    var licenseService = lifetimeScope.Resolve<ILicenseService>();
-                    return licenseService.IsLegacy;
-                }
-            }
-            catch (Exception ex)
-            {
-                log.Error($"Error occurred in ShipWorksLicense.HasInTrial", ex);
-                return false;
-            }
-        }
-
-        /// <summary>
         /// Update the trial display items
         /// </summary>
-        private static void UpdateTrialItems()
+        public static void UpdateTrialItems()
         {
             Debug.Assert(!Program.MainForm.InvokeRequired);
 
             using (var lifetimeScope = IoC.BeginLifetimeScope())
             {
                 var licenseService = lifetimeScope.Resolve<ILicenseService>();
-                
-                // Add in trial information for each store we don't have yet
-                foreach (StoreEntity store in StoreManager.GetAllStores())
+
+                if (licenseService.IsLegacy)
                 {
-                    // If it's not enabled, we ignore it
-                    if (!store.Enabled)
-                    {
-                        continue;
-                    }
-
-                    var license = licenseService.GetLicense(store);
-                    if (!license.IsInTrial)
-                    {
-                        continue;
-                    }
-
-                    // Freemium installs can be in a weird state of signed up for eBay - but not yet for ELS.  But it's not really a trial (from a user perspective) its just
-                    // what it is in tango b\c it was the simplest way to implement it until we get unified billing.
-                    if (EditionSerializer.Restore(store) is FreemiumFreeEdition)
-                    {
-                        continue;
-                    }
-
-                    DashboardTrialItem trialItem = dashboardItems.OfType<DashboardTrialItem>()
-                        .SingleOrDefault(i => i.Store.StoreID == store.StoreID);
-                    if (trialItem == null)
-                    {
-                        ThreadPool.QueueUserWorkItem(ExceptionMonitor.WrapWorkItem(AsyncLoadTrialDetail),
-                            new object[]
-                            {
-                                store,
-                                ApplicationBusyManager.OperationStarting(busyText)
-                            });
-                    }
-                    // Refresh the UI in case the days has changed or its now expired.
-                    else
-                    {
-                        trialItem.UpdateTrialDisplay();
-                    }
+                    UpdateLegacyStoreTrialItems(licenseService);
                 }
-
-                // Go through each trial making sure they are all still valid stores and valid trials
-                foreach (DashboardTrialItem trialItem in dashboardItems.OfType<DashboardTrialItem>().ToList())
+                else
                 {
-                    StoreEntity store = StoreManager.GetStore(trialItem.Store.StoreID);
-                    if (store == null || !store.Enabled)
-                    {
-                        RemoveDashboardItem(trialItem);
-                    }
-                    else
-                    {
-                        var license = licenseService.GetLicense(store);
-                        if (!license.IsInTrial)
-                        {
-                            RemoveDashboardItem(trialItem);
-                        }
-                    }
+                    UpdateAccountTrialItem(licenseService);
                 }
             }
         }
 
+        #region WebReg Account Trial
+
+        /// <summary>
+        /// Update the account trial item
+        /// </summary>
+        private static void UpdateAccountTrialItem(ILicenseService licenseService)
+        {
+            var license = licenseService.GetLicense(null);
+            DashboardAccountTrialItem accountTrialItem = dashboardItems.OfType<DashboardAccountTrialItem>().SingleOrDefault();
+
+            if (accountTrialItem == null)
+            {
+                if (license.TrialDetails.IsInTrial)
+                {
+                    ThreadPool.QueueUserWorkItem(ExceptionMonitor.WrapWorkItem(AsyncLoadAccountTrialDetail),
+                        new object[]
+                        {
+                            license.TrialDetails,
+                            ApplicationBusyManager.OperationStarting(busyText)
+                        });
+                }
+            }
+            // Refresh the UI in case the number of days has changed, its now expired, or the account is no longer in trial.
+            else
+            {
+                if (license.TrialDetails.IsInTrial)
+                {
+                    accountTrialItem.UpdateTrialDisplay();
+                }
+                else
+                {
+                    RemoveDashboardItem(accountTrialItem);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Load account trial information asynchronously
+        /// </summary>
+        private static void AsyncLoadAccountTrialDetail(object state)
+        {
+            object[] data = (object[]) state;
+
+            TrialDetails trialDetails = (TrialDetails) data[0];
+            ApplicationBusyToken token = (ApplicationBusyToken) data[1];
+
+            try
+            {
+                panel.BeginInvoke((MethodInvoker<TrialDetails>) AsyncLoadAccountTrialDetailComplete, trialDetails);
+            }
+            catch (Exception ex) when (ex is ShipWorksLicenseException || ex is TangoException)
+            {
+                log.Error("Failed to load trial details for account", ex);
+            }
+            finally
+            {
+                token.Dispose();
+            }
+        }
+
+        /// <summary>
+        /// The loading of a trial detail has completed. This is back on the UI thread.
+        /// </summary>
+        private static void AsyncLoadAccountTrialDetailComplete(TrialDetails trialDetails)
+        {
+            // Dashboard may have closed in the meantime
+            if (!IsDashboardOpen)
+            {
+                return;
+            }
+
+            DashboardAccountTrialItem existing = dashboardItems.OfType<DashboardAccountTrialItem>().SingleOrDefault();
+            if (existing != null)
+            {
+                return;
+            }
+
+            DashboardAccountTrialItem accountTrialItem = new DashboardAccountTrialItem(trialDetails);
+            AddDashboardItem(accountTrialItem);
+        }
+
+        #endregion
+
+        #region Legacy Store Trials
+
+        /// <summary>
+        /// Update trial items for legacy customer stores
+        /// </summary>
+        private static void UpdateLegacyStoreTrialItems(ILicenseService licenseService)
+        {
+            // Add in trial information for each store we don't have yet
+            foreach (StoreEntity store in StoreManager.GetAllStores())
+            {
+                // If it's not enabled, we ignore it
+                if (!store.Enabled)
+                {
+                    continue;
+                }
+
+                var license = licenseService.GetLicense(store);
+                if (!license.TrialDetails.IsInTrial)
+                {
+                    continue;
+                }
+
+                // Freemium installs can be in a weird state of signed up for eBay - but not yet for ELS.  But it's not really a trial (from a user perspective) its just
+                // what it is in tango b\c it was the simplest way to implement it until we get unified billing.
+                if (EditionSerializer.Restore(store) is FreemiumFreeEdition)
+                {
+                    continue;
+                }
+
+                DashboardLegacyStoreTrialItem legacyStoreTrialItem = dashboardItems.OfType<DashboardLegacyStoreTrialItem>()
+                    .SingleOrDefault(i => i.Store.StoreID == store.StoreID);
+                if (legacyStoreTrialItem == null)
+                {
+                    ThreadPool.QueueUserWorkItem(ExceptionMonitor.WrapWorkItem(AsyncLoadLegacyStoreTrialDetail),
+                        new object[]
+                        {
+                            store,
+                            license.TrialDetails,
+                            ApplicationBusyManager.OperationStarting(busyText)
+                        });
+                }
+                // Refresh the UI in case the days has changed, its now expired, or the store name changed
+                else
+                {
+                    legacyStoreTrialItem.UpdateTrialDisplay(store);
+                }
+            }
+
+            // Go through each trial making sure they are all still valid stores and valid trials
+            foreach (DashboardLegacyStoreTrialItem trialItem in dashboardItems.OfType<DashboardLegacyStoreTrialItem>().ToList())
+            {
+                StoreEntity store = StoreManager.GetStore(trialItem.Store.StoreID);
+                if (store == null || !store.Enabled)
+                {
+                    RemoveDashboardItem(trialItem);
+                }
+                else
+                {
+                    var license = licenseService.GetLicense(store);
+                    if (!license.TrialDetails.IsInTrial)
+                    {
+                        RemoveDashboardItem(trialItem);
+                    }
+                }
+            }
+        }
+        
+        /// <summary>
+        /// Load trial information asynchronously
+        /// </summary>
+        private static void AsyncLoadLegacyStoreTrialDetail(object state)
+        {
+            object[] data = (object[]) state;
+
+            StoreEntity store = (StoreEntity) data[0];
+            TrialDetails trialDetails = (TrialDetails) data[1];
+            ApplicationBusyToken token = (ApplicationBusyToken) data[2];
+
+            try
+            {
+                panel.BeginInvoke((MethodInvoker<IStoreEntity, TrialDetails>) AsyncLoadLegacyStoreTrialDetailComplete, store, trialDetails);
+            }
+            catch (Exception ex) when (ex is ShipWorksLicenseException || ex is TangoException)
+            {
+                log.Error("Failed to load trial details for store " + store.StoreID, ex);
+            }
+            finally
+            {
+                token.Dispose();
+            }
+        }
+
+        /// <summary>
+        /// The loading of a trial detail has completed.  This is back on the UI thread.
+        /// </summary>
+        private static void AsyncLoadLegacyStoreTrialDetailComplete(IStoreEntity storeEntity, TrialDetails trialDetails)
+        {
+            // Dashboard may have closed in the meantime
+            if (!IsDashboardOpen)
+            {
+                return;
+            }
+
+            DashboardLegacyStoreTrialItem existing = dashboardItems.OfType<DashboardLegacyStoreTrialItem>().SingleOrDefault(i => i.Store.StoreID == storeEntity.StoreID);
+            if (existing != null)
+            {
+                return;
+            }
+
+            DashboardLegacyStoreTrialItem legacyStoreTrialItem = new DashboardLegacyStoreTrialItem(storeEntity, trialDetails);
+            AddDashboardItem(legacyStoreTrialItem);
+        }
+
+        #endregion
+        
         /// <summary>
         /// Update the day count displayed next to each trial.  For users who leave ShipWorks open all the time this helps them still
         /// see the days count down.
@@ -359,69 +486,14 @@ namespace ShipWorks.ApplicationCore.Dashboard
                 return;
             }
 
-            foreach (DashboardTrialItem trialItem in dashboardItems.OfType<DashboardTrialItem>())
+            dashboardItems.OfType<DashboardAccountTrialItem>().SingleOrDefault()?.UpdateTrialDisplay();
+            
+            foreach (DashboardLegacyStoreTrialItem legacyStoreTrialItem in dashboardItems.OfType<DashboardLegacyStoreTrialItem>())
             {
-                trialItem.UpdateTrialDisplay();
+                legacyStoreTrialItem.UpdateTrialDisplay();
             }
 
             SortDashboardItems();
-        }
-
-        /// <summary>
-        /// Load trial information asynchronously
-        /// </summary>
-        private static void AsyncLoadTrialDetail(object state)
-        {
-            object[] data = (object[]) state;
-
-            StoreEntity store = (StoreEntity) data[0];
-            ApplicationBusyToken token = (ApplicationBusyToken) data[1];
-
-            try
-            {
-                ILicenseAccountDetail accountDetail = TangoWebClient.GetLicenseStatus(store.License, store, false);
-
-                panel.BeginInvoke((MethodInvoker<IStoreEntity, DateTime>) AsyncLoadTrialDetailComplete, store, accountDetail.RecurlyTrialEndDate);
-            }
-            catch (ShipWorksLicenseException ex)
-            {
-                log.Error("Failed to load trial details for store " + store.StoreID, ex);
-            }
-            catch (TangoException ex)
-            {
-                log.Error("Failed to load trial details for store " + store.StoreID, ex);
-            }
-            finally
-            {
-                token.Dispose();
-            }
-        }
-
-        /// <summary>
-        /// The loading of a trial detail has completed.  This is back on the UI thread.
-        /// </summary>
-        private static void AsyncLoadTrialDetailComplete(IStoreEntity storeEntity, DateTime trialEndDate)
-        {
-            // Dashboard may have closed in the meantime
-            if (!IsDashboardOpen)
-            {
-                return;
-            }
-
-            // If webreg, don't show trial details
-            if (!IsLegacyCustomer())
-            {
-                return;
-            }
-
-            DashboardTrialItem existing = dashboardItems.OfType<DashboardTrialItem>().SingleOrDefault(i => i.Store.StoreID == storeEntity.StoreID);
-            if (existing != null)
-            {
-                return;
-            }
-
-            DashboardTrialItem trialItem = new DashboardTrialItem(storeEntity, trialEndDate);
-            AddDashboardItem(trialItem);
         }
 
         /// <summary>
@@ -870,9 +942,9 @@ namespace ShipWorks.ApplicationCore.Dashboard
                 {
                     return ((DashboardStoreItem) left).StoreName.CompareTo(((DashboardStoreItem) right).StoreName);
                 }
-                else if (left is DashboardTrialItem && right is DashboardTrialItem)
+                else if (left is DashboardLegacyStoreTrialItem && right is DashboardLegacyStoreTrialItem)
                 {
-                    return ((DashboardTrialItem) left).Store.StoreName.CompareTo(((DashboardTrialItem) right).Store.StoreName);
+                    return ((DashboardLegacyStoreTrialItem) left).Store.StoreName.CompareTo(((DashboardLegacyStoreTrialItem) right).Store.StoreName);
                 }
             }
 

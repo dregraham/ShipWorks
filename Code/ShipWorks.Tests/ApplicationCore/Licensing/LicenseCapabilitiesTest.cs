@@ -161,7 +161,7 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing
 
             LicenseCapabilities licenseCapabilities = new LicenseCapabilities(xmlResponse);
 
-            Assert.Equal(true, licenseCapabilities.IsInTrial);
+            Assert.Equal(true, licenseCapabilities.TrialDetails.IsInTrial);
         }
 
         [Fact]
@@ -174,7 +174,7 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing
 
             LicenseCapabilities licenseCapabilities = new LicenseCapabilities(xmlResponse);
 
-            Assert.Equal(false, licenseCapabilities.IsInTrial);
+            Assert.Equal(false, licenseCapabilities.TrialDetails.IsInTrial);
         }
 
         [Fact]

@@ -38,7 +38,7 @@ namespace ShipWorks.ApplicationCore.Licensing
             this.store = store;
             log = logFactory(GetType());
             Key = store.License;
-
+            TrialDetails = new TrialDetails();
             nextStoreLicenseCheckTimeToLive = InterapptiveOnly.IsInterapptiveUser ? 
                                               new TimeSpan(0, 3, 0) : // 3 min for internal
                                               new TimeSpan(4, 0, 0);  // 4 hours for customers
@@ -59,16 +59,8 @@ namespace ShipWorks.ApplicationCore.Licensing
         /// </summary>
         public string Key { get; }
 
-        /// <summary>
-        /// Is the license legacy
-        /// </summary>
-        public bool IsLegacy => true;
-
-        /// <summary>
-        /// Is the license in trial
-        /// </summary>
-        public bool IsInTrial { get; private set; }
-
+        public TrialDetails TrialDetails { get; private set; }
+        
         /// <summary>
         /// Store licenses do not have channel limits
         /// </summary>
@@ -126,7 +118,7 @@ namespace ShipWorks.ApplicationCore.Licensing
             {
                 var accountDetail = LicenseActivationHelper.EnsureActive(store);
                 DisabledReason = string.Empty;
-                IsInTrial = accountDetail.InTrial;
+                TrialDetails = new TrialDetails(accountDetail.InTrial, accountDetail.RecurlyTrialEndDate);
                 
                 nextStoreLicenseCheckTime[store.StoreID] = dateTimeProvider.UtcNow.Add(nextStoreLicenseCheckTimeToLive);
 

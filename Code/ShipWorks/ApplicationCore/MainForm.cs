@@ -2197,7 +2197,10 @@ namespace ShipWorks
             UpdateDownloadButtonForStores();
 
             // Update the dashboard for new/removed trials
-            DashboardManager.UpdateStoreDependentItems();
+            DashboardManager.UpdateTrialItems();
+            
+            // Update store type specific dashboard items
+            DashboardManager.UpdateStoreTypeDependentItems();
 
             // Update edition-based UI from stores
             EditionManager.UpdateRestrictions();

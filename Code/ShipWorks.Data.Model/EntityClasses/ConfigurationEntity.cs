@@ -342,6 +342,8 @@ namespace ShipWorks.Data.Model.EntityClasses
 			_fieldsCustomProperties.Add("WarehouseID", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
 			_fieldsCustomProperties.Add("WarehouseName", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+			_fieldsCustomProperties.Add("LegacyCustomerKey", fieldHashtable);
 		}
 		#endregion
 
@@ -651,6 +653,17 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			get { return (System.String)GetValue((int)ConfigurationFieldIndex.WarehouseName, true); }
 			set	{ SetValue((int)ConfigurationFieldIndex.WarehouseName, value); }
+		}
+
+		/// <summary> The LegacyCustomerKey property of the Entity Configuration<br/><br/></summary>
+		/// <remarks>Mapped on  table field: "Configuration"."LegacyCustomerKey"<br/>
+		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 2147483647<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
+		public virtual System.String LegacyCustomerKey
+		{
+			get { return (System.String)GetValue((int)ConfigurationFieldIndex.LegacyCustomerKey, true); }
+			set	{ SetValue((int)ConfigurationFieldIndex.LegacyCustomerKey, value); }
 		}
 	
 		/// <summary> Gets the type of the hierarchy this entity is in. </summary>

@@ -144,21 +144,6 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing
             }
         }
 
-        [Fact]
-        public void Save_RethrowsExceptionFromLicenseWriter()
-        {
-            using (var mock = AutoMock.GetLoose())
-            {
-                var writer = mock.Mock<ICustomerLicenseWriter>();
-
-                writer.Setup(w => w.Write(It.IsAny<ICustomerLicense>())).Throws(new Exception("some random exception"));
-
-                CustomerLicense customerLicense = mock.Create<CustomerLicense>(new NamedParameter("key", "SomeKey"));
-
-                var ex = Assert.Throws<Exception>(() => customerLicense.Save());
-                Assert.Equal("some random exception", ex.Message);
-            }
-        }
 
         [Fact]
         public void Activate_ReturnsActive_WhenTangoReturnsSuccess()
@@ -170,7 +155,7 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing
                     .Returns(true);
 
                 mock.Mock<ITangoWebClient>()
-                    .Setup(w => w.AddStore(It.IsAny<ILicense>(), It.IsAny<StoreEntity>()))
+                    .Setup(w => w.AddStore(It.IsAny<string>(), It.IsAny<StoreEntity>()))
                     .Returns(response.Object);
 
                 CustomerLicense testObject = mock.Create<CustomerLicense>(new NamedParameter("key", "SomeKey"));
@@ -194,7 +179,7 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing
                     .Returns(LicenseActivationState.CustIdDisabled);
 
                 mock.Mock<ITangoWebClient>()
-                    .Setup(w => w.AddStore(It.IsAny<ILicense>(), It.IsAny<StoreEntity>()))
+                    .Setup(w => w.AddStore(It.IsAny<string>(), It.IsAny<StoreEntity>()))
                     .Returns(response.Object);
 
                 CustomerLicense testObject = mock.Create<CustomerLicense>(new NamedParameter("key", "SomeKey"));
@@ -218,7 +203,7 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing
                     .Returns(LicenseActivationState.MaxChannelsExceeded);
 
                 mock.Mock<ITangoWebClient>()
-                    .Setup(w => w.AddStore(It.IsAny<ILicense>(), It.IsAny<StoreEntity>()))
+                    .Setup(w => w.AddStore(It.IsAny<string>(), It.IsAny<StoreEntity>()))
                     .Returns(response.Object);
 
                 CustomerLicense testObject = mock.Create<CustomerLicense>(new NamedParameter("key", "SomeKey"));
@@ -268,8 +253,8 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing
             using (var mock = AutoMock.GetLoose())
             {
                 Mock<ILicenseCapabilities> capabilities = mock.Mock<ILicenseCapabilities>();
-                capabilities.SetupGet(c => c.IsInTrial)
-                    .Returns(true);
+                capabilities.SetupGet(c => c.TrialDetails)
+                    .Returns(new TrialDetails(true, DateTime.MinValue));
 
                 Mock<ITangoWebClient> tangoWebClient = mock.Mock<ITangoWebClient>();
                 tangoWebClient.Setup(c => c.GetLicenseCapabilities(It.IsAny<ICustomerLicense>()))
@@ -299,8 +284,8 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing
             using (var mock = AutoMock.GetLoose())
             {
                 Mock<ILicenseCapabilities> capabilities = mock.Mock<ILicenseCapabilities>();
-                capabilities.SetupGet(c => c.IsInTrial)
-                    .Returns(true);
+                capabilities.SetupGet(c => c.TrialDetails)
+                    .Returns(new TrialDetails(true, DateTime.MinValue));
 
                 Mock<ITangoWebClient> tangoWebClient = mock.Mock<ITangoWebClient>();
                 tangoWebClient.Setup(c => c.GetLicenseCapabilities(It.IsAny<ICustomerLicense>()))
@@ -376,8 +361,8 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing
             using (var mock1 = AutoMock.GetLoose())
             {
                 Mock<ILicenseCapabilities> capabilities = mock1.Mock<ILicenseCapabilities>();
-                capabilities.SetupGet(c => c.IsInTrial)
-                    .Returns(true);
+                capabilities.SetupGet(c => c.TrialDetails)
+                    .Returns(new TrialDetails(true, DateTime.MinValue));
 
                 Mock<ITangoWebClient> tangoWebClient = mock1.Mock<ITangoWebClient>();
                 tangoWebClient.Setup(c => c.GetLicenseCapabilities(It.IsAny<ICustomerLicense>()))
@@ -462,8 +447,8 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing
                 Mock<ILicenseEnforcer> enforcer = mock.Mock<ILicenseEnforcer>();
 
                 Mock<ILicenseCapabilities> capabilities = mock.Mock<ILicenseCapabilities>();
-                capabilities.SetupGet(c => c.IsInTrial)
-                    .Returns(true);
+                capabilities.SetupGet(c => c.TrialDetails)
+                    .Returns(new TrialDetails(true, DateTime.MinValue));
 
                 Mock<ITangoWebClient> tangoWebClient = mock.Mock<ITangoWebClient>();
                 tangoWebClient.Setup(c => c.GetLicenseCapabilities(It.IsAny<ICustomerLicense>()))
@@ -484,11 +469,9 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing
         {
             using (var mock = AutoMock.GetLoose())
             {
-                Mock<ILicenseEnforcer> enforcer = mock.Mock<ILicenseEnforcer>();
-
                 Mock<ILicenseCapabilities> capabilities = mock.Mock<ILicenseCapabilities>();
-                capabilities.SetupGet(c => c.IsInTrial)
-                    .Returns(false);
+                capabilities.SetupGet(c => c.TrialDetails)
+                    .Returns(new TrialDetails(false, DateTime.MinValue));
 
                 Mock<ITangoWebClient> tangoWebClient = mock.Mock<ITangoWebClient>();
                 tangoWebClient.Setup(c => c.GetLicenseCapabilities(It.IsAny<ICustomerLicense>()))
@@ -538,8 +521,8 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing
             using (var mock = AutoMock.GetLoose())
             {
                 Mock<ILicenseCapabilities> capabilities = mock.Mock<ILicenseCapabilities>();
-                capabilities.SetupGet(c => c.IsInTrial)
-                    .Returns(true);
+                capabilities.SetupGet(c => c.TrialDetails)
+                    .Returns(new TrialDetails(true, DateTime.MinValue));
 
                 Mock<ITangoWebClient> tangoWebClient = mock.Mock<ITangoWebClient>();
                 tangoWebClient.Setup(c => c.GetLicenseCapabilities(It.IsAny<ICustomerLicense>()))
@@ -564,8 +547,8 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing
             using (var mock = AutoMock.GetLoose())
             {
                 Mock<ILicenseCapabilities> capabilities = mock.Mock<ILicenseCapabilities>();
-                capabilities.SetupGet(c => c.IsInTrial)
-                    .Returns(true);
+                capabilities.SetupGet(c => c.TrialDetails)
+                    .Returns(new TrialDetails(true, DateTime.MinValue));
 
                 Mock<ITangoWebClient> tangoWebClient = mock.Mock<ITangoWebClient>();
                 tangoWebClient.Setup(c => c.GetLicenseCapabilities(It.IsAny<ICustomerLicense>()))
@@ -621,7 +604,7 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing
             {
                 Mock<ILicenseCapabilities> licenseCapabilities = mock.Mock<ILicenseCapabilities>();
 
-                licenseCapabilities.Setup(l => l.IsInTrial).Returns(false);
+                licenseCapabilities.Setup(l => l.TrialDetails).Returns(new TrialDetails(false, DateTime.MinValue));
                 licenseCapabilities.Setup(l => l.ProcessedShipments).Returns(9);
                 licenseCapabilities.Setup(l => l.ShipmentLimit).Returns(10);
 
@@ -643,7 +626,7 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing
             {
                 Mock<ILicenseCapabilities> licenseCapabilities = mock.Mock<ILicenseCapabilities>();
 
-                licenseCapabilities.Setup(l => l.IsInTrial).Returns(false);
+                licenseCapabilities.Setup(l => l.TrialDetails).Returns(new TrialDetails(false, DateTime.MinValue));
                 licenseCapabilities.Setup(l => l.ProcessedShipments).Returns(8);
                 licenseCapabilities.Setup(l => l.ShipmentLimit).Returns(10);
 
@@ -665,7 +648,7 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing
             {
                 Mock<ILicenseCapabilities> licenseCapabilities = mock.Mock<ILicenseCapabilities>();
 
-                licenseCapabilities.Setup(l => l.IsInTrial).Returns(false);
+                licenseCapabilities.Setup(l => l.TrialDetails).Returns(new TrialDetails(false, DateTime.MinValue));
                 licenseCapabilities.Setup(l => l.ProcessedShipments).Returns(7);
                 licenseCapabilities.Setup(l => l.ShipmentLimit).Returns(10);
 
@@ -687,7 +670,7 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing
             {
                 Mock<ILicenseCapabilities> licenseCapabilities = mock.Mock<ILicenseCapabilities>();
 
-                licenseCapabilities.Setup(l => l.IsInTrial).Returns(true);
+                licenseCapabilities.Setup(l => l.TrialDetails).Returns(new TrialDetails(true, DateTime.MinValue));
                 licenseCapabilities.Setup(l => l.ProcessedShipments).Returns(9);
                 licenseCapabilities.Setup(l => l.ShipmentLimit).Returns(10);
 
@@ -769,8 +752,6 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing
                 Mock<IFeatureRestriction> feature = mock.Mock<IFeatureRestriction>();
                 feature.SetupGet(f => f.EditionFeature)
                     .Returns(EditionFeature.EndiciaAccountLimit);
-
-                Mock<IWin32Window> window = mock.Mock<IWin32Window>();
 
                 CustomerLicense testObject = mock.Create<CustomerLicense>(new NamedParameter("key", "SomeKey"));
 

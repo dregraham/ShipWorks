@@ -149,7 +149,7 @@ namespace ShipWorks.Shipping.Insurance
                 using (var lifetimeScope = IoC.BeginLifetimeScope())
                 {
                     var license = lifetimeScope.Resolve<ILicenseService>().GetLicense(store);
-                    if (license.IsInTrial)
+                    if (license.TrialDetails.IsInTrial)
                     {
                         throw new ShippingException(
                             "ShipWorks Insurance is not available during the ShipWorks trial period. Please go to https://hub.shipworks.com/account to add a credit card to your account.");

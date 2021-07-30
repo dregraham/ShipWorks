@@ -1,4 +1,5 @@
-﻿using Autofac.Extras.Moq;
+﻿using System;
+using Autofac.Extras.Moq;
 using Interapptive.Shared.Utility;
 using Moq;
 using ShipWorks.ApplicationCore.Licensing;
@@ -42,7 +43,7 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing.LicenseEnforcement
             using (var mock = AutoMock.GetLoose())
             {
                 var capabilities = mock.Mock<ILicenseCapabilities>();
-                capabilities.SetupGet(l => l.IsInTrial).Returns(isInTrial);
+                capabilities.SetupGet(l => l.TrialDetails).Returns(new TrialDetails(isInTrial, DateTime.MinValue));
 
                 var testObject = mock.Create<ChannelSyncEnforcer>();
 

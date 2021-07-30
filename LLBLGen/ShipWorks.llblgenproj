@@ -670,6 +670,7 @@
           <Field Name="CustomerUpdateModifiedShipping" Type="int" FieldIndex="9" />
           <Field Name="CustomerUpdateShipping" Type="bool" FieldIndex="7" />
           <Field Name="DefaultPickListTemplateID" Type="long" IsOptional="true" Precision="19" FieldIndex="17" />
+          <Field Name="LegacyCustomerKey" Type="string" MaxLength="2147483647" FieldIndex="23" />
           <Field Name="LogOnMethod" Type="int" FieldIndex="2" />
           <Field Name="RowVersion" Type="byte[]" IsReadOnly="true" FieldIndex="1" />
           <Field Name="UseParallelActionQueue" Type="bool" FieldIndex="13" />
@@ -4698,7 +4699,7 @@
       <Catalogs>
         <Catalog Name="ShipWorksLocal">
           <Schemas>
-            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2021-05-03T17:57:11.5853204Z">
+            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2021-07-22T17:40:32.8058334Z">
               <Tables>
                 <Table Name="Action">
                   <PkConstraintName Name="PK_Action" />
@@ -5330,6 +5331,7 @@
                     <Field Name="AutoUpdateStartDate" Ordinal="21" DbType="29" Precision="7" />
                     <Field Name="WarehouseID" Ordinal="22" HasDefaultValue="true" DefaultValue="''" DbType="12" Length="50" />
                     <Field Name="WarehouseName" Ordinal="23" HasDefaultValue="true" DefaultValue="''" DbType="12" Length="50" />
+                    <Field Name="LegacyCustomerKey" Ordinal="24" HasDefaultValue="true" DefaultValue="''" DbType="12" Length="2147483647" />
                   </Fields>
                 </Table>
                 <Table Name="Customer">
@@ -11666,6 +11668,7 @@
             <FieldMapping FieldName="CustomerUpdateModifiedShipping" TargetFieldName="CustomerUpdateModifiedShipping" />
             <FieldMapping FieldName="CustomerUpdateShipping" TargetFieldName="CustomerUpdateShipping" />
             <FieldMapping FieldName="DefaultPickListTemplateID" TargetFieldName="DefaultPickListTemplateID" />
+            <FieldMapping FieldName="LegacyCustomerKey" TargetFieldName="LegacyCustomerKey" />
             <FieldMapping FieldName="LogOnMethod" TargetFieldName="LogOnMethod" />
             <FieldMapping FieldName="RowVersion" TargetFieldName="RowVersion" />
             <FieldMapping FieldName="UseParallelActionQueue" TargetFieldName="UseParallelActionQueue" />

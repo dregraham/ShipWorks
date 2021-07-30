@@ -135,7 +135,7 @@ namespace ShipWorks.ApplicationCore.Licensing
                                                    StoreManager.GetAllStores().FirstOrDefault(s => new ShipWorksLicense(s.License).IsLegacyTrialKey == false);
 
                 StoreEntity store = getStore();
-
+                
                 if (store == null && SqlSession.Current?.CanConnect() == true)
                 {
                     ((IInitializeForCurrentDatabase) new SystemData()).InitializeForCurrentDatabase(Program.ExecutionMode);
@@ -506,7 +506,7 @@ namespace ShipWorks.ApplicationCore.Licensing
             {
                 var license = lifetimeScope.Resolve<ILicenseService>().GetLicense(store);
 
-                if (license.IsInTrial)
+                if (license.TrialDetails.IsInTrial)
                 {
                     throw new InvalidOperationException("Should not get here for trials.");
                 }
@@ -677,37 +677,6 @@ namespace ShipWorks.ApplicationCore.Licensing
         }
 
         /// <summary>
-        /// Upgrade the given trial to not be in an 'Edition' mode
-        /// </summary>
-        public static void UpgradeEditionTrial(StoreEntity store)
-        {
-            if (store == null)
-            {
-                throw new ArgumentNullException("store");
-            }
-
-            HttpVariableRequestSubmitter postRequest = new HttpVariableRequestSubmitter();
-            postRequest.Variables.Add("action", "trialeditionupgrade");
-            postRequest.Variables.Add("license", store.License);
-
-            TrialDetail trialDetail = ProcessTrialRequest(postRequest, store);
-
-            bool wasDirty = store.IsDirty;
-
-            store.Edition = EditionSerializer.Serialize(trialDetail.Edition);
-
-            if (!wasDirty)
-            {
-                using (SqlAdapter adapter = new SqlAdapter())
-                {
-                    adapter.SaveAndRefetch(store);
-                }
-
-                StoreManager.CheckForChanges();
-            }
-        }
-
-        /// <summary>
         /// Process a request against a signed up customers interapptive account
         /// </summary>
         private static LicenseAccountDetail ProcessAccountRequest(HttpVariableRequestSubmitter postRequest, StoreEntity store, ShipWorksLicense license, bool collectTelemetry)
@@ -724,53 +693,6 @@ namespace ShipWorks.ApplicationCore.Licensing
             XmlDocument xmlResponse = ProcessXmlRequest(postRequest, "AccountRequest", collectTelemetry);
 
             return new LicenseAccountDetail(xmlResponse, store);
-        }
-
-        /// <summary>
-        /// Process a trial creation \ information request.
-        /// </summary>
-        private static TrialDetail ProcessTrialRequest(HttpVariableRequestSubmitter postRequest, StoreEntity store)
-        {
-            StoreType storeType = StoreTypeManager.GetType(store);
-
-            // These go with every trial request
-            postRequest.Variables.Add("storecode", storeType.TangoCode);
-            postRequest.Variables.Add("identifier", storeType.LicenseIdentifier);
-
-            // Process the request
-            XmlDocument xmlResponse = ProcessXmlRequest(postRequest, "ProcessTrialRequest", false);
-
-            // Grab the shipment type functionality node
-            XmlNode shipmentTypeFunctionality = xmlResponse.SelectSingleNode("//License/ShipmentTypeFunctionality");
-            // Grab the Best Rate shipment type functionality node
-            XmlNode bestRateShipmentTypeFunctionality = shipmentTypeFunctionality?.SelectSingleNode("//ShipmentType[@TypeCode='14']");
-
-            if (bestRateShipmentTypeFunctionality?.SelectSingleNode("Restriction")?.InnerText.ToLower() == "disabled")
-            {
-                // If it exists remove it
-                shipmentTypeFunctionality.RemoveChild(bestRateShipmentTypeFunctionality);
-
-                // add the new default which enables best rate but limits it to local rating only
-                XmlDocumentFragment newBestRateFunctionality = xmlResponse.CreateDocumentFragment();
-                newBestRateFunctionality.InnerXml =
-                    @"<ShipmentType TypeCode='14'> 
-                        <Feature>
-                            <Type>BestRateUpsRestriction</Type>
-                            <Config>True</Config>
-                        </Feature>
-                        <Feature>
-                            <Type>RateResultCount</Type>
-                            <Config>5</Config>
-                        </Feature>
-                    </ShipmentType>";
-
-                shipmentTypeFunctionality.AppendChild(newBestRateFunctionality);
-            }
-
-            // Create the details
-            TrialDetail trialDetail = new TrialDetail(xmlResponse, store);
-
-            return trialDetail;
         }
 
         /// <summary>
@@ -921,7 +843,7 @@ namespace ShipWorks.ApplicationCore.Licensing
         /// <summary>
         /// Makes a request to Tango to add a store
         /// </summary>
-        public static IAddStoreResponse AddStore(ILicense license, StoreEntity store)
+        public static IAddStoreResponse AddStore(string customerLicenseKey, StoreEntity store)
         {
             HttpVariableRequestSubmitter postRequest = new HttpVariableRequestSubmitter();
 
@@ -932,16 +854,7 @@ namespace ShipWorks.ApplicationCore.Licensing
             postRequest.Variables.Add("identifier", storeType.LicenseIdentifier);
             postRequest.Variables.Add("version", Version);
             postRequest.Variables.Add("storeinfo", store.StoreName);
-            
-            if (license.IsLegacy)
-            {
-                var tangoCustomerId = GetTangoCustomerId();
-                postRequest.Variables.Add("tangocustomerid", tangoCustomerId);
-            }
-            else
-            {
-                postRequest.Variables.Add("customerlicense", license.Key);
-            }
+            postRequest.Variables.Add("customerlicense", customerLicenseKey);
 
             XmlDocument xmlResponse = ProcessXmlRequest(postRequest, "AddStore", false);
 
@@ -1077,7 +990,33 @@ namespace ShipWorks.ApplicationCore.Licensing
                 log.Error(ex.Message);
             }
         }
+        
+        /// <summary>
+        /// Get the customer license key, given a store license key
+        /// </summary>
+        public static string GetCustomerLicenseKey(string storeLicenseKey)
+        {
+            HttpVariableRequestSubmitter postRequest = new HttpVariableRequestSubmitter();
 
+            postRequest.Variables.Add("action", "getcustomerkey");
+            postRequest.Variables.Add("license", storeLicenseKey);
+            postRequest.Variables.Add("version", Version);
+
+            XmlDocument xmlResponse = ProcessXmlRequest(postRequest, "GetCustomerKey", false);
+
+            try
+            {
+                CheckResponseForErrors(xmlResponse);
+                
+                return XPathUtility.Evaluate(xmlResponse.CreateNavigator(), "//CustomerLicenseKey", string.Empty);
+            }
+            catch (TangoException ex)
+            {
+                log.Error(ex.Message);
+                return string.Empty;
+            }
+        }
+        
         /// <summary>
         /// Checks the response for errors.
         /// </summary>

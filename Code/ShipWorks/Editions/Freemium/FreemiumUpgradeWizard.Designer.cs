@@ -61,9 +61,6 @@
             this.comboElsPlan = new System.Windows.Forms.ComboBox();
             this.labelElsPlan = new System.Windows.Forms.Label();
             this.labelChooseElsPlan = new System.Windows.Forms.Label();
-            this.wizardPageTrial = new ShipWorks.UI.Wizard.WizardPage();
-            this.label2 = new System.Windows.Forms.Label();
-            this.labelTrialUpgrade1 = new System.Windows.Forms.Label();
             this.mainPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize) (this.pictureBox)).BeginInit();
             this.topPanel.SuspendLayout();
@@ -81,7 +78,6 @@
             this.wizardPageEndicia.SuspendLayout();
             this.panelDazzle.SuspendLayout();
             this.panelElsUpgrade.SuspendLayout();
-            this.wizardPageTrial.SuspendLayout();
             this.SuspendLayout();
             // 
             // next
@@ -471,38 +467,6 @@
             this.labelChooseElsPlan.Text = "Select the Endicia Service Plan you would like to upgrade to. Charges will be app" +
                 "lied by Endicia, to the credit card they have on record.";
             // 
-            // wizardPageTrial
-            // 
-            this.wizardPageTrial.Controls.Add(this.label2);
-            this.wizardPageTrial.Controls.Add(this.labelTrialUpgrade1);
-            this.wizardPageTrial.Description = "Upgrade to the standard edition of ShipWorks.";
-            this.wizardPageTrial.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.wizardPageTrial.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (0)));
-            this.wizardPageTrial.Location = new System.Drawing.Point(0, 0);
-            this.wizardPageTrial.Name = "wizardPageTrial";
-            this.wizardPageTrial.Size = new System.Drawing.Size(526, 348);
-            this.wizardPageTrial.TabIndex = 0;
-            this.wizardPageTrial.Title = "Upgrade Edition";
-            this.wizardPageTrial.StepNext += new System.EventHandler<ShipWorks.UI.Wizard.WizardStepEventArgs>(this.OnStepNextTrial);
-            // 
-            // label2
-            // 
-            this.label2.Location = new System.Drawing.Point(23, 53);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(479, 34);
-            this.label2.TabIndex = 1;
-            this.label2.Text = "If you continue ShipWorks will be updated to the standard edition and your store " +
-                "will be updated from \'Free for eBay\' to a standard trial.";
-            // 
-            // labelTrialUpgrade1
-            // 
-            this.labelTrialUpgrade1.Location = new System.Drawing.Point(23, 10);
-            this.labelTrialUpgrade1.Name = "labelTrialUpgrade1";
-            this.labelTrialUpgrade1.Size = new System.Drawing.Size(479, 34);
-            this.labelTrialUpgrade1.TabIndex = 0;
-            this.labelTrialUpgrade1.Text = "Since you have not yet completed the Endicia shipping setup, upgrading your editi" +
-                "on of ShipWorks will not incur any service fees.";
-            // 
             // FreemiumUpgradeWizard
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -512,7 +476,6 @@
             this.Name = "FreemiumUpgradeWizard";
             this.Pages.AddRange(new ShipWorks.UI.Wizard.WizardPage[] {
             this.wizardPageWelcome,
-            this.wizardPageTrial,
             this.wizardPageTerms,
             this.wizardPageEndicia,
             this.wizardPageFinsh});
@@ -540,7 +503,6 @@
             this.panelDazzle.ResumeLayout(false);
             this.panelElsUpgrade.ResumeLayout(false);
             this.panelElsUpgrade.PerformLayout();
-            this.wizardPageTrial.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -580,8 +542,5 @@
         private System.Windows.Forms.ComboBox comboElsPlan;
         private System.Windows.Forms.Panel panelDazzle;
         private System.Windows.Forms.Label labelDazzleInfo;
-        private UI.Wizard.WizardPage wizardPageTrial;
-        private System.Windows.Forms.Label label2;
-        private System.Windows.Forms.Label labelTrialUpgrade1;
     }
 }

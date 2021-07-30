@@ -33,7 +33,7 @@ namespace ShipWorks.ApplicationCore.Licensing.LicenseEnforcement
         /// <summary>
         /// ChannelCount doesn't apply to trials
         /// </summary>
-        public bool AppliesTo(ILicenseCapabilities capabilities) => !capabilities.IsInTrial;
+        public bool AppliesTo(ILicenseCapabilities capabilities) => !capabilities.TrialDetails.IsInTrial;
 
         /// <summary>
         /// Enforces the ChannelCount and displays a dlg on the given owner

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Data.Common;
 using ShipWorks.Actions;
+using ShipWorks.ApplicationCore.Licensing;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
 
@@ -24,7 +25,7 @@ namespace ShipWorks.Data
         /// <summary>
         /// Get the customer key
         /// </summary>
-        string FetchCustomerKey();
+        string FetchCustomerKey(CustomerLicenseKeyType licenseKeyType);
 
         /// <summary>
         /// Load the configuration from the database
