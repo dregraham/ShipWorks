@@ -44,22 +44,6 @@ namespace ShipWorks.ApplicationCore.Licensing
         }
 
         /// <summary>
-        /// Customer Key read from the reader.
-        /// </summary>
-        /// <exception cref="EncryptionException"></exception>
-        private string CustomerKey
-        {
-            get
-            {
-                string customerKey = reader.Value.Read();
-
-                isLegacy = string.IsNullOrWhiteSpace(customerKey);
-
-                return customerKey;
-            }
-        }
-
-        /// <summary>
         /// True if Legacy Customer
         /// </summary>
         /// <remarks>True if CustomerKey is null or empty</remarks>
@@ -71,7 +55,7 @@ namespace ShipWorks.ApplicationCore.Licensing
                 if (!isLegacy.HasValue)
                 {
                     // Yes, this is duplicated code, but needed a way to get the initial value.
-                    isLegacy = string.IsNullOrWhiteSpace(CustomerKey);
+                    isLegacy = string.IsNullOrWhiteSpace(GetCustomerLicenseKey(CustomerLicenseKeyType.WebReg));
                 }
 
                 return isLegacy.Value;
@@ -83,6 +67,27 @@ namespace ShipWorks.ApplicationCore.Licensing
         /// </summary>
         public bool IsHub => CheckRestriction(EditionFeature.Warehouse, null) == EditionRestrictionLevel.None;
 
+        /// <summary>
+        /// Get the customers license key
+        /// </summary>
+        public string GetCustomerLicenseKey(CustomerLicenseKeyType licenseKeyType)
+        {
+            string customerKey = reader.Value.Read(licenseKeyType);
+            
+            if (licenseKeyType == CustomerLicenseKeyType.WebReg)
+            {
+                // if getting webreg key and it is blank, then customer is legacy
+                isLegacy = string.IsNullOrWhiteSpace(customerKey);
+            }
+            else
+            {
+                // if getting legacy key and it is not blank, then customer is legacy
+                isLegacy = !string.IsNullOrWhiteSpace(customerKey);
+            }
+            
+            return customerKey;
+        }
+        
         /// <summary>
         /// Returns the correct ILicense for the store
         /// </summary>
@@ -167,6 +172,10 @@ namespace ShipWorks.ApplicationCore.Licensing
                 // Legacy users are always allowed to log on, only new pricing restricts logon
                 if (IsLegacy)
                 {
+                    // Ensures the legacy customer license key exists. If not, this will throw and trigger the 
+                    // activation flow, which will set it.
+                    GetCustomerLicenseKey(CustomerLicenseKeyType.Legacy);
+                    
                     return new EnumResult<LogOnRestrictionLevel>(LogOnRestrictionLevel.None);
                 }
             }
@@ -209,10 +218,11 @@ namespace ShipWorks.ApplicationCore.Licensing
         /// </summary>
         private ICustomerLicense GetCustomerLicense()
         {
+            var customerLicenseKey = GetCustomerLicenseKey(CustomerLicenseKeyType.WebReg);
             // If the cache is null or the key has changed due to a new license being activated
-            if (cachedCustomerLicense == null || CustomerKey != cachedCustomerLicense.Key)
+            if (cachedCustomerLicense == null || customerLicenseKey != cachedCustomerLicense.Key)
             {
-                cachedCustomerLicense = customerLicenseFactory(CustomerKey);
+                cachedCustomerLicense = customerLicenseFactory(customerLicenseKey);
             }
 
             return cachedCustomerLicense;

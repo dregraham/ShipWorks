@@ -19,7 +19,7 @@ namespace ShipWorks.ApplicationCore.Licensing
     /// goes along with it when trying to setup specific test cases.
     /// </summary>
     [Obfuscation(Exclude = true, ApplyToMembers = true, StripAfterObfuscation = false)]
-    public class FakeTangoWebClient : TangoWebClientWrapper, ITangoWebClient
+    public class FakeTangoWebClient : TangoWebClientWrapper
     {
         public const string CustomizedTangoFilesKeyName = "TangoWebClientDataPath";
         private ILog log = LogManager.GetLogger(typeof(FakeTangoWebClient));
@@ -27,7 +27,7 @@ namespace ShipWorks.ApplicationCore.Licensing
         /// <summary>
         /// Makes a request to Tango to add a store
         /// </summary>
-        public override IAddStoreResponse AddStore(ILicense license, StoreEntity store)
+        public override IAddStoreResponse AddStore(string customerLicenseKey, StoreEntity store)
         {
             XmlDocument doc = new XmlDocument();
             doc.LoadXml("<?xml version=\"1.0\" standalone=\"yes\" ?><License><Error><Description>Invalid Authentication</Description></Error></License>");

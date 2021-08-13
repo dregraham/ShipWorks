@@ -24,6 +24,11 @@ namespace ShipWorks.ApplicationCore.Licensing
         bool IsHub { get; }
 
         /// <summary>
+        /// Get the customers license key
+        /// </summary>
+        string GetCustomerLicenseKey(CustomerLicenseKeyType licenseKeyType);
+        
+        /// <summary>
         /// Gets all licenses for ShipWorks
         /// </summary>
         /// <returns></returns>

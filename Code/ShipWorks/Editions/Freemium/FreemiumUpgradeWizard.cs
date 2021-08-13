@@ -57,13 +57,7 @@ namespace ShipWorks.Editions.Freemium
         /// </summary>
         private void OnStepNextWelcome(object sender, WizardStepEventArgs e)
         {
-            // Try to associate the Stamps account with the license
-            using (var lifetimeScope = IoC.BeginLifetimeScope())
-            {
-                e.NextPage = lifetimeScope.Resolve<ILicenseService>().GetLicense(edition.Store).IsInTrial
-                    ? wizardPageTrial
-                    : wizardPageTerms;
-            }
+            e.NextPage = wizardPageTerms;
         }
 
         /// <summary>
@@ -101,31 +95,6 @@ namespace ShipWorks.Editions.Freemium
 
                 e.NextPage = CurrentPage;
                 return;
-            }
-        }
-
-        /// <summary>
-        /// Stepping next from the trial page
-        /// </summary>
-        private void OnStepNextTrial(object sender, WizardStepEventArgs e)
-        {
-            e.NextPage = wizardPageFinsh;
-
-            Cursor.Current = Cursors.WaitCursor;
-
-            try
-            {
-                TangoWebClient.UpgradeEditionTrial(edition.Store);
-            }
-            catch (ShipWorksLicenseException ex)
-            {
-                MessageHelper.ShowError(this, "An error occurred upgrading your account:\n\n" + ex.Message);
-                e.NextPage = CurrentPage;
-            }
-            catch (TangoException ex)
-            {
-                MessageHelper.ShowError(this, "An error occurred upgrading your account:\n\n" + ex.Message);
-                e.NextPage = CurrentPage;
             }
         }
 

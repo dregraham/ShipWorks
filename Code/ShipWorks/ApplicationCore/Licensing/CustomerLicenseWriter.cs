@@ -22,7 +22,7 @@ namespace ShipWorks.ApplicationCore.Licensing
         /// <summary>
         /// Writes the customer license to the database
         /// </summary>
-        public void Write(ICustomerLicense customerLicense)
+        public void Write(string customerLicenseKey, CustomerLicenseKeyType licenseKeyType)
         {
             IEncryptionProvider encryptionProvider = encryptionProviderFactory.CreateLicenseEncryptionProvider();
 
@@ -31,7 +31,16 @@ namespace ShipWorks.ApplicationCore.Licensing
             ConfigurationData.InitializeForCurrentDatabase();
             ConfigurationEntity config = ConfigurationData.Fetch();
 
-            config.CustomerKey = encryptionProvider.Encrypt(customerLicense.Key);
+            if (licenseKeyType == CustomerLicenseKeyType.WebReg)
+            {
+                config.LegacyCustomerKey = encryptionProvider.Encrypt(string.Empty);
+                config.CustomerKey = encryptionProvider.Encrypt(customerLicenseKey);
+            }
+            else
+            {
+                config.LegacyCustomerKey = encryptionProvider.Encrypt(customerLicenseKey);
+                config.CustomerKey = encryptionProvider.Encrypt(string.Empty);
+            }
 
             // Save the key to the ConfigurationEntity
             ConfigurationData.Save(config);

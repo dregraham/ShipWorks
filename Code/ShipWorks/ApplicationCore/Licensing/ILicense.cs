@@ -31,14 +31,9 @@ namespace ShipWorks.ApplicationCore.Licensing
         string Key { get; }
 
         /// <summary>
-        /// Is the license legacy
+        /// Details about the trial
         /// </summary>
-        bool IsLegacy { get; }
-
-        /// <summary>
-        /// Is the license in trial
-        /// </summary>
-        bool IsInTrial { get; }
+        TrialDetails TrialDetails { get; }
         
         /// <summary>
         /// Refresh the license capabilities from Tango

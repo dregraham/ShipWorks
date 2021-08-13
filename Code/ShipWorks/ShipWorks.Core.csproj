@@ -794,6 +794,10 @@
     <Compile Include="Api\IApiPortRegistrationService.cs" />
     <Compile Include="Api\IApiService.cs" />
     <Compile Include="ApplicationCore\CommandLineOptions\AutoUpgradeFailureSubmitter.cs" />
+    <Compile Include="ApplicationCore\Dashboard\Content\DashboardAccountTrialItem.cs" />
+    <Compile Include="ApplicationCore\Dashboard\Content\DashboardTrialItem.cs" />
+    <Compile Include="ApplicationCore\Licensing\CustomerLicenseKeyType.cs" />    
+    <Compile Include="ApplicationCore\Licensing\TrialDetails.cs" />
     <Compile Include="ApplicationCore\Licensing\Warehouse\DTO\SqlConfigChangedDto.cs" />
     <Compile Include="ApplicationCore\Settings\ICubiscanSettingsPage.cs" />
     <Compile Include="AutoInstall\DTO\AutoInstallShipWorksDto.cs" />
@@ -946,6 +950,7 @@
     <Compile Include="Data\Administration\SqlSchemaUpdaterWrapper.cs" />
     <Compile Include="Data\Administration\UpdateService.cs" />
     <Compile Include="Data\Administration\VersionSpecificUpdates\V_07_04_00_02.cs" />
+    <Compile Include="Data\Administration\VersionSpecificUpdates\V_09_01_01_00.cs" />
     <Compile Include="Data\Connection\DatabaseUpgradeTelemetry.cs" />
     <Compile Include="Data\Serialization\EntityJsonSerializerSettings.cs" />
     <Compile Include="Data\ShipmentNotProcessedIgnoreConcurrencyFactory.cs" />
@@ -5182,7 +5187,7 @@
     <Compile Include="ApplicationCore\Dashboard\DashboardActionMethod.cs" />
     <Compile Include="ApplicationCore\Dashboard\Content\DashboardServerMessageItem.cs" />
     <Compile Include="ApplicationCore\Dashboard\Content\DashboardLocalMessageItem.cs" />
-    <Compile Include="ApplicationCore\Dashboard\Content\DashboardTrialItem.cs" />
+    <Compile Include="ApplicationCore\Dashboard\Content\DashboardLegacyStoreTrialItem.cs" />
     <Compile Include="ApplicationCore\Dashboard\Content\DashboardOnlineVersionItem.cs" />
     <Compile Include="ApplicationCore\Dashboard\Content\ShipWorksOnlineVersionChecker.cs" />
     <Compile Include="ApplicationCore\Interaction\DockingPanelContentHolder.cs">
@@ -7115,7 +7120,6 @@
     <Compile Include="ApplicationCore\Licensing\MessageBoxes\NeedMeteredLicenseDlg.Designer.cs">
       <DependentUpon>NeedMeteredLicenseDlg.cs</DependentUpon>
     </Compile>
-    <Compile Include="ApplicationCore\Licensing\TrialDetail.cs" />
     <Compile Include="ApplicationCore\Logging\ApiLogEntry.cs" />
     <Compile Include="ApplicationCore\Logging\ApiPrivateLogSourceAttribute.cs" />
     <Compile Include="Common\Threading\ProgressProvider.cs" />

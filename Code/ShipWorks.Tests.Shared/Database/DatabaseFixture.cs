@@ -396,7 +396,7 @@ DROP PROCEDURE [dbo].[GetDatabaseGuid]";
             using (var lifetimeScope = container.BeginLifetimeScope())
             {
                 var writer = lifetimeScope.Resolve<ICustomerLicenseWriter>();
-                writer.Write(new DummyLegacyLicense());
+                writer.Write(string.Empty, CustomerLicenseKeyType.WebReg);
             }
 
             using (SqlAdapter sqlAdapter = new SqlAdapter(SqlSession.Current.OpenConnection()))

@@ -2314,6 +2314,8 @@ namespace ShipWorks.Data.Model
 		WarehouseID,
 		///<summary>WarehouseName. </summary>
 		WarehouseName,
+		///<summary>LegacyCustomerKey. </summary>
+		LegacyCustomerKey,
 		/// <summary></summary>
 		AmountOfFields
 	}

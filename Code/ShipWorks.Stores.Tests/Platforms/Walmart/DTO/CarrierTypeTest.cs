@@ -20,9 +20,9 @@ namespace ShipWorks.Stores.Tests.Platforms.Walmart.DTO
             Assert.Equal(carrierType.UDS, carrierType.UDS);
             Assert.Equal(carrierType.UPSMI, carrierType.UPSMI);
             Assert.Equal(carrierType.FDX, carrierType.FDX);
-            Assert.Equal(carrierType.FDX, carrierType.PILOT);
-            Assert.Equal(carrierType.FDX, carrierType.ESTES);
-            Assert.Equal(carrierType.FDX, carrierType.SAIA);
+            Assert.Equal(carrierType.PILOT, carrierType.PILOT);
+            Assert.Equal(carrierType.ESTES, carrierType.ESTES);
+            Assert.Equal(carrierType.SAIA, carrierType.SAIA);
         }
     }
 }

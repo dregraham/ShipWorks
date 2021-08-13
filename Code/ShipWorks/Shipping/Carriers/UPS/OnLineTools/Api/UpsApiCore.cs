@@ -92,6 +92,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api
         public static UpsAccountEntity GetUpsAccount(ShipmentEntity shipment, ICarrierAccountRepository<UpsAccountEntity, IUpsAccountEntity> accountRepository)
         {
             UpsAccountEntity account = accountRepository.GetAccount(shipment.Ups.UpsAccountID);
+
             if (account == null)
             {
                 throw new UpsException("No UPS account is selected for the shipment.");
@@ -122,6 +123,8 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api
             switch (rateType)
             {
                 case UpsRateType.Negotiated:
+                    return "00";
+
                 case UpsRateType.DailyPickup:
                     return "01";
 

@@ -21,7 +21,8 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing
             using (var mock = AutoMock.GetLoose())
             {
                 Mock<ICustomerLicenseReader> customerLicenseReader = mock.Mock<ICustomerLicenseReader>();
-                customerLicenseReader.Setup(r => r.Read()).Returns("");
+                customerLicenseReader.Setup(r => r.Read(CustomerLicenseKeyType.WebReg)).Returns("");
+                customerLicenseReader.Setup(r => r.Read(CustomerLicenseKeyType.Legacy)).Returns("legacy key");
 
                 Mock<ICustomerLicense> customerLicense = mock.Mock<ICustomerLicense>();
 
@@ -38,7 +39,7 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing
                 // Reset calls back to 0
                 customerLicenseReader.ResetCalls();
                 testObject.AllowsLogOn();
-                customerLicenseReader.Verify(l => l.Read(), Times.Never);
+                customerLicenseReader.Verify(l => l.Read(CustomerLicenseKeyType.WebReg), Times.Never);
 
                 // Reset calls to 0
                 customerLicenseReader.ResetCalls();
@@ -48,7 +49,7 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing
                 testObject.AllowsLogOn();
 
                 // Make sure we read once.
-                customerLicenseReader.Verify(l => l.Read(), Times.Once);
+                customerLicenseReader.Verify(l => l.Read(CustomerLicenseKeyType.WebReg), Times.Once);
             }
         }
 
@@ -58,7 +59,7 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing
             using (var mock = AutoMock.GetLoose())
             {
                 mock.Mock<ICustomerLicenseReader>()
-                    .Setup(r => r.Read())
+                    .Setup(r => r.Read(CustomerLicenseKeyType.WebReg))
                     .Returns("foo");
 
                 Mock<ICustomerLicense> customerLicense = mock.Mock<ICustomerLicense>();
@@ -81,7 +82,7 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing
             using (var mock = AutoMock.GetLoose())
             {
                 mock.Mock<ICustomerLicenseReader>()
-                    .Setup(r => r.Read())
+                    .Setup(r => r.Read(CustomerLicenseKeyType.WebReg))
                     .Returns("foo");
 
                 Mock<ICustomerLicense> customerLicense = mock.Mock<ICustomerLicense>();
@@ -108,7 +109,7 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing
             using (var mock = AutoMock.GetLoose())
             {
                 mock.Mock<ICustomerLicenseReader>()
-                    .Setup(r => r.Read())
+                    .Setup(r => r.Read(CustomerLicenseKeyType.WebReg))
                     .Returns(string.Empty);
 
                 LicenseService testObject = mock.Create<LicenseService>();
@@ -125,7 +126,7 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing
             using (var mock = AutoMock.GetLoose())
             {
                 mock.Mock<ICustomerLicenseReader>()
-                    .Setup(r => r.Read())
+                    .Setup(r => r.Read(CustomerLicenseKeyType.WebReg))
                     .Returns((string) null);
 
                 LicenseService testObject = mock.Create<LicenseService>();
@@ -142,7 +143,7 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing
             using (var mock = AutoMock.GetLoose())
             {
                 mock.Mock<ICustomerLicenseReader>()
-                    .Setup(r => r.Read())
+                    .Setup(r => r.Read(CustomerLicenseKeyType.WebReg))
                     .Returns("42");
 
                 LicenseService testObject = mock.Create<LicenseService>();
@@ -159,7 +160,7 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing
             using (var mock = AutoMock.GetLoose())
             {
                 mock.Mock<ICustomerLicenseReader>()
-                    .Setup(r => r.Read())
+                    .Setup(r => r.Read(CustomerLicenseKeyType.WebReg))
                     .Returns("42");
 
                 Func<string, ICustomerLicense> customerLicenseFactory = s =>
@@ -186,7 +187,7 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing
             using (var mock = AutoMock.GetLoose())
             {
                 mock.Mock<ICustomerLicenseReader>()
-                    .Setup(r => r.Read())
+                    .Setup(r => r.Read(CustomerLicenseKeyType.WebReg))
                     .Throws<ShipWorksLicenseException>();
 
                 LicenseService testObject = mock.Create<LicenseService>();
@@ -203,7 +204,7 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing
             using (var mock = AutoMock.GetLoose())
             {
                 mock.Mock<ICustomerLicenseReader>()
-                    .Setup(r => r.Read())
+                    .Setup(r => r.Read(CustomerLicenseKeyType.WebReg))
                     .Returns(string.Empty);
 
                 mock.Mock<IStoreManager>()
@@ -226,7 +227,7 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing
             using (var mock = AutoMock.GetLoose())
             {
                 mock.Mock<ICustomerLicenseReader>()
-                    .Setup(r => r.Read())
+                    .Setup(r => r.Read(CustomerLicenseKeyType.WebReg))
                     .Returns("42");
 
                 mock.Mock<IStoreManager>()
@@ -248,7 +249,7 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing
             using (var mock = AutoMock.GetLoose())
             {
                 mock.Mock<ICustomerLicenseReader>()
-                    .Setup(r => r.Read())
+                    .Setup(r => r.Read(CustomerLicenseKeyType.WebReg))
                     .Throws<ShipWorksLicenseException>();
 
                 LicenseService testObject = mock.Create<LicenseService>();
@@ -267,7 +268,7 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing
             {
                 // null customer key makes it legacy
                 mock.Mock<ICustomerLicenseReader>()
-                    .Setup(r => r.Read())
+                    .Setup(r => r.Read(CustomerLicenseKeyType.WebReg))
                     .Returns((string) null);
 
                 LicenseService testObject = mock.Create<LicenseService>();
@@ -285,7 +286,7 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing
             {
                 // null customer key makes it legacy
                 mock.Mock<ICustomerLicenseReader>()
-                    .Setup(r => r.Read())
+                    .Setup(r => r.Read(CustomerLicenseKeyType.WebReg))
                     .Returns("42");
 
                 mock.Mock<ICustomerLicense>(new NamedParameter("key", "someKey"))
@@ -307,7 +308,7 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing
             {
                 // null customer key makes it legacy
                 mock.Mock<ICustomerLicenseReader>()
-                    .Setup(r => r.Read())
+                    .Setup(r => r.Read(CustomerLicenseKeyType.WebReg))
                     .Returns("42");
 
                 mock.Mock<ICustomerLicense>(new NamedParameter("key", "someKey"))

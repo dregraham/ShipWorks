@@ -181,10 +181,10 @@ namespace ShipWorks.ApplicationCore.Licensing
         public DateTime BillingEndDate { get; set; }
 
         /// <summary>
-        /// Gets or sets a value indicating whether this instance is in trial.
+        /// Details about the trial
         /// </summary>
-        public bool IsInTrial { get; set; }
-
+        public TrialDetails TrialDetails { get; set; }
+        
         /// <summary>
         /// The number of Active Channels in tango
         /// </summary>
@@ -491,7 +491,7 @@ namespace ShipWorks.ApplicationCore.Licensing
         {
             XPathNavigator xpath = response.CreateNavigator();
 
-            IsInTrial = XPathUtility.Evaluate(xpath, "//IsInTrial", false);
+            TrialDetails = GetTrialDetails(xpath);
 
             // Generic file channel capability
             if (!GetBoolValueFromNameValuePair(CustomDataSources, capabilitiesNode))
@@ -522,6 +522,20 @@ namespace ShipWorks.ApplicationCore.Licensing
             // Grab the billing date
             string date = XPathUtility.Evaluate(xpath, "//BillingEndDate", DateTime.MinValue.ToString(CultureInfo.InvariantCulture));
             BillingEndDate = DateTime.Parse(date);
+        }
+
+        /// <summary>
+        /// Get trial details from xml
+        /// </summary>
+        private TrialDetails GetTrialDetails(XPathNavigator xpath)
+        {
+            var isInTrial = XPathUtility.Evaluate(xpath, "//IsInTrial", false);
+
+            string recurlyTrialEndDateString = XPathUtility.Evaluate(xpath, "//RecurlyTrialEndDate",
+                DateTime.MinValue.ToString(CultureInfo.InvariantCulture));
+            var recurlyTrialEndDate = DateTime.Parse(recurlyTrialEndDateString);
+
+            return new TrialDetails(isInTrial, recurlyTrialEndDate);
         }
 
         /// <summary>

@@ -132,7 +132,7 @@ namespace ShipWorks.ApplicationCore.Licensing
                     {
                         throw new ShipWorksLicenseException(
                             "Your ShipWorks trial period has expired.\n\n" +
-                            "Please enter a credit card at https://hub.shipworks.com/account to continue using ShipWorks.");
+                            "Please login to https://hub.shipworks.com/account and enter your payment details to continue using ShipWorks.");
                     }
 
                     EditionManager.UpdateStoreEdition(store, accountDetail.Edition);

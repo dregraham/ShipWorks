@@ -74,14 +74,9 @@ namespace ShipWorks.ApplicationCore.Licensing
         }
 
         /// <summary>
-        /// Not Legacy.
+        /// Details about the trial
         /// </summary>
-        public bool IsLegacy => false;
-
-        /// <summary>
-        /// Is the license in trial
-        /// </summary>
-        public bool IsInTrial => false;
+        public TrialDetails TrialDetails => new TrialDetails();
 
         /// <summary>
         /// Not over limit, but I did debate throwing for this...

@@ -846,6 +846,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 			this.AddElementFieldInfo("ConfigurationEntity", "AutoUpdateStartDate", typeof(System.DateTime), false, false, false, false,  (int)ConfigurationFieldIndex.AutoUpdateStartDate, 0, 0, 7);
 			this.AddElementFieldInfo("ConfigurationEntity", "WarehouseID", typeof(System.String), false, false, false, false,  (int)ConfigurationFieldIndex.WarehouseID, 50, 0, 0);
 			this.AddElementFieldInfo("ConfigurationEntity", "WarehouseName", typeof(System.String), false, false, false, false,  (int)ConfigurationFieldIndex.WarehouseName, 50, 0, 0);
+			this.AddElementFieldInfo("ConfigurationEntity", "LegacyCustomerKey", typeof(System.String), false, false, false, false,  (int)ConfigurationFieldIndex.LegacyCustomerKey, 2147483647, 0, 0);
 		}
 		/// <summary>Inits CustomerEntity's FieldInfo objects</summary>
 		private void InitCustomerEntityInfos()

@@ -114,14 +114,6 @@ namespace ShipWorks.ApplicationCore.Licensing
         }
 
         /// <summary>
-        /// Upgrade the given trial to not be in an 'Edition' mode
-        /// </summary>
-        public virtual void UpgradeEditionTrial(StoreEntity store)
-        {
-            TangoWebClient.UpgradeEditionTrial(store);
-        }
-
-        /// <summary>
         /// Gets the nudges.
         /// </summary>
         public virtual IEnumerable<Nudge> GetNudges(IEnumerable<StoreEntity> stores)
@@ -203,9 +195,9 @@ namespace ShipWorks.ApplicationCore.Licensing
         /// <summary>
         /// Makes a request to Tango to add a store
         /// </summary>
-        public virtual IAddStoreResponse AddStore(ILicense license, StoreEntity store)
+        public virtual IAddStoreResponse AddStore(string customerLicenseKey, StoreEntity store)
         {
-            return TangoWebClient.AddStore(license, store);
+            return TangoWebClient.AddStore(customerLicenseKey, store);
         }
         
         /// <summary>
@@ -243,5 +235,11 @@ namespace ShipWorks.ApplicationCore.Licensing
         /// </summary>
         public void ConvertLegacyTrialStore(string trialLicenseKey) =>
             TangoWebClient.ConvertLegacyTrialStore(trialLicenseKey);
+
+        /// <summary>
+        /// Get the customer license key, given a store license key
+        /// </summary>
+        public string GetCustomerLicenseKey(string storeLicenseKey) =>
+            TangoWebClient.GetCustomerLicenseKey(storeLicenseKey);
     }
 }

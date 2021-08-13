@@ -159,7 +159,7 @@ namespace ShipWorks.ApplicationCore.Licensing.FeatureRestrictions
         /// </remarks>
         private Tuple<bool, string> IsBestRateDisabled(ILicenseCapabilities capabilities)
         {
-            if (capabilities.IsInTrial)
+            if (capabilities.TrialDetails.IsInTrial)
             {
                 // All customers can use best rate when in trial
                 return Result(false);
