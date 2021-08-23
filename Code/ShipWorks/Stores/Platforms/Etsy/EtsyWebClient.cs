@@ -223,7 +223,7 @@ namespace ShipWorks.Stores.Platforms.Etsy
                     ordersToReturn = ordersList.OrderBy(o => (int) o["creation_tsz"]).ToList<JToken>();
 
                     // Remove orders on the startDate border, b\c we already have those
-                    ordersToReturn = ordersToReturn.Where(o => (int) o["creation_tsz"] != startDateStamp || !IsOrderInDatabase((int) o["receipt_id"])).ToList();
+                    ordersToReturn = ordersToReturn.Where(o => (int) o["creation_tsz"] != startDateStamp || !IsOrderInDatabase((long) o["receipt_id"])).ToList();
                 }
             }
 
@@ -349,7 +349,7 @@ namespace ShipWorks.Stores.Platforms.Etsy
         /// <summary>
         /// If order is already in the local DB return true.
         /// </summary>
-        private bool IsOrderInDatabase(int orderNumber)
+        private bool IsOrderInDatabase(long orderNumber)
         {
             return 1 == OrderCollection.GetCount(SqlAdapter.Default,
                             OrderFields.StoreID == store.StoreID &
