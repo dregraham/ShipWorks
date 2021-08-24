@@ -250,7 +250,8 @@
                                                                                                                        AncestorType=UserControl},
                                                                                         Path=DataContext.Columns,
                                                                                         UpdateSourceTrigger=PropertyChanged}"
-                                                                  SelectedItem="{Binding ExternalField.Column}"
+                                                                  SelectedIndexWhenNull="{x:Static ui:RelativeIndex.First}"
+                                                                  ui:SelectedValueProper="{Binding ExternalField.Column, Mode=TwoWay}"
                                                                   TextSearch.TextPath="Name" />
 
                                         </Grid>
