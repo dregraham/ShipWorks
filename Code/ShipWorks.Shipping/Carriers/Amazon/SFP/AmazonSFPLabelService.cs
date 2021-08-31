@@ -49,7 +49,15 @@ namespace ShipWorks.Shipping.Carriers.Amazon.SFP
 
                 if (rateResult.Success)
                 {
-                    string serviceId = ((AmazonRateTag) rateResult.Value?.Rates?.FirstOrDefault()?.Tag)?.ShippingServiceId ?? string.Empty;
+                    string serviceId = ((AmazonRateTag) rateResult.Value?.Rates?.FirstOrDefault()?.Tag)?.ShippingServiceId;
+
+                    if (serviceId.IsNullOrWhiteSpace()) {
+                        throw new ShippingException("ShipWorks couldn't find any eligible shipping services for the given shipment." +
+                            "\r\nYou may need to adjust your available services in:" +
+                            "\r\n Manage > Shipping Settings > Amazon Seller Fulfilled Prime > Available Services"
+                        );
+                    }
+                    
                     shipment.AmazonSFP.ShippingServiceID = serviceId;
                 }
             }
