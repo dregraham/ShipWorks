@@ -265,6 +265,20 @@ namespace ShipWorks.Stores.Tests.Platforms.BigCommerce.AccountSettings
         }
 
         [Fact]
+        public async Task SaveToEntity_SavesCorrectUrl()
+        {
+            CreateSuccessfulPersistenceStrategyFor(BigCommerceAuthenticationType.Oauth);
+            var store = new BigCommerceStoreEntity();
+            var testObject = mock.Create<BigCommerceAccountSettingsViewModel>();
+            testObject.LoadStore(store);
+            testObject.ApiUrl = "https://api.bigcommerce.com/stores/v3ixtef5a7/v3/";
+
+            await testObject.SaveToEntity(store);
+            
+            Assert.Equal("https://api.bigcommerce.com/stores/v3ixtef5a7/v2/", store.ApiUrl);
+        }
+
+        [Fact]
         public async Task MigrateToOauth_DelegatesToOauthStrategy_AfterChange()
         {
             var builder = mock.CreateKeyedMockOf<IBigCommerceAuthenticationPersistenceStrategy>();

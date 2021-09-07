@@ -212,7 +212,7 @@ namespace ShipWorks.Stores.Platforms.BigCommerce.AccountSettings
             }
 
             // Trim and convert to v2 URL
-            string storeUrlToCheck = url.Trim().Replace("/v3", "/v2");
+            string storeUrlToCheck = url.Trim().Replace("/v3/", "/v2/");
 
             // Check for the url scheme, and add https if not present
             if (storeUrlToCheck.IndexOf(Uri.SchemeDelimiter, StringComparison.OrdinalIgnoreCase) == -1)
