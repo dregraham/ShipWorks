@@ -210,9 +210,14 @@ namespace ShipWorks.Stores.Platforms.BigCommerce.AccountSettings
             {
                 return GenericResult.FromError<string>("Please enter the API Path of your BigCommerce store.");
             }
-
+            
             // Trim and convert to v2 URL
-            string storeUrlToCheck = url.Trim().Replace("/v3", "/v2");
+            string storeUrlToCheck = url.Trim();
+            if (!storeUrlToCheck.EndsWith("/"))
+            {
+                storeUrlToCheck = $"{storeUrlToCheck}/";
+            }
+            storeUrlToCheck = storeUrlToCheck.Replace("/v3/", "/v2/");
 
             // Check for the url scheme, and add https if not present
             if (storeUrlToCheck.IndexOf(Uri.SchemeDelimiter, StringComparison.OrdinalIgnoreCase) == -1)
