@@ -1,4 +1,5 @@
 using System;
+using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Linq;
 using System.Security.Cryptography;
@@ -15,6 +16,12 @@ namespace Interapptive.Shared.Security
     /// <summary>
     /// Small utility to for decrypting \ encrypting text that will be saved locally.
     /// </summary>
+    [SuppressMessage("CSharp.Analyzers",
+        "CA5351: Do not use broken cryptographic algorithms",
+        Justification = "This is only used to decrypt previously-encrypted text")]
+    [SuppressMessage("SonarQube",
+            "S2674: Check the return value of the \"Read\" call to see how many bytes were read",
+            Justification = "Existing behavior")]
     public static class SecureText
     {
         // Logger
