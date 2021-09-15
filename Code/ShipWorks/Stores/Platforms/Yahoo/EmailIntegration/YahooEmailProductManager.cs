@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net;
+using System.Xml;
 using System.Xml.XPath;
 using Interapptive.Shared;
 using Interapptive.Shared.Net;
@@ -120,8 +121,12 @@ namespace ShipWorks.Stores.Platforms.Yahoo.EmailIntegration
                     }
 
 
-                    using (StreamReader reader = new StreamReader(response.GetResponseStream()))
+                    using (StreamReader streamReader = new StreamReader(response.GetResponseStream()))
                     {
+                        // Use an xml reader to prevent an External Entity attack
+                        // https://cheatsheetseries.owasp.org/cheatsheets/XML_External_Entity_Prevention_Cheat_Sheet.html#net
+                        var reader = XmlReader.Create(streamReader);
+
                         XPathDocument document = new XPathDocument(reader);
                         XPathNavigator xpath = document.CreateNavigator();
 
