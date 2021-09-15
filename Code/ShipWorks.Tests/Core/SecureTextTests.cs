@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using Interapptive.Shared.Security;
 using Xunit;
 
@@ -59,6 +60,21 @@ namespace ShipWorks.Tests.Core
             var decrypted = SecureText.Decrypt(encrypted, "salt");
 
             Assert.Equal(expected, decrypted);
+        }
+
+        [Fact]
+        public void Encrypt_Creates_Random_Salt()
+        {
+            var plaintext = "This is a test";
+            var password = "That Password";
+
+            var encrypted1 = Convert.FromBase64String(SecureText.Encrypt(plaintext, password));
+            var firstSalt = encrypted1.Skip(encrypted1.Length - 16).Take(16);
+
+            var encrypted2 = Convert.FromBase64String(SecureText.Encrypt(plaintext, password));
+            var secondSalt = encrypted2.Skip(encrypted2.Length - 16).Take(16);
+
+            Assert.NotEqual(firstSalt, secondSalt);
         }
 
         [Fact]
