@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Linq;
 using System.Security.Cryptography;
@@ -16,12 +15,6 @@ namespace ShipWorks.Installer.Security
     /// <summary>
     /// Small utility to for decrypting \ encrypting text that will be saved locally.
     /// </summary>
-    [SuppressMessage("CSharp.Analyzers",
-        "CA5351: Do not use broken cryptographic algorithms",
-        Justification = "This is only used to decrypt previously-encrypted text")]
-    [SuppressMessage("SonarQube",
-            "S2674: Check the return value of the \"Read\" call to see how many bytes were read",
-            Justification = "Existing behavior")]
     public static class SecureText
     {
         // Logger
@@ -32,12 +25,12 @@ namespace ShipWorks.Installer.Security
         private const int TagLength = 16;
         private const int SaltLength = 16;
         private const int EncryptedKeyLength = 60;
+        private const int AESKeyLength = 32;
 
         // SCrypt Parameters
         private const int SCryptIterations = 32768; // Should take less than 100ms on modern PCs
         private const int SCryptBlockSize = 8;
         private const int SCryptParallelismFactor = 1;
-        private const int SCryptOutputLength = 64;
 
         /// <summary>
         /// Decrypts a string that was returned by the Encrypt method.
@@ -67,23 +60,19 @@ namespace ShipWorks.Installer.Security
                 var encryptedText = encryptedBytes.Skip(EncryptedKeyLength).Take(encryptedBytes.Length - EncryptedKeyLength - SaltLength).ToArray();
                 var salt = encryptedBytes.Skip(EncryptedKeyLength + encryptedText.Length).Take(SaltLength).ToArray();
 
-                var keys = SCrypt.Generate(Encoding.UTF8.GetBytes(password), salt, SCryptIterations, SCryptBlockSize, SCryptParallelismFactor, SCryptOutputLength);
+                // Derive the key used to encrypt the aesKey using the salt and the password
+                var derivedKey = SCrypt.Generate(Encoding.UTF8.GetBytes(password), salt, SCryptIterations, SCryptBlockSize, SCryptParallelismFactor, AESKeyLength);
 
-                var key1 = keys.Take(32).ToArray();
-                var key2 = keys.Skip(32).Take(32).ToArray();
+                // Decrypt the aesKey with the derived key
+                var decryptedKey = DecryptWithAesGcm(encryptedKey, derivedKey);
 
-                var decryptedKey = DecryptWithAesGcm(encryptedKey, key2);
-
-                if (!key1.SequenceEqual(decryptedKey))
-                {
-                    throw new Exception("Decrypted key did not match generated key");
-                }
-
+                // Decrypt the encrypted text with the decrypted aesKey
                 var plaintext = DecryptWithAesGcm(encryptedText, decryptedKey);
 
                 return Encoding.UTF8.GetString(plaintext);
             }
-            catch (Exception e)
+            // OverflowException is thrown when the encrypted text is too short
+            catch (Exception e) when (e is OverflowException || e is InvalidCipherTextException)
             {
                 log.Warn($"Failed to decrypt with AES-GCM: {e.Message}, trying RC2");
 
@@ -178,17 +167,22 @@ namespace ShipWorks.Installer.Security
                 throw new ArgumentNullException("salt");
             }
 
+            // Use a random salt each time
             var salt = new byte[SaltLength];
             new SecureRandom().NextBytes(salt);
 
-            var keys = SCrypt.Generate(Encoding.UTF8.GetBytes(password), salt, SCryptIterations, SCryptBlockSize, SCryptParallelismFactor, SCryptOutputLength);
+            // Derive a key from the salt and password that will be used to encrypt the aesKey
+            var derivedKey = SCrypt.Generate(Encoding.UTF8.GetBytes(password), salt, SCryptIterations, SCryptBlockSize, SCryptParallelismFactor, AESKeyLength);
 
-            var key1 = keys.Take(32).ToArray();
-            var key2 = keys.Skip(32).Take(32).ToArray();
+            // Generate a random key that will be used to encrypt the plaintext
+            var aesKey = new byte[AESKeyLength];
+            new SecureRandom().NextBytes(aesKey);
 
-            var encryptedKey = EncryptWithAesGcm(key1, key2);
+            // Encrypt the aesKey with the derivedKey in order to save it with the encrypted text
+            var encryptedKey = EncryptWithAesGcm(aesKey, derivedKey);
 
-            var encryptedText = EncryptWithAesGcm(Encoding.UTF8.GetBytes(plaintext), key1);
+            // Encrypt the plaintext with the randomly generated aesKey
+            var encryptedText = EncryptWithAesGcm(Encoding.UTF8.GetBytes(plaintext), aesKey);
 
             var encryptedBytes = new byte[encryptedKey.Length + encryptedText.Length + salt.Length];
 
