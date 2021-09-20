@@ -4699,7 +4699,7 @@
       <Catalogs>
         <Catalog Name="ShipWorksLocal">
           <Schemas>
-            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2021-09-20T14:18:50.9167116Z">
+            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2021-09-20T15:47:29.9086061Z">
               <Tables>
                 <Table Name="Action">
                   <PkConstraintName Name="PK_Action" />
@@ -8189,7 +8189,7 @@
                     <Field Name="LegacyAdminUrl" Ordinal="13" DbType="24" Length="300" />
                     <Field Name="LegacyXtePath" Ordinal="14" DbType="24" Length="75" />
                     <Field Name="LegacyPrefix" Ordinal="15" DbType="24" Length="30" />
-                    <Field Name="LegacyPassword" Ordinal="16" DbType="12" Length="600" />
+                    <Field Name="LegacyPassword" Ordinal="16" DbType="24" Length="600" />
                     <Field Name="LegacyCanUpgrade" Ordinal="17" DbType="2" />
                   </Fields>
                 </Table>
@@ -9631,7 +9631,7 @@
                     <Field Name="StoreID" Ordinal="1" IsPrimaryKey="true" DbType="0" Precision="19" />
                     <Field Name="StoreUrl" Ordinal="2" DbType="24" Length="255" />
                     <Field Name="WebUserName" Ordinal="3" DbType="24" Length="50" />
-                    <Field Name="WebPassword" Ordinal="4" DbType="12" Length="280" />
+                    <Field Name="WebPassword" Ordinal="4" DbType="24" Length="280" />
                     <Field Name="ApiPassword" Ordinal="5" DbType="24" Length="100" />
                     <Field Name="PaymentMethods" Ordinal="6" DbType="26" Length="2147483647" />
                     <Field Name="ShipmentMethods" Ordinal="7" DbType="26" Length="2147483647" />
@@ -9876,7 +9876,7 @@
                   <Fields>
                     <Field Name="StoreID" Ordinal="1" IsPrimaryKey="true" DbType="0" Precision="19" />
                     <Field Name="YahooEmailAccountID" Ordinal="2" DbType="0" Precision="19" />
-                    <Field Name="TrackingUpdatePassword" Ordinal="3" DbType="12" Length="400" />
+                    <Field Name="TrackingUpdatePassword" Ordinal="3" DbType="24" Length="400" />
                     <Field Name="YahooStoreID" Ordinal="4" HasDefaultValue="true" DefaultValue="''" DbType="24" Length="50" />
                     <Field Name="AccessToken" Ordinal="5" HasDefaultValue="true" DefaultValue="''" DbType="24" Length="200" />
                     <Field Name="BackupOrderNumber" Ordinal="6" IsOptional="true" DbType="0" Precision="19" />

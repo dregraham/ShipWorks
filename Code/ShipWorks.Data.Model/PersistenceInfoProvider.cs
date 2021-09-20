@@ -3032,7 +3032,7 @@ namespace ShipWorks.Data.Model
 			this.AddElementFieldMapping("ProStoresStoreEntity", "LegacyAdminUrl", "LegacyAdminUrl", false, "VarChar", 300, 0, 0, false, "", null, typeof(System.String), 12);
 			this.AddElementFieldMapping("ProStoresStoreEntity", "LegacyXtePath", "LegacyXtePath", false, "VarChar", 75, 0, 0, false, "", null, typeof(System.String), 13);
 			this.AddElementFieldMapping("ProStoresStoreEntity", "LegacyPrefix", "LegacyPrefix", false, "VarChar", 30, 0, 0, false, "", null, typeof(System.String), 14);
-			this.AddElementFieldMapping("ProStoresStoreEntity", "LegacyPassword", "LegacyPassword", false, "NVarChar", 600, 0, 0, false, "", null, typeof(System.String), 15);
+			this.AddElementFieldMapping("ProStoresStoreEntity", "LegacyPassword", "LegacyPassword", false, "VarChar", 600, 0, 0, false, "", null, typeof(System.String), 15);
 			this.AddElementFieldMapping("ProStoresStoreEntity", "LegacyCanUpgrade", "LegacyCanUpgrade", false, "Bit", 0, 0, 0, false, "", null, typeof(System.Boolean), 16);
 		}
 
@@ -4171,7 +4171,7 @@ namespace ShipWorks.Data.Model
 			this.AddElementFieldMapping("VolusionStoreEntity", "StoreID", "StoreID", false, "BigInt", 0, 19, 0, false, "", null, typeof(System.Int64), 0);
 			this.AddElementFieldMapping("VolusionStoreEntity", "StoreUrl", "StoreUrl", false, "VarChar", 255, 0, 0, false, "", null, typeof(System.String), 1);
 			this.AddElementFieldMapping("VolusionStoreEntity", "WebUserName", "WebUserName", false, "VarChar", 50, 0, 0, false, "", null, typeof(System.String), 2);
-			this.AddElementFieldMapping("VolusionStoreEntity", "WebPassword", "WebPassword", false, "NVarChar", 280, 0, 0, false, "", null, typeof(System.String), 3);
+			this.AddElementFieldMapping("VolusionStoreEntity", "WebPassword", "WebPassword", false, "VarChar", 280, 0, 0, false, "", null, typeof(System.String), 3);
 			this.AddElementFieldMapping("VolusionStoreEntity", "ApiPassword", "ApiPassword", false, "VarChar", 100, 0, 0, false, "", null, typeof(System.String), 4);
 			this.AddElementFieldMapping("VolusionStoreEntity", "PaymentMethods", "PaymentMethods", false, "Xml", 2147483647, 0, 0, false, "", null, typeof(System.String), 5);
 			this.AddElementFieldMapping("VolusionStoreEntity", "ShipmentMethods", "ShipmentMethods", false, "Xml", 2147483647, 0, 0, false, "", null, typeof(System.String), 6);
@@ -4429,7 +4429,7 @@ namespace ShipWorks.Data.Model
 			this.AddElementMapping("YahooStoreEntity", @"ShipWorksLocal", @"dbo", "YahooStore", 6, 0);
 			this.AddElementFieldMapping("YahooStoreEntity", "StoreID", "StoreID", false, "BigInt", 0, 19, 0, false, "", null, typeof(System.Int64), 0);
 			this.AddElementFieldMapping("YahooStoreEntity", "YahooEmailAccountID", "YahooEmailAccountID", false, "BigInt", 0, 19, 0, false, "", null, typeof(System.Int64), 1);
-			this.AddElementFieldMapping("YahooStoreEntity", "TrackingUpdatePassword", "TrackingUpdatePassword", false, "NVarChar", 400, 0, 0, false, "", null, typeof(System.String), 2);
+			this.AddElementFieldMapping("YahooStoreEntity", "TrackingUpdatePassword", "TrackingUpdatePassword", false, "VarChar", 400, 0, 0, false, "", null, typeof(System.String), 2);
 			this.AddElementFieldMapping("YahooStoreEntity", "YahooStoreID", "YahooStoreID", false, "VarChar", 50, 0, 0, false, "", null, typeof(System.String), 3);
 			this.AddElementFieldMapping("YahooStoreEntity", "AccessToken", "AccessToken", false, "VarChar", 200, 0, 0, false, "", null, typeof(System.String), 4);
 			this.AddElementFieldMapping("YahooStoreEntity", "BackupOrderNumber", "BackupOrderNumber", true, "BigInt", 0, 19, 0, false, "", null, typeof(System.Int64), 5);
