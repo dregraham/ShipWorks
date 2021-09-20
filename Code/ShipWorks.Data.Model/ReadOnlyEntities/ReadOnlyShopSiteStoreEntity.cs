@@ -64,7 +64,7 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
         /// <summary> The Password property of the Entity ShopSiteStore<br/><br/>
         /// </summary>
         /// <remarks>Mapped on table field: "ShopSiteStore"."Password"<br/>
-        /// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 50<br/>
+        /// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 200<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
         public System.String Password { get; }
         /// <summary> The ApiUrl property of the Entity ShopSiteStore<br/><br/>

@@ -458,7 +458,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 
 		/// <summary> The WebPassword property of the Entity EndiciaAccount<br/><br/></summary>
 		/// <remarks>Mapped on  table field: "EndiciaAccount"."WebPassword"<br/>
-		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 250<br/>
+		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 1000<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
 		[DataMember]
 		public virtual System.String WebPassword
@@ -469,7 +469,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 
 		/// <summary> The ApiInitialPassword property of the Entity EndiciaAccount<br/><br/></summary>
 		/// <remarks>Mapped on  table field: "EndiciaAccount"."ApiInitialPassword"<br/>
-		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 250<br/>
+		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 1000<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
 		[DataMember]
 		public virtual System.String ApiInitialPassword
@@ -480,7 +480,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 
 		/// <summary> The ApiUserPassword property of the Entity EndiciaAccount<br/><br/></summary>
 		/// <remarks>Mapped on  table field: "EndiciaAccount"."ApiUserPassword"<br/>
-		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 250<br/>
+		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 1000<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
 		[DataMember]
 		public virtual System.String ApiUserPassword

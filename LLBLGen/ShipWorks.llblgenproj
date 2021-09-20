@@ -402,7 +402,7 @@
       </EntityDefinition>
       <EntityDefinition Name="AmeriCommerceStore" ObjectID="8bf58023-525f-4754-9192-e4c497ab6e82" InheritanceType="2">
         <Fields>
-          <Field Name="Password" Type="string" MaxLength="70" FieldIndex="1" />
+          <Field Name="Password" Type="string" MaxLength="280" FieldIndex="1" />
           <Field Name="StatusCodes" Type="string" MaxLength="2147483647" FieldIndex="4" />
           <Field Name="StoreCode" Type="int" FieldIndex="3" />
           <Field Name="StoreUrl" Type="string" MaxLength="350" FieldIndex="2" />
@@ -558,7 +558,7 @@
       </EntityDefinition>
       <EntityDefinition Name="BuyDotComStore" ObjectID="273729fa-08ac-437c-9954-ddbe9da4390e" InheritanceType="2">
         <Fields>
-          <Field Name="FtpPassword" Type="string" MaxLength="50" FieldIndex="1" />
+          <Field Name="FtpPassword" Type="string" MaxLength="200" FieldIndex="1" />
           <Field Name="FtpUsername" Type="string" MaxLength="50" FieldIndex="0" />
         </Fields>
       </EntityDefinition>
@@ -608,7 +608,7 @@
           <Field Name="DownloadDaysBack" Type="byte" Precision="3" FieldIndex="8" />
           <Field Name="ExcludeFBA" Type="bool" FieldIndex="9" />
           <Field Name="ProfileID" Type="int" FieldIndex="1" />
-          <Field Name="RefreshToken" Type="string" MaxLength="200" FieldIndex="7" />
+          <Field Name="RefreshToken" Type="string" MaxLength="800" FieldIndex="7" />
         </Fields>
       </EntityDefinition>
       <EntityDefinition Name="ClickCartProOrder" ObjectID="d483348d-8aef-4b58-a81e-b06b4592c323" InheritanceType="2">
@@ -935,7 +935,7 @@
           <Field Name="DisplayName" Type="string" MaxLength="50" FieldIndex="3" />
           <Field Name="EmailAccountID" Type="long" IsReadOnly="true" IsPrimaryKey="true" FieldIndex="0" />
           <Field Name="EmailAddress" Type="string" MaxLength="100" FieldIndex="4" />
-          <Field Name="IncomingPassword" Type="string" MaxLength="150" FieldIndex="10" />
+          <Field Name="IncomingPassword" Type="string" MaxLength="600" FieldIndex="10" />
           <Field Name="IncomingPort" Type="int" FieldIndex="7" />
           <Field Name="IncomingSecurityType" Type="int" FieldIndex="8" />
           <Field Name="IncomingServer" Type="string" MaxLength="100" FieldIndex="5" />
@@ -949,7 +949,7 @@
           <Field Name="LimitMessagesPerHour" Type="bool" FieldIndex="22" />
           <Field Name="LimitMessagesPerHourQuantity" Type="int" FieldIndex="23" />
           <Field Name="OutgoingCredentialSource" Type="int" FieldIndex="14" />
-          <Field Name="OutgoingPassword" Type="string" MaxLength="150" FieldIndex="16" />
+          <Field Name="OutgoingPassword" Type="string" MaxLength="600" FieldIndex="16" />
           <Field Name="OutgoingPort" Type="int" FieldIndex="12" />
           <Field Name="OutgoingSecurityType" Type="int" FieldIndex="13" />
           <Field Name="OutgoingServer" Type="string" MaxLength="100" FieldIndex="11" />
@@ -995,8 +995,8 @@
           <Field Name="AcceptedFCMILetterWarning" Type="bool" FieldIndex="26" />
           <Field Name="AccountNumber" Type="string" IsOptional="true" MaxLength="50" FieldIndex="2" />
           <Field Name="AccountType" Type="int" FieldIndex="7" />
-          <Field Name="ApiInitialPassword" Type="string" MaxLength="250" FieldIndex="5" />
-          <Field Name="ApiUserPassword" Type="string" MaxLength="250" FieldIndex="6" />
+          <Field Name="ApiInitialPassword" Type="string" MaxLength="1000" FieldIndex="5" />
+          <Field Name="ApiUserPassword" Type="string" MaxLength="1000" FieldIndex="6" />
           <Field Name="City" Type="string" MaxLength="50" FieldIndex="17" />
           <Field Name="Company" Type="string" MaxLength="30" FieldIndex="13" />
           <Field Name="CountryCode" Type="string" MaxLength="50" FieldIndex="20" />
@@ -1020,7 +1020,7 @@
           <Field Name="Street2" Type="string" MaxLength="60" FieldIndex="15" />
           <Field Name="Street3" Type="string" MaxLength="60" FieldIndex="16" />
           <Field Name="TestAccount" Type="bool" FieldIndex="8" />
-          <Field Name="WebPassword" Type="string" MaxLength="250" FieldIndex="4" />
+          <Field Name="WebPassword" Type="string" MaxLength="1000" FieldIndex="4" />
         </Fields>
       </EntityDefinition>
       <EntityDefinition Name="EndiciaProfile" ObjectID="2956325f-4467-416a-bc73-9548e4f2fe47">
@@ -1083,8 +1083,8 @@
           <Field Name="EtsyLoginName" Type="string" MaxLength="255" FieldIndex="1" />
           <Field Name="EtsyShopID" Type="long" FieldIndex="0" />
           <Field Name="EtsyStoreName" Type="string" MaxLength="255" FieldIndex="2" />
-          <Field Name="OAuthToken" Type="string" MaxLength="50" FieldIndex="3" />
-          <Field Name="OAuthTokenSecret" Type="string" MaxLength="50" FieldIndex="4" />
+          <Field Name="OAuthToken" Type="string" MaxLength="200" FieldIndex="3" />
+          <Field Name="OAuthTokenSecret" Type="string" MaxLength="200" FieldIndex="4" />
         </Fields>
       </EntityDefinition>
       <EntityDefinition Name="ExcludedPackageType" ObjectID="f21d723a-e8ed-494b-bc74-755733029261">
@@ -1508,7 +1508,7 @@
           <Field Name="Host" Type="string" MaxLength="100" FieldIndex="1" />
           <Field Name="InternalOwnerID" Type="long" IsOptional="true" FieldIndex="7" />
           <Field Name="Passive" Type="bool" FieldIndex="6" />
-          <Field Name="Password" Type="string" MaxLength="50" FieldIndex="3" />
+          <Field Name="Password" Type="string" MaxLength="200" FieldIndex="3" />
           <Field Name="Port" Type="int" FieldIndex="4" />
           <Field Name="ReuseControlConnectionSession" Type="bool" FieldIndex="8" />
           <Field Name="SecurityType" Type="int" FieldIndex="5" />
@@ -1568,7 +1568,7 @@
           <Field Name="ModuleOnlineStatusDataType" Type="int" FieldIndex="12" />
           <Field Name="ModuleOnlineStatusSupport" Type="int" FieldIndex="11" />
           <Field Name="ModuleOnlineStoreCode" Type="string" MaxLength="50" FieldIndex="6" />
-          <Field Name="ModulePassword" Type="string" MaxLength="80" FieldIndex="1" />
+          <Field Name="ModulePassword" Type="string" MaxLength="320" FieldIndex="1" />
           <Field Name="ModulePlatform" Type="string" MaxLength="50" FieldIndex="4" />
           <Field Name="ModuleRequestTimeout" Type="int" FieldIndex="9" />
           <Field Name="ModuleResponseEncoding" Type="int" FieldIndex="17" />
@@ -1679,7 +1679,7 @@
           <Field Name="IParcelAccountID" Type="long" IsReadOnly="true" IsPrimaryKey="true" FieldIndex="0" />
           <Field Name="LastName" Type="string" MaxLength="30" FieldIndex="7" />
           <Field Name="MiddleName" Type="string" MaxLength="30" FieldIndex="6" />
-          <Field Name="Password" Type="string" MaxLength="50" FieldIndex="3" />
+          <Field Name="Password" Type="string" MaxLength="200" FieldIndex="3" />
           <Field Name="Phone" Type="string" MaxLength="25" FieldIndex="15" />
           <Field Name="PostalCode" Type="string" MaxLength="20" FieldIndex="13" />
           <Field Name="RowVersion" Type="byte[]" IsReadOnly="true" FieldIndex="1" />
@@ -1756,7 +1756,7 @@
       <EntityDefinition Name="JetStore" ObjectID="09c32316-900c-49e7-a066-c93d454f37bb" InheritanceType="2">
         <Fields>
           <Field Name="ApiUser" Type="string" MaxLength="100" FieldIndex="0" />
-          <Field Name="Secret" Type="string" MaxLength="100" FieldIndex="1" />
+          <Field Name="Secret" Type="string" MaxLength="400" FieldIndex="1" />
         </Fields>
       </EntityDefinition>
       <EntityDefinition Name="LabelSheet" ObjectID="56e1997e-27f4-4322-b3af-2747c4eebd37">
@@ -1844,7 +1844,7 @@
         <Fields>
           <Field Name="AccountType" Type="int" FieldIndex="2" />
           <Field Name="DownloadFlags" Type="int" FieldIndex="3" />
-          <Field Name="Password" Type="string" MaxLength="50" FieldIndex="1" />
+          <Field Name="Password" Type="string" MaxLength="200" FieldIndex="1" />
           <Field Name="Username" Type="string" MaxLength="50" FieldIndex="0" />
         </Fields>
       </EntityDefinition>
@@ -1858,7 +1858,7 @@
       <EntityDefinition Name="MivaStore" ObjectID="56917d76-4404-4264-83b8-5b88ef5118f6" InheritanceType="2">
         <Fields>
           <Field Name="AddendumCheckoutDataEnabled" Type="bool" FieldIndex="5" />
-          <Field Name="EncryptionPassphrase" Type="string" MaxLength="50" FieldIndex="0" />
+          <Field Name="EncryptionPassphrase" Type="string" MaxLength="200" FieldIndex="0" />
           <Field Name="LiveManualOrderNumbers" Type="bool" FieldIndex="1" />
           <Field Name="OnlineUpdateStatusChangeEmail" Type="bool" FieldIndex="4" />
           <Field Name="OnlineUpdateStrategy" Type="int" FieldIndex="3" />
@@ -1972,7 +1972,7 @@
           <Field Name="LastName" Type="string" MaxLength="30" FieldIndex="7" />
           <Field Name="MiddleName" Type="string" MaxLength="30" FieldIndex="6" />
           <Field Name="OnTracAccountID" Type="long" IsReadOnly="true" IsPrimaryKey="true" FieldIndex="0" />
-          <Field Name="Password" Type="string" MaxLength="50" FieldIndex="3" />
+          <Field Name="Password" Type="string" MaxLength="200" FieldIndex="3" />
           <Field Name="Phone" Type="string" MaxLength="15" FieldIndex="15" />
           <Field Name="PostalCode" Type="string" MaxLength="10" FieldIndex="12" />
           <Field Name="RowVersion" Type="byte[]" IsReadOnly="true" FieldIndex="1" />
@@ -2207,7 +2207,7 @@
           <Field Name="OrderID" Type="long" IsAutoCreated="true" FieldIndex="2" />
           <Field Name="OrderPaymentDetailID" Type="long" IsReadOnly="true" IsPrimaryKey="true" FieldIndex="0" />
           <Field Name="RowVersion" Type="byte[]" IsReadOnly="true" FieldIndex="1" />
-          <Field Name="Value" Type="string" MaxLength="100" FieldIndex="4" />
+          <Field Name="Value" Type="string" MaxLength="400" FieldIndex="4" />
         </Fields>
       </EntityDefinition>
       <EntityDefinition Name="OrderSearch" ObjectID="e9ae11b7-a1c0-42a9-926b-d9c3ca4b1ddd">
@@ -2531,7 +2531,7 @@
           <Field Name="ApiXteUrl" Type="string" MaxLength="300" FieldIndex="7" />
           <Field Name="LegacyAdminUrl" Type="string" MaxLength="300" FieldIndex="11" />
           <Field Name="LegacyCanUpgrade" Type="bool" FieldIndex="15" />
-          <Field Name="LegacyPassword" Type="string" MaxLength="150" FieldIndex="14" />
+          <Field Name="LegacyPassword" Type="string" MaxLength="600" FieldIndex="14" />
           <Field Name="LegacyPrefix" Type="string" MaxLength="30" FieldIndex="13" />
           <Field Name="LegacyXtePath" Type="string" MaxLength="75" FieldIndex="12" />
           <Field Name="LoginMethod" Type="int" FieldIndex="2" />
@@ -2880,7 +2880,7 @@
           <Field Name="FedExInsurancePennyOne" Type="bool" FieldIndex="15" />
           <Field Name="FedExInsuranceProvider" Type="int" FieldIndex="14" />
           <Field Name="FedExMaskAccount" Type="bool" FieldIndex="11" />
-          <Field Name="FedExPassword" Type="string" IsOptional="true" MaxLength="50" FieldIndex="10" />
+          <Field Name="FedExPassword" Type="string" IsOptional="true" MaxLength="200" FieldIndex="10" />
           <Field Name="FedExThermalDocTab" Type="bool" FieldIndex="12" />
           <Field Name="FedExThermalDocTabType" Type="int" FieldIndex="13" />
           <Field Name="FedExUsername" Type="string" IsOptional="true" MaxLength="50" FieldIndex="9" />
@@ -2905,7 +2905,7 @@
           <Field Name="ShipSenseEndShipmentID" Type="long" FieldIndex="46" />
           <Field Name="ShipSenseProcessedShipmentID" Type="long" FieldIndex="45" />
           <Field Name="ShipSenseUniquenessXml" Type="string" MaxLength="2147483647" FieldIndex="44" />
-          <Field Name="UpsAccessKey" Type="string" IsOptional="true" MaxLength="50" FieldIndex="16" />
+          <Field Name="UpsAccessKey" Type="string" IsOptional="true" MaxLength="200" FieldIndex="16" />
           <Field Name="UpsAllowNoDims" Type="bool" FieldIndex="56" />
           <Field Name="UpsInsurancePennyOne" Type="bool" FieldIndex="18" />
           <Field Name="UpsInsuranceProvider" Type="int" FieldIndex="17" />
@@ -2965,7 +2965,7 @@
           <Field Name="OauthAuthorizationCode" Type="string" MaxLength="100" FieldIndex="10" />
           <Field Name="OauthClientID" Type="string" MaxLength="100" FieldIndex="7" />
           <Field Name="OauthSecretKey" Type="string" MaxLength="100" FieldIndex="8" />
-          <Field Name="Password" Type="string" MaxLength="50" FieldIndex="1" />
+          <Field Name="Password" Type="string" MaxLength="200" FieldIndex="1" />
           <Field Name="RequestTimeout" Type="int" FieldIndex="5" />
           <Field Name="RequireSSL" Type="bool" FieldIndex="3" />
           <Field Name="ShopSiteAuthentication" Type="ShopSiteAuthenticationType" FieldIndex="6" />
@@ -3159,7 +3159,7 @@
           <Field Name="LastName" Type="string" MaxLength="30" FieldIndex="10" />
           <Field Name="LocalRatingEnabled" Type="bool" FieldIndex="23" />
           <Field Name="MiddleName" Type="string" MaxLength="30" FieldIndex="9" />
-          <Field Name="Password" Type="string" MaxLength="25" FieldIndex="5" />
+          <Field Name="Password" Type="string" MaxLength="100" FieldIndex="5" />
           <Field Name="Phone" Type="string" MaxLength="25" FieldIndex="19" />
           <Field Name="PostalCode" Type="string" MaxLength="20" FieldIndex="17" />
           <Field Name="PromoStatus" Type="byte" Precision="3" FieldIndex="22" />
@@ -3451,7 +3451,7 @@
           <Field Name="LastName" Type="string" MaxLength="30" FieldIndex="7" />
           <Field Name="MailingPostalCode" Type="string" MaxLength="20" FieldIndex="19" />
           <Field Name="MiddleName" Type="string" MaxLength="30" FieldIndex="6" />
-          <Field Name="Password" Type="string" MaxLength="100" FieldIndex="4" />
+          <Field Name="Password" Type="string" MaxLength="400" FieldIndex="4" />
           <Field Name="PendingInitialAccount" Type="int" FieldIndex="23" />
           <Field Name="Phone" Type="string" MaxLength="25" FieldIndex="16" />
           <Field Name="PostalCode" Type="string" MaxLength="20" FieldIndex="14" />
@@ -3538,7 +3538,7 @@
           <Field Name="ServerTimeZoneDST" Type="bool" FieldIndex="8" />
           <Field Name="ShipmentMethods" Type="string" MaxLength="2147483647" FieldIndex="5" />
           <Field Name="StoreUrl" Type="string" MaxLength="255" FieldIndex="0" />
-          <Field Name="WebPassword" Type="string" MaxLength="70" FieldIndex="2" />
+          <Field Name="WebPassword" Type="string" MaxLength="280" FieldIndex="2" />
           <Field Name="WebUserName" Type="string" MaxLength="50" FieldIndex="1" />
         </Fields>
       </EntityDefinition>
@@ -3760,7 +3760,7 @@
         <Fields>
           <Field Name="AccessToken" Type="string" MaxLength="200" FieldIndex="3" />
           <Field Name="BackupOrderNumber" Type="long" IsOptional="true" FieldIndex="4" />
-          <Field Name="TrackingUpdatePassword" Type="string" MaxLength="100" FieldIndex="1" />
+          <Field Name="TrackingUpdatePassword" Type="string" MaxLength="400" FieldIndex="1" />
           <Field Name="YahooEmailAccountID" Type="long" IsAutoCreated="true" FieldIndex="0" />
           <Field Name="YahooStoreID" Type="string" MaxLength="50" FieldIndex="2" />
         </Fields>
@@ -4699,7 +4699,7 @@
       <Catalogs>
         <Catalog Name="ShipWorksLocal">
           <Schemas>
-            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2021-07-22T17:40:32.8058334Z">
+            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2021-09-20T14:18:50.9167116Z">
               <Tables>
                 <Table Name="Action">
                   <PkConstraintName Name="PK_Action" />
@@ -4989,7 +4989,7 @@
                   <Fields>
                     <Field Name="StoreID" Ordinal="1" IsPrimaryKey="true" DbType="0" Precision="19" />
                     <Field Name="Username" Ordinal="2" DbType="12" Length="70" />
-                    <Field Name="Password" Ordinal="3" DbType="12" Length="70" />
+                    <Field Name="Password" Ordinal="3" DbType="12" Length="280" />
                     <Field Name="StoreUrl" Ordinal="4" DbType="12" Length="350" />
                     <Field Name="StoreCode" Ordinal="5" DbType="8" Precision="10" />
                     <Field Name="StatusCodes" Ordinal="6" DbType="26" Length="2147483647" />
@@ -5200,7 +5200,7 @@
                   <Fields>
                     <Field Name="StoreID" Ordinal="1" IsPrimaryKey="true" DbType="0" Precision="19" />
                     <Field Name="FtpUsername" Ordinal="2" DbType="12" Length="50" />
-                    <Field Name="FtpPassword" Ordinal="3" DbType="12" Length="50" />
+                    <Field Name="FtpPassword" Ordinal="3" DbType="12" Length="200" />
                   </Fields>
                 </Table>
                 <Table Name="ChannelAdvisorOrder">
@@ -5254,7 +5254,7 @@
                     <Field Name="AmazonMerchantID" Ordinal="6" DbType="12" Length="50" />
                     <Field Name="AmazonAuthToken" Ordinal="7" DbType="12" Length="100" />
                     <Field Name="AmazonApiRegion" Ordinal="8" DbType="3" Length="2" />
-                    <Field Name="RefreshToken" Ordinal="9" DbType="12" Length="200" />
+                    <Field Name="RefreshToken" Ordinal="9" DbType="12" Length="800" />
                     <Field Name="DownloadDaysBack" Ordinal="10" HasDefaultValue="true" DefaultValue="(4)" DbType="22" Precision="3" />
                     <Field Name="ExcludeFBA" Ordinal="11" HasDefaultValue="true" DefaultValue="(1)" DbType="2" />
                   </Fields>
@@ -5703,13 +5703,13 @@
                     <Field Name="IncomingPort" Ordinal="8" DbType="8" Precision="10" />
                     <Field Name="IncomingSecurityType" Ordinal="9" DbType="8" Precision="10" />
                     <Field Name="IncomingUsername" Ordinal="10" DbType="12" Length="50" />
-                    <Field Name="IncomingPassword" Ordinal="11" DbType="12" Length="150" />
+                    <Field Name="IncomingPassword" Ordinal="11" DbType="12" Length="600" />
                     <Field Name="OutgoingServer" Ordinal="12" DbType="12" Length="100" />
                     <Field Name="OutgoingPort" Ordinal="13" DbType="8" Precision="10" />
                     <Field Name="OutgoingSecurityType" Ordinal="14" DbType="8" Precision="10" />
                     <Field Name="OutgoingCredentialSource" Ordinal="15" DbType="8" Precision="10" />
                     <Field Name="OutgoingUsername" Ordinal="16" DbType="12" Length="50" />
-                    <Field Name="OutgoingPassword" Ordinal="17" DbType="12" Length="150" />
+                    <Field Name="OutgoingPassword" Ordinal="17" DbType="12" Length="600" />
                     <Field Name="AutoSend" Ordinal="18" DbType="2" />
                     <Field Name="AutoSendMinutes" Ordinal="19" DbType="8" Precision="10" />
                     <Field Name="AutoSendLastTime" Ordinal="20" DbType="4" />
@@ -5764,9 +5764,9 @@
                     <Field Name="EndiciaReseller" Ordinal="2" DbType="8" Precision="10" />
                     <Field Name="AccountNumber" Ordinal="3" IsOptional="true" DbType="12" Length="50" />
                     <Field Name="SignupConfirmation" Ordinal="4" DbType="12" Length="30" />
-                    <Field Name="WebPassword" Ordinal="5" DbType="12" Length="250" />
-                    <Field Name="ApiInitialPassword" Ordinal="6" DbType="12" Length="250" />
-                    <Field Name="ApiUserPassword" Ordinal="7" DbType="12" Length="250" />
+                    <Field Name="WebPassword" Ordinal="5" DbType="12" Length="1000" />
+                    <Field Name="ApiInitialPassword" Ordinal="6" DbType="12" Length="1000" />
+                    <Field Name="ApiUserPassword" Ordinal="7" DbType="12" Length="1000" />
                     <Field Name="AccountType" Ordinal="8" DbType="8" Precision="10" />
                     <Field Name="TestAccount" Ordinal="9" DbType="2" />
                     <Field Name="CreatedByShipWorks" Ordinal="10" DbType="2" />
@@ -5880,8 +5880,8 @@
                     <Field Name="EtsyShopID" Ordinal="2" DbType="0" Precision="19" />
                     <Field Name="EtsyLogin" Ordinal="3" DbType="12" Length="255" />
                     <Field Name="EtsyStoreName" Ordinal="4" DbType="12" Length="255" />
-                    <Field Name="OAuthToken" Ordinal="5" DbType="12" Length="50" />
-                    <Field Name="OAuthTokenSecret" Ordinal="6" DbType="12" Length="50" />
+                    <Field Name="OAuthToken" Ordinal="5" DbType="12" Length="200" />
+                    <Field Name="OAuthTokenSecret" Ordinal="6" DbType="12" Length="200" />
                   </Fields>
                 </Table>
                 <Table Name="ExcludedPackageType">
@@ -6943,7 +6943,7 @@
                     <Field Name="FtpAccountID" Ordinal="1" IsIdentity="true" IsPrimaryKey="true" DbType="0" Precision="19" />
                     <Field Name="Host" Ordinal="2" DbType="12" Length="100" />
                     <Field Name="Username" Ordinal="3" DbType="12" Length="50" />
-                    <Field Name="Password" Ordinal="4" DbType="12" Length="50" />
+                    <Field Name="Password" Ordinal="4" DbType="12" Length="200" />
                     <Field Name="Port" Ordinal="5" DbType="8" Precision="10" />
                     <Field Name="SecurityType" Ordinal="6" DbType="8" Precision="10" />
                     <Field Name="Passive" Ordinal="7" DbType="2" />
@@ -6999,7 +6999,7 @@
                   <Fields>
                     <Field Name="StoreID" Ordinal="1" IsPrimaryKey="true" DbType="0" Precision="19" />
                     <Field Name="ModuleUsername" Ordinal="2" DbType="12" Length="50" />
-                    <Field Name="ModulePassword" Ordinal="3" DbType="12" Length="80" />
+                    <Field Name="ModulePassword" Ordinal="3" DbType="12" Length="320" />
                     <Field Name="ModuleUrl" Ordinal="4" DbType="12" Length="350" />
                     <Field Name="ModuleVersion" Ordinal="5" DbType="24" Length="20" />
                     <Field Name="ModulePlatform" Ordinal="6" DbType="12" Length="50" />
@@ -7133,7 +7133,7 @@
                     <Field Name="iParcelAccountID" Ordinal="1" IsIdentity="true" IsPrimaryKey="true" DbType="0" Precision="19" />
                     <Field Name="RowVersion" Ordinal="2" IsTimestamp="true" DbType="21" />
                     <Field Name="Username" Ordinal="3" DbType="12" Length="50" />
-                    <Field Name="Password" Ordinal="4" DbType="12" Length="50" />
+                    <Field Name="Password" Ordinal="4" DbType="12" Length="200" />
                     <Field Name="Description" Ordinal="5" DbType="12" Length="50" />
                     <Field Name="FirstName" Ordinal="6" DbType="12" Length="30" />
                     <Field Name="MiddleName" Ordinal="7" DbType="12" Length="30" />
@@ -7238,7 +7238,7 @@
                   <Fields>
                     <Field Name="StoreID" Ordinal="1" IsPrimaryKey="true" DbType="0" Precision="19" />
                     <Field Name="ApiUser" Ordinal="2" DbType="12" Length="100" />
-                    <Field Name="Secret" Ordinal="3" DbType="12" Length="100" />
+                    <Field Name="Secret" Ordinal="3" DbType="12" Length="400" />
                   </Fields>
                 </Table>
                 <Table Name="LabelSheet">
@@ -7343,7 +7343,7 @@
                   <Fields>
                     <Field Name="StoreID" Ordinal="1" IsPrimaryKey="true" DbType="0" Precision="19" />
                     <Field Name="Username" Ordinal="2" DbType="12" Length="50" />
-                    <Field Name="Password" Ordinal="3" DbType="12" Length="50" />
+                    <Field Name="Password" Ordinal="3" DbType="12" Length="200" />
                     <Field Name="AccountType" Ordinal="4" DbType="8" Precision="10" />
                     <Field Name="DownloadFlags" Ordinal="5" DbType="8" Precision="10" />
                   </Fields>
@@ -7361,7 +7361,7 @@
                   <PkConstraintName Name="PK_MivaStore" />
                   <Fields>
                     <Field Name="StoreID" Ordinal="1" IsPrimaryKey="true" DbType="0" Precision="19" />
-                    <Field Name="EncryptionPassphrase" Ordinal="2" DbType="12" Length="50" />
+                    <Field Name="EncryptionPassphrase" Ordinal="2" DbType="12" Length="200" />
                     <Field Name="LiveManualOrderNumbers" Ordinal="3" DbType="2" />
                     <Field Name="SebenzaCheckoutDataEnabled" Ordinal="4" DbType="2" />
                     <Field Name="OnlineUpdateStrategy" Ordinal="5" DbType="8" Precision="10" />
@@ -7501,7 +7501,7 @@
                     <Field Name="OnTracAccountID" Ordinal="1" IsIdentity="true" IsPrimaryKey="true" DbType="0" Precision="19" />
                     <Field Name="RowVersion" Ordinal="2" IsTimestamp="true" DbType="21" />
                     <Field Name="AccountNumber" Ordinal="3" DbType="8" Precision="10" />
-                    <Field Name="Password" Ordinal="4" DbType="12" Length="50" />
+                    <Field Name="Password" Ordinal="4" DbType="12" Length="200" />
                     <Field Name="Description" Ordinal="5" DbType="12" Length="50" />
                     <Field Name="FirstName" Ordinal="6" DbType="12" Length="30" />
                     <Field Name="MiddleName" Ordinal="7" DbType="12" Length="30" />
@@ -7840,7 +7840,7 @@
                     <Field Name="RowVersion" Ordinal="2" IsTimestamp="true" DbType="21" />
                     <Field Name="OrderID" Ordinal="3" DbType="0" Precision="19" />
                     <Field Name="Label" Ordinal="4" DbType="12" Length="100" />
-                    <Field Name="Value" Ordinal="5" DbType="12" Length="100" />
+                    <Field Name="Value" Ordinal="5" DbType="12" Length="400" />
                   </Fields>
                 </Table>
                 <Table Name="OrderSearch">
@@ -8189,7 +8189,7 @@
                     <Field Name="LegacyAdminUrl" Ordinal="13" DbType="24" Length="300" />
                     <Field Name="LegacyXtePath" Ordinal="14" DbType="24" Length="75" />
                     <Field Name="LegacyPrefix" Ordinal="15" DbType="24" Length="30" />
-                    <Field Name="LegacyPassword" Ordinal="16" DbType="24" Length="150" />
+                    <Field Name="LegacyPassword" Ordinal="16" DbType="12" Length="600" />
                     <Field Name="LegacyCanUpgrade" Ordinal="17" DbType="2" />
                   </Fields>
                 </Table>
@@ -8757,13 +8757,13 @@
                     <Field Name="InsurancePolicy" Ordinal="8" DbType="12" Length="40" />
                     <Field Name="InsuranceLastAgreed" Ordinal="9" IsOptional="true" DbType="4" />
                     <Field Name="FedExUsername" Ordinal="10" IsOptional="true" DbType="12" Length="50" />
-                    <Field Name="FedExPassword" Ordinal="11" IsOptional="true" DbType="12" Length="50" />
+                    <Field Name="FedExPassword" Ordinal="11" IsOptional="true" DbType="12" Length="200" />
                     <Field Name="FedExMaskAccount" Ordinal="12" DbType="2" />
                     <Field Name="FedExThermalDocTab" Ordinal="13" DbType="2" />
                     <Field Name="FedExThermalDocTabType" Ordinal="14" DbType="8" Precision="10" />
                     <Field Name="FedExInsuranceProvider" Ordinal="15" DbType="8" Precision="10" />
                     <Field Name="FedExInsurancePennyOne" Ordinal="16" DbType="2" />
-                    <Field Name="UpsAccessKey" Ordinal="17" IsOptional="true" DbType="12" Length="50" />
+                    <Field Name="UpsAccessKey" Ordinal="17" IsOptional="true" DbType="12" Length="200" />
                     <Field Name="UpsInsuranceProvider" Ordinal="18" DbType="8" Precision="10" />
                     <Field Name="UpsInsurancePennyOne" Ordinal="19" DbType="2" />
                     <Field Name="EndiciaCustomsCertify" Ordinal="20" DbType="2" />
@@ -8880,7 +8880,7 @@
                   <Fields>
                     <Field Name="StoreID" Ordinal="1" IsPrimaryKey="true" DbType="0" Precision="19" />
                     <Field Name="Username" Ordinal="2" DbType="12" Length="50" />
-                    <Field Name="Password" Ordinal="3" DbType="12" Length="50" />
+                    <Field Name="Password" Ordinal="3" DbType="12" Length="200" />
                     <Field Name="ApiUrl" Ordinal="4" DbType="12" Length="350" />
                     <Field Name="RequireSSL" Ordinal="5" DbType="2" />
                     <Field Name="DownloadPageSize" Ordinal="6" DbType="8" Precision="10" />
@@ -9100,7 +9100,7 @@
                     <Field Name="Description" Ordinal="3" DbType="12" Length="50" />
                     <Field Name="AccountNumber" Ordinal="4" DbType="12" Length="10" />
                     <Field Name="UserID" Ordinal="5" DbType="12" Length="25" />
-                    <Field Name="Password" Ordinal="6" DbType="12" Length="25" />
+                    <Field Name="Password" Ordinal="6" DbType="12" Length="100" />
                     <Field Name="RateType" Ordinal="7" DbType="8" Precision="10" />
                     <Field Name="InvoiceAuth" Ordinal="8" DbType="2" />
                     <Field Name="FirstName" Ordinal="9" DbType="12" Length="30" />
@@ -9519,7 +9519,7 @@
                     <Field Name="RowVersion" Ordinal="2" IsTimestamp="true" DbType="21" />
                     <Field Name="Description" Ordinal="3" DbType="12" Length="50" />
                     <Field Name="Username" Ordinal="4" DbType="12" Length="50" />
-                    <Field Name="Password" Ordinal="5" DbType="12" Length="100" />
+                    <Field Name="Password" Ordinal="5" DbType="12" Length="400" />
                     <Field Name="FirstName" Ordinal="6" DbType="12" Length="30" />
                     <Field Name="MiddleName" Ordinal="7" DbType="12" Length="30" />
                     <Field Name="LastName" Ordinal="8" DbType="12" Length="30" />
@@ -9631,7 +9631,7 @@
                     <Field Name="StoreID" Ordinal="1" IsPrimaryKey="true" DbType="0" Precision="19" />
                     <Field Name="StoreUrl" Ordinal="2" DbType="24" Length="255" />
                     <Field Name="WebUserName" Ordinal="3" DbType="24" Length="50" />
-                    <Field Name="WebPassword" Ordinal="4" DbType="24" Length="70" />
+                    <Field Name="WebPassword" Ordinal="4" DbType="12" Length="280" />
                     <Field Name="ApiPassword" Ordinal="5" DbType="24" Length="100" />
                     <Field Name="PaymentMethods" Ordinal="6" DbType="26" Length="2147483647" />
                     <Field Name="ShipmentMethods" Ordinal="7" DbType="26" Length="2147483647" />
@@ -9876,7 +9876,7 @@
                   <Fields>
                     <Field Name="StoreID" Ordinal="1" IsPrimaryKey="true" DbType="0" Precision="19" />
                     <Field Name="YahooEmailAccountID" Ordinal="2" DbType="0" Precision="19" />
-                    <Field Name="TrackingUpdatePassword" Ordinal="3" DbType="24" Length="100" />
+                    <Field Name="TrackingUpdatePassword" Ordinal="3" DbType="12" Length="400" />
                     <Field Name="YahooStoreID" Ordinal="4" HasDefaultValue="true" DefaultValue="''" DbType="24" Length="50" />
                     <Field Name="AccessToken" Ordinal="5" HasDefaultValue="true" DefaultValue="''" DbType="24" Length="200" />
                     <Field Name="BackupOrderNumber" Ordinal="6" IsOptional="true" DbType="0" Precision="19" />
