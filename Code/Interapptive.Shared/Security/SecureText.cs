@@ -79,7 +79,9 @@ namespace Interapptive.Shared.Security
 
                 try
                 {
-                    return DecryptWithRC2(ciphertext, password);
+                    var decrypted = DecryptWithRC2(ciphertext, password);
+                    log.Info("Decrypting with RC2 succeeded");
+                    return decrypted;
                 }
                 catch (Exception ex)
                 {
