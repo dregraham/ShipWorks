@@ -165,7 +165,7 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
         /// <summary> The FedExPassword property of the Entity ShippingSettings<br/><br/>
         /// </summary>
         /// <remarks>Mapped on table field: "ShippingSettings"."FedExPassword"<br/>
-        /// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 50<br/>
+        /// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 200<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
         public System.String FedExPassword { get; }
         /// <summary> The FedExMaskAccount property of the Entity ShippingSettings<br/><br/>
@@ -201,7 +201,7 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
         /// <summary> The UpsAccessKey property of the Entity ShippingSettings<br/><br/>
         /// </summary>
         /// <remarks>Mapped on table field: "ShippingSettings"."UpsAccessKey"<br/>
-        /// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 50<br/>
+        /// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 200<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
         public System.String UpsAccessKey { get; }
         /// <summary> The UpsInsuranceProvider property of the Entity ShippingSettings<br/><br/>

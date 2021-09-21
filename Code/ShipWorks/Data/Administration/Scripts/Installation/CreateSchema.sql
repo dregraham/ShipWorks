@@ -1047,7 +1047,7 @@ CREATE TABLE [dbo].[AmeriCommerceStore]
 (
 [StoreID] [bigint] NOT NULL,
 [Username] [nvarchar] (70) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
-[Password] [nvarchar] (70) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+[Password] [nvarchar] (280) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [StoreUrl] [nvarchar] (350) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [StoreCode] [int] NOT NULL,
 [StatusCodes] [xml] NOT NULL
@@ -1473,7 +1473,7 @@ CREATE TABLE [dbo].[BuyDotComStore]
 (
 [StoreID] [bigint] NOT NULL,
 [FtpUsername] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
-[FtpPassword] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL
+[FtpPassword] [nvarchar] (200) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL
 )
 GO
 PRINT N'Creating primary key [PK_BuyComStore] on [dbo].[BuyDotComStore]'
@@ -1577,7 +1577,7 @@ CREATE TABLE [dbo].[ChannelAdvisorStore]
 [AmazonMerchantID] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [AmazonAuthToken] [nvarchar] (100) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [AmazonApiRegion] [char] (2) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
-[RefreshToken] [nvarchar] (200) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+[RefreshToken] [nvarchar] (800) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [DownloadDaysBack] [tinyint] NOT NULL DEFAULT ((4)),
 [ExcludeFBA] [bit] NOT NULL CONSTRAINT [DF_ChannelAdvisorStore_ExcludeFBA] DEFAULT ((1))
 )
@@ -1996,8 +1996,8 @@ CREATE TABLE [dbo].[EtsyStore]
 [EtsyShopID] [bigint] NOT NULL,
 [EtsyLogin] [nvarchar] (255) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [EtsyStoreName] [nvarchar] (255) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
-[OAuthToken] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
-[OAuthTokenSecret] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL
+[OAuthToken] [nvarchar] (200) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+[OAuthTokenSecret] [nvarchar] (200) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL
 )
 GO
 PRINT N'Creating primary key [PK_EtsyStore] on [dbo].[EtsyStore]'
@@ -2504,7 +2504,7 @@ CREATE TABLE [dbo].[GenericModuleStore]
 (
 [StoreID] [bigint] NOT NULL,
 [ModuleUsername] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
-[ModulePassword] [nvarchar] (80) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+[ModulePassword] [nvarchar] (320) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [ModuleUrl] [nvarchar] (350) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [ModuleVersion] [varchar] (20) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [ModulePlatform] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
@@ -2740,7 +2740,7 @@ CREATE TABLE [dbo].[MarketplaceAdvisorStore]
 (
 [StoreID] [bigint] NOT NULL,
 [Username] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
-[Password] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+[Password] [nvarchar] (200) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [AccountType] [int] NOT NULL,
 [DownloadFlags] [int] NOT NULL
 )
@@ -2793,7 +2793,7 @@ GO
 CREATE TABLE [dbo].[MivaStore]
 (
 [StoreID] [bigint] NOT NULL,
-[EncryptionPassphrase] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+[EncryptionPassphrase] [nvarchar] (200) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [LiveManualOrderNumbers] [bit] NOT NULL,
 [SebenzaCheckoutDataEnabled] [bit] NOT NULL,
 [OnlineUpdateStrategy] [int] NOT NULL,
@@ -3314,7 +3314,7 @@ CREATE TABLE [dbo].[OrderPaymentDetail]
 [RowVersion] [timestamp] NOT NULL,
 [OrderID] [bigint] NOT NULL,
 [Label] [nvarchar] (100) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
-[Value] [nvarchar] (100) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL
+[Value] [nvarchar] (400) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL
 )
 GO
 PRINT N'Creating primary key [PK_OrderPaymentDetail] on [dbo].[OrderPaymentDetail]'
@@ -3493,7 +3493,7 @@ CREATE TABLE [dbo].[ProStoresStore]
 [LegacyAdminUrl] [varchar] (300) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [LegacyXtePath] [varchar] (75) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [LegacyPrefix] [varchar] (30) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
-[LegacyPassword] [varchar] (150) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+[LegacyPassword] [varchar] (600) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [LegacyCanUpgrade] [bit] NOT NULL
 )
 GO
@@ -3969,7 +3969,7 @@ CREATE TABLE [dbo].[ShopSiteStore]
 (
 [StoreID] [bigint] NOT NULL,
 [Username] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
-[Password] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+[Password] [nvarchar] (200) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [ApiUrl] [nvarchar] (350) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [RequireSSL] [bit] NOT NULL,
 [DownloadPageSize] [int] NOT NULL,
@@ -4410,7 +4410,7 @@ CREATE TABLE [dbo].[VolusionStore]
 [StoreID] [bigint] NOT NULL,
 [StoreUrl] [varchar] (255) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [WebUserName] [varchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
-[WebPassword] [varchar] (70) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+[WebPassword] [varchar] (280) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [ApiPassword] [varchar] (100) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [PaymentMethods] [xml] NOT NULL,
 [ShipmentMethods] [xml] NOT NULL,
@@ -4551,7 +4551,7 @@ CREATE TABLE [dbo].[YahooStore]
 (
 [StoreID] [bigint] NOT NULL,
 [YahooEmailAccountID] [bigint] NOT NULL,
-[TrackingUpdatePassword] [varchar] (100) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+[TrackingUpdatePassword] [varchar] (400) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [YahooStoreID] [varchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL CONSTRAINT [DF_YahooStore_YahooStoreID] DEFAULT (''),
 [AccessToken] [varchar] (200) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL CONSTRAINT [DF_YahooStore_AccessToken] DEFAULT (''),
 [BackupOrderNumber] [bigint] NULL
@@ -4693,13 +4693,13 @@ CREATE TABLE [dbo].[EmailAccount]
 [IncomingPort] [int] NOT NULL,
 [IncomingSecurityType] [int] NOT NULL,
 [IncomingUsername] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
-[IncomingPassword] [nvarchar] (150) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+[IncomingPassword] [nvarchar] (600) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [OutgoingServer] [nvarchar] (100) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [OutgoingPort] [int] NOT NULL,
 [OutgoingSecurityType] [int] NOT NULL,
 [OutgoingCredentialSource] [int] NOT NULL,
 [OutgoingUsername] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
-[OutgoingPassword] [nvarchar] (150) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+[OutgoingPassword] [nvarchar] (600) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [AutoSend] [bit] NOT NULL,
 [AutoSendMinutes] [int] NOT NULL,
 [AutoSendLastTime] [datetime] NOT NULL,
@@ -4726,9 +4726,9 @@ CREATE TABLE [dbo].[EndiciaAccount]
 [EndiciaReseller] [int] NOT NULL,
 [AccountNumber] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
 [SignupConfirmation] [nvarchar] (30) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
-[WebPassword] [nvarchar] (250) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
-[ApiInitialPassword] [nvarchar] (250) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
-[ApiUserPassword] [nvarchar] (250) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+[WebPassword] [nvarchar] (1000) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+[ApiInitialPassword] [nvarchar] (1000) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+[ApiUserPassword] [nvarchar] (1000) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [AccountType] [int] NOT NULL,
 [TestAccount] [bit] NOT NULL,
 [CreatedByShipWorks] [bit] NOT NULL,
@@ -4926,7 +4926,7 @@ CREATE TABLE [dbo].[FtpAccount]
 [FtpAccountID] [bigint] NOT NULL IDENTITY(1071, 1000),
 [Host] [nvarchar] (100) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [Username] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
-[Password] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+[Password] [nvarchar] (200) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [Port] [int] NOT NULL,
 [SecurityType] [int] NOT NULL,
 [Passive] [bit] NOT NULL,
@@ -4947,7 +4947,7 @@ CREATE TABLE [dbo].[iParcelAccount]
 [iParcelAccountID] [bigint] NOT NULL IDENTITY(1091, 1000),
 [RowVersion] [timestamp] NOT NULL,
 [Username] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
-[Password] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+[Password] [nvarchar] (200) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [Description] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [FirstName] [nvarchar] (30) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [MiddleName] [nvarchar] (30) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
@@ -5026,7 +5026,7 @@ CREATE TABLE [dbo].[OnTracAccount]
 [OnTracAccountID] [bigint] NOT NULL IDENTITY(1090, 1000),
 [RowVersion] [timestamp] NOT NULL,
 [AccountNumber] [int] NOT NULL,
-[Password] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+[Password] [nvarchar] (200) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [Description] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [FirstName] [nvarchar] (30) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [MiddleName] [nvarchar] (30) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
@@ -5285,13 +5285,13 @@ CREATE TABLE [dbo].[ShippingSettings]
 [InsurancePolicy] [nvarchar] (40) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [InsuranceLastAgreed] [datetime] NULL,
 [FedExUsername] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
-[FedExPassword] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
+[FedExPassword] [nvarchar] (200) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
 [FedExMaskAccount] [bit] NOT NULL,
 [FedExThermalDocTab] [bit] NOT NULL,
 [FedExThermalDocTabType] [int] NOT NULL,
 [FedExInsuranceProvider] [int] NOT NULL,
 [FedExInsurancePennyOne] [bit] NOT NULL,
-[UpsAccessKey] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
+[UpsAccessKey] [nvarchar] (200) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
 [UpsInsuranceProvider] [int] NOT NULL,
 [UpsInsurancePennyOne] [bit] NOT NULL,
 [EndiciaCustomsCertify] [bit] NOT NULL,
@@ -5383,7 +5383,7 @@ CREATE TABLE [dbo].[UspsAccount]
 [RowVersion] [timestamp] NOT NULL,
 [Description] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [Username] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
-[Password] [nvarchar] (100) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+[Password] [nvarchar] (400) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [FirstName] [nvarchar] (30) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [MiddleName] [nvarchar] (30) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [LastName] [nvarchar] (30) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
@@ -5526,7 +5526,7 @@ CREATE TABLE [dbo].[UpsAccount]
 [Description] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [AccountNumber] [nvarchar] (10) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [UserID] [nvarchar] (25) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
-[Password] [nvarchar] (25) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+[Password] [nvarchar] (100) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [RateType] [int] NOT NULL,
 [InvoiceAuth] [bit] NOT NULL,
 [FirstName] [nvarchar] (30) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
@@ -6549,7 +6549,7 @@ CREATE TABLE [dbo].[JetStore]
 (
 [StoreID] [bigint] NOT NULL,
 [ApiUser] [nvarchar](100) NOT NULL,
-[Secret] [nvarchar](100) NOT NULL
+[Secret] [nvarchar](400) NOT NULL
 )
 GO
 PRINT N'Creating primary key [PK_JetStore] on [dbo].[JetStore]'
