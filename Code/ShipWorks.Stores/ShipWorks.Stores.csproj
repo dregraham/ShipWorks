@@ -269,19 +269,14 @@
     <Compile Include="Platforms\Amazon\Warehouse\AmazonWarehouseOrder.cs" />
     <Compile Include="Platforms\Amazon\Warehouse\AmazonWarehouseOrderFactory.cs" />
     <Compile Include="Platforms\Amazon\Warehouse\AmazonStoreDtoFactory.cs" />
-    <Compile Include="Platforms\Api\ApiStoreDowloader.cs" />
-    <Compile Include="Platforms\Api\ApiStoreException.cs" />
     <Compile Include="Platforms\Api\ApiStoreSetup.cs" />
     <Compile Include="Platforms\Api\ApiStoreType.cs" />
-    <Compile Include="Platforms\Api\ApiWarehouseOrderFactory.cs" />
-    <Compile Include="Platforms\Api\OnlineUpdating\ApiOnlineUpdateCommandCreator.cs" />
-    <Compile Include="Platforms\Api\OnlineUpdating\ApiOnlineUpdater.cs" />
-    <Compile Include="Platforms\Api\CoreExtensions\Actions\ApiShipmentUploadTask.cs" />
-    <Compile Include="Platforms\Api\OnlineUpdating\IApiOnlineUpdater.cs" />
     <Compile Include="Platforms\BigCommerce\Warehouse\BigCommerceStore.cs" />
     <Compile Include="Platforms\BigCommerce\Warehouse\BigCommerceStoreDtoFactory.cs" />
     <Compile Include="Platforms\BigCommerce\Warehouse\BigCommerceWarehouseItem.cs" />
     <Compile Include="Platforms\BigCommerce\Warehouse\BigCommerceWarehouseOrderFactory.cs" />
+    <Compile Include="Platforms\BrightpearlHub\BrightpearlHubStoreSetup.cs" />
+    <Compile Include="Platforms\BrightpearlHub\BrightpearlHubStoreType.cs" />
     <Compile Include="Platforms\ChannelAdvisor\DTO\ChannelAdvisorProductList.cs" />
     <Compile Include="Platforms\Ebay\Warehouse\EbayStoreDtoFactory.cs" />
     <Compile Include="Platforms\GenericFile\Warehouse\GenericFileStoreDtoFactory.cs" />
@@ -293,6 +288,14 @@
     <Compile Include="Platforms\Manual\CreateDefaultStoreActivity.cs" />
     <Compile Include="Platforms\Odbc\Mapping\OdbcStoreRepository.cs" />
     <Compile Include="Platforms\Odbc\Mapping\RefreshingOdbcStore.cs" />
+    <Compile Include="Platforms\Platform\CoreExtensions\Actions\PlatformShipmentUploadTask.cs" />
+    <Compile Include="Platforms\Platform\OnlineUpdating\PlatformOnlineUpdater.cs" />
+    <Compile Include="Platforms\Platform\OnlineUpdating\IPlatformOnlineUpdater.cs" />
+    <Compile Include="Platforms\Platform\OnlineUpdating\PlatformOnlineUpdateCommandCreator.cs" />
+    <Compile Include="Platforms\Platform\PlatformStoreDowloader.cs" />
+    <Compile Include="Platforms\Platform\PlatformStoreException.cs" />
+    <Compile Include="Platforms\Platform\PlatformWarehouseOrderFactory.cs" />
+    <Compile Include="Platforms\Platform\PlatformStoreType.cs" />
     <Compile Include="Platforms\Rakuten\Content\RakutenCombineOrderAction.cs" />
     <Compile Include="Platforms\Rakuten\Content\RakutenSplitOrderAction.cs" />
     <Compile Include="Platforms\Rakuten\CoreExtensions\Actions\RakutenShipmentUploadTask.cs" />
@@ -1089,7 +1092,6 @@
   <ItemGroup>
     <EmbeddedResource Include="Orders\Archive\GetArchiveTriggers.sql" />
   </ItemGroup>
-  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>

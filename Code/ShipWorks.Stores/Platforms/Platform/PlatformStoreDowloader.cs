@@ -1,25 +1,23 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Metrics;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Communication;
 
-namespace ShipWorks.Stores.Platforms.Api
+namespace ShipWorks.Stores.Platforms.Platform
 {
     /// <summary>
-    /// Basicly a no-op. API stores should only download from hub.
+    /// Basically a no-op. API stores should only download from hub.
     /// </summary>
     [KeyedComponent(typeof(IStoreDownloader), StoreTypeCode.Api)]
-    public class ApiStoreDowloader : StoreDownloader
+    [KeyedComponent(typeof(IStoreDownloader), StoreTypeCode.BrightpearlHub)]
+    public class PlatformStoreDowloader : StoreDownloader
     {
         /// <summary>
         /// Constructor
         /// </summary>
-        public ApiStoreDowloader(StoreEntity store, IStoreTypeManager storeTypeManager)
+        public PlatformStoreDowloader(StoreEntity store, IStoreTypeManager storeTypeManager)
             : base(store, storeTypeManager.GetType(store))
         {
         }
@@ -29,7 +27,7 @@ namespace ShipWorks.Stores.Platforms.Api
         /// </summary>
         protected override Task Download(TrackedDurationEvent trackedDurationEvent)
         {
-            throw new NotImplementedException("API should only download via hub");
+            throw new NotImplementedException($"{StoreType} should only download via hub");
         }
     }
 }

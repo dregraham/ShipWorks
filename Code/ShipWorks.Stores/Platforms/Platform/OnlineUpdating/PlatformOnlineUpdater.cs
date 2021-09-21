@@ -1,28 +1,27 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using Interapptive.Shared.ComponentRegistration;
 using log4net;
-using SD.LLBLGen.Pro.QuerySpec;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping;
 using ShipWorks.Shipping.Carriers;
 using ShipWorks.Shipping.Carriers.Postal;
 using ShipWorks.Stores.Content;
+using ShipWorks.Stores.Platforms.Api;
 using ShipWorks.Warehouse.Orders;
 
-namespace ShipWorks.Stores.Platforms.Api.OnlineUpdating
+namespace ShipWorks.Stores.Platforms.Platform.OnlineUpdating
 {
     /// <summary>
-    /// Uploads shipment details to Api
+    /// Uploads shipment details to Platform
     /// </summary>
     [Component]
-    public class ApiOnlineUpdater : IApiOnlineUpdater
+    public class PlatformOnlineUpdater : IPlatformOnlineUpdater
     {
         // Logger
-        static readonly ILog log = LogManager.GetLogger(typeof(ApiOnlineUpdater));
+        static readonly ILog log = LogManager.GetLogger(typeof(PlatformOnlineUpdater));
         private readonly IOrderManager orderManager;
         private readonly IShippingManager shippingManager;
         private readonly ISqlAdapterFactory sqlAdapterFactory;
@@ -31,7 +30,7 @@ namespace ShipWorks.Stores.Platforms.Api.OnlineUpdating
         /// <summary>
         /// Constructor
         /// </summary>
-        public ApiOnlineUpdater(IOrderManager orderManager, IShippingManager shippingManager,
+        public PlatformOnlineUpdater(IOrderManager orderManager, IShippingManager shippingManager,
             ISqlAdapterFactory sqlAdapterFactory, Func<IWarehouseOrderClient> createWarehouseOrderClient)
         {
             this.sqlAdapterFactory = sqlAdapterFactory;
@@ -115,7 +114,7 @@ namespace ShipWorks.Stores.Platforms.Api.OnlineUpdating
                 await shippingManager.EnsureShipmentLoadedAsync(shipment).ConfigureAwait(false);
                 string carrier = GetCarrierName(shipment);
                 var result = await client.NotifyShipped(shipment.Order.ChannelOrderID, shipment.TrackingNumber, carrier).ConfigureAwait(false);
-                result.OnFailure(ex => throw new ApiStoreException($"Error uploading shipment details: {ex.Message}", ex));
+                result.OnFailure(ex => throw new PlatformStoreException($"Error uploading shipment details: {ex.Message}", ex));
             }            
         }
 

@@ -1,13 +1,12 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
-using ShipWorks.Data.Model.EntityClasses;
 
-namespace ShipWorks.Stores.Platforms.Api.OnlineUpdating
+namespace ShipWorks.Stores.Platforms.Platform.OnlineUpdating
 {
     /// <summary>
-    /// Uploads shipment details to Api
+    /// Uploads shipment details to Platform
     /// </summary>
-    public interface IApiOnlineUpdater
+    public interface IPlatformOnlineUpdater
     {
         /// <summary>
         /// Update the online status of the given order
