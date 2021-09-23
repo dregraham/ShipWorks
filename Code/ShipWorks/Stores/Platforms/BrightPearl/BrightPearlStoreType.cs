@@ -62,5 +62,10 @@ namespace ShipWorks.Stores.Platforms.Brightpearl
         /// Gets the help URL to use in the setup wizard.
         /// </summary>
         public override string AccountSettingsHelpUrl => "https://shipworks.zendesk.com/hc/en-us/articles/360022464952";
+
+        /// <summary>
+        /// Can only add Brightpearl in the hub
+        /// </summary>
+        public override bool CanAddStoreType => false;
     }
 }

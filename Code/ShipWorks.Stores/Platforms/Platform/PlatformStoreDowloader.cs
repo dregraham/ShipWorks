@@ -27,7 +27,7 @@ namespace ShipWorks.Stores.Platforms.Platform
         /// </summary>
         protected override Task Download(TrackedDurationEvent trackedDurationEvent)
         {
-            throw new NotImplementedException($"{StoreType} should only download via hub");
+            throw new DownloadException($"{StoreType} should only download via hub");
         }
     }
 }

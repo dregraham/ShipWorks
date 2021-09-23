@@ -18,6 +18,7 @@ namespace ShipWorks.Stores.UI.Platforms.Api
     /// Control for setting up an API Account (currently, directs user to the hub)
     /// </summary>
     [KeyedComponent(typeof(AccountSettingsControlBase), StoreTypeCode.Api, ExternallyOwned = true)]
+    [KeyedComponent(typeof(AccountSettingsControlBase), StoreTypeCode.BrightpearlHub, ExternallyOwned = true)]
     public partial class ApiAccountSettingsControl : AccountSettingsControlBase
     {
         private readonly WebClientEnvironmentFactory webClientEnvironmentFactory;
