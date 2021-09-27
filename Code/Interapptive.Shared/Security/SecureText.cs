@@ -78,7 +78,11 @@ namespace Interapptive.Shared.Security
                 var plaintext = DecryptWithAesGcm(encryptedText, decryptedKey);
                 log.Info("Finished decrypting text");
 
-                return Encoding.UTF8.GetString(plaintext);
+                var decryptedText = Encoding.UTF8.GetString(plaintext);
+
+                log.Info("Finished building decrypted text string");
+
+                return decryptedText;
             }
             // OverflowException is thrown when the encrypted text is too short
             catch (Exception e) when (e is OverflowException || e is InvalidCipherTextException)
@@ -214,7 +218,11 @@ namespace Interapptive.Shared.Security
             // The last 16 bytes are the salt
             Buffer.BlockCopy(salt, 0, encryptedBytes, encryptedKey.Length + encryptedText.Length, salt.Length);
 
-            return Convert.ToBase64String(encryptedBytes);
+            var fullyEncrypted = Convert.ToBase64String(encryptedBytes);
+
+            log.Info("Finished building encrypted string");
+
+            return fullyEncrypted;
         }
 
         /// <summary>
