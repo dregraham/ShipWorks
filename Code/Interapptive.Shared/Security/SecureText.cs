@@ -42,25 +42,34 @@ namespace Interapptive.Shared.Security
 
             if (ciphertext == null)
             {
+                log.Info("Cipher text was null");
                 throw new ArgumentNullException("cipher");
             }
 
             if (password == null)
             {
+                log.Info("Password was null");
                 throw new ArgumentNullException("salt");
             }
 
             if (ciphertext.Length == 0)
             {
+                log.Info("Cipher text was empty. Returning empty string");
                 return string.Empty;
             }
 
             try
             {
+                log.Info("Converting cipher text from base64");
                 var encryptedBytes = Convert.FromBase64String(ciphertext);
 
+                log.Info("Getting encrypted key");
                 var encryptedKey = encryptedBytes.Take(EncryptedKeyLength).ToArray();
+
+                log.Info("Getting encrypted text");
                 var encryptedText = encryptedBytes.Skip(EncryptedKeyLength).Take(encryptedBytes.Length - EncryptedKeyLength - SaltLength).ToArray();
+
+                log.Info("Getting salt");
                 var salt = encryptedBytes.Skip(EncryptedKeyLength + encryptedText.Length).Take(SaltLength).ToArray();
 
                 // Derive the key used to encrypt the aesKey using the salt and the password
