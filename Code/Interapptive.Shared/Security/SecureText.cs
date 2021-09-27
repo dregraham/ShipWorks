@@ -38,6 +38,8 @@ namespace Interapptive.Shared.Security
         /// </summary>
         public static string Decrypt(string ciphertext, string password)
         {
+            log.Info("Beginning decryption");
+
             if (ciphertext == null)
             {
                 throw new ArgumentNullException("cipher");
@@ -62,13 +64,19 @@ namespace Interapptive.Shared.Security
                 var salt = encryptedBytes.Skip(EncryptedKeyLength + encryptedText.Length).Take(SaltLength).ToArray();
 
                 // Derive the key used to encrypt the aesKey using the salt and the password
+                log.Info("Deriving key");
                 var derivedKey = SCrypt.Generate(Encoding.UTF8.GetBytes(password), salt, SCryptIterations, SCryptBlockSize, SCryptParallelismFactor, AESKeyLength);
+                log.Info("Finished deriving key");
 
                 // Decrypt the aesKey with the derived key
+                log.Info("Decrypting key");
                 var decryptedKey = DecryptWithAesGcm(encryptedKey, derivedKey);
+                log.Info("Finished decrypting key");
 
                 // Decrypt the encrypted text with the decrypted aesKey
+                log.Info("Decrypting text");
                 var plaintext = DecryptWithAesGcm(encryptedText, decryptedKey);
+                log.Info("Finished decrypting text");
 
                 return Encoding.UTF8.GetString(plaintext);
             }
@@ -160,6 +168,8 @@ namespace Interapptive.Shared.Security
         /// </summary>
         public static string Encrypt(string plaintext, string password)
         {
+            log.Info("Beginning encryption");
+
             if (plaintext == null)
             {
                 throw new ArgumentNullException("plaintext");
@@ -175,17 +185,23 @@ namespace Interapptive.Shared.Security
             new SecureRandom().NextBytes(salt);
 
             // Derive a key from the salt and password that will be used to encrypt the aesKey
+            log.Info("Deriving key");
             var derivedKey = SCrypt.Generate(Encoding.UTF8.GetBytes(password), salt, SCryptIterations, SCryptBlockSize, SCryptParallelismFactor, AESKeyLength);
+            log.Info("Finished deriving key");
 
             // Generate a random key that will be used to encrypt the plaintext
             var aesKey = new byte[AESKeyLength];
             new SecureRandom().NextBytes(aesKey);
 
             // Encrypt the aesKey with the derivedKey in order to save it with the encrypted text
+            log.Info("Encrypting key");
             var encryptedKey = EncryptWithAesGcm(aesKey, derivedKey);
+            log.Info("Finished encrypting key");
 
             // Encrypt the plaintext with the randomly generated aesKey
+            log.Info("Encrypting text");
             var encryptedText = EncryptWithAesGcm(Encoding.UTF8.GetBytes(plaintext), aesKey);
+            log.Info("Finished encrypting text");
 
             var encryptedBytes = new byte[encryptedKey.Length + encryptedText.Length + salt.Length];
 
