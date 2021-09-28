@@ -36,17 +36,20 @@ namespace ShipWorks.Stores.Warehouse
             AmazonStoreEntity storeEntity = baseStoreEntity as AmazonStoreEntity;
             AmazonStore store = helpers.PopulateCommonData(storeEntity, new AmazonStore());
 
-            store.MerchantID = storeEntity.MerchantID;
-            store.MarketplaceID = storeEntity.MarketplaceID;
-            store.Region = storeEntity.AmazonApiRegion;
-            store.ExcludeFBA = storeEntity.ExcludeFBA;
-            store.AmazonVATS = storeEntity.AmazonVATS;
-            var downloadStartDate = await downloadStartingPoint.OnlineLastModified(storeEntity)
-                .ConfigureAwait(false);
+            if (storeEntity != null)
+            {
+                store.MerchantID = storeEntity.MerchantID;
+                store.MarketplaceID = storeEntity.MarketplaceID;
+                store.Region = storeEntity.AmazonApiRegion;
+                store.ExcludeFBA = storeEntity.ExcludeFBA;
+                store.AmazonVATS = storeEntity.AmazonVATS;
+                var downloadStartDate = await downloadStartingPoint.OnlineLastModified(storeEntity)
+                    .ConfigureAwait(false);
 
-            store.DownloadStartDate = helpers.GetUnixTimestampMillis(downloadStartDate);
-            store.AuthToken = await helpers.EncryptSecret(storeEntity.AuthToken)
-                                .ConfigureAwait(false);
+                store.DownloadStartDate = helpers.GetUnixTimestampMillis(downloadStartDate);
+                store.AuthToken = await helpers.EncryptSecret(storeEntity.AuthToken)
+                    .ConfigureAwait(false);
+            }
 
             return store;
         }

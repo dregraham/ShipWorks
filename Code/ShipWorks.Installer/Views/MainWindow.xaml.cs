@@ -20,7 +20,7 @@ namespace ShipWorks.Installer.Views
                 App.ServiceProvider.GetService(typeof(INavigationService<NavigationPageType>)) as
                     INavigationService<NavigationPageType>;
 
-            navService.NavigateTo(NavigationPageType.SystemCheck);
+            navService?.NavigateTo(NavigationPageType.SystemCheck);
         }
 
         /// <summary>
@@ -34,7 +34,7 @@ namespace ShipWorks.Installer.Views
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
             var viewModel = this.DataContext as MainViewModel;
-            if (!viewModel.IsClosing)
+            if (viewModel != null && !viewModel.IsClosing)
             {
                 e.Cancel = !viewModel.Close(true);
             }

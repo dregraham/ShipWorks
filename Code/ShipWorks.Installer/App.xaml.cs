@@ -83,9 +83,12 @@ namespace ShipWorks.Installer
                 .Where(t => (t.BaseType == typeof(InstallerViewModelBase) ||
                              t.BaseType == typeof(ViewModelBase)) &&
                             t != typeof(InstallerViewModelBase));
-            foreach (var vm in viewModelsToAdd)
+            if (viewModelsToAdd != null)
             {
-                services.AddSingleton(vm);
+                foreach (var vm in viewModelsToAdd)
+                {
+                    services.AddSingleton(vm);
+                }
             }
 
             // Register all the Windows of the applications.
