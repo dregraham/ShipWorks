@@ -9,8 +9,11 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Net;
+using Interapptive.Shared.Utility;
 using ShipWorks.ApplicationCore.Licensing.WebClientEnvironments;
+using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Management;
+using ShipWorks.Stores.Platforms.SparkPay.DTO;
 
 namespace ShipWorks.Stores.UI.Platforms.Api
 {
@@ -22,6 +25,7 @@ namespace ShipWorks.Stores.UI.Platforms.Api
     public partial class ApiAccountSettingsControl : AccountSettingsControlBase
     {
         private readonly WebClientEnvironmentFactory webClientEnvironmentFactory;
+        private StoreEntity store;
 
         /// <summary>
         /// Constructor
@@ -32,6 +36,13 @@ namespace ShipWorks.Stores.UI.Platforms.Api
             this.webClientEnvironmentFactory = webClientEnvironmentFactory;
         }
 
+        public override void LoadStore(StoreEntity store)
+        {
+            base.LoadStore(store);
+            this.store = store;
+            SettingsLabel.Text = $"To update {EnumHelper.GetDescription(store.StoreTypeCode)} store settings, go to https://hub.shipworks.com.";
+        }
+
         /// <summary>
         /// Open the hub homepage
         /// </summary>
@@ -39,7 +50,7 @@ namespace ShipWorks.Stores.UI.Platforms.Api
         {
             string url = webClientEnvironmentFactory.SelectedEnvironment.WarehouseUrl;
             var builder = new UriBuilder(url);
-            builder.Path = "/apiSettings";
+            builder.Path = store.StoreTypeCode == StoreTypeCode.Api ? "/apiSettings" : "/settings";
             WebHelper.OpenUrl(builder.Uri, this);
         }
 
