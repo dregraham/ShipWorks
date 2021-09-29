@@ -139,7 +139,7 @@ namespace ShipWorks.Templates.Management
 
             template.Name = templateName;
             template.ParentFolder = treeControl.SelectedTemplateTreeNode.Folder;
-            template.TemplateTree = template.ParentFolder.TemplateTree;
+            template.TemplateTree = template.ParentFolder?.TemplateTree;
         }
 
         /// <summary>

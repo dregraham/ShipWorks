@@ -442,8 +442,11 @@ namespace ShipWorks.Shipping.Carriers.Postal
         {
             // Update the available confirmation types based on the shipping provider
             PostalShipmentType postalShipmentType = ShipmentTypeManager.GetType(ShipmentTypeCode) as PostalShipmentType;
-            UpdateConfirmationTypes(postalShipmentType.GetAvailableConfirmationTypes(personControl.CountryCode,
-                serviceType, (PostalPackagingType?) packagingType.SelectedValue));
+            if (postalShipmentType != null)
+            {
+                UpdateConfirmationTypes(postalShipmentType.GetAvailableConfirmationTypes(personControl.CountryCode,
+                    serviceType, (PostalPackagingType?) packagingType.SelectedValue));
+            }
         }
 
         /// <summary>
@@ -504,8 +507,11 @@ namespace ShipWorks.Shipping.Carriers.Postal
         {
             PostalRateSelection rate = e.Rate.OriginalTag as PostalRateSelection;
 
-            service.SelectedValue = rate.ServiceType;
-            UpdateConfirmationTypes(rate.ServiceType);
+            if (rate != null)
+            {
+                service.SelectedValue = rate.ServiceType;
+                UpdateConfirmationTypes(rate.ServiceType);
+            }
 
             confirmation.SelectedIndexChanged -= OnConfirmationChanged;
             if (confirmation.SelectedIndex == -1)

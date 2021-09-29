@@ -426,7 +426,7 @@ namespace ShipWorks.Stores.Platforms.Amazon
         /// up via Amazon MWS</exception>
         public async Task<string> GetDomainName()
         {
-            AmazonStoreEntity amazonStore = Store as AmazonStoreEntity;
+            AmazonStoreEntity amazonStore = (AmazonStoreEntity) Store;
 
             if (string.IsNullOrWhiteSpace(amazonStore.DomainName))
             {

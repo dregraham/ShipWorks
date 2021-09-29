@@ -258,7 +258,7 @@ namespace ShipWorks.Templates.Emailing
                     string plainContent = null;
 
                     // If the results are saved as HTML, we have to do all our html processing
-                    if (processHtml)
+                    if (processHtml && htmlControl != null)
                     {
                         htmlControl.Html = TemplateResultFormatter.FormatHtml(
                             templateResults,

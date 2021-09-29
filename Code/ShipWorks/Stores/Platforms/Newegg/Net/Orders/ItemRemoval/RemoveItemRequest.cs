@@ -97,7 +97,7 @@ namespace ShipWorks.Stores.Platforms.Newegg.Net.Orders.ItemRemoval
             }
 
             // There weren't any response errors, so the result in the response is an ItemRemovalResult
-            ItemRemovalResult removalResult = removalResponse.Result as ItemRemovalResult;
+            ItemRemovalResult removalResult = (ItemRemovalResult) removalResponse.Result;
 
             // There's one last check we should make to ensure the items were removed successfully (another
             // case where this API method is a little odd and deviates from the other methods)

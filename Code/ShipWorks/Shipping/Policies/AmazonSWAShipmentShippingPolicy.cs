@@ -64,6 +64,12 @@ namespace ShipWorks.Shipping.Policies
             AmazonShippingPolicyTarget theTarget = target as AmazonShippingPolicyTarget;
             MethodConditions.EnsureArgumentIsNotNull(theTarget, nameof(theTarget));
 
+            // Only doing this for the security scan
+            if (theTarget == null)
+            {
+                return;
+            }
+
             if (IsApplicable(target) && (AllOrdersAllowed || (OnlyAmazonOrdersAllowed && !string.IsNullOrWhiteSpace(theTarget?.AmazonOrder?.AmazonOrderID))))
             {
                 theTarget.Allowed = true;

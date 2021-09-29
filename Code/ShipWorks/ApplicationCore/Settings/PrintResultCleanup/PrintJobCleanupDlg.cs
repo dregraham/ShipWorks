@@ -221,7 +221,7 @@ namespace ShipWorks.ApplicationCore.Settings.PrintResultCleanup
 
             // cleanup
             BackgroundWorker worker = sender as BackgroundWorker;
-            worker.Dispose();
+            worker?.Dispose();
         }
 
         #endregion
@@ -307,11 +307,14 @@ namespace ShipWorks.ApplicationCore.Settings.PrintResultCleanup
         {
             object[] result = e.Result as object[];
 
-            DisplayEstimatedBytesFreed((DateTime) result[1], (long) result[0]);
+            if (result != null)
+            {
+                DisplayEstimatedBytesFreed((DateTime) result[1], (long) result[0]);
+            }
 
             // cleanup
             BackgroundWorker worker = sender as BackgroundWorker;
-            worker.Dispose();
+            worker?.Dispose();
         }
 
         /// <summary>

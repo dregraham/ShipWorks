@@ -239,7 +239,7 @@ namespace ShipWorks.Templates.Management
             contextMenuSnippets.Items.Clear();
 
             // Use the known editable tree of the template we are editing
-            TemplateTree templateTree = template.TemplateTree as TemplateTree;
+            TemplateTree templateTree = (TemplateTree) template.TemplateTree;
 
             TemplateFolderEntity snippetFolder = templateTree.GetFolder(TemplateBuiltinFolders.SnippetsFolderID);
             if (snippetFolder != null)

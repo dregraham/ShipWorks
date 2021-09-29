@@ -26,51 +26,58 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Tracking.Response.Manipulators
             TrackReply reply = carrierResponse.NativeResponse as TrackReply;
             TrackingResult result = new TrackingResult();
             FedExTrackingResponse trackingResponse = carrierResponse as FedExTrackingResponse;
-            shipment = trackingResponse.Shipment;
-
-            if (reply.HighestSeverity == NotificationSeverityType.ERROR || reply.HighestSeverity == NotificationSeverityType.FAILURE)
+            if (trackingResponse != null)
             {
-                throw new FedExApiCarrierException(reply.Notifications);
-            }
+                shipment = trackingResponse.Shipment;
 
-            if (reply.CompletedTrackDetails == null || reply.CompletedTrackDetails.Length == 0 || reply.CompletedTrackDetails[0].TrackDetails == null || reply.CompletedTrackDetails[0].TrackDetails.Length == 0)
-            {
-                result.Summary = "Unknown";
-                trackingResponse.TrackingResult = result;
-                return;
-            }
-
-            // Hardcode to use the first one
-            CompletedTrackDetail detail = reply.CompletedTrackDetails[0];
-
-            if (reply.CompletedTrackDetails.Length > 1)
-            {
-                log.InfoFormat("Ignoring additional TrackDetails records (Total of {0})", reply.CompletedTrackDetails.Length);
-            }
-
-            TrackDetail trackDetail = detail.TrackDetails[0];
-
-            result.Summary = GetTrackingSummary(trackDetail);
-
-            if (trackDetail.Events != null)
-            {
-                foreach (TrackEvent trackEvent in trackDetail.Events)
+                if (reply.HighestSeverity == NotificationSeverityType.ERROR ||
+                    reply.HighestSeverity == NotificationSeverityType.FAILURE)
                 {
-                    TrackingResultDetail resultDetail = new TrackingResultDetail();
-                    resultDetail.Activity = GetTrackEventActivity(trackEvent);
-                    resultDetail.Location = GetTrackEventLocation(trackEvent);
-
-                    if (trackEvent.TimestampSpecified)
-                    {
-                        resultDetail.Date = trackEvent.Timestamp.ToString("M/dd/yyy");
-                        resultDetail.Time = trackEvent.Timestamp.ToString("h:mm tt");
-                    }
-
-                    result.Details.Add(resultDetail);
+                    throw new FedExApiCarrierException(reply.Notifications);
                 }
-            }
 
-            trackingResponse.TrackingResult = result;
+                if (reply.CompletedTrackDetails == null || reply.CompletedTrackDetails.Length == 0 ||
+                    reply.CompletedTrackDetails[0].TrackDetails == null ||
+                    reply.CompletedTrackDetails[0].TrackDetails.Length == 0)
+                {
+                    result.Summary = "Unknown";
+                    trackingResponse.TrackingResult = result;
+                    return;
+                }
+
+                // Hardcode to use the first one
+                CompletedTrackDetail detail = reply.CompletedTrackDetails[0];
+
+                if (reply.CompletedTrackDetails.Length > 1)
+                {
+                    log.InfoFormat("Ignoring additional TrackDetails records (Total of {0})",
+                        reply.CompletedTrackDetails.Length);
+                }
+
+                TrackDetail trackDetail = detail.TrackDetails[0];
+
+                result.Summary = GetTrackingSummary(trackDetail);
+
+                if (trackDetail.Events != null)
+                {
+                    foreach (TrackEvent trackEvent in trackDetail.Events)
+                    {
+                        TrackingResultDetail resultDetail = new TrackingResultDetail();
+                        resultDetail.Activity = GetTrackEventActivity(trackEvent);
+                        resultDetail.Location = GetTrackEventLocation(trackEvent);
+
+                        if (trackEvent.TimestampSpecified)
+                        {
+                            resultDetail.Date = trackEvent.Timestamp.ToString("M/dd/yyy");
+                            resultDetail.Time = trackEvent.Timestamp.ToString("h:mm tt");
+                        }
+
+                        result.Details.Add(resultDetail);
+                    }
+                }
+
+                trackingResponse.TrackingResult = result;
+            }
         }
 
         /// <summary>

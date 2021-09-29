@@ -354,7 +354,8 @@ namespace ShipWorks.Stores.Platforms.Amazon
         private void AddOrderItemCharges(XPathNamespaceNavigator xpath, AmazonOrderEntity order)
         {
             // Charges
-            if ((Store as IAmazonStoreEntity)?.AmazonVATS != true)
+            var entity = Store as IAmazonStoreEntity;
+            if (entity != null && entity.AmazonVATS != true)
             {
                 decimal itemTax = XPathUtility.Evaluate(xpath, "amz:ItemTax/amz:Amount", 0M);
                 AddToCharge(order, "Tax", "Tax", itemTax);

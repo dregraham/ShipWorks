@@ -70,10 +70,10 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
             //Get all header rates
             foreach (RateResult headerRate in mergedRates.Where(rate => !rate.Selectable))
             {
-                PostalRateSelection headerRateTag = headerRate.Tag as PostalRateSelection;
+                PostalRateSelection headerRateTag = (PostalRateSelection) headerRate.Tag;
 
                 // Get the child rates of the header rate
-                IEnumerable<RateResult> childRates = mergedRates.Where(rate => rate.Selectable && (rate.Tag as PostalRateSelection).ServiceType == headerRateTag.ServiceType);
+                IEnumerable<RateResult> childRates = mergedRates.Where(rate => rate.Selectable && ((PostalRateSelection) rate.Tag).ServiceType == headerRateTag.ServiceType);
 
                 // If all the child rates are not USPS
                 if (childRates.All(childRate => childRate.ShipmentType != ShipmentTypeCode.Usps))
@@ -81,7 +81,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
                     // Find the corresponding express1 header rate
                     RateResult expres1HeaderRateResult = express1Rates.Rates
                         .SingleOrDefault(express1Rate => !express1Rate.Selectable &&
-                            (express1Rate.Tag as PostalRateSelection).ServiceType == headerRateTag.ServiceType);
+                            ((PostalRateSelection) express1Rate.Tag).ServiceType == headerRateTag.ServiceType);
 
                     //If found, use that logo
                     if (expres1HeaderRateResult != null)
