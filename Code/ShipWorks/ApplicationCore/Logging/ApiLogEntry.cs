@@ -461,11 +461,6 @@ namespace ShipWorks.ApplicationCore.Logging
             EnsureLogNumber();
 
             string sourceName = source.ToString();
-            if (LogSession.IsApiLogSourceEncrypted(source))
-            {
-                // Replace slashes with ! to make valid path
-                sourceName = SecureText.Encrypt(sourceName, "shipworks").Replace('/', '!');
-            }
 
             string logpath = Path.Combine(LogSession.LogFolder, sourceName);
 
@@ -495,12 +490,6 @@ namespace ShipWorks.ApplicationCore.Logging
             string filename = string.Format("{0:0000} - {1}",
                 lognumber,
                 logname);
-
-            if (LogSession.IsApiLogSourceEncrypted(source))
-            {
-                // Replace slashes with ! to make valid path
-                filename = SecureText.Encrypt(filename, "shipworks").Replace('/', '!');
-            }
 
             string logfile = Path.Combine(logpath, filename);
 

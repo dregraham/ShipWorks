@@ -30,7 +30,7 @@ namespace ShipWorks.Data.Model.EntityInterfaces
         /// <summary> The TrackingUpdatePassword property of the Entity YahooStore<br/><br/>
         /// </summary>
         /// <remarks>Mapped on table field: "YahooStore"."TrackingUpdatePassword"<br/>
-        /// Table field type characteristics (type, precision, scale, length): VarChar, 0, 0, 100<br/>
+        /// Table field type characteristics (type, precision, scale, length): VarChar, 0, 0, 400<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
         System.String TrackingUpdatePassword { get; }
         /// <summary> The YahooStoreID property of the Entity YahooStore<br/><br/>
