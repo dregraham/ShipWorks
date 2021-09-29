@@ -1,5 +1,4 @@
 using System;
-using System.Linq;
 using Interapptive.Shared.Security;
 using Xunit;
 
@@ -20,6 +19,19 @@ namespace ShipWorks.Tests.Core
             string decrypted = SecureText.Decrypt(encrypted, salt);
 
             Assert.Equal(original, decrypted);
+        }
+
+        [Fact]
+        public void KeyCache_IsUnique_BetweenVersions()
+        {
+            var latestVersionEncrypted = SecureText.Encrypt("Some text", "salt");
+
+            var latestVersionDecrypted = SecureText.Decrypt(latestVersionEncrypted, "salt");
+
+            var version0Decrypted = SecureText.Decrypt("c6eW7VwJSF/sDIL93MhX6F0AR9VvouNC7mp9sdUvMYe7aimUcExSQvSlh0Rcm81OqVC+HRr67G945a7ugtsHZqfYXynzGpQwNSF86p5RjfuKDA67Doz3hRDjnv4MUWqw6vlyBqJztgqW2m4jHY5izMUSGY7w/NSJzw==", "salt");
+
+            Assert.Equal("Some text", latestVersionDecrypted);
+            Assert.Equal("String to Encrypt", version0Decrypted);
         }
 
         [Fact]

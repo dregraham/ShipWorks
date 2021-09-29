@@ -14,6 +14,11 @@ namespace Interapptive.Shared.Security.SecureTextVersions
     /// </summary>
     public abstract class SecureTextBase
     {
+        /// <summary>
+        /// Prefix to make the keys in the cache unique between versions
+        /// </summary>
+        protected abstract string KeyCachePrefix { get; }
+
         protected static Dictionary<string, byte[]> keyCache = new Dictionary<string, byte[]>();
 
         protected readonly ILog log;
@@ -61,7 +66,9 @@ namespace Interapptive.Shared.Security.SecureTextVersions
         /// </summary>
         protected byte[] GetKey(string password, byte[] salt, int iterations, int blockSize, int parallelismFactor, int keyLength)
         {
-            if (keyCache.TryGetValue(password, out byte[] key))
+            var cacheIndex = $"{KeyCachePrefix}-password";
+
+            if (keyCache.TryGetValue(cacheIndex, out byte[] key))
             {
                 log.Info("Found key in cache");
                 return key;
@@ -72,7 +79,7 @@ namespace Interapptive.Shared.Security.SecureTextVersions
             var derivedKey = SCrypt.Generate(Encoding.UTF8.GetBytes(password), salt, iterations, blockSize, parallelismFactor, keyLength);
             log.Info("Finished deriving key");
 
-            keyCache.Add(password, derivedKey);
+            keyCache.Add(cacheIndex, derivedKey);
 
             return derivedKey;
         }

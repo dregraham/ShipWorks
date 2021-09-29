@@ -24,6 +24,8 @@ namespace Interapptive.Shared.Security.SecureTextVersions
         private const int SCryptBlockSize = 8;
         private const int SCryptParallelismFactor = 1;
 
+        protected override string KeyCachePrefix => "V0";
+
         /// <summary>
         /// Constructor
         /// </summary>
