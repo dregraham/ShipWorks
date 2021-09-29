@@ -78,5 +78,11 @@ namespace ShipWorks.Shipping.Services
         /// </summary>
         [Obfuscation(Exclude = true)]
         decimal UnitPriceAmount { get; set; }
+
+        /// <summary>
+        /// The tax identifier
+        /// </summary>
+        [Obfuscation(Exclude = true)]
+        string TaxId { get; set; }
     }
 }

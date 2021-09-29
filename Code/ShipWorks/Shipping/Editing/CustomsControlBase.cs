@@ -55,6 +55,7 @@ namespace ShipWorks.Shipping.Editing
         public CustomsControlBase()
         {
             InitializeComponent();
+            LoadTaxIds();
         }
 
         /// <summary>
@@ -74,6 +75,13 @@ namespace ShipWorks.Shipping.Editing
         /// The enable editing value last past to LoadShipments
         /// </summary>
         protected bool EnableEditing => enableEditing;
+
+        private void LoadTaxIds()
+        {
+            //where we fetch taxids from settings 
+            //for each setting 
+            ///taxId.Items.Add()
+        }
 
         /// <summary>
         /// Load the given shipments customs information into the control and resets the selection
@@ -638,6 +646,14 @@ namespace ShipWorks.Shipping.Editing
         /// Some aspect of the shipment that affects ShipSense has changed
         /// </summary>
         private void OnShipSenseFieldChanged(object sender, EventArgs e)
+        {
+            RaiseShipSenseFieldChanged();
+        }
+
+        /// <summary>
+        /// Some aspect of the shipment that affects ShipSense has changed
+        /// </summary>
+        private void OnTaxIdFieldChanged(object sender, EventArgs e)
         {
             RaiseShipSenseFieldChanged();
         }
