@@ -48,6 +48,24 @@
                 </i:Interaction.Behaviors>
             </TextBox>
         </Grid>
+        <Grid Style="{StaticResource Expander.Content.Section}">
+            <Grid.Resources>
+                <Style TargetType="TextBlock" BasedOn="{StaticResource Grid.TextBlock.Label}" />
+                <Style TargetType="TextBox" BasedOn="{StaticResource Grid.TextBox.Default}" />
+            </Grid.Resources>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+
+            <TextBlock Grid.Row="5" Grid.Column="0">TaxID:</TextBlock>
+            <ComboBox Grid.Row="5" Grid.Column="1"
+                      x:Name="TaxIdComboBox"
+                      DisplayMemberPath="Key"
+                      SelectedValuePath="Value"
+                      SelectedValue="{Binding SelectedCustomsItem.TaxId}"
+                      ItemsSource="{Binding}" SelectionChanged="TaxIdComboBox_SelectionChanged"></ComboBox>
+        </Grid>
 
         <TextBlock Style="{StaticResource TextBlock.SectionHeader}">Contents</TextBlock>
 
