@@ -2683,6 +2683,7 @@
           <Field Name="IncludeReturn" Type="bool" FieldIndex="74" />
           <Field Name="Insurance" Type="bool" FieldIndex="60" />
           <Field Name="InsuranceProvider" Type="int" FieldIndex="61" />
+          <Field Name="IossTaxId" Type="string" IsOptional="true" MaxLength="25" FieldIndex="80" />
           <Field Name="LoggedShippedToHub" Type="bool" IsOptional="true" FieldIndex="77" />
           <Field Name="LoggedVoidToHub" Type="bool" IsOptional="true" FieldIndex="78" />
           <Field Name="OnlineShipmentID" Type="string" MaxLength="128" FieldIndex="70" />
@@ -4699,7 +4700,7 @@
       <Catalogs>
         <Catalog Name="ShipWorksLocal">
           <Schemas>
-            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2021-09-20T15:47:29.9086061Z">
+            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2021-09-30T15:59:58.4668196Z">
               <Tables>
                 <Table Name="Action">
                   <PkConstraintName Name="PK_Action" />
@@ -8632,6 +8633,7 @@
                     <Field Name="LoggedShippedToHub" Ordinal="78" IsOptional="true" DbType="2" />
                     <Field Name="LoggedVoidToHub" Ordinal="79" IsOptional="true" DbType="2" />
                     <Field Name="CarrierAccount" Ordinal="80" IsOptional="true" DbType="12" Length="25" />
+                    <Field Name="IossTaxId" Ordinal="81" IsOptional="true" DbType="12" Length="25" />
                   </Fields>
                 </Table>
                 <Table Name="ShipmentCustomsItem">
@@ -13724,6 +13726,7 @@
             <FieldMapping FieldName="IncludeReturn" TargetFieldName="IncludeReturn" />
             <FieldMapping FieldName="Insurance" TargetFieldName="Insurance" />
             <FieldMapping FieldName="InsuranceProvider" TargetFieldName="InsuranceProvider" />
+            <FieldMapping FieldName="IossTaxId" TargetFieldName="IossTaxId" />
             <FieldMapping FieldName="LoggedShippedToHub" TargetFieldName="LoggedShippedToHub" />
             <FieldMapping FieldName="LoggedVoidToHub" TargetFieldName="LoggedVoidToHub" />
             <FieldMapping FieldName="OnlineShipmentID" TargetFieldName="OnlineShipmentID" />
