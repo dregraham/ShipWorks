@@ -3102,6 +3102,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 			this.AddElementFieldInfo("ShipmentEntity", "LoggedShippedToHub", typeof(Nullable<System.Boolean>), false, false, false, true,  (int)ShipmentFieldIndex.LoggedShippedToHub, 0, 0, 0);
 			this.AddElementFieldInfo("ShipmentEntity", "LoggedVoidToHub", typeof(Nullable<System.Boolean>), false, false, false, true,  (int)ShipmentFieldIndex.LoggedVoidToHub, 0, 0, 0);
 			this.AddElementFieldInfo("ShipmentEntity", "CarrierAccount", typeof(System.String), false, false, false, true,  (int)ShipmentFieldIndex.CarrierAccount, 25, 0, 0);
+			this.AddElementFieldInfo("ShipmentEntity", "IossTaxId", typeof(System.String), false, false, false, true,  (int)ShipmentFieldIndex.IossTaxId, 25, 0, 0);
 		}
 		/// <summary>Inits ShipmentCustomsItemEntity's FieldInfo objects</summary>
 		private void InitShipmentCustomsItemEntityInfos()

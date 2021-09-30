@@ -11542,6 +11542,8 @@ namespace ShipWorks.Data.Model
 		LoggedVoidToHub,
 		///<summary>CarrierAccount. </summary>
 		CarrierAccount,
+		///<summary>IossTaxId. </summary>
+		IossTaxId,
 		/// <summary></summary>
 		AmountOfFields
 	}

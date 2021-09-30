@@ -4,7 +4,9 @@ using System.Diagnostics;
 using System.Drawing;
 using System.Globalization;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Windows.Forms;
+using Autofac;
 using Divelements.SandGrid;
 using Interapptive.Shared;
 using Interapptive.Shared.Business.Geography;
@@ -12,9 +14,13 @@ using Interapptive.Shared.Data;
 using Interapptive.Shared.UI;
 using log4net;
 using SD.LLBLGen.Pro.ORMSupportClasses;
+using ShipWorks.ApplicationCore;
+using ShipWorks.Data;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.UI.Controls;
+using ShipWorks.Warehouse.Configuration;
+using ShipWorks.Warehouse.Configuration.TaxIdentifiers.DTO;
 
 namespace ShipWorks.Shipping.Editing
 {
@@ -55,7 +61,6 @@ namespace ShipWorks.Shipping.Editing
         public CustomsControlBase()
         {
             InitializeComponent();
-            LoadTaxIds();
         }
 
         /// <summary>
@@ -63,7 +68,7 @@ namespace ShipWorks.Shipping.Editing
         /// </summary>
         public virtual void Initialize()
         {
-
+            LoadTaxIds();
         }
 
         /// <summary>
@@ -76,11 +81,31 @@ namespace ShipWorks.Shipping.Editing
         /// </summary>
         protected bool EnableEditing => enableEditing;
 
-        private void LoadTaxIds()
+        /// <summary>
+        /// Load The Tax Identifiers from the Hub.
+        /// </summary>
+        private async Task LoadTaxIds()
         {
-            //where we fetch taxids from settings 
-            //for each setting 
-            ///taxId.Items.Add()
+            List<TaxIdentifierConfiguration> taxIdentifiers;
+            using (var lifetimeScope = IoC.BeginLifetimeScope())
+            {
+                var configuration = lifetimeScope.Resolve<IConfigurationData>().FetchReadOnly();
+
+                if (!string.IsNullOrEmpty(configuration.WarehouseID))
+                {
+                    var hubConfig = await lifetimeScope.Resolve<IHubConfigurationWebClient>().GetConfig(configuration.WarehouseID).ConfigureAwait(false);
+                    taxIdentifiers = hubConfig.TaxIdentifierConfigurations;
+
+                    foreach (var item in taxIdentifiers)
+                    {
+                        taxId.Items.Add(new KeyValuePair<string, string>($"{item.Number} ({item.Description})", item.Number));
+                    }
+                } 
+                else
+                { 
+                    // TODO: implement disabling of dropdown.
+                }
+            }
         }
 
         /// <summary>

@@ -1,4 +1,5 @@
-﻿using System.Collections.ObjectModel;
+﻿using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel.DataAnnotations;
 using System.Reflection;
 using GalaSoft.MvvmLight.CommandWpf;
@@ -55,6 +56,19 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ShipmentControl
 
                 // Finally update the shipment's total customs value.
                 shipmentAdapter.Shipment.CustomsValue = TotalCustomsValue;
+            }
+        }
+
+        /// <summary>
+        /// The list of Tax Identifiers from the Hub.
+        /// </summary>
+        [Obfuscation(Exclude = true)]
+        public List<KeyValuePair<string,string>> TaxIdentifiers
+        {
+            get
+            {
+                // Return a list
+                return new List<KeyValuePair<string, string>>();
             }
         }
 

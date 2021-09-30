@@ -83,7 +83,7 @@ namespace ShipWorks.Shipping.Editing
             this.sectionGeneral.Name = "sectionGeneral";
             this.sectionGeneral.SectionName = "General";
             this.sectionGeneral.SettingsKey = "{ce5a918e-a23f-40cf-8029-7c03753fc946}";
-            this.sectionGeneral.Size = new System.Drawing.Size(572, 65);
+            this.sectionGeneral.Size = new System.Drawing.Size(572, 130);
             this.sectionGeneral.TabIndex = 0;
             // 
             // label1

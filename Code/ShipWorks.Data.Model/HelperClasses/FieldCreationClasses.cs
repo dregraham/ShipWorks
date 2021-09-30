@@ -27067,6 +27067,11 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(ShipmentFieldIndex.CarrierAccount);}
 		}
+		/// <summary>Creates a new ShipmentEntity.IossTaxId field instance</summary>
+		public static EntityField2 IossTaxId
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ShipmentFieldIndex.IossTaxId);}
+		}
 	}
 
 	/// <summary>Field Creation Class for entity ShipmentCustomsItemEntity</summary>

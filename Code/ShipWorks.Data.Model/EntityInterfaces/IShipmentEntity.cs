@@ -501,6 +501,12 @@ namespace ShipWorks.Data.Model.EntityInterfaces
         /// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 25<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
         System.String CarrierAccount { get; }
+        /// <summary> The IossTaxId property of the Entity Shipment<br/><br/>
+        /// </summary>
+        /// <remarks>Mapped on table field: "Shipment"."IossTaxId"<br/>
+        /// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 25<br/>
+        /// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+        System.String IossTaxId { get; }
         
         IAmazonSFPShipmentEntity AmazonSFP { get; }
         IAmazonSWAShipmentEntity AmazonSWA { get; }

@@ -58,8 +58,8 @@
                 <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
 
-            <TextBlock Grid.Row="5" Grid.Column="0">TaxID:</TextBlock>
-            <ComboBox Grid.Row="5" Grid.Column="1"
+            <TextBlock Grid.Row="2" Grid.Column="0">TaxID:</TextBlock>
+            <ComboBox Grid.Row="2" Grid.Column="1"
                       x:Name="TaxIdComboBox"
                       DisplayMemberPath="Key"
                       SelectedValuePath="Value"
