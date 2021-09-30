@@ -483,7 +483,7 @@ namespace ShipWorks.Shipping.Tests.Services.Telemetry
             trackedDurationEventMock.Verify(x => x.AddProperty("Label.FedEx.Package.1.PackingDetailsCargoAircraftOnly", "True"));
             package.VerifyGet(x => x.PackingDetailsCargoAircraftOnly, Times.Once);
             trackedDurationEventMock.Verify(x => x.AddProperty("Label.FedEx.Package.1.PackingDetailsPackingInstructions", "PackingDetailsPackingInstructions"));
-            //trackedDurationEventMock.Verify(x => x.AddProperty("Label.FedEx.Package.1.DangerousGoodsAuthorization", "DangerousGoodAuthorization"));
+            trackedDurationEventMock.Verify(x => x.AddProperty($"Label.FedEx.Package.1.PackingDetailsDangerousGoodsAuthorization", "DangerousGoodsAuthorization"));
             trackedDurationEventMock.Verify(x => x.AddProperty("Label.FedEx.Package.1.PriorityAlert", "True"));
             package.VerifyGet(x => x.PriorityAlert, Times.Once);
             trackedDurationEventMock.Verify(x => x.AddProperty("Label.FedEx.Package.1.PriorityAlertDetailContent", "PriorityAlertDetailContent"));
