@@ -40,19 +40,12 @@ namespace Interapptive.Shared.Security.SecureTextVersions
         /// </summary>
         public override string Decrypt(string ciphertext, string password)
         {
-            log.Info("Converting cipher text from base64");
             var encryptedBytes = Convert.FromBase64String(ciphertext);
-
-            log.Info("Getting encrypted key");
             var encryptedKey = encryptedBytes.Take(EncryptedKeyLength).ToArray();
-
-            log.Info("Getting encrypted text");
             var encryptedText = encryptedBytes
                 .Skip(EncryptedKeyLength)
                 .Take(encryptedBytes.Length - EncryptedKeyLength - SaltLength)
                 .ToArray();
-
-            log.Info("Getting salt");
             var salt = encryptedBytes.Skip(EncryptedKeyLength + encryptedText.Length).Take(SaltLength).ToArray();
 
             // Derive the key used to encrypt the aesKey using the salt and the password
@@ -65,18 +58,14 @@ namespace Interapptive.Shared.Security.SecureTextVersions
                 AESKeyLength);
 
             // Decrypt the aesKey with the derived key
-            log.Info("Decrypting key");
             var decryptedKey = DecryptWithAesGcm(encryptedKey, derivedKey, NonceLength, TagLength);
-            log.Info("Finished decrypting key");
 
             // Decrypt the encrypted text with the decrypted aesKey
-            log.Info("Decrypting text");
             var plaintext = DecryptWithAesGcm(encryptedText, decryptedKey, NonceLength, TagLength);
-            log.Info("Finished decrypting text");
 
             var decryptedText = Encoding.UTF8.GetString(plaintext);
 
-            log.Info("Finished building decrypted text string");
+            log.Info("Finished decrypting");
 
             return decryptedText;
         }
@@ -104,14 +93,10 @@ namespace Interapptive.Shared.Security.SecureTextVersions
             new SecureRandom().NextBytes(aesKey);
 
             // Encrypt the aesKey with the derivedKey in order to save it with the encrypted text
-            log.Info("Encrypting key");
             var encryptedKey = EncryptWithAesGcm(aesKey, derivedKey);
-            log.Info("Finished encrypting key");
 
             // Encrypt the plaintext with the randomly generated aesKey
-            log.Info("Encrypting text");
             var encryptedText = EncryptWithAesGcm(Encoding.UTF8.GetBytes(plaintext), aesKey);
-            log.Info("Finished encrypting text");
 
             var encryptedBytes = new byte[encryptedKey.Length + encryptedText.Length + salt.Length];
 
@@ -129,7 +114,7 @@ namespace Interapptive.Shared.Security.SecureTextVersions
             // Add the version to the encrypted string
             fullyEncrypted += ":1";
 
-            log.Info("Finished building encrypted string");
+            log.Info("Finished encrypting");
 
             return fullyEncrypted;
         }

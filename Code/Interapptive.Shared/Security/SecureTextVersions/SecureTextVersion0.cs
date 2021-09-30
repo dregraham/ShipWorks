@@ -49,19 +49,12 @@ namespace Interapptive.Shared.Security.SecureTextVersions
             {
                 log.Info("Decrypting with RC2 failed. Trying AES-GCM");
 
-                log.Info("Converting cipher text from base64");
                 var encryptedBytes = Convert.FromBase64String(ciphertext);
-
-                log.Info("Getting encrypted key");
                 var encryptedKey = encryptedBytes.Take(EncryptedKeyLength).ToArray();
-
-                log.Info("Getting encrypted text");
                 var encryptedText = encryptedBytes
                     .Skip(EncryptedKeyLength)
                     .Take(encryptedBytes.Length - EncryptedKeyLength - SaltLength)
                     .ToArray();
-
-                log.Info("Getting salt");
                 var salt = encryptedBytes.Skip(EncryptedKeyLength + encryptedText.Length).Take(SaltLength).ToArray();
 
                 // Derive the key used to encrypt the aesKey using the salt and the password
@@ -74,18 +67,14 @@ namespace Interapptive.Shared.Security.SecureTextVersions
                     AESKeyLength);
 
                 // Decrypt the aesKey with the derived key
-                log.Info("Decrypting key");
                 var decryptedKey = DecryptWithAesGcm(encryptedKey, derivedKey, NonceLength, TagLength);
-                log.Info("Finished decrypting key");
 
                 // Decrypt the encrypted text with the decrypted aesKey
-                log.Info("Decrypting text");
                 var plaintext = DecryptWithAesGcm(encryptedText, decryptedKey, NonceLength, TagLength);
-                log.Info("Finished decrypting text");
 
                 var decryptedText = Encoding.UTF8.GetString(plaintext);
 
-                log.Info("Finished building decrypted text string");
+                log.Info("Decrypting with AES-GCM succeeded");
 
                 return decryptedText;
             }

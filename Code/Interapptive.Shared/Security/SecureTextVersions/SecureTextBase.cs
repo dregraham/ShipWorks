@@ -66,7 +66,7 @@ namespace Interapptive.Shared.Security.SecureTextVersions
         /// </summary>
         protected byte[] GetKey(string password, byte[] salt, int iterations, int blockSize, int parallelismFactor, int keyLength)
         {
-            var cacheIndex = $"{KeyCachePrefix}-password";
+            var cacheIndex = $"{KeyCachePrefix}-{password}";
 
             if (keyCache.TryGetValue(cacheIndex, out byte[] key))
             {
