@@ -560,7 +560,7 @@ namespace ShipWorks.Data.Model
 			this.AddElementMapping("AmeriCommerceStoreEntity", @"ShipWorksLocal", @"dbo", "AmeriCommerceStore", 6, 0);
 			this.AddElementFieldMapping("AmeriCommerceStoreEntity", "StoreID", "StoreID", false, "BigInt", 0, 19, 0, false, "", null, typeof(System.Int64), 0);
 			this.AddElementFieldMapping("AmeriCommerceStoreEntity", "Username", "Username", false, "NVarChar", 70, 0, 0, false, "", null, typeof(System.String), 1);
-			this.AddElementFieldMapping("AmeriCommerceStoreEntity", "Password", "Password", false, "NVarChar", 70, 0, 0, false, "", null, typeof(System.String), 2);
+			this.AddElementFieldMapping("AmeriCommerceStoreEntity", "Password", "Password", false, "NVarChar", 280, 0, 0, false, "", null, typeof(System.String), 2);
 			this.AddElementFieldMapping("AmeriCommerceStoreEntity", "StoreUrl", "StoreUrl", false, "NVarChar", 350, 0, 0, false, "", null, typeof(System.String), 3);
 			this.AddElementFieldMapping("AmeriCommerceStoreEntity", "StoreCode", "StoreCode", false, "Int", 0, 10, 0, false, "", null, typeof(System.Int32), 4);
 			this.AddElementFieldMapping("AmeriCommerceStoreEntity", "StatusCodes", "StatusCodes", false, "Xml", 2147483647, 0, 0, false, "", null, typeof(System.String), 5);
@@ -746,7 +746,7 @@ namespace ShipWorks.Data.Model
 			this.AddElementMapping("BuyDotComStoreEntity", @"ShipWorksLocal", @"dbo", "BuyDotComStore", 3, 0);
 			this.AddElementFieldMapping("BuyDotComStoreEntity", "StoreID", "StoreID", false, "BigInt", 0, 19, 0, false, "", null, typeof(System.Int64), 0);
 			this.AddElementFieldMapping("BuyDotComStoreEntity", "FtpUsername", "FtpUsername", false, "NVarChar", 50, 0, 0, false, "", null, typeof(System.String), 1);
-			this.AddElementFieldMapping("BuyDotComStoreEntity", "FtpPassword", "FtpPassword", false, "NVarChar", 50, 0, 0, false, "", null, typeof(System.String), 2);
+			this.AddElementFieldMapping("BuyDotComStoreEntity", "FtpPassword", "FtpPassword", false, "NVarChar", 200, 0, 0, false, "", null, typeof(System.String), 2);
 		}
 
 		/// <summary>Inits ChannelAdvisorOrderEntity's mappings</summary>
@@ -804,7 +804,7 @@ namespace ShipWorks.Data.Model
 			this.AddElementFieldMapping("ChannelAdvisorStoreEntity", "AmazonMerchantID", "AmazonMerchantID", false, "NVarChar", 50, 0, 0, false, "", null, typeof(System.String), 5);
 			this.AddElementFieldMapping("ChannelAdvisorStoreEntity", "AmazonAuthToken", "AmazonAuthToken", false, "NVarChar", 100, 0, 0, false, "", null, typeof(System.String), 6);
 			this.AddElementFieldMapping("ChannelAdvisorStoreEntity", "AmazonApiRegion", "AmazonApiRegion", false, "Char", 2, 0, 0, false, "", null, typeof(System.String), 7);
-			this.AddElementFieldMapping("ChannelAdvisorStoreEntity", "RefreshToken", "RefreshToken", false, "NVarChar", 200, 0, 0, false, "", null, typeof(System.String), 8);
+			this.AddElementFieldMapping("ChannelAdvisorStoreEntity", "RefreshToken", "RefreshToken", false, "NVarChar", 800, 0, 0, false, "", null, typeof(System.String), 8);
 			this.AddElementFieldMapping("ChannelAdvisorStoreEntity", "DownloadDaysBack", "DownloadDaysBack", false, "TinyInt", 0, 3, 0, false, "", null, typeof(System.Byte), 9);
 			this.AddElementFieldMapping("ChannelAdvisorStoreEntity", "ExcludeFBA", "ExcludeFBA", false, "Bit", 0, 0, 0, false, "", null, typeof(System.Boolean), 10);
 		}
@@ -1178,13 +1178,13 @@ namespace ShipWorks.Data.Model
 			this.AddElementFieldMapping("EmailAccountEntity", "IncomingPort", "IncomingPort", false, "Int", 0, 10, 0, false, "", null, typeof(System.Int32), 7);
 			this.AddElementFieldMapping("EmailAccountEntity", "IncomingSecurityType", "IncomingSecurityType", false, "Int", 0, 10, 0, false, "", null, typeof(System.Int32), 8);
 			this.AddElementFieldMapping("EmailAccountEntity", "IncomingUsername", "IncomingUsername", false, "NVarChar", 50, 0, 0, false, "", null, typeof(System.String), 9);
-			this.AddElementFieldMapping("EmailAccountEntity", "IncomingPassword", "IncomingPassword", false, "NVarChar", 150, 0, 0, false, "", null, typeof(System.String), 10);
+			this.AddElementFieldMapping("EmailAccountEntity", "IncomingPassword", "IncomingPassword", false, "NVarChar", 600, 0, 0, false, "", null, typeof(System.String), 10);
 			this.AddElementFieldMapping("EmailAccountEntity", "OutgoingServer", "OutgoingServer", false, "NVarChar", 100, 0, 0, false, "", null, typeof(System.String), 11);
 			this.AddElementFieldMapping("EmailAccountEntity", "OutgoingPort", "OutgoingPort", false, "Int", 0, 10, 0, false, "", null, typeof(System.Int32), 12);
 			this.AddElementFieldMapping("EmailAccountEntity", "OutgoingSecurityType", "OutgoingSecurityType", false, "Int", 0, 10, 0, false, "", null, typeof(System.Int32), 13);
 			this.AddElementFieldMapping("EmailAccountEntity", "OutgoingCredentialSource", "OutgoingCredentialSource", false, "Int", 0, 10, 0, false, "", null, typeof(System.Int32), 14);
 			this.AddElementFieldMapping("EmailAccountEntity", "OutgoingUsername", "OutgoingUsername", false, "NVarChar", 50, 0, 0, false, "", null, typeof(System.String), 15);
-			this.AddElementFieldMapping("EmailAccountEntity", "OutgoingPassword", "OutgoingPassword", false, "NVarChar", 150, 0, 0, false, "", null, typeof(System.String), 16);
+			this.AddElementFieldMapping("EmailAccountEntity", "OutgoingPassword", "OutgoingPassword", false, "NVarChar", 600, 0, 0, false, "", null, typeof(System.String), 16);
 			this.AddElementFieldMapping("EmailAccountEntity", "AutoSend", "AutoSend", false, "Bit", 0, 0, 0, false, "", null, typeof(System.Boolean), 17);
 			this.AddElementFieldMapping("EmailAccountEntity", "AutoSendMinutes", "AutoSendMinutes", false, "Int", 0, 10, 0, false, "", null, typeof(System.Int32), 18);
 			this.AddElementFieldMapping("EmailAccountEntity", "AutoSendLastTime", "AutoSendLastTime", false, "DateTime", 0, 0, 0, false, "", null, typeof(System.DateTime), 19);
@@ -1242,9 +1242,9 @@ namespace ShipWorks.Data.Model
 			this.AddElementFieldMapping("EndiciaAccountEntity", "EndiciaReseller", "EndiciaReseller", false, "Int", 0, 10, 0, false, "", null, typeof(System.Int32), 1);
 			this.AddElementFieldMapping("EndiciaAccountEntity", "AccountNumber", "AccountNumber", true, "NVarChar", 50, 0, 0, false, "", null, typeof(System.String), 2);
 			this.AddElementFieldMapping("EndiciaAccountEntity", "SignupConfirmation", "SignupConfirmation", false, "NVarChar", 30, 0, 0, false, "", null, typeof(System.String), 3);
-			this.AddElementFieldMapping("EndiciaAccountEntity", "WebPassword", "WebPassword", false, "NVarChar", 250, 0, 0, false, "", null, typeof(System.String), 4);
-			this.AddElementFieldMapping("EndiciaAccountEntity", "ApiInitialPassword", "ApiInitialPassword", false, "NVarChar", 250, 0, 0, false, "", null, typeof(System.String), 5);
-			this.AddElementFieldMapping("EndiciaAccountEntity", "ApiUserPassword", "ApiUserPassword", false, "NVarChar", 250, 0, 0, false, "", null, typeof(System.String), 6);
+			this.AddElementFieldMapping("EndiciaAccountEntity", "WebPassword", "WebPassword", false, "NVarChar", 1000, 0, 0, false, "", null, typeof(System.String), 4);
+			this.AddElementFieldMapping("EndiciaAccountEntity", "ApiInitialPassword", "ApiInitialPassword", false, "NVarChar", 1000, 0, 0, false, "", null, typeof(System.String), 5);
+			this.AddElementFieldMapping("EndiciaAccountEntity", "ApiUserPassword", "ApiUserPassword", false, "NVarChar", 1000, 0, 0, false, "", null, typeof(System.String), 6);
 			this.AddElementFieldMapping("EndiciaAccountEntity", "AccountType", "AccountType", false, "Int", 0, 10, 0, false, "", null, typeof(System.Int32), 7);
 			this.AddElementFieldMapping("EndiciaAccountEntity", "TestAccount", "TestAccount", false, "Bit", 0, 0, 0, false, "", null, typeof(System.Boolean), 8);
 			this.AddElementFieldMapping("EndiciaAccountEntity", "CreatedByShipWorks", "CreatedByShipWorks", false, "Bit", 0, 0, 0, false, "", null, typeof(System.Boolean), 9);
@@ -1344,8 +1344,8 @@ namespace ShipWorks.Data.Model
 			this.AddElementFieldMapping("EtsyStoreEntity", "EtsyShopID", "EtsyShopID", false, "BigInt", 0, 19, 0, false, "", null, typeof(System.Int64), 1);
 			this.AddElementFieldMapping("EtsyStoreEntity", "EtsyLoginName", "EtsyLogin", false, "NVarChar", 255, 0, 0, false, "", null, typeof(System.String), 2);
 			this.AddElementFieldMapping("EtsyStoreEntity", "EtsyStoreName", "EtsyStoreName", false, "NVarChar", 255, 0, 0, false, "", null, typeof(System.String), 3);
-			this.AddElementFieldMapping("EtsyStoreEntity", "OAuthToken", "OAuthToken", false, "NVarChar", 50, 0, 0, false, "", null, typeof(System.String), 4);
-			this.AddElementFieldMapping("EtsyStoreEntity", "OAuthTokenSecret", "OAuthTokenSecret", false, "NVarChar", 50, 0, 0, false, "", null, typeof(System.String), 5);
+			this.AddElementFieldMapping("EtsyStoreEntity", "OAuthToken", "OAuthToken", false, "NVarChar", 200, 0, 0, false, "", null, typeof(System.String), 4);
+			this.AddElementFieldMapping("EtsyStoreEntity", "OAuthTokenSecret", "OAuthTokenSecret", false, "NVarChar", 200, 0, 0, false, "", null, typeof(System.String), 5);
 		}
 
 		/// <summary>Inits ExcludedPackageTypeEntity's mappings</summary>
@@ -1801,7 +1801,7 @@ namespace ShipWorks.Data.Model
 			this.AddElementFieldMapping("FtpAccountEntity", "FtpAccountID", "FtpAccountID", false, "BigInt", 0, 19, 0, true, "SCOPE_IDENTITY()", null, typeof(System.Int64), 0);
 			this.AddElementFieldMapping("FtpAccountEntity", "Host", "Host", false, "NVarChar", 100, 0, 0, false, "", null, typeof(System.String), 1);
 			this.AddElementFieldMapping("FtpAccountEntity", "Username", "Username", false, "NVarChar", 50, 0, 0, false, "", null, typeof(System.String), 2);
-			this.AddElementFieldMapping("FtpAccountEntity", "Password", "Password", false, "NVarChar", 50, 0, 0, false, "", null, typeof(System.String), 3);
+			this.AddElementFieldMapping("FtpAccountEntity", "Password", "Password", false, "NVarChar", 200, 0, 0, false, "", null, typeof(System.String), 3);
 			this.AddElementFieldMapping("FtpAccountEntity", "Port", "Port", false, "Int", 0, 10, 0, false, "", null, typeof(System.Int32), 4);
 			this.AddElementFieldMapping("FtpAccountEntity", "SecurityType", "SecurityType", false, "Int", 0, 10, 0, false, "", null, typeof(System.Int32), 5);
 			this.AddElementFieldMapping("FtpAccountEntity", "Passive", "Passive", false, "Bit", 0, 0, 0, false, "", null, typeof(System.Boolean), 6);
@@ -1861,7 +1861,7 @@ namespace ShipWorks.Data.Model
 			this.AddElementMapping("GenericModuleStoreEntity", @"ShipWorksLocal", @"dbo", "GenericModuleStore", 24, 0);
 			this.AddElementFieldMapping("GenericModuleStoreEntity", "StoreID", "StoreID", false, "BigInt", 0, 19, 0, false, "", null, typeof(System.Int64), 0);
 			this.AddElementFieldMapping("GenericModuleStoreEntity", "ModuleUsername", "ModuleUsername", false, "NVarChar", 50, 0, 0, false, "", null, typeof(System.String), 1);
-			this.AddElementFieldMapping("GenericModuleStoreEntity", "ModulePassword", "ModulePassword", false, "NVarChar", 80, 0, 0, false, "", null, typeof(System.String), 2);
+			this.AddElementFieldMapping("GenericModuleStoreEntity", "ModulePassword", "ModulePassword", false, "NVarChar", 320, 0, 0, false, "", null, typeof(System.String), 2);
 			this.AddElementFieldMapping("GenericModuleStoreEntity", "ModuleUrl", "ModuleUrl", false, "NVarChar", 350, 0, 0, false, "", null, typeof(System.String), 3);
 			this.AddElementFieldMapping("GenericModuleStoreEntity", "ModuleVersion", "ModuleVersion", false, "VarChar", 20, 0, 0, false, "", null, typeof(System.String), 4);
 			this.AddElementFieldMapping("GenericModuleStoreEntity", "ModulePlatform", "ModulePlatform", false, "NVarChar", 50, 0, 0, false, "", null, typeof(System.String), 5);
@@ -2006,7 +2006,7 @@ namespace ShipWorks.Data.Model
 			this.AddElementFieldMapping("IParcelAccountEntity", "IParcelAccountID", "iParcelAccountID", false, "BigInt", 0, 19, 0, true, "SCOPE_IDENTITY()", null, typeof(System.Int64), 0);
 			this.AddElementFieldMapping("IParcelAccountEntity", "RowVersion", "RowVersion", false, "Timestamp", 2147483647, 0, 0, false, "", null, typeof(System.Byte[]), 1);
 			this.AddElementFieldMapping("IParcelAccountEntity", "Username", "Username", false, "NVarChar", 50, 0, 0, false, "", null, typeof(System.String), 2);
-			this.AddElementFieldMapping("IParcelAccountEntity", "Password", "Password", false, "NVarChar", 50, 0, 0, false, "", null, typeof(System.String), 3);
+			this.AddElementFieldMapping("IParcelAccountEntity", "Password", "Password", false, "NVarChar", 200, 0, 0, false, "", null, typeof(System.String), 3);
 			this.AddElementFieldMapping("IParcelAccountEntity", "Description", "Description", false, "NVarChar", 50, 0, 0, false, "", null, typeof(System.String), 4);
 			this.AddElementFieldMapping("IParcelAccountEntity", "FirstName", "FirstName", false, "NVarChar", 30, 0, 0, false, "", null, typeof(System.String), 5);
 			this.AddElementFieldMapping("IParcelAccountEntity", "MiddleName", "MiddleName", false, "NVarChar", 30, 0, 0, false, "", null, typeof(System.String), 6);
@@ -2106,7 +2106,7 @@ namespace ShipWorks.Data.Model
 			this.AddElementMapping("JetStoreEntity", @"ShipWorksLocal", @"dbo", "JetStore", 3, 0);
 			this.AddElementFieldMapping("JetStoreEntity", "StoreID", "StoreID", false, "BigInt", 0, 19, 0, false, "", null, typeof(System.Int64), 0);
 			this.AddElementFieldMapping("JetStoreEntity", "ApiUser", "ApiUser", false, "NVarChar", 100, 0, 0, false, "", null, typeof(System.String), 1);
-			this.AddElementFieldMapping("JetStoreEntity", "Secret", "Secret", false, "NVarChar", 100, 0, 0, false, "", null, typeof(System.String), 2);
+			this.AddElementFieldMapping("JetStoreEntity", "Secret", "Secret", false, "NVarChar", 400, 0, 0, false, "", null, typeof(System.String), 2);
 		}
 
 		/// <summary>Inits LabelSheetEntity's mappings</summary>
@@ -2222,7 +2222,7 @@ namespace ShipWorks.Data.Model
 			this.AddElementMapping("MarketplaceAdvisorStoreEntity", @"ShipWorksLocal", @"dbo", "MarketplaceAdvisorStore", 5, 0);
 			this.AddElementFieldMapping("MarketplaceAdvisorStoreEntity", "StoreID", "StoreID", false, "BigInt", 0, 19, 0, false, "", null, typeof(System.Int64), 0);
 			this.AddElementFieldMapping("MarketplaceAdvisorStoreEntity", "Username", "Username", false, "NVarChar", 50, 0, 0, false, "", null, typeof(System.String), 1);
-			this.AddElementFieldMapping("MarketplaceAdvisorStoreEntity", "Password", "Password", false, "NVarChar", 50, 0, 0, false, "", null, typeof(System.String), 2);
+			this.AddElementFieldMapping("MarketplaceAdvisorStoreEntity", "Password", "Password", false, "NVarChar", 200, 0, 0, false, "", null, typeof(System.String), 2);
 			this.AddElementFieldMapping("MarketplaceAdvisorStoreEntity", "AccountType", "AccountType", false, "Int", 0, 10, 0, false, "", null, typeof(System.Int32), 3);
 			this.AddElementFieldMapping("MarketplaceAdvisorStoreEntity", "DownloadFlags", "DownloadFlags", false, "Int", 0, 10, 0, false, "", null, typeof(System.Int32), 4);
 		}
@@ -2242,7 +2242,7 @@ namespace ShipWorks.Data.Model
 		{
 			this.AddElementMapping("MivaStoreEntity", @"ShipWorksLocal", @"dbo", "MivaStore", 7, 0);
 			this.AddElementFieldMapping("MivaStoreEntity", "StoreID", "StoreID", false, "BigInt", 0, 19, 0, false, "", null, typeof(System.Int64), 0);
-			this.AddElementFieldMapping("MivaStoreEntity", "EncryptionPassphrase", "EncryptionPassphrase", false, "NVarChar", 50, 0, 0, false, "", null, typeof(System.String), 1);
+			this.AddElementFieldMapping("MivaStoreEntity", "EncryptionPassphrase", "EncryptionPassphrase", false, "NVarChar", 200, 0, 0, false, "", null, typeof(System.String), 1);
 			this.AddElementFieldMapping("MivaStoreEntity", "LiveManualOrderNumbers", "LiveManualOrderNumbers", false, "Bit", 0, 0, 0, false, "", null, typeof(System.Boolean), 2);
 			this.AddElementFieldMapping("MivaStoreEntity", "SebenzaCheckoutDataEnabled", "SebenzaCheckoutDataEnabled", false, "Bit", 0, 0, 0, false, "", null, typeof(System.Boolean), 3);
 			this.AddElementFieldMapping("MivaStoreEntity", "OnlineUpdateStrategy", "OnlineUpdateStrategy", false, "Int", 0, 10, 0, false, "", null, typeof(System.Int32), 4);
@@ -2376,7 +2376,7 @@ namespace ShipWorks.Data.Model
 			this.AddElementFieldMapping("OnTracAccountEntity", "OnTracAccountID", "OnTracAccountID", false, "BigInt", 0, 19, 0, true, "SCOPE_IDENTITY()", null, typeof(System.Int64), 0);
 			this.AddElementFieldMapping("OnTracAccountEntity", "RowVersion", "RowVersion", false, "Timestamp", 2147483647, 0, 0, false, "", null, typeof(System.Byte[]), 1);
 			this.AddElementFieldMapping("OnTracAccountEntity", "AccountNumber", "AccountNumber", false, "Int", 0, 10, 0, false, "", null, typeof(System.Int32), 2);
-			this.AddElementFieldMapping("OnTracAccountEntity", "Password", "Password", false, "NVarChar", 50, 0, 0, false, "", null, typeof(System.String), 3);
+			this.AddElementFieldMapping("OnTracAccountEntity", "Password", "Password", false, "NVarChar", 200, 0, 0, false, "", null, typeof(System.String), 3);
 			this.AddElementFieldMapping("OnTracAccountEntity", "Description", "Description", false, "NVarChar", 50, 0, 0, false, "", null, typeof(System.String), 4);
 			this.AddElementFieldMapping("OnTracAccountEntity", "FirstName", "FirstName", false, "NVarChar", 30, 0, 0, false, "", null, typeof(System.String), 5);
 			this.AddElementFieldMapping("OnTracAccountEntity", "MiddleName", "MiddleName", false, "NVarChar", 30, 0, 0, false, "", null, typeof(System.String), 6);
@@ -2642,7 +2642,7 @@ namespace ShipWorks.Data.Model
 			this.AddElementFieldMapping("OrderPaymentDetailEntity", "RowVersion", "RowVersion", false, "Timestamp", 2147483647, 0, 0, false, "", null, typeof(System.Byte[]), 1);
 			this.AddElementFieldMapping("OrderPaymentDetailEntity", "OrderID", "OrderID", false, "BigInt", 0, 19, 0, false, "", null, typeof(System.Int64), 2);
 			this.AddElementFieldMapping("OrderPaymentDetailEntity", "Label", "Label", false, "NVarChar", 100, 0, 0, false, "", null, typeof(System.String), 3);
-			this.AddElementFieldMapping("OrderPaymentDetailEntity", "Value", "Value", false, "NVarChar", 100, 0, 0, false, "", null, typeof(System.String), 4);
+			this.AddElementFieldMapping("OrderPaymentDetailEntity", "Value", "Value", false, "NVarChar", 400, 0, 0, false, "", null, typeof(System.String), 4);
 		}
 
 		/// <summary>Inits OrderSearchEntity's mappings</summary>
@@ -3032,7 +3032,7 @@ namespace ShipWorks.Data.Model
 			this.AddElementFieldMapping("ProStoresStoreEntity", "LegacyAdminUrl", "LegacyAdminUrl", false, "VarChar", 300, 0, 0, false, "", null, typeof(System.String), 12);
 			this.AddElementFieldMapping("ProStoresStoreEntity", "LegacyXtePath", "LegacyXtePath", false, "VarChar", 75, 0, 0, false, "", null, typeof(System.String), 13);
 			this.AddElementFieldMapping("ProStoresStoreEntity", "LegacyPrefix", "LegacyPrefix", false, "VarChar", 30, 0, 0, false, "", null, typeof(System.String), 14);
-			this.AddElementFieldMapping("ProStoresStoreEntity", "LegacyPassword", "LegacyPassword", false, "VarChar", 150, 0, 0, false, "", null, typeof(System.String), 15);
+			this.AddElementFieldMapping("ProStoresStoreEntity", "LegacyPassword", "LegacyPassword", false, "VarChar", 600, 0, 0, false, "", null, typeof(System.String), 15);
 			this.AddElementFieldMapping("ProStoresStoreEntity", "LegacyCanUpgrade", "LegacyCanUpgrade", false, "Bit", 0, 0, 0, false, "", null, typeof(System.Boolean), 16);
 		}
 
@@ -3410,13 +3410,13 @@ namespace ShipWorks.Data.Model
 			this.AddElementFieldMapping("ShippingSettingsEntity", "InsurancePolicy", "InsurancePolicy", false, "NVarChar", 40, 0, 0, false, "", null, typeof(System.String), 7);
 			this.AddElementFieldMapping("ShippingSettingsEntity", "InsuranceLastAgreed", "InsuranceLastAgreed", true, "DateTime", 0, 0, 0, false, "", null, typeof(System.DateTime), 8);
 			this.AddElementFieldMapping("ShippingSettingsEntity", "FedExUsername", "FedExUsername", true, "NVarChar", 50, 0, 0, false, "", null, typeof(System.String), 9);
-			this.AddElementFieldMapping("ShippingSettingsEntity", "FedExPassword", "FedExPassword", true, "NVarChar", 50, 0, 0, false, "", null, typeof(System.String), 10);
+			this.AddElementFieldMapping("ShippingSettingsEntity", "FedExPassword", "FedExPassword", true, "NVarChar", 200, 0, 0, false, "", null, typeof(System.String), 10);
 			this.AddElementFieldMapping("ShippingSettingsEntity", "FedExMaskAccount", "FedExMaskAccount", false, "Bit", 0, 0, 0, false, "", null, typeof(System.Boolean), 11);
 			this.AddElementFieldMapping("ShippingSettingsEntity", "FedExThermalDocTab", "FedExThermalDocTab", false, "Bit", 0, 0, 0, false, "", null, typeof(System.Boolean), 12);
 			this.AddElementFieldMapping("ShippingSettingsEntity", "FedExThermalDocTabType", "FedExThermalDocTabType", false, "Int", 0, 10, 0, false, "", null, typeof(System.Int32), 13);
 			this.AddElementFieldMapping("ShippingSettingsEntity", "FedExInsuranceProvider", "FedExInsuranceProvider", false, "Int", 0, 10, 0, false, "", null, typeof(System.Int32), 14);
 			this.AddElementFieldMapping("ShippingSettingsEntity", "FedExInsurancePennyOne", "FedExInsurancePennyOne", false, "Bit", 0, 0, 0, false, "", null, typeof(System.Boolean), 15);
-			this.AddElementFieldMapping("ShippingSettingsEntity", "UpsAccessKey", "UpsAccessKey", true, "NVarChar", 50, 0, 0, false, "", null, typeof(System.String), 16);
+			this.AddElementFieldMapping("ShippingSettingsEntity", "UpsAccessKey", "UpsAccessKey", true, "NVarChar", 200, 0, 0, false, "", null, typeof(System.String), 16);
 			this.AddElementFieldMapping("ShippingSettingsEntity", "UpsInsuranceProvider", "UpsInsuranceProvider", false, "Int", 0, 10, 0, false, "", null, typeof(System.Int32), 17);
 			this.AddElementFieldMapping("ShippingSettingsEntity", "UpsInsurancePennyOne", "UpsInsurancePennyOne", false, "Bit", 0, 0, 0, false, "", null, typeof(System.Boolean), 18);
 			this.AddElementFieldMapping("ShippingSettingsEntity", "EndiciaCustomsCertify", "EndiciaCustomsCertify", false, "Bit", 0, 0, 0, false, "", null, typeof(System.Boolean), 19);
@@ -3519,7 +3519,7 @@ namespace ShipWorks.Data.Model
 			this.AddElementMapping("ShopSiteStoreEntity", @"ShipWorksLocal", @"dbo", "ShopSiteStore", 12, 0);
 			this.AddElementFieldMapping("ShopSiteStoreEntity", "StoreID", "StoreID", false, "BigInt", 0, 19, 0, false, "", null, typeof(System.Int64), 0);
 			this.AddElementFieldMapping("ShopSiteStoreEntity", "Username", "Username", false, "NVarChar", 50, 0, 0, false, "", null, typeof(System.String), 1);
-			this.AddElementFieldMapping("ShopSiteStoreEntity", "Password", "Password", false, "NVarChar", 50, 0, 0, false, "", null, typeof(System.String), 2);
+			this.AddElementFieldMapping("ShopSiteStoreEntity", "Password", "Password", false, "NVarChar", 200, 0, 0, false, "", null, typeof(System.String), 2);
 			this.AddElementFieldMapping("ShopSiteStoreEntity", "ApiUrl", "ApiUrl", false, "NVarChar", 350, 0, 0, false, "", null, typeof(System.String), 3);
 			this.AddElementFieldMapping("ShopSiteStoreEntity", "RequireSSL", "RequireSSL", false, "Bit", 0, 0, 0, false, "", null, typeof(System.Boolean), 4);
 			this.AddElementFieldMapping("ShopSiteStoreEntity", "DownloadPageSize", "DownloadPageSize", false, "Int", 0, 10, 0, false, "", null, typeof(System.Int32), 5);
@@ -3744,7 +3744,7 @@ namespace ShipWorks.Data.Model
 			this.AddElementFieldMapping("UpsAccountEntity", "Description", "Description", false, "NVarChar", 50, 0, 0, false, "", null, typeof(System.String), 2);
 			this.AddElementFieldMapping("UpsAccountEntity", "AccountNumber", "AccountNumber", false, "NVarChar", 10, 0, 0, false, "", null, typeof(System.String), 3);
 			this.AddElementFieldMapping("UpsAccountEntity", "UserID", "UserID", false, "NVarChar", 25, 0, 0, false, "", null, typeof(System.String), 4);
-			this.AddElementFieldMapping("UpsAccountEntity", "Password", "Password", false, "NVarChar", 25, 0, 0, false, "", null, typeof(System.String), 5);
+			this.AddElementFieldMapping("UpsAccountEntity", "Password", "Password", false, "NVarChar", 100, 0, 0, false, "", null, typeof(System.String), 5);
 			this.AddElementFieldMapping("UpsAccountEntity", "RateType", "RateType", false, "Int", 0, 10, 0, false, "", null, typeof(System.Int32), 6);
 			this.AddElementFieldMapping("UpsAccountEntity", "InvoiceAuth", "InvoiceAuth", false, "Bit", 0, 0, 0, false, "", null, typeof(System.Boolean), 7);
 			this.AddElementFieldMapping("UpsAccountEntity", "FirstName", "FirstName", false, "NVarChar", 30, 0, 0, false, "", null, typeof(System.String), 8);
@@ -4066,7 +4066,7 @@ namespace ShipWorks.Data.Model
 			this.AddElementFieldMapping("UspsAccountEntity", "RowVersion", "RowVersion", false, "Timestamp", 2147483647, 0, 0, false, "", null, typeof(System.Byte[]), 1);
 			this.AddElementFieldMapping("UspsAccountEntity", "Description", "Description", false, "NVarChar", 50, 0, 0, false, "", null, typeof(System.String), 2);
 			this.AddElementFieldMapping("UspsAccountEntity", "Username", "Username", false, "NVarChar", 50, 0, 0, false, "", null, typeof(System.String), 3);
-			this.AddElementFieldMapping("UspsAccountEntity", "Password", "Password", false, "NVarChar", 100, 0, 0, false, "", null, typeof(System.String), 4);
+			this.AddElementFieldMapping("UspsAccountEntity", "Password", "Password", false, "NVarChar", 400, 0, 0, false, "", null, typeof(System.String), 4);
 			this.AddElementFieldMapping("UspsAccountEntity", "FirstName", "FirstName", false, "NVarChar", 30, 0, 0, false, "", null, typeof(System.String), 5);
 			this.AddElementFieldMapping("UspsAccountEntity", "MiddleName", "MiddleName", false, "NVarChar", 30, 0, 0, false, "", null, typeof(System.String), 6);
 			this.AddElementFieldMapping("UspsAccountEntity", "LastName", "LastName", false, "NVarChar", 30, 0, 0, false, "", null, typeof(System.String), 7);
@@ -4172,7 +4172,7 @@ namespace ShipWorks.Data.Model
 			this.AddElementFieldMapping("VolusionStoreEntity", "StoreID", "StoreID", false, "BigInt", 0, 19, 0, false, "", null, typeof(System.Int64), 0);
 			this.AddElementFieldMapping("VolusionStoreEntity", "StoreUrl", "StoreUrl", false, "VarChar", 255, 0, 0, false, "", null, typeof(System.String), 1);
 			this.AddElementFieldMapping("VolusionStoreEntity", "WebUserName", "WebUserName", false, "VarChar", 50, 0, 0, false, "", null, typeof(System.String), 2);
-			this.AddElementFieldMapping("VolusionStoreEntity", "WebPassword", "WebPassword", false, "VarChar", 70, 0, 0, false, "", null, typeof(System.String), 3);
+			this.AddElementFieldMapping("VolusionStoreEntity", "WebPassword", "WebPassword", false, "VarChar", 280, 0, 0, false, "", null, typeof(System.String), 3);
 			this.AddElementFieldMapping("VolusionStoreEntity", "ApiPassword", "ApiPassword", false, "VarChar", 100, 0, 0, false, "", null, typeof(System.String), 4);
 			this.AddElementFieldMapping("VolusionStoreEntity", "PaymentMethods", "PaymentMethods", false, "Xml", 2147483647, 0, 0, false, "", null, typeof(System.String), 5);
 			this.AddElementFieldMapping("VolusionStoreEntity", "ShipmentMethods", "ShipmentMethods", false, "Xml", 2147483647, 0, 0, false, "", null, typeof(System.String), 6);
@@ -4430,7 +4430,7 @@ namespace ShipWorks.Data.Model
 			this.AddElementMapping("YahooStoreEntity", @"ShipWorksLocal", @"dbo", "YahooStore", 6, 0);
 			this.AddElementFieldMapping("YahooStoreEntity", "StoreID", "StoreID", false, "BigInt", 0, 19, 0, false, "", null, typeof(System.Int64), 0);
 			this.AddElementFieldMapping("YahooStoreEntity", "YahooEmailAccountID", "YahooEmailAccountID", false, "BigInt", 0, 19, 0, false, "", null, typeof(System.Int64), 1);
-			this.AddElementFieldMapping("YahooStoreEntity", "TrackingUpdatePassword", "TrackingUpdatePassword", false, "VarChar", 100, 0, 0, false, "", null, typeof(System.String), 2);
+			this.AddElementFieldMapping("YahooStoreEntity", "TrackingUpdatePassword", "TrackingUpdatePassword", false, "VarChar", 400, 0, 0, false, "", null, typeof(System.String), 2);
 			this.AddElementFieldMapping("YahooStoreEntity", "YahooStoreID", "YahooStoreID", false, "VarChar", 50, 0, 0, false, "", null, typeof(System.String), 3);
 			this.AddElementFieldMapping("YahooStoreEntity", "AccessToken", "AccessToken", false, "VarChar", 200, 0, 0, false, "", null, typeof(System.String), 4);
 			this.AddElementFieldMapping("YahooStoreEntity", "BackupOrderNumber", "BackupOrderNumber", true, "BigInt", 0, 19, 0, false, "", null, typeof(System.Int64), 5);

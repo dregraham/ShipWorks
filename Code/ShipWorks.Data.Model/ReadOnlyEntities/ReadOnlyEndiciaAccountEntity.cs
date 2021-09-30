@@ -100,19 +100,19 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
         /// <summary> The WebPassword property of the Entity EndiciaAccount<br/><br/>
         /// </summary>
         /// <remarks>Mapped on table field: "EndiciaAccount"."WebPassword"<br/>
-        /// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 250<br/>
+        /// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 1000<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
         public System.String WebPassword { get; }
         /// <summary> The ApiInitialPassword property of the Entity EndiciaAccount<br/><br/>
         /// </summary>
         /// <remarks>Mapped on table field: "EndiciaAccount"."ApiInitialPassword"<br/>
-        /// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 250<br/>
+        /// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 1000<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
         public System.String ApiInitialPassword { get; }
         /// <summary> The ApiUserPassword property of the Entity EndiciaAccount<br/><br/>
         /// </summary>
         /// <remarks>Mapped on table field: "EndiciaAccount"."ApiUserPassword"<br/>
-        /// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 250<br/>
+        /// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 1000<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
         public System.String ApiUserPassword { get; }
         /// <summary> The AccountType property of the Entity EndiciaAccount<br/><br/>

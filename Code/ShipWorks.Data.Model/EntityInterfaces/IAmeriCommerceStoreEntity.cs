@@ -30,7 +30,7 @@ namespace ShipWorks.Data.Model.EntityInterfaces
         /// <summary> The Password property of the Entity AmeriCommerceStore<br/><br/>
         /// </summary>
         /// <remarks>Mapped on table field: "AmeriCommerceStore"."Password"<br/>
-        /// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 70<br/>
+        /// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 280<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
         System.String Password { get; }
         /// <summary> The StoreUrl property of the Entity AmeriCommerceStore<br/><br/>

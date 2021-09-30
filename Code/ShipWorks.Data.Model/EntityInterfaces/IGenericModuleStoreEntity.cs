@@ -30,7 +30,7 @@ namespace ShipWorks.Data.Model.EntityInterfaces
         /// <summary> The ModulePassword property of the Entity GenericModuleStore<br/><br/>
         /// </summary>
         /// <remarks>Mapped on table field: "GenericModuleStore"."ModulePassword"<br/>
-        /// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 80<br/>
+        /// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 320<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
         System.String ModulePassword { get; }
         /// <summary> The ModuleUrl property of the Entity GenericModuleStore<br/><br/>

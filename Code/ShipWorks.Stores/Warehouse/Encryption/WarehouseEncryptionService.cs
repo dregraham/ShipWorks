@@ -1,12 +1,15 @@
 using System;
-using System.IO;
-using System.Security.Cryptography;
+using System.Buffers.Binary;
 using System.Text;
 using System.Threading.Tasks;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Utility;
 using log4net;
 using Newtonsoft.Json;
+using Org.BouncyCastle.Crypto.Engines;
+using Org.BouncyCastle.Crypto.Modes;
+using Org.BouncyCastle.Crypto.Parameters;
+using Org.BouncyCastle.Security;
 using RestSharp;
 using ShipWorks.ApplicationCore;
 using ShipWorks.ApplicationCore.Licensing.Warehouse;
@@ -24,8 +27,8 @@ namespace ShipWorks.Stores.Warehouse.Encryption
         private readonly ILog log;
 
         // Encryption Parameters
-        private const int BlockBitSize = 128;
-        private const int KeyBitSize = 256;
+        private const int NonceLength = 12;
+        private const int TagLength = 16;
 
         /// <summary>
         /// Constructor
@@ -53,7 +56,7 @@ namespace ShipWorks.Stores.Warehouse.Encryption
                 byte[] key = Convert.FromBase64String(keyResponse.Plaintext);
                 byte[] encryptedKey = Convert.FromBase64String(keyResponse.CiphertextBlob);
 
-                byte[] encryptedBytes = EncryptWithAES(Encoding.UTF8.GetBytes(plainText), key, encryptedKey);
+                byte[] encryptedBytes = EncryptWithAesGcm(Encoding.UTF8.GetBytes(plainText), key, encryptedKey);
 
                 return Convert.ToBase64String(encryptedBytes);
             }
@@ -65,58 +68,40 @@ namespace ShipWorks.Stores.Warehouse.Encryption
         }
 
         /// <summary>
-        /// Encrypt using AES
+        /// Encrypt using AES-GCM
         /// </summary>
-        private byte[] EncryptWithAES(byte[] plainText, byte[] key, byte[] encryptedKey)
+        private byte[] EncryptWithAesGcm(byte[] plaintext, byte[] key, byte[] encryptedKey)
         {
-            byte[] encryptedText;
-            byte[] iv;
+            var nonce = new byte[NonceLength];
+            new SecureRandom().NextBytes(nonce); // We can randomly generate a nonce since we use a new key each time
 
-            AesManaged aes = new AesManaged
-            {
-                KeySize = KeyBitSize,
-                BlockSize = BlockBitSize,
-                Mode = CipherMode.CBC,
-                Padding = PaddingMode.PKCS7
-            };
+            byte[] ciphertext = new byte[plaintext.Length + TagLength];
 
-            // Use AES to encrypt the plain text
-            using (aes)
-            {
-                // Always use random IV
-                aes.GenerateIV();
+            var cipher = new GcmBlockCipher(new AesEngine());
+            var parameters = new AeadParameters(new KeyParameter(key), TagLength * 8, nonce);
+            cipher.Init(true, parameters);
 
-                // Save IV so we can save it with the encrypted message
-                iv = aes.IV;
+            var offset = cipher.ProcessBytes(plaintext, 0, plaintext.Length, ciphertext, 0);
+            cipher.DoFinal(ciphertext, offset);
 
-                using (ICryptoTransform encryptor = aes.CreateEncryptor(key, iv))
-                {
-                    using (MemoryStream cipherStream = new MemoryStream())
-                    {
-                        using (CryptoStream cryptoStream = new CryptoStream(cipherStream, encryptor, CryptoStreamMode.Write))
-                        {
-                            // Encrypt Data
-                            cryptoStream.Write(plainText, 0, plainText.Length);
-                            cryptoStream.FlushFinalBlock();
+            Span<byte> encryptedKeyLength = new byte[4];
+            BinaryPrimitives.WriteInt32BigEndian(encryptedKeyLength, encryptedKey.Length);
 
-                            encryptedText = cipherStream.ToArray();
-                        }
-                    }
-                }
-            }
+            byte[] encryptedBytes = new byte[4 + encryptedKey.Length + nonce.Length + ciphertext.Length];
 
-            // Assemble encrypted message
-            using (MemoryStream encryptedStream = new MemoryStream())
-            {
-                // Prepend with encrypted key
-                encryptedStream.Write(encryptedKey, 0, encryptedKey.Length);
-                // Prepend with IV
-                encryptedStream.Write(iv, 0, iv.Length);
-                // Write encrypted text
-                encryptedStream.Write(encryptedText, 0, encryptedText.Length);
+            // The first 4 bytes are an int indicating the length of the encrypted key
+            Buffer.BlockCopy(encryptedKeyLength.ToArray(), 0, encryptedBytes, 0, 4);
 
-                return encryptedStream.ToArray();
-            }
+            // The next X bytes are the encrypted key
+            Buffer.BlockCopy(encryptedKey, 0, encryptedBytes, 4, encryptedKey.Length);
+
+            // The next 12 bytes are the nonce (the max allowed nonce size in the AES-GCM spec)
+            Buffer.BlockCopy(nonce, 0, encryptedBytes, 4 + encryptedKey.Length, nonce.Length);
+
+            // The next X bytes are the encrypted text and tag
+            Buffer.BlockCopy(ciphertext, 0, encryptedBytes, 4 + encryptedKey.Length + nonce.Length, ciphertext.Length);
+
+            return encryptedBytes;
         }
 
         /// <summary>
