@@ -4026,6 +4026,10 @@ namespace ShipWorks.Data.Model
 		CreateCommercialInvoice,
 		///<summary>FileElectronically. </summary>
 		FileElectronically,
+		///<summary>CustomsRecipientTIN. </summary>
+		CustomsRecipientTIN,
+		///<summary>TinType. </summary>
+		TinType,
 		/// <summary></summary>
 		AmountOfFields
 	}
@@ -4442,6 +4446,8 @@ namespace ShipWorks.Data.Model
 		FreightGuaranteeType,
 		///<summary>FreightGuaranteeDate. </summary>
 		FreightGuaranteeDate,
+		///<summary>TinType. </summary>
+		TinType,
 		/// <summary></summary>
 		AmountOfFields
 	}

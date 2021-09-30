@@ -31,7 +31,7 @@
                 <Style TargetType="TextBox" BasedOn="{StaticResource Grid.TextBox.Default}" />
             </Grid.Resources>
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="41" />
                 <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
 
@@ -54,8 +54,8 @@
                 <Style TargetType="TextBox" BasedOn="{StaticResource Grid.TextBox.Default}" />
             </Grid.Resources>
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="Auto" />
-                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="40" />
+                <ColumnDefinition Width="200" />
             </Grid.ColumnDefinitions>
 
             <TextBlock Grid.Row="2" Grid.Column="0">TaxID:</TextBlock>

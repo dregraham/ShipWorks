@@ -173,6 +173,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             // Customs
             AddValueMapping(fedex, FedExProfileFields.CreateCommercialInvoice, createCommercialInvoiceState, createCommercialInvoice);
             AddValueMapping(fedex, FedExProfileFields.FileElectronically, fileElectronicallyState, fileElectronically);
+            AddValueMapping(fedex, FedExProfileFields.TinType, tinTypeState, tinTypes);
 
             // Map parent/child relationships
             SetParentCheckBox(includeReturnState, includeReturn, applyReturnProfileState, applyReturnProfile);

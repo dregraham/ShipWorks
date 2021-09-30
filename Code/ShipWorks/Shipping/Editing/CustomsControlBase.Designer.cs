@@ -47,8 +47,8 @@ namespace ShipWorks.Shipping.Editing
             this.labelDescription = new System.Windows.Forms.Label();
             this.labelWeight = new System.Windows.Forms.Label();
             this.labelValue = new System.Windows.Forms.Label();
-            this.labelTaxId = new System.Windows.Forms.Label();
-            this.taxId = new System.Windows.Forms.ComboBox();
+            //this.labelTaxId = new System.Windows.Forms.Label();
+            //this.taxId = new System.Windows.Forms.ComboBox();
 
             this.labelCountryOfOrigin = new System.Windows.Forms.Label();
             this.countryOfOrigin = new ShipWorks.UI.Controls.MultiValueComboBox();
@@ -76,8 +76,8 @@ namespace ShipWorks.Shipping.Editing
             // 
             this.sectionGeneral.ContentPanel.Controls.Add(this.label1);
             this.sectionGeneral.ContentPanel.Controls.Add(this.customsValue);
-            this.sectionGeneral.ContentPanel.Controls.Add(this.labelTaxId);
-            this.sectionGeneral.ContentPanel.Controls.Add(this.taxId);
+            //this.sectionGeneral.ContentPanel.Controls.Add(this.labelTaxId);
+            //this.sectionGeneral.ContentPanel.Controls.Add(this.taxId);
             this.sectionGeneral.ExtraText = "";
             this.sectionGeneral.Location = new System.Drawing.Point(6, 3);
             this.sectionGeneral.Name = "sectionGeneral";
@@ -110,27 +110,27 @@ namespace ShipWorks.Shipping.Editing
             this.customsValue.Size = new System.Drawing.Size(100, 21);
             this.customsValue.TabIndex = 0;
             this.customsValue.Text = "$0.00";
-            // 
-            // labelTaxId
-            // 
-            this.labelTaxId.AutoSize = true;
-            this.labelTaxId.BackColor = System.Drawing.Color.Transparent;
-            this.labelTaxId.Location = new System.Drawing.Point(15, 60);
-            this.labelTaxId.Name = "labelTaxId";
-            this.labelTaxId.Size = new System.Drawing.Size(37, 13);
-            this.labelTaxId.TabIndex = 13;
-            this.labelTaxId.Text = "Tax ID:";
-            // 
-            // customsValue
-            // 
-            this.taxId.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.taxId.FormattingEnabled = true;
-            this.taxId.Location = new System.Drawing.Point(61, 57);
-            this.taxId.Name = "taxId";
-            this.taxId.Size = new System.Drawing.Size(160, 21);
-            this.taxId.TabIndex = 11;
-            //this is the event that will fire on change
-            this.taxId.SelectedIndexChanged += new System.EventHandler(this.OnTaxIdFieldChanged);
+            //// 
+            //// labelTaxId
+            //// 
+            //this.labelTaxId.AutoSize = true;
+            //this.labelTaxId.BackColor = System.Drawing.Color.Transparent;
+            //this.labelTaxId.Location = new System.Drawing.Point(15, 40);
+            //this.labelTaxId.Name = "labelTaxId";
+            //this.labelTaxId.Size = new System.Drawing.Size(37, 13);
+            //this.labelTaxId.TabIndex = 13;
+            //this.labelTaxId.Text = "Tax ID:";
+            //// 
+            //// taxId
+            //// 
+            //this.taxId.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            //this.taxId.FormattingEnabled = true;
+            //this.taxId.Location = new System.Drawing.Point(61, 37);
+            //this.taxId.Name = "taxId";
+            //this.taxId.Size = new System.Drawing.Size(160, 21);
+            //this.taxId.TabIndex = 11;
+            ////this is the event that will fire on change
+            //this.taxId.SelectedIndexChanged += new System.EventHandler(this.OnTaxIdFieldChanged);
             
             // 
             // sectionContents
@@ -145,7 +145,7 @@ namespace ShipWorks.Shipping.Editing
             this.sectionContents.ContentPanel.Controls.Add(this.delete);
             this.sectionContents.ContentPanel.Controls.Add(this.add);
             this.sectionContents.ExtraText = "";
-            this.sectionContents.Location = new System.Drawing.Point(6, 74);
+            this.sectionContents.Location = new System.Drawing.Point(6, 94);
             this.sectionContents.Name = "sectionContents";
             this.sectionContents.SectionName = "Contents";
             this.sectionContents.SettingsKey = "{7fa47a04-8bd5-4ea5-a891-ab22cffa8e17}";
@@ -381,8 +381,8 @@ namespace ShipWorks.Shipping.Editing
         private System.Windows.Forms.Label labelDescription;
         private System.Windows.Forms.Label labelWeight;
         private System.Windows.Forms.Label labelValue;
-        private System.Windows.Forms.Label labelTaxId;
-        private System.Windows.Forms.ComboBox taxId;
+        //private System.Windows.Forms.Label labelTaxId;
+        //private System.Windows.Forms.ComboBox taxId;
 
         private System.Windows.Forms.Label labelCountryOfOrigin;
         private ShipWorks.UI.Controls.MultiValueComboBox countryOfOrigin;

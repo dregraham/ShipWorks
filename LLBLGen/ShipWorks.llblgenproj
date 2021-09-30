@@ -1191,6 +1191,7 @@
       <EntityDefinition Name="FedExProfile" ObjectID="59dac7b4-50ba-42fa-8b38-291cbb95f554">
         <Fields>
           <Field Name="CreateCommercialInvoice" Type="bool" IsOptional="true" FieldIndex="37" />
+          <Field Name="CustomsRecipientTIN" Type="string" IsOptional="true" MaxLength="24" FieldIndex="39" />
           <Field Name="DropoffType" Type="int" IsOptional="true" FieldIndex="27" />
           <Field Name="EmailNotifyBroker" Type="int" IsOptional="true" FieldIndex="26" />
           <Field Name="EmailNotifyMessage" Type="string" IsOptional="true" MaxLength="120" FieldIndex="19" />
@@ -1229,6 +1230,7 @@
           <Field Name="SmartPostHubID" Type="string" IsOptional="true" MaxLength="10" FieldIndex="25" />
           <Field Name="SmartPostIndicia" Type="int" IsOptional="true" FieldIndex="21" />
           <Field Name="ThirdPartyConsignee" Type="bool" IsOptional="true" FieldIndex="36" />
+          <Field Name="TinType" Type="int" IsOptional="true" Precision="10" FieldIndex="40" />
         </Fields>
       </EntityDefinition>
       <EntityDefinition Name="FedExProfilePackage" ObjectID="4fa66e16-e8ea-46e7-b3b1-51fc5047a885" InheritanceType="2">
@@ -1427,6 +1429,7 @@
           <Field Name="SmartPostIndicia" Type="int" FieldIndex="102" />
           <Field Name="SmartPostUspsApplicationId" Type="string" MaxLength="10" FieldIndex="107" />
           <Field Name="ThirdPartyConsignee" Type="bool" FieldIndex="153" />
+          <Field Name="TinType" Type="int" IsOptional="true" Precision="10" FieldIndex="163" />
           <Field Name="TrafficInArmsLicenseNumber" Type="string" MaxLength="32" FieldIndex="140" />
           <Field Name="WeightUnitType" Type="int" FieldIndex="146" />
         </Fields>
@@ -4700,7 +4703,7 @@
       <Catalogs>
         <Catalog Name="ShipWorksLocal">
           <Schemas>
-            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2021-09-30T15:59:58.4668196Z">
+            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2021-09-30T20:56:35.680684Z">
               <Tables>
                 <Table Name="Action">
                   <PkConstraintName Name="PK_Action" />
@@ -6033,6 +6036,8 @@
                     <Field Name="ThirdPartyConsignee" Ordinal="37" IsOptional="true" DbType="2" />
                     <Field Name="CreateCommercialInvoice" Ordinal="38" IsOptional="true" DbType="2" />
                     <Field Name="FileElectronically" Ordinal="39" IsOptional="true" DbType="2" />
+                    <Field Name="CustomsRecipientTIN" Ordinal="40" IsOptional="true" DbType="12" Length="24" />
+                    <Field Name="TinType" Ordinal="41" IsOptional="true" DbType="8" Precision="10" />
                   </Fields>
                 </Table>
                 <Table Name="FedExProfilePackage">
@@ -6789,6 +6794,7 @@
                     <Field Name="FreightSpecialServices" Ordinal="161" DbType="8" Precision="10" />
                     <Field Name="FreightGuaranteeType" Ordinal="162" DbType="8" Precision="10" />
                     <Field Name="FreightGuaranteeDate" Ordinal="163" DbType="4" />
+                    <Field Name="TinType" Ordinal="164" IsOptional="true" DbType="8" Precision="10" />
                   </Fields>
                 </Table>
                 <Table Name="Filter">
@@ -12197,6 +12203,7 @@
         <EntityMapping EntityName=":FedExProfile" TargetName="ShipWorksLocal:dbo:FedExProfile">
           <FieldMappings>
             <FieldMapping FieldName="CreateCommercialInvoice" TargetFieldName="CreateCommercialInvoice" />
+            <FieldMapping FieldName="CustomsRecipientTIN" TargetFieldName="CustomsRecipientTIN" />
             <FieldMapping FieldName="DropoffType" TargetFieldName="DropoffType" />
             <FieldMapping FieldName="EmailNotifyBroker" TargetFieldName="EmailNotifyBroker" />
             <FieldMapping FieldName="EmailNotifyMessage" TargetFieldName="EmailNotifyMessage" />
@@ -12235,6 +12242,7 @@
             <FieldMapping FieldName="SmartPostHubID" TargetFieldName="SmartPostHubID" />
             <FieldMapping FieldName="SmartPostIndicia" TargetFieldName="SmartPostIndicia" />
             <FieldMapping FieldName="ThirdPartyConsignee" TargetFieldName="ThirdPartyConsignee" />
+            <FieldMapping FieldName="TinType" TargetFieldName="TinType" />
           </FieldMappings>
         </EntityMapping>
         <EntityMapping EntityName=":FedExProfilePackage" TargetName="ShipWorksLocal:dbo:FedExProfilePackage">
@@ -12434,6 +12442,7 @@
             <FieldMapping FieldName="SmartPostIndicia" TargetFieldName="SmartPostIndicia" />
             <FieldMapping FieldName="SmartPostUspsApplicationId" TargetFieldName="SmartPostUspsApplicationId" />
             <FieldMapping FieldName="ThirdPartyConsignee" TargetFieldName="ThirdPartyConsignee" />
+            <FieldMapping FieldName="TinType" TargetFieldName="TinType" />
             <FieldMapping FieldName="TrafficInArmsLicenseNumber" TargetFieldName="TrafficInArmsLicenseNumber" />
             <FieldMapping FieldName="WeightUnitType" TargetFieldName="WeightUnitType" />
           </FieldMappings>

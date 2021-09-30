@@ -209,6 +209,9 @@
             this.fileElectronicallyState = new System.Windows.Forms.CheckBox();
             this.createCommercialInvoiceState = new System.Windows.Forms.CheckBox();
             this.fileElectronically = new System.Windows.Forms.CheckBox();
+            this.tinTypeState = new System.Windows.Forms.CheckBox();
+            this.tinTypes = new ShipWorks.UI.Controls.MultiValueComboBox();
+
             this.kryptonBorderEdge13 = new ComponentFactory.Krypton.Toolkit.KryptonBorderEdge();
             this.insureWith = new System.Windows.Forms.ComboBox();
             this.labelInsureWith = new System.Windows.Forms.Label();
@@ -2215,9 +2218,11 @@
             this.groupBoxCommercialInvoice.Controls.Add(this.createCommercialInvoiceState);
             this.groupBoxCommercialInvoice.Controls.Add(this.fileElectronically);
             this.groupBoxCommercialInvoice.Controls.Add(this.kryptonBorderEdge13);
+            this.groupBoxCommercialInvoice.Controls.Add(this.tinTypes);
+            this.groupBoxCommercialInvoice.Controls.Add(this.tinTypeState);
             this.groupBoxCommercialInvoice.Location = new System.Drawing.Point(6, 4);
             this.groupBoxCommercialInvoice.Name = "groupBoxCommercialInvoice";
-            this.groupBoxCommercialInvoice.Size = new System.Drawing.Size(553, 72);
+            this.groupBoxCommercialInvoice.Size = new System.Drawing.Size(553, 144);
             this.groupBoxCommercialInvoice.TabIndex = 0;
             this.groupBoxCommercialInvoice.TabStop = false;
             this.groupBoxCommercialInvoice.Text = "Commercial Invoice";
@@ -2261,6 +2266,24 @@
             this.fileElectronically.TabIndex = 7;
             this.fileElectronically.Text = "File electronically";
             this.fileElectronically.UseVisualStyleBackColor = false;
+            //
+            // tinTypeState
+            //
+            this.tinTypeState.AutoSize = true;
+            this.tinTypeState.Location = new System.Drawing.Point(9, 42);
+            this.tinTypeState.Name = "tinTypeState";
+            this.tinTypeState.Size = new System.Drawing.Size(15, 14);
+            this.tinTypeState.TabIndex = 8;
+            this.tinTypeState.UseVisualStyleBackColor = true;
+            //
+            // tinTypes
+            //
+            this.tinTypes.AutoSize = true;
+            this.tinTypes.BackColor = System.Drawing.Color.White;
+            this.tinTypes.Location = new System.Drawing.Point(71, 42);
+            this.tinTypes.Name = "tinTypes";
+            this.tinTypes.Size = new System.Drawing.Size(553, 72);
+            this.tinTypes.TabIndex = 9;
             // 
             // kryptonBorderEdge13
             // 
@@ -2525,6 +2548,8 @@
         private System.Windows.Forms.GroupBox groupBoxCommercialInvoice;
         private System.Windows.Forms.CheckBox createCommercialInvoice;
         private System.Windows.Forms.CheckBox fileElectronicallyState;
+        private System.Windows.Forms.CheckBox tinTypeState;
+        private UI.Controls.MultiValueComboBox tinTypes;
         private System.Windows.Forms.CheckBox createCommercialInvoiceState;
         private System.Windows.Forms.CheckBox fileElectronically;
         private ComponentFactory.Krypton.Toolkit.KryptonBorderEdge kryptonBorderEdge13;

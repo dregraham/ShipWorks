@@ -96,10 +96,10 @@ namespace ShipWorks.Shipping.Editing
                     var hubConfig = await lifetimeScope.Resolve<IHubConfigurationWebClient>().GetConfig(configuration.WarehouseID).ConfigureAwait(false);
                     taxIdentifiers = hubConfig.TaxIdentifierConfigurations;
 
-                    foreach (var item in taxIdentifiers)
-                    {
-                        taxId.Items.Add(new KeyValuePair<string, string>($"{item.Number} ({item.Description})", item.Number));
-                    }
+                    //foreach (var item in taxIdentifiers)
+                    //{
+                    //    taxId.Items.Add(new KeyValuePair<string, string>($"{item.Number} ({item.Description})", item.Number));
+                    //}
                 } 
                 else
                 { 
