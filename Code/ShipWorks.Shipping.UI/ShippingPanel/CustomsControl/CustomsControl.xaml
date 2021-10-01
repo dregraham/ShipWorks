@@ -57,14 +57,6 @@
                 <ColumnDefinition Width="40" />
                 <ColumnDefinition Width="200" />
             </Grid.ColumnDefinitions>
-
-            <TextBlock Grid.Row="2" Grid.Column="0">TaxID:</TextBlock>
-            <ComboBox Grid.Row="2" Grid.Column="1"
-                      x:Name="TaxIdComboBox"
-                      DisplayMemberPath="Key"
-                      SelectedValuePath="Value"
-                      SelectedValue="{Binding SelectedCustomsItem.TaxId}"
-                      ItemsSource="{Binding}" SelectionChanged="TaxIdComboBox_SelectionChanged"></ComboBox>
         </Grid>
 
         <TextBlock Style="{StaticResource TextBlock.SectionHeader}">Contents</TextBlock>

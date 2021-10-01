@@ -1192,6 +1192,7 @@
         <Fields>
           <Field Name="CreateCommercialInvoice" Type="bool" IsOptional="true" FieldIndex="37" />
           <Field Name="CustomsRecipientTIN" Type="string" IsOptional="true" MaxLength="24" FieldIndex="39" />
+          <Field Name="CustomsRecipientTinType" Type="int" IsOptional="true" Precision="10" FieldIndex="40" />
           <Field Name="DropoffType" Type="int" IsOptional="true" FieldIndex="27" />
           <Field Name="EmailNotifyBroker" Type="int" IsOptional="true" FieldIndex="26" />
           <Field Name="EmailNotifyMessage" Type="string" IsOptional="true" MaxLength="120" FieldIndex="19" />
@@ -1230,7 +1231,6 @@
           <Field Name="SmartPostHubID" Type="string" IsOptional="true" MaxLength="10" FieldIndex="25" />
           <Field Name="SmartPostIndicia" Type="int" IsOptional="true" FieldIndex="21" />
           <Field Name="ThirdPartyConsignee" Type="bool" IsOptional="true" FieldIndex="36" />
-          <Field Name="TinType" Type="int" IsOptional="true" Precision="10" FieldIndex="40" />
         </Fields>
       </EntityDefinition>
       <EntityDefinition Name="FedExProfilePackage" ObjectID="4fa66e16-e8ea-46e7-b3b1-51fc5047a885" InheritanceType="2">
@@ -1329,6 +1329,7 @@
           <Field Name="CustomsRecipientIdentificationType" Type="int" FieldIndex="75" />
           <Field Name="CustomsRecipientIdentificationValue" Type="string" MaxLength="50" FieldIndex="76" />
           <Field Name="CustomsRecipientTIN" Type="string" MaxLength="24" FieldIndex="70" />
+          <Field Name="CustomsRecipientTinType" Type="int" IsOptional="true" Precision="10" FieldIndex="163" />
           <Field Name="DropoffType" Type="int" FieldIndex="108" />
           <Field Name="EmailNotifyBroker" Type="int" FieldIndex="27" />
           <Field Name="EmailNotifyMessage" Type="string" MaxLength="120" FieldIndex="32" />
@@ -1429,7 +1430,6 @@
           <Field Name="SmartPostIndicia" Type="int" FieldIndex="102" />
           <Field Name="SmartPostUspsApplicationId" Type="string" MaxLength="10" FieldIndex="107" />
           <Field Name="ThirdPartyConsignee" Type="bool" FieldIndex="153" />
-          <Field Name="TinType" Type="int" IsOptional="true" Precision="10" FieldIndex="163" />
           <Field Name="TrafficInArmsLicenseNumber" Type="string" MaxLength="32" FieldIndex="140" />
           <Field Name="WeightUnitType" Type="int" FieldIndex="146" />
         </Fields>
@@ -2686,7 +2686,6 @@
           <Field Name="IncludeReturn" Type="bool" FieldIndex="74" />
           <Field Name="Insurance" Type="bool" FieldIndex="60" />
           <Field Name="InsuranceProvider" Type="int" FieldIndex="61" />
-          <Field Name="IossTaxId" Type="string" IsOptional="true" MaxLength="25" FieldIndex="80" />
           <Field Name="LoggedShippedToHub" Type="bool" IsOptional="true" FieldIndex="77" />
           <Field Name="LoggedVoidToHub" Type="bool" IsOptional="true" FieldIndex="78" />
           <Field Name="OnlineShipmentID" Type="string" MaxLength="128" FieldIndex="70" />
@@ -4703,7 +4702,7 @@
       <Catalogs>
         <Catalog Name="ShipWorksLocal">
           <Schemas>
-            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2021-09-30T20:56:35.680684Z">
+            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2021-10-01T21:27:25.7713154Z">
               <Tables>
                 <Table Name="Action">
                   <PkConstraintName Name="PK_Action" />
@@ -6037,7 +6036,7 @@
                     <Field Name="CreateCommercialInvoice" Ordinal="38" IsOptional="true" DbType="2" />
                     <Field Name="FileElectronically" Ordinal="39" IsOptional="true" DbType="2" />
                     <Field Name="CustomsRecipientTIN" Ordinal="40" IsOptional="true" DbType="12" Length="24" />
-                    <Field Name="TinType" Ordinal="41" IsOptional="true" DbType="8" Precision="10" />
+                    <Field Name="CustomsRecipientTinType" Ordinal="41" IsOptional="true" DbType="8" Precision="10" />
                   </Fields>
                 </Table>
                 <Table Name="FedExProfilePackage">
@@ -6794,7 +6793,7 @@
                     <Field Name="FreightSpecialServices" Ordinal="161" DbType="8" Precision="10" />
                     <Field Name="FreightGuaranteeType" Ordinal="162" DbType="8" Precision="10" />
                     <Field Name="FreightGuaranteeDate" Ordinal="163" DbType="4" />
-                    <Field Name="TinType" Ordinal="164" IsOptional="true" DbType="8" Precision="10" />
+                    <Field Name="CustomsRecipientTinType" Ordinal="164" IsOptional="true" DbType="8" Precision="10" />
                   </Fields>
                 </Table>
                 <Table Name="Filter">
@@ -8639,7 +8638,6 @@
                     <Field Name="LoggedShippedToHub" Ordinal="78" IsOptional="true" DbType="2" />
                     <Field Name="LoggedVoidToHub" Ordinal="79" IsOptional="true" DbType="2" />
                     <Field Name="CarrierAccount" Ordinal="80" IsOptional="true" DbType="12" Length="25" />
-                    <Field Name="IossTaxId" Ordinal="81" IsOptional="true" DbType="12" Length="25" />
                   </Fields>
                 </Table>
                 <Table Name="ShipmentCustomsItem">
@@ -12204,6 +12202,7 @@
           <FieldMappings>
             <FieldMapping FieldName="CreateCommercialInvoice" TargetFieldName="CreateCommercialInvoice" />
             <FieldMapping FieldName="CustomsRecipientTIN" TargetFieldName="CustomsRecipientTIN" />
+            <FieldMapping FieldName="CustomsRecipientTinType" TargetFieldName="CustomsRecipientTinType" />
             <FieldMapping FieldName="DropoffType" TargetFieldName="DropoffType" />
             <FieldMapping FieldName="EmailNotifyBroker" TargetFieldName="EmailNotifyBroker" />
             <FieldMapping FieldName="EmailNotifyMessage" TargetFieldName="EmailNotifyMessage" />
@@ -12242,7 +12241,6 @@
             <FieldMapping FieldName="SmartPostHubID" TargetFieldName="SmartPostHubID" />
             <FieldMapping FieldName="SmartPostIndicia" TargetFieldName="SmartPostIndicia" />
             <FieldMapping FieldName="ThirdPartyConsignee" TargetFieldName="ThirdPartyConsignee" />
-            <FieldMapping FieldName="TinType" TargetFieldName="TinType" />
           </FieldMappings>
         </EntityMapping>
         <EntityMapping EntityName=":FedExProfilePackage" TargetName="ShipWorksLocal:dbo:FedExProfilePackage">
@@ -12342,6 +12340,7 @@
             <FieldMapping FieldName="CustomsRecipientIdentificationType" TargetFieldName="CustomsRecipientIdentificationType" />
             <FieldMapping FieldName="CustomsRecipientIdentificationValue" TargetFieldName="CustomsRecipientIdentificationValue" />
             <FieldMapping FieldName="CustomsRecipientTIN" TargetFieldName="CustomsRecipientTIN" />
+            <FieldMapping FieldName="CustomsRecipientTinType" TargetFieldName="CustomsRecipientTinType" />
             <FieldMapping FieldName="DropoffType" TargetFieldName="DropoffType" />
             <FieldMapping FieldName="EmailNotifyBroker" TargetFieldName="EmailNotifyBroker" />
             <FieldMapping FieldName="EmailNotifyMessage" TargetFieldName="EmailNotifyMessage" />
@@ -12442,7 +12441,6 @@
             <FieldMapping FieldName="SmartPostIndicia" TargetFieldName="SmartPostIndicia" />
             <FieldMapping FieldName="SmartPostUspsApplicationId" TargetFieldName="SmartPostUspsApplicationId" />
             <FieldMapping FieldName="ThirdPartyConsignee" TargetFieldName="ThirdPartyConsignee" />
-            <FieldMapping FieldName="TinType" TargetFieldName="TinType" />
             <FieldMapping FieldName="TrafficInArmsLicenseNumber" TargetFieldName="TrafficInArmsLicenseNumber" />
             <FieldMapping FieldName="WeightUnitType" TargetFieldName="WeightUnitType" />
           </FieldMappings>
@@ -13735,7 +13733,6 @@
             <FieldMapping FieldName="IncludeReturn" TargetFieldName="IncludeReturn" />
             <FieldMapping FieldName="Insurance" TargetFieldName="Insurance" />
             <FieldMapping FieldName="InsuranceProvider" TargetFieldName="InsuranceProvider" />
-            <FieldMapping FieldName="IossTaxId" TargetFieldName="IossTaxId" />
             <FieldMapping FieldName="LoggedShippedToHub" TargetFieldName="LoggedShippedToHub" />
             <FieldMapping FieldName="LoggedVoidToHub" TargetFieldName="LoggedVoidToHub" />
             <FieldMapping FieldName="OnlineShipmentID" TargetFieldName="OnlineShipmentID" />

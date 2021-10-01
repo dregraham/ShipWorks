@@ -76,7 +76,7 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
             CreateCommercialInvoice = source.CreateCommercialInvoice;
             FileElectronically = source.FileElectronically;
             CustomsRecipientTIN = source.CustomsRecipientTIN;
-            TinType = source.TinType;
+            CustomsRecipientTinType = source.CustomsRecipientTinType;
             
             ShippingProfile = (IShippingProfileEntity) source.ShippingProfile?.AsReadOnly(objectMap);
             
@@ -326,12 +326,12 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
         /// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 24<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
         public System.String CustomsRecipientTIN { get; }
-        /// <summary> The TinType property of the Entity FedExProfile<br/><br/>
+        /// <summary> The CustomsRecipientTinType property of the Entity FedExProfile<br/><br/>
         /// </summary>
-        /// <remarks>Mapped on table field: "FedExProfile"."TinType"<br/>
+        /// <remarks>Mapped on table field: "FedExProfile"."CustomsRecipientTinType"<br/>
         /// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
-        public Nullable<System.Int32> TinType { get; }
+        public Nullable<System.Int32> CustomsRecipientTinType { get; }
         
         public IShippingProfileEntity ShippingProfile { get; }
         

@@ -199,7 +199,7 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
             FreightSpecialServices = source.FreightSpecialServices;
             FreightGuaranteeType = source.FreightGuaranteeType;
             FreightGuaranteeDate = source.FreightGuaranteeDate;
-            TinType = source.TinType;
+            CustomsRecipientTinType = source.CustomsRecipientTinType;
             
             Shipment = (IShipmentEntity) source.Shipment?.AsReadOnly(objectMap);
             
@@ -1189,12 +1189,12 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
         /// Table field type characteristics (type, precision, scale, length): DateTime, 0, 0, 0<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
         public System.DateTime FreightGuaranteeDate { get; }
-        /// <summary> The TinType property of the Entity FedExShipment<br/><br/>
+        /// <summary> The CustomsRecipientTinType property of the Entity FedExShipment<br/><br/>
         /// </summary>
-        /// <remarks>Mapped on table field: "FedExShipment"."TinType"<br/>
+        /// <remarks>Mapped on table field: "FedExShipment"."CustomsRecipientTinType"<br/>
         /// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
-        public Nullable<System.Int32> TinType { get; }
+        public Nullable<System.Int32> CustomsRecipientTinType { get; }
         
         public IShipmentEntity Shipment { get; }
         

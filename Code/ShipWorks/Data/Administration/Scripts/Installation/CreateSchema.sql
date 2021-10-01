@@ -1337,8 +1337,7 @@ CREATE TABLE [dbo].[Shipment]
 [ReturnProfileID] [bigint] NOT NULL CONSTRAINT [DF_Shipment_ReturnProfileID] DEFAULT ((-1)),
 [LoggedShippedToHub] [bit] NULL,
 [LoggedVoidToHub] [bit] NULL,
-[CarrierAccount][nvarchar](25) NULL,
-[IossTaxId] [nvarchar] (25) NULL
+[CarrierAccount][nvarchar](25) NULL
 )
 GO
 PRINT N'Creating primary key [PK_Shipment] on [dbo].[Shipment]'
@@ -2221,7 +2220,7 @@ CREATE TABLE [dbo].[FedExShipment]
 [FreightSpecialServices] [int] NOT NULL,
 [FreightGuaranteeType] [int] NOT NULL,
 [FreightGuaranteeDate] [datetime] NOT NULL,
-[TinType] [int] NULL
+[CustomsRecipientTinType] [int] NULL
 )
 GO
 PRINT N'Creating primary key [PK_FedExShipment] on [dbo].[FedExShipment]'
@@ -2280,7 +2279,7 @@ CREATE TABLE [dbo].[FedExProfile]
 [CreateCommercialInvoice] [bit] NULL,
 [FileElectronically] [bit] NULL,
 [CustomsRecipientTIN] [nvarchar] (24) NULL,
-[TinType] [int] NULL,
+[CustomsRecipientTinType] [int] NULL
 )
 GO
 PRINT N'Creating primary key [PK_FedExProfile] on [dbo].[FedExProfile]'

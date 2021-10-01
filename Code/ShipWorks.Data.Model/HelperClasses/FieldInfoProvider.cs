@@ -1437,7 +1437,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 			this.AddElementFieldInfo("FedExProfileEntity", "CreateCommercialInvoice", typeof(Nullable<System.Boolean>), false, false, false, true,  (int)FedExProfileFieldIndex.CreateCommercialInvoice, 0, 0, 0);
 			this.AddElementFieldInfo("FedExProfileEntity", "FileElectronically", typeof(Nullable<System.Boolean>), false, false, false, true,  (int)FedExProfileFieldIndex.FileElectronically, 0, 0, 0);
 			this.AddElementFieldInfo("FedExProfileEntity", "CustomsRecipientTIN", typeof(System.String), false, false, false, true,  (int)FedExProfileFieldIndex.CustomsRecipientTIN, 24, 0, 0);
-			this.AddElementFieldInfo("FedExProfileEntity", "TinType", typeof(Nullable<System.Int32>), false, false, false, true,  (int)FedExProfileFieldIndex.TinType, 0, 0, 10);
+			this.AddElementFieldInfo("FedExProfileEntity", "CustomsRecipientTinType", typeof(Nullable<System.Int32>), false, false, false, true,  (int)FedExProfileFieldIndex.CustomsRecipientTinType, 0, 0, 10);
 		}
 		/// <summary>Inits FedExProfilePackageEntity's FieldInfo objects</summary>
 		private void InitFedExProfilePackageEntityInfos()
@@ -1641,7 +1641,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 			this.AddElementFieldInfo("FedExShipmentEntity", "FreightSpecialServices", typeof(System.Int32), false, false, false, false,  (int)FedExShipmentFieldIndex.FreightSpecialServices, 0, 0, 10);
 			this.AddElementFieldInfo("FedExShipmentEntity", "FreightGuaranteeType", typeof(ShipWorks.Shipping.FedEx.FedExFreightGuaranteeType), false, false, false, false,  (int)FedExShipmentFieldIndex.FreightGuaranteeType, 0, 0, 10);
 			this.AddElementFieldInfo("FedExShipmentEntity", "FreightGuaranteeDate", typeof(System.DateTime), false, false, false, false,  (int)FedExShipmentFieldIndex.FreightGuaranteeDate, 0, 0, 0);
-			this.AddElementFieldInfo("FedExShipmentEntity", "TinType", typeof(Nullable<System.Int32>), false, false, false, true,  (int)FedExShipmentFieldIndex.TinType, 0, 0, 10);
+			this.AddElementFieldInfo("FedExShipmentEntity", "CustomsRecipientTinType", typeof(Nullable<System.Int32>), false, false, false, true,  (int)FedExShipmentFieldIndex.CustomsRecipientTinType, 0, 0, 10);
 		}
 		/// <summary>Inits FilterEntity's FieldInfo objects</summary>
 		private void InitFilterEntityInfos()
@@ -3105,7 +3105,6 @@ namespace ShipWorks.Data.Model.HelperClasses
 			this.AddElementFieldInfo("ShipmentEntity", "LoggedShippedToHub", typeof(Nullable<System.Boolean>), false, false, false, true,  (int)ShipmentFieldIndex.LoggedShippedToHub, 0, 0, 0);
 			this.AddElementFieldInfo("ShipmentEntity", "LoggedVoidToHub", typeof(Nullable<System.Boolean>), false, false, false, true,  (int)ShipmentFieldIndex.LoggedVoidToHub, 0, 0, 0);
 			this.AddElementFieldInfo("ShipmentEntity", "CarrierAccount", typeof(System.String), false, false, false, true,  (int)ShipmentFieldIndex.CarrierAccount, 25, 0, 0);
-			this.AddElementFieldInfo("ShipmentEntity", "IossTaxId", typeof(System.String), false, false, false, true,  (int)ShipmentFieldIndex.IossTaxId, 25, 0, 0);
 		}
 		/// <summary>Inits ShipmentCustomsItemEntity's FieldInfo objects</summary>
 		private void InitShipmentCustomsItemEntityInfos()

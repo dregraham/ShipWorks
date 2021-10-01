@@ -9352,10 +9352,10 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(FedExProfileFieldIndex.CustomsRecipientTIN);}
 		}
-		/// <summary>Creates a new FedExProfileEntity.TinType field instance</summary>
-		public static EntityField2 TinType
+		/// <summary>Creates a new FedExProfileEntity.CustomsRecipientTinType field instance</summary>
+		public static EntityField2 CustomsRecipientTinType
 		{
-			get { return (EntityField2)EntityFieldFactory.Create(FedExProfileFieldIndex.TinType);}
+			get { return (EntityField2)EntityFieldFactory.Create(FedExProfileFieldIndex.CustomsRecipientTinType);}
 		}
 	}
 
@@ -10377,10 +10377,10 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(FedExShipmentFieldIndex.FreightGuaranteeDate);}
 		}
-		/// <summary>Creates a new FedExShipmentEntity.TinType field instance</summary>
-		public static EntityField2 TinType
+		/// <summary>Creates a new FedExShipmentEntity.CustomsRecipientTinType field instance</summary>
+		public static EntityField2 CustomsRecipientTinType
 		{
-			get { return (EntityField2)EntityFieldFactory.Create(FedExShipmentFieldIndex.TinType);}
+			get { return (EntityField2)EntityFieldFactory.Create(FedExShipmentFieldIndex.CustomsRecipientTinType);}
 		}
 	}
 
@@ -27081,11 +27081,6 @@ namespace ShipWorks.Data.Model.HelperClasses
 		public static EntityField2 CarrierAccount
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(ShipmentFieldIndex.CarrierAccount);}
-		}
-		/// <summary>Creates a new ShipmentEntity.IossTaxId field instance</summary>
-		public static EntityField2 IossTaxId
-		{
-			get { return (EntityField2)EntityFieldFactory.Create(ShipmentFieldIndex.IossTaxId);}
 		}
 	}
 

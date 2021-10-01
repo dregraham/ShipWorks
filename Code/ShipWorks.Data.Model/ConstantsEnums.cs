@@ -4028,8 +4028,8 @@ namespace ShipWorks.Data.Model
 		FileElectronically,
 		///<summary>CustomsRecipientTIN. </summary>
 		CustomsRecipientTIN,
-		///<summary>TinType. </summary>
-		TinType,
+		///<summary>CustomsRecipientTinType. </summary>
+		CustomsRecipientTinType,
 		/// <summary></summary>
 		AmountOfFields
 	}
@@ -4446,8 +4446,8 @@ namespace ShipWorks.Data.Model
 		FreightGuaranteeType,
 		///<summary>FreightGuaranteeDate. </summary>
 		FreightGuaranteeDate,
-		///<summary>TinType. </summary>
-		TinType,
+		///<summary>CustomsRecipientTinType. </summary>
+		CustomsRecipientTinType,
 		/// <summary></summary>
 		AmountOfFields
 	}
@@ -11548,8 +11548,6 @@ namespace ShipWorks.Data.Model
 		LoggedVoidToHub,
 		///<summary>CarrierAccount. </summary>
 		CarrierAccount,
-		///<summary>IossTaxId. </summary>
-		IossTaxId,
 		/// <summary></summary>
 		AmountOfFields
 	}

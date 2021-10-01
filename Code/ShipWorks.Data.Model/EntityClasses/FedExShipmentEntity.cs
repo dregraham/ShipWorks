@@ -708,7 +708,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 			fieldHashtable = new Dictionary<string, string>();
 			_fieldsCustomProperties.Add("FreightGuaranteeDate", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
-			_fieldsCustomProperties.Add("TinType", fieldHashtable);
+			_fieldsCustomProperties.Add("CustomsRecipientTinType", fieldHashtable);
 		}
 		#endregion
 
@@ -2607,15 +2607,15 @@ namespace ShipWorks.Data.Model.EntityClasses
 			set	{ SetValue((int)FedExShipmentFieldIndex.FreightGuaranteeDate, value); }
 		}
 
-		/// <summary> The TinType property of the Entity FedExShipment<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "FedExShipment"."TinType"<br/>
+		/// <summary> The CustomsRecipientTinType property of the Entity FedExShipment<br/><br/></summary>
+		/// <remarks>Mapped on  table field: "FedExShipment"."CustomsRecipientTinType"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
 		[DataMember]
-		public virtual Nullable<System.Int32> TinType
+		public virtual Nullable<System.Int32> CustomsRecipientTinType
 		{
-			get { return (Nullable<System.Int32>)GetValue((int)FedExShipmentFieldIndex.TinType, false); }
-			set	{ SetValue((int)FedExShipmentFieldIndex.TinType, value); }
+			get { return (Nullable<System.Int32>)GetValue((int)FedExShipmentFieldIndex.CustomsRecipientTinType, false); }
+			set	{ SetValue((int)FedExShipmentFieldIndex.CustomsRecipientTinType, value); }
 		}
 
 		/// <summary> Gets the EntityCollection with the related entities of type 'FedExPackageEntity' which are related to this entity via a relation of type '1:n'. If the EntityCollection hasn't been fetched yet, the collection returned will be empty.<br/><br/></summary>
