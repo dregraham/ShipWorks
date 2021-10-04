@@ -7,21 +7,21 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Enums
     /// TIN method
     /// </summary>
     [Obfuscation(Feature = "PreserveLiteralValues", Exclude = false, StripAfterObfuscation = false)]
-    public enum FedexTinType
+    public enum FedexTINType
     {
-        [Description("BUSINESS NATIONAL")]
+        [Description("Business National")]
         BUSINESS_NATIONAL,
 
-        [Description("BUSINESS STATE")]
+        [Description("Business State")]
         BUSINESS_STATE,
 
-        [Description("BUSINESS UNION")]
+        [Description("Business Union")]
         BUSINESS_UNION,
-            
-        [Description("PERSONAL NATIONAL")]
+          
+        [Description("Personal National")]
         PERSONAL_NATIONAL,
-            
-        [Description("PERSONAL STATE")]
-        PERSONAL_STATE 
+        
+        [Description("Personal State")]
+        PERSONAL_STATE
     }
 }

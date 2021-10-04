@@ -11,7 +11,6 @@ using ShipWorks.Core.Messaging;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Messaging.Messages;
 using ShipWorks.Shipping.Carriers.FedEx.Enums;
-//using ShipWorks.Shipping.Carriers.FedEx.WebServices.Ship;
 using ShipWorks.Shipping.Editing;
 using ShipWorks.UI.Controls;
 
@@ -48,7 +47,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             EnumHelper.BindComboBox<FedExNaftaDeterminationCode>(naftaProducerDetermination);
             EnumHelper.BindComboBox<FedExNaftaPreferenceCriteria>(naftaPreference);
             EnumHelper.BindComboBox<FedExNaftaNetCostMethod>(naftaNetCostMethod);
-            EnumHelper.BindComboBox<FedexTinType>(customsRecipientTinType);
+            EnumHelper.BindComboBox<FedexTINType>(customsRecipientTINType);
         }
 
         /// <summary>
@@ -84,7 +83,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
                     documentsOnly.ApplyMultiCheck(shipment.FedEx.CustomsDocumentsOnly);
 
                     recipientTaxID.ApplyMultiText(shipment.FedEx.CustomsRecipientTIN);
-                    customsRecipientTinType.ApplyMultiValue((FedexTinType) shipment.FedEx.CustomsRecipientTinType); //example to follow for tintype
+                    customsRecipientTINType.ApplyMultiValue((FedexTINType) shipment.FedEx.CustomsRecipientTINType); //example to follow for tintype
 
                     admissibilityPackaging.ApplyMultiValue((FedExPhysicalPackagingType) shipment.FedEx.CustomsAdmissibilityPackaging);
 
@@ -242,7 +241,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
                 documentsOnly.ReadMultiCheck(c => shipment.FedEx.CustomsDocumentsOnly = c);
 
                 recipientTaxID.ReadMultiText(t => shipment.FedEx.CustomsRecipientTIN = t);
-                customsRecipientTinType.ReadMultiValue(v => shipment.FedEx.CustomsRecipientTinType = (int) v);
+                customsRecipientTINType.ReadMultiValue(v => shipment.FedEx.CustomsRecipientTINType = (int) v);
 
                 admissibilityPackaging.ReadMultiValue(v => shipment.FedEx.CustomsAdmissibilityPackaging = (int) v);
 

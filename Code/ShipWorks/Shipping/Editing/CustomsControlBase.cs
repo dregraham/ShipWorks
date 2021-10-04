@@ -4,7 +4,6 @@ using System.Diagnostics;
 using System.Drawing;
 using System.Globalization;
 using System.Linq;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 using Autofac;
 using Divelements.SandGrid;
@@ -14,13 +13,9 @@ using Interapptive.Shared.Data;
 using Interapptive.Shared.UI;
 using log4net;
 using SD.LLBLGen.Pro.ORMSupportClasses;
-using ShipWorks.ApplicationCore;
-using ShipWorks.Data;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.UI.Controls;
-using ShipWorks.Warehouse.Configuration;
-using ShipWorks.Warehouse.Configuration.TaxIdentifiers.DTO;
 
 namespace ShipWorks.Shipping.Editing
 {
@@ -644,14 +639,6 @@ namespace ShipWorks.Shipping.Editing
         /// Some aspect of the shipment that affects ShipSense has changed
         /// </summary>
         private void OnShipSenseFieldChanged(object sender, EventArgs e)
-        {
-            RaiseShipSenseFieldChanged();
-        }
-
-        /// <summary>
-        /// Some aspect of the shipment that affects ShipSense has changed
-        /// </summary>
-        private void OnTaxIdFieldChanged(object sender, EventArgs e)
         {
             RaiseShipSenseFieldChanged();
         }

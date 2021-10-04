@@ -4,7 +4,6 @@ using System.ComponentModel;
 using System.Data;
 using System.Diagnostics;
 using System.Linq;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 using Autofac;
 using Interapptive.Shared;
@@ -16,11 +15,9 @@ using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Shipping.Carriers.FedEx.Api.Enums;
 using ShipWorks.Shipping.Carriers.FedEx.Enums;
-//using ShipWorks.Shipping.Carriers.FedEx.WebServices.Ship;
 using ShipWorks.Shipping.Insurance;
 using ShipWorks.Shipping.Profiles;
 using ShipWorks.Shipping.Settings;
-using ShipWorks.UI.Controls;
 
 namespace ShipWorks.Shipping.Carriers.FedEx
 {
@@ -80,7 +77,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
 
             EnumHelper.BindComboBox<FedExReturnType>(returnType);
 
-            EnumHelper.BindComboBox<FedexTinType>(customsRecipientTinType);
+            EnumHelper.BindComboBox<FedexTINType>(customsRecipientTINType);
 
             FedExUtility.LoadSmartPostComboBox(smartHubID);
 
@@ -179,7 +176,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             AddValueMapping(fedex, FedExProfileFields.CreateCommercialInvoice, createCommercialInvoiceState, createCommercialInvoice);
             AddValueMapping(fedex, FedExProfileFields.FileElectronically, fileElectronicallyState, fileElectronically);
             AddValueMapping(fedex, FedExProfileFields.CustomsRecipientTIN, customsRecipientTINState, customsRecipientTIN);
-            AddValueMapping(fedex, FedExProfileFields.CustomsRecipientTinType, customsRecipientTinTypeState, customsRecipientTinType);
+            AddValueMapping(fedex, FedExProfileFields.CustomsRecipientTINType, customsRecipientTINTypeState, customsRecipientTINType);
 
             // Map parent/child relationships
             SetParentCheckBox(includeReturnState, includeReturn, applyReturnProfileState, applyReturnProfile);

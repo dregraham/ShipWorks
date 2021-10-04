@@ -31,7 +31,7 @@
                 <Style TargetType="TextBox" BasedOn="{StaticResource Grid.TextBox.Default}" />
             </Grid.Resources>
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="41" />
+                <ColumnDefinition Width="Auto" />
                 <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
 
@@ -47,16 +47,6 @@
                     <ui:TextBoxInputRegExBehavior RegularExpression="^\S*$" EmptyValue="" MaxLength="15" />
                 </i:Interaction.Behaviors>
             </TextBox>
-        </Grid>
-        <Grid Style="{StaticResource Expander.Content.Section}">
-            <Grid.Resources>
-                <Style TargetType="TextBlock" BasedOn="{StaticResource Grid.TextBlock.Label}" />
-                <Style TargetType="TextBox" BasedOn="{StaticResource Grid.TextBox.Default}" />
-            </Grid.Resources>
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="40" />
-                <ColumnDefinition Width="200" />
-            </Grid.ColumnDefinitions>
         </Grid>
 
         <TextBlock Style="{StaticResource TextBlock.SectionHeader}">Contents</TextBlock>

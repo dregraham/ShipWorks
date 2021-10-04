@@ -232,7 +232,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Ship.Manipulators.Request.Intern
             
             // TODO: We may need to set shipping/recipient based on who's paying.  See ETD_Request.xml where The Tins info
             // is on Shipper.
-            request.RequestedShipment.Recipient.Tins[0] = new TaxpayerIdentification() { Number = shipment.FedEx.CustomsRecipientTIN, TinType = (TinType)shipment.FedEx.CustomsRecipientTinType };
+            request.RequestedShipment.Recipient.Tins[0] = new TaxpayerIdentification() { Number = shipment.FedEx.CustomsRecipientTIN, TinType = (TinType) shipment.FedEx.CustomsRecipientTINType };
 
             return request;
         }

@@ -48,8 +48,8 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             this.labelDocuments = new System.Windows.Forms.Label();
             this.labelRecipientTaxID = new System.Windows.Forms.Label();
             this.recipientTaxID = new ShipWorks.UI.Controls.MultiValueTextBox();
-            this.labelCustomsRecipientTinType = new System.Windows.Forms.Label();
-            this.customsRecipientTinType = new ShipWorks.UI.Controls.MultiValueComboBox();
+            this.labelCustomsRecipientTINType = new System.Windows.Forms.Label();
+            this.customsRecipientTINType = new ShipWorks.UI.Controls.MultiValueComboBox();
             this.sectionCommercialInvoice = new ShipWorks.UI.Controls.CollapsibleGroupControl();
             this.commercialInvoiceReference = new ShipWorks.UI.Controls.MultiValueTextBox();
             this.commercialInvoiceReferenceLabel = new System.Windows.Forms.Label();
@@ -140,11 +140,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             // 
             this.sectionGeneral.ContentPanel.Controls.Add(this.electronicExportInfo);
             this.sectionGeneral.ContentPanel.Controls.Add(this.recipientTaxID);
-            this.sectionGeneral.ContentPanel.Controls.Add(this.customsRecipientTinType);
+            this.sectionGeneral.ContentPanel.Controls.Add(this.customsRecipientTINType);
             this.sectionGeneral.ContentPanel.Controls.Add(this.filingOption);
             this.sectionGeneral.ContentPanel.Controls.Add(this.electronicExportInfoLabel);
             this.sectionGeneral.ContentPanel.Controls.Add(this.labelRecipientTaxID);
-            this.sectionGeneral.ContentPanel.Controls.Add(this.labelCustomsRecipientTinType);
+            this.sectionGeneral.ContentPanel.Controls.Add(this.labelCustomsRecipientTINType);
             this.sectionGeneral.ContentPanel.Controls.Add(this.filingOptionLabel);
             this.sectionGeneral.ContentPanel.Controls.Add(this.labelDocuments);
             this.sectionGeneral.ContentPanel.Controls.Add(this.documentsOnly);
@@ -305,21 +305,21 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             // 
             // labelTinTypes
             // 
-            this.labelCustomsRecipientTinType.AutoSize = true;
-            this.labelCustomsRecipientTinType.BackColor = System.Drawing.Color.White;
-            this.labelCustomsRecipientTinType.Location = new System.Drawing.Point(33, 87);
-            this.labelCustomsRecipientTinType.Name = "labelTinTypes";
-            this.labelCustomsRecipientTinType.Size = new System.Drawing.Size(88, 13);
-            this.labelCustomsRecipientTinType.TabIndex = 6;
-            this.labelCustomsRecipientTinType.Text = "Tin Type:";
+            this.labelCustomsRecipientTINType.AutoSize = true;
+            this.labelCustomsRecipientTINType.BackColor = System.Drawing.Color.White;
+            this.labelCustomsRecipientTINType.Location = new System.Drawing.Point(33, 87);
+            this.labelCustomsRecipientTINType.Name = "labelCustomsRecipientTINType";
+            this.labelCustomsRecipientTINType.Size = new System.Drawing.Size(88, 13);
+            this.labelCustomsRecipientTINType.TabIndex = 6;
+            this.labelCustomsRecipientTINType.Text = "TIN Type:";
             // 
             // tinTypes
             // 
-            this.customsRecipientTinType.Location = new System.Drawing.Point(128, 84);
-            this.fieldLengthProvider.SetMaxLengthSource(this.customsRecipientTinType, ShipWorks.Data.Utility.EntityFieldLengthSource.FedExCustomsTin);
-            this.customsRecipientTinType.Name = "tinTypes";
-            this.customsRecipientTinType.Size = new System.Drawing.Size(145, 21);
-            this.customsRecipientTinType.TabIndex = 7;
+            this.customsRecipientTINType.Location = new System.Drawing.Point(128, 84);
+            this.fieldLengthProvider.SetMaxLengthSource(this.customsRecipientTINType, ShipWorks.Data.Utility.EntityFieldLengthSource.FedExCustomsTin);
+            this.customsRecipientTINType.Name = "customsRecipientTINType";
+            this.customsRecipientTINType.Size = new System.Drawing.Size(145, 21);
+            this.customsRecipientTINType.TabIndex = 7;
             // 
             // sectionCommercialInvoice
             // 
@@ -851,8 +851,8 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         private System.Windows.Forms.CheckBox documentsOnly;
         private System.Windows.Forms.Label labelRecipientTaxID;
         private ShipWorks.UI.Controls.MultiValueTextBox recipientTaxID;
-        private System.Windows.Forms.Label labelCustomsRecipientTinType;
-        private ShipWorks.UI.Controls.MultiValueComboBox customsRecipientTinType; //rename tintype to CustomsRecipientTinType
+        private System.Windows.Forms.Label labelCustomsRecipientTINType;
+        private ShipWorks.UI.Controls.MultiValueComboBox customsRecipientTINType;
         //private ShipWorks.UI.Controls.MultiValueTextBox documentDescription;
         //private System.Windows.Forms.Label labelDocumentDescription;
         private ShipWorks.UI.Controls.CollapsibleGroupControl sectionCommercialInvoice;

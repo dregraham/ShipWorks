@@ -166,20 +166,6 @@ namespace ShipWorks.Shipping.Services
         }
 
         /// <summary>
-        /// The tax identifier
-        /// </summary>
-        [Obfuscation(Exclude = true)]
-        public string TaxId
-        {
-            get { return ShipmentCustomsItemEntity.CountryOfOrigin; }
-            set
-            {
-                ShipmentCustomsItemEntity.CountryOfOrigin = value;
-                RaisePropertyChanged(nameof(CountryOfOrigin));
-            }
-        }
-
-        /// <summary>
         /// Raise the INotifyPropertyChanged event
         /// </summary>
         /// <param name="propertyName"></param>

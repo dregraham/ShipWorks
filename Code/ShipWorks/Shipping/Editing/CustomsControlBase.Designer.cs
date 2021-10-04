@@ -47,7 +47,6 @@ namespace ShipWorks.Shipping.Editing
             this.labelDescription = new System.Windows.Forms.Label();
             this.labelWeight = new System.Windows.Forms.Label();
             this.labelValue = new System.Windows.Forms.Label();
-
             this.labelCountryOfOrigin = new System.Windows.Forms.Label();
             this.countryOfOrigin = new ShipWorks.UI.Controls.MultiValueComboBox();
             this.quantity = new ShipWorks.UI.Controls.MultiValueTextBox();
@@ -74,8 +73,6 @@ namespace ShipWorks.Shipping.Editing
             // 
             this.sectionGeneral.ContentPanel.Controls.Add(this.label1);
             this.sectionGeneral.ContentPanel.Controls.Add(this.customsValue);
-            //this.sectionGeneral.ContentPanel.Controls.Add(this.labelTaxId);
-            //this.sectionGeneral.ContentPanel.Controls.Add(this.taxId);
             this.sectionGeneral.ExtraText = "";
             this.sectionGeneral.Location = new System.Drawing.Point(6, 3);
             this.sectionGeneral.Name = "sectionGeneral";
@@ -204,7 +201,7 @@ namespace ShipWorks.Shipping.Editing
             this.weight.Size = new System.Drawing.Size(269, 24);
             this.weight.TabIndex = 5;
             this.weight.Weight = 0D;
-            this.weight.WeightChanged += new System.EventHandler<ShipWorks.UI.Controls.WeightChangedEventArgs>(this.OnShipSenseFieldChanged);
+            this.weight.WeightChanged += new System.EventHandler<WeightChangedEventArgs>(this.OnShipSenseFieldChanged);
             // 
             // value
             // 
@@ -357,7 +354,6 @@ namespace ShipWorks.Shipping.Editing
         private System.Windows.Forms.Label labelDescription;
         private System.Windows.Forms.Label labelWeight;
         private System.Windows.Forms.Label labelValue;
-
         private System.Windows.Forms.Label labelCountryOfOrigin;
         private ShipWorks.UI.Controls.MultiValueComboBox countryOfOrigin;
         private ShipWorks.UI.Controls.MultiValueTextBox quantity;

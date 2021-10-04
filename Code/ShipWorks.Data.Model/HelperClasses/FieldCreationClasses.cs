@@ -9352,10 +9352,10 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(FedExProfileFieldIndex.CustomsRecipientTIN);}
 		}
-		/// <summary>Creates a new FedExProfileEntity.CustomsRecipientTinType field instance</summary>
-		public static EntityField2 CustomsRecipientTinType
+		/// <summary>Creates a new FedExProfileEntity.CustomsRecipientTINType field instance</summary>
+		public static EntityField2 CustomsRecipientTINType
 		{
-			get { return (EntityField2)EntityFieldFactory.Create(FedExProfileFieldIndex.CustomsRecipientTinType);}
+			get { return (EntityField2)EntityFieldFactory.Create(FedExProfileFieldIndex.CustomsRecipientTINType);}
 		}
 	}
 
@@ -10377,10 +10377,10 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(FedExShipmentFieldIndex.FreightGuaranteeDate);}
 		}
-		/// <summary>Creates a new FedExShipmentEntity.CustomsRecipientTinType field instance</summary>
-		public static EntityField2 CustomsRecipientTinType
+		/// <summary>Creates a new FedExShipmentEntity.CustomsRecipientTINType field instance</summary>
+		public static EntityField2 CustomsRecipientTINType
 		{
-			get { return (EntityField2)EntityFieldFactory.Create(FedExShipmentFieldIndex.CustomsRecipientTinType);}
+			get { return (EntityField2)EntityFieldFactory.Create(FedExShipmentFieldIndex.CustomsRecipientTINType);}
 		}
 	}
 

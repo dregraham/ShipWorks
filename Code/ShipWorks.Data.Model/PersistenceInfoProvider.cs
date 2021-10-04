@@ -1503,7 +1503,7 @@ namespace ShipWorks.Data.Model
 			this.AddElementFieldMapping("FedExProfileEntity", "CreateCommercialInvoice", "CreateCommercialInvoice", true, "Bit", 0, 0, 0, false, "", null, typeof(System.Boolean), 37);
 			this.AddElementFieldMapping("FedExProfileEntity", "FileElectronically", "FileElectronically", true, "Bit", 0, 0, 0, false, "", null, typeof(System.Boolean), 38);
 			this.AddElementFieldMapping("FedExProfileEntity", "CustomsRecipientTIN", "CustomsRecipientTIN", true, "NVarChar", 24, 0, 0, false, "", null, typeof(System.String), 39);
-			this.AddElementFieldMapping("FedExProfileEntity", "CustomsRecipientTinType", "CustomsRecipientTinType", true, "Int", 0, 10, 0, false, "", null, typeof(System.Int32), 40);
+			this.AddElementFieldMapping("FedExProfileEntity", "CustomsRecipientTINType", "CustomsRecipientTINType", true, "Int", 0, 10, 0, false, "", null, typeof(System.Int32), 40);
 		}
 
 		/// <summary>Inits FedExProfilePackageEntity's mappings</summary>
@@ -1709,7 +1709,7 @@ namespace ShipWorks.Data.Model
 			this.AddElementFieldMapping("FedExShipmentEntity", "FreightSpecialServices", "FreightSpecialServices", false, "Int", 0, 10, 0, false, "", null, typeof(System.Int32), 160);
 			this.AddElementFieldMapping("FedExShipmentEntity", "FreightGuaranteeType", "FreightGuaranteeType", false, "Int", 0, 10, 0, false, "", null, typeof(System.Int32), 161);
 			this.AddElementFieldMapping("FedExShipmentEntity", "FreightGuaranteeDate", "FreightGuaranteeDate", false, "DateTime", 0, 0, 0, false, "", null, typeof(System.DateTime), 162);
-			this.AddElementFieldMapping("FedExShipmentEntity", "CustomsRecipientTinType", "CustomsRecipientTinType", true, "Int", 0, 10, 0, false, "", null, typeof(System.Int32), 163);
+			this.AddElementFieldMapping("FedExShipmentEntity", "CustomsRecipientTINType", "CustomsRecipientTINType", true, "Int", 0, 10, 0, false, "", null, typeof(System.Int32), 163);
 		}
 
 		/// <summary>Inits FilterEntity's mappings</summary>

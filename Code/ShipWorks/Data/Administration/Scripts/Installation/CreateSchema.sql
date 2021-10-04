@@ -2220,7 +2220,7 @@ CREATE TABLE [dbo].[FedExShipment]
 [FreightSpecialServices] [int] NOT NULL,
 [FreightGuaranteeType] [int] NOT NULL,
 [FreightGuaranteeDate] [datetime] NOT NULL,
-[CustomsRecipientTinType] [int] NULL
+[CustomsRecipientTINType] [int] NULL
 )
 GO
 PRINT N'Creating primary key [PK_FedExShipment] on [dbo].[FedExShipment]'
@@ -2279,7 +2279,7 @@ CREATE TABLE [dbo].[FedExProfile]
 [CreateCommercialInvoice] [bit] NULL,
 [FileElectronically] [bit] NULL,
 [CustomsRecipientTIN] [nvarchar] (24) NULL,
-[CustomsRecipientTinType] [int] NULL
+[CustomsRecipientTINType] [int] NULL
 )
 GO
 PRINT N'Creating primary key [PK_FedExProfile] on [dbo].[FedExProfile]'

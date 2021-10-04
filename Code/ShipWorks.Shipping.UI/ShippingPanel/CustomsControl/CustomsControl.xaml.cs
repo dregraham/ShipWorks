@@ -23,10 +23,5 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.CustomsControl
         {
             InitializeComponent();
         }
-
-        private void TaxIdComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-
-        }
     }
 }

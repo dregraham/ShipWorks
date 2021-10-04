@@ -214,9 +214,9 @@
             this.customsRecipientTIN = new ShipWorks.UI.Controls.MultiValueTextBox();
             this.customsRecipientTINState = new System.Windows.Forms.CheckBox();
             this.labelCustomsRecipientTIN = new System.Windows.Forms.Label();
-            this.customsRecipientTinType = new ShipWorks.UI.Controls.MultiValueComboBox();
-            this.customsRecipientTinTypeState = new System.Windows.Forms.CheckBox();
-            this.labelCustomsRecipientTinType = new System.Windows.Forms.Label(); 
+            this.customsRecipientTINType = new ShipWorks.UI.Controls.MultiValueComboBox();
+            this.customsRecipientTINTypeState = new System.Windows.Forms.CheckBox();
+            this.labelCustomsRecipientTINType = new System.Windows.Forms.Label(); 
             this.kryptonBorderEdgeTIN = new ComponentFactory.Krypton.Toolkit.KryptonBorderEdge();
             this.insureWith = new System.Windows.Forms.ComboBox();
             this.labelInsureWith = new System.Windows.Forms.Label();
@@ -2290,9 +2290,9 @@
             this.groupBoxCustomsRecipientTIN.Controls.Add(this.customsRecipientTIN);
             this.groupBoxCustomsRecipientTIN.Controls.Add(this.customsRecipientTINState);
             this.groupBoxCustomsRecipientTIN.Controls.Add(this.labelCustomsRecipientTIN);
-            this.groupBoxCustomsRecipientTIN.Controls.Add(this.labelCustomsRecipientTinType);
-            this.groupBoxCustomsRecipientTIN.Controls.Add(this.customsRecipientTinType);
-            this.groupBoxCustomsRecipientTIN.Controls.Add(this.customsRecipientTinTypeState);
+            this.groupBoxCustomsRecipientTIN.Controls.Add(this.labelCustomsRecipientTINType);
+            this.groupBoxCustomsRecipientTIN.Controls.Add(this.customsRecipientTINType);
+            this.groupBoxCustomsRecipientTIN.Controls.Add(this.customsRecipientTINTypeState);
             this.groupBoxCustomsRecipientTIN.Controls.Add(this.kryptonBorderEdgeTIN);
             this.groupBoxCustomsRecipientTIN.Location = new System.Drawing.Point(6, 80);
             this.groupBoxCustomsRecipientTIN.Name = "groupBoxCustomsRecipientTIN";
@@ -2301,13 +2301,21 @@
             this.groupBoxCustomsRecipientTIN.TabStop = false;
             this.groupBoxCustomsRecipientTIN.Text = "Ioss Tax Id";
             // 
+            // customsRecipientTIN
+            // 
+            this.customsRecipientTIN.BackColor = System.Drawing.Color.White;
+            this.customsRecipientTIN.Location = new System.Drawing.Point(110, 17);
+            this.customsRecipientTIN.Name = "customsRecipientTIN";
+            this.customsRecipientTIN.Size = new System.Drawing.Size(198, 21);
+            this.customsRecipientTIN.TabIndex = 2;
+            // 
             // customsRecipientTINState
             // 
             this.customsRecipientTINState.AutoSize = true;
             this.customsRecipientTINState.Location = new System.Drawing.Point(9, 20);
             this.customsRecipientTINState.Name = "customsRecipientTINState";
             this.customsRecipientTINState.Size = new System.Drawing.Size(15, 14);
-            this.customsRecipientTINState.TabIndex = 8;
+            this.customsRecipientTINState.TabIndex = 0;
             this.customsRecipientTINState.UseVisualStyleBackColor = true;
             // 
             // labelCustomsRecipientTIN
@@ -2316,43 +2324,35 @@
             this.labelCustomsRecipientTIN.Location = new System.Drawing.Point(37, 20);
             this.labelCustomsRecipientTIN.Name = "labelCustomsRecipientTIN";
             this.labelCustomsRecipientTIN.Size = new System.Drawing.Size(20, 13);
-            this.labelCustomsRecipientTIN.TabIndex = 17;
+            this.labelCustomsRecipientTIN.TabIndex = 1;
             this.labelCustomsRecipientTIN.Text = "Ioss Tax Id #:";
-            // 
-            // customsRecipientTIN
-            // 
-            this.customsRecipientTIN.BackColor = System.Drawing.Color.White;
-            this.customsRecipientTIN.Location = new System.Drawing.Point(110, 17);
-            this.customsRecipientTIN.Name = "customsRecipientTIN";
-            this.customsRecipientTIN.Size = new System.Drawing.Size(198, 21);
-            this.customsRecipientTIN.TabIndex = 1;
-            // 
-            // tinTypeState
-            // 
-            this.customsRecipientTinTypeState.AutoSize = true;
-            this.customsRecipientTinTypeState.Location = new System.Drawing.Point(9, 45);
-            this.customsRecipientTinTypeState.Name = "customsRecipientTinTypeState";
-            this.customsRecipientTinTypeState.Size = new System.Drawing.Size(15, 14);
-            this.customsRecipientTinTypeState.TabIndex = 8;
-            this.customsRecipientTinTypeState.UseVisualStyleBackColor = true;
-            // 
-            // labelTinTypes
-            // 
-            this.labelCustomsRecipientTinType.AutoSize = true;
-            this.labelCustomsRecipientTinType.Location = new System.Drawing.Point(37, 45);
-            this.labelCustomsRecipientTinType.Name = "labelCustomsRecipientTinType";
-            this.labelCustomsRecipientTinType.Size = new System.Drawing.Size(20, 13);
-            this.labelCustomsRecipientTinType.TabIndex = 17;
-            this.labelCustomsRecipientTinType.Text = "Tin Type:";
             // 
             // tinTypes
             // 
-            this.customsRecipientTinType.BackColor = System.Drawing.Color.White;
-            this.customsRecipientTinType.Location = new System.Drawing.Point(110, 42);
-            this.customsRecipientTinType.Name = "customsRecipientTinType";
-            this.customsRecipientTinType.PromptText = "(Multiple Values)";
-            this.customsRecipientTinType.Size = new System.Drawing.Size(198, 21);
-            this.customsRecipientTinType.TabIndex = 1;
+            this.customsRecipientTINType.BackColor = System.Drawing.Color.White;
+            this.customsRecipientTINType.Location = new System.Drawing.Point(110, 42);
+            this.customsRecipientTINType.Name = "customsRecipientTINType";
+            this.customsRecipientTINType.PromptText = "(Multiple Values)";
+            this.customsRecipientTINType.Size = new System.Drawing.Size(198, 21);
+            this.customsRecipientTINType.TabIndex = 5;
+            // 
+            // tinTypeState
+            // 
+            this.customsRecipientTINTypeState.AutoSize = true;
+            this.customsRecipientTINTypeState.Location = new System.Drawing.Point(9, 45);
+            this.customsRecipientTINTypeState.Name = "customsRecipientTINTypeState";
+            this.customsRecipientTINTypeState.Size = new System.Drawing.Size(15, 14);
+            this.customsRecipientTINTypeState.TabIndex = 3;
+            this.customsRecipientTINTypeState.UseVisualStyleBackColor = true;
+            // 
+            // labelTinTypes
+            // 
+            this.labelCustomsRecipientTINType.AutoSize = true;
+            this.labelCustomsRecipientTINType.Location = new System.Drawing.Point(37, 45);
+            this.labelCustomsRecipientTINType.Name = "labelCustomsRecipientTINType";
+            this.labelCustomsRecipientTINType.Size = new System.Drawing.Size(20, 13);
+            this.labelCustomsRecipientTINType.TabIndex = 4;
+            this.labelCustomsRecipientTINType.Text = "Tin Type:";
             // 
             // kryptonBorderEdgeTIN
             // 
@@ -2623,9 +2623,9 @@
         private System.Windows.Forms.CheckBox customsRecipientTINState;
         private System.Windows.Forms.Label labelCustomsRecipientTIN;
         private UI.Controls.MultiValueTextBox customsRecipientTIN; //text box
-        private System.Windows.Forms.CheckBox customsRecipientTinTypeState;
-        private System.Windows.Forms.Label labelCustomsRecipientTinType;
-        private UI.Controls.MultiValueComboBox customsRecipientTinType;
+        private System.Windows.Forms.CheckBox customsRecipientTINTypeState;
+        private System.Windows.Forms.Label labelCustomsRecipientTINType;
+        private UI.Controls.MultiValueComboBox customsRecipientTINType;
         private ComponentFactory.Krypton.Toolkit.KryptonBorderEdge kryptonBorderEdgeTIN;
         private System.Windows.Forms.CheckBox createCommercialInvoiceState;
         private System.Windows.Forms.CheckBox fileElectronically;

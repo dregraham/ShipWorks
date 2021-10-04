@@ -2,7 +2,6 @@
 using System.Reflection;
 using ShipWorks.Warehouse.Configuration.Carriers.DTO;
 using ShipWorks.Warehouse.Configuration.Stores.DTO;
-using ShipWorks.Warehouse.Configuration.TaxIdentifiers.DTO;
 
 namespace ShipWorks.Warehouse.Configuration.DTO
 {
@@ -31,10 +30,5 @@ namespace ShipWorks.Warehouse.Configuration.DTO
         /// The ShipEngine Account ID associated with this customer in the hub
         /// </summary>
         public string ShipEngineAccountID { get; set; }
-
-        /// <summary>
-        /// The IOSS/OSS Tax Identifiers for the customer in the hub
-        /// </summary>
-        public List<TaxIdentifierConfiguration> TaxIdentifierConfigurations { get; set; }
     }
 }
