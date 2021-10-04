@@ -864,11 +864,11 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <summary> The ManagedInHub property of the Entity Store<br/><br/></summary>
 		/// <remarks>Mapped on  table field: "Store"."ManagedInHub"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
-		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
 		[DataMember]
-		public virtual Nullable<System.Boolean> ManagedInHub
+		public virtual System.Boolean ManagedInHub
 		{
-			get { return (Nullable<System.Boolean>)GetValue((int)StoreFieldIndex.ManagedInHub, false); }
+			get { return (System.Boolean)GetValue((int)StoreFieldIndex.ManagedInHub, true); }
 			set	{ SetValue((int)StoreFieldIndex.ManagedInHub, value); }
 		}
 

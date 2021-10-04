@@ -1027,7 +1027,7 @@ CREATE TABLE [dbo].[Store]
 [InsureShipClientID] [bigint] NULL,
 [InsureShipApiKey] [nvarchar] (255) NULL,
 [WarehouseStoreID] [uniqueidentifier] NULL,
-[ManagedInHub] [bit] NULL
+[ManagedInHub] [bit] NOT NULL CONSTRAINT [DF_Store_ManagedInHub] DEFAULT (0)
 )
 GO
 PRINT N'Creating primary key [PK_Store] on [dbo].[Store]'
