@@ -138,7 +138,7 @@ namespace ShipWorks.Actions.Tasks.Common
         /// <summary>
         /// Save the sound file resource to the database
         /// </summary>
-        protected override void SaveExtraState(ActionEntity action, SqlAdapter adapter)
+        protected override void SaveExtraState(ActionEntity action, ISqlAdapter adapter)
         {
             // If we are saving, we are closing or changing, so stop playing
             StopSound();

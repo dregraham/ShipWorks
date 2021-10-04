@@ -9,7 +9,6 @@ using ShipWorks.Shipping;
 using ShipWorks.Shipping.Carriers;
 using ShipWorks.Shipping.Carriers.Postal;
 using ShipWorks.Stores.Content;
-using ShipWorks.Stores.Platforms.Api;
 using ShipWorks.Warehouse.Orders;
 
 namespace ShipWorks.Stores.Platforms.Platform.OnlineUpdating
