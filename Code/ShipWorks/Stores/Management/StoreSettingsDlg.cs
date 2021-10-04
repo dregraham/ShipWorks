@@ -102,6 +102,13 @@ namespace ShipWorks.Stores.Management
         /// </summary>
         private void OnLoad(object sender, EventArgs e)
         {
+            if (store.ManagedInHub)
+            {
+                panelAddressValidation.Enabled = false;
+                panelManualOrders.Enabled = false;
+                panelStoreStatus.Enabled = false;
+            }
+            
             UserSession.Security.DemandPermission(PermissionType.ManageStores);
 
             // Load title
