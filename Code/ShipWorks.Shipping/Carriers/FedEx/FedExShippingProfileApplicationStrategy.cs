@@ -91,7 +91,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             ApplyProfileValue(fedExProfile.FileElectronically, fedExShipment, FedExShipmentFields.CommercialInvoiceFileElectronically);
 
             ApplyProfileValue(fedExProfile.CustomsRecipientTIN, fedExShipment, FedExShipmentFields.CustomsRecipientTIN);
-            ApplyProfileValue(fedExProfile.TinType, fedExShipment, FedExShipmentFields.TinType);
+            ApplyProfileValue(fedExProfile.CustomsRecipientTinType, fedExShipment, FedExShipmentFields.CustomsRecipientTinType);
 
         }
 

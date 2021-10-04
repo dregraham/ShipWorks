@@ -68,7 +68,7 @@ namespace ShipWorks.Shipping.Editing
         /// </summary>
         public virtual void Initialize()
         {
-            LoadTaxIds();
+            
         }
 
         /// <summary>
@@ -80,33 +80,6 @@ namespace ShipWorks.Shipping.Editing
         /// The enable editing value last past to LoadShipments
         /// </summary>
         protected bool EnableEditing => enableEditing;
-
-        /// <summary>
-        /// Load The Tax Identifiers from the Hub.
-        /// </summary>
-        private async Task LoadTaxIds()
-        {
-            List<TaxIdentifierConfiguration> taxIdentifiers;
-            using (var lifetimeScope = IoC.BeginLifetimeScope())
-            {
-                var configuration = lifetimeScope.Resolve<IConfigurationData>().FetchReadOnly();
-
-                if (!string.IsNullOrEmpty(configuration.WarehouseID))
-                {
-                    var hubConfig = await lifetimeScope.Resolve<IHubConfigurationWebClient>().GetConfig(configuration.WarehouseID).ConfigureAwait(false);
-                    taxIdentifiers = hubConfig.TaxIdentifierConfigurations;
-
-                    //foreach (var item in taxIdentifiers)
-                    //{
-                    //    taxId.Items.Add(new KeyValuePair<string, string>($"{item.Number} ({item.Description})", item.Number));
-                    //}
-                } 
-                else
-                { 
-                    // TODO: implement disabling of dropdown.
-                }
-            }
-        }
 
         /// <summary>
         /// Load the given shipments customs information into the control and resets the selection

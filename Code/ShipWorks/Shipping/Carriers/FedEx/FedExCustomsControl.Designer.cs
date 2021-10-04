@@ -48,6 +48,8 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             this.labelDocuments = new System.Windows.Forms.Label();
             this.labelRecipientTaxID = new System.Windows.Forms.Label();
             this.recipientTaxID = new ShipWorks.UI.Controls.MultiValueTextBox();
+            this.labelCustomsRecipientTinType = new System.Windows.Forms.Label();
+            this.customsRecipientTinType = new ShipWorks.UI.Controls.MultiValueComboBox();
             this.sectionCommercialInvoice = new ShipWorks.UI.Controls.CollapsibleGroupControl();
             this.commercialInvoiceReference = new ShipWorks.UI.Controls.MultiValueTextBox();
             this.commercialInvoiceReferenceLabel = new System.Windows.Forms.Label();
@@ -138,9 +140,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             // 
             this.sectionGeneral.ContentPanel.Controls.Add(this.electronicExportInfo);
             this.sectionGeneral.ContentPanel.Controls.Add(this.recipientTaxID);
+            this.sectionGeneral.ContentPanel.Controls.Add(this.customsRecipientTinType);
             this.sectionGeneral.ContentPanel.Controls.Add(this.filingOption);
             this.sectionGeneral.ContentPanel.Controls.Add(this.electronicExportInfoLabel);
             this.sectionGeneral.ContentPanel.Controls.Add(this.labelRecipientTaxID);
+            this.sectionGeneral.ContentPanel.Controls.Add(this.labelCustomsRecipientTinType);
             this.sectionGeneral.ContentPanel.Controls.Add(this.filingOptionLabel);
             this.sectionGeneral.ContentPanel.Controls.Add(this.labelDocuments);
             this.sectionGeneral.ContentPanel.Controls.Add(this.documentsOnly);
@@ -298,6 +302,24 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             this.recipientTaxID.Name = "recipientTaxID";
             this.recipientTaxID.Size = new System.Drawing.Size(145, 21);
             this.recipientTaxID.TabIndex = 7;
+            // 
+            // labelTinTypes
+            // 
+            this.labelCustomsRecipientTinType.AutoSize = true;
+            this.labelCustomsRecipientTinType.BackColor = System.Drawing.Color.White;
+            this.labelCustomsRecipientTinType.Location = new System.Drawing.Point(33, 87);
+            this.labelCustomsRecipientTinType.Name = "labelTinTypes";
+            this.labelCustomsRecipientTinType.Size = new System.Drawing.Size(88, 13);
+            this.labelCustomsRecipientTinType.TabIndex = 6;
+            this.labelCustomsRecipientTinType.Text = "Tin Type:";
+            // 
+            // tinTypes
+            // 
+            this.customsRecipientTinType.Location = new System.Drawing.Point(128, 84);
+            this.fieldLengthProvider.SetMaxLengthSource(this.customsRecipientTinType, ShipWorks.Data.Utility.EntityFieldLengthSource.FedExCustomsTin);
+            this.customsRecipientTinType.Name = "tinTypes";
+            this.customsRecipientTinType.Size = new System.Drawing.Size(145, 21);
+            this.customsRecipientTinType.TabIndex = 7;
             // 
             // sectionCommercialInvoice
             // 
@@ -585,7 +607,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             // 
             this.filingOptionLabel.AutoSize = true;
             this.filingOptionLabel.BackColor = System.Drawing.Color.White;
-            this.filingOptionLabel.Location = new System.Drawing.Point(24, 87);
+            this.filingOptionLabel.Location = new System.Drawing.Point(24, 116);
             this.filingOptionLabel.Name = "filingOptionLabel";
             this.filingOptionLabel.Size = new System.Drawing.Size(98, 13);
             this.filingOptionLabel.TabIndex = 10;
@@ -596,7 +618,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             // 
             this.filingOption.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.filingOption.FormattingEnabled = true;
-            this.filingOption.Location = new System.Drawing.Point(129, 84);
+            this.filingOption.Location = new System.Drawing.Point(128, 113);
             this.filingOption.Name = "filingOption";
             this.filingOption.PromptText = "(Multiple Values)";
             this.filingOption.Size = new System.Drawing.Size(145, 21);
@@ -606,7 +628,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             // 
             this.electronicExportInfoLabel.AutoSize = true;
             this.electronicExportInfoLabel.BackColor = System.Drawing.Color.White;
-            this.electronicExportInfoLabel.Location = new System.Drawing.Point(19, 116);
+            this.electronicExportInfoLabel.Location = new System.Drawing.Point(19, 143);
             this.electronicExportInfoLabel.Name = "electronicExportInfoLabel";
             this.electronicExportInfoLabel.Size = new System.Drawing.Size(103, 13);
             this.electronicExportInfoLabel.TabIndex = 12;
@@ -737,7 +759,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             // 
             // electronicExportInfo
             // 
-            this.electronicExportInfo.Location = new System.Drawing.Point(128, 113);
+            this.electronicExportInfo.Location = new System.Drawing.Point(128, 140);
             this.fieldLengthProvider.SetMaxLengthSource(this.electronicExportInfo, ShipWorks.Data.Utility.EntityFieldLengthSource.FedExCustomsAESEEI);
             this.electronicExportInfo.Name = "electronicExportInfo";
             this.electronicExportInfo.Size = new System.Drawing.Size(145, 21);
@@ -829,6 +851,8 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         private System.Windows.Forms.CheckBox documentsOnly;
         private System.Windows.Forms.Label labelRecipientTaxID;
         private ShipWorks.UI.Controls.MultiValueTextBox recipientTaxID;
+        private System.Windows.Forms.Label labelCustomsRecipientTinType;
+        private ShipWorks.UI.Controls.MultiValueComboBox customsRecipientTinType; //rename tintype to CustomsRecipientTinType
         //private ShipWorks.UI.Controls.MultiValueTextBox documentDescription;
         //private System.Windows.Forms.Label labelDocumentDescription;
         private ShipWorks.UI.Controls.CollapsibleGroupControl sectionCommercialInvoice;
