@@ -289,11 +289,8 @@
     <Compile Include="Platforms\Odbc\Mapping\OdbcStoreRepository.cs" />
     <Compile Include="Platforms\Odbc\Mapping\RefreshingOdbcStore.cs" />
     <Compile Include="Platforms\Platform\CoreExtensions\Actions\PlatformShipmentUploadTask.cs" />
-    <Compile Include="Platforms\Platform\OnlineUpdating\PlatformOnlineUpdater.cs" />
-    <Compile Include="Platforms\Platform\OnlineUpdating\IPlatformOnlineUpdater.cs" />
     <Compile Include="Platforms\Platform\OnlineUpdating\PlatformOnlineUpdateCommandCreator.cs" />
     <Compile Include="Platforms\Platform\PlatformStoreDowloader.cs" />
-    <Compile Include="Platforms\Platform\PlatformStoreException.cs" />
     <Compile Include="Platforms\Platform\PlatformWarehouseOrderFactory.cs" />
     <Compile Include="Platforms\Platform\PlatformStoreType.cs" />
     <Compile Include="Platforms\Rakuten\Content\RakutenCombineOrderAction.cs" />
