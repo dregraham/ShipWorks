@@ -55,7 +55,7 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
         /// <summary> The Secret property of the Entity JetStore<br/><br/>
         /// </summary>
         /// <remarks>Mapped on table field: "JetStore"."Secret"<br/>
-        /// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 100<br/>
+        /// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 400<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
         public System.String Secret { get; }
         

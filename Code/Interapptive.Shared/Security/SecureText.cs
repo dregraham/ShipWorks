@@ -1,144 +1,84 @@
 using System;
-using System.Diagnostics.CodeAnalysis;
-using System.IO;
-using System.Security.Cryptography;
-using System.Text;
+using Interapptive.Shared.Security.SecureTextVersions;
 using log4net;
+using Org.BouncyCastle.Crypto;
 
 namespace Interapptive.Shared.Security
 {
     /// <summary>
-    /// Small utility to for decrypting \ encrypting passwords that are going to be
-    /// saved locally.  Not totally secure, but better than nothing.
+    /// Small utility to for decrypting \ encrypting text that will be saved locally.
     /// </summary>
-    [SuppressMessage("CSharp.Analyzers",
-        "CA5351: Do not use broken cryptographic algorithms",
-        Justification = "This is what ShipWorks currently uses")]
-    [SuppressMessage("SonarQube",
-            "S2674: Check the return value of the \"Read\" call to see how many bytes were read",
-            Justification = "Existing behavior")]
     public static class SecureText
     {
         // Logger
-        static readonly ILog log = LogManager.GetLogger(typeof(SecureText));
+        private static readonly ILog log = LogManager.GetLogger(typeof(SecureText));
 
         /// <summary>
         /// Decrypts a string that was returned by the Encrypt method.
         /// </summary>
-        public static string Decrypt(string cipher, string salt)
+        public static string Decrypt(string ciphertext, string password)
         {
-            if (cipher == null)
+            log.Info("Beginning decryption");
+
+            if (ciphertext == null)
             {
+                log.Info("Cipher text was null");
                 throw new ArgumentNullException("cipher");
             }
 
-            if (salt == null)
+            if (password == null)
             {
+                log.Info("Password was null");
                 throw new ArgumentNullException("salt");
             }
 
-            if (cipher.Length == 0)
+            if (ciphertext.Length == 0)
             {
+                log.Info("Cipher text was empty. Returning empty string");
                 return string.Empty;
             }
 
             try
             {
-                RC2CryptoServiceProvider crypto = new RC2CryptoServiceProvider();
+                var encryptedVersion = ciphertext.Split(':');
 
-                // Create IV from salt
-                byte[] saltTotal = Encoding.UTF8.GetBytes(salt + salt.Length.ToString());
-                byte[] iv = new byte[8];
-                for (int i = 0; i < 8 && i < saltTotal.Length; i++)
+                if (encryptedVersion.Length == 1)
                 {
-                    iv[i] = saltTotal[i];
+                    // If there is no version, use version 0
+                    log.Info("Decrypting with SecureText version 0");
+                    return new SecureTextVersion0(log).Decrypt(ciphertext, password);
                 }
 
-                // Derive the key
-                crypto.IV = iv;
-                crypto.Key = new PasswordDeriveBytes(salt, new byte[0]).CryptDeriveKey("RC2", "MD5", 56, crypto.IV);
-
-                byte[] encryptedBytes = Convert.FromBase64String(cipher);
-                byte[] plainBytes = new Byte[1];
-
-                MemoryStream plain = new MemoryStream();
-                using (CryptoStream decoder = new CryptoStream(
-                           plain,
-                           crypto.CreateDecryptor(),
-                           CryptoStreamMode.Write))
-                {
-                    decoder.Write(encryptedBytes, 0, encryptedBytes.Length);
-                    decoder.FlushFinalBlock();
-
-                    plainBytes = new byte[plain.Length];
-                    plain.Position = 0;
-                    plain.Read(plainBytes, 0, (int) plain.Length);
-                }
-
-                return Encoding.UTF8.GetString(plainBytes);
+                // When new versions are created, this should become a switch statement based on encryptedVersion[1]
+                log.Info("Decrypting with SecureText version 1");
+                return new SecureTextVersion1(log).Decrypt(encryptedVersion[0], password);
             }
-            catch (Exception ex)
+            // OverflowException is thrown when the encrypted text is too short
+            catch (Exception ex) when (ex is OverflowException || ex is InvalidCipherTextException)
             {
-                if (ex is FormatException || ex is CryptographicException)
-                {
-                    log.ErrorFormat("Failed to decrypt '{0}'.", cipher);
-                    return string.Empty;
-                }
-
-                throw;
+                log.Error($"Failed to decrypt '{ciphertext}'.");
+                return string.Empty;
             }
         }
 
         /// <summary>
         /// Encrypts the string and returns the cipher text.
         /// </summary>
-        public static string Encrypt(string value, string salt)
+        public static string Encrypt(string plaintext, string password)
         {
-            if (value == null)
+            log.Info("Beginning encryption");
+
+            if (plaintext == null)
             {
-                throw new ArgumentNullException("value");
+                throw new ArgumentNullException("plaintext");
             }
 
-            if (salt == null)
+            if (password == null)
             {
                 throw new ArgumentNullException("salt");
             }
 
-            // Create crypto provider
-            RC2CryptoServiceProvider crypto = new RC2CryptoServiceProvider();
-
-            // Create IV from salt
-            byte[] saltTotal = Encoding.UTF8.GetBytes(salt + salt.Length.ToString());
-            byte[] iv = new byte[8];
-            for (int i = 0; i < 8 && i < saltTotal.Length; i++)
-            {
-                iv[i] = saltTotal[i];
-            }
-
-            // Derive the key
-            crypto.IV = iv;
-            crypto.Key = new PasswordDeriveBytes(salt, new byte[0]).CryptDeriveKey("RC2", "MD5", 56, crypto.IV);
-
-            byte[] encryptedBytes = new byte[1];
-
-            MemoryStream cipher = new MemoryStream();
-            using (CryptoStream encoder = new CryptoStream(
-                       cipher,
-                       crypto.CreateEncryptor(),
-                       CryptoStreamMode.Write))
-            {
-
-                byte[] plainBytes = Encoding.UTF8.GetBytes(value);
-
-                encoder.Write(plainBytes, 0, plainBytes.Length);
-                encoder.FlushFinalBlock();
-
-                encryptedBytes = new byte[cipher.Length];
-                cipher.Position = 0;
-                cipher.Read(encryptedBytes, 0, (int) cipher.Length);
-            }
-
-            return Convert.ToBase64String(encryptedBytes);
+            return new SecureTextVersion1(log).Encrypt(plaintext, password);
         }
     }
 }

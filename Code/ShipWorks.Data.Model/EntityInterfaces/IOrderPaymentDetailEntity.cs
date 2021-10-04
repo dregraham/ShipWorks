@@ -48,7 +48,7 @@ namespace ShipWorks.Data.Model.EntityInterfaces
         /// <summary> The Value property of the Entity OrderPaymentDetail<br/><br/>
         /// </summary>
         /// <remarks>Mapped on table field: "OrderPaymentDetail"."Value"<br/>
-        /// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 100<br/>
+        /// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 400<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
         System.String Value { get; }
         

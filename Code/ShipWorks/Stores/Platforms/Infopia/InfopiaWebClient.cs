@@ -832,8 +832,12 @@ namespace ShipWorks.Stores.Platforms.Infopia
         {
             // convert to Xml and load into an InfopiaProductInfo object
             string xml = ConvertProductResponseToXml(line);
-            using (StringReader reader = new StringReader(xml))
+            using (StringReader stringReader = new StringReader(xml))
             {
+                // Use an xml reader to prevent an External Entity attack
+                // https://cheatsheetseries.owasp.org/cheatsheets/XML_External_Entity_Prevention_Cheat_Sheet.html#net
+                var reader = XmlReader.Create(stringReader);
+
                 // Create XPath document
                 XPathDocument xmlDocument = new XPathDocument(reader);
 

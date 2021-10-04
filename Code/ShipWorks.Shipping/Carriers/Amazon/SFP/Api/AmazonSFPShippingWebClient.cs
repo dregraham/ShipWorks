@@ -86,6 +86,14 @@ namespace ShipWorks.Shipping.Carriers.Amazon.SFP.Api
 
             IHttpVariableRequestSubmitter request = createVariableRequestSubmitter();
 
+
+            if (shipment.ShippingServiceID.IsNullOrWhiteSpace())
+            {
+                throw new ShippingException("ShipWorks couldn't find any eligible shipping services for the given shipment." +
+                    "\r\nYou may need to adjust your available services in:" +
+                    "\r\n Manage > Shipping Settings > Amazon Seller Fulfilled Prime > Available Services"
+                );
+            }
             // Add the service
             request.Variables.Add("ShippingServiceId", shipment.ShippingServiceID);
 
