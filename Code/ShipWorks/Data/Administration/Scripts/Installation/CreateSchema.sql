@@ -3898,7 +3898,8 @@ CREATE TABLE [dbo].[UspsProfile]
 [UspsAccountID] [bigint] NULL,
 [HidePostage] [bit] NULL,
 [RequireFullAddressValidation] [bit] NULL,
-[RateShop] [bit] NULL
+[RateShop] [bit] NULL,
+[CustomsRecipientTIN] [nvarchar] (25) NULL
 )
 GO
 PRINT N'Creating primary key [PK_UspsProfile] on [dbo].[UspsProfile]'
@@ -3936,7 +3937,8 @@ CREATE TABLE [dbo].[UspsShipment]
 [ScanFormBatchID] [bigint] NULL,
 [RequestedLabelFormat] [int] NOT NULL,
 [RateShop] [bit] NOT NULL,
-[Insurance] [bit] NOT NULL
+[Insurance] [bit] NOT NULL,
+[CustomsRecipientTIN] [nvarchar] (25) NULL
 )
 GO
 PRINT N'Creating primary key [PK_UspsShipment] on [dbo].[UspsShipment]'
