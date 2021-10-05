@@ -1604,6 +1604,7 @@
     <Compile Include="Warehouse\Configuration\HubConfigurator.cs" />
     <Compile Include="Warehouse\Configuration\IHubConfigurator.cs" />
     <Compile Include="Warehouse\Configuration\Stores\ActionTaskConfigurator.cs" />
+    <Compile Include="Warehouse\Configuration\Stores\DTO\Address.cs" />
     <Compile Include="Warehouse\Configuration\Stores\DTO\StoreConfiguration.cs" />
     <Compile Include="Warehouse\Configuration\Stores\DTO\StoreSettings.cs" />
     <Compile Include="Warehouse\Configuration\Stores\DTO\StoreSynchronization.cs" />
