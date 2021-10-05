@@ -583,6 +583,7 @@
     <Compile Include="Actions\Scheduling\SchedulingException.cs" />
     <Compile Include="Actions\ActionTaskChangingEventArgs.cs" />
     <Compile Include="Actions\Tasks\ActionTaskCategory.cs" />
+    <Compile Include="Actions\Tasks\ActionTaskFactory.cs" />
     <Compile Include="Actions\Tasks\IActionTaskFactory.cs" />
     <Compile Include="Actions\Tasks\ActionTaskFlowInfoControl.cs">
       <SubType>UserControl</SubType>
@@ -796,8 +797,7 @@
     <Compile Include="Api\IApiService.cs" />
     <Compile Include="ApplicationCore\CommandLineOptions\AutoUpgradeFailureSubmitter.cs" />
     <Compile Include="ApplicationCore\Dashboard\Content\DashboardAccountTrialItem.cs" />
-    <Compile Include="ApplicationCore\Dashboard\Content\DashboardTrialItem.cs" />
-    <Compile Include="ApplicationCore\Licensing\CustomerLicenseKeyType.cs" />    
+    <Compile Include="ApplicationCore\Dashboard\Content\DashboardTrialItem.cs" />    
     <Compile Include="ApplicationCore\Licensing\CustomerLicenseKeyType.cs" />
     <Compile Include="ApplicationCore\Licensing\TrialDetails.cs" />
     <Compile Include="ApplicationCore\Licensing\Warehouse\DTO\SqlConfigChangedDto.cs" />
@@ -1603,7 +1603,6 @@
     <Compile Include="Warehouse\Configuration\HubConfigurationSynchronizer.cs" />
     <Compile Include="Warehouse\Configuration\HubConfigurator.cs" />
     <Compile Include="Warehouse\Configuration\IHubConfigurator.cs" />
-    <Compile Include="Warehouse\Configuration\Stores\ActionTaskConfigurator.cs" />
     <Compile Include="Warehouse\Configuration\Stores\DTO\Address.cs" />
     <Compile Include="Warehouse\Configuration\Stores\DTO\StoreConfiguration.cs" />
     <Compile Include="Warehouse\Configuration\Stores\DTO\StoreSettings.cs" />

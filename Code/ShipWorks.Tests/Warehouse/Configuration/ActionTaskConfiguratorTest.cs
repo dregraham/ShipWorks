@@ -3,6 +3,7 @@ using Autofac.Extras.Moq;
 using Moq;
 using ShipWorks.Actions.Tasks;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Stores.Warehouse.Configuration.Stores;
 using ShipWorks.Tests.Shared;
 using ShipWorks.Warehouse.Configuration.Stores;
 using ShipWorks.Warehouse.Configuration.Stores.DTO;

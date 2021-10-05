@@ -14,8 +14,10 @@ namespace ShipWorks.Stores.Platforms.Platform.CoreExtensions.Actions
     /// <summary>
     /// Task for uploading shipment details to Platform
     /// </summary>
-    // The ActionTask Identifier is API because this was originally written for API and I worry that customers might
-    // have an action task configured to run based on the identifier and I don't want to mess them up.
+    /// <remarks>
+    /// The ActionTask Identifier is API because this was originally written for API and I worry that customers might
+    /// have an action task configured to run based on the identifier and I don't want to mess them up.
+    /// </remarks>
     [ActionTask("Upload shipment details", "ApiShipmentUploadTask", ActionTaskCategory.UpdateOnline)]
     public class PlatformShipmentUploadTask : StoreInstanceTaskBase
     {

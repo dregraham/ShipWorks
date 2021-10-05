@@ -52,12 +52,10 @@ namespace ShipWorks.Warehouse.Configuration.Stores.DTO
         /// </summary>
         public Address Address { get; set; }
 
-
         /// <summary>
         /// Store settings
         /// </summary>
         public StoreSettings Settings { get; set; }
-
 
         /// <summary>
         /// True if this store should upload shipment details

@@ -17,7 +17,7 @@ namespace ShipWorks.Stores.Platforms.Platform
     /// Platform stores originate outside of the ShipWorks client, likely from Platform/Hub/Api.
     /// </summary>
     [KeyedComponent(typeof(IStoreSetup), StoreTypeCode.Api)]
-    [KeyedComponent(typeof(IStoreSetup), StoreTypeCode.Brightpearl)]
+    [KeyedComponent(typeof(IStoreSetup), StoreTypeCode.BrightpearlHub)]
     public class PlatformStoreSetup: BaseStoreSetup 
     {
         private readonly IActionTaskConfigurator actionTaskConfigurator;

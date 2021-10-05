@@ -5,10 +5,11 @@ using ShipWorks.Actions.Tasks;
 using ShipWorks.Actions.Triggers;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Stores.Platforms.Platform.OnlineUpdating;
+using ShipWorks.Stores.Platforms.Platform.CoreExtensions.Actions;
+using ShipWorks.Warehouse.Configuration.Stores;
 using ShipWorks.Warehouse.Configuration.Stores.DTO;
 
-namespace ShipWorks.Warehouse.Configuration.Stores
+namespace ShipWorks.Stores.Warehouse.Configuration.Stores
 {
     /// <summary>
     /// Creates an action task for stores managed in the hub
@@ -57,13 +58,14 @@ namespace ShipWorks.Warehouse.Configuration.Stores
                 TriggerSettings = trigger.GetXml()
             };
 
-            var actionTask = actionTaskFactory.Create(typeof(PlatformOnlineUpdater), store, 0);
+            var actionTask = actionTaskFactory.Create(typeof(PlatformShipmentUploadTask), store, 0);
 
             // Set the summary
             action.TaskSummary = actionManager.GetTaskSummary(new List<ActionTask> {actionTask});
 
             using (var sqlAdapter = sqlAdapterFactory.Create())
             {
+                actionManager.SaveAction(action, sqlAdapter);
                 actionTask.Save(action, sqlAdapter);
                 sqlAdapter.Commit();
             }
