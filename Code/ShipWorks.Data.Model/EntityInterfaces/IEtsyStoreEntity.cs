@@ -42,13 +42,13 @@ namespace ShipWorks.Data.Model.EntityInterfaces
         /// <summary> The OAuthToken property of the Entity EtsyStore<br/><br/>
         /// </summary>
         /// <remarks>Mapped on table field: "EtsyStore"."OAuthToken"<br/>
-        /// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 200<br/>
+        /// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 50<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
         System.String OAuthToken { get; }
         /// <summary> The OAuthTokenSecret property of the Entity EtsyStore<br/><br/>
         /// </summary>
         /// <remarks>Mapped on table field: "EtsyStore"."OAuthTokenSecret"<br/>
-        /// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 200<br/>
+        /// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 50<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
         System.String OAuthTokenSecret { get; }
         

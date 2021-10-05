@@ -499,7 +499,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 
 		/// <summary> The TrackingUpdatePassword property of the Entity YahooStore<br/><br/></summary>
 		/// <remarks>Mapped on  table field: "YahooStore"."TrackingUpdatePassword"<br/>
-		/// Table field type characteristics (type, precision, scale, length): VarChar, 0, 0, 400<br/>
+		/// Table field type characteristics (type, precision, scale, length): VarChar, 0, 0, 100<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
 		[DataMember]
 		public virtual System.String TrackingUpdatePassword

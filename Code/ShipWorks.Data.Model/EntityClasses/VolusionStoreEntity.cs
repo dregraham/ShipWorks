@@ -426,7 +426,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 
 		/// <summary> The WebPassword property of the Entity VolusionStore<br/><br/></summary>
 		/// <remarks>Mapped on  table field: "VolusionStore"."WebPassword"<br/>
-		/// Table field type characteristics (type, precision, scale, length): VarChar, 0, 0, 280<br/>
+		/// Table field type characteristics (type, precision, scale, length): VarChar, 0, 0, 70<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
 		[DataMember]
 		public virtual System.String WebPassword

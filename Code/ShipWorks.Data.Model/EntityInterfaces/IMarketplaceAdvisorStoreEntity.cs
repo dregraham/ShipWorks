@@ -30,7 +30,7 @@ namespace ShipWorks.Data.Model.EntityInterfaces
         /// <summary> The Password property of the Entity MarketplaceAdvisorStore<br/><br/>
         /// </summary>
         /// <remarks>Mapped on table field: "MarketplaceAdvisorStore"."Password"<br/>
-        /// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 200<br/>
+        /// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 50<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
         System.String Password { get; }
         /// <summary> The AccountType property of the Entity MarketplaceAdvisorStore<br/><br/>

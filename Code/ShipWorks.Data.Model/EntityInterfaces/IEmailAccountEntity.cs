@@ -84,7 +84,7 @@ namespace ShipWorks.Data.Model.EntityInterfaces
         /// <summary> The IncomingPassword property of the Entity EmailAccount<br/><br/>
         /// </summary>
         /// <remarks>Mapped on table field: "EmailAccount"."IncomingPassword"<br/>
-        /// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 600<br/>
+        /// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 150<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
         System.String IncomingPassword { get; }
         /// <summary> The OutgoingServer property of the Entity EmailAccount<br/><br/>
@@ -120,7 +120,7 @@ namespace ShipWorks.Data.Model.EntityInterfaces
         /// <summary> The OutgoingPassword property of the Entity EmailAccount<br/><br/>
         /// </summary>
         /// <remarks>Mapped on table field: "EmailAccount"."OutgoingPassword"<br/>
-        /// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 600<br/>
+        /// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 150<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
         System.String OutgoingPassword { get; }
         /// <summary> The AutoSend property of the Entity EmailAccount<br/><br/>

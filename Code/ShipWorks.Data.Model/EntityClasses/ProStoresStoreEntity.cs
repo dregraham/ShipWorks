@@ -572,7 +572,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 
 		/// <summary> The LegacyPassword property of the Entity ProStoresStore<br/><br/></summary>
 		/// <remarks>Mapped on  table field: "ProStoresStore"."LegacyPassword"<br/>
-		/// Table field type characteristics (type, precision, scale, length): VarChar, 0, 0, 600<br/>
+		/// Table field type characteristics (type, precision, scale, length): VarChar, 0, 0, 150<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
 		[DataMember]
 		public virtual System.String LegacyPassword
