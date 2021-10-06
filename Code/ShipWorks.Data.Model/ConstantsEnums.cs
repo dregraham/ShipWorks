@@ -9926,6 +9926,8 @@ namespace ShipWorks.Data.Model
 		Memo3,
 		///<summary>NoPostage. </summary>
 		NoPostage,
+		///<summary>CustomsRecipientTin. </summary>
+		CustomsRecipientTin,
 		/// <summary></summary>
 		AmountOfFields
 	}
@@ -9978,6 +9980,8 @@ namespace ShipWorks.Data.Model
 		NoPostage,
 		///<summary>Insurance. </summary>
 		Insurance,
+		///<summary>CustomsRecipientTin. </summary>
+		CustomsRecipientTin,
 		/// <summary></summary>
 		AmountOfFields
 	}
@@ -11542,8 +11546,6 @@ namespace ShipWorks.Data.Model
 		LoggedVoidToHub,
 		///<summary>CarrierAccount. </summary>
 		CarrierAccount,
-		///<summary>IossTaxId. </summary>
-		IossTaxId,
 		/// <summary></summary>
 		AmountOfFields
 	}
@@ -11718,6 +11720,8 @@ namespace ShipWorks.Data.Model
 		ApplyReturnProfile,
 		///<summary>ReturnProfileID. </summary>
 		ReturnProfileID,
+		///<summary>CustomsRecipientTin. </summary>
+		CustomsRecipientTin,
 		/// <summary></summary>
 		AmountOfFields
 	}
@@ -13720,8 +13724,6 @@ namespace ShipWorks.Data.Model
 		RequireFullAddressValidation,
 		///<summary>RateShop. </summary>
 		RateShop,
-		///<summary>CustomsRecipientTIN. </summary>
-		CustomsRecipientTIN,
 		/// <summary></summary>
 		AmountOfFields
 	}
@@ -13770,8 +13772,8 @@ namespace ShipWorks.Data.Model
 		RateShop,
 		///<summary>Insurance. </summary>
 		Insurance,
-		///<summary>CustomsRecipientTIN. </summary>
-		CustomsRecipientTIN,
+		///<summary>CustomsRecipientTin. </summary>
+		CustomsRecipientTin,
 		/// <summary></summary>
 		AmountOfFields
 	}

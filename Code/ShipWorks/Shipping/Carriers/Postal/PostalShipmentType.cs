@@ -140,6 +140,7 @@ namespace ShipWorks.Shipping.Carriers.Postal
 
             postal.CustomsContentType = (int) PostalCustomsContentType.Merchandise;
             postal.CustomsContentDescription = "Other";
+            postal.CustomsRecipientTin = String.Empty;
 
             postal.ExpressSignatureWaiver = false;
 

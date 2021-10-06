@@ -13484,7 +13484,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.WebServices {
         private System.DateTime passportExpiryDateField;
         
         private string importLicenseNumberField;
-        
+
         public CustomsV5() {
             this.passportIssueDateField = new System.DateTime(0);
             this.passportExpiryDateField = new System.DateTime(0);
@@ -13509,7 +13509,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.WebServices {
                 this.commentsField = value;
             }
         }
-        
+
         /// <remarks/>
         public string LicenseNumber {
             get {

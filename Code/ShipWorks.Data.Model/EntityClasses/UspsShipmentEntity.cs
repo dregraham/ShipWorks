@@ -410,7 +410,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 			fieldHashtable = new Dictionary<string, string>();
 			_fieldsCustomProperties.Add("Insurance", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
-			_fieldsCustomProperties.Add("CustomsRecipientTIN", fieldHashtable);
+			_fieldsCustomProperties.Add("CustomsRecipientTin", fieldHashtable);
 		}
 		#endregion
 
@@ -670,15 +670,15 @@ namespace ShipWorks.Data.Model.EntityClasses
 			set	{ SetValue((int)UspsShipmentFieldIndex.Insurance, value); }
 		}
 
-		/// <summary> The CustomsRecipientTIN property of the Entity UspsShipment<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "UspsShipment"."CustomsRecipientTIN"<br/>
+		/// <summary> The CustomsRecipientTin property of the Entity UspsShipment<br/><br/></summary>
+		/// <remarks>Mapped on  table field: "UspsShipment"."CustomsRecipientTin"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 25<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
 		[DataMember]
-		public virtual System.String CustomsRecipientTIN
+		public virtual System.String CustomsRecipientTin
 		{
-			get { return (System.String)GetValue((int)UspsShipmentFieldIndex.CustomsRecipientTIN, true); }
-			set	{ SetValue((int)UspsShipmentFieldIndex.CustomsRecipientTIN, value); }
+			get { return (System.String)GetValue((int)UspsShipmentFieldIndex.CustomsRecipientTin, true); }
+			set	{ SetValue((int)UspsShipmentFieldIndex.CustomsRecipientTin, value); }
 		}
 
 		/// <summary> Gets / sets related entity of type 'ScanFormBatchEntity' which has to be set using a fetch action earlier. If no related entity is set for this property, null is returned..<br/><br/></summary>

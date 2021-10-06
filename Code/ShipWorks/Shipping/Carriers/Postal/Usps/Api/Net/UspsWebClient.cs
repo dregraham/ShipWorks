@@ -1501,6 +1501,11 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
                     customs.OtherDescribe = shipment.Postal.CustomsContentDescription.Truncate(MaxCustomsContentDescriptionLength);
                 }
             }
+            
+            //if (shipment.Postal.CustomsRecipientTin != null)
+            //{
+            //    customs.FromCustomsReference = shipment.Postal.CustomsRecipientTin;
+            //}
 
             List<CustomsLine> lines = new List<CustomsLine>();
 

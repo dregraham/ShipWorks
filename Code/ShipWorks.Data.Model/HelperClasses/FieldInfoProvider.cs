@@ -2657,6 +2657,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 			this.AddElementFieldInfo("PostalProfileEntity", "Memo2", typeof(System.String), false, false, false, true,  (int)PostalProfileFieldIndex.Memo2, 300, 0, 0);
 			this.AddElementFieldInfo("PostalProfileEntity", "Memo3", typeof(System.String), false, false, false, true,  (int)PostalProfileFieldIndex.Memo3, 300, 0, 0);
 			this.AddElementFieldInfo("PostalProfileEntity", "NoPostage", typeof(Nullable<System.Boolean>), false, false, false, true,  (int)PostalProfileFieldIndex.NoPostage, 0, 0, 0);
+			this.AddElementFieldInfo("PostalProfileEntity", "CustomsRecipientTin", typeof(System.String), false, false, false, true,  (int)PostalProfileFieldIndex.CustomsRecipientTin, 25, 0, 0);
 		}
 		/// <summary>Inits PostalShipmentEntity's FieldInfo objects</summary>
 		private void InitPostalShipmentEntityInfos()
@@ -2685,6 +2686,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 			this.AddElementFieldInfo("PostalShipmentEntity", "Memo3", typeof(System.String), false, false, false, false,  (int)PostalShipmentFieldIndex.Memo3, 300, 0, 0);
 			this.AddElementFieldInfo("PostalShipmentEntity", "NoPostage", typeof(System.Boolean), false, false, false, false,  (int)PostalShipmentFieldIndex.NoPostage, 0, 0, 0);
 			this.AddElementFieldInfo("PostalShipmentEntity", "Insurance", typeof(System.Boolean), false, false, false, false,  (int)PostalShipmentFieldIndex.Insurance, 0, 0, 0);
+			this.AddElementFieldInfo("PostalShipmentEntity", "CustomsRecipientTin", typeof(System.String), false, false, false, true,  (int)PostalShipmentFieldIndex.CustomsRecipientTin, 25, 0, 0);
 		}
 		/// <summary>Inits PrintResultEntity's FieldInfo objects</summary>
 		private void InitPrintResultEntityInfos()
@@ -3102,7 +3104,6 @@ namespace ShipWorks.Data.Model.HelperClasses
 			this.AddElementFieldInfo("ShipmentEntity", "LoggedShippedToHub", typeof(Nullable<System.Boolean>), false, false, false, true,  (int)ShipmentFieldIndex.LoggedShippedToHub, 0, 0, 0);
 			this.AddElementFieldInfo("ShipmentEntity", "LoggedVoidToHub", typeof(Nullable<System.Boolean>), false, false, false, true,  (int)ShipmentFieldIndex.LoggedVoidToHub, 0, 0, 0);
 			this.AddElementFieldInfo("ShipmentEntity", "CarrierAccount", typeof(System.String), false, false, false, true,  (int)ShipmentFieldIndex.CarrierAccount, 25, 0, 0);
-			this.AddElementFieldInfo("ShipmentEntity", "IossTaxId", typeof(System.String), false, false, false, true,  (int)ShipmentFieldIndex.IossTaxId, 25, 0, 0);
 		}
 		/// <summary>Inits ShipmentCustomsItemEntity's FieldInfo objects</summary>
 		private void InitShipmentCustomsItemEntityInfos()
@@ -3204,6 +3205,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 			this.AddElementFieldInfo("ShippingProfileEntity", "IncludeReturn", typeof(Nullable<System.Boolean>), false, false, false, true,  (int)ShippingProfileFieldIndex.IncludeReturn, 0, 0, 0);
 			this.AddElementFieldInfo("ShippingProfileEntity", "ApplyReturnProfile", typeof(Nullable<System.Boolean>), false, false, false, true,  (int)ShippingProfileFieldIndex.ApplyReturnProfile, 0, 0, 0);
 			this.AddElementFieldInfo("ShippingProfileEntity", "ReturnProfileID", typeof(Nullable<System.Int64>), false, false, false, true,  (int)ShippingProfileFieldIndex.ReturnProfileID, 0, 0, 19);
+			this.AddElementFieldInfo("ShippingProfileEntity", "CustomsRecipientTin", typeof(System.String), false, false, false, true,  (int)ShippingProfileFieldIndex.CustomsRecipientTin, 25, 0, 0);
 		}
 		/// <summary>Inits ShippingProviderRuleEntity's FieldInfo objects</summary>
 		private void InitShippingProviderRuleEntityInfos()
@@ -3882,7 +3884,6 @@ namespace ShipWorks.Data.Model.HelperClasses
 			this.AddElementFieldInfo("UspsProfileEntity", "HidePostage", typeof(Nullable<System.Boolean>), false, false, false, true,  (int)UspsProfileFieldIndex.HidePostage, 0, 0, 0);
 			this.AddElementFieldInfo("UspsProfileEntity", "RequireFullAddressValidation", typeof(Nullable<System.Boolean>), false, false, false, true,  (int)UspsProfileFieldIndex.RequireFullAddressValidation, 0, 0, 0);
 			this.AddElementFieldInfo("UspsProfileEntity", "RateShop", typeof(Nullable<System.Boolean>), false, false, false, true,  (int)UspsProfileFieldIndex.RateShop, 0, 0, 0);
-			this.AddElementFieldInfo("UspsProfileEntity", "CustomsRecipientTIN", typeof(System.String), false, false, false, true,  (int)UspsProfileFieldIndex.CustomsRecipientTIN, 25, 0, 0);
 		}
 		/// <summary>Inits UspsScanFormEntity's FieldInfo objects</summary>
 		private void InitUspsScanFormEntityInfos()
@@ -3911,7 +3912,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 			this.AddElementFieldInfo("UspsShipmentEntity", "RequestedLabelFormat", typeof(System.Int32), false, false, false, false,  (int)UspsShipmentFieldIndex.RequestedLabelFormat, 0, 0, 10);
 			this.AddElementFieldInfo("UspsShipmentEntity", "RateShop", typeof(System.Boolean), false, false, false, false,  (int)UspsShipmentFieldIndex.RateShop, 0, 0, 0);
 			this.AddElementFieldInfo("UspsShipmentEntity", "Insurance", typeof(System.Boolean), false, false, false, false,  (int)UspsShipmentFieldIndex.Insurance, 0, 0, 0);
-			this.AddElementFieldInfo("UspsShipmentEntity", "CustomsRecipientTIN", typeof(System.String), false, false, false, true,  (int)UspsShipmentFieldIndex.CustomsRecipientTIN, 25, 0, 0);
+			this.AddElementFieldInfo("UspsShipmentEntity", "CustomsRecipientTin", typeof(System.String), false, false, false, true,  (int)UspsShipmentFieldIndex.CustomsRecipientTin, 25, 0, 0);
 		}
 		/// <summary>Inits ValidatedAddressEntity's FieldInfo objects</summary>
 		private void InitValidatedAddressEntityInfos()

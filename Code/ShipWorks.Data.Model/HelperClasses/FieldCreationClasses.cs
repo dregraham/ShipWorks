@@ -23297,6 +23297,11 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(PostalProfileFieldIndex.NoPostage);}
 		}
+		/// <summary>Creates a new PostalProfileEntity.CustomsRecipientTin field instance</summary>
+		public static EntityField2 CustomsRecipientTin
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(PostalProfileFieldIndex.CustomsRecipientTin);}
+		}
 	}
 
 	/// <summary>Field Creation Class for entity PostalShipmentEntity</summary>
@@ -23416,6 +23421,11 @@ namespace ShipWorks.Data.Model.HelperClasses
 		public static EntityField2 Insurance
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(PostalShipmentFieldIndex.Insurance);}
+		}
+		/// <summary>Creates a new PostalShipmentEntity.CustomsRecipientTin field instance</summary>
+		public static EntityField2 CustomsRecipientTin
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(PostalShipmentFieldIndex.CustomsRecipientTin);}
 		}
 	}
 
@@ -27067,11 +27077,6 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(ShipmentFieldIndex.CarrierAccount);}
 		}
-		/// <summary>Creates a new ShipmentEntity.IossTaxId field instance</summary>
-		public static EntityField2 IossTaxId
-		{
-			get { return (EntityField2)EntityFieldFactory.Create(ShipmentFieldIndex.IossTaxId);}
-		}
 	}
 
 	/// <summary>Field Creation Class for entity ShipmentCustomsItemEntity</summary>
@@ -27436,6 +27441,11 @@ namespace ShipWorks.Data.Model.HelperClasses
 		public static EntityField2 ReturnProfileID
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(ShippingProfileFieldIndex.ReturnProfileID);}
+		}
+		/// <summary>Creates a new ShippingProfileEntity.CustomsRecipientTin field instance</summary>
+		public static EntityField2 CustomsRecipientTin
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ShippingProfileFieldIndex.CustomsRecipientTin);}
 		}
 	}
 
@@ -32042,11 +32052,6 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(UspsProfileFieldIndex.RateShop);}
 		}
-		/// <summary>Creates a new UspsProfileEntity.CustomsRecipientTIN field instance</summary>
-		public static EntityField2 CustomsRecipientTIN
-		{
-			get { return (EntityField2)EntityFieldFactory.Create(UspsProfileFieldIndex.CustomsRecipientTIN);}
-		}
 	}
 
 	/// <summary>Field Creation Class for entity UspsScanFormEntity</summary>
@@ -32147,10 +32152,10 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(UspsShipmentFieldIndex.Insurance);}
 		}
-		/// <summary>Creates a new UspsShipmentEntity.CustomsRecipientTIN field instance</summary>
-		public static EntityField2 CustomsRecipientTIN
+		/// <summary>Creates a new UspsShipmentEntity.CustomsRecipientTin field instance</summary>
+		public static EntityField2 CustomsRecipientTin
 		{
-			get { return (EntityField2)EntityFieldFactory.Create(UspsShipmentFieldIndex.CustomsRecipientTIN);}
+			get { return (EntityField2)EntityFieldFactory.Create(UspsShipmentFieldIndex.CustomsRecipientTin);}
 		}
 	}
 
