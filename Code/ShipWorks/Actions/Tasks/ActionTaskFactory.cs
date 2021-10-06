@@ -16,7 +16,7 @@ namespace ShipWorks.Actions.Tasks
         /// </summary>
         public ActionTask Create(Type taskType, StoreEntity store, int stepIndex)
         {
-            using (var scope = IoC.UnsafeGlobalLifetimeScope)
+            using (var scope = IoC.BeginLifetimeScope())
             {
                 var actionTask =  new ActionTaskDescriptorBinding(taskType, store, scope)
                     .CreateInstance(scope);

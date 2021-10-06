@@ -36,6 +36,7 @@ namespace ShipWorks.Warehouse.Configuration.Stores
         private readonly IStoreTypeManager storeTypeManager;
         private readonly IActionManager actionManager;
         private readonly ILifetimeScope lifetimeScope;
+        private readonly IActionTaskConfigurator actionTaskConfigurator;
         private readonly ILog log;
 
         /// <summary>
@@ -46,6 +47,7 @@ namespace ShipWorks.Warehouse.Configuration.Stores
             IStoreTypeManager storeTypeManager,
             IActionManager actionManager,
             ILifetimeScope lifetimeScope,
+            IActionTaskConfigurator actionTaskConfigurator,
             Func<Type, ILog> logFactory)
         {
             this.storeSetupFactory = storeSetupFactory;
@@ -53,6 +55,7 @@ namespace ShipWorks.Warehouse.Configuration.Stores
             this.storeTypeManager = storeTypeManager;
             this.actionManager = actionManager;
             this.lifetimeScope = lifetimeScope;
+            this.actionTaskConfigurator = actionTaskConfigurator;
             log = logFactory(typeof(HubStoreConfigurator));
         }
 
@@ -111,7 +114,7 @@ namespace ShipWorks.Warehouse.Configuration.Stores
                         else
                         {
                             var storeID = ConfigureNewStore(deserializedStore);
-                            ConfigureDefaultAction(storeID, config.ActionsPayload);
+                            ConfigureDefaultAction(storeID, config);
                         }
                     }
                     else
@@ -154,7 +157,7 @@ namespace ShipWorks.Warehouse.Configuration.Stores
         /// <summary>
         /// Configures a new store and saves it to the DB
         /// </summary>
-        private long ConfigureNewStore(StoreEntity store)
+        private StoreEntity ConfigureNewStore(StoreEntity store)
         {
             // Fill in non-null values for anything the store is not yet configured for
             store.InitializeNullsToDefault();
@@ -210,7 +213,7 @@ namespace ShipWorks.Warehouse.Configuration.Stores
                 FilterLayoutContext.PopScope();
             }
 
-            return store.StoreID;
+            return store;
         }
 
         /// <summary>
@@ -272,21 +275,27 @@ namespace ShipWorks.Warehouse.Configuration.Stores
         /// <summary>
         /// Create the default store action
         /// </summary>
-        private void ConfigureDefaultAction(long storeID, string actionPayload)
+        private void ConfigureDefaultAction(StoreEntity store, StoreConfiguration config)
         {
-            if (string.IsNullOrWhiteSpace(actionPayload) || actionPayload.Equals("null", StringComparison.OrdinalIgnoreCase))
+            if (config.ManagedInHub)
+            {
+                actionTaskConfigurator.Configure(config, store, true);
+                return; 
+            }
+            
+            if (string.IsNullOrWhiteSpace(config.ActionsPayload) || config.ActionsPayload.Equals("null", StringComparison.OrdinalIgnoreCase))
             {
                 return;
             }
 
-            var actionConfiguration = JsonConvert.DeserializeObject<ActionConfiguration>(actionPayload, new EntityJsonSerializerSettings());
+            var actionConfiguration = JsonConvert.DeserializeObject<ActionConfiguration>(config.ActionsPayload, new EntityJsonSerializerSettings());
 
             var action = actionConfiguration.Action;
             var tasks = new List<ActionTask>();
 
             foreach (var taskEntity in actionConfiguration.Tasks)
             {
-                UpdateTaskStoreId(taskEntity, storeID);
+                UpdateTaskStoreId(taskEntity, store.StoreID);
                 taskEntity.IsNew = true;
                 taskEntity.IsDirty = true;
                 taskEntity.Fields.ForEach(x => x.IsChanged = true);
@@ -299,7 +308,7 @@ namespace ShipWorks.Warehouse.Configuration.Stores
             action.IsDirty = true;
             action.Fields.ForEach(x => x.IsChanged = true);
 
-            action.StoreLimitedList = new long[] { storeID };
+            action.StoreLimitedList = new long[] { store.StoreID };
             action.TaskSummary = actionManager.GetTaskSummary(tasks);
 
             using (var adapter = new SqlAdapter(true))

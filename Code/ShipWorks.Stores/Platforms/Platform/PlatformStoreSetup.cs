@@ -20,17 +20,14 @@ namespace ShipWorks.Stores.Platforms.Platform
     [KeyedComponent(typeof(IStoreSetup), StoreTypeCode.BrightpearlHub)]
     public class PlatformStoreSetup: BaseStoreSetup 
     {
-        private readonly IActionTaskConfigurator actionTaskConfigurator;
-
         private readonly IStoreTypeManager storeTypeManager;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public PlatformStoreSetup(IStoreTypeManager storeTypeManager, IActionTaskConfigurator actionTaskConfigurator)
+        public PlatformStoreSetup(IStoreTypeManager storeTypeManager)
         {
             this.storeTypeManager = storeTypeManager;
-            this.actionTaskConfigurator = actionTaskConfigurator;
         }
 
         /// <summary>
@@ -45,17 +42,15 @@ namespace ShipWorks.Stores.Platforms.Platform
                 return base.Setup(config, storeType, existingStore);
             }
 
-            var store = (PlatformStoreEntity) CreatePlatformStore(config.StoreType);
+            var store = CreatePlatformStore(config.StoreType);
 
-            var isNewStore = existingStore != null;
-            if (isNewStore)
+            var isNewStore = existingStore == null;
+            if (!isNewStore)
             {
                 store.StoreID = existingStore.StoreID;
             }
 
             ApplyStoreConfig(store, config);
-
-            actionTaskConfigurator.Configure(config, store, isNewStore);
 
             return store;
         }
