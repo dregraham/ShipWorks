@@ -87,7 +87,15 @@
 
                             </td>
                         </tr>
-                    </table>
+                        <tr>
+                          <td style="padding-right: 2px">
+                            TIN:
+                          </td>
+                          <td>
+                            <xsl:value-of select="$order/Shipment/TIN" />
+                          </td>
+                        </tr>
+                      </table>
 
                     </td>
                 </tr>

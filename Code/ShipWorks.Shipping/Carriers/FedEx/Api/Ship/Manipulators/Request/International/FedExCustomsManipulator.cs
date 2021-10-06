@@ -229,10 +229,13 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Ship.Manipulators.Request.Intern
             {
                 request.RequestedShipment.Recipient.Tins = new TaxpayerIdentification[1] { new TaxpayerIdentification() };
             }
-            
+
             // TODO: We may need to set shipping/recipient based on who's paying.  See ETD_Request.xml where The Tins info
             // is on Shipper.
-            request.RequestedShipment.Recipient.Tins[0] = new TaxpayerIdentification() { Number = shipment.FedEx.CustomsRecipientTIN, TinType = (TinType) shipment.FedEx.CustomsRecipientTINType };
+            
+            //Set tin type to default value if user selects blank in dropdown
+            var tinType = shipment.FedEx.CustomsRecipientTINType == -1 ? TinType.PERSONAL_STATE : (TinType) shipment.FedEx.CustomsRecipientTINType;
+            request.RequestedShipment.Recipient.Tins[0] = new TaxpayerIdentification() { Number = shipment.FedEx.CustomsRecipientTIN, TinType = tinType };
 
             return request;
         }

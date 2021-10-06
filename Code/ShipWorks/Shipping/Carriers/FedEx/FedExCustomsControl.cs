@@ -83,7 +83,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
                     documentsOnly.ApplyMultiCheck(shipment.FedEx.CustomsDocumentsOnly);
 
                     recipientTaxID.ApplyMultiText(shipment.FedEx.CustomsRecipientTIN);
-                    customsRecipientTINType.ApplyMultiValue((FedexTINType) shipment.FedEx.CustomsRecipientTINType); //example to follow for tintype
+                    customsRecipientTINType.ApplyMultiValue((FedexTINType) shipment.FedEx.CustomsRecipientTINType);
 
                     admissibilityPackaging.ApplyMultiValue((FedExPhysicalPackagingType) shipment.FedEx.CustomsAdmissibilityPackaging);
 
