@@ -102,7 +102,7 @@ namespace ShipWorks.Stores.Management
         /// </summary>
         private void OnLoad(object sender, EventArgs e)
         {
-            if (store.ManagedInHub)
+            if (store.ManagedInHub && store.StoreTypeCode != StoreTypeCode.Api)
             {
                 panelAddressValidation.Enabled = false;
                 panelManualOrders.Enabled = false;
