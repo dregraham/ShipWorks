@@ -423,6 +423,8 @@ namespace ShipWorks.Data.Model.EntityClasses
 			_fieldsCustomProperties.Add("UspsPackageID", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
 			_fieldsCustomProperties.Add("CustomsDescription", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+			_fieldsCustomProperties.Add("CustomsRecipientTIN", fieldHashtable);
 		}
 		#endregion
 
@@ -926,6 +928,17 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			get { return (System.String)GetValue((int)UpsProfileFieldIndex.CustomsDescription, true); }
 			set	{ SetValue((int)UpsProfileFieldIndex.CustomsDescription, value); }
+		}
+
+		/// <summary> The CustomsRecipientTIN property of the Entity UpsProfile<br/><br/></summary>
+		/// <remarks>Mapped on  table field: "UpsProfile"."CustomsRecipientTIN"<br/>
+		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 24<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		[DataMember]
+		public virtual System.String CustomsRecipientTIN
+		{
+			get { return (System.String)GetValue((int)UpsProfileFieldIndex.CustomsRecipientTIN, true); }
+			set	{ SetValue((int)UpsProfileFieldIndex.CustomsRecipientTIN, value); }
 		}
 
 		/// <summary> Gets / sets related entity of type 'ShippingProfileEntity' which has to be set using a fetch action earlier. If no related entity is set for this property, null is returned.<br/><br/>

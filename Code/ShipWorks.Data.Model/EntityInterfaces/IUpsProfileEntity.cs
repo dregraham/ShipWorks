@@ -243,6 +243,12 @@ namespace ShipWorks.Data.Model.EntityInterfaces
         /// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 150<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
         System.String CustomsDescription { get; }
+        /// <summary> The CustomsRecipientTIN property of the Entity UpsProfile<br/><br/>
+        /// </summary>
+        /// <remarks>Mapped on table field: "UpsProfile"."CustomsRecipientTIN"<br/>
+        /// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 24<br/>
+        /// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+        System.String CustomsRecipientTIN { get; }
         
         IShippingProfileEntity ShippingProfile { get; }
         

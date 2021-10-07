@@ -73,6 +73,7 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
             ShipmentChargeCountryCode = source.ShipmentChargeCountryCode;
             UspsPackageID = source.UspsPackageID;
             CustomsDescription = source.CustomsDescription;
+            CustomsRecipientTIN = source.CustomsRecipientTIN;
             
             ShippingProfile = (IShippingProfileEntity) source.ShippingProfile?.AsReadOnly(objectMap);
             
@@ -304,6 +305,12 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
         /// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 150<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
         public System.String CustomsDescription { get; }
+        /// <summary> The CustomsRecipientTIN property of the Entity UpsProfile<br/><br/>
+        /// </summary>
+        /// <remarks>Mapped on table field: "UpsProfile"."CustomsRecipientTIN"<br/>
+        /// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 24<br/>
+        /// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+        public System.String CustomsRecipientTIN { get; }
         
         public IShippingProfileEntity ShippingProfile { get; }
         
