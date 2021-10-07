@@ -23,11 +23,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         {
             var labels = new Lazy<List<TemplateLabelData>>(() => LoadLabelData(shipment));
 
+            container.AddElement("TIN", () => loaded().FedEx.CustomsRecipientTIN);
             // Add the labels content
             container.AddElement("Labels",
                 new LabelsOutline(container.Context, shipment, labels, () => ImageFormat.Png),
                 ElementOutline.If(() => shipment().Processed));
-            container.AddElement("TIN", () => shipment().FedEx.CustomsRecipientTIN);
 
             Lazy<TemplateLabelData> codReturn = new Lazy<TemplateLabelData>(() => labels.Value.FirstOrDefault(l => l.Name == "COD"));
 
