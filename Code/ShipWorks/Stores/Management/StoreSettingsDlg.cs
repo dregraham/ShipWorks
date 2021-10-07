@@ -107,6 +107,8 @@ namespace ShipWorks.Stores.Management
                 panelAddressValidation.Enabled = false;
                 panelManualOrders.Enabled = false;
                 panelStoreStatus.Enabled = false;
+                storeAddressControl.Enabled = false;
+                storeContactControl.Enabled = false;
             }
             
             UserSession.Security.DemandPermission(PermissionType.ManageStores);
