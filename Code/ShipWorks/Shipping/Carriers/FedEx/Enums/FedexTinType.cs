@@ -9,22 +9,19 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Enums
     [Obfuscation(Feature = "PreserveLiteralValues", Exclude = false, StripAfterObfuscation = false)]
     public enum FedexTINType
     {
-        [Description("")]
-        DEFAULT = -1,
-
         [Description("Business National")]
-        BUSINESS_NATIONAL = 0,
+        BUSINESS_NATIONAL,
 
         [Description("Business State")]
-        BUSINESS_STATE = 1,
+        BUSINESS_STATE,
 
         [Description("Business Union")]
-        BUSINESS_UNION = 2,
+        BUSINESS_UNION,
           
         [Description("Personal National")]
-        PERSONAL_NATIONAL = 3,
+        PERSONAL_NATIONAL,
         
         [Description("Personal State")]
-        PERSONAL_STATE = 4
+        PERSONAL_STATE
     }
 }

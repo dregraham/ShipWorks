@@ -2332,7 +2332,9 @@
             this.customsRecipientTINType.BackColor = System.Drawing.Color.White;
             this.customsRecipientTINType.Location = new System.Drawing.Point(110, 42);
             this.customsRecipientTINType.Name = "customsRecipientTINType";
-            this.customsRecipientTINType.PromptText = "(Multiple Values)";
+            this.customsRecipientTINType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.customsRecipientTINType.FormattingEnabled = true;
+            this.customsRecipientTINType.PromptText = "(Select a Value)";
             this.customsRecipientTINType.Size = new System.Drawing.Size(198, 21);
             this.customsRecipientTINType.TabIndex = 5;
             // 

@@ -320,6 +320,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             this.customsRecipientTINType.Name = "customsRecipientTINType";
             this.customsRecipientTINType.Size = new System.Drawing.Size(145, 21);
             this.customsRecipientTINType.TabIndex = 7;
+            this.customsRecipientTINType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.customsRecipientTINType.FormattingEnabled = true;
+            this.customsRecipientTINType.PromptText = "(Select a Value)";
             // 
             // sectionCommercialInvoice
             // 
@@ -852,7 +855,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         private System.Windows.Forms.Label labelRecipientTaxID;
         private ShipWorks.UI.Controls.MultiValueTextBox recipientTaxID;
         private System.Windows.Forms.Label labelCustomsRecipientTINType;
-        private ShipWorks.UI.Controls.MultiValueComboBox customsRecipientTINType;
+        private MultiValueComboBox customsRecipientTINType;
         //private ShipWorks.UI.Controls.MultiValueTextBox documentDescription;
         //private System.Windows.Forms.Label labelDocumentDescription;
         private ShipWorks.UI.Controls.CollapsibleGroupControl sectionCommercialInvoice;
