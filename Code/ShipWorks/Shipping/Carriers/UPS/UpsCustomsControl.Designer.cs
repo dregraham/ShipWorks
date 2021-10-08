@@ -28,6 +28,8 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.labelCustomsRecipientTIN = new System.Windows.Forms.Label();
+            this.customsRecipientTIN = new ShipWorks.UI.Controls.MultiValueTextBox();
             this.documentsOnly = new System.Windows.Forms.CheckBox();
             this.labelDocuments = new System.Windows.Forms.Label();
             this.labelDescriptionOfGoods = new System.Windows.Forms.Label();
@@ -69,8 +71,8 @@
             this.sectionContents.ContentPanel.Controls.Add(this.groupSelectedContent);
             this.sectionContents.ContentPanel.Controls.Add(this.delete);
             this.sectionContents.ContentPanel.Controls.Add(this.add);
-            this.sectionContents.Location = new System.Drawing.Point(6, 120);
             this.sectionContents.Size = new System.Drawing.Size(555, 362);
+            this.sectionContents.Location = new System.Drawing.Point(6, 150);
             // 
             // label1
             // 
@@ -89,12 +91,14 @@
             // 
             this.sectionGeneral.ContentPanel.Controls.Add(this.label1);
             this.sectionGeneral.ContentPanel.Controls.Add(this.customsValue);
+            this.sectionGeneral.ContentPanel.Controls.Add(this.labelCustomsRecipientTIN);
+            this.sectionGeneral.ContentPanel.Controls.Add(this.customsRecipientTIN);
             this.sectionGeneral.ContentPanel.Controls.Add(this.descriptionOfGoods);
             this.sectionGeneral.ContentPanel.Controls.Add(this.labelDescriptionOfGoods);
             this.sectionGeneral.ContentPanel.Controls.Add(this.documentsOnly);
             this.sectionGeneral.ContentPanel.Controls.Add(this.labelDocuments);
             this.sectionGeneral.Location = new System.Drawing.Point(6, 5);
-            this.sectionGeneral.Size = new System.Drawing.Size(572, 110);
+            this.sectionGeneral.Size = new System.Drawing.Size(572, 140);
             // 
             // groupSelectedContent
             // 
@@ -112,11 +116,28 @@
             // 
             this.itemsGrid.Size = new System.Drawing.Size(469, 116);
             // 
+            // labelCustomsRecipientTIN
+            // 
+            this.labelCustomsRecipientTIN.AutoSize = true;
+            this.labelCustomsRecipientTIN.BackColor = System.Drawing.Color.White;
+            this.labelCustomsRecipientTIN.Location = new System.Drawing.Point(6, 35);
+            this.labelCustomsRecipientTIN.Name = "labelCustomsRecipientTIN";
+            this.labelCustomsRecipientTIN.Size = new System.Drawing.Size(65, 13);
+            this.labelCustomsRecipientTIN.TabIndex = 4;
+            this.labelCustomsRecipientTIN.Text = "Ioss Tax Id:";
+            // 
+            // customsRecipientTIN
+            // 
+            this.customsRecipientTIN.Location = new System.Drawing.Point(75, 33);
+            this.customsRecipientTIN.Name = "customsRecipientTIN";
+            this.customsRecipientTIN.Size = new System.Drawing.Size(258, 21);
+            this.customsRecipientTIN.TabIndex = 5;
+            // 
             // documentsOnly
             // 
             this.documentsOnly.AutoSize = true;
             this.documentsOnly.BackColor = System.Drawing.Color.White;
-            this.documentsOnly.Location = new System.Drawing.Point(75, 34);
+            this.documentsOnly.Location = new System.Drawing.Point(75, 59);
             this.documentsOnly.Name = "documentsOnly";
             this.documentsOnly.Size = new System.Drawing.Size(102, 17);
             this.documentsOnly.TabIndex = 3;
@@ -127,7 +148,7 @@
             // 
             this.labelDocuments.AutoSize = true;
             this.labelDocuments.BackColor = System.Drawing.Color.White;
-            this.labelDocuments.Location = new System.Drawing.Point(15, 35);
+            this.labelDocuments.Location = new System.Drawing.Point(15, 59);
             this.labelDocuments.Name = "labelDocuments";
             this.labelDocuments.Size = new System.Drawing.Size(55, 13);
             this.labelDocuments.TabIndex = 2;
@@ -137,7 +158,7 @@
             // 
             this.labelDescriptionOfGoods.AutoSize = true;
             this.labelDescriptionOfGoods.BackColor = System.Drawing.Color.White;
-            this.labelDescriptionOfGoods.Location = new System.Drawing.Point(6, 59);
+            this.labelDescriptionOfGoods.Location = new System.Drawing.Point(6, 83);
             this.labelDescriptionOfGoods.Name = "labelDescriptionOfGoods";
             this.labelDescriptionOfGoods.Size = new System.Drawing.Size(64, 13);
             this.labelDescriptionOfGoods.TabIndex = 4;
@@ -145,7 +166,7 @@
             // 
             // descriptionOfGoods
             // 
-            this.descriptionOfGoods.Location = new System.Drawing.Point(75, 56);
+            this.descriptionOfGoods.Location = new System.Drawing.Point(75, 80);
             this.descriptionOfGoods.Name = "descriptionOfGoods";
             this.descriptionOfGoods.Size = new System.Drawing.Size(258, 21);
             this.descriptionOfGoods.TabIndex = 5;
@@ -173,11 +194,11 @@
             this.sectionInvoicing.ContentPanel.Controls.Add(this.labelTermsOfSale);
             this.sectionInvoicing.ContentPanel.Controls.Add(this.usePaperlessInvoice);
             this.sectionInvoicing.ExtraText = "";
-            this.sectionInvoicing.Location = new System.Drawing.Point(6, 487);
+            this.sectionInvoicing.Location = new System.Drawing.Point(6, 517);
             this.sectionInvoicing.Name = "sectionInvoicing";
             this.sectionInvoicing.SectionName = "Invoicing";
             this.sectionInvoicing.SettingsKey = "{ae2272b7-0a1c-43d8-9215-e301bcc1f9b8}";
-            this.sectionInvoicing.Size = new System.Drawing.Size(555, 238);
+            this.sectionInvoicing.Size = new System.Drawing.Size(538, 238);
             this.sectionInvoicing.TabIndex = 2;
             // 
             // extraDocuments
@@ -348,7 +369,7 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.Controls.Add(this.sectionInvoicing);
             this.Name = "UpsCustomsControl";
-            this.Size = new System.Drawing.Size(564, 727);
+            this.Size = new System.Drawing.Size(547, 727);
             this.Controls.SetChildIndex(this.sectionInvoicing, 0);
             this.Controls.SetChildIndex(this.sectionContents, 0);
             this.Controls.SetChildIndex(this.sectionGeneral, 0);
@@ -370,6 +391,8 @@
 
         #endregion
 
+        private System.Windows.Forms.Label labelCustomsRecipientTIN;
+        private ShipWorks.UI.Controls.MultiValueTextBox customsRecipientTIN;
         private System.Windows.Forms.CheckBox documentsOnly;
         private System.Windows.Forms.Label labelDocuments;
         private ShipWorks.UI.Controls.MultiValueTextBox descriptionOfGoods;
