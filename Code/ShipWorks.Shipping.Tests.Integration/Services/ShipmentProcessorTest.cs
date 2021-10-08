@@ -302,13 +302,13 @@ namespace ShipWorks.Shipping.Tests.Integration.Services
         [Fact]
         public async Task Process_ShowsErrorMessage_WhenTimeoutErrorIsReceived()
         {
-            Mock<IExtendedSwsimV90> webService = context.Mock.CreateMock<IExtendedSwsimV90>(w =>
+            Mock<IExtendedSwsimV111> webService = context.Mock.CreateMock<IExtendedSwsimV111>(w =>
             {
                 UspsTestHelpers.SetupAddressValidationResponse(w);
                 w.Setup(x => x.CreateIndicium(It.IsAny<CreateIndiciumParameters>()))
                     .Throws(new WebException("There was an error", WebExceptionStatus.Timeout));
 
-                AccountInfoV41 accountInfo = new AccountInfoV41()
+                AccountInfoV54 accountInfo = new AccountInfoV54()
                 {
                     Terms = new Terms()
                     {
@@ -343,17 +343,17 @@ namespace ShipWorks.Shipping.Tests.Integration.Services
         [Fact]
         public async Task Process_ShowsErrorMessage_WhenLabelIsBad()
         {
-            Mock<IExtendedSwsimV90> webService = context.Mock.CreateMock<IExtendedSwsimV90>(w =>
+            Mock<IExtendedSwsimV111> webService = context.Mock.CreateMock<IExtendedSwsimV111>(w =>
             {
                 UspsTestHelpers.SetupAddressValidationResponse(w);
                 w.Setup(x => x.CreateIndicium(It.IsAny<CreateIndiciumParameters>()))
                     .Returns(new CreateIndiciumResult
                     {
-                        Rate = new RateV33(),
+                        Rate = new RateV40(),
                         ImageData = new[] { new byte[] { 0x20, 0x20 } },
                     });
 
-                AccountInfoV41 accountInfo = new AccountInfoV41()
+                AccountInfoV54 accountInfo = new AccountInfoV54()
                 {
                     Terms = new Terms()
                     {
@@ -388,17 +388,17 @@ namespace ShipWorks.Shipping.Tests.Integration.Services
         [Fact]
         public async Task Process_ShowsCorrectCustomerSupportPhoneNumberInErrorMessage_WhenLabelIsBad()
         {
-            Mock<IExtendedSwsimV90> webService = context.Mock.CreateMock<IExtendedSwsimV90>(w =>
+            Mock<IExtendedSwsimV111> webService = context.Mock.CreateMock<IExtendedSwsimV111>(w =>
             {
                 UspsTestHelpers.SetupAddressValidationResponse(w);
                 w.Setup(x => x.CreateIndicium(It.IsAny<CreateIndiciumParameters>()))
                     .Returns(new CreateIndiciumResult
                     {
-                        Rate = new RateV33(),
+                        Rate = new RateV40(),
                         ImageData = new[] { new byte[] { 0x20, 0x20 } },
                     });
 
-                AccountInfoV41 accountInfo = new AccountInfoV41()
+                AccountInfoV54 accountInfo = new AccountInfoV54()
                 {
                     Terms = new Terms()
                     {
@@ -432,7 +432,7 @@ namespace ShipWorks.Shipping.Tests.Integration.Services
         [Fact]
         public async Task Process_ShowsErrorMessage_WhenServerReturns500()
         {
-            Mock<IExtendedSwsimV90> webService = context.Mock.CreateMock<IExtendedSwsimV90>(w =>
+            Mock<IExtendedSwsimV111> webService = context.Mock.CreateMock<IExtendedSwsimV111>(w =>
             {
                 XmlDocument details = new XmlDocument();
                 details.LoadXml("<error><details code=\"bar\" /></error>");
@@ -441,7 +441,7 @@ namespace ShipWorks.Shipping.Tests.Integration.Services
                 w.Setup(x => x.CreateIndicium(It.IsAny<CreateIndiciumParameters>()))
                     .Throws(new SoapException("There was an error", new XmlQualifiedName("abc"), "actor", details));
 
-                AccountInfoV41 accountInfo = new AccountInfoV41()
+                AccountInfoV54 accountInfo = new AccountInfoV54()
                 {
                     Terms = new Terms()
                     {

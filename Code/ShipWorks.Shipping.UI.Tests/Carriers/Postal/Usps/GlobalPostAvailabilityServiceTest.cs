@@ -26,9 +26,9 @@ namespace ShipWorks.Shipping.UI.Tests.Carriers.Postal.Usps
         public void Refresh_AddsGlobalPostServices_WhenAccountSupportsGlobalPostServices()
         {
             UspsAccountEntity account = new UspsAccountEntity();
-            AccountInfoV41 accountInfo = new AccountInfoV41
+            AccountInfoV54 accountInfo = new AccountInfoV54
             {
-                Capabilities = new CapabilitiesV30
+                Capabilities = new CapabilitiesV41
                 {
                     CanPrintGPSmartSaver = false,
                     CanPrintGP = true
@@ -59,9 +59,9 @@ namespace ShipWorks.Shipping.UI.Tests.Carriers.Postal.Usps
         public void Refresh_AddsAllGlobalPostServices_WhenAccountSupportsAllGlobalPostServices()
         {
             UspsAccountEntity account = new UspsAccountEntity();
-            AccountInfoV41 accountInfo = new AccountInfoV41
+            AccountInfoV54 accountInfo = new AccountInfoV54
             {
-                Capabilities = new CapabilitiesV30()
+                Capabilities = new CapabilitiesV41()
                 {
                     CanPrintGPSmartSaver = true,
                     CanPrintGP = true
@@ -92,9 +92,9 @@ namespace ShipWorks.Shipping.UI.Tests.Carriers.Postal.Usps
         public void Refresh_AddsGlobalPostSmartSaverServices_WhenAccountSupportsGlobalPostSmartSaverServices()
         {
             UspsAccountEntity account = new UspsAccountEntity();
-            AccountInfoV41 accountInfo = new AccountInfoV41
+            AccountInfoV54 accountInfo = new AccountInfoV54
             {
-                Capabilities = new CapabilitiesV30
+                Capabilities = new CapabilitiesV41()
                 {
                     CanPrintGPSmartSaver = true,
                     CanPrintGP = false
@@ -125,9 +125,9 @@ namespace ShipWorks.Shipping.UI.Tests.Carriers.Postal.Usps
         public void Refresh_DoesNotAddsGlobalPostServices_WhenAccountDoesNotSupportsGlobalPostServices()
         {
             UspsAccountEntity account = new UspsAccountEntity();
-            AccountInfoV41 accountInfo = new AccountInfoV41
+            AccountInfoV54 accountInfo = new AccountInfoV54
             {
-                Capabilities = new CapabilitiesV30
+                Capabilities = new CapabilitiesV41
                 {
                     CanPrintGPSmartSaver = false,
                     CanPrintGP = false
@@ -154,9 +154,9 @@ namespace ShipWorks.Shipping.UI.Tests.Carriers.Postal.Usps
         public void InitializeForCurrentSession_AddsGlobalPostServices_WhenAccountSupportsGlobalPostServices()
         {
             UspsAccountEntity account = new UspsAccountEntity();
-            AccountInfoV41 accountInfo = new AccountInfoV41
+            AccountInfoV54 accountInfo = new AccountInfoV54
             {
-                Capabilities = new CapabilitiesV30
+                Capabilities = new CapabilitiesV41
                 {
                     CanPrintGPSmartSaver = false,
                     CanPrintGP = true
@@ -187,9 +187,9 @@ namespace ShipWorks.Shipping.UI.Tests.Carriers.Postal.Usps
         public void InitializeForCurrentSession_AddsAllGlobalPostServices_WhenAccountSupportsAllGlobalPostServices()
         {
             UspsAccountEntity account = new UspsAccountEntity();
-            AccountInfoV41 accountInfo = new AccountInfoV41
+            AccountInfoV54 accountInfo = new AccountInfoV54
             {
-                Capabilities = new CapabilitiesV30
+                Capabilities = new CapabilitiesV41
                 {
                     CanPrintGPSmartSaver = true,
                     CanPrintGP = true
@@ -220,9 +220,9 @@ namespace ShipWorks.Shipping.UI.Tests.Carriers.Postal.Usps
         public void InitializeForCurrentSession_AddsGlobalPostSmartSaverServices_WhenAccountSupportsGlobalPostSmartSaverServices()
         {
             UspsAccountEntity account = new UspsAccountEntity();
-            AccountInfoV41 accountInfo = new AccountInfoV41
+            AccountInfoV54 accountInfo = new AccountInfoV54
             {
-                Capabilities = new CapabilitiesV30
+                Capabilities = new CapabilitiesV41
                 {
                     CanPrintGPSmartSaver = true,
                     CanPrintGP = false
@@ -253,9 +253,9 @@ namespace ShipWorks.Shipping.UI.Tests.Carriers.Postal.Usps
         public void InitializeForCurrentSession_DoesNotAddsGlobalPostServices_WhenAccountDoesNotSupportsGlobalPostServices()
         {
             UspsAccountEntity account = new UspsAccountEntity();
-            AccountInfoV41 accountInfo = new AccountInfoV41
+            AccountInfoV54 accountInfo = new AccountInfoV54
             {
-                Capabilities = new CapabilitiesV30
+                Capabilities = new CapabilitiesV41
                 {
                     CanPrintGPSmartSaver = false,
                     CanPrintGP = false

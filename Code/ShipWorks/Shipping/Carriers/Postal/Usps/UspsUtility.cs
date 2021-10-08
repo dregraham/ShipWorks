@@ -70,32 +70,32 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         /// <summary>
         /// Get the API value for the given packaging type
         /// </summary>
-        public static PackageTypeV10 GetApiPackageType(PostalPackagingType packagingType, DimensionsAdapter dimensions)
+        public static PackageTypeV11 GetApiPackageType(PostalPackagingType packagingType, DimensionsAdapter dimensions)
         {
             switch (packagingType)
             {
-                case PostalPackagingType.FlatRateSmallBox: return PackageTypeV10.SmallFlatRateBox;
-                case PostalPackagingType.FlatRateMediumBox: return PackageTypeV10.FlatRateBox;
-                case PostalPackagingType.FlatRateLargeBox: return PackageTypeV10.LargeFlatRateBox;
-                case PostalPackagingType.FlatRateEnvelope: return PackageTypeV10.FlatRateEnvelope;
-                case PostalPackagingType.LargeEnvelope: return PackageTypeV10.LargeEnvelopeorFlat;
-                case PostalPackagingType.Envelope: return PackageTypeV10.Letter;
+                case PostalPackagingType.FlatRateSmallBox: return PackageTypeV11.SmallFlatRateBox;
+                case PostalPackagingType.FlatRateMediumBox: return PackageTypeV11.FlatRateBox;
+                case PostalPackagingType.FlatRateLargeBox: return PackageTypeV11.LargeFlatRateBox;
+                case PostalPackagingType.FlatRateEnvelope: return PackageTypeV11.FlatRateEnvelope;
+                case PostalPackagingType.LargeEnvelope: return PackageTypeV11.LargeEnvelopeorFlat;
+                case PostalPackagingType.Envelope: return PackageTypeV11.Letter;
                 case PostalPackagingType.Package:
                     if (dimensions.Length + dimensions.Girth > 108)
                     {
-                        return PackageTypeV10.OversizedPackage;
+                        return PackageTypeV11.OversizedPackage;
                     }
                     else
                     {
-                        return PackageTypeV10.Package;
+                        return PackageTypeV11.Package;
                     }
 
-                case PostalPackagingType.FlatRatePaddedEnvelope: return PackageTypeV10.FlatRatePaddedEnvelope;
-                case PostalPackagingType.FlatRateLegalEnvelope: return PackageTypeV10.LegalFlatRateEnvelope;
-                case PostalPackagingType.RateRegionalBoxA: return PackageTypeV10.RegionalRateBoxA;
-                case PostalPackagingType.RateRegionalBoxB: return PackageTypeV10.RegionalRateBoxB;
-                case PostalPackagingType.RateRegionalBoxC: return PackageTypeV10.RegionalRateBoxC;
-                case PostalPackagingType.CubicSoftPack: return PackageTypeV10.LargeEnvelopeorFlat;
+                case PostalPackagingType.FlatRatePaddedEnvelope: return PackageTypeV11.FlatRatePaddedEnvelope;
+                case PostalPackagingType.FlatRateLegalEnvelope: return PackageTypeV11.LegalFlatRateEnvelope;
+                case PostalPackagingType.RateRegionalBoxA: return PackageTypeV11.RegionalRateBoxA;
+                case PostalPackagingType.RateRegionalBoxB: return PackageTypeV11.RegionalRateBoxB;
+                case PostalPackagingType.RateRegionalBoxC: return PackageTypeV11.RegionalRateBoxC;
+                case PostalPackagingType.CubicSoftPack: return PackageTypeV11.LargeEnvelopeorFlat;
 
                 default:
                     throw new InvalidOperationException(string.Format("Invalid USPS packaging type {0}", packagingType));

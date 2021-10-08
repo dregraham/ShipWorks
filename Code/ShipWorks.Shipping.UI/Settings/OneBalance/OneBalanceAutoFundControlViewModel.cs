@@ -150,7 +150,7 @@ namespace ShipWorks.Shipping.UI.Settings.OneBalance
 
             try
             {
-                var accountInfo = (AccountInfoV41) webClient.GetAccountInfo(account);
+                var accountInfo = (AccountInfoV54) webClient.GetAccountInfo(account);
 
                 IsAutoFund = accountInfo.AutoBuySettings.AutoBuyEnabled;
                 MinimumBalance = accountInfo.AutoBuySettings.TriggerAmount;

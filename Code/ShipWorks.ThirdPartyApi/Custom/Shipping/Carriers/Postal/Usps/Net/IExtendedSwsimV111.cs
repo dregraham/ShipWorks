@@ -3,9 +3,9 @@
 namespace ShipWorks.Shipping.Carriers.Postal.Usps.WebServices
 {
     /// <summary>
-    /// ISwsimV90 interface that exposes custom features
+    /// ISwsimV111 interface that exposes custom features
     /// </summary>
-    public interface IExtendedSwsimV90 : ISwsimV90
+    public interface IExtendedSwsimV111 : ISwsimV111
     {
         /// <summary>
         /// Cancel an async request
