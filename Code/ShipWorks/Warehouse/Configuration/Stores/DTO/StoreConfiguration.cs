@@ -61,6 +61,11 @@ namespace ShipWorks.Warehouse.Configuration.Stores.DTO
         /// True if this store should upload shipment details
         /// </summary>
         public bool UploadShipmentDetails { get; set; }
+        
+        /// <summary>
+        /// The store license, if we know it.
+        /// </summary>
+        public string StoreLicense { get; set; }
     }
 
     /// <summary>

@@ -100,6 +100,10 @@ namespace ShipWorks.Warehouse.Configuration.Stores
                     {
                         var deserializedStore = storeSetup.Setup(config, storeType, existingStore);
                         deserializedStore.StoreName = config.Name;
+                        if (!string.IsNullOrEmpty(config.StoreLicense))
+                        {
+                            deserializedStore.License = config.StoreLicense;
+                        }
 
                         // Make sure we don't add a store that won't actually show
                         if (!deserializedStore.SetupComplete)
