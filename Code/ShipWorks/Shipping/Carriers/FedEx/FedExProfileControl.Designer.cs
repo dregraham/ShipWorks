@@ -2325,7 +2325,7 @@
             this.labelCustomsRecipientTIN.Name = "labelCustomsRecipientTIN";
             this.labelCustomsRecipientTIN.Size = new System.Drawing.Size(20, 13);
             this.labelCustomsRecipientTIN.TabIndex = 1;
-            this.labelCustomsRecipientTIN.Text = "Ioss Tax Id #:";
+            this.labelCustomsRecipientTIN.Text = "Recipient Tax Id:";
             // 
             // tinTypes
             // 
