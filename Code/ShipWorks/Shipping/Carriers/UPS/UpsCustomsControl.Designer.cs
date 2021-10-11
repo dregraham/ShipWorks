@@ -124,7 +124,7 @@
             this.labelCustomsRecipientTIN.Name = "labelCustomsRecipientTIN";
             this.labelCustomsRecipientTIN.Size = new System.Drawing.Size(65, 13);
             this.labelCustomsRecipientTIN.TabIndex = 4;
-            this.labelCustomsRecipientTIN.Text = "Ioss Tax Id:";
+            this.labelCustomsRecipientTIN.Text = "Recipient Tax Id:";
             // 
             // customsRecipientTIN
             // 
