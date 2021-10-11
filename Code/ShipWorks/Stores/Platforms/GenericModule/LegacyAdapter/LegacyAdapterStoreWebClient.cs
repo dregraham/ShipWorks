@@ -299,7 +299,7 @@ namespace ShipWorks.Stores.Platforms.GenericModule.LegacyAdapter
                 // transform the response using the stylesheet that is configured
                 using (StringReader reader = new StringReader(resultXml))
                 {
-                    XmlReader xmlReader = XmlReader.Create(reader);
+                    XmlReader xmlReader = XmlReader.Create(reader, new XmlReaderSettings() { IgnoreComments = true });
 
                     try
                     {

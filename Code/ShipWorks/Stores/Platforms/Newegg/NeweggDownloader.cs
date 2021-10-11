@@ -335,20 +335,23 @@ namespace ShipWorks.Stores.Platforms.Newegg
         private void LoadOrderItem(NeweggOrderEntity order, Item neweggItem)
         {
             NeweggOrderItemEntity orderItem = InstantiateOrderItem(order) as NeweggOrderItemEntity;
-            orderItem.Code = neweggItem.SellerPartNumber;
-            orderItem.Name = neweggItem.Description;
-            orderItem.Description = neweggItem.Description;
-            orderItem.Quantity = neweggItem.QuantityOrdered;
-            orderItem.SKU = neweggItem.ManufacturerPartNumber;
-            orderItem.UnitPrice = neweggItem.UnitPrice;
-            orderItem.UPC = neweggItem.UpcCode;
+            if (orderItem != null)
+            {
+                orderItem.Code = neweggItem.SellerPartNumber;
+                orderItem.Name = neweggItem.Description;
+                orderItem.Description = neweggItem.Description;
+                orderItem.Quantity = neweggItem.QuantityOrdered;
+                orderItem.SKU = neweggItem.ManufacturerPartNumber;
+                orderItem.UnitPrice = neweggItem.UnitPrice;
+                orderItem.UPC = neweggItem.UpcCode;
 
-            orderItem.SellerPartNumber = neweggItem.SellerPartNumber;
-            orderItem.NeweggItemNumber = neweggItem.NeweggItemNumber;
-            orderItem.ManufacturerPartNumber = neweggItem.ManufacturerPartNumber;
-            orderItem.ShippingStatusDescription = neweggItem.ShippingStatusDescription;
-            orderItem.ShippingStatusID = neweggItem.ShippingStatusID;
-            orderItem.QuantityShipped = neweggItem.QuantityShipped;
+                orderItem.SellerPartNumber = neweggItem.SellerPartNumber;
+                orderItem.NeweggItemNumber = neweggItem.NeweggItemNumber;
+                orderItem.ManufacturerPartNumber = neweggItem.ManufacturerPartNumber;
+                orderItem.ShippingStatusDescription = neweggItem.ShippingStatusDescription;
+                orderItem.ShippingStatusID = neweggItem.ShippingStatusID;
+                orderItem.QuantityShipped = neweggItem.QuantityShipped;
+            }
         }
 
         /// <summary>

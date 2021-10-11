@@ -100,7 +100,7 @@ namespace ShipWorks.Templates.Management
 
             // Parent
             template.ParentFolder = (treeControl.SelectedTemplateTreeNode != null) ? treeControl.SelectedTemplateTreeNode.Folder : templateTree.GetFolder(TemplateBuiltinFolders.SnippetsFolderID);
-            template.TemplateTree = template.ParentFolder.TemplateTree;
+            template.TemplateTree = template.ParentFolder?.TemplateTree;
 
             // The initial XSL
             template.Xsl = TemplateSkeletons.GetSnippetSkeleton(template.Name);

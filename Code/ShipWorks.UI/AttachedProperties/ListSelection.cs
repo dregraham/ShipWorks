@@ -49,7 +49,7 @@ namespace ShipWorks.UI.AttachedProperties
         private static void ListBoxOnSelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             ListBox list = sender as ListBox;
-            if (list.SelectedItem == null && e.RemovedItems.OfType<object>().Any())
+            if (list != null && list.SelectedItem == null && e.RemovedItems.OfType<object>().Any())
             {
                 if (list.SelectionMode == SelectionMode.Single)
                 {

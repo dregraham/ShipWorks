@@ -84,7 +84,7 @@ namespace ShipWorks.Stores.Platforms.OrderMotion
         /// </summary>
         public override OrderIdentifier CreateOrderIdentifier(IOrderEntity order)
         {
-            IOrderMotionOrderEntity omOrder = order as IOrderMotionOrderEntity;
+            IOrderMotionOrderEntity omOrder = (IOrderMotionOrderEntity) order;
 
             return new OrderMotionOrderIdentifier(omOrder.OrderNumber, omOrder.OrderMotionShipmentID);
         }

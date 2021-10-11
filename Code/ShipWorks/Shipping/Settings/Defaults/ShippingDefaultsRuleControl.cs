@@ -236,16 +236,19 @@ namespace ShipWorks.Shipping.Settings.Defaults
 
                 if (carrierProfiles.Any())
                 {
-                    ToolStripLabel carrierLabel = new ToolStripLabel(EnumHelper.GetDescription(Rule.ShipmentTypeCode))
+                    using (var fontFamily = new FontFamily("Tahoma"))
                     {
-                        Font = new Font(new FontFamily("Tahoma"), 6.5f, FontStyle.Bold),
-                        Margin = new Padding(-4, 2, 2, 2),
-                        Enabled = false
-                    };
-                    selectMenu.DropDownItems.Add(carrierLabel);
-                    carrierProfiles.ForEach(p => AddProfileToMenu(p, selectMenu));
+                        ToolStripLabel carrierLabel = new ToolStripLabel(EnumHelper.GetDescription(Rule.ShipmentTypeCode))
+                        {
+                            Font = new Font(fontFamily, 6.5f, FontStyle.Bold),
+                            Margin = new Padding(-4, 2, 2, 2),
+                            Enabled = false
+                        };
+                        selectMenu.DropDownItems.Add(carrierLabel);
+                        carrierProfiles.ForEach(p => AddProfileToMenu(p, selectMenu));
 
-                    selectMenu.DropDown.PerformLayout();
+                        selectMenu.DropDown.PerformLayout();
+                    }
                 }
             }
             else

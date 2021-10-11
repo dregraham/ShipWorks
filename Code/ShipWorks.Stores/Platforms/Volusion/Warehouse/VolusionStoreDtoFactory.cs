@@ -34,9 +34,12 @@ namespace ShipWorks.Stores.Platforms.Volusion.Warehouse
             var storeEntity = baseStoreEntity as VolusionStoreEntity;
             var store = helpers.PopulateCommonData(storeEntity, new VolusionStore());
 
-            store.Username = storeEntity.WebUserName;
-            store.EncryptedPassword = storeEntity.ApiPassword;
-            store.BaseUrl = storeEntity.StoreUrl;
+            if (storeEntity != null)
+            {
+                store.Username = storeEntity.WebUserName;
+                store.EncryptedPassword = storeEntity.ApiPassword;
+                store.BaseUrl = storeEntity.StoreUrl;
+            }
 
             return await Task.FromResult(store);
         }

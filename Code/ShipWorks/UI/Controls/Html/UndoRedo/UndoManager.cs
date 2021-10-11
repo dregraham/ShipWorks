@@ -149,7 +149,7 @@ namespace ShipWorks.UI.Controls.Html.UndoRedo
         /// </summary>
         private IOleUndoManager GetOleUndoManager(HtmlApi.IHTMLDocument2 htmlDocument)
         {
-            IComServiceProvider serviceProvider = htmlDocument as IComServiceProvider;
+            IComServiceProvider serviceProvider = (IComServiceProvider) htmlDocument;
 
             Guid undoManagerGuid1 = typeof(IOleUndoManager).GUID;
             Guid undoManagerGuid2 = typeof(IOleUndoManager).GUID;

@@ -260,7 +260,7 @@ namespace ShipWorks.Templates.Processing.TemplateXml
                     if (!end.MoveToFirstChild())
                     {
                         // But if we couldn't just move to the next sibling
-                        while (!end.MoveToNext())
+                        while (end != null && !end.MoveToNext())
                         {
                             // But if there was no next sibling just move up to the parent
                             if (!end.MoveToParent())

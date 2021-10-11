@@ -586,7 +586,7 @@ namespace ShipWorks.Shipping.Editing.Rating
         /// <param name="e">The <see cref="GridRowColumnEventArgs"/> instance containing the event data.</param>
         private void OnConfigureRateClicked(object sender, GridRowColumnEventArgs e)
         {
-            RateResult rate = e.Row.Tag as RateResult;
+            RateResult rate = (RateResult) e.Row.Tag;
             if (!rate.Selectable)
             {
                 return;

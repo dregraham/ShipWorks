@@ -133,7 +133,10 @@ namespace ShipWorks.UI.WPF
             {
                 ButtonAutomationPeer peer = new ButtonAutomationPeer(wpfButton);
                 IInvokeProvider invokeProv = peer.GetPattern(PatternInterface.Invoke) as IInvokeProvider;
-                invokeProv.Invoke();
+                if (invokeProv != null)
+                {
+                    invokeProv.Invoke();
+                }
             }
             else
             {
@@ -148,7 +151,7 @@ namespace ShipWorks.UI.WPF
         private void WinGotFocus(object sender, EventArgs e)
         {
             var button = sender as WinForms::Button;
-            button.NotifyDefault(true);
+            button?.NotifyDefault(true);
             AcceptButton = button;
             ClearStyles();
         }

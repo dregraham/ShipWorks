@@ -1740,13 +1740,16 @@ namespace ShipWorks.Shipping
 
                 if (profileGroup.Key.HasValue)
                 {
-                    ToolStripLabel carrierLabel = new ToolStripLabel(EnumHelper.GetDescription(profileGroup.Key.Value))
+                    using (var fontFamily = new FontFamily("Tahoma"))
                     {
-                        Font = new Font(new FontFamily("Tahoma"), 6.5f, FontStyle.Bold),
-                        Margin = new Padding(-4, 2, 2, 2),
-                        Enabled = false
-                    };
-                    contextMenuProfiles.Items.Add(carrierLabel);
+                        ToolStripLabel carrierLabel = new ToolStripLabel(EnumHelper.GetDescription(profileGroup.Key.Value))
+                        {
+                            Font = new Font(fontFamily, 6.5f, FontStyle.Bold),
+                            Margin = new Padding(-4, 2, 2, 2),
+                            Enabled = false
+                        };
+                        contextMenuProfiles.Items.Add(carrierLabel);
+                    }
                 }
 
                 profileGroup.OrderByDescending(p => p.ShipmentTypePrimary).ThenBy(p => p.Name)

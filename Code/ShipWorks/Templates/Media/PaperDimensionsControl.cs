@@ -55,7 +55,7 @@ namespace ShipWorks.Templates.Media
         /// </summary>
         private void OnChangePaperDimensions(object sender, System.EventArgs e)
         {
-            PaperDimensions dimensions = paperDimensions.SelectedItem as PaperDimensions;
+            PaperDimensions dimensions = (PaperDimensions) paperDimensions.SelectedItem;
 
             if (!dimensions.IsCustom)
             {

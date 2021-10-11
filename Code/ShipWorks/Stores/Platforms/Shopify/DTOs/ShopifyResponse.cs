@@ -27,9 +27,12 @@ namespace ShipWorks.Stores.Platforms.Shopify.DTOs
 
                 if (!nextLinkHeader.IsNullOrWhiteSpace())
                 {
-                    NextPageUrl = nextLinkHeader
-                        .Replace("<", string.Empty)
-                        .Substring(0, nextLinkHeader.IndexOf(">", StringComparison.Ordinal) - 1);
+                    if (nextLinkHeader != null)
+                    {
+                        NextPageUrl = nextLinkHeader
+                            .Replace("<", string.Empty)
+                            .Substring(0, nextLinkHeader.IndexOf(">", StringComparison.Ordinal) - 1);
+                    }
                 }
             }
         }
