@@ -49,7 +49,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon.SFP
 
                 if (rateResult.Success)
                 {
-                    string serviceId = ((AmazonRateTag) rateResult.Value?.Rates?.FirstOrDefault()?.Tag)?.ShippingServiceId ?? string.Empty;
+                    string serviceId = ((AmazonRateTag) rateResult.Value?.Rates?.FirstOrDefault()?.Tag)?.ShippingServiceId;                    
                     shipment.AmazonSFP.ShippingServiceID = serviceId;
                 }
             }
