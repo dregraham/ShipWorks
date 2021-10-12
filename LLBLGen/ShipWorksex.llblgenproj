@@ -1192,7 +1192,7 @@
         <Fields>
           <Field Name="CreateCommercialInvoice" Type="bool" IsOptional="true" FieldIndex="37" />
           <Field Name="CustomsRecipientTIN" Type="string" IsOptional="true" MaxLength="24" FieldIndex="39" />
-          <Field Name="CustomsRecipientTINType" Type="int" IsOptional="true" Precision="10" FieldIndex="40" />
+          <Field Name="CustomsRecipientTinType" Type="int" IsOptional="true" Precision="10" FieldIndex="40" />
           <Field Name="DropoffType" Type="int" IsOptional="true" FieldIndex="27" />
           <Field Name="EmailNotifyBroker" Type="int" IsOptional="true" FieldIndex="26" />
           <Field Name="EmailNotifyMessage" Type="string" IsOptional="true" MaxLength="120" FieldIndex="19" />
@@ -1329,7 +1329,7 @@
           <Field Name="CustomsRecipientIdentificationType" Type="int" FieldIndex="75" />
           <Field Name="CustomsRecipientIdentificationValue" Type="string" MaxLength="50" FieldIndex="76" />
           <Field Name="CustomsRecipientTIN" Type="string" MaxLength="24" FieldIndex="70" />
-          <Field Name="CustomsRecipientTINType" Type="int" IsOptional="true" Precision="10" FieldIndex="163" />
+          <Field Name="CustomsRecipientTinType" Type="int" IsOptional="true" Precision="10" FieldIndex="163" />
           <Field Name="DropoffType" Type="int" FieldIndex="108" />
           <Field Name="EmailNotifyBroker" Type="int" FieldIndex="27" />
           <Field Name="EmailNotifyMessage" Type="string" MaxLength="120" FieldIndex="32" />
@@ -4702,7 +4702,7 @@
       <Catalogs>
         <Catalog Name="ShipWorksLocal">
           <Schemas>
-            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2021-10-04T19:03:23.9664147Z">
+            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2021-10-04T19:00:19.1852297Z">
               <Tables>
                 <Table Name="Action">
                   <PkConstraintName Name="PK_Action" />
@@ -6036,7 +6036,7 @@
                     <Field Name="CreateCommercialInvoice" Ordinal="38" IsOptional="true" DbType="2" />
                     <Field Name="FileElectronically" Ordinal="39" IsOptional="true" DbType="2" />
                     <Field Name="CustomsRecipientTIN" Ordinal="40" IsOptional="true" DbType="12" Length="24" />
-                    <Field Name="CustomsRecipientTINType" Ordinal="41" IsOptional="true" DbType="8" Precision="10" />
+                    <Field Name="CustomsRecipientTinType" Ordinal="41" IsOptional="true" DbType="8" Precision="10" />
                   </Fields>
                 </Table>
                 <Table Name="FedExProfilePackage">
@@ -6793,7 +6793,7 @@
                     <Field Name="FreightSpecialServices" Ordinal="161" DbType="8" Precision="10" />
                     <Field Name="FreightGuaranteeType" Ordinal="162" DbType="8" Precision="10" />
                     <Field Name="FreightGuaranteeDate" Ordinal="163" DbType="4" />
-                    <Field Name="CustomsRecipientTINType" Ordinal="164" IsOptional="true" DbType="8" Precision="10" />
+                    <Field Name="CustomsRecipientTinType" Ordinal="164" IsOptional="true" DbType="8" Precision="10" />
                   </Fields>
                 </Table>
                 <Table Name="Filter">
@@ -12202,7 +12202,7 @@
           <FieldMappings>
             <FieldMapping FieldName="CreateCommercialInvoice" TargetFieldName="CreateCommercialInvoice" />
             <FieldMapping FieldName="CustomsRecipientTIN" TargetFieldName="CustomsRecipientTIN" />
-            <FieldMapping FieldName="CustomsRecipientTINType" TargetFieldName="CustomsRecipientTINType" />
+            <FieldMapping FieldName="CustomsRecipientTinType" TargetFieldName="CustomsRecipientTinType" />
             <FieldMapping FieldName="DropoffType" TargetFieldName="DropoffType" />
             <FieldMapping FieldName="EmailNotifyBroker" TargetFieldName="EmailNotifyBroker" />
             <FieldMapping FieldName="EmailNotifyMessage" TargetFieldName="EmailNotifyMessage" />
@@ -12340,7 +12340,7 @@
             <FieldMapping FieldName="CustomsRecipientIdentificationType" TargetFieldName="CustomsRecipientIdentificationType" />
             <FieldMapping FieldName="CustomsRecipientIdentificationValue" TargetFieldName="CustomsRecipientIdentificationValue" />
             <FieldMapping FieldName="CustomsRecipientTIN" TargetFieldName="CustomsRecipientTIN" />
-            <FieldMapping FieldName="CustomsRecipientTINType" TargetFieldName="CustomsRecipientTINType" />
+            <FieldMapping FieldName="CustomsRecipientTinType" TargetFieldName="CustomsRecipientTinType" />
             <FieldMapping FieldName="DropoffType" TargetFieldName="DropoffType" />
             <FieldMapping FieldName="EmailNotifyBroker" TargetFieldName="EmailNotifyBroker" />
             <FieldMapping FieldName="EmailNotifyMessage" TargetFieldName="EmailNotifyMessage" />

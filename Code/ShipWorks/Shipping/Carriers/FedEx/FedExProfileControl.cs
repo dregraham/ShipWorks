@@ -77,6 +77,8 @@ namespace ShipWorks.Shipping.Carriers.FedEx
 
             EnumHelper.BindComboBox<FedExReturnType>(returnType);
 
+            EnumHelper.BindComboBox<FedexTINType>(customsRecipientTINType);
+
             FedExUtility.LoadSmartPostComboBox(smartHubID);
 
             if (ShippingSettings.Fetch().FedExInsuranceProvider == (int) InsuranceProvider.Carrier)
@@ -173,6 +175,8 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             // Customs
             AddValueMapping(fedex, FedExProfileFields.CreateCommercialInvoice, createCommercialInvoiceState, createCommercialInvoice);
             AddValueMapping(fedex, FedExProfileFields.FileElectronically, fileElectronicallyState, fileElectronically);
+            AddValueMapping(fedex, FedExProfileFields.CustomsRecipientTIN, customsRecipientTINState, customsRecipientTIN);
+            AddValueMapping(fedex, FedExProfileFields.CustomsRecipientTINType, customsRecipientTINTypeState, customsRecipientTINType);
 
             // Map parent/child relationships
             SetParentCheckBox(includeReturnState, includeReturn, applyReturnProfileState, applyReturnProfile);

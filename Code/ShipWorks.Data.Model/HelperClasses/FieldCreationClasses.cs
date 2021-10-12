@@ -9347,6 +9347,16 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(FedExProfileFieldIndex.FileElectronically);}
 		}
+		/// <summary>Creates a new FedExProfileEntity.CustomsRecipientTIN field instance</summary>
+		public static EntityField2 CustomsRecipientTIN
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(FedExProfileFieldIndex.CustomsRecipientTIN);}
+		}
+		/// <summary>Creates a new FedExProfileEntity.CustomsRecipientTINType field instance</summary>
+		public static EntityField2 CustomsRecipientTINType
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(FedExProfileFieldIndex.CustomsRecipientTINType);}
+		}
 	}
 
 	/// <summary>Field Creation Class for entity FedExProfilePackageEntity</summary>
@@ -10366,6 +10376,11 @@ namespace ShipWorks.Data.Model.HelperClasses
 		public static EntityField2 FreightGuaranteeDate
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(FedExShipmentFieldIndex.FreightGuaranteeDate);}
+		}
+		/// <summary>Creates a new FedExShipmentEntity.CustomsRecipientTINType field instance</summary>
+		public static EntityField2 CustomsRecipientTINType
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(FedExShipmentFieldIndex.CustomsRecipientTINType);}
 		}
 	}
 

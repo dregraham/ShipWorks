@@ -2219,7 +2219,8 @@ CREATE TABLE [dbo].[FedExShipment]
 [FreightClass] [int] NOT NULL,
 [FreightSpecialServices] [int] NOT NULL,
 [FreightGuaranteeType] [int] NOT NULL,
-[FreightGuaranteeDate] [datetime] NOT NULL
+[FreightGuaranteeDate] [datetime] NOT NULL,
+[CustomsRecipientTINType] [int] NULL
 )
 GO
 PRINT N'Creating primary key [PK_FedExShipment] on [dbo].[FedExShipment]'
@@ -2276,7 +2277,9 @@ CREATE TABLE [dbo].[FedExProfile]
 [ReferenceFIMS] [nvarchar] (300) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
 [ThirdPartyConsignee] [bit] NULL,
 [CreateCommercialInvoice] [bit] NULL,
-[FileElectronically] [bit] NULL
+[FileElectronically] [bit] NULL,
+[CustomsRecipientTIN] [nvarchar] (24) NULL,
+[CustomsRecipientTINType] [int] NULL
 )
 GO
 PRINT N'Creating primary key [PK_FedExProfile] on [dbo].[FedExProfile]'

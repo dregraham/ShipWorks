@@ -18,6 +18,7 @@ namespace ShipWorks.OrderLookup.Controls.Customs
     public class FedExCustomsViewModel : GenericCustomsViewModel
     {
         private Dictionary<int, string> customsExportFilingOptions;
+        private Dictionary<int, string> customsRecipientTINType;
 
         /// <summary>
         /// Ctor
@@ -27,6 +28,7 @@ namespace ShipWorks.OrderLookup.Controls.Customs
             OrderLookupFieldLayoutProvider fieldLayoutProvider) : base(shipmentModel, shipmentTypeManager, fieldLayoutProvider)
         {
             CustomsExportFilingOptions = EnumHelper.GetEnumList<FedExCustomsExportFilingOption>().ToDictionary(x => (int) x.Value, x => x.Description);
+            CustomsRecipientTINType = EnumHelper.GetEnumList<FedexTINType>().ToDictionary(x => (int) x.Value, x => x.Description);
         }
 
         /// <summary>
@@ -37,6 +39,16 @@ namespace ShipWorks.OrderLookup.Controls.Customs
         {
             get => customsExportFilingOptions;
             set => Handler.Set(nameof(CustomsExportFilingOptions), ref customsExportFilingOptions, value);
+        }
+
+        /// <summary>
+        /// List of available customs TIN Types
+        /// </summary>
+        [Obfuscation(Exclude = true)]
+        public Dictionary<int, string> CustomsRecipientTINType
+        {
+            get => customsRecipientTINType;
+            set => Handler.Set(nameof(CustomsRecipientTINType), ref customsRecipientTINType, value);
         }
     }
 }

@@ -33,6 +33,7 @@
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="Auto" />
@@ -83,14 +84,28 @@
                 Grid.Column="1"
                 Text="{Binding ShipmentModel.ShipmentAdapter.Shipment.FedEx.CustomsRecipientTIN, UpdateSourceTrigger=PropertyChanged}"
                 Style="{StaticResource FormTextBox}" />
-            
+
             <TextBlock
                 Grid.Row="3"
                 Grid.Column="0"
                 Style="{StaticResource FieldLabel}"
-                Text="B13A Filing Option" />
+                Text="TIN Type" />
             <ComboBox
                 Grid.Row="3"
+                Grid.Column="1"
+                DisplayMemberPath="Value"
+                ItemsSource="{Binding CustomsRecipientTINType, UpdateSourceTrigger=PropertyChanged}"
+                SelectedValue="{Binding ShipmentModel.ShipmentAdapter.Shipment.FedEx.CustomsRecipientTINType}"
+                SelectedValuePath="Key"
+                Style="{StaticResource FormComboBox}" />
+
+            <TextBlock
+                Grid.Row="4"
+                Grid.Column="0"
+                Style="{StaticResource FieldLabel}"
+                Text="B13A Filing Option" />
+            <ComboBox
+                Grid.Row="4"
                 Grid.Column="1"
                 DisplayMemberPath="Value"
                 ItemsSource="{Binding CustomsExportFilingOptions, UpdateSourceTrigger=PropertyChanged}"
@@ -99,12 +114,12 @@
                 Style="{StaticResource FormComboBox}" />
             
             <TextBlock
-                Grid.Row="4"
+                Grid.Row="5"
                 Grid.Column="0"
                 Style="{StaticResource FieldLabel}"
                 Text="AES/EEI Exemption" />
             <TextBox
-                Grid.Row="4"
+                Grid.Row="5"
                 Grid.Column="1"
                 Text="{Binding ShipmentModel.ShipmentAdapter.Shipment.FedEx.CustomsAESEEI, UpdateSourceTrigger=PropertyChanged}"
                 Style="{StaticResource FormTextBox}" />
