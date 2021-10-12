@@ -2304,7 +2304,7 @@
             // customsRecipientTIN
             // 
             this.customsRecipientTIN.BackColor = System.Drawing.Color.White;
-            this.customsRecipientTIN.Location = new System.Drawing.Point(110, 17);
+            this.customsRecipientTIN.Location = new System.Drawing.Point(125, 17);
             this.customsRecipientTIN.Name = "customsRecipientTIN";
             this.customsRecipientTIN.Size = new System.Drawing.Size(198, 21);
             this.customsRecipientTIN.TabIndex = 2;
@@ -2330,7 +2330,7 @@
             // tinTypes
             // 
             this.customsRecipientTINType.BackColor = System.Drawing.Color.White;
-            this.customsRecipientTINType.Location = new System.Drawing.Point(110, 42);
+            this.customsRecipientTINType.Location = new System.Drawing.Point(125, 42);
             this.customsRecipientTINType.Name = "customsRecipientTINType";
             this.customsRecipientTINType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.customsRecipientTINType.FormattingEnabled = true;
@@ -2350,7 +2350,7 @@
             // labelTinTypes
             // 
             this.labelCustomsRecipientTINType.AutoSize = true;
-            this.labelCustomsRecipientTINType.Location = new System.Drawing.Point(37, 45);
+            this.labelCustomsRecipientTINType.Location = new System.Drawing.Point(73, 45);
             this.labelCustomsRecipientTINType.Name = "labelCustomsRecipientTINType";
             this.labelCustomsRecipientTINType.Size = new System.Drawing.Size(20, 13);
             this.labelCustomsRecipientTINType.TabIndex = 4;
