@@ -2053,7 +2053,7 @@
             this.groupBoxCustomsRecipientTIN.Controls.Add(this.kryptonBorderEdgeTIN);
             this.groupBoxCustomsRecipientTIN.Location = new System.Drawing.Point(6, 60);
             this.groupBoxCustomsRecipientTIN.Name = "groupBoxCustomsRecipientTIN";
-            this.groupBoxCustomsRecipientTIN.Size = new System.Drawing.Size(388, 151);
+            this.groupBoxCustomsRecipientTIN.Size = new System.Drawing.Size(388, 120);
             this.groupBoxCustomsRecipientTIN.TabIndex = 1;
             this.groupBoxCustomsRecipientTIN.TabStop = false;
             this.groupBoxCustomsRecipientTIN.Text = "Ioss Tax Id";

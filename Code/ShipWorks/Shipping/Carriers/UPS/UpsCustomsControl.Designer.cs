@@ -81,7 +81,7 @@
             // 
             // customsValue
             // 
-            this.customsValue.Location = new System.Drawing.Point(76, 7);
+            this.customsValue.Location = new System.Drawing.Point(96, 7);
             this.customsValue.TabIndex = 1;
             // 
             // sectionGeneral
@@ -128,7 +128,7 @@
             // 
             // customsRecipientTIN
             // 
-            this.customsRecipientTIN.Location = new System.Drawing.Point(75, 33);
+            this.customsRecipientTIN.Location = new System.Drawing.Point(95, 33);
             this.customsRecipientTIN.Name = "customsRecipientTIN";
             this.customsRecipientTIN.Size = new System.Drawing.Size(258, 21);
             this.customsRecipientTIN.TabIndex = 5;
@@ -137,7 +137,7 @@
             // 
             this.documentsOnly.AutoSize = true;
             this.documentsOnly.BackColor = System.Drawing.Color.White;
-            this.documentsOnly.Location = new System.Drawing.Point(75, 59);
+            this.documentsOnly.Location = new System.Drawing.Point(95, 59);
             this.documentsOnly.Name = "documentsOnly";
             this.documentsOnly.Size = new System.Drawing.Size(102, 17);
             this.documentsOnly.TabIndex = 3;
@@ -166,7 +166,7 @@
             // 
             // descriptionOfGoods
             // 
-            this.descriptionOfGoods.Location = new System.Drawing.Point(75, 80);
+            this.descriptionOfGoods.Location = new System.Drawing.Point(95, 80);
             this.descriptionOfGoods.Name = "descriptionOfGoods";
             this.descriptionOfGoods.Size = new System.Drawing.Size(258, 21);
             this.descriptionOfGoods.TabIndex = 5;

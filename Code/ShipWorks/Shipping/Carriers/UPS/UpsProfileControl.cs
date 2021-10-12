@@ -119,6 +119,8 @@ namespace ShipWorks.Shipping.Carriers.UPS
             EnumHelper.BindComboBox<UspsEndorsementType>(uspsEndorsement);
             EnumHelper.BindComboBox<UpsIrregularIndicatorType>(irregularIndicator);
             EnumHelper.BindComboBox<UpsShipmentChargeType>(payorDuties);
+            EnumHelper.BindComboBox<UpsCustomsRecipientTINType>(customsRecipientTINType);
+            EnumHelper.BindComboBox<UpsCustomsRecipientType>(customsRecipientType);
 
             payorCountry.DisplayMember = "Key";
             payorCountry.ValueMember = "Value";
@@ -158,6 +160,8 @@ namespace ShipWorks.Shipping.Carriers.UPS
             //Customs
             AddValueMapping(ups, UpsProfileFields.CustomsDescription, customsDescState, customsDescription, labelCustomsDescription);
             AddValueMapping(ups, UpsProfileFields.CustomsRecipientTIN, customsRecipientTINState, customsRecipientTIN, labelCustomsRecipientTIN);
+            AddValueMapping(ups, UpsProfileFields.CustomsRecipientTINType, customsRecipientTINTypeState, customsRecipientTINType, labelCustomsRecipientTINType);
+            AddValueMapping(ups, UpsProfileFields.CustomsRecipientType, customsRecipientTypeState, customsRecipientType, labelCustomsRecipientType);
 
             AddEnabledStateMapping(ups, UpsProfileFields.EmailNotifySender, emailNotifySenderState, emailNotifySenderShip, labelEmailSender);
             AddEnabledStateMapping(ups, UpsProfileFields.EmailNotifySender, emailNotifySenderState, emailNotifySenderException);
