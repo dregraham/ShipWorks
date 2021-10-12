@@ -36,6 +36,8 @@ namespace ShipWorks.Shipping.Carriers.UPS
 
             EnumHelper.BindComboBox<UpsTermsOfSale>(ciTermsOfSale);
             EnumHelper.BindComboBox<UpsExportReason>(ciPurpose);
+            EnumHelper.BindComboBox<UpsCustomsRecipientTINType>(customsRecipientTINType);
+            EnumHelper.BindComboBox<UpsCustomsRecipientType>(customsRecipientType);
         }
 
         /// <summary>
@@ -70,6 +72,8 @@ namespace ShipWorks.Shipping.Carriers.UPS
                     extraDocuments.ApplyMultiCheck(shipment.Ups.PaperlessAdditionalDocumentation);
                     descriptionOfGoods.ApplyMultiText(shipment.Ups.CustomsDescription);
                     customsRecipientTIN.ApplyMultiText(shipment.Ups.CustomsRecipientTIN);
+                    customsRecipientTINType.ApplyMultiValue((UpsCustomsRecipientTINType) shipment.Ups.CustomsRecipientTINType);
+                    customsRecipientType.ApplyMultiValue((UpsCustomsRecipientType) shipment.Ups.CustomsRecipientType);
 
                     usePaperlessInvoice.ApplyMultiCheck(shipment.Ups.CommercialPaperlessInvoice);
                     ciTermsOfSale.ApplyMultiValue((UpsTermsOfSale) shipment.Ups.CommercialInvoiceTermsOfSale);
@@ -120,6 +124,8 @@ namespace ShipWorks.Shipping.Carriers.UPS
                 extraDocuments.ReadMultiCheck(c => shipment.Ups.PaperlessAdditionalDocumentation = c);
                 descriptionOfGoods.ReadMultiText(t => shipment.Ups.CustomsDescription = t);
                 customsRecipientTIN.ReadMultiText(t => shipment.Ups.CustomsRecipientTIN = t);
+                customsRecipientTINType.ReadMultiValue(t => shipment.Ups.CustomsRecipientTINType = (int) t);
+                customsRecipientType.ReadMultiValue(t => shipment.Ups.CustomsRecipientType = (int) t);
 
                 usePaperlessInvoice.ReadMultiCheck(c => shipment.Ups.CommercialPaperlessInvoice = c);
                 ciTermsOfSale.ReadMultiValue(v => shipment.Ups.CommercialInvoiceTermsOfSale = (int) v);

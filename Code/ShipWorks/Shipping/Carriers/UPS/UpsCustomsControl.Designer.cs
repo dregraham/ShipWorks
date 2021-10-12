@@ -30,6 +30,10 @@
         {
             this.labelCustomsRecipientTIN = new System.Windows.Forms.Label();
             this.customsRecipientTIN = new ShipWorks.UI.Controls.MultiValueTextBox();
+            this.labelCustomsRecipientTINType = new System.Windows.Forms.Label();
+            this.customsRecipientTINType = new ShipWorks.UI.Controls.MultiValueComboBox();
+            this.labelCustomsRecipientType = new System.Windows.Forms.Label();
+            this.customsRecipientType = new ShipWorks.UI.Controls.MultiValueComboBox();
             this.documentsOnly = new System.Windows.Forms.CheckBox();
             this.labelDocuments = new System.Windows.Forms.Label();
             this.labelDescriptionOfGoods = new System.Windows.Forms.Label();
@@ -93,12 +97,16 @@
             this.sectionGeneral.ContentPanel.Controls.Add(this.customsValue);
             this.sectionGeneral.ContentPanel.Controls.Add(this.labelCustomsRecipientTIN);
             this.sectionGeneral.ContentPanel.Controls.Add(this.customsRecipientTIN);
+            this.sectionGeneral.ContentPanel.Controls.Add(this.labelCustomsRecipientTINType);
+            this.sectionGeneral.ContentPanel.Controls.Add(this.customsRecipientTINType);
+            this.sectionGeneral.ContentPanel.Controls.Add(this.labelCustomsRecipientType);
+            this.sectionGeneral.ContentPanel.Controls.Add(this.customsRecipientType);
             this.sectionGeneral.ContentPanel.Controls.Add(this.descriptionOfGoods);
             this.sectionGeneral.ContentPanel.Controls.Add(this.labelDescriptionOfGoods);
             this.sectionGeneral.ContentPanel.Controls.Add(this.documentsOnly);
             this.sectionGeneral.ContentPanel.Controls.Add(this.labelDocuments);
             this.sectionGeneral.Location = new System.Drawing.Point(6, 5);
-            this.sectionGeneral.Size = new System.Drawing.Size(572, 140);
+            this.sectionGeneral.Size = new System.Drawing.Size(572, 185);
             // 
             // groupSelectedContent
             // 
@@ -122,22 +130,62 @@
             this.labelCustomsRecipientTIN.BackColor = System.Drawing.Color.White;
             this.labelCustomsRecipientTIN.Location = new System.Drawing.Point(6, 35);
             this.labelCustomsRecipientTIN.Name = "labelCustomsRecipientTIN";
-            this.labelCustomsRecipientTIN.Size = new System.Drawing.Size(65, 13);
+            this.labelCustomsRecipientTIN.Size = new System.Drawing.Size(89, 13);
             this.labelCustomsRecipientTIN.TabIndex = 4;
             this.labelCustomsRecipientTIN.Text = "Recipient Tax Id:";
             // 
             // customsRecipientTIN
             // 
-            this.customsRecipientTIN.Location = new System.Drawing.Point(95, 33);
+            this.customsRecipientTIN.Location = new System.Drawing.Point(95, 32);
             this.customsRecipientTIN.Name = "customsRecipientTIN";
             this.customsRecipientTIN.Size = new System.Drawing.Size(258, 21);
             this.customsRecipientTIN.TabIndex = 5;
+            // 
+            // labelCustomsRecipientTINType
+            // 
+            this.labelCustomsRecipientTINType.AutoSize = true;
+            this.labelCustomsRecipientTINType.BackColor = System.Drawing.Color.White;
+            this.labelCustomsRecipientTINType.Location = new System.Drawing.Point(6, 59);
+            this.labelCustomsRecipientTINType.Name = "labelCustomsRecipientTINType";
+            this.labelCustomsRecipientTINType.Size = new System.Drawing.Size(52, 13);
+            this.labelCustomsRecipientTINType.TabIndex = 4;
+            this.labelCustomsRecipientTINType.Text = "Tin Type:";
+            // 
+            // customsRecipientTINType
+            // 
+            this.customsRecipientTINType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.customsRecipientTINType.FormattingEnabled = true;
+            this.customsRecipientTINType.Location = new System.Drawing.Point(95, 56);
+            this.customsRecipientTINType.Name = "customsRecipientTINType";
+            this.customsRecipientTINType.PromptText = "(Multiple Values)";
+            this.customsRecipientTINType.Size = new System.Drawing.Size(258, 21);
+            this.customsRecipientTINType.TabIndex = 4;
+            // 
+            // labelCustomsRecipientType
+            // 
+            this.labelCustomsRecipientType.AutoSize = true;
+            this.labelCustomsRecipientType.BackColor = System.Drawing.Color.White;
+            this.labelCustomsRecipientType.Location = new System.Drawing.Point(6, 83);
+            this.labelCustomsRecipientType.Name = "labelCustomsRecipientType";
+            this.labelCustomsRecipientType.Size = new System.Drawing.Size(82, 13);
+            this.labelCustomsRecipientType.TabIndex = 4;
+            this.labelCustomsRecipientType.Text = "Recipient Type:";
+            // 
+            // customsRecipientType
+            // 
+            this.customsRecipientType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.customsRecipientType.FormattingEnabled = true;
+            this.customsRecipientType.Location = new System.Drawing.Point(95, 80);
+            this.customsRecipientType.Name = "customsRecipientType";
+            this.customsRecipientType.PromptText = "(Multiple Values)";
+            this.customsRecipientType.Size = new System.Drawing.Size(258, 21);
+            this.customsRecipientType.TabIndex = 4;
             // 
             // documentsOnly
             // 
             this.documentsOnly.AutoSize = true;
             this.documentsOnly.BackColor = System.Drawing.Color.White;
-            this.documentsOnly.Location = new System.Drawing.Point(95, 59);
+            this.documentsOnly.Location = new System.Drawing.Point(95, 107);
             this.documentsOnly.Name = "documentsOnly";
             this.documentsOnly.Size = new System.Drawing.Size(102, 17);
             this.documentsOnly.TabIndex = 3;
@@ -148,7 +196,7 @@
             // 
             this.labelDocuments.AutoSize = true;
             this.labelDocuments.BackColor = System.Drawing.Color.White;
-            this.labelDocuments.Location = new System.Drawing.Point(15, 59);
+            this.labelDocuments.Location = new System.Drawing.Point(15, 107);
             this.labelDocuments.Name = "labelDocuments";
             this.labelDocuments.Size = new System.Drawing.Size(55, 13);
             this.labelDocuments.TabIndex = 2;
@@ -158,7 +206,7 @@
             // 
             this.labelDescriptionOfGoods.AutoSize = true;
             this.labelDescriptionOfGoods.BackColor = System.Drawing.Color.White;
-            this.labelDescriptionOfGoods.Location = new System.Drawing.Point(6, 83);
+            this.labelDescriptionOfGoods.Location = new System.Drawing.Point(6, 131);
             this.labelDescriptionOfGoods.Name = "labelDescriptionOfGoods";
             this.labelDescriptionOfGoods.Size = new System.Drawing.Size(64, 13);
             this.labelDescriptionOfGoods.TabIndex = 4;
@@ -166,7 +214,7 @@
             // 
             // descriptionOfGoods
             // 
-            this.descriptionOfGoods.Location = new System.Drawing.Point(95, 80);
+            this.descriptionOfGoods.Location = new System.Drawing.Point(95, 127);
             this.descriptionOfGoods.Name = "descriptionOfGoods";
             this.descriptionOfGoods.Size = new System.Drawing.Size(258, 21);
             this.descriptionOfGoods.TabIndex = 5;
@@ -393,6 +441,10 @@
 
         private System.Windows.Forms.Label labelCustomsRecipientTIN;
         private ShipWorks.UI.Controls.MultiValueTextBox customsRecipientTIN;
+        private System.Windows.Forms.Label labelCustomsRecipientTINType;
+        private ShipWorks.UI.Controls.MultiValueComboBox customsRecipientTINType;
+        private System.Windows.Forms.Label labelCustomsRecipientType;
+        private ShipWorks.UI.Controls.MultiValueComboBox customsRecipientType;
         private System.Windows.Forms.CheckBox documentsOnly;
         private System.Windows.Forms.Label labelDocuments;
         private ShipWorks.UI.Controls.MultiValueTextBox descriptionOfGoods;
