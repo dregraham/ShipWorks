@@ -103,6 +103,9 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools
         {
             var labels = new Lazy<List<TemplateLabelData>>(() => LoadLabelData(loaded));
 
+            //add the tax id
+            container.AddElement("TIN", () => loaded().Ups.CustomsRecipientTIN);
+
             // Add the labels content
             container.AddElement("Labels",
                 new LabelsOutline(container.Context, shipment, labels, () => GetStandardImageFormat(loaded)),

@@ -89,6 +89,8 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
             RequestedLabelFormat = source.RequestedLabelFormat;
             ShipEngineLabelID = source.ShipEngineLabelID;
             CustomsRecipientTIN = source.CustomsRecipientTIN;
+            CustomsRecipientTINType = source.CustomsRecipientTINType;
+            CustomsRecipientType = source.CustomsRecipientType;
             
             Shipment = (IShipmentEntity) source.Shipment?.AsReadOnly(objectMap);
             
@@ -418,6 +420,18 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
         /// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 24<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
         public System.String CustomsRecipientTIN { get; }
+        /// <summary> The CustomsRecipientTINType property of the Entity UpsShipment<br/><br/>
+        /// </summary>
+        /// <remarks>Mapped on table field: "UpsShipment"."CustomsRecipientTINType"<br/>
+        /// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
+        /// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+        public Nullable<System.Int32> CustomsRecipientTINType { get; }
+        /// <summary> The CustomsRecipientType property of the Entity UpsShipment<br/><br/>
+        /// </summary>
+        /// <remarks>Mapped on table field: "UpsShipment"."CustomsRecipientType"<br/>
+        /// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
+        /// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+        public Nullable<System.Int32> CustomsRecipientType { get; }
         
         public IShipmentEntity Shipment { get; }
         

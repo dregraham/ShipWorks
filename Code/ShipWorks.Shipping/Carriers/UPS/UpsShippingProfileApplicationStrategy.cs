@@ -47,6 +47,9 @@ namespace ShipWorks.Shipping.Carriers.Ups
             base.ApplyProfile(profile, shipment);
             ApplyProfileValue(profile.Ups.ResidentialDetermination, shipment, ShipmentFields.ResidentialDetermination);
 
+            //apply the tax id
+            ApplyProfileValue(profile.Ups.CustomsRecipientTIN, shipment.Ups, UpsShipmentFields.CustomsRecipientTIN);
+
             // Apply the UPS specific profile stuff to the UPS Shipment
             ApplyProfile(profile.Ups, shipment.Ups);
 
