@@ -181,5 +181,10 @@ namespace ShipWorks.Stores.Platforms.Volusion
 
             return false;
         }
+
+        /// <summary>
+        /// Can only add Volusion store in the hub
+        /// </summary>
+        public override bool CanAddStoreType => false;
     }
 }

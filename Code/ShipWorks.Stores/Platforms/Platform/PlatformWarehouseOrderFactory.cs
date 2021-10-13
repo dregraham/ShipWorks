@@ -17,6 +17,10 @@ namespace ShipWorks.Stores.Platforms.Platform
     /// </summary>
     [KeyedComponent(typeof(IWarehouseOrderFactory), StoreTypeCode.Api)]
     [KeyedComponent(typeof(IWarehouseOrderFactory), StoreTypeCode.BrightpearlHub)]
+    [KeyedComponent(typeof(IWarehouseOrderFactory), StoreTypeCode.WalmartHub)]
+    [KeyedComponent(typeof(IWarehouseOrderFactory), StoreTypeCode.ChannelAdvisorHub)]
+    [KeyedComponent(typeof(IWarehouseOrderFactory), StoreTypeCode.VolusionHub)]
+    [KeyedComponent(typeof(IWarehouseOrderFactory), StoreTypeCode.GrouponHub)]
     public class PlatformWarehouseOrderFactory : WarehouseOrderFactory
     {
         private readonly ILog log;

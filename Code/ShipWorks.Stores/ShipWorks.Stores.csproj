@@ -275,10 +275,12 @@
     <Compile Include="Platforms\BigCommerce\Warehouse\BigCommerceWarehouseItem.cs" />
     <Compile Include="Platforms\BigCommerce\Warehouse\BigCommerceWarehouseOrderFactory.cs" />
     <Compile Include="Platforms\BrightpearlHub\BrightpearlHubStoreType.cs" />
+    <Compile Include="Platforms\ChannelAdvisorHub\ChannelAdvisorHubStoreType.cs" />
     <Compile Include="Platforms\ChannelAdvisor\DTO\ChannelAdvisorProductList.cs" />
     <Compile Include="Platforms\Ebay\Warehouse\EbayStoreDtoFactory.cs" />
     <Compile Include="Platforms\GenericFile\Warehouse\GenericFileStoreDtoFactory.cs" />
     <Compile Include="Platforms\GenericModule\CoreExtensions\Filters\Orders\GenericModuleOrderSourceCondition.cs" />
+    <Compile Include="Platforms\GrouponHub\GrouponHubStoreType.cs" />
     <Compile Include="Platforms\Magento\Warehouse\MagentoWarehouseOrder.cs" />
     <Compile Include="Platforms\Magento\Warehouse\MagentoWarehouseOrderFactory.cs" />
     <Compile Include="Platforms\Magento\Warehouse\MagentoStore.cs" />
@@ -337,8 +339,10 @@
     <Compile Include="Platforms\Rakuten\Warehouse\RakutenStoreDtoFactory.cs" />
     <Compile Include="Platforms\Rakuten\Warehouse\RakutenWarehouseOrder.cs" />
     <Compile Include="Platforms\Rakuten\Warehouse\RakutenWarehouseOrderFactory.cs" />
+    <Compile Include="Platforms\VolusionHub\VolusionHubStoreType.cs" />
     <Compile Include="Platforms\Volusion\Warehouse\VolusionStoreDtoFactory.cs" />
     <Compile Include="Platforms\Volusion\Warehouse\VolusionWarehouseOrderFactory.cs" />
+    <Compile Include="Platforms\WalmartHub\WalmartHubStoreType.cs" />
     <Compile Include="Platforms\Walmart\WalmartWebClientSettings.cs" />
     <Compile Include="Platforms\Walmart\IWalmartWebClientSettings.cs" />
     <Compile Include="Platforms\Walmart\Warehouse\WalmartStore.cs" />

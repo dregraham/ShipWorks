@@ -18,6 +18,10 @@ namespace ShipWorks.Stores.Platforms.Platform
     /// </summary>
     [KeyedComponent(typeof(IStoreSetup), StoreTypeCode.Api)]
     [KeyedComponent(typeof(IStoreSetup), StoreTypeCode.BrightpearlHub)]
+    [KeyedComponent(typeof(IStoreSetup), StoreTypeCode.WalmartHub)]
+    [KeyedComponent(typeof(IStoreSetup), StoreTypeCode.ChannelAdvisorHub)]
+    [KeyedComponent(typeof(IStoreSetup), StoreTypeCode.VolusionHub)]
+    [KeyedComponent(typeof(IStoreSetup), StoreTypeCode.GrouponHub)]
     public class PlatformStoreSetup: BaseStoreSetup 
     {
         private readonly IStoreTypeManager storeTypeManager;

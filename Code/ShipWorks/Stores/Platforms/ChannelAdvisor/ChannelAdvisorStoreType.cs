@@ -402,5 +402,11 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
         /// Should the Hub be used for this store?
         /// </summary>
         public override bool ShouldUseHub(IStoreEntity store) => true;
+
+
+        /// <summary>
+        /// Can only add ChannelAdvisor store in the hub
+        /// </summary>
+        public override bool CanAddStoreType => false;
     }
 }

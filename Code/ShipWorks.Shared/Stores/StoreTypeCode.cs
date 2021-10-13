@@ -439,5 +439,25 @@ namespace ShipWorks.Stores
         [StoreTypeIdentity("BRIGHTPEARLHUB", "BPH")]
         [StoreTypeIcon("brightpearl")]
         BrightpearlHub = 88,
+
+        [Description("Walmart")]
+        [StoreTypeIdentity("WALMARTHUB", "WMH")]
+        [StoreTypeIcon("walmart")]
+        WalmartHub = 89,
+        
+        [Description("ChannelAdvisor")]
+        [StoreTypeIdentity("CHANNELADVISORHUB", "CAH")]
+        [StoreTypeIcon("channeladvisor")]
+        ChannelAdvisorHub = 90,
+        
+        [Description("Volusion")]
+        [StoreTypeIdentity("VOLUSIONHUB", "VLH")]
+        [StoreTypeIcon("volusion")]
+        VolusionHub = 91,
+        
+        [Description("Groupon")]
+        [StoreTypeIdentity("GROUPONHUB", "GRH")]
+        [StoreTypeIcon("groupon")]
+        GrouponHub = 92,
     }
 }

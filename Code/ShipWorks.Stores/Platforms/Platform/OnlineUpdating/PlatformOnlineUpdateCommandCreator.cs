@@ -17,6 +17,10 @@ namespace ShipWorks.Stores.Platforms.Platform.OnlineUpdating
     /// </summary>
     [KeyedComponent(typeof(IOnlineUpdateCommandCreator), StoreTypeCode.Api)]
     [KeyedComponent(typeof(IOnlineUpdateCommandCreator), StoreTypeCode.BrightpearlHub)]
+    [KeyedComponent(typeof(IOnlineUpdateCommandCreator), StoreTypeCode.WalmartHub)]
+    [KeyedComponent(typeof(IOnlineUpdateCommandCreator), StoreTypeCode.ChannelAdvisorHub)]
+    [KeyedComponent(typeof(IOnlineUpdateCommandCreator), StoreTypeCode.VolusionHub)]
+    [KeyedComponent(typeof(IOnlineUpdateCommandCreator), StoreTypeCode.GrouponHub)]
     public class PlatformUpdateCommandCreator : IOnlineUpdateCommandCreator
     {
         private readonly IPlatformOnlineUpdater platformOnlineUpdater;

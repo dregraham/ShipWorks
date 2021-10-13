@@ -219,5 +219,10 @@ namespace ShipWorks.Stores.Platforms.Walmart
                 FilterTarget = (int) FilterTarget.Orders
             };
         }
+
+        /// <summary>
+        /// Can only add Walmart store in the hub
+        /// </summary>
+        public override bool CanAddStoreType => false;
     }
 }
