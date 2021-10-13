@@ -72,8 +72,9 @@ namespace ShipWorks.Shipping.Carriers.UPS
                     extraDocuments.ApplyMultiCheck(shipment.Ups.PaperlessAdditionalDocumentation);
                     descriptionOfGoods.ApplyMultiText(shipment.Ups.CustomsDescription);
                     customsRecipientTIN.ApplyMultiText(shipment.Ups.CustomsRecipientTIN);
+
                     customsRecipientTINType.ApplyMultiValue((UpsCustomsRecipientTINType) shipment.Ups.CustomsRecipientTINType);
-                    customsRecipientType.ApplyMultiValue((UpsCustomsRecipientType) shipment.Ups.CustomsRecipientType);
+                    customsRecipientType.ApplyMultiValue((UpsCustomsRecipientType) shipment.Ups.CustomsRecipientType);                  
 
                     usePaperlessInvoice.ApplyMultiCheck(shipment.Ups.CommercialPaperlessInvoice);
                     ciTermsOfSale.ApplyMultiValue((UpsTermsOfSale) shipment.Ups.CommercialInvoiceTermsOfSale);

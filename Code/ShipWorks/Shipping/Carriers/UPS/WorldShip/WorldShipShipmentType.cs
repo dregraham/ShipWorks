@@ -70,7 +70,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.WorldShip
         public override void GenerateTemplateElements(ElementOutline container, Func<ShipmentEntity> shipment, Func<ShipmentEntity> loaded)
         {
             //add the tax id
-            container.AddElement("TIN", () => loaded().Ups.CustomsRecipientTIN);
+            container.AddElement("TIN", () => ($"{loaded().Ups.CustomsRecipientTIN} ({loaded().Ups.CustomsRecipientTINType})"));
 
             // USPS tracking details
             container.AddElement("USPSTrackingNumber", () => loaded().Ups.UspsTrackingNumber, ElementOutline.If(() => shipment().Processed));

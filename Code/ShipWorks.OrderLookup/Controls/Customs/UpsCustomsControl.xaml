@@ -36,6 +36,8 @@
                 <RowDefinition Height="auto" />
                 <RowDefinition Height="auto" />
                 <RowDefinition Height="auto"/>
+                <RowDefinition Height="auto"/>
+                <RowDefinition Height="auto"/>
             </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="102" />
@@ -75,14 +77,42 @@
                 Grid.Column="1"
                 Text="{Binding ShipmentModel.ShipmentAdapter.Shipment.Ups.CustomsRecipientTIN, UpdateSourceTrigger=PropertyChanged}"
                 Style="{StaticResource FormTextBox}" />
-            
+
             <TextBlock
                 Grid.Row="2"
                 Grid.Column="0"
                 Style="{StaticResource FieldLabel}"
+                Text="Tin Type" />
+            <ComboBox
+                Grid.Row="2"
+                Grid.Column="1"
+                DisplayMemberPath="Value"
+                ItemsSource="{Binding CustomsRecipientTINType, UpdateSourceTrigger=PropertyChanged}"
+                SelectedValue="{Binding ShipmentModel.ShipmentAdapter.Shipment.Ups.CustomsRecipientTINType}"
+                SelectedValuePath="Key"
+                Style="{StaticResource FormComboBox}" />
+
+            <TextBlock
+                Grid.Row="3"
+                Grid.Column="0"
+                Style="{StaticResource FieldLabel}"
+                Text="Recipient Type" />
+            <ComboBox
+                Grid.Row="3"
+                Grid.Column="1"
+                DisplayMemberPath="Value"
+                ItemsSource="{Binding CustomsRecipientType, UpdateSourceTrigger=PropertyChanged}"
+                SelectedValue="{Binding ShipmentModel.ShipmentAdapter.Shipment.Ups.CustomsRecipientType}"
+                SelectedValuePath="Key"
+                Style="{StaticResource FormComboBox}" />
+            
+            <TextBlock
+                Grid.Row="4"
+                Grid.Column="0"
+                Style="{StaticResource FieldLabel}"
                 Text="Contents" />
             <CheckBox
-                Grid.Row="2"
+                Grid.Row="4"
                 Grid.Column="1"
                 Margin="8 0 0 10"
                 IsChecked="{Binding ShipmentModel.ShipmentAdapter.Shipment.Ups.CustomsDocumentsOnly, UpdateSourceTrigger=PropertyChanged}"
@@ -90,12 +120,12 @@
                 Style="{StaticResource FormCheckBox}" />
 
             <TextBlock
-                Grid.Row="3"
+                Grid.Row="5"
                 Grid.Column="0"
                 Style="{StaticResource FieldLabel}"
                 Text="Description" />
             <TextBox
-                Grid.Row="3"
+                Grid.Row="5"
                 Grid.Column="1"
                 Margin="9 0 0 10"
                 Style="{StaticResource FormTextBox}"
