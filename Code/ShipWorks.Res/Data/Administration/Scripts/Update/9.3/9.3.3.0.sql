@@ -12,3 +12,10 @@ GO
 IF COL_LENGTH(N'[dbo].[FedexProfile]', N'CustomsRecipientTINType') IS NULL
 ALTER TABLE [dbo].[FedexProfile] ADD [CustomsRecipientTINType] [int] NULL
 GO
+UPDATE fedex
+SET fedex.[CustomsRecipientTINType] = '0'
+FROM FedexProfile fedex
+INNER JOIN ShippingProfile ship
+    ON fedex.ShippingProfileID = ship.ShippingProfileID
+WHERE ship.ShipmentTypePrimary = 1
+GO
