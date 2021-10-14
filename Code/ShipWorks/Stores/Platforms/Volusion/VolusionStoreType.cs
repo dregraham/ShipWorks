@@ -16,7 +16,6 @@ namespace ShipWorks.Stores.Platforms.Volusion
     /// Volusion integration type
     /// </summary>
     [KeyedComponent(typeof(StoreType), StoreTypeCode.Volusion)]
-    [Component(RegistrationType.Self)]
     public class VolusionStoreType : StoreType
     {
         // Logger
@@ -181,10 +180,5 @@ namespace ShipWorks.Stores.Platforms.Volusion
 
             return false;
         }
-
-        /// <summary>
-        /// Can only add Volusion store in the hub
-        /// </summary>
-        public override bool CanAddStoreType => false;
     }
 }

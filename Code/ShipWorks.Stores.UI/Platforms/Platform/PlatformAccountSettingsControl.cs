@@ -15,14 +15,18 @@ using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Management;
 using ShipWorks.Stores.Platforms.SparkPay.DTO;
 
-namespace ShipWorks.Stores.UI.Platforms.Api
+namespace ShipWorks.Stores.UI.Platforms.Platform
 {
     /// <summary>
     /// Control for setting up an API Account (currently, directs user to the hub)
     /// </summary>
     [KeyedComponent(typeof(AccountSettingsControlBase), StoreTypeCode.Api, ExternallyOwned = true)]
     [KeyedComponent(typeof(AccountSettingsControlBase), StoreTypeCode.BrightpearlHub, ExternallyOwned = true)]
-    public partial class ApiAccountSettingsControl : AccountSettingsControlBase
+    [KeyedComponent(typeof(AccountSettingsControlBase), StoreTypeCode.WalmartHub, ExternallyOwned = true)]
+    [KeyedComponent(typeof(AccountSettingsControlBase), StoreTypeCode.VolusionHub, ExternallyOwned = true)]
+    [KeyedComponent(typeof(AccountSettingsControlBase), StoreTypeCode.ChannelAdvisorHub, ExternallyOwned = true)]
+    [KeyedComponent(typeof(AccountSettingsControlBase), StoreTypeCode.GrouponHub, ExternallyOwned = true)]
+    public partial class PlatformAccountSettingsControl : AccountSettingsControlBase
     {
         private readonly WebClientEnvironmentFactory webClientEnvironmentFactory;
         private StoreEntity store;
@@ -30,7 +34,7 @@ namespace ShipWorks.Stores.UI.Platforms.Api
         /// <summary>
         /// Constructor
         /// </summary>
-        public ApiAccountSettingsControl(WebClientEnvironmentFactory webClientEnvironmentFactory)
+        public PlatformAccountSettingsControl(WebClientEnvironmentFactory webClientEnvironmentFactory)
         {
             InitializeComponent();
             this.webClientEnvironmentFactory = webClientEnvironmentFactory;

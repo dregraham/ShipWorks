@@ -198,11 +198,11 @@
     <Compile Include="Orders\Split\RoutingErrorDialog.xaml.cs">
       <DependentUpon>RoutingErrorDialog.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Platforms\Api\ApiAccountSettingsControl.cs">
+    <Compile Include="Platforms\Platform\PlatformAccountSettingsControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Platforms\Api\ApiAccountSettingsControl.Designer.cs">
-      <DependentUpon>ApiAccountSettingsControl.cs</DependentUpon>
+    <Compile Include="Platforms\Platform\PlatformAccountSettingsControl.Designer.cs">
+      <DependentUpon>PlatformAccountSettingsControl.cs</DependentUpon>
     </Compile>
     <Compile Include="Platforms\BigCommerce\BigCommerceAccountSettings.xaml.cs">
       <DependentUpon>BigCommerceAccountSettings.xaml</DependentUpon>
@@ -657,8 +657,8 @@
     <EmbeddedResource Include="Controls\StoreWizardFinishPageControl.resx">
       <DependentUpon>StoreWizardFinishPageControl.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Platforms\Api\ApiAccountSettingsControl.resx">
-      <DependentUpon>ApiAccountSettingsControl.cs</DependentUpon>
+    <EmbeddedResource Include="Platforms\Platform\PlatformAccountSettingsControl.resx">
+      <DependentUpon>PlatformAccountSettingsControl.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Platforms\BigCommerce\BigCommerceAccountSettingsControl.resx">
       <DependentUpon>BigCommerceAccountSettingsControl.cs</DependentUpon>

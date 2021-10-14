@@ -290,7 +290,7 @@
     <Compile Include="Platforms\Odbc\Mapping\RefreshingOdbcStore.cs" />
     <Compile Include="Platforms\Platform\CoreExtensions\Actions\PlatformShipmentUploadTask.cs" />
     <Compile Include="Platforms\Platform\OnlineUpdating\PlatformOnlineUpdateCommandCreator.cs" />
-    <Compile Include="Platforms\Platform\PlatformStoreDowloader.cs" />
+    <Compile Include="Platforms\Platform\PlatformStoreDownloader.cs" />
     <Compile Include="Platforms\Platform\PlatformStoreSetup.cs" />
     <Compile Include="Platforms\Platform\PlatformWarehouseOrderFactory.cs" />
     <Compile Include="Platforms\Platform\PlatformStoreType.cs" />

@@ -14,7 +14,6 @@ namespace ShipWorks.Stores.Platforms.GrouponHub
     /// GrouponHub Store type
     /// </summary>
     [KeyedComponent(typeof(StoreType), StoreTypeCode.GrouponHub)]
-    [Component(RegistrationType.Self)]
     public class GrouponHubStoreType : PlatformStoreType
     {
         /// <summary>

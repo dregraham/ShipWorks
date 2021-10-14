@@ -12,12 +12,16 @@ namespace ShipWorks.Stores.Platforms.Platform
     /// </summary>
     [KeyedComponent(typeof(IStoreDownloader), StoreTypeCode.Api)]
     [KeyedComponent(typeof(IStoreDownloader), StoreTypeCode.BrightpearlHub)]
-    public class PlatformStoreDowloader : StoreDownloader
+    [KeyedComponent(typeof(IStoreDownloader), StoreTypeCode.WalmartHub)]
+    [KeyedComponent(typeof(IStoreDownloader), StoreTypeCode.VolusionHub)]
+    [KeyedComponent(typeof(IStoreDownloader), StoreTypeCode.GrouponHub)]
+    [KeyedComponent(typeof(IStoreDownloader), StoreTypeCode.ChannelAdvisorHub)]
+    public class PlatformStoreDownloader : StoreDownloader
     {
         /// <summary>
         /// Constructor
         /// </summary>
-        public PlatformStoreDowloader(StoreEntity store, IStoreTypeManager storeTypeManager)
+        public PlatformStoreDownloader(StoreEntity store, IStoreTypeManager storeTypeManager)
             : base(store, storeTypeManager.GetType(store))
         {
         }

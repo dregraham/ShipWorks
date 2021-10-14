@@ -1,7 +1,7 @@
 ﻿
-namespace ShipWorks.Stores.UI.Platforms.Api
+namespace ShipWorks.Stores.UI.Platforms.Platform
 {
-    partial class ApiAccountSettingsControl
+    partial class PlatformAccountSettingsControl
     {
         /// <summary> 
         /// Required designer variable.
