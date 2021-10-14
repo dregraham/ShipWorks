@@ -5,7 +5,7 @@ ALTER TABLE [dbo].[FedexShipment] ADD [CustomsRecipientTINType] [int] NULL
 GO
 
 UPDATE fedexShipment
-SET fedexShipment.[CustomsRecipientTINType] = 0 
+SET fedexShipment.[CustomsRecipientTINType] = 3 
 FROM FedexShipment fedexShipment
 WHERE fedexShipment.[CustomsRecipientTINType] IS NULL
 GO
@@ -20,7 +20,7 @@ ALTER TABLE [dbo].[FedexProfile] ADD [CustomsRecipientTINType] [int] NULL
 GO
 
 UPDATE fedexProfile
-SET fedexProfile.[CustomsRecipientTINType] = 0 , fedexProfile.[CustomsRecipientTIN] = ''
+SET fedexProfile.[CustomsRecipientTINType] = 3 , fedexProfile.[CustomsRecipientTIN] = ''
 FROM FedexProfile fedexProfile
 INNER JOIN ShippingProfile shipProfile
     ON fedexProfile.ShippingProfileID = shipProfile.ShippingProfileID
