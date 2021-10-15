@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Utility;
@@ -13,23 +10,28 @@ using ShipWorks.Stores.Content;
 using ShipWorks.Warehouse.Orders;
 using ShipWorks.Warehouse.Orders.DTO;
 
-namespace ShipWorks.Stores.Platforms.Api
+namespace ShipWorks.Stores.Platforms.Platform
 {
     /// <summary>
     /// API Warehouse Order Factory
     /// </summary>
     [KeyedComponent(typeof(IWarehouseOrderFactory), StoreTypeCode.Api)]
-    public class ApiWarehouseOrderFactory : WarehouseOrderFactory
+    [KeyedComponent(typeof(IWarehouseOrderFactory), StoreTypeCode.BrightpearlHub)]
+    [KeyedComponent(typeof(IWarehouseOrderFactory), StoreTypeCode.WalmartHub)]
+    [KeyedComponent(typeof(IWarehouseOrderFactory), StoreTypeCode.ChannelAdvisorHub)]
+    [KeyedComponent(typeof(IWarehouseOrderFactory), StoreTypeCode.VolusionHub)]
+    [KeyedComponent(typeof(IWarehouseOrderFactory), StoreTypeCode.GrouponHub)]
+    public class PlatformWarehouseOrderFactory : WarehouseOrderFactory
     {
         private readonly ILog log;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public ApiWarehouseOrderFactory(IOrderElementFactory orderElementFactory,
+        public PlatformWarehouseOrderFactory(IOrderElementFactory orderElementFactory,
             Func<Type, ILog> logFactory) : base(orderElementFactory)
         {
-            log = logFactory(typeof(ApiWarehouseOrderFactory));
+            log = logFactory(typeof(PlatformWarehouseOrderFactory));
         }
 
         /// <summary>

@@ -9,26 +9,42 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Net;
+using Interapptive.Shared.Utility;
 using ShipWorks.ApplicationCore.Licensing.WebClientEnvironments;
+using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Management;
+using ShipWorks.Stores.Platforms.SparkPay.DTO;
 
-namespace ShipWorks.Stores.UI.Platforms.Api
+namespace ShipWorks.Stores.UI.Platforms.Platform
 {
     /// <summary>
     /// Control for setting up an API Account (currently, directs user to the hub)
     /// </summary>
     [KeyedComponent(typeof(AccountSettingsControlBase), StoreTypeCode.Api, ExternallyOwned = true)]
-    public partial class ApiAccountSettingsControl : AccountSettingsControlBase
+    [KeyedComponent(typeof(AccountSettingsControlBase), StoreTypeCode.BrightpearlHub, ExternallyOwned = true)]
+    [KeyedComponent(typeof(AccountSettingsControlBase), StoreTypeCode.WalmartHub, ExternallyOwned = true)]
+    [KeyedComponent(typeof(AccountSettingsControlBase), StoreTypeCode.VolusionHub, ExternallyOwned = true)]
+    [KeyedComponent(typeof(AccountSettingsControlBase), StoreTypeCode.ChannelAdvisorHub, ExternallyOwned = true)]
+    [KeyedComponent(typeof(AccountSettingsControlBase), StoreTypeCode.GrouponHub, ExternallyOwned = true)]
+    public partial class PlatformAccountSettingsControl : AccountSettingsControlBase
     {
         private readonly WebClientEnvironmentFactory webClientEnvironmentFactory;
+        private StoreEntity store;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public ApiAccountSettingsControl(WebClientEnvironmentFactory webClientEnvironmentFactory)
+        public PlatformAccountSettingsControl(WebClientEnvironmentFactory webClientEnvironmentFactory)
         {
             InitializeComponent();
             this.webClientEnvironmentFactory = webClientEnvironmentFactory;
+        }
+
+        public override void LoadStore(StoreEntity store)
+        {
+            base.LoadStore(store);
+            this.store = store;
+            SettingsLabel.Text = $"To update {EnumHelper.GetDescription(store.StoreTypeCode)} store settings, go to https://hub.shipworks.com.";
         }
 
         /// <summary>
@@ -38,7 +54,7 @@ namespace ShipWorks.Stores.UI.Platforms.Api
         {
             string url = webClientEnvironmentFactory.SelectedEnvironment.WarehouseUrl;
             var builder = new UriBuilder(url);
-            builder.Path = "/apiSettings";
+            builder.Path = store.StoreTypeCode == StoreTypeCode.Api ? "/apiSettings" : "/settings";
             WebHelper.OpenUrl(builder.Uri, this);
         }
 

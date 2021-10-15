@@ -1,30 +1,33 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using log4net;
 using ShipWorks.Actions;
 using ShipWorks.Actions.Tasks;
 using ShipWorks.Actions.Tasks.Common;
 using ShipWorks.Actions.Tasks.Common.Editors;
 using ShipWorks.Data.Model;
 using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Stores.Platforms.Api.OnlineUpdating;
+using ShipWorks.Stores.Platforms.Platform.OnlineUpdating;
 
-namespace ShipWorks.Stores.Platforms.Api.CoreExtensions.Actions
+namespace ShipWorks.Stores.Platforms.Platform.CoreExtensions.Actions
 {
     /// <summary>
-    /// Task for uploading shipment details to Api
+    /// Task for uploading shipment details to Platform
     /// </summary>
+    /// <remarks>
+    /// The ActionTask Identifier is API because this was originally written for API and I worry that customers might
+    /// have an action task configured to run based on the identifier and I don't want to mess them up.
+    /// </remarks>
     [ActionTask("Upload shipment details", "ApiShipmentUploadTask", ActionTaskCategory.UpdateOnline)]
-    public class ApiShipmentUploadTask : StoreInstanceTaskBase
+    public class PlatformShipmentUploadTask : StoreInstanceTaskBase
     {
         private const long MaxBatchSize = 1000;
-        private readonly IApiOnlineUpdater onlineUpdater;
+        private readonly IPlatformOnlineUpdater onlineUpdater;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public ApiShipmentUploadTask(IApiOnlineUpdater onlineUpdater)
+        public PlatformShipmentUploadTask(IPlatformOnlineUpdater onlineUpdater)
         {
             this.onlineUpdater = onlineUpdater;
         }
@@ -98,7 +101,7 @@ namespace ShipWorks.Stores.Platforms.Api.CoreExtensions.Actions
             {
                 await onlineUpdater.UploadShipmentDetails(shipmentKeys).ConfigureAwait(false);
             }
-            catch (ApiStoreException ex)
+            catch (PlatformStoreException ex)
             {
                 throw new ActionTaskRunException(ex.Message, ex);
             }

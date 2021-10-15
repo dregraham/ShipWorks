@@ -28,7 +28,6 @@ namespace ShipWorks.Stores.Platforms.Groupon
     /// Groupon store type
     /// </summary>
     [KeyedComponent(typeof(StoreType), StoreTypeCode.Groupon)]
-    [Component(RegistrationType.Self)]
     public class GrouponStoreType : StoreType
     {
         // Logger

@@ -9,28 +9,32 @@ using log4net;
 using ShipWorks.ApplicationCore.Interaction;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Content;
-using ShipWorks.Warehouse.Orders;
 
-namespace ShipWorks.Stores.Platforms.Api.OnlineUpdating
+namespace ShipWorks.Stores.Platforms.Platform.OnlineUpdating
 {
     /// <summary>
-    /// Create online update commands for API stores
+    /// Create online update commands for Platform stores
     /// </summary>
     [KeyedComponent(typeof(IOnlineUpdateCommandCreator), StoreTypeCode.Api)]
-    public class ApiUpdateCommandCreator : IOnlineUpdateCommandCreator
+    [KeyedComponent(typeof(IOnlineUpdateCommandCreator), StoreTypeCode.BrightpearlHub)]
+    [KeyedComponent(typeof(IOnlineUpdateCommandCreator), StoreTypeCode.WalmartHub)]
+    [KeyedComponent(typeof(IOnlineUpdateCommandCreator), StoreTypeCode.ChannelAdvisorHub)]
+    [KeyedComponent(typeof(IOnlineUpdateCommandCreator), StoreTypeCode.VolusionHub)]
+    [KeyedComponent(typeof(IOnlineUpdateCommandCreator), StoreTypeCode.GrouponHub)]
+    public class PlatformUpdateCommandCreator : IOnlineUpdateCommandCreator
     {
-        private readonly IApiOnlineUpdater apiOnlineUpdater;
+        private readonly IPlatformOnlineUpdater platformOnlineUpdater;
         private readonly IMessageHelper messageHelper;
         private readonly ILog log;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public ApiUpdateCommandCreator(IApiOnlineUpdater apiOnlineUpdater,
+        public PlatformUpdateCommandCreator(IPlatformOnlineUpdater platformOnlineUpdater,
             IMessageHelper messageHelper,
             Func<Type, ILog> createLogger)
         {
-            this.apiOnlineUpdater = apiOnlineUpdater;
+            this.platformOnlineUpdater = platformOnlineUpdater;
             this.messageHelper = messageHelper;
             log = createLogger(GetType());
         }
@@ -77,7 +81,7 @@ namespace ShipWorks.Stores.Platforms.Api.OnlineUpdating
                 {
                     progressDialog.ToUpdater($"Updating {orderKeys} orders...");
 
-                    await apiOnlineUpdater.UploadOrderShipmentDetails(orderKeys).ConfigureAwait(false);
+                    await platformOnlineUpdater.UploadOrderShipmentDetails(orderKeys).ConfigureAwait(false);
 
                     return Result.FromSuccess();
                 }
