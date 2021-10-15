@@ -4,6 +4,7 @@ using System.Linq;
 using Interapptive.Shared.Enums;
 using Interapptive.Shared.Extensions;
 using Interapptive.Shared.Utility;
+using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Shipping.Carriers.FedEx.Api.Environment;
 using ShipWorks.Shipping.Carriers.FedEx.Api.Rate.Manipulators.Request.International;
@@ -231,7 +232,10 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Ship.Manipulators.Request.Intern
 
             // TODO: We may need to set shipping/recipient based on who's paying.  See ETD_Request.xml where The Tins info
             // is on Shipper.
-            request.RequestedShipment.Recipient.Tins[0] = new TaxpayerIdentification() { Number = shipment.FedEx.CustomsRecipientTIN, TinType = TinType.PERSONAL_STATE };
+            
+            //Set tin type to default value if user selects blank in dropdown
+            var tinType = shipment.FedEx.CustomsRecipientTINType == -1 ? TinType.PERSONAL_STATE : (TinType) shipment.FedEx.CustomsRecipientTINType;
+            request.RequestedShipment.Recipient.Tins[0] = new TaxpayerIdentification() { Number = shipment.FedEx.CustomsRecipientTIN, TinType = tinType };
 
             return request;
         }

@@ -427,6 +427,10 @@ namespace ShipWorks.Data.Model.EntityClasses
 			_fieldsCustomProperties.Add("CreateCommercialInvoice", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
 			_fieldsCustomProperties.Add("FileElectronically", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+			_fieldsCustomProperties.Add("CustomsRecipientTIN", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+			_fieldsCustomProperties.Add("CustomsRecipientTINType", fieldHashtable);
 		}
 		#endregion
 
@@ -952,6 +956,28 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			get { return (Nullable<System.Boolean>)GetValue((int)FedExProfileFieldIndex.FileElectronically, false); }
 			set	{ SetValue((int)FedExProfileFieldIndex.FileElectronically, value); }
+		}
+
+		/// <summary> The CustomsRecipientTIN property of the Entity FedExProfile<br/><br/></summary>
+		/// <remarks>Mapped on  table field: "FedExProfile"."CustomsRecipientTIN"<br/>
+		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 24<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		[DataMember]
+		public virtual System.String CustomsRecipientTIN
+		{
+			get { return (System.String)GetValue((int)FedExProfileFieldIndex.CustomsRecipientTIN, true); }
+			set	{ SetValue((int)FedExProfileFieldIndex.CustomsRecipientTIN, value); }
+		}
+
+		/// <summary> The CustomsRecipientTINType property of the Entity FedExProfile<br/><br/></summary>
+		/// <remarks>Mapped on  table field: "FedExProfile"."CustomsRecipientTINType"<br/>
+		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		[DataMember]
+		public virtual Nullable<System.Int32> CustomsRecipientTINType
+		{
+			get { return (Nullable<System.Int32>)GetValue((int)FedExProfileFieldIndex.CustomsRecipientTINType, false); }
+			set	{ SetValue((int)FedExProfileFieldIndex.CustomsRecipientTINType, value); }
 		}
 
 		/// <summary> Gets / sets related entity of type 'ShippingProfileEntity' which has to be set using a fetch action earlier. If no related entity is set for this property, null is returned.<br/><br/>

@@ -78,7 +78,7 @@ namespace ShipWorks.Shipping.Editing
             this.sectionGeneral.Name = "sectionGeneral";
             this.sectionGeneral.SectionName = "General";
             this.sectionGeneral.SettingsKey = "{ce5a918e-a23f-40cf-8029-7c03753fc946}";
-            this.sectionGeneral.Size = new System.Drawing.Size(572, 65);
+            this.sectionGeneral.Size = new System.Drawing.Size(572, 130);
             this.sectionGeneral.TabIndex = 0;
             // 
             // label1
@@ -118,7 +118,7 @@ namespace ShipWorks.Shipping.Editing
             this.sectionContents.ContentPanel.Controls.Add(this.delete);
             this.sectionContents.ContentPanel.Controls.Add(this.add);
             this.sectionContents.ExtraText = "";
-            this.sectionContents.Location = new System.Drawing.Point(6, 74);
+            this.sectionContents.Location = new System.Drawing.Point(6, 94);
             this.sectionContents.Name = "sectionContents";
             this.sectionContents.SectionName = "Contents";
             this.sectionContents.SettingsKey = "{7fa47a04-8bd5-4ea5-a891-ab22cffa8e17}";
