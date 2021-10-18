@@ -381,7 +381,7 @@ namespace ShipWorks.Filters.Controls
                 if (sandGrid.SelectedElements.Count == 1)
                 {
                     FilterTreeGridRow row = sandGrid.SelectedElements[0] as FilterTreeGridRow;
-                    return row.FilterNode;
+                    return row?.FilterNode;
                 }
 
                 return null;

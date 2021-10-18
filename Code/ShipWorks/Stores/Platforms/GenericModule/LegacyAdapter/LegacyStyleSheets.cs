@@ -94,7 +94,7 @@ namespace ShipWorks.Stores.Platforms.GenericModule.LegacyAdapter
                 }
 
                 // load the stream into a stylesheet object for use
-                using (XmlReader xmlReader = XmlReader.Create(stream))
+                using (XmlReader xmlReader = XmlReader.Create(stream, new XmlReaderSettings() { IgnoreComments = true }))
                 {
                     XslCompiledTransform transform = new XslCompiledTransform();
                     transform.Load(xmlReader);

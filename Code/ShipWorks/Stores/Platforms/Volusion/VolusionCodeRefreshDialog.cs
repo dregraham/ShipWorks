@@ -78,7 +78,11 @@ namespace ShipWorks.Stores.Platforms.Volusion
         {
             try
             {
-                string fileData = File.OpenText(fileName).ReadToEnd();
+                string fileData = string.Empty;
+                using (var stream = File.OpenText(fileName))
+                {
+                    fileData = stream.ReadToEnd();
+                }
 
                 if (importMode == VolusionCodeImportMode.PaymentMethods)
                 {

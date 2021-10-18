@@ -1,5 +1,6 @@
 using System.ComponentModel;
 using System.Reflection;
+using Interapptive.Shared.Utility;
 
 namespace ShipWorks.Stores
 {
@@ -201,6 +202,7 @@ namespace ShipWorks.Stores
         [Description("Brightpearl")]
         [StoreTypeIdentity("BRIGHTPEARL", "BTP")]
         [StoreTypeIcon("brightpearl")]
+        [Deprecated]
         Brightpearl = 38,
 
         [Description("OrderDesk")]
@@ -431,6 +433,31 @@ namespace ShipWorks.Stores
         [Description("API")]
         [StoreTypeIdentity("API", "API")]
         [StoreTypeIcon("api")]
-        Api = 87
+        Api = 87,
+        
+        [Description("Brightpearl")]
+        [StoreTypeIdentity("BRIGHTPEARLHUB", "BPH")]
+        [StoreTypeIcon("brightpearl")]
+        BrightpearlHub = 88,
+
+        [Description("Walmart")]
+        [StoreTypeIdentity("WALMARTHUB", "WMH")]
+        [StoreTypeIcon("walmart")]
+        WalmartHub = 89,
+        
+        [Description("ChannelAdvisor")]
+        [StoreTypeIdentity("CHANNELADVISORHUB", "CAH")]
+        [StoreTypeIcon("channeladvisor")]
+        ChannelAdvisorHub = 90,
+        
+        [Description("Volusion")]
+        [StoreTypeIdentity("VOLUSIONHUB", "VLH")]
+        [StoreTypeIcon("volusion")]
+        VolusionHub = 91,
+        
+        [Description("Groupon")]
+        [StoreTypeIdentity("GROUPONHUB", "GRH")]
+        [StoreTypeIcon("groupon")]
+        GrouponHub = 92,
     }
 }

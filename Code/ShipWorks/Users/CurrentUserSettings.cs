@@ -117,13 +117,16 @@ namespace ShipWorks.Users
         {
             DialogSettings settings = userSession.Settings?.DialogSettingsObject;
 
-            settings.NotificationDialogSettings = settings.NotificationDialogSettings
-                .Where(x => x.Type != notificationType)
-                .Append(new NotificationDialogSetting(notificationType, dateTimeProvider.UtcNow.Add(waitTime)))
-                .OrderBy(x => x.Type)
-                .ToArray();
+            if (settings != null)
+            {
+                settings.NotificationDialogSettings = settings.NotificationDialogSettings
+                    .Where(x => x.Type != notificationType)
+                    .Append(new NotificationDialogSetting(notificationType, dateTimeProvider.UtcNow.Add(waitTime)))
+                    .OrderBy(x => x.Type)
+                    .ToArray();
 
-            userSession.UpdateSettings(x => x.DialogSettingsObject = settings);
+                userSession.UpdateSettings(x => x.DialogSettingsObject = settings);
+            }
         }
 
         /// <summary>

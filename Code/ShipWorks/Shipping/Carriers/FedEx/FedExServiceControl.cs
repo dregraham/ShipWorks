@@ -900,7 +900,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
 
             FedExRateSelection rate = e.Rate.OriginalTag as FedExRateSelection;
 
-            service.SelectedValue = rate.ServiceType;
+            service.SelectedValue = rate?.ServiceType;
             if (service.SelectedIndex == -1 && oldIndex != -1)
             {
                 service.SelectedIndex = oldIndex;

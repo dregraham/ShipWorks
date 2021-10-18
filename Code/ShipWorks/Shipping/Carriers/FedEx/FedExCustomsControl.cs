@@ -47,6 +47,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             EnumHelper.BindComboBox<FedExNaftaDeterminationCode>(naftaProducerDetermination);
             EnumHelper.BindComboBox<FedExNaftaPreferenceCriteria>(naftaPreference);
             EnumHelper.BindComboBox<FedExNaftaNetCostMethod>(naftaNetCostMethod);
+            EnumHelper.BindComboBox<FedexTINType>(customsRecipientTINType);
         }
 
         /// <summary>
@@ -82,6 +83,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
                     documentsOnly.ApplyMultiCheck(shipment.FedEx.CustomsDocumentsOnly);
 
                     recipientTaxID.ApplyMultiText(shipment.FedEx.CustomsRecipientTIN);
+                    customsRecipientTINType.ApplyMultiValue((FedexTINType) shipment.FedEx.CustomsRecipientTINType);
 
                     admissibilityPackaging.ApplyMultiValue((FedExPhysicalPackagingType) shipment.FedEx.CustomsAdmissibilityPackaging);
 
@@ -239,6 +241,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
                 documentsOnly.ReadMultiCheck(c => shipment.FedEx.CustomsDocumentsOnly = c);
 
                 recipientTaxID.ReadMultiText(t => shipment.FedEx.CustomsRecipientTIN = t);
+                customsRecipientTINType.ReadMultiValue(v => shipment.FedEx.CustomsRecipientTINType = (int) v);
 
                 admissibilityPackaging.ReadMultiValue(v => shipment.FedEx.CustomsAdmissibilityPackaging = (int) v);
 

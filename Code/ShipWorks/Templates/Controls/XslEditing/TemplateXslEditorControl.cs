@@ -112,7 +112,7 @@ namespace ShipWorks.Templates.Controls.XslEditing
         {
             foreach (IToken token in e.Document.Tokens)
             {
-                DynamicToken dynamic = token as DynamicToken;
+                DynamicToken dynamic = (DynamicToken) token;
                 if (dynamic.TextRange.IntersectsWith(e.DirtyTextRange))
                 {
                     if (dynamic.Key.StartsWith("StartTag", StringComparison.OrdinalIgnoreCase) || dynamic.Key.StartsWith("EndTag", StringComparison.OrdinalIgnoreCase))

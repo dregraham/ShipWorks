@@ -789,7 +789,8 @@ namespace ShipWorks.Templates.Controls
             {
                 object[] tag = item.Tag as object[];
 
-                if (activePreviewSource == (TemplatePreviewSource) tag[0] &&
+                if (tag != null &&
+                    activePreviewSource == (TemplatePreviewSource) tag[0] &&
                     activePreviewCount == (int) tag[1])
                 {
                     item.Checked = true;

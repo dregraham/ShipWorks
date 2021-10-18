@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Reflection;
+using Interapptive.Shared.Business;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores;
 
@@ -40,6 +41,31 @@ namespace ShipWorks.Warehouse.Configuration.Stores.DTO
         /// The JSON serialized actions list
         /// </summary>
         public string ActionsPayload { get; set; }
+
+        /// <summary>
+        /// True if this store should be managed by Hub
+        /// </summary>
+        public bool ManagedInHub { get; set; }
+
+        /// <summary>
+        /// Store's address
+        /// </summary>
+        public Address Address { get; set; }
+
+        /// <summary>
+        /// Store settings
+        /// </summary>
+        public StoreSettings Settings { get; set; }
+
+        /// <summary>
+        /// True if this store should upload shipment details
+        /// </summary>
+        public bool UploadShipmentDetails { get; set; }
+        
+        /// <summary>
+        /// The store license, if we know it.
+        /// </summary>
+        public string StoreLicense { get; set; }
     }
 
     /// <summary>

@@ -40,7 +40,7 @@ namespace ShipWorks.UI.Controls.Settings.Api
         {
             Visible = false;
 
-            ApiSettingsControl apiSettingsControl = new ApiSettingsControl();
+            PlatformSettingsControl apiSettingsControl = new PlatformSettingsControl();
             ElementHost elementHost = new ElementHost();
             elementHost.Dock = DockStyle.Fill;
             elementHost.Child = apiSettingsControl;

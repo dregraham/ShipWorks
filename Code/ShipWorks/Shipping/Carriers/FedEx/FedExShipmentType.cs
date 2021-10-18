@@ -334,6 +334,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             shipment.FedEx.CustomsDocumentsOnly = false;
             shipment.FedEx.CustomsDocumentsDescription = "General Documents";
             shipment.FedEx.CustomsRecipientTIN = "";
+            shipment.FedEx.CustomsRecipientTINType = (int) FedexTINType.PERSONAL_STATE;
             shipment.FedEx.CustomsAESEEI = string.Empty;
             shipment.FedEx.CustomsRecipientIdentificationType = (int) FedExCustomsRecipientIdentificationType.None;
             shipment.FedEx.CustomsRecipientIdentificationValue = string.Empty;

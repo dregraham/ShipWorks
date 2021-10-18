@@ -4281,7 +4281,10 @@ namespace ShipWorks
             modeRadios.ForEach(b => b.Checked = false);
 
             // Check the right one
-            activeRadio.Checked = true;
+            if (activeRadio != null)
+            {
+                activeRadio.Checked = true;
+            }
 
             // Select the height
             detailViewDetailHeight.SelectedIndex = settings.DetailRows;

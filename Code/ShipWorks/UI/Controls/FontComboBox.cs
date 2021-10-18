@@ -125,26 +125,28 @@ namespace ShipWorks.UI.Controls
             {
                 try
                 {
-                    FontFamily fontFamily = new FontFamily(fontName);
-                    FontStyle fontStyle = FontStyle.Regular;
-
-                    // If Regular doesnt exist, move on to Italic
-                    if (!fontFamily.IsStyleAvailable(fontStyle))
+                    using (FontFamily fontFamily = new FontFamily(fontName))
                     {
-                        fontStyle = FontStyle.Italic;
+                        FontStyle fontStyle = FontStyle.Regular;
 
-                        // Then try bold
+                        // If Regular doesnt exist, move on to Italic
                         if (!fontFamily.IsStyleAvailable(fontStyle))
                         {
-                            fontStyle = FontStyle.Bold;
+                            fontStyle = FontStyle.Italic;
+
+                            // Then try bold
                             if (!fontFamily.IsStyleAvailable(fontStyle))
                             {
-                                return null;
+                                fontStyle = FontStyle.Bold;
+                                if (!fontFamily.IsStyleAvailable(fontStyle))
+                                {
+                                    return null;
+                                }
                             }
                         }
-                    }
 
-                    return new Font(fontName, (float) ((itemBounds.Height - 2) / 1.2), fontStyle, GraphicsUnit.Pixel);
+                        return new Font(fontName, (float) ((itemBounds.Height - 2) / 1.2), fontStyle, GraphicsUnit.Pixel);
+                    }
                 }
                 // Unable to create font family
                 catch (ArgumentException)

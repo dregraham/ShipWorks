@@ -5,6 +5,7 @@ using System.Drawing;
 using System.Globalization;
 using System.Linq;
 using System.Windows.Forms;
+using Autofac;
 using Divelements.SandGrid;
 using Interapptive.Shared;
 using Interapptive.Shared.Business.Geography;
@@ -62,7 +63,7 @@ namespace ShipWorks.Shipping.Editing
         /// </summary>
         public virtual void Initialize()
         {
-
+            
         }
 
         /// <summary>

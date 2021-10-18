@@ -75,6 +75,8 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
             ThirdPartyConsignee = source.ThirdPartyConsignee;
             CreateCommercialInvoice = source.CreateCommercialInvoice;
             FileElectronically = source.FileElectronically;
+            CustomsRecipientTIN = source.CustomsRecipientTIN;
+            CustomsRecipientTINType = source.CustomsRecipientTINType;
             
             ShippingProfile = (IShippingProfileEntity) source.ShippingProfile?.AsReadOnly(objectMap);
             
@@ -318,6 +320,18 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
         /// Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
         public Nullable<System.Boolean> FileElectronically { get; }
+        /// <summary> The CustomsRecipientTIN property of the Entity FedExProfile<br/><br/>
+        /// </summary>
+        /// <remarks>Mapped on table field: "FedExProfile"."CustomsRecipientTIN"<br/>
+        /// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 24<br/>
+        /// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+        public System.String CustomsRecipientTIN { get; }
+        /// <summary> The CustomsRecipientTINType property of the Entity FedExProfile<br/><br/>
+        /// </summary>
+        /// <remarks>Mapped on table field: "FedExProfile"."CustomsRecipientTINType"<br/>
+        /// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
+        /// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+        public Nullable<System.Int32> CustomsRecipientTINType { get; }
         
         public IShippingProfileEntity ShippingProfile { get; }
         

@@ -277,23 +277,18 @@
     <Compile Include="Platforms\Amazon\Warehouse\AmazonWarehouseOrder.cs" />
     <Compile Include="Platforms\Amazon\Warehouse\AmazonWarehouseOrderFactory.cs" />
     <Compile Include="Platforms\Amazon\Warehouse\AmazonStoreDtoFactory.cs" />
-    <Compile Include="Platforms\Api\ApiStoreDowloader.cs" />
-    <Compile Include="Platforms\Api\ApiStoreException.cs" />
-    <Compile Include="Platforms\Api\ApiStoreSetup.cs" />
     <Compile Include="Platforms\Api\ApiStoreType.cs" />
-    <Compile Include="Platforms\Api\ApiWarehouseOrderFactory.cs" />
-    <Compile Include="Platforms\Api\OnlineUpdating\ApiOnlineUpdateCommandCreator.cs" />
-    <Compile Include="Platforms\Api\OnlineUpdating\ApiOnlineUpdater.cs" />
-    <Compile Include="Platforms\Api\CoreExtensions\Actions\ApiShipmentUploadTask.cs" />
-    <Compile Include="Platforms\Api\OnlineUpdating\IApiOnlineUpdater.cs" />
     <Compile Include="Platforms\BigCommerce\Warehouse\BigCommerceStore.cs" />
     <Compile Include="Platforms\BigCommerce\Warehouse\BigCommerceStoreDtoFactory.cs" />
     <Compile Include="Platforms\BigCommerce\Warehouse\BigCommerceWarehouseItem.cs" />
     <Compile Include="Platforms\BigCommerce\Warehouse\BigCommerceWarehouseOrderFactory.cs" />
+    <Compile Include="Platforms\BrightpearlHub\BrightpearlHubStoreType.cs" />
+    <Compile Include="Platforms\ChannelAdvisorHub\ChannelAdvisorHubStoreType.cs" />
     <Compile Include="Platforms\ChannelAdvisor\DTO\ChannelAdvisorProductList.cs" />
     <Compile Include="Platforms\Ebay\Warehouse\EbayStoreDtoFactory.cs" />
     <Compile Include="Platforms\GenericFile\Warehouse\GenericFileStoreDtoFactory.cs" />
     <Compile Include="Platforms\GenericModule\CoreExtensions\Filters\Orders\GenericModuleOrderSourceCondition.cs" />
+    <Compile Include="Platforms\GrouponHub\GrouponHubStoreType.cs" />
     <Compile Include="Platforms\Magento\Warehouse\MagentoWarehouseOrder.cs" />
     <Compile Include="Platforms\Magento\Warehouse\MagentoWarehouseOrderFactory.cs" />
     <Compile Include="Platforms\Magento\Warehouse\MagentoStore.cs" />
@@ -301,6 +296,12 @@
     <Compile Include="Platforms\Manual\CreateDefaultStoreActivity.cs" />
     <Compile Include="Platforms\Odbc\Mapping\OdbcStoreRepository.cs" />
     <Compile Include="Platforms\Odbc\Mapping\RefreshingOdbcStore.cs" />
+    <Compile Include="Platforms\Platform\CoreExtensions\Actions\PlatformShipmentUploadTask.cs" />
+    <Compile Include="Platforms\Platform\OnlineUpdating\PlatformOnlineUpdateCommandCreator.cs" />
+    <Compile Include="Platforms\Platform\PlatformStoreDownloader.cs" />
+    <Compile Include="Platforms\Platform\PlatformStoreSetup.cs" />
+    <Compile Include="Platforms\Platform\PlatformWarehouseOrderFactory.cs" />
+    <Compile Include="Platforms\Platform\PlatformStoreType.cs" />
     <Compile Include="Platforms\Rakuten\Content\RakutenCombineOrderAction.cs" />
     <Compile Include="Platforms\Rakuten\Content\RakutenSplitOrderAction.cs" />
     <Compile Include="Platforms\Rakuten\CoreExtensions\Actions\RakutenShipmentUploadTask.cs" />
@@ -346,8 +347,10 @@
     <Compile Include="Platforms\Rakuten\Warehouse\RakutenStoreDtoFactory.cs" />
     <Compile Include="Platforms\Rakuten\Warehouse\RakutenWarehouseOrder.cs" />
     <Compile Include="Platforms\Rakuten\Warehouse\RakutenWarehouseOrderFactory.cs" />
+    <Compile Include="Platforms\VolusionHub\VolusionHubStoreType.cs" />
     <Compile Include="Platforms\Volusion\Warehouse\VolusionStoreDtoFactory.cs" />
     <Compile Include="Platforms\Volusion\Warehouse\VolusionWarehouseOrderFactory.cs" />
+    <Compile Include="Platforms\WalmartHub\WalmartHubStoreType.cs" />
     <Compile Include="Platforms\Walmart\WalmartWebClientSettings.cs" />
     <Compile Include="Platforms\Walmart\IWalmartWebClientSettings.cs" />
     <Compile Include="Platforms\Walmart\Warehouse\WalmartStore.cs" />
@@ -364,6 +367,7 @@
     <Compile Include="Platforms\Odbc\Warehouse\OdbcStoreClient.cs" />
     <Compile Include="Platforms\Odbc\Warehouse\OdbcStoreDtoFactory.cs" />
     <Compile Include="Services\LegacyStoreTrialKeyConverter.cs" />
+    <Compile Include="Warehouse\Configuration\Stores\ActionTaskConfigurator.cs" />
     <Compile Include="Warehouse\IStoreDtoHelpers.cs" />
     <Compile Include="Platforms\AmeriCommerce\AmeriCommerceCombineOrderNumberSearchProvider.cs" />
     <Compile Include="Platforms\AmeriCommerce\AmeriCommerceWebClient.cs" />
@@ -1097,7 +1101,6 @@
   <ItemGroup>
     <EmbeddedResource Include="Orders\Archive\GetArchiveTriggers.sql" />
   </ItemGroup>
-  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>

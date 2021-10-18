@@ -285,7 +285,7 @@ namespace ShipWorks.Shipping.Settings
         /// </summary>
         private ShipmentTypeSettingsControl BuildPageControl(OptionPage page)
         {
-            ShipmentType shipmentType = page.Tag as ShipmentType;
+            ShipmentType shipmentType = (ShipmentType) page.Tag;
 
             Control control = ShippingManager.IsShipmentTypeConfigured(shipmentType.ShipmentTypeCode) ?
                 BuildShippingSettingsControl(shipmentType) :

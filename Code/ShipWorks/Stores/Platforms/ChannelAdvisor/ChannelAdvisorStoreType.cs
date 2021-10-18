@@ -31,7 +31,6 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
     /// Store implementation for ChannelAdvisor
     /// </summary>
     [KeyedComponent(typeof(StoreType), StoreTypeCode.ChannelAdvisor)]
-    [Component]
     public class ChannelAdvisorStoreType : StoreType, IChannelAdvisorStoreType
     {
         // Logger

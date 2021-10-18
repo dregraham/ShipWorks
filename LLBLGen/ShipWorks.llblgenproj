@@ -1191,6 +1191,8 @@
       <EntityDefinition Name="FedExProfile" ObjectID="59dac7b4-50ba-42fa-8b38-291cbb95f554">
         <Fields>
           <Field Name="CreateCommercialInvoice" Type="bool" IsOptional="true" FieldIndex="37" />
+          <Field Name="CustomsRecipientTIN" Type="string" IsOptional="true" MaxLength="24" FieldIndex="39" />
+          <Field Name="CustomsRecipientTINType" Type="int" IsOptional="true" Precision="10" FieldIndex="40" />
           <Field Name="DropoffType" Type="int" IsOptional="true" FieldIndex="27" />
           <Field Name="EmailNotifyBroker" Type="int" IsOptional="true" FieldIndex="26" />
           <Field Name="EmailNotifyMessage" Type="string" IsOptional="true" MaxLength="120" FieldIndex="19" />
@@ -1327,6 +1329,7 @@
           <Field Name="CustomsRecipientIdentificationType" Type="int" FieldIndex="75" />
           <Field Name="CustomsRecipientIdentificationValue" Type="string" MaxLength="50" FieldIndex="76" />
           <Field Name="CustomsRecipientTIN" Type="string" MaxLength="24" FieldIndex="70" />
+          <Field Name="CustomsRecipientTINType" Type="int" IsOptional="true" Precision="10" FieldIndex="163" />
           <Field Name="DropoffType" Type="int" FieldIndex="108" />
           <Field Name="EmailNotifyBroker" Type="int" FieldIndex="27" />
           <Field Name="EmailNotifyMessage" Type="string" MaxLength="120" FieldIndex="32" />
@@ -3024,6 +3027,7 @@
           <Field Name="InsureShipClientID" Type="long" IsOptional="true" Precision="19" FieldIndex="31" />
           <Field Name="InternationalAddressValidationSetting" Type="AddressValidationStoreSettingType" FieldIndex="24" />
           <Field Name="License" Type="string" MaxLength="150" FieldIndex="2" />
+          <Field Name="ManagedInHub" Type="bool" FieldIndex="34" />
           <Field Name="ManualOrderPostfix" Type="string" MaxLength="10" FieldIndex="28" />
           <Field Name="ManualOrderPrefix" Type="string" MaxLength="10" FieldIndex="27" />
           <Field Name="Phone" Type="string" MaxLength="35" FieldIndex="16" />
@@ -6036,6 +6040,8 @@
                     <Field Name="ThirdPartyConsignee" Ordinal="37" IsOptional="true" DbType="2" />
                     <Field Name="CreateCommercialInvoice" Ordinal="38" IsOptional="true" DbType="2" />
                     <Field Name="FileElectronically" Ordinal="39" IsOptional="true" DbType="2" />
+                    <Field Name="CustomsRecipientTIN" Ordinal="40" IsOptional="true" DbType="12" Length="24" />
+                    <Field Name="CustomsRecipientTINType" Ordinal="41" IsOptional="true" DbType="8" Precision="10" />
                   </Fields>
                 </Table>
                 <Table Name="FedExProfilePackage">
@@ -6792,6 +6798,7 @@
                     <Field Name="FreightSpecialServices" Ordinal="161" DbType="8" Precision="10" />
                     <Field Name="FreightGuaranteeType" Ordinal="162" DbType="8" Precision="10" />
                     <Field Name="FreightGuaranteeDate" Ordinal="163" DbType="4" />
+                    <Field Name="CustomsRecipientTINType" Ordinal="164" IsOptional="true" DbType="8" Precision="10" />
                   </Fields>
                 </Table>
                 <Table Name="Filter">
@@ -8968,6 +8975,7 @@
                     <Field Name="InsureShipClientID" Ordinal="32" IsOptional="true" DbType="0" Precision="19" />
                     <Field Name="InsureShipApiKey" Ordinal="33" IsOptional="true" DbType="12" Length="255" />
                     <Field Name="WarehouseStoreID" Ordinal="34" IsOptional="true" DbType="25" />
+                    <Field Name="ManagedInHub" Ordinal="35" HasDefaultValue="true" DefaultValue="(0)" DbType="2" />
                   </Fields>
                 </Table>
                 <Table Name="SystemData">
@@ -12203,6 +12211,8 @@
         <EntityMapping EntityName=":FedExProfile" TargetName="ShipWorksLocal:dbo:FedExProfile">
           <FieldMappings>
             <FieldMapping FieldName="CreateCommercialInvoice" TargetFieldName="CreateCommercialInvoice" />
+            <FieldMapping FieldName="CustomsRecipientTIN" TargetFieldName="CustomsRecipientTIN" />
+            <FieldMapping FieldName="CustomsRecipientTINType" TargetFieldName="CustomsRecipientTINType" />
             <FieldMapping FieldName="DropoffType" TargetFieldName="DropoffType" />
             <FieldMapping FieldName="EmailNotifyBroker" TargetFieldName="EmailNotifyBroker" />
             <FieldMapping FieldName="EmailNotifyMessage" TargetFieldName="EmailNotifyMessage" />
@@ -12340,6 +12350,7 @@
             <FieldMapping FieldName="CustomsRecipientIdentificationType" TargetFieldName="CustomsRecipientIdentificationType" />
             <FieldMapping FieldName="CustomsRecipientIdentificationValue" TargetFieldName="CustomsRecipientIdentificationValue" />
             <FieldMapping FieldName="CustomsRecipientTIN" TargetFieldName="CustomsRecipientTIN" />
+            <FieldMapping FieldName="CustomsRecipientTINType" TargetFieldName="CustomsRecipientTINType" />
             <FieldMapping FieldName="DropoffType" TargetFieldName="DropoffType" />
             <FieldMapping FieldName="EmailNotifyBroker" TargetFieldName="EmailNotifyBroker" />
             <FieldMapping FieldName="EmailNotifyMessage" TargetFieldName="EmailNotifyMessage" />
@@ -14078,6 +14089,7 @@
             <FieldMapping FieldName="InsureShipClientID" TargetFieldName="InsureShipClientID" />
             <FieldMapping FieldName="InternationalAddressValidationSetting" TargetFieldName="InternationalAddressValidationSetting" />
             <FieldMapping FieldName="License" TargetFieldName="License" />
+            <FieldMapping FieldName="ManagedInHub" TargetFieldName="ManagedInHub" />
             <FieldMapping FieldName="ManualOrderPostfix" TargetFieldName="ManualOrderPostfix" />
             <FieldMapping FieldName="ManualOrderPrefix" TargetFieldName="ManualOrderPrefix" />
             <FieldMapping FieldName="Phone" TargetFieldName="Phone" />

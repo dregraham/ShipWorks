@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel;
 using System.Reflection;
+using Interapptive.Shared.Utility;
 
 namespace Interapptive.Shared.Enums
 {
@@ -9,16 +10,20 @@ namespace Interapptive.Shared.Enums
     [Obfuscation(Feature = "PreserveLiteralValues", Exclude = false, StripAfterObfuscation = false)]
     public enum AddressValidationStoreSettingType
     {
-        [Description("Automatically fix addresses")] 
+        [Description("Automatically fix addresses")]
+        [ApiValue("auto")]
         ValidateAndApply = 0,
 
-        [Description("Notify me of suggestions")] 
+        [Description("Notify me of suggestions")]
+        [ApiValue("notify")]
         ValidateAndNotify = 1,
 
-        [Description("Manual validation only")] 
+        [Description("Manual validation only")]
+        [ApiValue("manual")]
         ManualValidationOnly = 2,
 
-        [Description("Disabled")] 
+        [Description("Disabled")]
+        [ApiValue("disabled")]
         ValidationDisabled = 3
     }
 }

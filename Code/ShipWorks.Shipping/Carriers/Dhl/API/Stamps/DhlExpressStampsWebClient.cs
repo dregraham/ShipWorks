@@ -161,18 +161,20 @@ namespace ShipWorks.Shipping.Carriers.Dhl.API.Stamps
             {
                 WeightValue weightValue = new WeightValue(customsItem.Weight);
 
-                CustomsLine line = new CustomsLine();
-                line.Description = customsItem.Description.Truncate(60);
-                line.Quantity = customsItem.Quantity;
-                line.Value = customsItem.UnitValue;
+                CustomsLine line = new CustomsLine
+                {
+                    Description = customsItem.Description.Truncate(60),
+                    Quantity = customsItem.Quantity,
+                    Value = customsItem.UnitValue,
 
-                line.WeightLb = weightValue.PoundsOnly;
-                line.WeightOz = weightValue.OuncesOnly;
+                    WeightLb = weightValue.PoundsOnly,
+                    WeightOz = weightValue.OuncesOnly,
 
-                line.HSTariffNumber = customsItem.HarmonizedCode;
-                line.CountryOfOrigin = customsItem.CountryOfOrigin;
+                    HSTariffNumber = customsItem.HarmonizedCode,
+                    CountryOfOrigin = customsItem.CountryOfOrigin,
 
-                line.sku = customsItem.Description.Truncate(20);
+                    sku = customsItem.Description.Truncate(20)
+                };
 
                 lines.Add(line);
             }

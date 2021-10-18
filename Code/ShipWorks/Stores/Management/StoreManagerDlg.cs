@@ -224,6 +224,11 @@ namespace ShipWorks.Stores.Management
         /// </summary>
         private void OnRename(object sender, EventArgs e)
         {
+            if (SelectedStore.ManagedInHub && !InterapptiveOnly.MagicKeysDown)
+            {
+                MessageHelper.ShowWarning(this, "To rename the store, go to hub.shipworks.com.");
+                return;
+            }
             ((GridRow) sandGrid.SelectedElements[0]).BeginEdit();
         }
 
@@ -267,6 +272,12 @@ namespace ShipWorks.Stores.Management
         /// </summary>
         private void OnDelete(object sender, EventArgs e)
         {
+            if (SelectedStore.ManagedInHub && !InterapptiveOnly.MagicKeysDown)
+            {
+                MessageHelper.ShowWarning(this, "To delete the store, go to hub.shipworks.com.");
+                return;
+            }
+            
             using (StoreConfirmDeleteDlg dlg = new StoreConfirmDeleteDlg(SelectedStore))
             {
                 if (dlg.ShowDialog(this) == DialogResult.OK)

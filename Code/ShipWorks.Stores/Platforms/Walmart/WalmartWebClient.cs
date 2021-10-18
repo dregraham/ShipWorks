@@ -209,7 +209,7 @@ namespace ShipWorks.Stores.Platforms.Walmart
         private static T DeserializeResponse<T>(string response)
         {
             XmlSerializer serializer = new XmlSerializer(typeof(T));
-            XmlReader xmlReader = XmlReader.Create(new StringReader(response));
+            XmlReader xmlReader = XmlReader.Create(new StringReader(response), new XmlReaderSettings() { IgnoreComments = true });
 
             return typeof(T) == typeof(string) ?
                 (T) TypeDescriptor.GetConverter(typeof(T)).ConvertFromString(response) :
@@ -227,7 +227,7 @@ namespace ShipWorks.Stores.Platforms.Walmart
             try
             {
                 XmlSerializer serializer = new XmlSerializer(typeof(Errors));
-                XmlReader reader = XmlReader.Create(new StringReader(response));
+                XmlReader reader = XmlReader.Create(new StringReader(response), new XmlReaderSettings() { IgnoreComments = true });
 
                 Errors errors = (Errors) serializer.Deserialize(reader);
 

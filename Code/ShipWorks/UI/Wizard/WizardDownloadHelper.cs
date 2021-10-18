@@ -118,6 +118,7 @@ namespace ShipWorks.UI.Wizard
                     {
                         // Try to cleanup a little
                         fileTargetStream.Close();
+                        fileTargetStream.Dispose();
                         fileTargetStream = null;
                         fileDownloader = null;
 

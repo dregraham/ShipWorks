@@ -17,11 +17,14 @@ namespace ShipWorks.Installer.Views
         {
             InitializeComponent();
             var vm = this.DataContext as CancelConfirmationDialogViewModel;
-            this.Owner = vm.Owner;
-
-            if (navigationService.CurrentPageKey == NavigationPageType.Warning)
+            if (vm != null)
             {
-                vm.ConfirmClose(this);
+                this.Owner = vm.Owner;
+
+                if (navigationService.CurrentPageKey == NavigationPageType.Warning)
+                {
+                    vm.ConfirmClose(this);
+                }
             }
         }
 
@@ -31,7 +34,7 @@ namespace ShipWorks.Installer.Views
         private void ExitSetupDlg_Closed(object sender, System.EventArgs e)
         {
             var vm = this.DataContext as CancelConfirmationDialogViewModel;
-            vm.SetClosing(false);
+            vm?.SetClosing(false);
         }
 
         /// <summary>
@@ -40,7 +43,7 @@ namespace ShipWorks.Installer.Views
         private void ExitSetupDlg_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
             var vm = this.DataContext as CancelConfirmationDialogViewModel;
-            if (!vm.Loading)
+            if (vm != null && !vm.Loading)
             {
                 this.DialogResult = vm.DialogResult;
             }

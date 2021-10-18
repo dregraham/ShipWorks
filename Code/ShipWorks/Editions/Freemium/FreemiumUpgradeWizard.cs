@@ -29,7 +29,7 @@ namespace ShipWorks.Editions.Freemium
 
             labelExplanation.Text = issue.GetDescription();
 
-            string accountText = (edition.AccountType == FreemiumAccountType.DAZzle) ? "ShipWorks account" : "ShipWorks and Endicia accounts";
+            string accountText = edition != null && edition.AccountType == FreemiumAccountType.DAZzle ? "ShipWorks account" : "ShipWorks and Endicia accounts";
 
             wizardPageWelcome.Description = string.Format(wizardPageWelcome.Description, accountText);
             labelUpgradeAdvert.Text = string.Format(labelUpgradeAdvert.Text, accountText);

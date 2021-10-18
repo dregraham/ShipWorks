@@ -56,7 +56,7 @@ namespace ShipWorks.UI.AttachedProperties
         {
             TextBox textBox = sender as TextBox;
 
-            if (e.Key == System.Windows.Input.Key.Enter && textBox.LineCount >= GetMaxLines(textBox))
+            if (textBox != null && e.Key == System.Windows.Input.Key.Enter && textBox.LineCount >= GetMaxLines(textBox))
             {
                 e.Handled = true;
             }

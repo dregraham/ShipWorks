@@ -266,7 +266,6 @@ namespace ShipWorks.Common.IO.Hardware.Printers
             try
             {
                 printDocument.Print();
-
                 return true;
             }
             catch (InvalidPrinterException ex)
@@ -283,6 +282,10 @@ namespace ShipWorks.Common.IO.Hardware.Printers
                 }
 
                 MessageHelper.ShowError(this, "There was a problem printing the test: " + message);
+            }
+            finally
+            {
+                printDocument.Dispose();
             }
 
             return false;

@@ -72,7 +72,7 @@ namespace ShipWorks.UI.Wizard.Design
       
             Graphics g = pe.Graphics;
 
-            WizardPage page = Control as WizardPage;
+            WizardPage page = (WizardPage) Control;
             WizardForm wizard = page.Wizard;
                         
             // Draw the guidelines
