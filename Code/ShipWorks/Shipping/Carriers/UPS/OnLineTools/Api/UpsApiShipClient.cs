@@ -238,8 +238,8 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api
             xmlWriter.WriteElementString("AttentionName", StringUtility.Truncate(attentionName, 35));
             xmlWriter.WriteElementString("PhoneNumber", Regex.Replace(origin.Phone, @"\D", "").Truncate(15));
 
-            //// International stuff
-            if (!ShipmentTypeManager.GetType(shipment).IsDomestic(shipment))
+            //// International shipment and a IOSS number was added
+            if (!ShipmentTypeManager.GetType(shipment).IsDomestic(shipment) && !string.IsNullOrWhiteSpace(ups.CustomsRecipientTIN))
             {
                 xmlWriter.WriteStartElement("VendorInfo");
                 xmlWriter.WriteElementString("VendorCollectIDTypeCode", StringUtility.Truncate(EnumHelper.GetApiValue((UpsCustomsRecipientTINType) ups.CustomsRecipientTINType), 35));
