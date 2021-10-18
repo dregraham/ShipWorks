@@ -117,7 +117,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Express1.Net
         public void ReplaceArrayElements()
         {
             // We cannot dispose of xmlReader here because it will close oldStream, which we don't want
-            var xmlReader = XmlReader.Create(oldStream);
+            var xmlReader = XmlReader.Create(oldStream, new XmlReaderSettings() { IgnoreComments = true });
             XDocument doc = XDocument.Load(xmlReader);
 
             // Replace the elements that are different between Express1 and USPS

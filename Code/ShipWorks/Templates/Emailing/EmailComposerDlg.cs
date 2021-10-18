@@ -847,7 +847,7 @@ namespace ShipWorks.Templates.Emailing
 
             foreach (GridRow usentRow in unsentRows)
             {
-                MessageDraft draft = usentRow.Tag as MessageDraft;
+                MessageDraft draft = (MessageDraft) usentRow.Tag;
 
                 // If cancelled then don't try to send
                 if (progress.IsCancelRequested)

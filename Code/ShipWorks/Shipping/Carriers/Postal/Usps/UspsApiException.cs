@@ -48,6 +48,13 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
                 }
 
                 SoapException baseEx = InnerException as SoapException;
+
+                // Only doing this to satisfy the security audit code analysis
+                if (baseEx == null)
+                {
+                    return Message;
+                }
+
                 string message = baseEx.Detail.InnerText;
 
                 // Strip out the authenticator junk

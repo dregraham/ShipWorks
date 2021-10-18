@@ -174,9 +174,12 @@ namespace ShipWorks.ApplicationCore.Settings
         /// </summary>
         private void MenuListDrawItem(object sender, DrawItemEventArgs e)
         {
-            e.DrawBackground();
-            e.DrawFocusRectangle();
-            e.Graphics.DrawString((string) menuList.Items[e.Index], e.Font, new SolidBrush(e.ForeColor), e.Bounds);
+            using (var brush = new SolidBrush(e.ForeColor))
+            {
+                e.DrawBackground();
+                e.DrawFocusRectangle();
+                e.Graphics.DrawString((string) menuList.Items[e.Index], e.Font, brush, e.Bounds);
+            }
         }
 
         /// <summary>

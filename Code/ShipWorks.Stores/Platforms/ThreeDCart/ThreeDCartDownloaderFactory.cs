@@ -27,7 +27,7 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart
         {
             Store = store;
             ThreeDCartStoreEntity typedStore = store as ThreeDCartStoreEntity;
-            downloader = typedStore.RestUser == true ?
+            downloader = typedStore != null && typedStore.RestUser ?
                 (IStoreDownloader) createRestDownloader(typedStore) :
                 (IStoreDownloader) createSoapDownloader(typedStore);
         }

@@ -1437,6 +1437,11 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(AmazonStoreFieldIndex.WarehouseStoreID);}
 		}
+		/// <summary>Creates a new AmazonStoreEntity.ManagedInHub field instance</summary>
+		public static EntityField2 ManagedInHub
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(AmazonStoreFieldIndex.ManagedInHub);}
+		}
 		/// <summary>Creates a new AmazonStoreEntity.StoreID field instance</summary>
 		public static EntityField2 StoreID
 		{
@@ -1876,6 +1881,11 @@ namespace ShipWorks.Data.Model.HelperClasses
 		public static EntityField2 WarehouseStoreID
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(AmeriCommerceStoreFieldIndex.WarehouseStoreID);}
+		}
+		/// <summary>Creates a new AmeriCommerceStoreEntity.ManagedInHub field instance</summary>
+		public static EntityField2 ManagedInHub
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(AmeriCommerceStoreFieldIndex.ManagedInHub);}
 		}
 		/// <summary>Creates a new AmeriCommerceStoreEntity.StoreID field instance</summary>
 		public static EntityField2 StoreID
@@ -2732,6 +2742,11 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(BigCommerceStoreFieldIndex.WarehouseStoreID);}
 		}
+		/// <summary>Creates a new BigCommerceStoreEntity.ManagedInHub field instance</summary>
+		public static EntityField2 ManagedInHub
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(BigCommerceStoreFieldIndex.ManagedInHub);}
+		}
 		/// <summary>Creates a new BigCommerceStoreEntity.StoreID field instance</summary>
 		public static EntityField2 StoreID
 		{
@@ -3181,6 +3196,11 @@ namespace ShipWorks.Data.Model.HelperClasses
 		public static EntityField2 WarehouseStoreID
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(BuyDotComStoreFieldIndex.WarehouseStoreID);}
+		}
+		/// <summary>Creates a new BuyDotComStoreEntity.ManagedInHub field instance</summary>
+		public static EntityField2 ManagedInHub
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(BuyDotComStoreFieldIndex.ManagedInHub);}
 		}
 		/// <summary>Creates a new BuyDotComStoreEntity.StoreID field instance</summary>
 		public static EntityField2 StoreID
@@ -4156,6 +4176,11 @@ namespace ShipWorks.Data.Model.HelperClasses
 		public static EntityField2 WarehouseStoreID
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(ChannelAdvisorStoreFieldIndex.WarehouseStoreID);}
+		}
+		/// <summary>Creates a new ChannelAdvisorStoreEntity.ManagedInHub field instance</summary>
+		public static EntityField2 ManagedInHub
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ChannelAdvisorStoreFieldIndex.ManagedInHub);}
 		}
 		/// <summary>Creates a new ChannelAdvisorStoreEntity.StoreID field instance</summary>
 		public static EntityField2 StoreID
@@ -7152,6 +7177,11 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(EbayStoreFieldIndex.WarehouseStoreID);}
 		}
+		/// <summary>Creates a new EbayStoreEntity.ManagedInHub field instance</summary>
+		public static EntityField2 ManagedInHub
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(EbayStoreFieldIndex.ManagedInHub);}
+		}
 		/// <summary>Creates a new EbayStoreEntity.StoreID field instance</summary>
 		public static EntityField2 StoreID
 		{
@@ -8686,6 +8716,11 @@ namespace ShipWorks.Data.Model.HelperClasses
 		public static EntityField2 WarehouseStoreID
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(EtsyStoreFieldIndex.WarehouseStoreID);}
+		}
+		/// <summary>Creates a new EtsyStoreEntity.ManagedInHub field instance</summary>
+		public static EntityField2 ManagedInHub
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(EtsyStoreFieldIndex.ManagedInHub);}
 		}
 		/// <summary>Creates a new EtsyStoreEntity.StoreID field instance</summary>
 		public static EntityField2 StoreID
@@ -10857,6 +10892,11 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(GenericFileStoreFieldIndex.WarehouseStoreID);}
 		}
+		/// <summary>Creates a new GenericFileStoreEntity.ManagedInHub field instance</summary>
+		public static EntityField2 ManagedInHub
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(GenericFileStoreFieldIndex.ManagedInHub);}
+		}
 		/// <summary>Creates a new GenericFileStoreEntity.StoreID field instance</summary>
 		public static EntityField2 StoreID
 		{
@@ -11826,6 +11866,11 @@ namespace ShipWorks.Data.Model.HelperClasses
 		public static EntityField2 WarehouseStoreID
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(GenericModuleStoreFieldIndex.WarehouseStoreID);}
+		}
+		/// <summary>Creates a new GenericModuleStoreEntity.ManagedInHub field instance</summary>
+		public static EntityField2 ManagedInHub
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(GenericModuleStoreFieldIndex.ManagedInHub);}
 		}
 		/// <summary>Creates a new GenericModuleStoreEntity.StoreID field instance</summary>
 		public static EntityField2 StoreID
@@ -12957,6 +13002,11 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(GrouponStoreFieldIndex.WarehouseStoreID);}
 		}
+		/// <summary>Creates a new GrouponStoreEntity.ManagedInHub field instance</summary>
+		public static EntityField2 ManagedInHub
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(GrouponStoreFieldIndex.ManagedInHub);}
+		}
 		/// <summary>Creates a new GrouponStoreEntity.StoreID field instance</summary>
 		public static EntityField2 StoreID
 		{
@@ -13351,6 +13401,11 @@ namespace ShipWorks.Data.Model.HelperClasses
 		public static EntityField2 WarehouseStoreID
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(InfopiaStoreFieldIndex.WarehouseStoreID);}
+		}
+		/// <summary>Creates a new InfopiaStoreEntity.ManagedInHub field instance</summary>
+		public static EntityField2 ManagedInHub
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(InfopiaStoreFieldIndex.ManagedInHub);}
 		}
 		/// <summary>Creates a new InfopiaStoreEntity.StoreID field instance</summary>
 		public static EntityField2 StoreID
@@ -14582,6 +14637,11 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(JetStoreFieldIndex.WarehouseStoreID);}
 		}
+		/// <summary>Creates a new JetStoreEntity.ManagedInHub field instance</summary>
+		public static EntityField2 ManagedInHub
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(JetStoreFieldIndex.ManagedInHub);}
+		}
 		/// <summary>Creates a new JetStoreEntity.StoreID field instance</summary>
 		public static EntityField2 StoreID
 		{
@@ -15552,6 +15612,11 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(LemonStandStoreFieldIndex.WarehouseStoreID);}
 		}
+		/// <summary>Creates a new LemonStandStoreEntity.ManagedInHub field instance</summary>
+		public static EntityField2 ManagedInHub
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(LemonStandStoreFieldIndex.ManagedInHub);}
+		}
 		/// <summary>Creates a new LemonStandStoreEntity.StoreID field instance</summary>
 		public static EntityField2 StoreID
 		{
@@ -16281,6 +16346,11 @@ namespace ShipWorks.Data.Model.HelperClasses
 		public static EntityField2 WarehouseStoreID
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(MagentoStoreFieldIndex.WarehouseStoreID);}
+		}
+		/// <summary>Creates a new MagentoStoreEntity.ManagedInHub field instance</summary>
+		public static EntityField2 ManagedInHub
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(MagentoStoreFieldIndex.ManagedInHub);}
 		}
 		/// <summary>Creates a new MagentoStoreEntity.StoreID field instance</summary>
 		public static EntityField2 StoreID_GenericModuleStore
@@ -17122,6 +17192,11 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(MarketplaceAdvisorStoreFieldIndex.WarehouseStoreID);}
 		}
+		/// <summary>Creates a new MarketplaceAdvisorStoreEntity.ManagedInHub field instance</summary>
+		public static EntityField2 ManagedInHub
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(MarketplaceAdvisorStoreFieldIndex.ManagedInHub);}
+		}
 		/// <summary>Creates a new MarketplaceAdvisorStoreEntity.StoreID field instance</summary>
 		public static EntityField2 StoreID
 		{
@@ -17381,6 +17456,11 @@ namespace ShipWorks.Data.Model.HelperClasses
 		public static EntityField2 WarehouseStoreID
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(MivaStoreFieldIndex.WarehouseStoreID);}
+		}
+		/// <summary>Creates a new MivaStoreEntity.ManagedInHub field instance</summary>
+		public static EntityField2 ManagedInHub
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(MivaStoreFieldIndex.ManagedInHub);}
 		}
 		/// <summary>Creates a new MivaStoreEntity.StoreID field instance</summary>
 		public static EntityField2 StoreID_GenericModuleStore
@@ -18216,6 +18296,11 @@ namespace ShipWorks.Data.Model.HelperClasses
 		public static EntityField2 WarehouseStoreID
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(NetworkSolutionsStoreFieldIndex.WarehouseStoreID);}
+		}
+		/// <summary>Creates a new NetworkSolutionsStoreEntity.ManagedInHub field instance</summary>
+		public static EntityField2 ManagedInHub
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(NetworkSolutionsStoreFieldIndex.ManagedInHub);}
 		}
 		/// <summary>Creates a new NetworkSolutionsStoreEntity.StoreID field instance</summary>
 		public static EntityField2 StoreID
@@ -19127,6 +19212,11 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(NeweggStoreFieldIndex.WarehouseStoreID);}
 		}
+		/// <summary>Creates a new NeweggStoreEntity.ManagedInHub field instance</summary>
+		public static EntityField2 ManagedInHub
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(NeweggStoreFieldIndex.ManagedInHub);}
+		}
 		/// <summary>Creates a new NeweggStoreEntity.StoreID field instance</summary>
 		public static EntityField2 StoreID
 		{
@@ -19436,6 +19526,11 @@ namespace ShipWorks.Data.Model.HelperClasses
 		public static EntityField2 WarehouseStoreID
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(OdbcStoreFieldIndex.WarehouseStoreID);}
+		}
+		/// <summary>Creates a new OdbcStoreEntity.ManagedInHub field instance</summary>
+		public static EntityField2 ManagedInHub
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(OdbcStoreFieldIndex.ManagedInHub);}
 		}
 		/// <summary>Creates a new OdbcStoreEntity.StoreID field instance</summary>
 		public static EntityField2 StoreID
@@ -21197,6 +21292,11 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(OrderMotionStoreFieldIndex.WarehouseStoreID);}
 		}
+		/// <summary>Creates a new OrderMotionStoreEntity.ManagedInHub field instance</summary>
+		public static EntityField2 ManagedInHub
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(OrderMotionStoreFieldIndex.ManagedInHub);}
+		}
 		/// <summary>Creates a new OrderMotionStoreEntity.StoreID field instance</summary>
 		public static EntityField2 StoreID
 		{
@@ -22222,6 +22322,11 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(OverstockStoreFieldIndex.WarehouseStoreID);}
 		}
+		/// <summary>Creates a new OverstockStoreEntity.ManagedInHub field instance</summary>
+		public static EntityField2 ManagedInHub
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(OverstockStoreFieldIndex.ManagedInHub);}
+		}
 		/// <summary>Creates a new OverstockStoreEntity.StoreID field instance</summary>
 		public static EntityField2 StoreID
 		{
@@ -22982,6 +23087,11 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(PayPalStoreFieldIndex.WarehouseStoreID);}
 		}
+		/// <summary>Creates a new PayPalStoreEntity.ManagedInHub field instance</summary>
+		public static EntityField2 ManagedInHub
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(PayPalStoreFieldIndex.ManagedInHub);}
+		}
 		/// <summary>Creates a new PayPalStoreEntity.StoreID field instance</summary>
 		public static EntityField2 StoreID
 		{
@@ -23221,6 +23331,11 @@ namespace ShipWorks.Data.Model.HelperClasses
 		public static EntityField2 WarehouseStoreID
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(PlatformStoreFieldIndex.WarehouseStoreID);}
+		}
+		/// <summary>Creates a new PlatformStoreEntity.ManagedInHub field instance</summary>
+		public static EntityField2 ManagedInHub
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(PlatformStoreFieldIndex.ManagedInHub);}
 		}
 		/// <summary>Creates a new PlatformStoreEntity.StoreID field instance</summary>
 		public static EntityField2 StoreID
@@ -24692,6 +24807,11 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(ProStoresStoreFieldIndex.WarehouseStoreID);}
 		}
+		/// <summary>Creates a new ProStoresStoreEntity.ManagedInHub field instance</summary>
+		public static EntityField2 ManagedInHub
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ProStoresStoreFieldIndex.ManagedInHub);}
+		}
 		/// <summary>Creates a new ProStoresStoreEntity.StoreID field instance</summary>
 		public static EntityField2 StoreID
 		{
@@ -25456,6 +25576,11 @@ namespace ShipWorks.Data.Model.HelperClasses
 		public static EntityField2 WarehouseStoreID
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(RakutenStoreFieldIndex.WarehouseStoreID);}
+		}
+		/// <summary>Creates a new RakutenStoreEntity.ManagedInHub field instance</summary>
+		public static EntityField2 ManagedInHub
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(RakutenStoreFieldIndex.ManagedInHub);}
 		}
 		/// <summary>Creates a new RakutenStoreEntity.StoreID field instance</summary>
 		public static EntityField2 StoreID
@@ -26481,6 +26606,11 @@ namespace ShipWorks.Data.Model.HelperClasses
 		public static EntityField2 WarehouseStoreID
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(SearsStoreFieldIndex.WarehouseStoreID);}
+		}
+		/// <summary>Creates a new SearsStoreEntity.ManagedInHub field instance</summary>
+		public static EntityField2 ManagedInHub
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(SearsStoreFieldIndex.ManagedInHub);}
 		}
 		/// <summary>Creates a new SearsStoreEntity.StoreID field instance</summary>
 		public static EntityField2 StoreID
@@ -28677,6 +28807,11 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(ShopifyStoreFieldIndex.WarehouseStoreID);}
 		}
+		/// <summary>Creates a new ShopifyStoreEntity.ManagedInHub field instance</summary>
+		public static EntityField2 ManagedInHub
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ShopifyStoreFieldIndex.ManagedInHub);}
+		}
 		/// <summary>Creates a new ShopifyStoreEntity.StoreID field instance</summary>
 		public static EntityField2 StoreID
 		{
@@ -28896,6 +29031,11 @@ namespace ShipWorks.Data.Model.HelperClasses
 		public static EntityField2 WarehouseStoreID
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(ShopSiteStoreFieldIndex.WarehouseStoreID);}
+		}
+		/// <summary>Creates a new ShopSiteStoreEntity.ManagedInHub field instance</summary>
+		public static EntityField2 ManagedInHub
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ShopSiteStoreFieldIndex.ManagedInHub);}
 		}
 		/// <summary>Creates a new ShopSiteStoreEntity.StoreID field instance</summary>
 		public static EntityField2 StoreID
@@ -29172,6 +29312,11 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(SparkPayStoreFieldIndex.WarehouseStoreID);}
 		}
+		/// <summary>Creates a new SparkPayStoreEntity.ManagedInHub field instance</summary>
+		public static EntityField2 ManagedInHub
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(SparkPayStoreFieldIndex.ManagedInHub);}
+		}
 		/// <summary>Creates a new SparkPayStoreEntity.StoreID field instance</summary>
 		public static EntityField2 StoreID
 		{
@@ -29401,6 +29546,11 @@ namespace ShipWorks.Data.Model.HelperClasses
 		public static EntityField2 WarehouseStoreID
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(StoreFieldIndex.WarehouseStoreID);}
+		}
+		/// <summary>Creates a new StoreEntity.ManagedInHub field instance</summary>
+		public static EntityField2 ManagedInHub
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(StoreFieldIndex.ManagedInHub);}
 		}
 	}
 
@@ -30571,6 +30721,11 @@ namespace ShipWorks.Data.Model.HelperClasses
 		public static EntityField2 WarehouseStoreID
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(ThreeDCartStoreFieldIndex.WarehouseStoreID);}
+		}
+		/// <summary>Creates a new ThreeDCartStoreEntity.ManagedInHub field instance</summary>
+		public static EntityField2 ManagedInHub
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ThreeDCartStoreFieldIndex.ManagedInHub);}
 		}
 		/// <summary>Creates a new ThreeDCartStoreEntity.StoreID field instance</summary>
 		public static EntityField2 StoreID
@@ -32432,6 +32587,11 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(VolusionStoreFieldIndex.WarehouseStoreID);}
 		}
+		/// <summary>Creates a new VolusionStoreEntity.ManagedInHub field instance</summary>
+		public static EntityField2 ManagedInHub
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(VolusionStoreFieldIndex.ManagedInHub);}
+		}
 		/// <summary>Creates a new VolusionStoreEntity.StoreID field instance</summary>
 		public static EntityField2 StoreID
 		{
@@ -33386,6 +33546,11 @@ namespace ShipWorks.Data.Model.HelperClasses
 		public static EntityField2 WarehouseStoreID
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(WalmartStoreFieldIndex.WarehouseStoreID);}
+		}
+		/// <summary>Creates a new WalmartStoreEntity.ManagedInHub field instance</summary>
+		public static EntityField2 ManagedInHub
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(WalmartStoreFieldIndex.ManagedInHub);}
 		}
 		/// <summary>Creates a new WalmartStoreEntity.StoreID field instance</summary>
 		public static EntityField2 StoreID
@@ -35031,6 +35196,11 @@ namespace ShipWorks.Data.Model.HelperClasses
 		public static EntityField2 WarehouseStoreID
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(YahooStoreFieldIndex.WarehouseStoreID);}
+		}
+		/// <summary>Creates a new YahooStoreEntity.ManagedInHub field instance</summary>
+		public static EntityField2 ManagedInHub
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(YahooStoreFieldIndex.ManagedInHub);}
 		}
 		/// <summary>Creates a new YahooStoreEntity.StoreID field instance</summary>
 		public static EntityField2 StoreID

@@ -46,7 +46,7 @@ namespace ShipWorks.UI.AttachedProperties
             RemoveExistingSubscription(control);
 
             Type messageType = e.NewValue as Type;
-            if (messageType.IsAssignableFrom(typeof(IShipWorksMessage)))
+            if (!(messageType is null) && messageType.IsAssignableFrom(typeof(IShipWorksMessage)))
             {
                 throw new InvalidOperationException("MessageType must be an implementation of IShipWorksMessage");
             }
@@ -177,7 +177,7 @@ namespace ShipWorks.UI.AttachedProperties
             if (contentPresenter != null && childCount > 0)
             {
                 TextBlock textBlock = VisualTreeHelper.GetChild(contentPresenter, 0) as TextBlock;
-                textBlock.SetCurrentValue(TextBlock.TextProperty, textValue);
+                textBlock?.SetCurrentValue(TextBlock.TextProperty, textValue);
                 return true;
             }
 

@@ -1055,7 +1055,7 @@ namespace ShipWorks.UI.Wizard
                     buttonInterop.HookEvents(this, elementHost);
                 }
             }
-            var button = this.AcceptButton as Button;
+            var button = (Button) this.AcceptButton;
             buttonInterop.AcceptButton = button;
             buttonInterop.DefaultAcceptButton = button;
             button.Focus();

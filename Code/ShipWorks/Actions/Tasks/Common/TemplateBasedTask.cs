@@ -163,7 +163,7 @@ namespace ShipWorks.Actions.Tasks.Common
         /// <summary>
         /// Save the reference to the selected template
         /// </summary>
-        protected override void SaveExtraState(ActionEntity action, SqlAdapter adapter)
+        protected override void SaveExtraState(ActionEntity action, ISqlAdapter adapter)
         {
             if (originalTemplateID != templateID)
             {

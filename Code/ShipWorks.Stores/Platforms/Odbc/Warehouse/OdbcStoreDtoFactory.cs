@@ -41,18 +41,21 @@ namespace ShipWorks.Stores.Platforms.Odbc.Warehouse
 
             OdbcStoreEntity storeEntity = baseStoreEntity as OdbcStoreEntity;
 
-            store.ImportMap = storeEntity.ImportMap;
-            store.UploadMap = storeEntity.UploadMap;
-            store.ImportStrategy = storeEntity.ImportStrategy;
-            store.ImportColumnSourceType = storeEntity.ImportColumnSourceType;
-            store.ImportColumnSource = storeEntity.ImportColumnSource;
-            store.ImportOrderItemStrategy = storeEntity.ImportOrderItemStrategy;
-            store.UploadStrategy = storeEntity.UploadStrategy;
-            store.UploadColumnSourceType = storeEntity.UploadColumnSourceType;
-            store.UploadColumnSource = storeEntity.UploadColumnSource;
-            if (storeEntity.ShouldUploadWarehouseOrders)
+            if (storeEntity != null)
             {
-                store.OrderImportingWarehouseId = warehouseID.Value;
+                store.ImportMap = storeEntity.ImportMap;
+                store.UploadMap = storeEntity.UploadMap;
+                store.ImportStrategy = storeEntity.ImportStrategy;
+                store.ImportColumnSourceType = storeEntity.ImportColumnSourceType;
+                store.ImportColumnSource = storeEntity.ImportColumnSource;
+                store.ImportOrderItemStrategy = storeEntity.ImportOrderItemStrategy;
+                store.UploadStrategy = storeEntity.UploadStrategy;
+                store.UploadColumnSourceType = storeEntity.UploadColumnSourceType;
+                store.UploadColumnSource = storeEntity.UploadColumnSource;
+                if (storeEntity.ShouldUploadWarehouseOrders)
+                {
+                    store.OrderImportingWarehouseId = warehouseID.Value;
+                }
             }
 
             return Task.FromResult<Store>(store);

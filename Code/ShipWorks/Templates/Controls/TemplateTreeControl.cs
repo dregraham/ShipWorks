@@ -241,7 +241,7 @@ namespace ShipWorks.Templates.Controls
 
                 if (sandGrid.SelectedElements.Count == 1)
                 {
-                    TemplateTreeGridRow row = sandGrid.SelectedElements[0] as TemplateTreeGridRow;
+                    TemplateTreeGridRow row = (TemplateTreeGridRow) sandGrid.SelectedElements[0];
                     return row.TemplateTreeNode;
                 }
 

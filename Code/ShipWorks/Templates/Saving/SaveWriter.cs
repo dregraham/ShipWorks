@@ -273,7 +273,7 @@ namespace ShipWorks.Templates.Saving
                     string contentToSave;
 
                     // If the results are saved as HTML, we have to do all our html processing
-                    if (processHtml)
+                    if (processHtml && htmlControl != null)
                     {
                         htmlControl.Html = TemplateResultFormatter.FormatHtml(
                             templateResults,

@@ -237,7 +237,13 @@ namespace ShipWorks.Stores.Content.Panels
         /// </summary>
         private void OnGoogleImageClick(object sender, EventArgs e)
         {
-            var address = (sender as PictureBox)?.Tag as PersonAdapter;
+            var pictureBox = sender as PictureBox;
+            if (pictureBox == null)
+            {
+                return;
+            }
+
+            var address = pictureBox.Tag as PersonAdapter;
             if (address == null)
             {
                 return;

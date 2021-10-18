@@ -59,7 +59,11 @@ namespace ShipWorks.Stores.Platforms.Volusion.WizardPages
 
                 try
                 {
-                    string fileData = File.OpenText(file).ReadToEnd();
+                    string fileData = string.Empty;
+                    using (var stream = File.OpenText(file))
+                    {
+                        fileData = stream.ReadToEnd();
+                    }
 
                     VolusionShippingMethods methodsProcessor = new VolusionShippingMethods(store);
                     methodsProcessor.ImportCsv(fileData);
@@ -101,7 +105,11 @@ namespace ShipWorks.Stores.Platforms.Volusion.WizardPages
 
                 try
                 {
-                    string fileData = File.OpenText(file).ReadToEnd();
+                    string fileData = string.Empty;
+                    using (var stream = File.OpenText(file))
+                    {
+                        fileData = stream.ReadToEnd();
+                    }
 
                     VolusionPaymentMethods methodsProcessor = new VolusionPaymentMethods(store);
                     methodsProcessor.ImportCsv(fileData);

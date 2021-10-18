@@ -307,7 +307,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             // 
             this.labelCustomsRecipientTINType.AutoSize = true;
             this.labelCustomsRecipientTINType.BackColor = System.Drawing.Color.White;
-            this.labelCustomsRecipientTINType.Location = new System.Drawing.Point(33, 87);
+            this.labelCustomsRecipientTINType.Location = new System.Drawing.Point(67, 87);
             this.labelCustomsRecipientTINType.Name = "labelCustomsRecipientTINType";
             this.labelCustomsRecipientTINType.Size = new System.Drawing.Size(88, 13);
             this.labelCustomsRecipientTINType.TabIndex = 6;

@@ -74,7 +74,7 @@ namespace ShipWorks.Stores.Platforms.Newegg.Net
                 // usually indicates an error response was returned from the Newegg API, so
                 // we'll try to deserialize the response into an ErrorResult. 
                 Errors.ErrorResponseSerializer errorSerializer = new Errors.ErrorResponseSerializer();
-                ErrorResult errorResult = errorSerializer.Deserialize(this.rawResponseData) as ErrorResult;
+                ErrorResult errorResult = (ErrorResult) errorSerializer.Deserialize(this.rawResponseData);
 
                 // Now just add the errors to our response errors
                 this.responseErrors.AddRange(errorResult.Errors);

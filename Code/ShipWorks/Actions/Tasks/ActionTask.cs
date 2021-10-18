@@ -199,7 +199,7 @@ namespace ShipWorks.Actions.Tasks
         /// <summary>
         /// Save the task settings to the entity, and persist any other task data to the database.
         /// </summary>
-        public void Save(ActionEntity action, SqlAdapter adapter)
+        public void Save(ActionEntity action, ISqlAdapter adapter)
         {
             if (taskEntity == null)
             {
@@ -285,7 +285,7 @@ namespace ShipWorks.Actions.Tasks
         /// Some tasks may have extra database state they need to save in addition to what get's persisted in the XML settings.
         /// Such as the sound file resource for the PlaySound task.  This gives the task a chance to save it.
         /// </summary>
-        protected virtual void SaveExtraState(ActionEntity action, SqlAdapter adapter)
+        protected virtual void SaveExtraState(ActionEntity action, ISqlAdapter adapter)
         {
 
         }

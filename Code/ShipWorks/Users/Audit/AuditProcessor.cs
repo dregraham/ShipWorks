@@ -500,6 +500,10 @@ namespace ShipWorks.Users.Audit
                 else
                 {
                     Debug.Assert(orderChanges != null);
+                    if (orderChanges == null)
+                    {
+                        return;
+                    }
 
                     // If there are multiple, then call it various
                     if (orderChanges.Count > 1)

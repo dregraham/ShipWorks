@@ -593,7 +593,7 @@ namespace ShipWorks.Templates.Printing
 
             // If its a label sheet, we have to set how many pages there should be.  Due to printer calibration and using margins for offsetting, IE can
             // think there is overflow when there really should not be.  This way we can force the # of pages to be truncated to this number.
-            if (bridge.DocumentContent.IsLabelSheet)
+            if (bridge.DocumentContent.IsLabelSheet && startPosition != null)
             {
                 int cellsUsed = (startPosition.Row - 1) * settings.LabelSheet.Columns + (startPosition.Column - 1) + resultsUsed;
                 int pagesUsed = (int) Math.Ceiling((double) cellsUsed / (double) (settings.LabelSheet.Columns * settings.LabelSheet.Rows));

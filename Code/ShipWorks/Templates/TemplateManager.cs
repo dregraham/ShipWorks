@@ -44,9 +44,12 @@ namespace ShipWorks.Templates
             InternalCheckForChanges();
 
             // Go ahead and pre-compile all the templates now
-            foreach (TemplateEntity template in templateTree.AllTemplates)
+            if (templateTree != null)
             {
-                templateTree.XslCache.FromTemplate(template);
+                foreach (TemplateEntity template in templateTree.AllTemplates)
+                {
+                    templateTree.XslCache.FromTemplate(template);
+                }
             }
         }
 

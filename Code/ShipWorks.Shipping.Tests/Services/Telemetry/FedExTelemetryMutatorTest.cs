@@ -405,7 +405,7 @@ namespace ShipWorks.Shipping.Tests.Services.Telemetry
             trackedDurationEventMock.Verify(x => x.AddProperty("Label.FedEx.NonStandardContainer", "True"));
             fedExShipment.VerifyGet(x => x.NonStandardContainer, Times.Once);
             trackedDurationEventMock.Verify(x => x.AddProperty("Label.FedEx.OriginResidentialDetermination", "Commercial"));
-            trackedDurationEventMock.Verify(x => x.AddProperty("Label.FedEx.PackagingType", "FedEx� Box"));
+            trackedDurationEventMock.Verify(x => x.AddProperty("Label.FedEx.PackagingType", "FedEx® Box"));
             trackedDurationEventMock.Verify(x => x.AddProperty("Label.FedEx.PayorDutiesAccount", "PayorDutiesA"));
             trackedDurationEventMock.Verify(x => x.AddProperty("Label.FedEx.PayorDutiesCountryCode", "PayorDutiesCountryCode"));
             trackedDurationEventMock.Verify(x => x.AddProperty("Label.FedEx.PayorDutiesName", "PayorDutiesName"));
@@ -434,7 +434,7 @@ namespace ShipWorks.Shipping.Tests.Services.Telemetry
             trackedDurationEventMock.Verify(x => x.AddProperty("Label.FedEx.SmartPostCustomerManifest", "SmartPostCustomerManifest"));
             trackedDurationEventMock.Verify(x => x.AddProperty("Label.FedEx.SmartPostEndorsement", "Change Service"));
             trackedDurationEventMock.Verify(x => x.AddProperty("Label.FedEx.SmartPostHubID", "SmartPostH"));
-            trackedDurationEventMock.Verify(x => x.AddProperty("Label.FedEx.SmartPostIndicia", "FedEx SmartPost� Media"));
+            trackedDurationEventMock.Verify(x => x.AddProperty("Label.FedEx.SmartPostIndicia", "FedEx SmartPost® Media"));
             trackedDurationEventMock.Verify(x => x.AddProperty("Label.FedEx.SmartPostUspsApplicationId", "SmartPostU"));
             trackedDurationEventMock.Verify(x => x.AddProperty("Label.FedEx.ThirdPartyConsignee", "True"));
             fedExShipment.VerifyGet(x => x.ThirdPartyConsignee, Times.Once);
@@ -483,11 +483,11 @@ namespace ShipWorks.Shipping.Tests.Services.Telemetry
             trackedDurationEventMock.Verify(x => x.AddProperty("Label.FedEx.Package.1.PackingDetailsCargoAircraftOnly", "True"));
             package.VerifyGet(x => x.PackingDetailsCargoAircraftOnly, Times.Once);
             trackedDurationEventMock.Verify(x => x.AddProperty("Label.FedEx.Package.1.PackingDetailsPackingInstructions", "PackingDetailsPackingInstructions"));
-            trackedDurationEventMock.Verify(x => x.AddProperty("Label.FedEx.Package.1.DangerousGoodsAuthorization", "DangerousGoodAuthorization"));
+            trackedDurationEventMock.Verify(x => x.AddProperty($"Label.FedEx.Package.1.PackingDetailsDangerousGoodsAuthorization", "DangerousGoodsAuthorization"));
             trackedDurationEventMock.Verify(x => x.AddProperty("Label.FedEx.Package.1.PriorityAlert", "True"));
             package.VerifyGet(x => x.PriorityAlert, Times.Once);
             trackedDurationEventMock.Verify(x => x.AddProperty("Label.FedEx.Package.1.PriorityAlertDetailContent", "PriorityAlertDetailContent"));
-            trackedDurationEventMock.Verify(x => x.AddProperty("Label.FedEx.Package.1.PriorityAlertEnhancementType", "FedEx Priority Alert�"));
+            trackedDurationEventMock.Verify(x => x.AddProperty("Label.FedEx.Package.1.PriorityAlertEnhancementType", "FedEx Priority Alert®"));
             trackedDurationEventMock.Verify(x => x.AddProperty("Label.FedEx.Package.1.SignatoryContactName", "SignatoryContactName"));
             trackedDurationEventMock.Verify(x => x.AddProperty("Label.FedEx.Package.1.SignatoryPlace", "SignatoryPlace"));
             trackedDurationEventMock.Verify(x => x.AddProperty("Label.FedEx.Package.1.SignatoryTitle", "SignatoryTitle"));

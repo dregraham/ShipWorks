@@ -3,11 +3,11 @@
 namespace ShipWorks.UI.Controls.Settings.Api
 {
     /// <summary>
-    /// Interaction logic for ApiSettingsControl.xaml
+    /// Interaction logic for PlatformSettingsControl.xaml
     /// </summary>
-    public partial class ApiSettingsControl : UserControl
+    public partial class PlatformSettingsControl : UserControl
     {
-        public ApiSettingsControl()
+        public PlatformSettingsControl()
         {
             InitializeComponent();
         }

@@ -3414,6 +3414,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 			this.AddElementFieldInfo("StoreEntity", "InsureShipClientID", typeof(Nullable<System.Int64>), false, false, false, true,  (int)StoreFieldIndex.InsureShipClientID, 0, 0, 19);
 			this.AddElementFieldInfo("StoreEntity", "InsureShipApiKey", typeof(System.String), false, false, false, true,  (int)StoreFieldIndex.InsureShipApiKey, 255, 0, 0);
 			this.AddElementFieldInfo("StoreEntity", "WarehouseStoreID", typeof(Nullable<System.Guid>), false, false, false, true,  (int)StoreFieldIndex.WarehouseStoreID, 0, 0, 0);
+			this.AddElementFieldInfo("StoreEntity", "ManagedInHub", typeof(System.Boolean), false, false, false, false,  (int)StoreFieldIndex.ManagedInHub, 0, 0, 0);
 		}
 		/// <summary>Inits SystemDataEntity's FieldInfo objects</summary>
 		private void InitSystemDataEntityInfos()

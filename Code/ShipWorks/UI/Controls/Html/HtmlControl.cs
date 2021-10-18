@@ -2312,6 +2312,11 @@ namespace ShipWorks.UI.Controls.Html
                 zoomElement = HtmlDocument.getElementById("zoomElement") as HtmlApi.IHTMLElement;
             }
 
+            if (zoomElement == null)
+            {
+                return (HtmlApi.IHTMLStyle3) (null);
+            }
+
             return (HtmlApi.IHTMLStyle3) zoomElement.Style;
         }
 
@@ -2570,7 +2575,7 @@ namespace ShipWorks.UI.Controls.Html
             // Otherwise get the first object in the control range
             else
             {
-                HtmlApi.IHTMLControlRange controlRange = range as HtmlApi.IHTMLControlRange;
+                HtmlApi.IHTMLControlRange controlRange = (HtmlApi.IHTMLControlRange) range;
 
                 currentElement = controlRange.Item(0);
             }

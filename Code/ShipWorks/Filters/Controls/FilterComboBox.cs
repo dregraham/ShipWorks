@@ -436,6 +436,7 @@ namespace ShipWorks.Filters.Controls
                 bool isFilterDisabled = selectedNode.Filter.State == (byte) FilterState.Disabled;
                 if (isFilterDisabled)
                 {
+                    itemFont.Dispose();
                     itemFont = disabledFont.Font;
                     itemColor = disabledFont.TextColor;
                 }
@@ -484,6 +485,8 @@ namespace ShipWorks.Filters.Controls
 
                     IndependentText.DrawText(g, ")", Font, countBounds, textFormat, countColor);
                 }
+
+                itemFont.Dispose();
             }
         }
 

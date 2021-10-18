@@ -19,10 +19,10 @@ namespace ShipWorks.Shipping.Carriers.UPS.InvoiceRegistration.Api.Response.Manip
         /// </summary>
         public void Manipulate(ICarrierResponse carrierResponse)
         {
-            UpsInvoiceRegistrationResponse upsInvoiceRegistrationResponse = carrierResponse as UpsInvoiceRegistrationResponse;
-            RegisterRequest registerRequest = upsInvoiceRegistrationResponse.Request.NativeRequest as RegisterRequest;
+            UpsInvoiceRegistrationResponse upsInvoiceRegistrationResponse = (UpsInvoiceRegistrationResponse) carrierResponse;
+            RegisterRequest registerRequest = (RegisterRequest) upsInvoiceRegistrationResponse.Request.NativeRequest;
 
-            UpsAccountEntity upsAccount = (UpsAccountEntity)upsInvoiceRegistrationResponse.Request.CarrierAccountEntity;
+            UpsAccountEntity upsAccount = (UpsAccountEntity) upsInvoiceRegistrationResponse.Request.CarrierAccountEntity;
 
             upsAccount.UserID = registerRequest.Username;
             upsAccount.Password = registerRequest.Password;

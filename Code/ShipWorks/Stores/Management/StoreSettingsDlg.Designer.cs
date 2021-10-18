@@ -60,7 +60,7 @@ namespace ShipWorks.Stores.Management
             this.panelStoreStatus = new System.Windows.Forms.Panel();
             this.infotipStoreEnabled = new ShipWorks.UI.Controls.InfoTip();
             this.sectionStatus = new ShipWorks.UI.Controls.SectionTitle();
-            this.label4 = new System.Windows.Forms.Label();
+            this.storeDisabledHint = new System.Windows.Forms.Label();
             this.storeDisabled = new System.Windows.Forms.CheckBox();
             this.optionPageOnlineAccount = new ShipWorks.UI.Controls.OptionPage();
             this.optionPageStatusPreset = new ShipWorks.UI.Controls.OptionPage();
@@ -412,7 +412,7 @@ namespace ShipWorks.Stores.Management
             this.panelStoreStatus.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.panelStoreStatus.Controls.Add(this.infotipStoreEnabled);
             this.panelStoreStatus.Controls.Add(this.sectionStatus);
-            this.panelStoreStatus.Controls.Add(this.label4);
+            this.panelStoreStatus.Controls.Add(this.storeDisabledHint);
             this.panelStoreStatus.Controls.Add(this.storeDisabled);
             this.panelStoreStatus.Location = new System.Drawing.Point(15, 190);
             this.panelStoreStatus.Name = "panelStoreStatus";
@@ -441,13 +441,13 @@ namespace ShipWorks.Stores.Management
             // 
             // label4
             // 
-            this.label4.AutoSize = true;
-            this.label4.ForeColor = System.Drawing.SystemColors.GrayText;
-            this.label4.Location = new System.Drawing.Point(32, 54);
-            this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(319, 13);
-            this.label4.TabIndex = 0;
-            this.label4.Text = "(This does not affect your ShipWorks account or billing status.)";
+            this.storeDisabledHint.AutoSize = true;
+            this.storeDisabledHint.ForeColor = System.Drawing.SystemColors.GrayText;
+            this.storeDisabledHint.Location = new System.Drawing.Point(32, 54);
+            this.storeDisabledHint.Name = "storeDisabledHint";
+            this.storeDisabledHint.Size = new System.Drawing.Size(319, 13);
+            this.storeDisabledHint.TabIndex = 0;
+            this.storeDisabledHint.Text = "(This does not affect your ShipWorks account or billing status.)";
             // 
             // storeDisabled
             // 
@@ -742,7 +742,7 @@ namespace ShipWorks.Stores.Management
         private ShipWorks.UI.Controls.OptionPage optionPageSettings;
         private UI.Controls.SectionTitle sectionStatus;
         private UI.Controls.SectionTitle sectionAddressValidation;
-        private System.Windows.Forms.Label label4;
+        private System.Windows.Forms.Label storeDisabledHint;
         private UI.Controls.InfoTip infotipStoreEnabled;
         private System.Windows.Forms.CheckBox storeDisabled;
         private System.Windows.Forms.Panel panelStoreStatus;

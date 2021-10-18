@@ -16,7 +16,6 @@ namespace ShipWorks.Stores.Platforms.Volusion
     /// Volusion integration type
     /// </summary>
     [KeyedComponent(typeof(StoreType), StoreTypeCode.Volusion)]
-    [Component(RegistrationType.Self)]
     public class VolusionStoreType : StoreType
     {
         // Logger

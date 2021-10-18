@@ -19,11 +19,11 @@ namespace ShipWorks.Shipping.Carriers.UPS.OpenAccount.Api.Response.Manipulators
         {
             Validate(carrierResponse);
 
-            UpsOpenAccountResponse upsOpenAccountResponse = carrierResponse as UpsOpenAccountResponse;
-            OpenAccountRequest openAccountRequest = upsOpenAccountResponse.Request.NativeRequest as OpenAccountRequest;
-            openAccountResponse = upsOpenAccountResponse.NativeResponse as OpenAccountResponse;
+            UpsOpenAccountResponse upsOpenAccountResponse = (UpsOpenAccountResponse) carrierResponse;
+            OpenAccountRequest openAccountRequest = (OpenAccountRequest) upsOpenAccountResponse.Request.NativeRequest;
+            openAccountResponse = (OpenAccountResponse) upsOpenAccountResponse.NativeResponse;
 
-            UpsAccountEntity upsAccount = upsOpenAccountResponse.Request.CarrierAccountEntity as UpsAccountEntity;
+            UpsAccountEntity upsAccount = (UpsAccountEntity) upsOpenAccountResponse.Request.CarrierAccountEntity;
 
             upsAccount.AccountNumber = openAccountResponse.ShipperNumber;
             upsAccount.RateType = GetRateType(openAccountRequest.PickupInformation.PickupOption.Code);
