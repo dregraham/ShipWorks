@@ -232,7 +232,7 @@ namespace ShipWorks.Shipping.Carriers.Dhl.API.Stamps
         /// <summary>
         /// Create a rate object for processing
         /// </summary>
-        protected override RateV40 CreateRateForProcessing(ShipmentEntity shipment, UspsAccountEntity account)
+        protected override RateV40 CreateRateForProcessing(ShipmentEntity shipment, UspsAccountEntity account, Address toAddress, Address fromAddress)
         {
             RateV40 rate = CreateRateForRating(shipment, account);
 

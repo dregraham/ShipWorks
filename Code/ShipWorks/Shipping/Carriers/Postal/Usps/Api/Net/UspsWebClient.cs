@@ -1019,15 +1019,15 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
             TelemetricResult<StampsLabelResponse> telemetricResult = new TelemetricResult<StampsLabelResponse>(TelemetricResultBaseName.ApiResponseTimeInMilliseconds);
             (Address toAddress, Address fromAddress) = await FixWebserviceAddresses(account, shipment, telemetricResult, requireFullAddressValidation).ConfigureAwait(false);
 
-            RateV40 rate = CreateRateForProcessing(shipment, account);
+            RateV40 rate = CreateRateForProcessing(shipment, account,toAddress,fromAddress);
             CustomsV7 customs = CreateCustoms(shipment);
 
             // USPS requires that the address in the Rate match that of the request.  Makes sense - but could be different if they auto-cleansed the address.
-            rate.To = new Address()
-            {
-                ZIPCode = toAddress.ZIPCode,
-                State = toAddress.State,
-            };
+            //rate.To = new Address()
+            //{
+            //    ZIPCode = toAddress.ZIPCode,
+            //    State = toAddress.State,
+            //};
 
             ThermalLanguage? thermalType = GetThermalLanguage(shipment);
 
@@ -1062,7 +1062,6 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
                                 IntegratorTxID = integratorTransactionID.ToString(),
                                 Rate = rate,
                                 From = fromAddress,
-                                To = toAddress,
                                 CustomerID = null,
                                 Mode = CreateIndiciumModeV1.Normal,
                                 ImageType = ImageType.Png,
@@ -1084,7 +1083,6 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
                                 TrackingNumber = string.Empty,
                                 Rate = rate,
                                 From = fromAddress,
-                                To = toAddress,
                                 CustomerID = null,
                                 Customs = customs,
                                 SampleOnly = false, // Sample only,
@@ -1365,7 +1363,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
         /// <summary>
         /// Create the rate object for the given shipment
         /// </summary>
-        protected virtual RateV40 CreateRateForProcessing(ShipmentEntity shipment, UspsAccountEntity account)
+        protected virtual RateV40 CreateRateForProcessing(ShipmentEntity shipment, UspsAccountEntity account,Address toAddress, Address fromAddress)
         {
             PostalServiceType serviceType = (PostalServiceType) shipment.Postal.Service;
             PostalPackagingType packagingType = (PostalPackagingType) shipment.Postal.PackagingType;
@@ -1417,6 +1415,10 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
                 // Swapping out Normal with Return indicates a return label
                 rate.PrintLayout = rate.PrintLayout.Replace("Normal", "Return");
             }
+
+            //v11 change add the from and to
+            rate.From = fromAddress;
+            rate.To = toAddress;
 
             return rate;
         }
@@ -1519,11 +1521,6 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
                     customs.OtherDescribe = shipment.Postal.CustomsContentDescription.Truncate(MaxCustomsContentDescriptionLength);
                 }
             }
-            
-            //if (shipment.Postal.CustomsRecipientTin != null)
-            //{
-            //    customs.FromCustomsReference = shipment.Postal.CustomsRecipientTin;
-            //}
 
             List<CustomsLine> lines = new List<CustomsLine>();
 
@@ -1549,6 +1546,9 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
             }
 
             customs.CustomsLines = lines.ToArray();
+
+            //add tax id 
+            customs.SendersCustomsReference = shipment.Postal.CustomsRecipientTin;
 
             return customs;
         }

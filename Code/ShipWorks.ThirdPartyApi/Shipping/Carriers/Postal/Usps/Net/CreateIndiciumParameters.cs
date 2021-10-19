@@ -12,7 +12,6 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
         public string TrackingNumber { get; set; }
         public RateV40 Rate { get; set; }
         public Address From { get; set; }
-        public Address To { get; set; }
         public string CustomerID { get; set; }
         public CustomsV7 Customs { get; set; }
         public bool SampleOnly { get; set; }
