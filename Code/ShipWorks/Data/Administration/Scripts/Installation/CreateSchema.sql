@@ -1850,7 +1850,8 @@ CREATE TABLE [dbo].[PostalProfile]
 [Memo1] [nvarchar] (300) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
 [Memo2] [nvarchar] (300) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
 [Memo3] [nvarchar] (300) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
-[NoPostage] [bit] NULL
+[NoPostage] [bit] NULL,
+[CustomsRecipientTin] [nvarchar] (25) NULL
 )
 GO
 PRINT N'Creating primary key [PK_PostalProfile] on [dbo].[PostalProfile]'
@@ -1933,7 +1934,8 @@ CREATE TABLE [dbo].[PostalShipment]
 [Memo2] [nvarchar] (300) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [Memo3] [nvarchar] (300) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [NoPostage] [bit] NOT NULL CONSTRAINT [DF_PostalShipment_NoPostage] DEFAULT ((0)),
-[Insurance] [bit] NOT NULL
+[Insurance] [bit] NOT NULL,
+[CustomsRecipientTin] [nvarchar] (25) NULL
 )
 GO
 PRINT N'Creating primary key [PK_PostalShipment] on [dbo].[PostalShipment]'
@@ -3941,8 +3943,7 @@ CREATE TABLE [dbo].[UspsShipment]
 [ScanFormBatchID] [bigint] NULL,
 [RequestedLabelFormat] [int] NOT NULL,
 [RateShop] [bit] NOT NULL,
-[Insurance] [bit] NOT NULL,
-[CustomsRecipientTin] [nvarchar] (25) NULL
+[Insurance] [bit] NOT NULL
 )
 GO
 PRINT N'Creating primary key [PK_UspsShipment] on [dbo].[UspsShipment]'
@@ -3958,7 +3959,8 @@ CREATE TABLE [dbo].[StatusPreset]
 [StoreID] [bigint] NULL,
 [StatusTarget] [int] NOT NULL,
 [StatusText] [nvarchar] (300) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
-[IsDefault] [bit] NOT NULL
+[IsDefault] [bit] NOT NULL,
+[CustomsRecipientTin] [nvarchar] (25) NULL
 )
 GO
 PRINT N'Creating primary key [PK_StatusPreset] on [dbo].[StatusPreset]'
