@@ -242,9 +242,9 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api
             if (!ShipmentTypeManager.GetType(shipment).IsDomestic(shipment) && !string.IsNullOrWhiteSpace(ups.CustomsRecipientTIN))
             {
                 xmlWriter.WriteStartElement("VendorInfo");
-                xmlWriter.WriteElementString("VendorCollectIDTypeCode", StringUtility.Truncate(EnumHelper.GetApiValue((UpsCustomsRecipientTINType) ups.CustomsRecipientTINType), 35));
-                xmlWriter.WriteElementString("VendorCollectIDNumber", StringUtility.Truncate(ups.CustomsRecipientTIN, 35));
-                xmlWriter.WriteElementString("ConsigneeType", StringUtility.Truncate(EnumHelper.GetApiValue((UpsCustomsRecipientType) ups.CustomsRecipientType), 35));
+                xmlWriter.WriteElementString("VendorCollectIDTypeCode", EnumHelper.GetApiValue((UpsCustomsRecipientTINType) ups.CustomsRecipientTINType);
+                xmlWriter.WriteElementString("VendorCollectIDNumber", StringUtility.Truncate(ups.CustomsRecipientTIN, 24));
+                xmlWriter.WriteElementString("ConsigneeType", EnumHelper.GetApiValue((UpsCustomsRecipientType) ups.CustomsRecipientType);
                 xmlWriter.WriteEndElement();
             }
 

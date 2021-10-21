@@ -11,7 +11,7 @@ IF COL_LENGTH(N'[dbo].[UpsShipment]', N'CustomsRecipientType') IS NULL
 ALTER TABLE [dbo].[UpsShipment] ADD [CustomsRecipientType] [int] NULL 
 GO
 UPDATE upsShipment
-SET upsShipment.[CustomsRecipientTINType] = 3 
+SET upsShipment.[CustomsRecipientTINType] = 0 
 FROM UpsShipment upsShipment
 WHERE upsShipment.[CustomsRecipientTINType] IS NULL AND upsShipment.[CustomsRecipientType] IS NULL
 GO
