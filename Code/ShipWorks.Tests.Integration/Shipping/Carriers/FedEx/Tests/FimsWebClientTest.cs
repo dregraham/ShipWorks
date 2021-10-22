@@ -32,7 +32,10 @@ namespace ShipWorks.Tests.Integration.Shipping.Carriers.FedEx.Tests
                     Service = (int) FedExServiceType.FedExFimsPremium,
                     CommercialInvoicePurpose = (int) FedExCommercialInvoicePurpose.Gift,
                     ReferenceFIMS = "1234",
-                    FimsAirWaybill = "123456789012"
+                    FimsAirWaybill = "123456789012",
+                    //added to test TIN is being sent
+                    CustomsRecipientTINType = (int) FedexTINType.PERSONAL_STATE,
+                    CustomsRecipientTIN = "IM4420001201"
                 };
 
                 fedExShipment.Packages.Add(new FedExPackageEntity
