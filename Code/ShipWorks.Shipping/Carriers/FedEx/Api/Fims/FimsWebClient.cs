@@ -129,6 +129,14 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Fims
                 fimsRequestXml.Add(new XElement("airWaybill", shipment.FedEx.FimsAirWaybill));
             }
 
+            if (!string.IsNullOrEmpty(shipment.FedEx.CustomsRecipientTIN))
+            {
+                fimsRequestXml.Add(new XElement("Tin", 
+                    new XElement("TinType", (FedexTINType) shipment.FedEx.CustomsRecipientTINType),
+                    new XElement("Number", shipment.FedEx.CustomsRecipientTIN)
+                ));
+            }
+
             return fimsRequestXml;
         }
 
