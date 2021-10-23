@@ -178,6 +178,7 @@ namespace ShipWorks.Shipping.Services.ShipmentProcessorSteps
             List<ShipmentFieldIndex> fieldsToRestore = storeType.OverrideShipmentDetails(modifiedShipment);
 
             log.InfoFormat("Shipment {0}  - ShipmentType.Process Start", modifiedShipment.ShipmentID);
+            log.InfoFormat("TINType Number {0}  - TINType Text {1}", modifiedShipment.FedEx.CustomsRecipientTINType,(Carriers.FedEx.Enums.FedexTINType) modifiedShipment.FedEx.CustomsRecipientTINType);
 
             ILabelService labelService = labelServiceFactory.Create(modifiedShipment.ShipmentTypeCode);
             Debug.Assert(Transaction.Current == null, "No transaction should exist at this point.");
