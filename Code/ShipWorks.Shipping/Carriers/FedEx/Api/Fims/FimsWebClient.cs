@@ -132,7 +132,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Fims
             if (!string.IsNullOrEmpty(shipment.FedEx.CustomsRecipientTIN))
             {
                 fimsRequestXml.Add(new XElement("Tin", 
-                    new XElement("TinType", (FedexTINType) shipment.FedEx.CustomsRecipientTINType),
+                    new XElement("TinType", ((long)(FedexTINType) shipment.FedEx.CustomsRecipientTINType).ToString()),
                     new XElement("Number", shipment.FedEx.CustomsRecipientTIN)
                 ));
             }
