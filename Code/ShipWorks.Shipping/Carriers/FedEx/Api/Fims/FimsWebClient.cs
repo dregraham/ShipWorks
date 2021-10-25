@@ -12,6 +12,7 @@ using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Common.IO.Hardware.Printers;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.FedEx.Enums;
+using ShipWorks.Shipping.Carriers.FedEx.WebServices.Ship;
 
 namespace ShipWorks.Shipping.Carriers.FedEx.Api.Fims
 {
@@ -132,7 +133,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Fims
             if (!string.IsNullOrEmpty(shipment.FedEx.CustomsRecipientTIN))
             {
                 fimsRequestXml.Add(new XElement("Tin", 
-                    new XElement("TinType", ((long)(FedexTINType) shipment.FedEx.CustomsRecipientTINType).ToString()),
+                    new XElement("TinType", (TinType) shipment.FedEx.CustomsRecipientTINType),
                     new XElement("Number", shipment.FedEx.CustomsRecipientTIN)
                 ));
             }
