@@ -6,7 +6,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Enums
     /// <summary>
     /// TIN method
     /// </summary>
-    [Obfuscation(Feature = "PreserveLiteralValues", Exclude = false, StripAfterObfuscation = false)]
+    [Obfuscation(Feature = "PreserveLiteralValues", Exclude = true, StripAfterObfuscation = false)]
     public enum FedexTINType
     {
         [Description("Business National")]
