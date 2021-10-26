@@ -338,6 +338,7 @@
       <DependentUpon>ItemsToScanControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="ScanPack\IVerifiedOrderService.cs" />
+    <Compile Include="ScanPack\ScanPackItemQuantityConverter.cs" />
     <Compile Include="ScanPack\VerifiedControl.cs">
       <DependentUpon>VerifiedControl.xaml</DependentUpon>
     </Compile>
