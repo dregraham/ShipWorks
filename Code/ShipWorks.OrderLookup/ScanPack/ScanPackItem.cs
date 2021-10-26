@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Reflection;
 using GalaSoft.MvvmLight;
+using Interapptive.Shared;
 
 namespace ShipWorks.OrderLookup.ScanPack
 {
@@ -15,12 +16,16 @@ namespace ShipWorks.OrderLookup.ScanPack
         /// <summary>
         /// Constructor
         /// </summary>
-        public ScanPackItem(long orderItemID, string name, string imageUrl, double quantity, params string[] barcodes)
+        [NDependIgnoreTooManyParams]
+        public ScanPackItem(long sortIdentifier, string name, string imageUrl, double quantity, bool isBundle, int parentIdentifier, bool isBundleComplete, params string[] barcodes)
         {
-            OrderItemID = orderItemID;
+            SortIdentifier = sortIdentifier;
             Name = name;
             ImageUrl = imageUrl;
             Quantity = quantity;
+            IsBundle = isBundle;
+            ParentIdentifier = parentIdentifier;
+            IsBundleComplete = isBundleComplete;
             Barcodes = barcodes.Where(b=>!string.IsNullOrWhiteSpace(b)).ToArray();
         }
 
@@ -28,7 +33,7 @@ namespace ShipWorks.OrderLookup.ScanPack
         /// Order Item ID
         /// </summary>
         [Obfuscation(Exclude = true)]
-        public long OrderItemID { get; }
+        public long SortIdentifier { get; }
 
         /// <summary>
         /// The Items Name
@@ -53,6 +58,21 @@ namespace ShipWorks.OrderLookup.ScanPack
         }
 
         /// <summary>
+        /// True if product is a Bundle
+        /// </summary>
+        public bool IsBundle { get; }
+        
+        /// <summary>
+        /// The identifier of the 
+        /// </summary>
+        public int ParentIdentifier { get; }
+        
+        /// <summary>
+        /// True if all items are in bundle otherwise false 
+        /// </summary>
+        public bool IsBundleComplete { get; set; }
+
+        /// <summary>
         /// A collection of barcodes that can be matched on
         /// </summary>
         [Obfuscation(Exclude = true)]
@@ -66,6 +86,6 @@ namespace ShipWorks.OrderLookup.ScanPack
         /// <summary>
         /// Creates a copy of this ScanPackItem
         /// </summary>
-        public ScanPackItem Copy() => new ScanPackItem(OrderItemID, Name, ImageUrl, Quantity, Barcodes);
+        public ScanPackItem Copy() => new ScanPackItem(SortIdentifier, Name, ImageUrl, Quantity, IsBundle, ParentIdentifier, IsBundleComplete, Barcodes);
     }
 }
