@@ -17,14 +17,14 @@ namespace ShipWorks.OrderLookup.ScanPack
         /// Constructor
         /// </summary>
         [NDependIgnoreTooManyParams]
-        public ScanPackItem(long sortIdentifier, string name, string imageUrl, double quantity, bool isBundle, int parentIdentifier, bool isBundleComplete, params string[] barcodes)
+        public ScanPackItem(long sortIdentifier, string name, string imageUrl, double quantity, bool isBundle, int? parentSortIdentifier, bool isBundleComplete, params string[] barcodes)
         {
             SortIdentifier = sortIdentifier;
             Name = name;
             ImageUrl = imageUrl;
             Quantity = quantity;
             IsBundle = isBundle;
-            ParentIdentifier = parentIdentifier;
+            ParentSortIdentifier = parentSortIdentifier;
             IsBundleComplete = isBundleComplete;
             Barcodes = barcodes.Where(b=>!string.IsNullOrWhiteSpace(b)).ToArray();
         }
@@ -63,9 +63,9 @@ namespace ShipWorks.OrderLookup.ScanPack
         public bool IsBundle { get; }
         
         /// <summary>
-        /// The identifier of the 
+        /// The identifier of the parent bundle - Otherwise null
         /// </summary>
-        public int ParentIdentifier { get; }
+        public int? ParentSortIdentifier { get; }
         
         /// <summary>
         /// True if all items are in bundle otherwise false 
@@ -86,6 +86,6 @@ namespace ShipWorks.OrderLookup.ScanPack
         /// <summary>
         /// Creates a copy of this ScanPackItem
         /// </summary>
-        public ScanPackItem Copy() => new ScanPackItem(SortIdentifier, Name, ImageUrl, Quantity, IsBundle, ParentIdentifier, IsBundleComplete, Barcodes);
+        public ScanPackItem Copy() => new ScanPackItem(SortIdentifier, Name, ImageUrl, Quantity, IsBundle, ParentSortIdentifier, IsBundleComplete, Barcodes);
     }
 }
