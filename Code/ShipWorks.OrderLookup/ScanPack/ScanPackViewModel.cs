@@ -293,7 +293,7 @@ namespace ShipWorks.OrderLookup.ScanPack
             }
 
             // Update target list
-            ScanPackItem matchingTargetItem = targetItems.SingleOrDefault(x => x.OrderItemID == sourceItem.OrderItemID);
+            ScanPackItem matchingTargetItem = targetItems.SingleOrDefault(x => x.SortIdentifier == sourceItem.SortIdentifier);
 
             if (matchingTargetItem == null)
             {
