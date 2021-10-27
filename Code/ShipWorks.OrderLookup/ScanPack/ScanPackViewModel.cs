@@ -284,6 +284,9 @@ namespace ShipWorks.OrderLookup.ScanPack
             {
                 Update(true);
                 Error = false;
+
+                ItemsToScan = new ObservableCollection<ScanPackItem>(ItemsToScan.OrderBy(x => x.SortIdentifier));
+                PackedItems = new ObservableCollection<ScanPackItem>(PackedItems.OrderBy(x => x.SortIdentifier));
             }
             else
             {

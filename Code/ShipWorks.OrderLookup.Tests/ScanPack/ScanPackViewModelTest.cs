@@ -300,6 +300,26 @@ namespace ShipWorks.OrderLookup.Tests.ScanPack
             Assert.Empty(testObject.PackedItems);
         }
 
+        
+        [Fact]
+        public async Task ProcessItemScan_KeepsCollectionsSorted()
+        {
+            ScanPackItem item1 = new ScanPackItem(1, "name", "image", 2, false, null, true, "itemUpc", "itemCode", "productUpc", "sku");
+            ScanPackItem item2 = new ScanPackItem(2, "name2", "image", 2, false, null, true, "itemUpc2", "itemCode2", "productUpc2", "sku2");
+            ScanPackItem item3 = new ScanPackItem(3, "name3", "image", 2, false, null, true, "itemUpc3", "itemCode3", "productUpc3", "sku3");
+            
+            await testObject.LoadOrder(new OrderEntity { OrderID = 4 });
+            
+            testObject.ItemsToScan.Add(item1);
+            testObject.ItemsToScan.Add(item2);
+            testObject.ItemsToScan.Add(item3);
+
+            testObject.ProcessItemScan("itemUpc3");
+            testObject.ProcessItemScan("itemUpc");
+
+            Assert.Equal(1, testObject.PackedItems.FirstOrDefault().SortIdentifier);
+        }
+        
         # region BundleTests
 
         [Fact]
