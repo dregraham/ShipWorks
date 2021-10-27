@@ -19,7 +19,7 @@ namespace Interapptive.Shared.Security.SecureTextVersions
         /// </summary>
         protected abstract string KeyCachePrefix { get; }
 
-        protected static Dictionary<string, byte[]> keyCache = new Dictionary<string, byte[]>();
+        protected static Dictionary<string, (byte[] key, byte[] salt)> keyCache = new Dictionary<string, (byte[] key, byte[] salt)>();
 
         protected readonly ILog log;
 
@@ -62,16 +62,18 @@ namespace Interapptive.Shared.Security.SecureTextVersions
         }
 
         /// <summary>
-        /// Get a derived key from the cache, or if it's not there, derive it and add it
+        /// Get a derived key and salt from the cache, or if it's not there, derive it and add it
         /// </summary>
-        protected byte[] GetKey(string password, byte[] salt, int iterations, int blockSize, int parallelismFactor, int keyLength)
+        protected (byte[] key, byte[] salt) GetKeySaltPair(string password, byte[] salt, int iterations, int blockSize, int parallelismFactor, int keyLength)
         {
             var cacheIndex = $"{KeyCachePrefix}-{password}";
 
-            if (keyCache.TryGetValue(cacheIndex, out byte[] key))
+            (byte[] key, byte[] salt) cachedKey;
+
+            if (keyCache.TryGetValue(cacheIndex, out cachedKey))
             {
                 log.Info("Found key in cache");
-                return key;
+                return cachedKey;
             }
 
             // Derive a key from the salt and password that will be used to encrypt the aesKey
@@ -79,9 +81,9 @@ namespace Interapptive.Shared.Security.SecureTextVersions
             var derivedKey = SCrypt.Generate(Encoding.UTF8.GetBytes(password), salt, iterations, blockSize, parallelismFactor, keyLength);
             log.Info("Finished deriving key");
 
-            keyCache.Add(cacheIndex, derivedKey);
+            keyCache.Add(cacheIndex, (derivedKey, salt));
 
-            return derivedKey;
+            return (derivedKey, salt);
         }
     }
 }

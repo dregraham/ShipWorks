@@ -58,13 +58,13 @@ namespace Interapptive.Shared.Security.SecureTextVersions
                 var salt = encryptedBytes.Skip(EncryptedKeyLength + encryptedText.Length).Take(SaltLength).ToArray();
 
                 // Derive the key used to encrypt the aesKey using the salt and the password
-                var derivedKey = GetKey(
+                var derivedKey = GetKeySaltPair(
                     password,
                     salt,
                     SCryptIterations,
                     SCryptBlockSize,
                     SCryptParallelismFactor,
-                    AESKeyLength);
+                    AESKeyLength).key;
 
                 // Decrypt the aesKey with the derived key
                 var decryptedKey = DecryptWithAesGcm(encryptedKey, derivedKey, NonceLength, TagLength);
