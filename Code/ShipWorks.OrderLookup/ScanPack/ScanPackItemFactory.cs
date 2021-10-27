@@ -107,11 +107,14 @@ namespace ShipWorks.OrderLookup.ScanPack
         /// </summary>
         private int AddItem(ProductVariantEntity product, OrderItemEntity item, int? parentSortIdentifier, double quantity)
         {
-            string imageUrl = string.IsNullOrWhiteSpace(product?.ImageUrl) ? item.Image : product.ImageUrl;
-
-            if (string.IsNullOrWhiteSpace(imageUrl))
+            string imageUrl = product?.ImageUrl;
+            if (imageUrl.IsNullOrWhiteSpace())
             {
-                imageUrl = item.Thumbnail;
+                imageUrl = item?.Image;
+            }
+            if (imageUrl.IsNullOrWhiteSpace())
+            {
+                imageUrl = item?.Thumbnail ?? string.Empty;
             }
 
             string name = string.IsNullOrWhiteSpace(product?.Name) ? item?.Name : product.Name ?? string.Empty;
