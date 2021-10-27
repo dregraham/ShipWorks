@@ -93,20 +93,6 @@
                 Style="{StaticResource FormComboBox}" />
 
             <TextBlock
-                Grid.Row="3"
-                Grid.Column="0"
-                Style="{StaticResource FieldLabel}"
-                Text="Recipient Type" />
-            <ComboBox
-                Grid.Row="3"
-                Grid.Column="1"
-                DisplayMemberPath="Value"
-                ItemsSource="{Binding CustomsRecipientType, UpdateSourceTrigger=PropertyChanged}"
-                SelectedValue="{Binding ShipmentModel.ShipmentAdapter.Shipment.Ups.CustomsRecipientType}"
-                SelectedValuePath="Key"
-                Style="{StaticResource FormComboBox}" />
-            
-            <TextBlock
                 Grid.Row="4"
                 Grid.Column="0"
                 Style="{StaticResource FieldLabel}"

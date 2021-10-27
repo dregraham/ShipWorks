@@ -7,13 +7,10 @@ GO
 IF COL_LENGTH(N'[dbo].[UpsShipment]', N'CustomsRecipientTINType') IS NULL
 ALTER TABLE [dbo].[UpsShipment] ADD [CustomsRecipientTINType] [int] NULL 
 GO
-IF COL_LENGTH(N'[dbo].[UpsShipment]', N'CustomsRecipientType') IS NULL
-ALTER TABLE [dbo].[UpsShipment] ADD [CustomsRecipientType] [int] NULL 
-GO
 UPDATE upsShipment
 SET upsShipment.[CustomsRecipientTINType] = 0 
 FROM UpsShipment upsShipment
-WHERE upsShipment.[CustomsRecipientTINType] IS NULL AND upsShipment.[CustomsRecipientType] IS NULL
+WHERE upsShipment.[CustomsRecipientTINType] IS NULL
 GO
 
 PRINT N'ALTERING [dbo].[UpsProfile]'
@@ -24,12 +21,9 @@ GO
 IF COL_LENGTH(N'[dbo].[UpsProfile]', N'CustomsRecipientTINType') IS NULL
 ALTER TABLE [dbo].[UpsProfile] ADD [CustomsRecipientTINType] [int] NULL
 GO
-IF COL_LENGTH(N'[dbo].[UpsProfile]', N'CustomsRecipientType') IS NULL
-ALTER TABLE [dbo].[UpsProfile] ADD [CustomsRecipientType] [int] NULL
-GO
 UPDATE upsProfile
-SET upsProfile.[CustomsRecipientTIN] = '', upsProfile.[CustomsRecipientTINType] = 0, upsProfile.[CustomsRecipientType] = 0
+SET upsProfile.[CustomsRecipientTIN] = '', upsProfile.[CustomsRecipientTINType] = 0
 from UpsProfile upsProfile
 INNER JOIN ShippingProfile shipProfile
     on upsProfile.ShippingProfileID = shipProfile.ShippingProfileID
-where shipProfile.ShipmentTypePrimary=1 AND upsProfile.[CustomsRecipientTINType] IS NULL AND upsProfile.[CustomsRecipientTIN] IS NULL
+where shipProfile.ShipmentTypePrimary=1 AND upsProfile.[CustomsRecipientTINType] IS NULL

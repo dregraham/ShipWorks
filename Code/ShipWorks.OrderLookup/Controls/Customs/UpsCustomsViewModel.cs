@@ -18,7 +18,6 @@ namespace ShipWorks.OrderLookup.Controls.Customs
     public class UpsCustomsViewModel : GenericCustomsViewModel
     {
         private Dictionary<int, string> customsRecipientTINType;
-        private Dictionary<int, string> customsRecipientType;
 
         /// <summary>
         /// Ctor
@@ -27,7 +26,6 @@ namespace ShipWorks.OrderLookup.Controls.Customs
             OrderLookupFieldLayoutProvider fieldLayoutProvider) : base(shipmentModel, shipmentTypeManager, fieldLayoutProvider)
         {
             CustomsRecipientTINType = EnumHelper.GetEnumList<UpsCustomsRecipientTINType>().ToDictionary(x => (int) x.Value, x => x.Description);
-            CustomsRecipientType = EnumHelper.GetEnumList<UpsCustomsRecipientType>().ToDictionary(x => (int) x.Value, x => x.Description);
         }
 
         /// <summary>
@@ -38,16 +36,6 @@ namespace ShipWorks.OrderLookup.Controls.Customs
         {
             get => customsRecipientTINType;
             set => Handler.Set(nameof(CustomsRecipientTINType), ref customsRecipientTINType, value);
-        }
-
-        /// <summary>
-        /// List of available customs Recipient Types
-        /// </summary>
-        [Obfuscation(Exclude = true)]
-        public Dictionary<int, string> CustomsRecipientType
-        {
-            get => customsRecipientType;
-            set => Handler.Set(nameof(CustomsRecipientType), ref customsRecipientType, value);
         }
     }
 }

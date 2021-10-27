@@ -13370,8 +13370,6 @@ namespace ShipWorks.Data.Model
 		CustomsRecipientTIN,
 		///<summary>CustomsRecipientTINType. </summary>
 		CustomsRecipientTINType,
-		///<summary>CustomsRecipientType. </summary>
-		CustomsRecipientType,
 		/// <summary></summary>
 		AmountOfFields
 	}
@@ -13556,8 +13554,6 @@ namespace ShipWorks.Data.Model
 		CustomsRecipientTIN,
 		///<summary>CustomsRecipientTINType. </summary>
 		CustomsRecipientTINType,
-		///<summary>CustomsRecipientType. </summary>
-		CustomsRecipientType,
 		/// <summary></summary>
 		AmountOfFields
 	}

@@ -4202,8 +4202,7 @@ CREATE TABLE [dbo].[UpsShipment]
 [RequestedLabelFormat] [int] NOT NULL,
 [ShipEngineLabelID] [nvarchar] (50) NULL,
 [CustomsRecipientTIN] [nvarchar] (24) NULL,
-[CustomsRecipientTINType] [int] NULL,
-[CustomsRecipientType] [int] NULL
+[CustomsRecipientTINType] [int] NULL
 )
 GO
 PRINT N'Creating primary key [PK_UpsShipment] on [dbo].[UpsShipment]'
@@ -4303,8 +4302,7 @@ CREATE TABLE [dbo].[UpsProfile]
 [UspsPackageID] [nvarchar] (100) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
 [CustomsDescription] [nvarchar] (150) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
 [CustomsRecipientTIN] [nvarchar] (24) NULL,
-[CustomsRecipientTINType] [int] NULL,
-[CustomsRecipientType] [int] NULL
+[CustomsRecipientTINType] [int] NULL
 )
 GO
 PRINT N'Creating primary key [PK_UpsProfile] on [dbo].[UpsProfile]'

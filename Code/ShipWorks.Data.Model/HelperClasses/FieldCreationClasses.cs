@@ -31257,11 +31257,6 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(UpsProfileFieldIndex.CustomsRecipientTINType);}
 		}
-		/// <summary>Creates a new UpsProfileEntity.CustomsRecipientType field instance</summary>
-		public static EntityField2 CustomsRecipientType
-		{
-			get { return (EntityField2)EntityFieldFactory.Create(UpsProfileFieldIndex.CustomsRecipientType);}
-		}
 	}
 
 	/// <summary>Field Creation Class for entity UpsProfilePackageEntity</summary>
@@ -31681,11 +31676,6 @@ namespace ShipWorks.Data.Model.HelperClasses
 		public static EntityField2 CustomsRecipientTINType
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(UpsShipmentFieldIndex.CustomsRecipientTINType);}
-		}
-		/// <summary>Creates a new UpsShipmentEntity.CustomsRecipientType field instance</summary>
-		public static EntityField2 CustomsRecipientType
-		{
-			get { return (EntityField2)EntityFieldFactory.Create(UpsShipmentFieldIndex.CustomsRecipientType);}
 		}
 	}
 
