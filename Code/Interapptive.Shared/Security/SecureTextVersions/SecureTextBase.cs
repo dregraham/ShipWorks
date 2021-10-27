@@ -85,5 +85,13 @@ namespace Interapptive.Shared.Security.SecureTextVersions
 
             return (derivedKey, salt);
         }
+
+        /// <summary>
+        /// Clear the key cache
+        /// </summary>
+        public void ClearCache()
+        {
+            keyCache = new Dictionary<string, (byte[] key, byte[] salt)>();
+        }
     }
 }
