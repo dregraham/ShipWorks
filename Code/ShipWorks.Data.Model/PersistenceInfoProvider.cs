@@ -3907,7 +3907,7 @@ namespace ShipWorks.Data.Model
 			this.AddElementFieldMapping("UpsProfileEntity", "ShipmentChargeCountryCode", "ShipmentChargeCountryCode", true, "NVarChar", 50, 0, 0, false, "", null, typeof(System.String), 34);
 			this.AddElementFieldMapping("UpsProfileEntity", "UspsPackageID", "UspsPackageID", true, "NVarChar", 100, 0, 0, false, "", null, typeof(System.String), 35);
 			this.AddElementFieldMapping("UpsProfileEntity", "CustomsDescription", "CustomsDescription", true, "NVarChar", 150, 0, 0, false, "", null, typeof(System.String), 36);
-			this.AddElementFieldMapping("UpsProfileEntity", "CustomsRecipientTIN", "CustomsRecipientTIN", true, "NVarChar", 24, 0, 0, false, "", null, typeof(System.String), 37);
+			this.AddElementFieldMapping("UpsProfileEntity", "CustomsRecipientTIN", "CustomsRecipientTIN", true, "NVarChar", 35, 0, 0, false, "", null, typeof(System.String), 37);
 			this.AddElementFieldMapping("UpsProfileEntity", "CustomsRecipientTINType", "CustomsRecipientTINType", true, "Int", 0, 10, 0, false, "", null, typeof(System.Int32), 38);
 		}
 
@@ -4002,7 +4002,7 @@ namespace ShipWorks.Data.Model
 			this.AddElementFieldMapping("UpsShipmentEntity", "UspsPackageID", "UspsPackageID", false, "NVarChar", 100, 0, 0, false, "", null, typeof(System.String), 49);
 			this.AddElementFieldMapping("UpsShipmentEntity", "RequestedLabelFormat", "RequestedLabelFormat", false, "Int", 0, 10, 0, false, "", null, typeof(System.Int32), 50);
 			this.AddElementFieldMapping("UpsShipmentEntity", "ShipEngineLabelID", "ShipEngineLabelID", true, "NVarChar", 50, 0, 0, false, "", null, typeof(System.String), 51);
-			this.AddElementFieldMapping("UpsShipmentEntity", "CustomsRecipientTIN", "CustomsRecipientTIN", true, "NVarChar", 24, 0, 0, false, "", null, typeof(System.String), 52);
+			this.AddElementFieldMapping("UpsShipmentEntity", "CustomsRecipientTIN", "CustomsRecipientTIN", true, "NVarChar", 35, 0, 0, false, "", null, typeof(System.String), 52);
 			this.AddElementFieldMapping("UpsShipmentEntity", "CustomsRecipientTINType", "CustomsRecipientTINType", true, "Int", 0, 10, 0, false, "", null, typeof(System.Int32), 53);
 		}
 

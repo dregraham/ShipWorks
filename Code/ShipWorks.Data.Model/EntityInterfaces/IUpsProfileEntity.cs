@@ -246,7 +246,7 @@ namespace ShipWorks.Data.Model.EntityInterfaces
         /// <summary> The CustomsRecipientTIN property of the Entity UpsProfile<br/><br/>
         /// </summary>
         /// <remarks>Mapped on table field: "UpsProfile"."CustomsRecipientTIN"<br/>
-        /// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 24<br/>
+        /// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 35<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
         System.String CustomsRecipientTIN { get; }
         /// <summary> The CustomsRecipientTINType property of the Entity UpsProfile<br/><br/>

@@ -4201,7 +4201,7 @@ CREATE TABLE [dbo].[UpsShipment]
 [UspsPackageID] [nvarchar] (100) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [RequestedLabelFormat] [int] NOT NULL,
 [ShipEngineLabelID] [nvarchar] (50) NULL,
-[CustomsRecipientTIN] [nvarchar] (24) NULL,
+[CustomsRecipientTIN] [nvarchar] (35) NULL,
 [CustomsRecipientTINType] [int] NULL
 )
 GO
@@ -4301,7 +4301,7 @@ CREATE TABLE [dbo].[UpsProfile]
 [ShipmentChargeCountryCode] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
 [UspsPackageID] [nvarchar] (100) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
 [CustomsDescription] [nvarchar] (150) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
-[CustomsRecipientTIN] [nvarchar] (24) NULL,
+[CustomsRecipientTIN] [nvarchar] (35) NULL,
 [CustomsRecipientTINType] [int] NULL
 )
 GO

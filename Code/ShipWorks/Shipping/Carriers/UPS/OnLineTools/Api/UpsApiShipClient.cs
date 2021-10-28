@@ -243,7 +243,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api
             {
                 xmlWriter.WriteStartElement("VendorInfo");
                 xmlWriter.WriteElementString("VendorCollectIDTypeCode", EnumHelper.GetApiValue((UpsCustomsRecipientTINType) ups.CustomsRecipientTINType));
-                xmlWriter.WriteElementString("VendorCollectIDNumber", StringUtility.Truncate(ups.CustomsRecipientTIN, 24));
+                xmlWriter.WriteElementString("VendorCollectIDNumber", StringUtility.Truncate(ups.CustomsRecipientTIN, 35));
                 xmlWriter.WriteEndElement();
             }
 
