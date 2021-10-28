@@ -50,7 +50,6 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
             IncludeReturn = source.IncludeReturn;
             ApplyReturnProfile = source.ApplyReturnProfile;
             ReturnProfileID = source.ReturnProfileID;
-            CustomsRecipientTin = source.CustomsRecipientTin;
             
             AmazonSFP = (IAmazonSFPProfileEntity) source.AmazonSFP?.AsReadOnly(objectMap);
             AmazonSWA = (IAmazonSWAProfileEntity) source.AmazonSWA?.AsReadOnly(objectMap);
@@ -156,12 +155,6 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
         /// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
         public Nullable<System.Int64> ReturnProfileID { get; }
-        /// <summary> The CustomsRecipientTin property of the Entity ShippingProfile<br/><br/>
-        /// </summary>
-        /// <remarks>Mapped on table field: "ShippingProfile"."CustomsRecipientTin"<br/>
-        /// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 25<br/>
-        /// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
-        public System.String CustomsRecipientTin { get; }
         
         public IAmazonSFPProfileEntity AmazonSFP { get; }
         

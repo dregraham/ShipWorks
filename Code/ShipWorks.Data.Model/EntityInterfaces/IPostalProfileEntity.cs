@@ -114,7 +114,7 @@ namespace ShipWorks.Data.Model.EntityInterfaces
         /// <summary> The CustomsRecipientTin property of the Entity PostalProfile<br/><br/>
         /// </summary>
         /// <remarks>Mapped on table field: "PostalProfile"."CustomsRecipientTin"<br/>
-        /// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 25<br/>
+        /// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 24<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
         System.String CustomsRecipientTin { get; }
         

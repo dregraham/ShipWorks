@@ -774,8 +774,6 @@ namespace ShipWorks.Data.Model.EntityClasses
 			_fieldsCustomProperties.Add("ApplyReturnProfile", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
 			_fieldsCustomProperties.Add("ReturnProfileID", fieldHashtable);
-			fieldHashtable = new Dictionary<string, string>();
-			_fieldsCustomProperties.Add("CustomsRecipientTin", fieldHashtable);
 		}
 		#endregion
 
@@ -1433,17 +1431,6 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			get { return (Nullable<System.Int64>)GetValue((int)ShippingProfileFieldIndex.ReturnProfileID, false); }
 			set	{ SetValue((int)ShippingProfileFieldIndex.ReturnProfileID, value); }
-		}
-
-		/// <summary> The CustomsRecipientTin property of the Entity ShippingProfile<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "ShippingProfile"."CustomsRecipientTin"<br/>
-		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 25<br/>
-		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
-		[DataMember]
-		public virtual System.String CustomsRecipientTin
-		{
-			get { return (System.String)GetValue((int)ShippingProfileFieldIndex.CustomsRecipientTin, true); }
-			set	{ SetValue((int)ShippingProfileFieldIndex.CustomsRecipientTin, value); }
 		}
 
 		/// <summary> Gets the EntityCollection with the related entities of type 'PackageProfileEntity' which are related to this entity via a relation of type '1:n'. If the EntityCollection hasn't been fetched yet, the collection returned will be empty.<br/><br/></summary>

@@ -11778,8 +11778,6 @@ namespace ShipWorks.Data.Model
 		ApplyReturnProfile,
 		///<summary>ReturnProfileID. </summary>
 		ReturnProfileID,
-		///<summary>CustomsRecipientTin. </summary>
-		CustomsRecipientTin,
 		/// <summary></summary>
 		AmountOfFields
 	}
@@ -13840,8 +13838,6 @@ namespace ShipWorks.Data.Model
 		RateShop,
 		///<summary>Insurance. </summary>
 		Insurance,
-		///<summary>CustomsRecipientTin. </summary>
-		CustomsRecipientTin,
 		/// <summary></summary>
 		AmountOfFields
 	}

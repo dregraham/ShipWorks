@@ -27587,11 +27587,6 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(ShippingProfileFieldIndex.ReturnProfileID);}
 		}
-		/// <summary>Creates a new ShippingProfileEntity.CustomsRecipientTin field instance</summary>
-		public static EntityField2 CustomsRecipientTin
-		{
-			get { return (EntityField2)EntityFieldFactory.Create(ShippingProfileFieldIndex.CustomsRecipientTin);}
-		}
 	}
 
 	/// <summary>Field Creation Class for entity ShippingProviderRuleEntity</summary>
@@ -32321,11 +32316,6 @@ namespace ShipWorks.Data.Model.HelperClasses
 		public static EntityField2 Insurance
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(UspsShipmentFieldIndex.Insurance);}
-		}
-		/// <summary>Creates a new UspsShipmentEntity.CustomsRecipientTin field instance</summary>
-		public static EntityField2 CustomsRecipientTin
-		{
-			get { return (EntityField2)EntityFieldFactory.Create(UspsShipmentFieldIndex.CustomsRecipientTin);}
 		}
 	}
 
