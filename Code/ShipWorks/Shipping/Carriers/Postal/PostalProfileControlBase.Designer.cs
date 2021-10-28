@@ -131,7 +131,7 @@
             this.groupExpressMail.Controls.Add(this.expressSignatureRequirement);
             this.groupExpressMail.Controls.Add(this.expressSignatureRequirementState);
             this.groupExpressMail.Controls.Add(this.kryptonBorderEdge5);
-            this.groupExpressMail.Location = new System.Drawing.Point(8, 441);
+            this.groupExpressMail.Location = new System.Drawing.Point(8, 461);
             this.groupExpressMail.Name = "groupExpressMail";
             this.groupExpressMail.Size = new System.Drawing.Size(417, 53);
             this.groupExpressMail.TabIndex = 4;
@@ -183,7 +183,7 @@
             this.groupReturns.Controls.Add(this.returnShipment);
             this.groupReturns.Controls.Add(this.returnState);
             this.groupReturns.Controls.Add(this.kryptonBorderEdge3);
-            this.groupReturns.Location = new System.Drawing.Point(8, 501);
+            this.groupReturns.Location = new System.Drawing.Point(8, 521);
             this.groupReturns.Name = "groupReturns";
             this.groupReturns.Size = new System.Drawing.Size(417, 117);
             this.groupReturns.TabIndex = 5;
