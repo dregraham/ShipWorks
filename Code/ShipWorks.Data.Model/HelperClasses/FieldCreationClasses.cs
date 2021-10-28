@@ -23427,6 +23427,11 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(PostalProfileFieldIndex.NoPostage);}
 		}
+		/// <summary>Creates a new PostalProfileEntity.CustomsRecipientTin field instance</summary>
+		public static EntityField2 CustomsRecipientTin
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(PostalProfileFieldIndex.CustomsRecipientTin);}
+		}
 	}
 
 	/// <summary>Field Creation Class for entity PostalShipmentEntity</summary>
@@ -23546,6 +23551,11 @@ namespace ShipWorks.Data.Model.HelperClasses
 		public static EntityField2 Insurance
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(PostalShipmentFieldIndex.Insurance);}
+		}
+		/// <summary>Creates a new PostalShipmentEntity.CustomsRecipientTin field instance</summary>
+		public static EntityField2 CustomsRecipientTin
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(PostalShipmentFieldIndex.CustomsRecipientTin);}
 		}
 	}
 
@@ -27576,6 +27586,11 @@ namespace ShipWorks.Data.Model.HelperClasses
 		public static EntityField2 ReturnProfileID
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(ShippingProfileFieldIndex.ReturnProfileID);}
+		}
+		/// <summary>Creates a new ShippingProfileEntity.CustomsRecipientTin field instance</summary>
+		public static EntityField2 CustomsRecipientTin
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ShippingProfileFieldIndex.CustomsRecipientTin);}
 		}
 	}
 
@@ -32306,6 +32321,11 @@ namespace ShipWorks.Data.Model.HelperClasses
 		public static EntityField2 Insurance
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(UspsShipmentFieldIndex.Insurance);}
+		}
+		/// <summary>Creates a new UspsShipmentEntity.CustomsRecipientTin field instance</summary>
+		public static EntityField2 CustomsRecipientTin
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(UspsShipmentFieldIndex.CustomsRecipientTin);}
 		}
 	}
 

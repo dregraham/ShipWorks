@@ -42,7 +42,7 @@ namespace ShipWorks.Shipping.Specs.ShippingPanel
         private readonly DataContext context;
         private readonly IMessenger messenger;
         private readonly ShippingPanelViewModel shippingPanelViewModel;
-        private Mock<IExtendedSwsimV90> client;
+        private Mock<SwsimV111> client;
         private Mock<ILicenseService> licenseService;
 
         public BestRateSteps(DatabaseFixture db)
@@ -53,7 +53,7 @@ namespace ShipWorks.Shipping.Specs.ShippingPanel
                 var uspsWebServiceFactory = mock.CreateMock<IUspsWebServiceFactory>();
 
                 uspsWebServiceFactory.Setup(x => x.Create(AnyString, It.IsAny<LogActionType>()))
-                    .Returns(client);
+                    .Returns(client.Object);
                 mock.Provide(uspsWebServiceFactory.Object);
                 mock.Provide<ISchedulerProvider>(new ImmediateSchedulerProvider());
 
@@ -156,13 +156,13 @@ namespace ShipWorks.Shipping.Specs.ShippingPanel
             }, 5, TimeSpan.FromSeconds(250), ex => true);
 
         /// <summary>
-        /// Create a mocked version of ISwsimV90
+        /// Create a mocked version of ISwsimV111
         /// </summary>
-        private Mock<IExtendedSwsimV90> CreateMockedUspsWebService(Autofac.Extras.Moq.AutoMock mock)
+        private Mock<SwsimV111> CreateMockedUspsWebService(Autofac.Extras.Moq.AutoMock mock)
         {
-            var uspsClient = mock.CreateMock<IExtendedSwsimV90>();
+            var uspsClient = mock.CreateMock<SwsimV111>();
             uspsClient.Setup(x => x.GetAccountInfo(It.IsAny<Credentials>()))
-                .Returns(new AccountInfoResult(new AccountInfoV41
+                .Returns(new AccountInfoResult(new AccountInfoV54
                 {
                     Terms = new Terms
                     {
@@ -177,7 +177,7 @@ namespace ShipWorks.Shipping.Specs.ShippingPanel
                 .Returns(new CreateIndiciumResult
                 {
                     TrackingNumber = "123abc",
-                    Rate = new RateV33(),
+                    Rate = new RateV40(),
                     StampsTxID = Guid.NewGuid()
                 });
             return uspsClient;
@@ -199,7 +199,7 @@ namespace ShipWorks.Shipping.Specs.ShippingPanel
                 true, // IsPOBoxSpecified
                 new [] { address }, // CandidateAddresses
                 new StatusCodes(), // Status codes
-                new RateV33[0], // Rates
+                new RateV40[0], // Rates
                 "", // AddressCleansingResult
                 AddressVerificationLevel.Maximum // Verification Level
             };

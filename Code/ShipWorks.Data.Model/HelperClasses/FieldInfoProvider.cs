@@ -547,7 +547,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 			this.AddFieldIndexEnumForElementName(typeof(AmeriCommerceStoreFieldIndex), "AmeriCommerceStoreEntity");
 			this.AddElementFieldInfo("AmeriCommerceStoreEntity", "StoreID", typeof(System.Int64), true, false, false, false,  (int)AmeriCommerceStoreFieldIndex.StoreID, 0, 0, 19);
 			this.AddElementFieldInfo("AmeriCommerceStoreEntity", "Username", typeof(System.String), false, false, false, false,  (int)AmeriCommerceStoreFieldIndex.Username, 70, 0, 0);
-			this.AddElementFieldInfo("AmeriCommerceStoreEntity", "Password", typeof(System.String), false, false, false, false,  (int)AmeriCommerceStoreFieldIndex.Password, 280, 0, 0);
+			this.AddElementFieldInfo("AmeriCommerceStoreEntity", "Password", typeof(System.String), false, false, false, false,  (int)AmeriCommerceStoreFieldIndex.Password, 70, 0, 0);
 			this.AddElementFieldInfo("AmeriCommerceStoreEntity", "StoreUrl", typeof(System.String), false, false, false, false,  (int)AmeriCommerceStoreFieldIndex.StoreUrl, 350, 0, 0);
 			this.AddElementFieldInfo("AmeriCommerceStoreEntity", "StoreCode", typeof(System.Int32), false, false, false, false,  (int)AmeriCommerceStoreFieldIndex.StoreCode, 0, 0, 10);
 			this.AddElementFieldInfo("AmeriCommerceStoreEntity", "StatusCodes", typeof(System.String), false, false, false, false,  (int)AmeriCommerceStoreFieldIndex.StatusCodes, 2147483647, 0, 0);
@@ -720,7 +720,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 			this.AddFieldIndexEnumForElementName(typeof(BuyDotComStoreFieldIndex), "BuyDotComStoreEntity");
 			this.AddElementFieldInfo("BuyDotComStoreEntity", "StoreID", typeof(System.Int64), true, false, false, false,  (int)BuyDotComStoreFieldIndex.StoreID, 0, 0, 19);
 			this.AddElementFieldInfo("BuyDotComStoreEntity", "FtpUsername", typeof(System.String), false, false, false, false,  (int)BuyDotComStoreFieldIndex.FtpUsername, 50, 0, 0);
-			this.AddElementFieldInfo("BuyDotComStoreEntity", "FtpPassword", typeof(System.String), false, false, false, false,  (int)BuyDotComStoreFieldIndex.FtpPassword, 200, 0, 0);
+			this.AddElementFieldInfo("BuyDotComStoreEntity", "FtpPassword", typeof(System.String), false, false, false, false,  (int)BuyDotComStoreFieldIndex.FtpPassword, 50, 0, 0);
 		}
 		/// <summary>Inits ChannelAdvisorOrderEntity's FieldInfo objects</summary>
 		private void InitChannelAdvisorOrderEntityInfos()
@@ -774,7 +774,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 			this.AddElementFieldInfo("ChannelAdvisorStoreEntity", "AmazonMerchantID", typeof(System.String), false, false, false, false,  (int)ChannelAdvisorStoreFieldIndex.AmazonMerchantID, 50, 0, 0);
 			this.AddElementFieldInfo("ChannelAdvisorStoreEntity", "AmazonAuthToken", typeof(System.String), false, false, false, false,  (int)ChannelAdvisorStoreFieldIndex.AmazonAuthToken, 100, 0, 0);
 			this.AddElementFieldInfo("ChannelAdvisorStoreEntity", "AmazonApiRegion", typeof(System.String), false, false, false, false,  (int)ChannelAdvisorStoreFieldIndex.AmazonApiRegion, 2, 0, 0);
-			this.AddElementFieldInfo("ChannelAdvisorStoreEntity", "RefreshToken", typeof(System.String), false, false, false, false,  (int)ChannelAdvisorStoreFieldIndex.RefreshToken, 800, 0, 0);
+			this.AddElementFieldInfo("ChannelAdvisorStoreEntity", "RefreshToken", typeof(System.String), false, false, false, false,  (int)ChannelAdvisorStoreFieldIndex.RefreshToken, 200, 0, 0);
 			this.AddElementFieldInfo("ChannelAdvisorStoreEntity", "DownloadDaysBack", typeof(System.Byte), false, false, false, false,  (int)ChannelAdvisorStoreFieldIndex.DownloadDaysBack, 0, 0, 3);
 			this.AddElementFieldInfo("ChannelAdvisorStoreEntity", "ExcludeFBA", typeof(System.Boolean), false, false, false, false,  (int)ChannelAdvisorStoreFieldIndex.ExcludeFBA, 0, 0, 0);
 		}
@@ -1127,13 +1127,13 @@ namespace ShipWorks.Data.Model.HelperClasses
 			this.AddElementFieldInfo("EmailAccountEntity", "IncomingPort", typeof(System.Int32), false, false, false, false,  (int)EmailAccountFieldIndex.IncomingPort, 0, 0, 10);
 			this.AddElementFieldInfo("EmailAccountEntity", "IncomingSecurityType", typeof(System.Int32), false, false, false, false,  (int)EmailAccountFieldIndex.IncomingSecurityType, 0, 0, 10);
 			this.AddElementFieldInfo("EmailAccountEntity", "IncomingUsername", typeof(System.String), false, false, false, false,  (int)EmailAccountFieldIndex.IncomingUsername, 50, 0, 0);
-			this.AddElementFieldInfo("EmailAccountEntity", "IncomingPassword", typeof(System.String), false, false, false, false,  (int)EmailAccountFieldIndex.IncomingPassword, 600, 0, 0);
+			this.AddElementFieldInfo("EmailAccountEntity", "IncomingPassword", typeof(System.String), false, false, false, false,  (int)EmailAccountFieldIndex.IncomingPassword, 150, 0, 0);
 			this.AddElementFieldInfo("EmailAccountEntity", "OutgoingServer", typeof(System.String), false, false, false, false,  (int)EmailAccountFieldIndex.OutgoingServer, 100, 0, 0);
 			this.AddElementFieldInfo("EmailAccountEntity", "OutgoingPort", typeof(System.Int32), false, false, false, false,  (int)EmailAccountFieldIndex.OutgoingPort, 0, 0, 10);
 			this.AddElementFieldInfo("EmailAccountEntity", "OutgoingSecurityType", typeof(System.Int32), false, false, false, false,  (int)EmailAccountFieldIndex.OutgoingSecurityType, 0, 0, 10);
 			this.AddElementFieldInfo("EmailAccountEntity", "OutgoingCredentialSource", typeof(System.Int32), false, false, false, false,  (int)EmailAccountFieldIndex.OutgoingCredentialSource, 0, 0, 10);
 			this.AddElementFieldInfo("EmailAccountEntity", "OutgoingUsername", typeof(System.String), false, false, false, false,  (int)EmailAccountFieldIndex.OutgoingUsername, 50, 0, 0);
-			this.AddElementFieldInfo("EmailAccountEntity", "OutgoingPassword", typeof(System.String), false, false, false, false,  (int)EmailAccountFieldIndex.OutgoingPassword, 600, 0, 0);
+			this.AddElementFieldInfo("EmailAccountEntity", "OutgoingPassword", typeof(System.String), false, false, false, false,  (int)EmailAccountFieldIndex.OutgoingPassword, 150, 0, 0);
 			this.AddElementFieldInfo("EmailAccountEntity", "AutoSend", typeof(System.Boolean), false, false, false, false,  (int)EmailAccountFieldIndex.AutoSend, 0, 0, 0);
 			this.AddElementFieldInfo("EmailAccountEntity", "AutoSendMinutes", typeof(System.Int32), false, false, false, false,  (int)EmailAccountFieldIndex.AutoSendMinutes, 0, 0, 10);
 			this.AddElementFieldInfo("EmailAccountEntity", "AutoSendLastTime", typeof(System.DateTime), false, false, false, false,  (int)EmailAccountFieldIndex.AutoSendLastTime, 0, 0, 0);
@@ -1188,9 +1188,9 @@ namespace ShipWorks.Data.Model.HelperClasses
 			this.AddElementFieldInfo("EndiciaAccountEntity", "EndiciaReseller", typeof(System.Int32), false, false, false, false,  (int)EndiciaAccountFieldIndex.EndiciaReseller, 0, 0, 10);
 			this.AddElementFieldInfo("EndiciaAccountEntity", "AccountNumber", typeof(System.String), false, false, false, true,  (int)EndiciaAccountFieldIndex.AccountNumber, 50, 0, 0);
 			this.AddElementFieldInfo("EndiciaAccountEntity", "SignupConfirmation", typeof(System.String), false, false, false, false,  (int)EndiciaAccountFieldIndex.SignupConfirmation, 30, 0, 0);
-			this.AddElementFieldInfo("EndiciaAccountEntity", "WebPassword", typeof(System.String), false, false, false, false,  (int)EndiciaAccountFieldIndex.WebPassword, 1000, 0, 0);
-			this.AddElementFieldInfo("EndiciaAccountEntity", "ApiInitialPassword", typeof(System.String), false, false, false, false,  (int)EndiciaAccountFieldIndex.ApiInitialPassword, 1000, 0, 0);
-			this.AddElementFieldInfo("EndiciaAccountEntity", "ApiUserPassword", typeof(System.String), false, false, false, false,  (int)EndiciaAccountFieldIndex.ApiUserPassword, 1000, 0, 0);
+			this.AddElementFieldInfo("EndiciaAccountEntity", "WebPassword", typeof(System.String), false, false, false, false,  (int)EndiciaAccountFieldIndex.WebPassword, 250, 0, 0);
+			this.AddElementFieldInfo("EndiciaAccountEntity", "ApiInitialPassword", typeof(System.String), false, false, false, false,  (int)EndiciaAccountFieldIndex.ApiInitialPassword, 250, 0, 0);
+			this.AddElementFieldInfo("EndiciaAccountEntity", "ApiUserPassword", typeof(System.String), false, false, false, false,  (int)EndiciaAccountFieldIndex.ApiUserPassword, 250, 0, 0);
 			this.AddElementFieldInfo("EndiciaAccountEntity", "AccountType", typeof(System.Int32), false, false, false, false,  (int)EndiciaAccountFieldIndex.AccountType, 0, 0, 10);
 			this.AddElementFieldInfo("EndiciaAccountEntity", "TestAccount", typeof(System.Boolean), false, false, false, false,  (int)EndiciaAccountFieldIndex.TestAccount, 0, 0, 0);
 			this.AddElementFieldInfo("EndiciaAccountEntity", "CreatedByShipWorks", typeof(System.Boolean), false, false, false, false,  (int)EndiciaAccountFieldIndex.CreatedByShipWorks, 0, 0, 0);
@@ -1284,8 +1284,8 @@ namespace ShipWorks.Data.Model.HelperClasses
 			this.AddElementFieldInfo("EtsyStoreEntity", "EtsyShopID", typeof(System.Int64), false, false, false, false,  (int)EtsyStoreFieldIndex.EtsyShopID, 0, 0, 19);
 			this.AddElementFieldInfo("EtsyStoreEntity", "EtsyLoginName", typeof(System.String), false, false, false, false,  (int)EtsyStoreFieldIndex.EtsyLoginName, 255, 0, 0);
 			this.AddElementFieldInfo("EtsyStoreEntity", "EtsyStoreName", typeof(System.String), false, false, false, false,  (int)EtsyStoreFieldIndex.EtsyStoreName, 255, 0, 0);
-			this.AddElementFieldInfo("EtsyStoreEntity", "OAuthToken", typeof(System.String), false, false, false, false,  (int)EtsyStoreFieldIndex.OAuthToken, 200, 0, 0);
-			this.AddElementFieldInfo("EtsyStoreEntity", "OAuthTokenSecret", typeof(System.String), false, false, false, false,  (int)EtsyStoreFieldIndex.OAuthTokenSecret, 200, 0, 0);
+			this.AddElementFieldInfo("EtsyStoreEntity", "OAuthToken", typeof(System.String), false, false, false, false,  (int)EtsyStoreFieldIndex.OAuthToken, 50, 0, 0);
+			this.AddElementFieldInfo("EtsyStoreEntity", "OAuthTokenSecret", typeof(System.String), false, false, false, false,  (int)EtsyStoreFieldIndex.OAuthTokenSecret, 50, 0, 0);
 		}
 		/// <summary>Inits ExcludedPackageTypeEntity's FieldInfo objects</summary>
 		private void InitExcludedPackageTypeEntityInfos()
@@ -1728,7 +1728,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 			this.AddElementFieldInfo("FtpAccountEntity", "FtpAccountID", typeof(System.Int64), true, false, true, false,  (int)FtpAccountFieldIndex.FtpAccountID, 0, 0, 19);
 			this.AddElementFieldInfo("FtpAccountEntity", "Host", typeof(System.String), false, false, false, false,  (int)FtpAccountFieldIndex.Host, 100, 0, 0);
 			this.AddElementFieldInfo("FtpAccountEntity", "Username", typeof(System.String), false, false, false, false,  (int)FtpAccountFieldIndex.Username, 50, 0, 0);
-			this.AddElementFieldInfo("FtpAccountEntity", "Password", typeof(System.String), false, false, false, false,  (int)FtpAccountFieldIndex.Password, 200, 0, 0);
+			this.AddElementFieldInfo("FtpAccountEntity", "Password", typeof(System.String), false, false, false, false,  (int)FtpAccountFieldIndex.Password, 50, 0, 0);
 			this.AddElementFieldInfo("FtpAccountEntity", "Port", typeof(System.Int32), false, false, false, false,  (int)FtpAccountFieldIndex.Port, 0, 0, 10);
 			this.AddElementFieldInfo("FtpAccountEntity", "SecurityType", typeof(System.Int32), false, false, false, false,  (int)FtpAccountFieldIndex.SecurityType, 0, 0, 10);
 			this.AddElementFieldInfo("FtpAccountEntity", "Passive", typeof(System.Boolean), false, false, false, false,  (int)FtpAccountFieldIndex.Passive, 0, 0, 0);
@@ -1784,7 +1784,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 			this.AddFieldIndexEnumForElementName(typeof(GenericModuleStoreFieldIndex), "GenericModuleStoreEntity");
 			this.AddElementFieldInfo("GenericModuleStoreEntity", "StoreID", typeof(System.Int64), true, false, false, false,  (int)GenericModuleStoreFieldIndex.StoreID, 0, 0, 19);
 			this.AddElementFieldInfo("GenericModuleStoreEntity", "ModuleUsername", typeof(System.String), false, false, false, false,  (int)GenericModuleStoreFieldIndex.ModuleUsername, 50, 0, 0);
-			this.AddElementFieldInfo("GenericModuleStoreEntity", "ModulePassword", typeof(System.String), false, false, false, false,  (int)GenericModuleStoreFieldIndex.ModulePassword, 320, 0, 0);
+			this.AddElementFieldInfo("GenericModuleStoreEntity", "ModulePassword", typeof(System.String), false, false, false, false,  (int)GenericModuleStoreFieldIndex.ModulePassword, 80, 0, 0);
 			this.AddElementFieldInfo("GenericModuleStoreEntity", "ModuleUrl", typeof(System.String), false, false, false, false,  (int)GenericModuleStoreFieldIndex.ModuleUrl, 350, 0, 0);
 			this.AddElementFieldInfo("GenericModuleStoreEntity", "ModuleVersion", typeof(System.String), false, false, false, false,  (int)GenericModuleStoreFieldIndex.ModuleVersion, 20, 0, 0);
 			this.AddElementFieldInfo("GenericModuleStoreEntity", "ModulePlatform", typeof(System.String), false, false, false, false,  (int)GenericModuleStoreFieldIndex.ModulePlatform, 50, 0, 0);
@@ -1918,7 +1918,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 			this.AddElementFieldInfo("IParcelAccountEntity", "IParcelAccountID", typeof(System.Int64), true, false, true, false,  (int)IParcelAccountFieldIndex.IParcelAccountID, 0, 0, 19);
 			this.AddElementFieldInfo("IParcelAccountEntity", "RowVersion", typeof(System.Byte[]), false, false, true, false,  (int)IParcelAccountFieldIndex.RowVersion, 2147483647, 0, 0);
 			this.AddElementFieldInfo("IParcelAccountEntity", "Username", typeof(System.String), false, false, false, false,  (int)IParcelAccountFieldIndex.Username, 50, 0, 0);
-			this.AddElementFieldInfo("IParcelAccountEntity", "Password", typeof(System.String), false, false, false, false,  (int)IParcelAccountFieldIndex.Password, 200, 0, 0);
+			this.AddElementFieldInfo("IParcelAccountEntity", "Password", typeof(System.String), false, false, false, false,  (int)IParcelAccountFieldIndex.Password, 50, 0, 0);
 			this.AddElementFieldInfo("IParcelAccountEntity", "Description", typeof(System.String), false, false, false, false,  (int)IParcelAccountFieldIndex.Description, 50, 0, 0);
 			this.AddElementFieldInfo("IParcelAccountEntity", "FirstName", typeof(System.String), false, false, false, false,  (int)IParcelAccountFieldIndex.FirstName, 30, 0, 0);
 			this.AddElementFieldInfo("IParcelAccountEntity", "MiddleName", typeof(System.String), false, false, false, false,  (int)IParcelAccountFieldIndex.MiddleName, 30, 0, 0);
@@ -2011,7 +2011,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 			this.AddFieldIndexEnumForElementName(typeof(JetStoreFieldIndex), "JetStoreEntity");
 			this.AddElementFieldInfo("JetStoreEntity", "StoreID", typeof(System.Int64), true, false, false, false,  (int)JetStoreFieldIndex.StoreID, 0, 0, 19);
 			this.AddElementFieldInfo("JetStoreEntity", "ApiUser", typeof(System.String), false, false, false, false,  (int)JetStoreFieldIndex.ApiUser, 100, 0, 0);
-			this.AddElementFieldInfo("JetStoreEntity", "Secret", typeof(System.String), false, false, false, false,  (int)JetStoreFieldIndex.Secret, 400, 0, 0);
+			this.AddElementFieldInfo("JetStoreEntity", "Secret", typeof(System.String), false, false, false, false,  (int)JetStoreFieldIndex.Secret, 100, 0, 0);
 		}
 		/// <summary>Inits LabelSheetEntity's FieldInfo objects</summary>
 		private void InitLabelSheetEntityInfos()
@@ -2116,7 +2116,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 			this.AddFieldIndexEnumForElementName(typeof(MarketplaceAdvisorStoreFieldIndex), "MarketplaceAdvisorStoreEntity");
 			this.AddElementFieldInfo("MarketplaceAdvisorStoreEntity", "StoreID", typeof(System.Int64), true, false, false, false,  (int)MarketplaceAdvisorStoreFieldIndex.StoreID, 0, 0, 19);
 			this.AddElementFieldInfo("MarketplaceAdvisorStoreEntity", "Username", typeof(System.String), false, false, false, false,  (int)MarketplaceAdvisorStoreFieldIndex.Username, 50, 0, 0);
-			this.AddElementFieldInfo("MarketplaceAdvisorStoreEntity", "Password", typeof(System.String), false, false, false, false,  (int)MarketplaceAdvisorStoreFieldIndex.Password, 200, 0, 0);
+			this.AddElementFieldInfo("MarketplaceAdvisorStoreEntity", "Password", typeof(System.String), false, false, false, false,  (int)MarketplaceAdvisorStoreFieldIndex.Password, 50, 0, 0);
 			this.AddElementFieldInfo("MarketplaceAdvisorStoreEntity", "AccountType", typeof(System.Int32), false, false, false, false,  (int)MarketplaceAdvisorStoreFieldIndex.AccountType, 0, 0, 10);
 			this.AddElementFieldInfo("MarketplaceAdvisorStoreEntity", "DownloadFlags", typeof(System.Int32), false, false, false, false,  (int)MarketplaceAdvisorStoreFieldIndex.DownloadFlags, 0, 0, 10);
 		}
@@ -2134,7 +2134,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			this.AddFieldIndexEnumForElementName(typeof(MivaStoreFieldIndex), "MivaStoreEntity");
 			this.AddElementFieldInfo("MivaStoreEntity", "StoreID", typeof(System.Int64), true, false, false, false,  (int)MivaStoreFieldIndex.StoreID, 0, 0, 19);
-			this.AddElementFieldInfo("MivaStoreEntity", "EncryptionPassphrase", typeof(System.String), false, false, false, false,  (int)MivaStoreFieldIndex.EncryptionPassphrase, 200, 0, 0);
+			this.AddElementFieldInfo("MivaStoreEntity", "EncryptionPassphrase", typeof(System.String), false, false, false, false,  (int)MivaStoreFieldIndex.EncryptionPassphrase, 50, 0, 0);
 			this.AddElementFieldInfo("MivaStoreEntity", "LiveManualOrderNumbers", typeof(System.Boolean), false, false, false, false,  (int)MivaStoreFieldIndex.LiveManualOrderNumbers, 0, 0, 0);
 			this.AddElementFieldInfo("MivaStoreEntity", "SebenzaCheckoutDataEnabled", typeof(System.Boolean), false, false, false, false,  (int)MivaStoreFieldIndex.SebenzaCheckoutDataEnabled, 0, 0, 0);
 			this.AddElementFieldInfo("MivaStoreEntity", "OnlineUpdateStrategy", typeof(System.Int32), false, false, false, false,  (int)MivaStoreFieldIndex.OnlineUpdateStrategy, 0, 0, 10);
@@ -2257,7 +2257,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 			this.AddElementFieldInfo("OnTracAccountEntity", "OnTracAccountID", typeof(System.Int64), true, false, true, false,  (int)OnTracAccountFieldIndex.OnTracAccountID, 0, 0, 19);
 			this.AddElementFieldInfo("OnTracAccountEntity", "RowVersion", typeof(System.Byte[]), false, false, true, false,  (int)OnTracAccountFieldIndex.RowVersion, 2147483647, 0, 0);
 			this.AddElementFieldInfo("OnTracAccountEntity", "AccountNumber", typeof(System.Int32), false, false, false, false,  (int)OnTracAccountFieldIndex.AccountNumber, 0, 0, 10);
-			this.AddElementFieldInfo("OnTracAccountEntity", "Password", typeof(System.String), false, false, false, false,  (int)OnTracAccountFieldIndex.Password, 200, 0, 0);
+			this.AddElementFieldInfo("OnTracAccountEntity", "Password", typeof(System.String), false, false, false, false,  (int)OnTracAccountFieldIndex.Password, 50, 0, 0);
 			this.AddElementFieldInfo("OnTracAccountEntity", "Description", typeof(System.String), false, false, false, false,  (int)OnTracAccountFieldIndex.Description, 50, 0, 0);
 			this.AddElementFieldInfo("OnTracAccountEntity", "FirstName", typeof(System.String), false, false, false, false,  (int)OnTracAccountFieldIndex.FirstName, 30, 0, 0);
 			this.AddElementFieldInfo("OnTracAccountEntity", "MiddleName", typeof(System.String), false, false, false, false,  (int)OnTracAccountFieldIndex.MiddleName, 30, 0, 0);
@@ -2513,7 +2513,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 			this.AddElementFieldInfo("OrderPaymentDetailEntity", "RowVersion", typeof(System.Byte[]), false, false, true, false,  (int)OrderPaymentDetailFieldIndex.RowVersion, 2147483647, 0, 0);
 			this.AddElementFieldInfo("OrderPaymentDetailEntity", "OrderID", typeof(System.Int64), false, true, false, false,  (int)OrderPaymentDetailFieldIndex.OrderID, 0, 0, 19);
 			this.AddElementFieldInfo("OrderPaymentDetailEntity", "Label", typeof(System.String), false, false, false, false,  (int)OrderPaymentDetailFieldIndex.Label, 100, 0, 0);
-			this.AddElementFieldInfo("OrderPaymentDetailEntity", "Value", typeof(System.String), false, false, false, false,  (int)OrderPaymentDetailFieldIndex.Value, 400, 0, 0);
+			this.AddElementFieldInfo("OrderPaymentDetailEntity", "Value", typeof(System.String), false, false, false, false,  (int)OrderPaymentDetailFieldIndex.Value, 100, 0, 0);
 		}
 		/// <summary>Inits OrderSearchEntity's FieldInfo objects</summary>
 		private void InitOrderSearchEntityInfos()
@@ -2660,6 +2660,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 			this.AddElementFieldInfo("PostalProfileEntity", "Memo2", typeof(System.String), false, false, false, true,  (int)PostalProfileFieldIndex.Memo2, 300, 0, 0);
 			this.AddElementFieldInfo("PostalProfileEntity", "Memo3", typeof(System.String), false, false, false, true,  (int)PostalProfileFieldIndex.Memo3, 300, 0, 0);
 			this.AddElementFieldInfo("PostalProfileEntity", "NoPostage", typeof(Nullable<System.Boolean>), false, false, false, true,  (int)PostalProfileFieldIndex.NoPostage, 0, 0, 0);
+			this.AddElementFieldInfo("PostalProfileEntity", "CustomsRecipientTin", typeof(System.String), false, false, false, true,  (int)PostalProfileFieldIndex.CustomsRecipientTin, 25, 0, 0);
 		}
 		/// <summary>Inits PostalShipmentEntity's FieldInfo objects</summary>
 		private void InitPostalShipmentEntityInfos()
@@ -2688,6 +2689,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 			this.AddElementFieldInfo("PostalShipmentEntity", "Memo3", typeof(System.String), false, false, false, false,  (int)PostalShipmentFieldIndex.Memo3, 300, 0, 0);
 			this.AddElementFieldInfo("PostalShipmentEntity", "NoPostage", typeof(System.Boolean), false, false, false, false,  (int)PostalShipmentFieldIndex.NoPostage, 0, 0, 0);
 			this.AddElementFieldInfo("PostalShipmentEntity", "Insurance", typeof(System.Boolean), false, false, false, false,  (int)PostalShipmentFieldIndex.Insurance, 0, 0, 0);
+			this.AddElementFieldInfo("PostalShipmentEntity", "CustomsRecipientTin", typeof(System.String), false, false, false, true,  (int)PostalShipmentFieldIndex.CustomsRecipientTin, 25, 0, 0);
 		}
 		/// <summary>Inits PrintResultEntity's FieldInfo objects</summary>
 		private void InitPrintResultEntityInfos()
@@ -2876,7 +2878,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 			this.AddElementFieldInfo("ProStoresStoreEntity", "LegacyAdminUrl", typeof(System.String), false, false, false, false,  (int)ProStoresStoreFieldIndex.LegacyAdminUrl, 300, 0, 0);
 			this.AddElementFieldInfo("ProStoresStoreEntity", "LegacyXtePath", typeof(System.String), false, false, false, false,  (int)ProStoresStoreFieldIndex.LegacyXtePath, 75, 0, 0);
 			this.AddElementFieldInfo("ProStoresStoreEntity", "LegacyPrefix", typeof(System.String), false, false, false, false,  (int)ProStoresStoreFieldIndex.LegacyPrefix, 30, 0, 0);
-			this.AddElementFieldInfo("ProStoresStoreEntity", "LegacyPassword", typeof(System.String), false, false, false, false,  (int)ProStoresStoreFieldIndex.LegacyPassword, 600, 0, 0);
+			this.AddElementFieldInfo("ProStoresStoreEntity", "LegacyPassword", typeof(System.String), false, false, false, false,  (int)ProStoresStoreFieldIndex.LegacyPassword, 150, 0, 0);
 			this.AddElementFieldInfo("ProStoresStoreEntity", "LegacyCanUpgrade", typeof(System.Boolean), false, false, false, false,  (int)ProStoresStoreFieldIndex.LegacyCanUpgrade, 0, 0, 0);
 		}
 		/// <summary>Inits RakutenOrderEntity's FieldInfo objects</summary>
@@ -3206,6 +3208,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 			this.AddElementFieldInfo("ShippingProfileEntity", "IncludeReturn", typeof(Nullable<System.Boolean>), false, false, false, true,  (int)ShippingProfileFieldIndex.IncludeReturn, 0, 0, 0);
 			this.AddElementFieldInfo("ShippingProfileEntity", "ApplyReturnProfile", typeof(Nullable<System.Boolean>), false, false, false, true,  (int)ShippingProfileFieldIndex.ApplyReturnProfile, 0, 0, 0);
 			this.AddElementFieldInfo("ShippingProfileEntity", "ReturnProfileID", typeof(Nullable<System.Int64>), false, false, false, true,  (int)ShippingProfileFieldIndex.ReturnProfileID, 0, 0, 19);
+			this.AddElementFieldInfo("ShippingProfileEntity", "CustomsRecipientTin", typeof(System.String), false, false, false, true,  (int)ShippingProfileFieldIndex.CustomsRecipientTin, 25, 0, 0);
 		}
 		/// <summary>Inits ShippingProviderRuleEntity's FieldInfo objects</summary>
 		private void InitShippingProviderRuleEntityInfos()
@@ -3230,13 +3233,13 @@ namespace ShipWorks.Data.Model.HelperClasses
 			this.AddElementFieldInfo("ShippingSettingsEntity", "InsurancePolicy", typeof(System.String), false, false, false, false,  (int)ShippingSettingsFieldIndex.InsurancePolicy, 40, 0, 0);
 			this.AddElementFieldInfo("ShippingSettingsEntity", "InsuranceLastAgreed", typeof(Nullable<System.DateTime>), false, false, false, true,  (int)ShippingSettingsFieldIndex.InsuranceLastAgreed, 0, 0, 0);
 			this.AddElementFieldInfo("ShippingSettingsEntity", "FedExUsername", typeof(System.String), false, false, false, true,  (int)ShippingSettingsFieldIndex.FedExUsername, 50, 0, 0);
-			this.AddElementFieldInfo("ShippingSettingsEntity", "FedExPassword", typeof(System.String), false, false, false, true,  (int)ShippingSettingsFieldIndex.FedExPassword, 200, 0, 0);
+			this.AddElementFieldInfo("ShippingSettingsEntity", "FedExPassword", typeof(System.String), false, false, false, true,  (int)ShippingSettingsFieldIndex.FedExPassword, 50, 0, 0);
 			this.AddElementFieldInfo("ShippingSettingsEntity", "FedExMaskAccount", typeof(System.Boolean), false, false, false, false,  (int)ShippingSettingsFieldIndex.FedExMaskAccount, 0, 0, 0);
 			this.AddElementFieldInfo("ShippingSettingsEntity", "FedExThermalDocTab", typeof(System.Boolean), false, false, false, false,  (int)ShippingSettingsFieldIndex.FedExThermalDocTab, 0, 0, 0);
 			this.AddElementFieldInfo("ShippingSettingsEntity", "FedExThermalDocTabType", typeof(System.Int32), false, false, false, false,  (int)ShippingSettingsFieldIndex.FedExThermalDocTabType, 0, 0, 10);
 			this.AddElementFieldInfo("ShippingSettingsEntity", "FedExInsuranceProvider", typeof(System.Int32), false, false, false, false,  (int)ShippingSettingsFieldIndex.FedExInsuranceProvider, 0, 0, 10);
 			this.AddElementFieldInfo("ShippingSettingsEntity", "FedExInsurancePennyOne", typeof(System.Boolean), false, false, false, false,  (int)ShippingSettingsFieldIndex.FedExInsurancePennyOne, 0, 0, 0);
-			this.AddElementFieldInfo("ShippingSettingsEntity", "UpsAccessKey", typeof(System.String), false, false, false, true,  (int)ShippingSettingsFieldIndex.UpsAccessKey, 200, 0, 0);
+			this.AddElementFieldInfo("ShippingSettingsEntity", "UpsAccessKey", typeof(System.String), false, false, false, true,  (int)ShippingSettingsFieldIndex.UpsAccessKey, 50, 0, 0);
 			this.AddElementFieldInfo("ShippingSettingsEntity", "UpsInsuranceProvider", typeof(System.Int32), false, false, false, false,  (int)ShippingSettingsFieldIndex.UpsInsuranceProvider, 0, 0, 10);
 			this.AddElementFieldInfo("ShippingSettingsEntity", "UpsInsurancePennyOne", typeof(System.Boolean), false, false, false, false,  (int)ShippingSettingsFieldIndex.UpsInsurancePennyOne, 0, 0, 0);
 			this.AddElementFieldInfo("ShippingSettingsEntity", "EndiciaCustomsCertify", typeof(System.Boolean), false, false, false, false,  (int)ShippingSettingsFieldIndex.EndiciaCustomsCertify, 0, 0, 0);
@@ -3333,7 +3336,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 			this.AddFieldIndexEnumForElementName(typeof(ShopSiteStoreFieldIndex), "ShopSiteStoreEntity");
 			this.AddElementFieldInfo("ShopSiteStoreEntity", "StoreID", typeof(System.Int64), true, false, false, false,  (int)ShopSiteStoreFieldIndex.StoreID, 0, 0, 19);
 			this.AddElementFieldInfo("ShopSiteStoreEntity", "Username", typeof(System.String), false, false, false, false,  (int)ShopSiteStoreFieldIndex.Username, 50, 0, 0);
-			this.AddElementFieldInfo("ShopSiteStoreEntity", "Password", typeof(System.String), false, false, false, false,  (int)ShopSiteStoreFieldIndex.Password, 200, 0, 0);
+			this.AddElementFieldInfo("ShopSiteStoreEntity", "Password", typeof(System.String), false, false, false, false,  (int)ShopSiteStoreFieldIndex.Password, 50, 0, 0);
 			this.AddElementFieldInfo("ShopSiteStoreEntity", "ApiUrl", typeof(System.String), false, false, false, false,  (int)ShopSiteStoreFieldIndex.ApiUrl, 350, 0, 0);
 			this.AddElementFieldInfo("ShopSiteStoreEntity", "RequireSSL", typeof(System.Boolean), false, false, false, false,  (int)ShopSiteStoreFieldIndex.RequireSSL, 0, 0, 0);
 			this.AddElementFieldInfo("ShopSiteStoreEntity", "DownloadPageSize", typeof(System.Int32), false, false, false, false,  (int)ShopSiteStoreFieldIndex.DownloadPageSize, 0, 0, 10);
@@ -3544,7 +3547,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 			this.AddElementFieldInfo("UpsAccountEntity", "Description", typeof(System.String), false, false, false, false,  (int)UpsAccountFieldIndex.Description, 50, 0, 0);
 			this.AddElementFieldInfo("UpsAccountEntity", "AccountNumber", typeof(System.String), false, false, false, false,  (int)UpsAccountFieldIndex.AccountNumber, 10, 0, 0);
 			this.AddElementFieldInfo("UpsAccountEntity", "UserID", typeof(System.String), false, false, false, false,  (int)UpsAccountFieldIndex.UserID, 25, 0, 0);
-			this.AddElementFieldInfo("UpsAccountEntity", "Password", typeof(System.String), false, false, false, false,  (int)UpsAccountFieldIndex.Password, 100, 0, 0);
+			this.AddElementFieldInfo("UpsAccountEntity", "Password", typeof(System.String), false, false, false, false,  (int)UpsAccountFieldIndex.Password, 25, 0, 0);
 			this.AddElementFieldInfo("UpsAccountEntity", "RateType", typeof(System.Int32), false, false, false, false,  (int)UpsAccountFieldIndex.RateType, 0, 0, 10);
 			this.AddElementFieldInfo("UpsAccountEntity", "InvoiceAuth", typeof(System.Boolean), false, false, false, false,  (int)UpsAccountFieldIndex.InvoiceAuth, 0, 0, 0);
 			this.AddElementFieldInfo("UpsAccountEntity", "FirstName", typeof(System.String), false, false, false, false,  (int)UpsAccountFieldIndex.FirstName, 30, 0, 0);
@@ -3850,7 +3853,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 			this.AddElementFieldInfo("UspsAccountEntity", "RowVersion", typeof(System.Byte[]), false, false, true, false,  (int)UspsAccountFieldIndex.RowVersion, 2147483647, 0, 0);
 			this.AddElementFieldInfo("UspsAccountEntity", "Description", typeof(System.String), false, false, false, false,  (int)UspsAccountFieldIndex.Description, 50, 0, 0);
 			this.AddElementFieldInfo("UspsAccountEntity", "Username", typeof(System.String), false, false, false, false,  (int)UspsAccountFieldIndex.Username, 50, 0, 0);
-			this.AddElementFieldInfo("UspsAccountEntity", "Password", typeof(System.String), false, false, false, false,  (int)UspsAccountFieldIndex.Password, 400, 0, 0);
+			this.AddElementFieldInfo("UspsAccountEntity", "Password", typeof(System.String), false, false, false, false,  (int)UspsAccountFieldIndex.Password, 100, 0, 0);
 			this.AddElementFieldInfo("UspsAccountEntity", "FirstName", typeof(System.String), false, false, false, false,  (int)UspsAccountFieldIndex.FirstName, 30, 0, 0);
 			this.AddElementFieldInfo("UspsAccountEntity", "MiddleName", typeof(System.String), false, false, false, false,  (int)UspsAccountFieldIndex.MiddleName, 30, 0, 0);
 			this.AddElementFieldInfo("UspsAccountEntity", "LastName", typeof(System.String), false, false, false, false,  (int)UspsAccountFieldIndex.LastName, 30, 0, 0);
@@ -3913,6 +3916,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 			this.AddElementFieldInfo("UspsShipmentEntity", "RequestedLabelFormat", typeof(System.Int32), false, false, false, false,  (int)UspsShipmentFieldIndex.RequestedLabelFormat, 0, 0, 10);
 			this.AddElementFieldInfo("UspsShipmentEntity", "RateShop", typeof(System.Boolean), false, false, false, false,  (int)UspsShipmentFieldIndex.RateShop, 0, 0, 0);
 			this.AddElementFieldInfo("UspsShipmentEntity", "Insurance", typeof(System.Boolean), false, false, false, false,  (int)UspsShipmentFieldIndex.Insurance, 0, 0, 0);
+			this.AddElementFieldInfo("UspsShipmentEntity", "CustomsRecipientTin", typeof(System.String), false, false, false, true,  (int)UspsShipmentFieldIndex.CustomsRecipientTin, 25, 0, 0);
 		}
 		/// <summary>Inits ValidatedAddressEntity's FieldInfo objects</summary>
 		private void InitValidatedAddressEntityInfos()
@@ -3950,7 +3954,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 			this.AddElementFieldInfo("VolusionStoreEntity", "StoreID", typeof(System.Int64), true, false, false, false,  (int)VolusionStoreFieldIndex.StoreID, 0, 0, 19);
 			this.AddElementFieldInfo("VolusionStoreEntity", "StoreUrl", typeof(System.String), false, false, false, false,  (int)VolusionStoreFieldIndex.StoreUrl, 255, 0, 0);
 			this.AddElementFieldInfo("VolusionStoreEntity", "WebUserName", typeof(System.String), false, false, false, false,  (int)VolusionStoreFieldIndex.WebUserName, 50, 0, 0);
-			this.AddElementFieldInfo("VolusionStoreEntity", "WebPassword", typeof(System.String), false, false, false, false,  (int)VolusionStoreFieldIndex.WebPassword, 280, 0, 0);
+			this.AddElementFieldInfo("VolusionStoreEntity", "WebPassword", typeof(System.String), false, false, false, false,  (int)VolusionStoreFieldIndex.WebPassword, 70, 0, 0);
 			this.AddElementFieldInfo("VolusionStoreEntity", "ApiPassword", typeof(System.String), false, false, false, false,  (int)VolusionStoreFieldIndex.ApiPassword, 100, 0, 0);
 			this.AddElementFieldInfo("VolusionStoreEntity", "PaymentMethods", typeof(System.String), false, false, false, false,  (int)VolusionStoreFieldIndex.PaymentMethods, 2147483647, 0, 0);
 			this.AddElementFieldInfo("VolusionStoreEntity", "ShipmentMethods", typeof(System.String), false, false, false, false,  (int)VolusionStoreFieldIndex.ShipmentMethods, 2147483647, 0, 0);
@@ -4195,7 +4199,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 			this.AddFieldIndexEnumForElementName(typeof(YahooStoreFieldIndex), "YahooStoreEntity");
 			this.AddElementFieldInfo("YahooStoreEntity", "StoreID", typeof(System.Int64), true, false, false, false,  (int)YahooStoreFieldIndex.StoreID, 0, 0, 19);
 			this.AddElementFieldInfo("YahooStoreEntity", "YahooEmailAccountID", typeof(System.Int64), false, true, false, false,  (int)YahooStoreFieldIndex.YahooEmailAccountID, 0, 0, 19);
-			this.AddElementFieldInfo("YahooStoreEntity", "TrackingUpdatePassword", typeof(System.String), false, false, false, false,  (int)YahooStoreFieldIndex.TrackingUpdatePassword, 400, 0, 0);
+			this.AddElementFieldInfo("YahooStoreEntity", "TrackingUpdatePassword", typeof(System.String), false, false, false, false,  (int)YahooStoreFieldIndex.TrackingUpdatePassword, 100, 0, 0);
 			this.AddElementFieldInfo("YahooStoreEntity", "YahooStoreID", typeof(System.String), false, false, false, false,  (int)YahooStoreFieldIndex.YahooStoreID, 50, 0, 0);
 			this.AddElementFieldInfo("YahooStoreEntity", "AccessToken", typeof(System.String), false, false, false, false,  (int)YahooStoreFieldIndex.AccessToken, 200, 0, 0);
 			this.AddElementFieldInfo("YahooStoreEntity", "BackupOrderNumber", typeof(Nullable<System.Int64>), false, false, false, true,  (int)YahooStoreFieldIndex.BackupOrderNumber, 0, 0, 19);

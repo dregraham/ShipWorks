@@ -68,6 +68,15 @@ namespace ShipWorks.Shipping.Carriers.Postal
 
                     contentType.ApplyMultiValue((PostalCustomsContentType) shipment.Postal.CustomsContentType);
                     otherDetail.ApplyMultiText(shipment.Postal.CustomsContentDescription);
+
+                    if (shipment.Postal.CustomsRecipientTin == null)
+                    {
+                        customsRecipientTin.ApplyMultiText("");
+                    }
+                    else
+                    {
+                        customsRecipientTin.ApplyMultiText(shipment.Postal.CustomsRecipientTin);
+                    }
                 }
             }
 
@@ -111,6 +120,7 @@ namespace ShipWorks.Shipping.Carriers.Postal
             {
                 contentType.ReadMultiValue(v => shipment.Postal.CustomsContentType = (int) (PostalCustomsContentType) v);
                 otherDetail.ReadMultiText(s => shipment.Postal.CustomsContentDescription = s);
+                customsRecipientTin.ReadMultiText(s => shipment.Postal.CustomsRecipientTin = s);
             }
         }
     }

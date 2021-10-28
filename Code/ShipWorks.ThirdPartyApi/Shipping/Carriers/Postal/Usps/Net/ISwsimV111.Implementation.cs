@@ -6,14 +6,14 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.WebServices
     /// <summary>
     /// Mark the web service as implementing the interface
     /// </summary>
-    public partial class SwsimV90 : ISwsimV90
+    public partial class SwsimV111 : ISwsimV111
     {
         /// <summary>
         /// Get account info
         /// </summary>
         public AccountInfoResult GetAccountInfo(Credentials credentials)
         {
-            AccountInfoV41 accountInfo;
+            AccountInfoV54 accountInfo;
             Address address;
 
             GetAccountInfo(credentials, out accountInfo, out address, out string customerEmail, out string accountStatus, out DateAdvance dateAdvanceConfig, out string verificationPhoneNumber, out string verificationPhoneExtension);
@@ -24,9 +24,9 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.WebServices
         /// <summary>
         /// Get rates
         /// </summary>
-        public RateV33[] GetRates(Credentials account, RateV33 rate, Carrier carrier)
+        public RateV40[] GetRates(Credentials account, RateV40 rate, Carrier carrier)
         {
-            RateV33[] rateResults;
+            RateV40[] rateResults;
 
             GetRates(account, rate, carrier, out rateResults);
 
@@ -58,7 +58,10 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.WebServices
                 ref integratorTxID,
                 ref rate,
                 parameters.From,
-                parameters.To,
+                null,
+                false,
+                null,
+                false,
                 parameters.CustomerID,
                 parameters.Mode,
                 parameters.ImageType,
@@ -128,7 +131,6 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.WebServices
                 ref trackingNumber,
                 ref rate,
                 parameters.From,
-                parameters.To,
                 parameters.CustomerID,
                 parameters.Customs,
                 parameters.SampleOnly,
@@ -167,7 +169,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.WebServices
                 parameters.RateToken,
                 parameters.OrderId,
                 false, // BypassCleanseAddress
-                0, //image id,
+                0, // image id,
                 ref reference1, // Reference1
                 ref reference2, // Reference2
                 ref reference3, // Reference3
@@ -176,6 +178,9 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.WebServices
                 null, // ExtendedPostageInfo
                 EnclosedServiceType.Unknown,
                 EnclosedPackageType.Unknown,
+                null, // OrderDetails
+                null, // BrandingId
+                false, // BrandingIdSpecified
                 out string encodedTrackingNumber,
                 out string bannerText,
                 out string trailingSuperScript,
@@ -189,7 +194,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.WebServices
                 out holdForPickup,
                 out formURL,
                 out string labelCategory,
-                out byte[] indiciumData);
+                out byte[] indiciumData,
+                out string labelId);
 
             return new CreateIndiciumResult
             {

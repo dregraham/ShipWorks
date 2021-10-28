@@ -174,7 +174,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.WebTools
             xmlWriter.WriteElementString("POZipCode", "");
             xmlWriter.WriteElementString("ImageType", "GIF");
             xmlWriter.WriteElementString("LabelDate", string.Format("{0:MM/dd/yyyy}", shipment.ShipDate.ToLocalTime()));
-
+            //FromCustomsReference
             GenerateCustomsXml(xmlWriter, postalShipment);
 
             xmlWriter.WriteEndElement();
@@ -197,6 +197,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.WebTools
                 {
                     xmlWriter.WriteElementString("ContentComments", postalShipment.CustomsContentDescription);
                 }
+
+                //if (postalShipment.CustomsRecipientTin)
             }
         }
 

@@ -39,6 +39,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
                 ApplyProfileValue(uspsProfile.HidePostage, uspsShipment, UspsShipmentFields.HidePostage);
                 ApplyProfileValue(uspsProfile.RateShop, uspsShipment, UspsShipmentFields.RateShop);
                 ApplyProfileValue(uspsProfile.PostalProfile.Profile.Insurance, uspsShipment, UspsShipmentFields.Insurance);
+                ApplyProfileValue(uspsProfile.PostalProfile.CustomsRecipientTin, uspsShipment, UspsShipmentFields.CustomsRecipientTin);
             }
         }
     }
