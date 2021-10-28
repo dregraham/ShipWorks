@@ -259,13 +259,13 @@ namespace ShipWorks.OrderLookup.ScanPack
             }
             else
             {
+                UpdateItemInCollections(sourceItem, sourceItems, targetItems);
+                
                 // Is part of bundle
                 if (sourceItem.ParentSortIdentifier.HasValue)
                 {
                     UpdateBundleInCollections(sourceItem, sourceItems, targetItems);
                 }
-
-                UpdateItemInCollections(sourceItem, sourceItems, targetItems);
             }
 
             if (result.Success)
@@ -330,9 +330,7 @@ namespace ShipWorks.OrderLookup.ScanPack
 
             // Check if there are any other items left to pack in the bundle,
             // if not, remove the bundle from the source
-            if (sourceItems.Any(x =>
-                x != sourceItem &&
-                x.ParentSortIdentifier == sourceItem.ParentSortIdentifier))
+            if (sourceItems.Any(x => x.ParentSortIdentifier == sourceItem.ParentSortIdentifier))
             {
                 bundle.IsBundleComplete = false;
             }
