@@ -373,7 +373,7 @@ namespace ShipWorks.OrderLookup.Tests.ScanPack
             testObject.ProcessItemScan("bundleSku");
             
             Assert.True(testObject.Error);
-            Assert.Equal("Can not scan bundle with items that have been scanned.", testObject.ScanHeader);
+            Assert.Equal("Cannot scan incomplete bundles", testObject.ScanHeader);
         }
         
         [Fact]

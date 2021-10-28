@@ -354,7 +354,7 @@ namespace ShipWorks.OrderLookup.ScanPack
         {
             if (!sourceItem.IsBundleComplete)
             {
-                return Result.FromError("Can not scan bundle with items that have been scanned.");
+                return Result.FromError("Cannot scan incomplete bundles");
             }
 
             var bundle = sourceItems.Where(x =>
