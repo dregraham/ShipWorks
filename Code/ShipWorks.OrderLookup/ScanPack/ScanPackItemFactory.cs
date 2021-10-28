@@ -81,13 +81,13 @@ namespace ShipWorks.OrderLookup.ScanPack
                     quantityToAdd = itemQuantity;
                 }
 
-                var parentSortIdentifier = AddItem(product, item, null, quantityToAdd);
+                var parentSortIdentifier = AddScanPackItem(product, item, null, quantityToAdd, true);
                 
                 itemQuantity -= quantityToAdd;
 
                 foreach (var bundledItem in product.Product.Bundles)
                 {
-                    AddItem(bundledItem.ChildVariant, null, parentSortIdentifier, bundledItem.Quantity * quantityToAdd);
+                    AddScanPackItem(bundledItem.ChildVariant, null, parentSortIdentifier, bundledItem.Quantity * quantityToAdd);
                 }
             }
         }
@@ -97,15 +97,15 @@ namespace ShipWorks.OrderLookup.ScanPack
         /// </summary>
         private void AddItem(OrderItemEntity item, ProductVariantEntity product)
         {
-            Debug.Assert(product == null || product.Product.IsBundle==false, "A bundle should never be sent to this method.");
+            Debug.Assert(product == null || product.Product.IsBundle == false, "A bundle should never be sent to this method.");
 
-            AddItem(product, item, null, item.Quantity);
+            AddScanPackItem(product, item, null, item.Quantity);
         }
 
         /// <summary>
         /// Adds a ScanPackItem to the collection and returns the identifier
         /// </summary>
-        private int AddItem(ProductVariantEntity product, OrderItemEntity item, int? parentSortIdentifier, double quantity)
+        private int AddScanPackItem(ProductVariantEntity product, OrderItemEntity item, int? parentSortIdentifier, double quantity, bool isBundle = false)
         {
             string imageUrl = product?.ImageUrl;
             if (imageUrl.IsNullOrWhiteSpace())
@@ -122,7 +122,6 @@ namespace ShipWorks.OrderLookup.ScanPack
             string itemCode = item?.Code ?? string.Empty;
             string productUpc = product?.UPC ?? string.Empty;
             string sku = item?.SKU ?? string.Empty;
-            bool isBundle = product?.Product.IsBundle ?? false;
 
             int sortIdentifier = scanPackItems.Count;
 

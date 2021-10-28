@@ -144,13 +144,6 @@ namespace ShipWorks.OrderLookup.ScanPack
             }
             else
             {
-                // only play the sound if a user is logged in
-                // this will ensure that the sound does not play during unit tests
-                if (UserSession.IsLoggedOn)
-                {
-                    SystemSounds.Asterisk.Play();
-                }
-
                 ScanPackItem packedItem = GetScanPackItem(scannedText, PackedItems);
 
                 using (TrackedEvent trackedEvent = new TrackedEvent("PickAndPack.ItemNotFound"))
@@ -158,16 +151,14 @@ namespace ShipWorks.OrderLookup.ScanPack
                     if (packedItem == null)
                     {
                         trackedEvent.AddProperty("Reason", "NotPacked");
-                        ScanHeader = "Last scan did not match. Scan another item to continue.";
+                        HandleError("Last scan did not match. Scan another item to continue.");
                     }
                     else
                     {
                         trackedEvent.AddProperty("Reason", "AlreadyPacked");
-                        ScanHeader = "Item has already been packed";
+                        HandleError("Item has already been packed");
                     }
                 }
-
-                Error = true;
             }
         }
 
@@ -176,15 +167,14 @@ namespace ShipWorks.OrderLookup.ScanPack
         /// </summary>
         public async Task LoadOrder(OrderEntity order)
         {
-            bool errorLoading = false;
-
+            Error = false;
+            
             orderBeingPacked = order;
             ItemsToScan.Clear();
             PackedItems.Clear();
             if (order == null)
             {
-                ScanHeader = "No matching orders were found.";
-                errorLoading = true;
+                HandleError("No matching orders were found.");
                 ScanFooter = string.Empty;
             }
             else if (orderBeingPacked.OrderItems.Any())
@@ -208,8 +198,6 @@ namespace ShipWorks.OrderLookup.ScanPack
                 ScanHeader = "This order does not contain any items";
                 ScanFooter = "Scan another order to continue";
             }
-
-            Error = errorLoading;
         }
 
         /// <summary>
@@ -290,8 +278,7 @@ namespace ShipWorks.OrderLookup.ScanPack
             }
             else
             {
-                ScanHeader = result.Message;
-                Error = true;
+                HandleError(result.Message);
             }
         }
 
@@ -447,14 +434,51 @@ namespace ShipWorks.OrderLookup.ScanPack
         /// Search the items in the given list for a upc matching the scanned text first, if none found, search the items
         /// again for a sku matching the scanned text
         /// </summary>
+        /// <remarks>
+        /// Priority order is
+        /// 1. individual items
+        /// 2. bundles not in progress
+        /// 2. bundles in progress
+        /// 3. items in bundles
+        /// </remarks>
         private ScanPackItem GetScanPackItem(string scannedText, ObservableCollection<ScanPackItem> listToSearch)
         {
             var matches = listToSearch.Where(x => x.IsMatch(scannedText)).ToList();
 
             // Try getting item that is not in a bundle first
-            var nonBundledItem = matches.FirstOrDefault(x => x.ParentSortIdentifier == null);
-            
-            return nonBundledItem ?? matches.FirstOrDefault();
+            var nonBundledItems = matches.Where(x => x.ParentSortIdentifier == null).ToList();
+            if (nonBundledItems.Any())
+            {
+                var item = nonBundledItems.FirstOrDefault(x => !x.IsBundle);
+                if (item != null)
+                {
+                    // individual item
+                    return item;
+                }
+
+                // bundle
+                return nonBundledItems.FirstOrDefault(x => x.IsBundleComplete) ?? nonBundledItems.FirstOrDefault();
+            }
+
+            // bundled item
+            return matches.FirstOrDefault();
+        }
+
+        /// <summary>
+        /// Handle the given error
+        /// </summary>
+        private void HandleError(string errorMessage)
+        {
+            // only play the sound if a user is logged in
+            // this will ensure that the sound does not play during unit tests
+            if (UserSession.IsLoggedOn)
+            {
+                SystemSounds.Asterisk.Play();
+            }
+
+            ScanHeader = errorMessage;
+
+            Error = true;
         }
     }
 }
