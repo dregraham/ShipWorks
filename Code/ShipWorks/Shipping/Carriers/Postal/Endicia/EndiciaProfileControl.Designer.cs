@@ -100,7 +100,7 @@
             this.groupBoxFrom.Controls.Add(this.labelAccount);
             this.groupBoxFrom.Controls.Add(this.endiciaAccount);
             this.groupBoxFrom.Controls.Add(this.stateAccount);
-            this.groupBoxFrom.Size = new System.Drawing.Size(360, 82);
+            this.groupBoxFrom.Size = new System.Drawing.Size(400, 82);
             this.groupBoxFrom.Controls.SetChildIndex(this.stateAccount, 0);
             this.groupBoxFrom.Controls.SetChildIndex(this.senderState, 0);
             this.groupBoxFrom.Controls.SetChildIndex(this.endiciaAccount, 0);
@@ -118,7 +118,7 @@
             this.groupShipment.Controls.Add(this.labelStealth);
             this.groupShipment.Controls.Add(this.stateStealth);
             this.groupShipment.Location = new System.Drawing.Point(8, 94);
-            this.groupShipment.Size = new System.Drawing.Size(360, 264);
+            this.groupShipment.Size = new System.Drawing.Size(400, 264);
             this.groupShipment.Controls.SetChildIndex(this.kryptonBorderEdge, 0);
             this.groupShipment.Controls.SetChildIndex(this.stateStealth, 0);
             this.groupShipment.Controls.SetChildIndex(this.labelStealth, 0);
@@ -152,7 +152,7 @@
             // groupBoxCustoms
             // 
             this.groupBoxCustoms.Location = new System.Drawing.Point(8, 514);
-            this.groupBoxCustoms.Size = new System.Drawing.Size(400, 54);
+            this.groupBoxCustoms.Size = new System.Drawing.Size(400, 78);
             this.groupBoxCustoms.TabIndex = 4;
             // 
             // tabPage
@@ -175,8 +175,8 @@
             // 
             this.groupReturns.Controls.Add(this.scanBasedPaymentState);
             this.groupReturns.Controls.Add(this.scanBasedPayment);
-            this.groupReturns.Location = new System.Drawing.Point(8, 974);
-            this.groupReturns.Size = new System.Drawing.Size(417, 139);
+            this.groupReturns.Location = new System.Drawing.Point(8, 989);
+            this.groupReturns.Size = new System.Drawing.Size(400, 139);
             this.groupReturns.TabIndex = 8;
             this.groupReturns.Controls.SetChildIndex(this.kryptonBorderEdge3, 0);
             this.groupReturns.Controls.SetChildIndex(this.returnState, 0);
@@ -324,7 +324,7 @@
             this.groupBoxRubberStamps.Controls.Add(this.labelRubberStamp2);
             this.groupBoxRubberStamps.Controls.Add(this.rubberStamp1);
             this.groupBoxRubberStamps.Controls.Add(this.labelRubberStamp1);
-            this.groupBoxRubberStamps.Location = new System.Drawing.Point(8, 574);
+            this.groupBoxRubberStamps.Location = new System.Drawing.Point(8, 594);
             this.groupBoxRubberStamps.Name = "groupBoxRubberStamps";
             this.groupBoxRubberStamps.Size = new System.Drawing.Size(400, 304);
             this.groupBoxRubberStamps.TabIndex = 5;
@@ -603,9 +603,9 @@
             this.groupParcelSelect.Controls.Add(this.labelSortType);
             this.groupParcelSelect.Controls.Add(this.sortType);
             this.groupParcelSelect.Controls.Add(this.stateSortType);
-            this.groupParcelSelect.Location = new System.Drawing.Point(8, 878);
+            this.groupParcelSelect.Location = new System.Drawing.Point(8, 898);
             this.groupParcelSelect.Name = "groupParcelSelect";
-            this.groupParcelSelect.Size = new System.Drawing.Size(366, 90);
+            this.groupParcelSelect.Size = new System.Drawing.Size(400, 90);
             this.groupParcelSelect.TabIndex = 7;
             this.groupParcelSelect.TabStop = false;
             this.groupParcelSelect.Text = "Parcel Select";
@@ -704,7 +704,7 @@
             this.groupLabels.Controls.Add(this.kryptonBorderEdge11);
             this.groupLabels.Location = new System.Drawing.Point(8, 364);
             this.groupLabels.Name = "groupLabels";
-            this.groupLabels.Size = new System.Drawing.Size(360, 58);
+            this.groupLabels.Size = new System.Drawing.Size(400, 58);
             this.groupLabels.TabIndex = 2;
             this.groupLabels.TabStop = false;
             this.groupLabels.Text = "Labels";

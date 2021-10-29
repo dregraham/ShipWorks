@@ -69,11 +69,11 @@
             this.sectionGeneral.ContentPanel.Controls.Add(this.labelCustomsRecipientTin);
             this.sectionGeneral.ContentPanel.Controls.Add(this.customsRecipientTin);
             this.sectionGeneral.Location = new System.Drawing.Point(6, 5);
-            this.sectionGeneral.Size = new System.Drawing.Size(572, 135);
+            this.sectionGeneral.Size = new System.Drawing.Size(572, 115);
             // 
             // otherDetail
             // 
-            this.otherDetail.Location = new System.Drawing.Point(98, 60);
+            this.otherDetail.Location = new System.Drawing.Point(268, 34);
             this.otherDetail.MaxLength = 15;
             this.fieldLengthProvider.SetMaxLengthSource(this.otherDetail, ShipWorks.Data.Utility.EntityFieldLengthSource.PostalCustomsDescription);
             this.otherDetail.Name = "otherDetail";
@@ -85,7 +85,7 @@
             // 
             this.labelOtherDetail.AutoSize = true;
             this.labelOtherDetail.BackColor = System.Drawing.Color.Transparent;
-            this.labelOtherDetail.Location = new System.Drawing.Point(30, 63);
+            this.labelOtherDetail.Location = new System.Drawing.Point(202, 37);
             this.labelOtherDetail.Name = "labelOtherDetail";
             this.labelOtherDetail.Size = new System.Drawing.Size(64, 13);
             this.labelOtherDetail.TabIndex = 4;
@@ -96,7 +96,7 @@
             // 
             this.contentType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.contentType.FormattingEnabled = true;
-            this.contentType.Location = new System.Drawing.Point(98, 34);
+            this.contentType.Location = new System.Drawing.Point(63, 34);
             this.contentType.Name = "contentType";
             this.contentType.Size = new System.Drawing.Size(132, 21);
             this.contentType.TabIndex = 3;
@@ -105,7 +105,7 @@
             // 
             this.labelContent.AutoSize = true;
             this.labelContent.BackColor = System.Drawing.Color.Transparent;
-            this.labelContent.Location = new System.Drawing.Point(43, 37);
+            this.labelContent.Location = new System.Drawing.Point(5, 37);
             this.labelContent.Name = "labelContent";
             this.labelContent.Size = new System.Drawing.Size(50, 13);
             this.labelContent.TabIndex = 2;
@@ -115,7 +115,7 @@
             //
             this.labelCustomsRecipientTin.AutoSize = true;
             this.labelCustomsRecipientTin.BackColor = System.Drawing.Color.Transparent;
-            this.labelCustomsRecipientTin.Location = new System.Drawing.Point(5, 90);
+            this.labelCustomsRecipientTin.Location = new System.Drawing.Point(5, 63);
             this.labelCustomsRecipientTin.Name = "labelCustomsRecipientTin";
             this.labelCustomsRecipientTin.Size = new System.Drawing.Size(65, 20);
             this.labelCustomsRecipientTin.TabIndex = 4;
@@ -123,7 +123,7 @@
             //
             // custumsRecipientTin
             //
-            this.customsRecipientTin.Location = new System.Drawing.Point(98, 87);
+            this.customsRecipientTin.Location = new System.Drawing.Point(98, 60);
             this.customsRecipientTin.Size = new System.Drawing.Size(132, 21);
             this.customsRecipientTin.Name = "customsRecipientTin";
             this.customsRecipientTin.TabIndex = 5;
