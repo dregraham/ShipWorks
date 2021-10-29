@@ -378,6 +378,9 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
                 new LabelsOutline(container.Context, shipment, labels, () => ImageFormat.Png),
                 ElementOutline.If(() => shipment().Processed));
 
+            //Add the tax id
+            container.AddElement("TIN", () => ($"{loaded().Postal.CustomsRecipientTin}"));
+
             // Legacy stuff
             ElementOutline outline = container.AddElement("USPS", ElementOutline.If(() => shipment().Processed));
             outline.AddAttributeLegacy2x();

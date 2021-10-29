@@ -314,7 +314,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
             container.AddElement("Labels",
                 new LabelsOutline(container.Context, shipment, labels, () => ImageFormat.Png),
                 ElementOutline.If(() => shipment().Processed));
-
+            //Add the tax id
             container.AddElement("TIN", () => ($"{loaded().Postal.CustomsRecipientTin}"));
 
         }
