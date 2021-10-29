@@ -57,6 +57,8 @@ namespace ShipWorks.Shipping.Carriers.Postal
 
             shipment.Postal.Insurance = false;
 
+            shipment.Postal.CustomsRecipientTin = String.Empty;
+
             base.ConfigureNewShipment(shipment);
         }
 

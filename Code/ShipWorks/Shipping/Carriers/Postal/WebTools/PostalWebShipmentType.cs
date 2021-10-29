@@ -57,6 +57,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.WebTools
             container.AddElement("Labels",
                 new LabelsOutline(container.Context, shipment, labels, () => ImageFormat.Png),
                 ElementOutline.If(() => shipment().Processed));
+
+            //Add tax id
             container.AddElement("TIN", () => ($"{loaded().Postal.CustomsRecipientTin}"));
 
             // Lazily evaluate the full path to the primary label
