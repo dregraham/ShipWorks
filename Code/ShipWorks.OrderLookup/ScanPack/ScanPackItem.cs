@@ -60,16 +60,19 @@ namespace ShipWorks.OrderLookup.ScanPack
         /// <summary>
         /// True if product is a Bundle
         /// </summary>
+        [Obfuscation(Exclude = true)]
         public bool IsBundle { get; }
         
         /// <summary>
         /// The identifier of the parent bundle - Otherwise null
         /// </summary>
+        [Obfuscation(Exclude = true)]
         public int? ParentSortIdentifier { get; }
         
         /// <summary>
         /// True if all items are in bundle otherwise false 
         /// </summary>
+        [Obfuscation(Exclude = true)]
         public bool IsBundleComplete { get; set; }
 
         /// <summary>
