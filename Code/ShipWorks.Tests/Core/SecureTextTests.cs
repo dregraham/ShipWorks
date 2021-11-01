@@ -86,6 +86,30 @@ namespace ShipWorks.Tests.Core
         }
 
         [Fact]
+        public void DecryptWorks_AfterClearingCache()
+        {
+            // There used to be an issue where we would cache a key for a given password
+            // but when encrypting, we would store a newly generated salt, instead of the
+            // salt for the cached key. This would result in decrypt failing after the cache was cleared
+
+            string password = "thePassword";
+
+            string firstTest = "blah";
+            string secondTest = "thing";
+
+            string encrypted1 = SecureText.Encrypt(firstTest, password);
+            string encrypted2 = SecureText.Encrypt(secondTest, password);
+            string decrypted1 = SecureText.Decrypt(encrypted1, password);
+
+            SecureText.ClearCache();
+
+            string decrypted2 = SecureText.Decrypt(encrypted2, password);
+
+            Assert.Equal(firstTest, decrypted1);
+            Assert.Equal(secondTest, decrypted2);
+        }
+
+        [Fact]
         public void EncryptNullSalt()
         {
             Assert.Throws<ArgumentNullException>(() => SecureText.Encrypt("", null));

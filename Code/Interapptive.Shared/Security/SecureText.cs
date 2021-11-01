@@ -80,5 +80,15 @@ namespace Interapptive.Shared.Security
 
             return new SecureTextVersion1(log).Encrypt(plaintext, password);
         }
+
+        /// <summary>
+        /// Clear the key cache
+        /// We can use any versioned secure text class because
+        /// the cache is in the base class
+        /// </summary>
+        public static void ClearCache()
+        {
+            new SecureTextVersion0(log).ClearCache();
+        }
     }
 }

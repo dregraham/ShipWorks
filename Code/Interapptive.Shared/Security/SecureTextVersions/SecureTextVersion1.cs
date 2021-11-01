@@ -49,13 +49,13 @@ namespace Interapptive.Shared.Security.SecureTextVersions
             var salt = encryptedBytes.Skip(EncryptedKeyLength + encryptedText.Length).Take(SaltLength).ToArray();
 
             // Derive the key used to encrypt the aesKey using the salt and the password
-            var derivedKey = GetKey(
+            var derivedKey = GetKeySaltPair(
                 password,
                 salt,
                 SCryptIterations,
                 SCryptBlockSize,
                 SCryptParallelismFactor,
-                AESKeyLength);
+                AESKeyLength).key;
 
             // Decrypt the aesKey with the derived key
             var decryptedKey = DecryptWithAesGcm(encryptedKey, derivedKey, NonceLength, TagLength);
@@ -80,13 +80,17 @@ namespace Interapptive.Shared.Security.SecureTextVersions
             new SecureRandom().NextBytes(salt);
 
             // Derive a key from the salt and password that will be used to encrypt the aesKey
-            var derivedKey = GetKey(
+            var derivedKeySaltPair = GetKeySaltPair(
                 password,
                 salt,
                 SecureTextVersion1.SCryptIterations,
                 SecureTextVersion1.SCryptBlockSize,
                 SecureTextVersion1.SCryptParallelismFactor,
                 SecureTextVersion1.AESKeyLength);
+
+            // Make sure we use the values from the cache if we have them
+            salt = derivedKeySaltPair.salt;
+            var derivedKey = derivedKeySaltPair.key;
 
             // Generate a random key that will be used to encrypt the plaintext
             var aesKey = new byte[SecureTextVersion1.AESKeyLength];
