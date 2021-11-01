@@ -3,20 +3,14 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Media;
-using System.Reactive.Linq;
 using System.Reflection;
-using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Input;
 using GalaSoft.MvvmLight;
-using GalaSoft.MvvmLight.CommandWpf;
 using GongSolutions.Wpf.DragDrop;
 using Interapptive.Shared.Metrics;
 using Interapptive.Shared.Utility;
-using ShipWorks.Core.Messaging;
 using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Shipping;
 using ShipWorks.Users;
 
 namespace ShipWorks.OrderLookup.ScanPack
@@ -147,17 +141,9 @@ namespace ShipWorks.OrderLookup.ScanPack
             if (itemScanned != null)
             {
                 ProcessItemScan(itemScanned, ItemsToScan, PackedItems);
-                Error = false;
             }
             else
             {
-                // only play the sound if a user is logged in
-                // this will ensure that the sound does not play during unit tests
-                if (UserSession.IsLoggedOn)
-                {
-                    SystemSounds.Asterisk.Play();
-                }
-
                 ScanPackItem packedItem = GetScanPackItem(scannedText, PackedItems);
 
                 using (TrackedEvent trackedEvent = new TrackedEvent("PickAndPack.ItemNotFound"))
@@ -165,34 +151,30 @@ namespace ShipWorks.OrderLookup.ScanPack
                     if (packedItem == null)
                     {
                         trackedEvent.AddProperty("Reason", "NotPacked");
-                        ScanHeader = "Last scan did not match. Scan another item to continue.";
+                        HandleError("Last scan did not match. Scan another item to continue.");
                     }
                     else
                     {
                         trackedEvent.AddProperty("Reason", "AlreadyPacked");
-                        ScanHeader = "Item has already been packed";
+                        HandleError("Item has already been packed");
                     }
                 }
-
-                Error = true;
             }
         }
-        
 
         /// <summary>
         /// Load the given order
         /// </summary>
         public async Task LoadOrder(OrderEntity order)
         {
-            bool errorLoading = false;
-
+            Error = false;
+            
             orderBeingPacked = order;
             ItemsToScan.Clear();
             PackedItems.Clear();
             if (order == null)
             {
-                ScanHeader = "No matching orders were found.";
-                errorLoading = true;
+                HandleError("No matching orders were found.");
                 ScanFooter = string.Empty;
             }
             else if (orderBeingPacked.OrderItems.Any())
@@ -216,8 +198,6 @@ namespace ShipWorks.OrderLookup.ScanPack
                 ScanHeader = "This order does not contain any items";
                 ScanFooter = "Scan another order to continue";
             }
-
-            Error = errorLoading;
         }
 
         /// <summary>
@@ -241,10 +221,8 @@ namespace ShipWorks.OrderLookup.ScanPack
         /// </summary>
         public void DragOver(IDropInfo dropInfo)
         {
-            ScanPackItem sourceItem = dropInfo.Data as ScanPackItem;
-            IEnumerable<ScanPackItem> targetItems = dropInfo.TargetCollection as IEnumerable<ScanPackItem>;
-
-            if (State != ScanPackState.OrderVerified && sourceItem != null && targetItems != null)
+            if (State != ScanPackState.OrderVerified && dropInfo.Data is ScanPackItem &&
+                dropInfo.TargetCollection is IEnumerable<ScanPackItem>)
             {
                 dropInfo.DropTargetAdorner = DropTargetAdorners.Highlight;
                 dropInfo.Effects = DragDropEffects.Copy;
@@ -256,17 +234,11 @@ namespace ShipWorks.OrderLookup.ScanPack
         /// </summary>
         public void Drop(IDropInfo dropInfo)
         {
-            Error = false;
-
-            ScanPackItem sourceItem = dropInfo.Data as ScanPackItem;
-            ObservableCollection<ScanPackItem> sourceItems = dropInfo.DragInfo.SourceCollection as ObservableCollection<ScanPackItem>;
-            ObservableCollection<ScanPackItem> targetItems = dropInfo.TargetCollection as ObservableCollection<ScanPackItem>;
-
             // Don't do anything if order is already verified or item is dropped onto the same list
             if (State != ScanPackState.OrderVerified &&
-                sourceItem != null &&
-                sourceItems != null &&
-                targetItems != null &&
+                dropInfo.Data is ScanPackItem sourceItem &&
+                dropInfo.DragInfo.SourceCollection is ObservableCollection<ScanPackItem> sourceItems &&
+                dropInfo.TargetCollection is ObservableCollection<ScanPackItem> targetItems &&
                 !sourceItems.Equals(targetItems))
             {
                 ProcessItemScan(sourceItem, sourceItems, targetItems);
@@ -276,10 +248,49 @@ namespace ShipWorks.OrderLookup.ScanPack
         /// <summary>
         /// Check both lists for scanned item and update quantities accordingly
         /// </summary>
-        private void ProcessItemScan(ScanPackItem sourceItem, ObservableCollection<ScanPackItem> sourceItems, ObservableCollection<ScanPackItem> targetItems)
+        private void ProcessItemScan(ScanPackItem sourceItem, ObservableCollection<ScanPackItem> sourceItems,
+            ObservableCollection<ScanPackItem> targetItems)
         {
-            // If someone has a product of qty of 1.3, the first scan will move 1 to packed and leave .3, the second scan qill pack .3
+            var result = Result.FromSuccess();
+
+            if (sourceItem.IsBundle)
+            {
+                result = ProcessBundleScan(sourceItem, sourceItems, targetItems);
+            }
+            else
+            {
+                UpdateItemInCollections(sourceItem, sourceItems, targetItems);
+                
+                // Is part of bundle
+                if (sourceItem.ParentSortIdentifier.HasValue)
+                {
+                    UpdateBundleInCollections(sourceItem, sourceItems, targetItems);
+                }
+            }
+
+            if (result.Success)
+            {
+                Update(true);
+                Error = false;
+
+                ItemsToScan = new ObservableCollection<ScanPackItem>(ItemsToScan.OrderBy(x => x.SortIdentifier));
+                PackedItems = new ObservableCollection<ScanPackItem>(PackedItems.OrderBy(x => x.SortIdentifier));
+            }
+            else
+            {
+                HandleError(result.Message);
+            }
+        }
+
+        /// <summary>
+        /// Update each collection for a scanned item
+        /// </summary>
+        private void UpdateItemInCollections(ScanPackItem sourceItem, ObservableCollection<ScanPackItem> sourceItems,
+            ObservableCollection<ScanPackItem> targetItems)
+        {
+            // If someone has a product of qty of 1.3, the first scan will move 1 to packed and leave .3, the second scan will pack .3
             double quantityPacked;
+
             // Update source list
             if (sourceItem.Quantity > 1)
             {
@@ -293,7 +304,8 @@ namespace ShipWorks.OrderLookup.ScanPack
             }
 
             // Update target list
-            ScanPackItem matchingTargetItem = targetItems.SingleOrDefault(x => x.OrderItemID == sourceItem.OrderItemID);
+            ScanPackItem matchingTargetItem =
+                targetItems.SingleOrDefault(x => x.SortIdentifier == sourceItem.SortIdentifier);
 
             if (matchingTargetItem == null)
             {
@@ -305,8 +317,57 @@ namespace ShipWorks.OrderLookup.ScanPack
             {
                 matchingTargetItem.Quantity += quantityPacked;
             }
+        }
 
-            Update(true);
+        /// <summary>
+        /// Updates the bundle in each collection as needed when an item in the bundle is scanned
+        /// </summary>
+        private void UpdateBundleInCollections(ScanPackItem sourceItem, ObservableCollection<ScanPackItem> sourceItems,
+            ObservableCollection<ScanPackItem> targetItems)
+        {
+            var bundle =
+                sourceItems.First(x => x.SortIdentifier == sourceItem.ParentSortIdentifier);
+
+            // Check if there are any other items left to pack in the bundle,
+            // if not, remove the bundle from the source
+            if (sourceItems.Any(x => x.ParentSortIdentifier == sourceItem.ParentSortIdentifier))
+            {
+                bundle.IsBundleComplete = false;
+            }
+            else
+            {
+                bundle.IsBundleComplete = true;
+                sourceItems.Remove(bundle);
+            }
+
+            if (!targetItems.Contains(bundle))
+            {
+                targetItems.Add(bundle);
+            }
+        }
+
+        /// <summary>
+        /// Processes the scan for a bundle 
+        /// </summary>
+        private Result ProcessBundleScan(ScanPackItem sourceItem, ObservableCollection<ScanPackItem> sourceItems,
+            ObservableCollection<ScanPackItem> targetItems)
+        {
+            if (!sourceItem.IsBundleComplete)
+            {
+                return Result.FromError("Cannot scan incomplete bundles");
+            }
+
+            var bundle = sourceItems.Where(x =>
+                x.SortIdentifier == sourceItem.SortIdentifier ||
+                x.ParentSortIdentifier == sourceItem.SortIdentifier).ToList();
+
+            foreach (var item in bundle)
+            {
+                sourceItems.Remove(item);
+                targetItems.Add(item);
+            }
+
+            return Result.FromSuccess();
         }
 
         /// <summary>
@@ -314,8 +375,8 @@ namespace ShipWorks.OrderLookup.ScanPack
         /// </summary>
         private void Update(bool itemScanned = false)
         {
-            double scannedItemCount = PackedItems.Select(GetUnitCount).Sum();
-            double totalItemCount = ItemsToScan.Select(GetUnitCount).Sum() + scannedItemCount;
+            double scannedItemCount = PackedItems.Where(x => !x.IsBundle).Select(GetUnitCount).Sum();
+            double totalItemCount = ItemsToScan.Where(x => !x.IsBundle).Select(GetUnitCount).Sum() + scannedItemCount;
 
             // No order scanned yet
             if (totalItemCount.IsEquivalentTo(0))
@@ -346,7 +407,8 @@ namespace ShipWorks.OrderLookup.ScanPack
                     if (itemScanned)
                     {
                         verifiedOrderService.Save(orderBeingPacked, true);
-                        orderLookupAutoPrintService.AutoPrintShipment(orderBeingPacked.OrderID, orderBeingPacked.OrderNumberComplete);
+                        orderLookupAutoPrintService.AutoPrintShipment(orderBeingPacked.OrderID,
+                            orderBeingPacked.OrderNumberComplete);
                     }
 
                     // Order has been scanned, all items have been scanned
@@ -370,7 +432,51 @@ namespace ShipWorks.OrderLookup.ScanPack
         /// Search the items in the given list for a upc matching the scanned text first, if none found, search the items
         /// again for a sku matching the scanned text
         /// </summary>
-        private ScanPackItem GetScanPackItem(string scannedText, ObservableCollection<ScanPackItem> listToSearch) =>
-            listToSearch.FirstOrDefault(x => x.IsMatch(scannedText));
+        /// <remarks>
+        /// Priority order is
+        /// 1. individual items
+        /// 2. bundles not in progress
+        /// 2. bundles in progress
+        /// 3. items in bundles
+        /// </remarks>
+        private ScanPackItem GetScanPackItem(string scannedText, ObservableCollection<ScanPackItem> listToSearch)
+        {
+            var matches = listToSearch.Where(x => x.IsMatch(scannedText)).ToList();
+
+            // Try getting item that is not in a bundle first
+            var nonBundledItems = matches.Where(x => x.ParentSortIdentifier == null).ToList();
+            if (nonBundledItems.Any())
+            {
+                var item = nonBundledItems.FirstOrDefault(x => !x.IsBundle);
+                if (item != null)
+                {
+                    // individual item
+                    return item;
+                }
+
+                // bundle
+                return nonBundledItems.FirstOrDefault(x => x.IsBundleComplete) ?? nonBundledItems.FirstOrDefault();
+            }
+
+            // bundled item
+            return matches.FirstOrDefault();
+        }
+
+        /// <summary>
+        /// Handle the given error
+        /// </summary>
+        private void HandleError(string errorMessage)
+        {
+            // only play the sound if a user is logged in
+            // this will ensure that the sound does not play during unit tests
+            if (UserSession.IsLoggedOn)
+            {
+                SystemSounds.Asterisk.Play();
+            }
+
+            ScanHeader = errorMessage;
+
+            Error = true;
+        }
     }
 }
