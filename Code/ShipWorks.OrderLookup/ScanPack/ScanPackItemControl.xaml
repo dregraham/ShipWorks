@@ -7,42 +7,65 @@
              xmlns:scanPack="clr-namespace:ShipWorks.OrderLookup.ScanPack"
              mc:Ignorable="d"
              Height="120"
-             d:DesignWidth="300"
+             d:DesignWidth="500"
              d:DataContext="{d:DesignInstance scanPack:ScanPackItem}"
-             BorderBrush="Black"
-             BorderThickness="1"
-             FontSize="20">
+             FontSize="20"
+             Background="Transparent">
     <UserControl.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="/ShipWorks.UI;component/Styles/BlueSteel/Shapes.xaml" />
                 <ResourceDictionary Source="/ShipWorks.UI;component/Styles/BlueSteel/TextBlockStyle.xaml" />
             </ResourceDictionary.MergedDictionaries>
+            <ui:NullToBooleanConverter x:Key="NullToBoolean" />
+            <scanPack:ScanPackItemQuantityConverter x:Key="ScanPackItemQuantity" />
         </ResourceDictionary>
     </UserControl.Resources>
-    <Grid Margin="5">
+    <Grid>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="Auto"/>
             <ColumnDefinition Width="*"/>
-            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="4*"/>
         </Grid.ColumnDefinitions>
-        <ui:ImageWithPlaceholder
-            Grid.Column="0"
-            Height="100"
-            Width="100"
-            Source="{Binding ImageUrl, IsAsync=True}"/>
-        <TextBlock
-            Grid.Column="1"
-            HorizontalAlignment="Left"
-            VerticalAlignment="Center"
-            Text="{Binding Name}"
-            Margin="10 0 10 0"
-            TextWrapping="Wrap"
-            TextTrimming="CharacterEllipsis"/>
-        <TextBlock
-            Grid.Column="2"
-            HorizontalAlignment="Right"
-            VerticalAlignment="Center"
-            Text="{Binding Quantity, StringFormat='x{0}'}"/>
+        
+        <Border Grid.ColumnSpan="2" 
+                Background="White"
+                BorderBrush="Black"
+                BorderThickness="1">
+            <Border.Style>
+                <Style TargetType="Border">
+                    <Style.Triggers>
+                        <!-- Indent if item is part of a bundle -->
+                        <DataTrigger Binding="{Binding ParentSortIdentifier, Converter={StaticResource NullToBoolean}}" Value="true">
+                            <Setter Property="Grid.Column" Value="1"/>
+                        </DataTrigger>  
+                    </Style.Triggers>
+                </Style>
+            </Border.Style>
+            <Grid Margin="5">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+                <ui:ImageWithPlaceholder
+                    Grid.Column="0"
+                    Height="100"
+                    Width="100"
+                    Source="{Binding ImageUrl, IsAsync=True}"/>
+                <TextBlock
+                    Grid.Column="1"
+                    HorizontalAlignment="Left"
+                    VerticalAlignment="Center"
+                    Text="{Binding Name}"
+                    Margin="10 0 10 0"
+                    TextWrapping="Wrap"
+                    TextTrimming="CharacterEllipsis"/>
+                <TextBlock
+                    Grid.Column="2"
+                    HorizontalAlignment="Right"
+                    VerticalAlignment="Center"
+                    Text="{Binding ., Converter={StaticResource ScanPackItemQuantity}}"/>
+            </Grid>
+        </Border>
     </Grid>
 </UserControl>
