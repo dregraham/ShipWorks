@@ -2050,7 +2050,7 @@
             this.groupBoxCustomsRecipientTIN.Size = new System.Drawing.Size(388, 90);
             this.groupBoxCustomsRecipientTIN.TabIndex = 1;
             this.groupBoxCustomsRecipientTIN.TabStop = false;
-            this.groupBoxCustomsRecipientTIN.Text = "Ioss Tax Id";
+            this.groupBoxCustomsRecipientTIN.Text = "Tax Identification";
             // 
             // customsRecipientTIN
             // 
