@@ -1,10 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.Caching;
 using Autofac;
 using Autofac.Features.OwnedInstances;
-using Interapptive.Shared.Collections;
 using Interapptive.Shared.Utility;
 using ShipWorks.ApplicationCore;
 using ShipWorks.ApplicationCore.Licensing;
@@ -47,6 +45,12 @@ namespace ShipWorks.Shipping
         /// </summary>
         public static IEnumerable<ShipmentTypeCode> EnabledShipmentTypeCodes =>
             ShipmentTypeCodes.Where(ShippingManager.IsShipmentTypeEnabled);
+
+        /// <summary>
+        /// Gets whether or not this user is ctp enabled 
+        /// based on the allowed shipment type codes
+        /// </summary>
+        public static bool IsUpsCtpEnabled => EnabledShipmentTypeCodes.All(t => t == ShipmentTypeCode.UpsOnLineTools || t == ShipmentTypeCode.Usps || t == ShipmentTypeCode.Other || t == ShipmentTypeCode.UpsWorldShip);
 
         /// <summary>
         /// Get the ShipmentTypeCode instance of the specified ShipmentEntity

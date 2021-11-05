@@ -47,8 +47,10 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools
         /// </summary>
         private void UpdateOneBalanceBannerVisibility()
         {
-            if (UpsAccountManager.AccountsReadOnly.None() || 
-                UpsAccountManager.AccountsReadOnly.All(a => string.IsNullOrWhiteSpace(a.ShipEngineCarrierId)))
+            var shouldShow = (UpsAccountManager.AccountsReadOnly.None() || UpsAccountManager.AccountsReadOnly.All(a => string.IsNullOrWhiteSpace(a.ShipEngineCarrierId))) &&
+                !ShipmentTypeManager.IsUpsCtpEnabled;
+
+            if (shouldShow)
             {
                 oneBalanceUpsBannerControl.Visible = true;
                 panel.Location = new Point(4, 89);

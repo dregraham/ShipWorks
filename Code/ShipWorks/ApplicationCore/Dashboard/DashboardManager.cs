@@ -28,6 +28,7 @@ using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Editions;
 using ShipWorks.Editions.Freemium;
 using ShipWorks.Email;
+using ShipWorks.Shipping;
 using ShipWorks.Shipping.Carriers.Postal.Usps;
 using ShipWorks.Shipping.Carriers.Ups.LocalRating.Validation;
 using ShipWorks.Stores;
@@ -419,7 +420,7 @@ namespace ShipWorks.ApplicationCore.Dashboard
                 }
             }
         }
-        
+
         /// <summary>
         /// Load trial information asynchronously
         /// </summary>
@@ -467,7 +468,7 @@ namespace ShipWorks.ApplicationCore.Dashboard
         }
 
         #endregion
-        
+
         /// <summary>
         /// Update the day count displayed next to each trial.  For users who leave ShipWorks open all the time this helps them still
         /// see the days count down.
@@ -487,7 +488,7 @@ namespace ShipWorks.ApplicationCore.Dashboard
             }
 
             dashboardItems.OfType<DashboardAccountTrialItem>().SingleOrDefault()?.UpdateTrialDisplay();
-            
+
             foreach (DashboardLegacyStoreTrialItem legacyStoreTrialItem in dashboardItems.OfType<DashboardLegacyStoreTrialItem>())
             {
                 legacyStoreTrialItem.UpdateTrialDisplay();
@@ -605,7 +606,7 @@ namespace ShipWorks.ApplicationCore.Dashboard
                                                       "Finish setting up ShipWorks.",
                                                       new DashboardActionMethod(
                                                           "[link]Quick Start[/link]", ShowQuickStart))
-                            {ShowTime = false};
+                        { ShowTime = false };
 
                     AddDashboardItem(quickStartDashboardItem);
                     quickStartDashboardItem.DashboardBar.CanUserDismiss = false;
@@ -834,7 +835,6 @@ namespace ShipWorks.ApplicationCore.Dashboard
         private static void CheckForOneBalanceChanges()
         {
             var oneBalanceItem = dashboardItems.OfType<DashboardOneBalancePromoItem>().SingleOrDefault();
-
             if (UspsAccountManager.UspsAccountsReadOnly.Any(e => !string.IsNullOrEmpty(e.ShipEngineCarrierId)))
             {
                 if (oneBalanceItem != null)
@@ -849,8 +849,9 @@ namespace ShipWorks.ApplicationCore.Dashboard
         /// </summary>
         public static void ShowOneBalancePromo()
         {
+            //If the customer has the ability to use any carriers but ups and usps they are not ctp so we want to show the promo
             var oneBalanceItem = dashboardItems.OfType<DashboardOneBalancePromoItem>().SingleOrDefault();
-            if (oneBalanceItem == null)
+            if (oneBalanceItem == null && !ShipmentTypeManager.IsUpsCtpEnabled)
             {
                 oneBalanceItem = new DashboardOneBalancePromoItem();
                 AddDashboardItem(oneBalanceItem);

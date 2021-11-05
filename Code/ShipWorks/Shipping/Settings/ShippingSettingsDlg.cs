@@ -130,6 +130,12 @@ namespace ShipWorks.Shipping.Settings
 
                 optionControl.OptionPages.Add(page);
             }
+
+            if (ShipmentTypeManager.IsUpsCtpEnabled)
+            {
+                //Remove OneBalance
+                this.optionControl.OptionPages.RemoveAt(1);
+            }
         }
 
         /// <summary>
@@ -321,12 +327,15 @@ namespace ShipWorks.Shipping.Settings
 
                 controlPanel.Controls.Add(upsControl);
 
-                OneBalanceUpsBannerControl upsOneBalanceControl = new OneBalanceUpsBannerControl();
-                upsOneBalanceControl.SetupComplete += new EventHandler(OnShipmentTypeSetupComplete);
+                if (!ShipmentTypeManager.IsUpsCtpEnabled)
+                {
+                    OneBalanceUpsBannerControl upsOneBalanceControl = new OneBalanceUpsBannerControl();
+                    upsOneBalanceControl.SetupComplete += new EventHandler(OnShipmentTypeSetupComplete);
 
-                upsOneBalanceControl.Dock = DockStyle.Top;
+                    upsOneBalanceControl.Dock = DockStyle.Top;
 
-                controlPanel.Controls.Add(upsOneBalanceControl);
+                    controlPanel.Controls.Add(upsOneBalanceControl);
+                }
 
                 return controlPanel;
             }

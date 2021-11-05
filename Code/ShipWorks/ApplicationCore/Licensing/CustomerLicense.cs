@@ -66,7 +66,7 @@ namespace ShipWorks.ApplicationCore.Licensing
             // The license info/capabilities should be cached for 10 minutes
             capabilitiesTimeToLive = new TimeSpan(0, 10, 0);
             lastRefreshTimeInUtc = DateTime.MinValue;
-            
+
             EnsureOnlyOneFeatureRestrictionPerEditionFeature();
         }
 
@@ -110,7 +110,7 @@ namespace ShipWorks.ApplicationCore.Licensing
         /// Details about the trial
         /// </summary>
         public TrialDetails TrialDetails => LicenseCapabilities?.TrialDetails ?? new TrialDetails();
- 
+
         /// <summary>
         /// Gets or sets the user name of the SDC account associated with this license.
         /// </summary>
@@ -124,8 +124,8 @@ namespace ShipWorks.ApplicationCore.Licensing
         /// <summary>
         /// The license capabilities.
         /// </summary>
-        private ILicenseCapabilities LicenseCapabilities { get; set; }
-        
+        public ILicenseCapabilities LicenseCapabilities { get; set; }
+
         /// <summary>
         /// Activate a new store
         /// </summary>
