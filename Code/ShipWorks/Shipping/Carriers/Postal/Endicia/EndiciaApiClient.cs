@@ -286,7 +286,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
 
             customs.ContentsType = EndiciaApiTransforms.GetCustomsContentTypeCode((PostalCustomsContentType) postal.CustomsContentType);
             customs.ContentsExplanation = postal.CustomsContentDescription;
-            customs.RecipientTaxID = StringUtility.Truncate(postal.CustomsRecipientTin, 24);
+            customs.SendersCustomsReference = StringUtility.Truncate(postal.CustomsRecipientTin, 24);
 
             List<CustomsItem> customsItems = new List<CustomsItem>();
             for (int i = 0; i < Math.Min(30, shipment.CustomsItems.Count); i++)
