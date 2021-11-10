@@ -70,7 +70,7 @@
             <TextBox
                 Grid.Row="1"
                 Grid.Column="1"
-                Text="{Binding ShipmentModel.ShipmentAdapter.Shipment.Ups.CustomsRecipientTIN, UpdateSourceTrigger=PropertyChanged}"
+                Text="{Binding ShipmentModel.ShipmentAdapter.Shipment.Postal.CustomsRecipientTin, UpdateSourceTrigger=PropertyChanged}"
                 Style="{StaticResource FormTextBox}" />
 
             <TextBlock
