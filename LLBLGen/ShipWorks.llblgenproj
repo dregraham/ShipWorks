@@ -2325,7 +2325,7 @@
           <Field Name="Confirmation" Type="int" IsOptional="true" FieldIndex="2" />
           <Field Name="CustomsContentDescription" Type="string" IsOptional="true" MaxLength="50" FieldIndex="7" />
           <Field Name="CustomsContentType" Type="int" IsOptional="true" FieldIndex="6" />
-          <Field Name="CustomsRecipientTin" Type="string" IsOptional="true" MaxLength="24" FieldIndex="15" />
+          <Field Name="CustomsRecipientTin" Type="string" IsOptional="true" MaxLength="14" FieldIndex="15" />
           <Field Name="EntryFacility" Type="int" IsOptional="true" FieldIndex="10" />
           <Field Name="ExpressSignatureWaiver" Type="bool" IsOptional="true" FieldIndex="8" />
           <Field Name="Memo1" Type="string" IsOptional="true" MaxLength="300" FieldIndex="11" />
@@ -2345,7 +2345,7 @@
           <Field Name="Confirmation" Type="int" FieldIndex="2" />
           <Field Name="CustomsContentDescription" Type="string" MaxLength="50" FieldIndex="13" />
           <Field Name="CustomsContentType" Type="int" FieldIndex="12" />
-          <Field Name="CustomsRecipientTin" Type="string" IsOptional="true" MaxLength="24" FieldIndex="23" />
+          <Field Name="CustomsRecipientTin" Type="string" IsOptional="true" MaxLength="14" FieldIndex="23" />
           <Field Name="DimsAddWeight" Type="bool" FieldIndex="9" />
           <Field Name="DimsHeight" Type="double" FieldIndex="7" />
           <Field Name="DimsLength" Type="double" FieldIndex="5" />
@@ -4705,7 +4705,7 @@
       <Catalogs>
         <Catalog Name="ShipWorksLocal">
           <Schemas>
-            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2021-10-28T17:12:13.9882957Z">
+            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2021-11-11T14:55:29.9817014Z">
               <Tables>
                 <Table Name="Action">
                   <PkConstraintName Name="PK_Action" />
@@ -8000,7 +8000,7 @@
                     <Field Name="Memo2" Ordinal="13" IsOptional="true" DbType="12" Length="300" />
                     <Field Name="Memo3" Ordinal="14" IsOptional="true" DbType="12" Length="300" />
                     <Field Name="NoPostage" Ordinal="15" IsOptional="true" DbType="2" />
-                    <Field Name="CustomsRecipientTin" Ordinal="16" IsOptional="true" DbType="12" Length="24" />
+                    <Field Name="CustomsRecipientTin" Ordinal="16" IsOptional="true" DbType="12" Length="14" />
                   </Fields>
                 </Table>
                 <Table Name="PostalShipment">
@@ -8061,7 +8061,7 @@
                     <Field Name="Memo3" Ordinal="21" DbType="12" Length="300" />
                     <Field Name="NoPostage" Ordinal="22" HasDefaultValue="true" DefaultValue="(0)" DbType="2" />
                     <Field Name="Insurance" Ordinal="23" DbType="2" />
-                    <Field Name="CustomsRecipientTin" Ordinal="24" IsOptional="true" DbType="12" Length="24" />
+                    <Field Name="CustomsRecipientTin" Ordinal="24" IsOptional="true" DbType="12" Length="14" />
                   </Fields>
                 </Table>
                 <Table Name="PrintResult">

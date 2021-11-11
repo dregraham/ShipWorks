@@ -906,7 +906,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 
 		/// <summary> The CustomsRecipientTin property of the Entity PostalShipment<br/><br/></summary>
 		/// <remarks>Mapped on  table field: "PostalShipment"."CustomsRecipientTin"<br/>
-		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 24<br/>
+		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 14<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
 		[DataMember]
 		public virtual System.String CustomsRecipientTin
