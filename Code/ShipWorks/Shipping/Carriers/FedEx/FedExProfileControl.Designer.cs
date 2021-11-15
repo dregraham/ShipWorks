@@ -2299,7 +2299,7 @@
             this.groupBoxCustomsRecipientTIN.Size = new System.Drawing.Size(553, 72);
             this.groupBoxCustomsRecipientTIN.TabIndex = 0;
             this.groupBoxCustomsRecipientTIN.TabStop = false;
-            this.groupBoxCustomsRecipientTIN.Text = "Ioss Tax Id";
+            this.groupBoxCustomsRecipientTIN.Text = "Tax Identification";
             // 
             // customsRecipientTIN
             // 

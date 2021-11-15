@@ -124,6 +124,10 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
             // Known values we ignore
             switch (mailClass)
             {
+                case "UPSWorldwideExpress":
+                case "UPSWorldwideExpressPlus":
+                case "UPSWorldwideExpedited":
+                case "UPSWorldwideSaver":
                 case "GXG":
                     return null;
             }

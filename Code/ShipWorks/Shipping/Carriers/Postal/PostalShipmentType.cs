@@ -57,6 +57,8 @@ namespace ShipWorks.Shipping.Carriers.Postal
 
             shipment.Postal.Insurance = false;
 
+            shipment.Postal.CustomsRecipientTin = String.Empty;
+
             base.ConfigureNewShipment(shipment);
         }
 
@@ -140,6 +142,7 @@ namespace ShipWorks.Shipping.Carriers.Postal
 
             postal.CustomsContentType = (int) PostalCustomsContentType.Merchandise;
             postal.CustomsContentDescription = "Other";
+            postal.CustomsRecipientTin = string.Empty;
 
             postal.ExpressSignatureWaiver = false;
 

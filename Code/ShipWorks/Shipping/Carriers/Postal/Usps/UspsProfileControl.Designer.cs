@@ -514,11 +514,9 @@
             this.groupLabels.ResumeLayout(false);
             this.groupLabels.PerformLayout();
             this.ResumeLayout(false);
-
         }
 
         #endregion
-
         private System.Windows.Forms.ComboBox uspsAccount;
         private System.Windows.Forms.Label labelAccount;
         private System.Windows.Forms.CheckBox stateAccount;

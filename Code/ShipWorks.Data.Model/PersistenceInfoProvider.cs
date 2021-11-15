@@ -2790,7 +2790,7 @@ namespace ShipWorks.Data.Model
 		/// <summary>Inits PostalProfileEntity's mappings</summary>
 		private void InitPostalProfileEntityMappings()
 		{
-			this.AddElementMapping("PostalProfileEntity", @"ShipWorksLocal", @"dbo", "PostalProfile", 15, 0);
+			this.AddElementMapping("PostalProfileEntity", @"ShipWorksLocal", @"dbo", "PostalProfile", 16, 0);
 			this.AddElementFieldMapping("PostalProfileEntity", "ShippingProfileID", "ShippingProfileID", false, "BigInt", 0, 19, 0, false, "", null, typeof(System.Int64), 0);
 			this.AddElementFieldMapping("PostalProfileEntity", "Service", "Service", true, "Int", 0, 10, 0, false, "", null, typeof(System.Int32), 1);
 			this.AddElementFieldMapping("PostalProfileEntity", "Confirmation", "Confirmation", true, "Int", 0, 10, 0, false, "", null, typeof(System.Int32), 2);
@@ -2806,12 +2806,13 @@ namespace ShipWorks.Data.Model
 			this.AddElementFieldMapping("PostalProfileEntity", "Memo2", "Memo2", true, "NVarChar", 300, 0, 0, false, "", null, typeof(System.String), 12);
 			this.AddElementFieldMapping("PostalProfileEntity", "Memo3", "Memo3", true, "NVarChar", 300, 0, 0, false, "", null, typeof(System.String), 13);
 			this.AddElementFieldMapping("PostalProfileEntity", "NoPostage", "NoPostage", true, "Bit", 0, 0, 0, false, "", null, typeof(System.Boolean), 14);
+			this.AddElementFieldMapping("PostalProfileEntity", "CustomsRecipientTin", "CustomsRecipientTin", true, "NVarChar", 14, 0, 0, false, "", null, typeof(System.String), 15);
 		}
 
 		/// <summary>Inits PostalShipmentEntity's mappings</summary>
 		private void InitPostalShipmentEntityMappings()
 		{
-			this.AddElementMapping("PostalShipmentEntity", @"ShipWorksLocal", @"dbo", "PostalShipment", 23, 0);
+			this.AddElementMapping("PostalShipmentEntity", @"ShipWorksLocal", @"dbo", "PostalShipment", 24, 0);
 			this.AddElementFieldMapping("PostalShipmentEntity", "ShipmentID", "ShipmentID", false, "BigInt", 0, 19, 0, false, "", null, typeof(System.Int64), 0);
 			this.AddElementFieldMapping("PostalShipmentEntity", "Service", "Service", false, "Int", 0, 10, 0, false, "", null, typeof(System.Int32), 1);
 			this.AddElementFieldMapping("PostalShipmentEntity", "Confirmation", "Confirmation", false, "Int", 0, 10, 0, false, "", null, typeof(System.Int32), 2);
@@ -2835,6 +2836,7 @@ namespace ShipWorks.Data.Model
 			this.AddElementFieldMapping("PostalShipmentEntity", "Memo3", "Memo3", false, "NVarChar", 300, 0, 0, false, "", null, typeof(System.String), 20);
 			this.AddElementFieldMapping("PostalShipmentEntity", "NoPostage", "NoPostage", false, "Bit", 0, 0, 0, false, "", null, typeof(System.Boolean), 21);
 			this.AddElementFieldMapping("PostalShipmentEntity", "Insurance", "Insurance", false, "Bit", 0, 0, 0, false, "", null, typeof(System.Boolean), 22);
+			this.AddElementFieldMapping("PostalShipmentEntity", "CustomsRecipientTin", "CustomsRecipientTin", true, "NVarChar", 14, 0, 0, false, "", null, typeof(System.String), 23);
 		}
 
 		/// <summary>Inits PrintResultEntity's mappings</summary>

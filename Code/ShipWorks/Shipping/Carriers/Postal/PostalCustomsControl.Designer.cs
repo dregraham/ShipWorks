@@ -32,6 +32,8 @@
             this.labelOtherDetail = new System.Windows.Forms.Label();
             this.contentType = new ShipWorks.UI.Controls.MultiValueComboBox();
             this.labelContent = new System.Windows.Forms.Label();
+            this.labelCustomsRecipientTin = new System.Windows.Forms.Label();
+            this.customsRecipientTin = new ShipWorks.UI.Controls.MultiValueTextBox();
             ((System.ComponentModel.ISupportInitialize) (this.sectionContents)).BeginInit();
             ((System.ComponentModel.ISupportInitialize) (this.sectionContents.ContentPanel)).BeginInit();
             this.sectionContents.ContentPanel.SuspendLayout();
@@ -64,8 +66,10 @@
             this.sectionGeneral.ContentPanel.Controls.Add(this.labelOtherDetail);
             this.sectionGeneral.ContentPanel.Controls.Add(this.contentType);
             this.sectionGeneral.ContentPanel.Controls.Add(this.labelContent);
+            this.sectionGeneral.ContentPanel.Controls.Add(this.labelCustomsRecipientTin);
+            this.sectionGeneral.ContentPanel.Controls.Add(this.customsRecipientTin);
             this.sectionGeneral.Location = new System.Drawing.Point(6, 5);
-            this.sectionGeneral.Size = new System.Drawing.Size(572, 98);
+            this.sectionGeneral.Size = new System.Drawing.Size(572, 115);
             // 
             // otherDetail
             // 
@@ -106,6 +110,23 @@
             this.labelContent.Size = new System.Drawing.Size(50, 13);
             this.labelContent.TabIndex = 2;
             this.labelContent.Text = "Content:";
+            //
+            // labelCustomsRecipientTin
+            //
+            this.labelCustomsRecipientTin.AutoSize = true;
+            this.labelCustomsRecipientTin.BackColor = System.Drawing.Color.Transparent;
+            this.labelCustomsRecipientTin.Location = new System.Drawing.Point(5, 63);
+            this.labelCustomsRecipientTin.Name = "labelCustomsRecipientTin";
+            this.labelCustomsRecipientTin.Size = new System.Drawing.Size(65, 20);
+            this.labelCustomsRecipientTin.TabIndex = 4;
+            this.labelCustomsRecipientTin.Text = "Recipient Tax ID:";
+            //
+            // custumsRecipientTin
+            //
+            this.customsRecipientTin.Location = new System.Drawing.Point(98, 60);
+            this.customsRecipientTin.Size = new System.Drawing.Size(132, 21);
+            this.customsRecipientTin.Name = "customsRecipientTin";
+            this.customsRecipientTin.TabIndex = 5;
             // 
             // PostalCustomsControl
             // 
@@ -131,5 +152,7 @@
         private System.Windows.Forms.Label labelOtherDetail;
         private ShipWorks.UI.Controls.MultiValueComboBox contentType;
         private System.Windows.Forms.Label labelContent;
+        private System.Windows.Forms.Label labelCustomsRecipientTin;
+        private ShipWorks.UI.Controls.MultiValueTextBox customsRecipientTin;
     }
 }

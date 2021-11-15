@@ -60,6 +60,8 @@ namespace ShipWorks.Shipping.Carriers.Postal
             ApplyProfileValue(postalProfile.NoPostage, postalShipment, PostalShipmentFields.NoPostage);
             ApplyProfileValue(postalProfile.Profile.Insurance, postalShipment, PostalShipmentFields.Insurance);
 
+            ApplyProfileValue(postalProfile.CustomsRecipientTin, postalShipment, PostalShipmentFields.CustomsRecipientTin);
+
             ShipmentType shipmentType = shipmentTypeManager.Get(shipment);
 
             shipmentType.UpdateDynamicShipmentData(shipment);

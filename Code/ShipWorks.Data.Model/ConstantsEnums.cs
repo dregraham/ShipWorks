@@ -9978,6 +9978,8 @@ namespace ShipWorks.Data.Model
 		Memo3,
 		///<summary>NoPostage. </summary>
 		NoPostage,
+		///<summary>CustomsRecipientTin. </summary>
+		CustomsRecipientTin,
 		/// <summary></summary>
 		AmountOfFields
 	}
@@ -10030,6 +10032,8 @@ namespace ShipWorks.Data.Model
 		NoPostage,
 		///<summary>Insurance. </summary>
 		Insurance,
+		///<summary>CustomsRecipientTin. </summary>
+		CustomsRecipientTin,
 		/// <summary></summary>
 		AmountOfFields
 	}

@@ -58,6 +58,9 @@ namespace ShipWorks.Shipping.Carriers.Postal.WebTools
                 new LabelsOutline(container.Context, shipment, labels, () => ImageFormat.Png),
                 ElementOutline.If(() => shipment().Processed));
 
+            //Add tax id
+            container.AddElement("TIN", () => ($"{loaded().Postal.CustomsRecipientTin}"));
+
             // Lazily evaluate the full path to the primary label
             Lazy<string> primaryLabelPath = new Lazy<string>(() => labels.Value.Single(l => l.Category == TemplateLabelCategory.Primary).Resource.GetAlternateFilename(TemplateLabelUtility.GetFileExtension(ImageFormat.Png)));
 
@@ -67,6 +70,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.WebTools
             outline.AddElement("LabelOnly", () => primaryLabelPath.Value, ElementOutline.If(() => labels.Value.Count > 0));
             outline.AddElement("LabelOnlyRot90", () => TemplateLabelUtility.GenerateRotatedLabel(RotateFlipType.Rotate90FlipNone, primaryLabelPath.Value), ElementOutline.If(() => labels.Value.Count > 0));
             outline.AddElement("LabelOnlyRot270", () => TemplateLabelUtility.GenerateRotatedLabel(RotateFlipType.Rotate270FlipNone, primaryLabelPath.Value), ElementOutline.If(() => labels.Value.Count > 0));
+
         }
 
         /// <summary>

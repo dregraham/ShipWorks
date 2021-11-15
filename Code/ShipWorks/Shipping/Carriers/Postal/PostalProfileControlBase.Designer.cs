@@ -82,6 +82,9 @@
             this.pictureBoxReturnWarning = new System.Windows.Forms.PictureBox();
             this.applyReturnProfileState = new System.Windows.Forms.CheckBox();
             this.includeReturnState = new System.Windows.Forms.CheckBox();
+            this.labelCustomsRecipientTin = new System.Windows.Forms.Label();
+            this.customsRecipientTinState = new System.Windows.Forms.CheckBox();
+            this.customsRecipientTin = new ShipWorks.UI.Controls.MultiValueTextBox();
             this.fieldLengthProvider = new ShipWorks.Data.Utility.EntityFieldLengthProvider(this.components);
             this.tabControl.SuspendLayout();
             this.tabPage.SuspendLayout();
@@ -128,7 +131,7 @@
             this.groupExpressMail.Controls.Add(this.expressSignatureRequirement);
             this.groupExpressMail.Controls.Add(this.expressSignatureRequirementState);
             this.groupExpressMail.Controls.Add(this.kryptonBorderEdge5);
-            this.groupExpressMail.Location = new System.Drawing.Point(8, 441);
+            this.groupExpressMail.Location = new System.Drawing.Point(8, 461);
             this.groupExpressMail.Name = "groupExpressMail";
             this.groupExpressMail.Size = new System.Drawing.Size(417, 53);
             this.groupExpressMail.TabIndex = 4;
@@ -180,7 +183,7 @@
             this.groupReturns.Controls.Add(this.returnShipment);
             this.groupReturns.Controls.Add(this.returnState);
             this.groupReturns.Controls.Add(this.kryptonBorderEdge3);
-            this.groupReturns.Location = new System.Drawing.Point(8, 501);
+            this.groupReturns.Location = new System.Drawing.Point(8, 521);
             this.groupReturns.Name = "groupReturns";
             this.groupReturns.Size = new System.Drawing.Size(417, 117);
             this.groupReturns.TabIndex = 5;
@@ -355,13 +358,15 @@
             this.groupBoxCustoms.Controls.Add(this.labelContent);
             this.groupBoxCustoms.Controls.Add(this.kryptonBorderEdge2);
             this.groupBoxCustoms.Controls.Add(this.customsContentState);
+            this.groupBoxCustoms.Controls.Add(this.customsRecipientTinState);
+            this.groupBoxCustoms.Controls.Add(this.labelCustomsRecipientTin);
+            this.groupBoxCustoms.Controls.Add(this.customsRecipientTin);
             this.groupBoxCustoms.Location = new System.Drawing.Point(8, 380);
             this.groupBoxCustoms.Name = "groupBoxCustoms";
-            this.groupBoxCustoms.Size = new System.Drawing.Size(417, 54);
+            this.groupBoxCustoms.Size = new System.Drawing.Size(417, 78);
             this.groupBoxCustoms.TabIndex = 3;
             this.groupBoxCustoms.TabStop = false;
             this.groupBoxCustoms.Text = "Customs";
-            // 
             // contentDescription
             // 
             this.contentDescription.Location = new System.Drawing.Point(252, 18);
@@ -369,14 +374,14 @@
             this.fieldLengthProvider.SetMaxLengthSource(this.contentDescription, ShipWorks.Data.Utility.EntityFieldLengthSource.PostalCustomsDescription);
             this.contentDescription.Name = "contentDescription";
             this.contentDescription.Size = new System.Drawing.Size(154, 21);
-            this.contentDescription.TabIndex = 2;
+            this.contentDescription.TabIndex = 3;
             this.contentDescription.Visible = false;
             // 
             // contentType
             // 
             this.contentType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.contentType.FormattingEnabled = true;
-            this.contentType.Location = new System.Drawing.Point(110, 17);
+            this.contentType.Location = new System.Drawing.Point(147, 17);
             this.contentType.Name = "contentType";
             this.contentType.PromptText = "(Multiple Values)";
             this.contentType.Size = new System.Drawing.Size(136, 21);
@@ -387,7 +392,7 @@
             // 
             this.labelContent.AutoSize = true;
             this.labelContent.BackColor = System.Drawing.Color.Transparent;
-            this.labelContent.Location = new System.Drawing.Point(52, 20);
+            this.labelContent.Location = new System.Drawing.Point(90, 20);
             this.labelContent.Name = "labelContent";
             this.labelContent.Size = new System.Drawing.Size(50, 13);
             this.labelContent.TabIndex = 17;
@@ -399,7 +404,7 @@
             this.kryptonBorderEdge2.BorderStyle = ComponentFactory.Krypton.Toolkit.PaletteBorderStyle.GridDataCellSheet;
             this.kryptonBorderEdge2.Location = new System.Drawing.Point(29, 17);
             this.kryptonBorderEdge2.Name = "kryptonBorderEdge2";
-            this.kryptonBorderEdge2.Size = new System.Drawing.Size(1, 24);
+            this.kryptonBorderEdge2.Size = new System.Drawing.Size(1, 49);
             this.kryptonBorderEdge2.Text = "kryptonBorderEdge2";
             // 
             // customsContentState
@@ -413,7 +418,35 @@
             this.customsContentState.TabIndex = 0;
             this.customsContentState.Tag = "";
             this.customsContentState.UseVisualStyleBackColor = true;
-            // 
+            //
+            // customsRecipientTinState
+            //
+            this.customsRecipientTinState.AutoSize = true;
+            this.customsRecipientTinState.Checked = false;
+            this.customsRecipientTinState.Location = new System.Drawing.Point(9, 48);
+            this.customsRecipientTinState.Name = "customsRecipientTinState";
+            this.customsRecipientTinState.Size = new System.Drawing.Size(15, 14);
+            this.customsRecipientTinState.TabIndex = 2;
+            this.customsRecipientTinState.Tag = "";
+            this.customsRecipientTinState.UseVisualStyleBackColor = true;
+            //
+            // labelCustomsRecipientTin
+            //
+            this.labelCustomsRecipientTin.AutoSize = true;
+            this.labelCustomsRecipientTin.BackColor = System.Drawing.Color.Transparent;
+            this.labelCustomsRecipientTin.Location = new System.Drawing.Point(52, 48);
+            this.labelCustomsRecipientTin.Name = "labelCustomsRecipientTin";
+            this.labelCustomsRecipientTin.Size = new System.Drawing.Size(65, 20);
+            this.labelCustomsRecipientTin.TabIndex = 95;
+            this.labelCustomsRecipientTin.Text = "Recipient Tax ID:";
+            //
+            // customsRecipientTin
+            //
+            this.customsRecipientTin.Location = new System.Drawing.Point(147, 45);
+            this.customsRecipientTin.Name = "customsRecipientTin";
+            this.customsRecipientTin.Size = new System.Drawing.Size(136, 21);
+            this.customsRecipientTin.TabIndex = 95;
+            //
             // groupBoxFrom
             // 
             this.groupBoxFrom.Anchor = ((System.Windows.Forms.AnchorStyles) (((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
@@ -735,7 +768,9 @@
         }
 
         #endregion
-
+        private System.Windows.Forms.CheckBox customsRecipientTinState;
+        private System.Windows.Forms.Label labelCustomsRecipientTin;
+        private ShipWorks.UI.Controls.MultiValueTextBox customsRecipientTin;
         private System.Windows.Forms.TabControl tabControl;
         private System.Windows.Forms.CheckBox confirmationState;
         private System.Windows.Forms.CheckBox serviceState;

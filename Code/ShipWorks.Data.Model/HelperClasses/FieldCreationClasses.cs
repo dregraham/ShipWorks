@@ -23427,6 +23427,11 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(PostalProfileFieldIndex.NoPostage);}
 		}
+		/// <summary>Creates a new PostalProfileEntity.CustomsRecipientTin field instance</summary>
+		public static EntityField2 CustomsRecipientTin
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(PostalProfileFieldIndex.CustomsRecipientTin);}
+		}
 	}
 
 	/// <summary>Field Creation Class for entity PostalShipmentEntity</summary>
@@ -23546,6 +23551,11 @@ namespace ShipWorks.Data.Model.HelperClasses
 		public static EntityField2 Insurance
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(PostalShipmentFieldIndex.Insurance);}
+		}
+		/// <summary>Creates a new PostalShipmentEntity.CustomsRecipientTin field instance</summary>
+		public static EntityField2 CustomsRecipientTin
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(PostalShipmentFieldIndex.CustomsRecipientTin);}
 		}
 	}
 

@@ -10,11 +10,10 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
         public object Item { get; set; }
         public string IntegratorTxID { get; set; }
         public string TrackingNumber { get; set; }
-        public RateV33 Rate { get; set; }
+        public RateV40 Rate { get; set; }
         public Address From { get; set; }
-        public Address To { get; set; }
         public string CustomerID { get; set; }
-        public CustomsV5 Customs { get; set; }
+        public CustomsV7 Customs { get; set; }
         public bool SampleOnly { get; set; }
         public PostageMode PostageMode { get; set; }
         public ImageType ImageType { get; set; }

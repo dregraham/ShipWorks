@@ -388,7 +388,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api
                 if (errorLevel == "Success") return UpsApiResponseStatus.Success;
                 if (errorLevel == "Transient") return UpsApiResponseStatus.Transient;
                 if (errorLevel == "Hard") return UpsApiResponseStatus.Hard;
-                if (errorLevel == "Warning") return UpsApiResponseStatus.Warning;
+                if (errorLevel == "Warning") return UpsApiResponseStatus.Warning; 
 
                 throw new InvalidOperationException("Unhandled UPS response severity: " + errorLevel);
             }

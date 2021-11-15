@@ -6,7 +6,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
     /// <summary>
     /// Interface around the Stamps WebService
     /// </summary>
-    public interface ISwsimV90 : IDisposable
+    public interface ISwsimV111 : IDisposable
     {
         /// <summary>
         /// Url of the web service
@@ -27,7 +27,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
         /// <summary>
         /// Get account info
         /// </summary>
-        string GetAccountInfo(object Item, out AccountInfoV41 AccountInfo, out Address Address, out string CustomerEmail, out string accountStatus, out DateAdvance dateAdvanceConfig, out string verificationPhoneNumber, out string verificationPhoneExtension);
+        string GetAccountInfo(object Item, out AccountInfoV54 AccountInfo, out Address Address, out string CustomerEmail, out string accountStatus, out DateAdvance dateAdvanceConfig, out string verificationPhoneNumber, out string verificationPhoneExtension);
 
         /// <summary>
         /// Get account info
@@ -50,7 +50,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
         /// <summary>
         /// Get rates
         /// </summary>
-        RateV33[] GetRates(Credentials account, RateV33 rate, Carrier carrier);
+        RateV40[] GetRates(Credentials account, RateV40 rate, Carrier carrier);
 
         /// <summary>
         /// Cleanse the address
@@ -81,6 +81,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
                     bool SendEmailSpecified,
                     System.Nullable<bool> ResetPasswordAfterRegistration,
                     bool ResetPasswordAfterRegistrationSpecified,
+                    string UserCurrency,
                     out string SuggestedUserName,
                     out int UserId,
                     out string PromoUrl);
@@ -136,13 +137,13 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
         /// <param name="Carrier">Specifies carrier of the package.</param>
         /// <param name="DestinationInfo">Specifies the destination the package is headed to, if available.</param>
         /// <returns></returns>
-        string TrackShipment(object Item, object Item1, out TrackingEvent[] TrackingEvents, out DateTime? GuaranteedDeliveryDate,
-            out DateTime? ExpectedDeliveryDate, out string ServiceDescription, out string Carrier, out DestinationInfo DestinationInfo);
+        string TrackShipment(object Item, object Item1, Carrier Carrier, out TrackingEvent[] TrackingEvents, out DateTime? GuaranteedDeliveryDate,
+            out DateTime? ExpectedDeliveryDate, out string ServiceDescription, out string Carrier1, out DestinationInfo DestinationInfo);
 
         /// <summary>
         /// Add a carrier
         /// </summary>
-        string AddCarrier(object Item, bool UserOwnedAccount, Carrier Carrier, string AccountNumber, string AccountZIPCode, string AccountCountry, Address Address, bool AgreeToEula, Invoice Invoice, bool NegotiatedRates);
+        string AddCarrier(object Item, bool UserOwnedAccount, Carrier Carrier, string AccountNumber, string AccountZIPCode, string AccountCountry, Address Address, bool AgreeToEula, Invoice Invoice, bool NegotiatedRates, string DeviceIdentity);
 
         /// <summary>
         /// Set automatic funding settings

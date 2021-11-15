@@ -87,6 +87,7 @@ namespace ShipWorks.Shipping.Carriers.Postal
 
             AddValueMapping(postal, PostalProfileFields.CustomsContentType, customsContentState, contentType);
             AddValueMapping(postal, PostalProfileFields.CustomsContentDescription, customsContentState, contentDescription);
+            AddValueMapping(postal, PostalProfileFields.CustomsRecipientTin, customsRecipientTinState, customsRecipientTin);
 
             AddValueMapping(packageProfile, PackageProfileFields.DimsProfileID, dimensionsState, dimensionsControl,
                 labelDimensions);

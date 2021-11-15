@@ -471,6 +471,8 @@ namespace ShipWorks.Data.Model.EntityClasses
 			_fieldsCustomProperties.Add("NoPostage", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
 			_fieldsCustomProperties.Add("Insurance", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+			_fieldsCustomProperties.Add("CustomsRecipientTin", fieldHashtable);
 		}
 		#endregion
 
@@ -900,6 +902,17 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			get { return (System.Boolean)GetValue((int)PostalShipmentFieldIndex.Insurance, true); }
 			set	{ SetValue((int)PostalShipmentFieldIndex.Insurance, value); }
+		}
+
+		/// <summary> The CustomsRecipientTin property of the Entity PostalShipment<br/><br/></summary>
+		/// <remarks>Mapped on  table field: "PostalShipment"."CustomsRecipientTin"<br/>
+		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 14<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		[DataMember]
+		public virtual System.String CustomsRecipientTin
+		{
+			get { return (System.String)GetValue((int)PostalShipmentFieldIndex.CustomsRecipientTin, true); }
+			set	{ SetValue((int)PostalShipmentFieldIndex.CustomsRecipientTin, value); }
 		}
 
 		/// <summary> Gets / sets related entity of type 'EndiciaShipmentEntity' which has to be set using a fetch action earlier. If no related entity is set for this property, null is returned.<br/><br/>

@@ -9,7 +9,7 @@ using ShipWorks.Shipping.Carriers.Postal.Usps.WebServices;
 namespace ShipWorks.Shipping.Carriers.Postal.Usps.Net
 {
     [Component]
-    public class SwsimFinishAccountVerification: SwsimV90, ISwimFinishAccountVerification
+    public class SwsimFinishAccountVerification: SwsimV111, ISwimFinishAccountVerification
     {
         private readonly string smsVerificationPhoneNumber;
         private const string Salt = "StampsVCode";
