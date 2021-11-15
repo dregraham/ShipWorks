@@ -3271,6 +3271,8 @@
           <Field Name="CommercialPaperlessInvoice" Type="bool" IsOptional="true" FieldIndex="27" />
           <Field Name="CostCenter" Type="string" IsOptional="true" MaxLength="100" FieldIndex="28" />
           <Field Name="CustomsDescription" Type="string" IsOptional="true" MaxLength="150" FieldIndex="36" />
+          <Field Name="CustomsRecipientTIN" Type="string" IsOptional="true" MaxLength="35" FieldIndex="37" />
+          <Field Name="CustomsRecipientTINType" Type="int" IsOptional="true" Precision="10" FieldIndex="38" />
           <Field Name="DeliveryConfirmation" Type="int" IsOptional="true" FieldIndex="5" />
           <Field Name="EmailNotifyFrom" Type="string" IsOptional="true" MaxLength="100" FieldIndex="16" />
           <Field Name="EmailNotifyMessage" Type="string" IsOptional="true" MaxLength="120" FieldIndex="18" />
@@ -3350,6 +3352,8 @@
           <Field Name="CostCenter" Type="string" MaxLength="100" FieldIndex="42" />
           <Field Name="CustomsDescription" Type="string" MaxLength="150" FieldIndex="22" />
           <Field Name="CustomsDocumentsOnly" Type="bool" FieldIndex="21" />
+          <Field Name="CustomsRecipientTIN" Type="string" IsOptional="true" MaxLength="35" FieldIndex="52" />
+          <Field Name="CustomsRecipientTINType" Type="int" IsOptional="true" Precision="10" FieldIndex="53" />
           <Field Name="DeliveryConfirmation" Type="int" FieldIndex="7" />
           <Field Name="EmailNotifyFrom" Type="string" MaxLength="100" FieldIndex="18" />
           <Field Name="EmailNotifyMessage" Type="string" MaxLength="120" FieldIndex="20" />
@@ -4703,7 +4707,7 @@
       <Catalogs>
         <Catalog Name="ShipWorksLocal">
           <Schemas>
-            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2021-10-04T21:24:03.9938666Z">
+            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2021-10-28T19:17:21.6973713Z">
               <Tables>
                 <Table Name="Action">
                   <PkConstraintName Name="PK_Action" />
@@ -9264,6 +9268,8 @@
                     <Field Name="ShipmentChargeCountryCode" Ordinal="35" IsOptional="true" DbType="12" Length="50" />
                     <Field Name="UspsPackageID" Ordinal="36" IsOptional="true" DbType="12" Length="100" />
                     <Field Name="CustomsDescription" Ordinal="37" IsOptional="true" DbType="12" Length="150" />
+                    <Field Name="CustomsRecipientTIN" Ordinal="38" IsOptional="true" DbType="12" Length="35" />
+                    <Field Name="CustomsRecipientTINType" Ordinal="39" IsOptional="true" DbType="8" Precision="10" />
                   </Fields>
                 </Table>
                 <Table Name="UpsProfilePackage">
@@ -9466,6 +9472,8 @@
                     <Field Name="UspsPackageID" Ordinal="50" DbType="12" Length="100" />
                     <Field Name="RequestedLabelFormat" Ordinal="51" DbType="8" Precision="10" />
                     <Field Name="ShipEngineLabelID" Ordinal="52" IsOptional="true" DbType="12" Length="50" />
+                    <Field Name="CustomsRecipientTIN" Ordinal="53" IsOptional="true" DbType="12" Length="35" />
+                    <Field Name="CustomsRecipientTINType" Ordinal="54" IsOptional="true" DbType="8" Precision="10" />
                   </Fields>
                 </Table>
                 <Table Name="User">
@@ -14328,6 +14336,8 @@
             <FieldMapping FieldName="CommercialPaperlessInvoice" TargetFieldName="CommercialPaperlessInvoice" />
             <FieldMapping FieldName="CostCenter" TargetFieldName="CostCenter" />
             <FieldMapping FieldName="CustomsDescription" TargetFieldName="CustomsDescription" />
+            <FieldMapping FieldName="CustomsRecipientTIN" TargetFieldName="CustomsRecipientTIN" />
+            <FieldMapping FieldName="CustomsRecipientTINType" TargetFieldName="CustomsRecipientTINType" />
             <FieldMapping FieldName="DeliveryConfirmation" TargetFieldName="DeliveryConfirmation" />
             <FieldMapping FieldName="EmailNotifyFrom" TargetFieldName="EmailNotifyFrom" />
             <FieldMapping FieldName="EmailNotifyMessage" TargetFieldName="EmailNotifyMessage" />
@@ -14408,6 +14418,8 @@
             <FieldMapping FieldName="CostCenter" TargetFieldName="CostCenter" />
             <FieldMapping FieldName="CustomsDescription" TargetFieldName="CustomsDescription" />
             <FieldMapping FieldName="CustomsDocumentsOnly" TargetFieldName="CustomsDocumentsOnly" />
+            <FieldMapping FieldName="CustomsRecipientTIN" TargetFieldName="CustomsRecipientTIN" />
+            <FieldMapping FieldName="CustomsRecipientTINType" TargetFieldName="CustomsRecipientTINType" />
             <FieldMapping FieldName="DeliveryConfirmation" TargetFieldName="DeliveryConfirmation" />
             <FieldMapping FieldName="EmailNotifyFrom" TargetFieldName="EmailNotifyFrom" />
             <FieldMapping FieldName="EmailNotifyMessage" TargetFieldName="EmailNotifyMessage" />

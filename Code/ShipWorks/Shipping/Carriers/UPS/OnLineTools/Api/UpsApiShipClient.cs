@@ -237,6 +237,16 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api
             xmlWriter.WriteElementString("CompanyName", StringUtility.Truncate(fromCompany, 35));
             xmlWriter.WriteElementString("AttentionName", StringUtility.Truncate(attentionName, 35));
             xmlWriter.WriteElementString("PhoneNumber", Regex.Replace(origin.Phone, @"\D", "").Truncate(15));
+
+            //// International shipment and a IOSS number was added
+            if (!ShipmentTypeManager.GetType(shipment).IsDomestic(shipment) && !string.IsNullOrWhiteSpace(ups.CustomsRecipientTIN))
+            {
+                xmlWriter.WriteStartElement("VendorInfo");
+                xmlWriter.WriteElementString("VendorCollectIDTypeCode", EnumHelper.GetApiValue((UpsCustomsRecipientTINType) ups.CustomsRecipientTINType));
+                xmlWriter.WriteElementString("VendorCollectIDNumber", StringUtility.Truncate(ups.CustomsRecipientTIN, 35));
+                xmlWriter.WriteEndElement();
+            }
+
             UpsApiCore.WriteAddressXml(xmlWriter, origin);
             xmlWriter.WriteEndElement();
 

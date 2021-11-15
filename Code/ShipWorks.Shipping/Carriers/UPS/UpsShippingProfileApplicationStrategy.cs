@@ -101,6 +101,10 @@ namespace ShipWorks.Shipping.Carriers.Ups
             ApplyProfileShipmentCharge(upsProfile, upsShipment);
 
             ApplyProfileValue(upsProfile.CustomsDescription, upsShipment, UpsShipmentFields.CustomsDescription);
+
+            //apply the tax id
+            ApplyProfileValue(upsProfile.CustomsRecipientTIN, upsShipment, UpsShipmentFields.CustomsRecipientTIN);
+            ApplyProfileValue(upsProfile.CustomsRecipientTINType, upsShipment, UpsShipmentFields.CustomsRecipientTINType);
         }
 
         /// <summary>

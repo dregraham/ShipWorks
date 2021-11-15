@@ -3700,6 +3700,8 @@ namespace ShipWorks.Data.Model.HelperClasses
 			this.AddElementFieldInfo("UpsProfileEntity", "ShipmentChargeCountryCode", typeof(System.String), false, false, false, true,  (int)UpsProfileFieldIndex.ShipmentChargeCountryCode, 50, 0, 0);
 			this.AddElementFieldInfo("UpsProfileEntity", "UspsPackageID", typeof(System.String), false, false, false, true,  (int)UpsProfileFieldIndex.UspsPackageID, 100, 0, 0);
 			this.AddElementFieldInfo("UpsProfileEntity", "CustomsDescription", typeof(System.String), false, false, false, true,  (int)UpsProfileFieldIndex.CustomsDescription, 150, 0, 0);
+			this.AddElementFieldInfo("UpsProfileEntity", "CustomsRecipientTIN", typeof(System.String), false, false, false, true,  (int)UpsProfileFieldIndex.CustomsRecipientTIN, 35, 0, 0);
+			this.AddElementFieldInfo("UpsProfileEntity", "CustomsRecipientTINType", typeof(Nullable<System.Int32>), false, false, false, true,  (int)UpsProfileFieldIndex.CustomsRecipientTINType, 0, 0, 10);
 		}
 		/// <summary>Inits UpsProfilePackageEntity's FieldInfo objects</summary>
 		private void InitUpsProfilePackageEntityInfos()
@@ -3789,6 +3791,8 @@ namespace ShipWorks.Data.Model.HelperClasses
 			this.AddElementFieldInfo("UpsShipmentEntity", "UspsPackageID", typeof(System.String), false, false, false, false,  (int)UpsShipmentFieldIndex.UspsPackageID, 100, 0, 0);
 			this.AddElementFieldInfo("UpsShipmentEntity", "RequestedLabelFormat", typeof(System.Int32), false, false, false, false,  (int)UpsShipmentFieldIndex.RequestedLabelFormat, 0, 0, 10);
 			this.AddElementFieldInfo("UpsShipmentEntity", "ShipEngineLabelID", typeof(System.String), false, false, false, true,  (int)UpsShipmentFieldIndex.ShipEngineLabelID, 50, 0, 0);
+			this.AddElementFieldInfo("UpsShipmentEntity", "CustomsRecipientTIN", typeof(System.String), false, false, false, true,  (int)UpsShipmentFieldIndex.CustomsRecipientTIN, 35, 0, 0);
+			this.AddElementFieldInfo("UpsShipmentEntity", "CustomsRecipientTINType", typeof(Nullable<System.Int32>), false, false, false, true,  (int)UpsShipmentFieldIndex.CustomsRecipientTINType, 0, 0, 10);
 		}
 		/// <summary>Inits UserEntity's FieldInfo objects</summary>
 		private void InitUserEntityInfos()

@@ -13434,6 +13434,10 @@ namespace ShipWorks.Data.Model
 		UspsPackageID,
 		///<summary>CustomsDescription. </summary>
 		CustomsDescription,
+		///<summary>CustomsRecipientTIN. </summary>
+		CustomsRecipientTIN,
+		///<summary>CustomsRecipientTINType. </summary>
+		CustomsRecipientTINType,
 		/// <summary></summary>
 		AmountOfFields
 	}
@@ -13614,6 +13618,10 @@ namespace ShipWorks.Data.Model
 		RequestedLabelFormat,
 		///<summary>ShipEngineLabelID. </summary>
 		ShipEngineLabelID,
+		///<summary>CustomsRecipientTIN. </summary>
+		CustomsRecipientTIN,
+		///<summary>CustomsRecipientTINType. </summary>
+		CustomsRecipientTINType,
 		/// <summary></summary>
 		AmountOfFields
 	}

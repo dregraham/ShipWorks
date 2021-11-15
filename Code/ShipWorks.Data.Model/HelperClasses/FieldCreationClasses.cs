@@ -31417,6 +31417,16 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(UpsProfileFieldIndex.CustomsDescription);}
 		}
+		/// <summary>Creates a new UpsProfileEntity.CustomsRecipientTIN field instance</summary>
+		public static EntityField2 CustomsRecipientTIN
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(UpsProfileFieldIndex.CustomsRecipientTIN);}
+		}
+		/// <summary>Creates a new UpsProfileEntity.CustomsRecipientTINType field instance</summary>
+		public static EntityField2 CustomsRecipientTINType
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(UpsProfileFieldIndex.CustomsRecipientTINType);}
+		}
 	}
 
 	/// <summary>Field Creation Class for entity UpsProfilePackageEntity</summary>
@@ -31826,6 +31836,16 @@ namespace ShipWorks.Data.Model.HelperClasses
 		public static EntityField2 ShipEngineLabelID
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(UpsShipmentFieldIndex.ShipEngineLabelID);}
+		}
+		/// <summary>Creates a new UpsShipmentEntity.CustomsRecipientTIN field instance</summary>
+		public static EntityField2 CustomsRecipientTIN
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(UpsShipmentFieldIndex.CustomsRecipientTIN);}
+		}
+		/// <summary>Creates a new UpsShipmentEntity.CustomsRecipientTINType field instance</summary>
+		public static EntityField2 CustomsRecipientTINType
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(UpsShipmentFieldIndex.CustomsRecipientTINType);}
 		}
 	}
 

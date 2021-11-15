@@ -333,6 +333,18 @@ namespace ShipWorks.Data.Model.EntityInterfaces
         /// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 50<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
         System.String ShipEngineLabelID { get; }
+        /// <summary> The CustomsRecipientTIN property of the Entity UpsShipment<br/><br/>
+        /// </summary>
+        /// <remarks>Mapped on table field: "UpsShipment"."CustomsRecipientTIN"<br/>
+        /// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 35<br/>
+        /// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+        System.String CustomsRecipientTIN { get; }
+        /// <summary> The CustomsRecipientTINType property of the Entity UpsShipment<br/><br/>
+        /// </summary>
+        /// <remarks>Mapped on table field: "UpsShipment"."CustomsRecipientTINType"<br/>
+        /// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
+        /// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+        Nullable<System.Int32> CustomsRecipientTINType { get; }
         
         IShipmentEntity Shipment { get; }
         

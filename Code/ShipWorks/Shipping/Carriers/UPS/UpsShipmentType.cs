@@ -170,6 +170,8 @@ namespace ShipWorks.Shipping.Carriers.UPS
 
             shipment.Ups.CustomsDocumentsOnly = false;
             shipment.Ups.CustomsDescription = string.Empty;
+            shipment.Ups.CustomsRecipientTIN = string.Empty;
+            shipment.Ups.CustomsRecipientTINType = (int) UpsCustomsRecipientTINType.IOSS;
 
             shipment.Ups.CommercialPaperlessInvoice = false;
             shipment.Ups.CommercialInvoiceTermsOfSale = (int) UpsTermsOfSale.NotSpecified;
@@ -346,6 +348,8 @@ namespace ShipWorks.Shipping.Carriers.UPS
             profile.Ups.ShipmentChargeType = (int) UpsShipmentChargeType.BillReceiver;
 
             profile.Ups.CustomsDescription = "Goods";
+            profile.Ups.CustomsRecipientTIN = string.Empty;
+            profile.Ups.CustomsRecipientTINType = (int) UpsCustomsRecipientTINType.IOSS;
         }
 
         /// <summary>
