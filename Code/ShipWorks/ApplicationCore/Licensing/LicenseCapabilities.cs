@@ -202,11 +202,6 @@ namespace ShipWorks.ApplicationCore.Licensing
         public bool IsBestRateAllowed { get; private set; }
 
         /// <summary>
-        /// Whether or not this license is UPS CTP
-        /// </summary>
-        public bool IsCtp => UpsStatus != UpsStatus.Discount && UpsStatus != UpsStatus.Discount;
-
-        /// <summary>
         /// Get the ShipmentType functionality for the given ShipmentType and ShippingPolicyType
         /// </summary>
         public string GetShipmentTypeFunctionality(ShipmentTypeCode shipmentType, ShippingPolicyType policy)
