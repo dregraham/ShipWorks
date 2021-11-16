@@ -23,7 +23,7 @@ namespace ShipWorks.ApplicationCore.Licensing
         /// <summary>
         /// ShipmentType, can be forbidden or just restricted to upgrade
         /// </summary>
-        Dictionary<ShipmentTypeCode, IEnumerable<ShipmentTypeRestrictionType>> ShipmentTypeRestriction { get;}
+        Dictionary<ShipmentTypeCode, IEnumerable<ShipmentTypeRestrictionType>> ShipmentTypeRestriction { get; }
 
         /// <summary>
         /// Gets the shipping policy for a specific shipment type.
@@ -99,7 +99,7 @@ namespace ShipWorks.ApplicationCore.Licensing
         /// Stamps RrDonnelley consolidator
         /// </summary>
         bool StampsRrDonnelleyConsolidator { get; set; }
-        
+
         /// <summary>
         /// Number of selling channels the license allows
         /// </summary>
@@ -119,7 +119,7 @@ namespace ShipWorks.ApplicationCore.Licensing
         /// Details about the trial
         /// </summary>
         TrialDetails TrialDetails { get; set; }
-        
+
         /// <summary>
         /// The number of Active Channels in tango
         /// </summary>
@@ -140,7 +140,7 @@ namespace ShipWorks.ApplicationCore.Licensing
         /// </summary>
         /// <value><c>true</c> if the capabilities allows best rate; otherwise, <c>false</c>.</value>
         bool IsBestRateAllowed { get; }
-        
+
         /// <summary>
         /// Gets the ShipmentType Functionality value for the given ShipmentType and PolicyType
         /// </summary>

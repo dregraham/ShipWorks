@@ -293,7 +293,7 @@ namespace ShipWorks.Shipping
         /// <summary>
         /// Creates the UserControl that is used to edit the defaults\settings for the service
         /// </summary>
-        protected virtual SettingsControlBase CreateSettingsControl()
+        protected virtual SettingsControlBase CreateSettingsControlInternal(ILifetimeScope scope)
         {
             return null;
         }
@@ -305,7 +305,7 @@ namespace ShipWorks.Shipping
         {
             return lifetimeScope.IsRegisteredWithKey<SettingsControlBase>(ShipmentTypeCode) ?
                 lifetimeScope.ResolveKeyed<SettingsControlBase>(ShipmentTypeCode) :
-                CreateSettingsControl();
+                CreateSettingsControlInternal(lifetimeScope);
         }
 
         /// <summary>

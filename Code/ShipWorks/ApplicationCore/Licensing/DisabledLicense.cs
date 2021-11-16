@@ -63,6 +63,11 @@ namespace ShipWorks.ApplicationCore.Licensing
         public bool IsShipmentLimitReached => true;
 
         /// <summary>
+        /// Whether or not this license is UPS CTP
+        /// </summary>
+        public bool IsCtp => false;
+
+        /// <summary>
         /// Throws - We shouldn't try to access the key if the license is disabled.
         /// </summary>
         public string Key

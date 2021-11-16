@@ -147,7 +147,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
         /// <summary>
         /// Create the settings control for Endicia
         /// </summary>
-        protected override SettingsControlBase CreateSettingsControl()
+        protected override SettingsControlBase CreateSettingsControlInternal(ILifetimeScope scope)
         {
             EndiciaSettingsControl settingsControl = new EndiciaSettingsControl(EndiciaReseller);
             settingsControl.Initialize(ShipmentTypeCode);
@@ -439,9 +439,9 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
                 case PostalServiceType.InternationalPriority: return "PriorityMailInternational";
 
                 case PostalServiceType.InternationalFirst:
-                {
-                    return PostalUtility.IsEnvelopeOrFlat(packagingType) ? "FirstClassMailInternational" : "FirstClassPackageInternationalService";
-                }
+                    {
+                        return PostalUtility.IsEnvelopeOrFlat(packagingType) ? "FirstClassMailInternational" : "FirstClassPackageInternationalService";
+                    }
             }
 
             if (ShipmentTypeManager.IsEndiciaDhl(serviceType) || ShipmentTypeManager.IsConsolidator(serviceType))
@@ -515,7 +515,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
         {
             IEnumerable<long> excludedAccounts = bestRateExcludedAccountRepository.GetAll();
             IEnumerable<IEndiciaAccountEntity> nonExcludedAccounts = AccountRepository.AccountsReadOnly.Where(a => !excludedAccounts.Contains(a.AccountId));
-            
+
             if (nonExcludedAccounts.Any())
             {
                 return new EndiciaBestRateBroker(this, AccountRepository, "USPS", bestRateExcludedAccountRepository);

@@ -47,12 +47,6 @@ namespace ShipWorks.Shipping
             ShipmentTypeCodes.Where(ShippingManager.IsShipmentTypeEnabled);
 
         /// <summary>
-        /// Gets whether or not this user is ctp enabled 
-        /// based on the allowed shipment type codes
-        /// </summary>
-        public static bool IsUpsCtpEnabled => EnabledShipmentTypeCodes.All(t => t == ShipmentTypeCode.UpsOnLineTools || t == ShipmentTypeCode.Usps || t == ShipmentTypeCode.Other || t == ShipmentTypeCode.UpsWorldShip);
-
-        /// <summary>
         /// Get the ShipmentTypeCode instance of the specified ShipmentEntity
         /// </summary>
         public static ShipmentType GetType(IShipmentEntity shipment)

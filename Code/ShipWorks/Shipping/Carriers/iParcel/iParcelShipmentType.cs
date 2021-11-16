@@ -5,6 +5,7 @@ using System.Data;
 using System.Drawing.Imaging;
 using System.Linq;
 using System.Text;
+using Autofac;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Utility;
 using SD.LLBLGen.Pro.ORMSupportClasses;
@@ -296,7 +297,7 @@ namespace ShipWorks.Shipping.Carriers.iParcel
         /// Creates the UserControl that is used to edit the defaults\settings for the service
         /// </summary>
         /// <returns>An iParcelSettingsControl object.</returns>
-        protected override SettingsControlBase CreateSettingsControl()
+        protected override SettingsControlBase CreateSettingsControlInternal(ILifetimeScope scope)
         {
             iParcelSettingsControl settingsControl = new iParcelSettingsControl();
             settingsControl.Initialize(ShipmentTypeCode);
@@ -449,7 +450,7 @@ namespace ShipWorks.Shipping.Carriers.iParcel
         /// </summary>
         protected override string GetCarrierTrackingUrlInternal(ShipmentEntity shipment) =>
               string.Format("https://tracking.i-parcel.com/secure/track.aspx?track={0}", shipment.TrackingNumber);
-        
+
         /// <summary>
         /// Load all the label data for the given shipmentID
         /// </summary>

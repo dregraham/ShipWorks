@@ -103,7 +103,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         /// <summary>
         /// Create the settings control for USPS
         /// </summary>
-        protected override SettingsControlBase CreateSettingsControl()
+        protected override SettingsControlBase CreateSettingsControlInternal(ILifetimeScope scope)
         {
             UspsSettingsControl control = new UspsSettingsControl();
             control.Initialize(ShipmentTypeCode);
@@ -274,7 +274,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         {
             IEnumerable<long> excludedAccounts = bestRateExcludedAccountRepository.GetAll();
             IEnumerable<IUspsAccountEntity> nonExcludedAccounts = AccountRepository.AccountsReadOnly.Where(a => !excludedAccounts.Contains(a.AccountId));
-            
+
             if (nonExcludedAccounts.Any())
             {
                 // We have an account that is completely setup, so use the normal broker

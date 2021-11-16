@@ -122,9 +122,14 @@ namespace ShipWorks.ApplicationCore.Licensing
         public string StampsUsername { get; set; }
 
         /// <summary>
+        /// Whether or not this license is UPS CTP
+        /// </summary>
+        public bool IsCtp => LicenseCapabilities.UpsStatus != UpsStatus.None && LicenseCapabilities.UpsStatus != UpsStatus.Discount;
+
+        /// <summary>
         /// The license capabilities.
         /// </summary>
-        public ILicenseCapabilities LicenseCapabilities { get; set; }
+        private ILicenseCapabilities LicenseCapabilities { get; set; }
 
         /// <summary>
         /// Activate a new store

@@ -28,7 +28,6 @@ using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Editions;
 using ShipWorks.Editions.Freemium;
 using ShipWorks.Email;
-using ShipWorks.Shipping;
 using ShipWorks.Shipping.Carriers.Postal.Usps;
 using ShipWorks.Shipping.Carriers.Ups.LocalRating.Validation;
 using ShipWorks.Stores;
@@ -849,12 +848,17 @@ namespace ShipWorks.ApplicationCore.Dashboard
         /// </summary>
         public static void ShowOneBalancePromo()
         {
-            //If the customer has the ability to use any carriers but ups and usps they are not ctp so we want to show the promo
-            var oneBalanceItem = dashboardItems.OfType<DashboardOneBalancePromoItem>().SingleOrDefault();
-            if (oneBalanceItem == null && !ShipmentTypeManager.IsUpsCtpEnabled)
+            using (var scope = IoC.BeginLifetimeScope())
             {
-                oneBalanceItem = new DashboardOneBalancePromoItem();
-                AddDashboardItem(oneBalanceItem);
+                var licenses = scope.Resolve<ILicenseService>().GetLicenses();
+
+                // Show the promo if the customer isn't CTP
+                var oneBalanceItem = dashboardItems.OfType<DashboardOneBalancePromoItem>().SingleOrDefault();
+                if (oneBalanceItem == null && !licenses.Any(x => x.IsCtp))
+                {
+                    oneBalanceItem = new DashboardOneBalancePromoItem();
+                    AddDashboardItem(oneBalanceItem);
+                }
             }
         }
 
