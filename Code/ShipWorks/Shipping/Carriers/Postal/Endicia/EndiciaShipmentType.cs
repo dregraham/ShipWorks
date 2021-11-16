@@ -426,22 +426,32 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
         {
             switch (serviceType)
             {
-                case PostalServiceType.ExpressMail: return "PriorityExpress";
-                case PostalServiceType.FirstClass: return "First";
-                case PostalServiceType.LibraryMail: return "LibraryMail";
-                case PostalServiceType.MediaMail: return "MediaMail";
-                case PostalServiceType.StandardPost: return "StandardPost";
-                case PostalServiceType.ParcelSelect: return "ParcelSelect";
-                case PostalServiceType.PriorityMail: return "Priority";
-                case PostalServiceType.CriticalMail: return "CriticalMail";
+                case PostalServiceType.ExpressMail:
+                    return "PriorityExpress";
+                case PostalServiceType.FirstClass:
+                    return "First";
+                case PostalServiceType.LibraryMail:
+                    return "LibraryMail";
+                case PostalServiceType.MediaMail:
+                    return "MediaMail";
+                case PostalServiceType.StandardPost:
+                    return "StandardPost";
+                case PostalServiceType.ParcelSelect:
+                    return "ParcelSelect";
+                case PostalServiceType.PriorityMail:
+                    return "Priority";
+                case PostalServiceType.CriticalMail:
+                    return "CriticalMail";
 
-                case PostalServiceType.InternationalExpress: return "PriorityMailExpressInternational";
-                case PostalServiceType.InternationalPriority: return "PriorityMailInternational";
+                case PostalServiceType.InternationalExpress:
+                    return "PriorityMailExpressInternational";
+                case PostalServiceType.InternationalPriority:
+                    return "PriorityMailInternational";
 
                 case PostalServiceType.InternationalFirst:
-                    {
-                        return PostalUtility.IsEnvelopeOrFlat(packagingType) ? "FirstClassMailInternational" : "FirstClassPackageInternationalService";
-                    }
+                {
+                    return PostalUtility.IsEnvelopeOrFlat(packagingType) ? "FirstClassMailInternational" : "FirstClassPackageInternationalService";
+                }
             }
 
             if (ShipmentTypeManager.IsEndiciaDhl(serviceType) || ShipmentTypeManager.IsConsolidator(serviceType))
