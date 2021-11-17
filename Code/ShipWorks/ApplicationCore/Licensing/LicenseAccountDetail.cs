@@ -108,7 +108,7 @@ namespace ShipWorks.ApplicationCore.Licensing
                 ? trialEndDate
                 : DateTime.MinValue;
 
-            UpsStatus = (UpsStatus) XPathUtility.Evaluate(xpath, "//UpsOnly/@status", 0);
+            UpsStatus = (UpsStatus) XPathUtility.Evaluate(xpath, "//UpsOnly/@status", (int) UpsStatus.None);
         }
 
         /// <summary>

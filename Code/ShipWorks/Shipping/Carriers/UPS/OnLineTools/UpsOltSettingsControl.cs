@@ -54,7 +54,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools
             var licenses = scope.Resolve<ILicenseService>().GetLicenses();
 
             var shouldShow = (UpsAccountManager.AccountsReadOnly.None() || UpsAccountManager.AccountsReadOnly.All(a => string.IsNullOrWhiteSpace(a.ShipEngineCarrierId))) &&
-            !licenses.Any(x => x.IsCtp);
+            licenses.None(x => x.IsCtp);
 
             if (shouldShow)
             {
