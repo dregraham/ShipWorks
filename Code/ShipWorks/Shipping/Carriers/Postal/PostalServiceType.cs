@@ -189,5 +189,8 @@ namespace ShipWorks.Shipping.Carriers.Postal
 
         [Description("GlobalPost Plus SmartSaver")]
         GlobalPostPlusSmartSaver = 232,
+
+        [Description("USPS Pay-on-Use Return")]
+        UspsPayOnUseReturn = 233,
     }
 }
