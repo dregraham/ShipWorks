@@ -232,7 +232,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
                 return true;
             }
 
-            if (service == UpsServiceType.WorldwideExpress || service == UpsServiceType.WorldwideExpressPlus)
+            if (service == UpsServiceType.WorldwideExpress || service == UpsServiceType.WorldwideExpressPlus || service == UpsServiceType.UpsGround)
             {
                 return true;
             }
