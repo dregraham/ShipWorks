@@ -192,5 +192,10 @@ namespace ShipWorks.Shipping.Carriers.Postal
 
         [Description("GlobalPost Plus SmartSaver")]
         GlobalPostPlusSmartSaver = 232,
+
+        // New service, still in beta at Stamps.
+        [Deprecated]
+        [Description("GlobalPost Parcel Select SmartSaver")]
+        GlobalPostParcelSelectSmartSaver = 233,
     }
 }
