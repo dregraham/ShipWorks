@@ -192,10 +192,5 @@ namespace ShipWorks.Shipping.Carriers.Postal
 
         [Description("GlobalPost Plus SmartSaver")]
         GlobalPostPlusSmartSaver = 232,
-
-        // New service, still in beta at Stamps.
-        [Deprecated]
-        [Description("USPS Pay-on-Use Return")]
-        UspsPayOnUseReturn = 233,
     }
 }
