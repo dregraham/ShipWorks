@@ -119,22 +119,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
                 case "FirstClassMailInternational":
                 case "FirstClassPackageInternational":
                 case "FirstClassPackageInternationalService": return PostalServiceType.InternationalFirst;
+                default: return null;
             }
-
-            // Known values we ignore
-            switch (mailClass)
-            {
-                case "UPSWorldwideExpress":
-                case "UPSWorldwideExpressPlus":
-                case "UPSWorldwideExpedited":
-                case "UPSWorldwideSaver":
-                case "GXG":
-                    return null;
-            }
-
-            Debug.Fail("Unknown mailClass value while getting rates: " + mailClass);
-
-            return null;
         }
     }
 }
