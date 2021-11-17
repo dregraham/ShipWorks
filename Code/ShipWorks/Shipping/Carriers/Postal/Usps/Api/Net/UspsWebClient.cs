@@ -1373,7 +1373,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
         /// <summary>
         /// Create the rate object for the given shipment
         /// </summary>
-        protected virtual RateV40 CreateRateForProcessing(ShipmentEntity shipment, UspsAccountEntity account,Address toAddress, Address fromAddress)
+        protected virtual RateV40 CreateRateForProcessing(ShipmentEntity shipment, UspsAccountEntity account, Address toAddress, Address fromAddress)
         {
             PostalServiceType serviceType = (PostalServiceType) shipment.Postal.Service;
             PostalPackagingType packagingType = (PostalPackagingType) shipment.Postal.PackagingType;
@@ -1381,7 +1381,10 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
             RateV40 rate = CreateRateForRating(shipment, account);
             rate.ServiceType = UspsUtility.GetApiServiceType(serviceType);
             rate.PrintLayout = "Normal4X6";
-
+            if (serviceType == PostalServiceType.PayOnUseReturn)
+            {
+                rate.PrintLayout = "Return";
+            }
             // Get the confirmation type add ons
             List<AddOnV17> addOns = AddConfirmationTypeAddOnsForProcessing(shipment, serviceType, packagingType);
 

@@ -208,6 +208,7 @@ namespace ShipWorks.Shipping.Carriers.Postal
                         services.AddRange(EnumHelper.GetEnumList<PostalServiceType>(ShipmentTypeManager.IsStampsDhl)
                             .Select(entry => entry.Value));
                     }
+                    services.Add(PostalServiceType.PayOnUseReturn);
                 }
             }
 

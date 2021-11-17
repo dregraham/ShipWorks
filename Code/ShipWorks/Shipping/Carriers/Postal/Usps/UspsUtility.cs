@@ -65,7 +65,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
             {ServiceType.SCGPPSS, PostalServiceType.GlobalPostSmartSaverStandardIntl},
             {ServiceType.SCGPLSS, PostalServiceType.GlobalPostPlusSmartSaver },
             {ServiceType.SCGPL, PostalServiceType.GlobalPostPlus },
-            {ServiceType.USRETURN, PostalServiceType.UspsPayOnUseReturn }
+            {ServiceType.USRETURN, PostalServiceType.PayOnUseReturn},
+            {ServiceType.SCGPPSSS, PostalServiceType.GlobalPostParcelSelectSmartSaver}
         };
 
         /// <summary>
