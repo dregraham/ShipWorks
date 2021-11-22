@@ -433,6 +433,10 @@
         <Fields>
           <Field Name="AsendiaAccountID" Type="long" IsOptional="true" Precision="19" FieldIndex="1" />
           <Field Name="Contents" Type="int" IsOptional="true" Precision="10" FieldIndex="4" />
+          <Field Name="CustomsRecipientEntityType" Type="string" IsOptional="true" MaxLength="24" FieldIndex="8" />
+          <Field Name="CustomsRecipientIssuingAuthority" Type="string" IsOptional="true" MaxLength="5" FieldIndex="9" />
+          <Field Name="CustomsRecipientTin" Type="string" IsOptional="true" MaxLength="24" FieldIndex="6" />
+          <Field Name="CustomsRecipientTinType" Type="string" IsOptional="true" MaxLength="10" FieldIndex="7" />
           <Field Name="NonDelivery" Type="int" IsOptional="true" Precision="10" FieldIndex="5" />
           <Field Name="NonMachinable" Type="bool" IsOptional="true" FieldIndex="3" />
           <Field Name="Service" Type="AsendiaServiceType" IsOptional="true" FieldIndex="2" />
@@ -443,6 +447,10 @@
         <Fields>
           <Field Name="AsendiaAccountID" Type="long" Precision="19" FieldIndex="1" />
           <Field Name="Contents" Type="int" Precision="10" FieldIndex="4" />
+          <Field Name="CustomsRecipientEntityType" Type="string" IsOptional="true" MaxLength="24" FieldIndex="18" />
+          <Field Name="CustomsRecipientIssuingAuthority" Type="string" IsOptional="true" MaxLength="5" FieldIndex="19" />
+          <Field Name="CustomsRecipientTin" Type="string" IsOptional="true" MaxLength="24" FieldIndex="16" />
+          <Field Name="CustomsRecipientTinType" Type="string" IsOptional="true" MaxLength="10" FieldIndex="17" />
           <Field Name="DimsAddWeight" Type="bool" FieldIndex="11" />
           <Field Name="DimsHeight" Type="double" Precision="38" FieldIndex="10" />
           <Field Name="DimsLength" Type="double" Precision="38" FieldIndex="8" />
@@ -5035,6 +5043,10 @@
                     <Field Name="NonMachinable" Ordinal="4" IsOptional="true" DbType="2" />
                     <Field Name="Contents" Ordinal="5" IsOptional="true" DbType="8" Precision="10" />
                     <Field Name="NonDelivery" Ordinal="6" IsOptional="true" DbType="8" Precision="10" />
+                    <Field Name="CustomsRecipientTin" Ordinal="7" IsOptional="true" DbType="12" Length="24" />
+                    <Field Name="CustomsRecipientTinType" Ordinal="8" IsOptional="true" DbType="12" Length="10" />
+                    <Field Name="CustomsRecipientEntityType" Ordinal="9" IsOptional="true" DbType="12" Length="24" />
+                    <Field Name="CustomsRecipientIssuingAuthority" Ordinal="10" IsOptional="true" DbType="12" Length="5" />
                   </Fields>
                 </Table>
                 <Table Name="AsendiaShipment">
@@ -5064,6 +5076,10 @@
                     <Field Name="DimsWeight" Ordinal="14" DbType="6" Precision="38" />
                     <Field Name="InsuranceValue" Ordinal="15" DbType="9" Precision="19" Scale="4" />
                     <Field Name="Insurance" Ordinal="16" DbType="2" />
+                    <Field Name="CustomsRecipientTin" Ordinal="17" IsOptional="true" DbType="12" Length="24" />
+                    <Field Name="CustomsRecipientTinType" Ordinal="18" IsOptional="true" DbType="12" Length="10" />
+                    <Field Name="CustomsRecipientEntityType" Ordinal="19" IsOptional="true" DbType="12" Length="24" />
+                    <Field Name="CustomsRecipientIssuingAuthority" Ordinal="20" IsOptional="true" DbType="12" Length="5" />
                   </Fields>
                 </Table>
                 <Table Name="Audit">
@@ -11447,6 +11463,10 @@
           <FieldMappings>
             <FieldMapping FieldName="AsendiaAccountID" TargetFieldName="AsendiaAccountID" />
             <FieldMapping FieldName="Contents" TargetFieldName="Contents" />
+            <FieldMapping FieldName="CustomsRecipientEntityType" TargetFieldName="CustomsRecipientEntityType" />
+            <FieldMapping FieldName="CustomsRecipientIssuingAuthority" TargetFieldName="CustomsRecipientIssuingAuthority" />
+            <FieldMapping FieldName="CustomsRecipientTin" TargetFieldName="CustomsRecipientTin" />
+            <FieldMapping FieldName="CustomsRecipientTinType" TargetFieldName="CustomsRecipientTinType" />
             <FieldMapping FieldName="NonDelivery" TargetFieldName="NonDelivery" />
             <FieldMapping FieldName="NonMachinable" TargetFieldName="NonMachinable" />
             <FieldMapping FieldName="Service" TargetFieldName="Service" />
@@ -11457,6 +11477,10 @@
           <FieldMappings>
             <FieldMapping FieldName="AsendiaAccountID" TargetFieldName="AsendiaAccountID" />
             <FieldMapping FieldName="Contents" TargetFieldName="Contents" />
+            <FieldMapping FieldName="CustomsRecipientEntityType" TargetFieldName="CustomsRecipientEntityType" />
+            <FieldMapping FieldName="CustomsRecipientIssuingAuthority" TargetFieldName="CustomsRecipientIssuingAuthority" />
+            <FieldMapping FieldName="CustomsRecipientTin" TargetFieldName="CustomsRecipientTin" />
+            <FieldMapping FieldName="CustomsRecipientTinType" TargetFieldName="CustomsRecipientTinType" />
             <FieldMapping FieldName="DimsAddWeight" TargetFieldName="DimsAddWeight" />
             <FieldMapping FieldName="DimsHeight" TargetFieldName="DimsHeight" />
             <FieldMapping FieldName="DimsLength" TargetFieldName="DimsLength" />

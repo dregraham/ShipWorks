@@ -381,6 +381,14 @@ namespace ShipWorks.Data.Model.EntityClasses
 			_fieldsCustomProperties.Add("NonMachinable", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
 			_fieldsCustomProperties.Add("Insurance", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+			_fieldsCustomProperties.Add("CustomsRecipientTin", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+			_fieldsCustomProperties.Add("CustomsRecipientTinType", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+			_fieldsCustomProperties.Add("CustomsRecipientEntityType", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+			_fieldsCustomProperties.Add("CustomsRecipientIssuingAuthority", fieldHashtable);
 		}
 		#endregion
 
@@ -653,6 +661,50 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			get { return (System.Boolean)GetValue((int)AsendiaShipmentFieldIndex.Insurance, true); }
 			set	{ SetValue((int)AsendiaShipmentFieldIndex.Insurance, value); }
+		}
+
+		/// <summary> The CustomsRecipientTin property of the Entity AsendiaShipment<br/><br/></summary>
+		/// <remarks>Mapped on  table field: "AsendiaShipment"."CustomsRecipientTin"<br/>
+		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 24<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		[DataMember]
+		public virtual System.String CustomsRecipientTin
+		{
+			get { return (System.String)GetValue((int)AsendiaShipmentFieldIndex.CustomsRecipientTin, true); }
+			set	{ SetValue((int)AsendiaShipmentFieldIndex.CustomsRecipientTin, value); }
+		}
+
+		/// <summary> The CustomsRecipientTinType property of the Entity AsendiaShipment<br/><br/></summary>
+		/// <remarks>Mapped on  table field: "AsendiaShipment"."CustomsRecipientTinType"<br/>
+		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 10<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		[DataMember]
+		public virtual System.String CustomsRecipientTinType
+		{
+			get { return (System.String)GetValue((int)AsendiaShipmentFieldIndex.CustomsRecipientTinType, true); }
+			set	{ SetValue((int)AsendiaShipmentFieldIndex.CustomsRecipientTinType, value); }
+		}
+
+		/// <summary> The CustomsRecipientEntityType property of the Entity AsendiaShipment<br/><br/></summary>
+		/// <remarks>Mapped on  table field: "AsendiaShipment"."CustomsRecipientEntityType"<br/>
+		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 24<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		[DataMember]
+		public virtual System.String CustomsRecipientEntityType
+		{
+			get { return (System.String)GetValue((int)AsendiaShipmentFieldIndex.CustomsRecipientEntityType, true); }
+			set	{ SetValue((int)AsendiaShipmentFieldIndex.CustomsRecipientEntityType, value); }
+		}
+
+		/// <summary> The CustomsRecipientIssuingAuthority property of the Entity AsendiaShipment<br/><br/></summary>
+		/// <remarks>Mapped on  table field: "AsendiaShipment"."CustomsRecipientIssuingAuthority"<br/>
+		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 5<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		[DataMember]
+		public virtual System.String CustomsRecipientIssuingAuthority
+		{
+			get { return (System.String)GetValue((int)AsendiaShipmentFieldIndex.CustomsRecipientIssuingAuthority, true); }
+			set	{ SetValue((int)AsendiaShipmentFieldIndex.CustomsRecipientIssuingAuthority, value); }
 		}
 
 		/// <summary> Gets / sets related entity of type 'ShipmentEntity' which has to be set using a fetch action earlier. If no related entity is set for this property, null is returned.<br/><br/>
