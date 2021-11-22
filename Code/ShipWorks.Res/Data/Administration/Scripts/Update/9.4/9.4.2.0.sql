@@ -11,6 +11,7 @@ ALTER TABLE [dbo].[AsendiaShipment] ADD [CustomsRecipientEntityType] [int] NULL
 GO
 IF COL_LENGTH(N'[dbo].[AsendiaShipment]', N'CustomsRecipientIssuingAuthority') IS NULL
 ALTER TABLE [dbo].[AsendiaShipment] ADD [CustomsRecipientIssuingAuthority] [int] NULL
+GO
 
 UPDATE asendiaShipment
 SET asendiaShipment.[CustomsRecipientTinType] = 4 
