@@ -38,6 +38,18 @@
             this.nonDeliveryState = new System.Windows.Forms.CheckBox();
             this.labelNonDelivery = new System.Windows.Forms.Label();
             this.nonDelivery = new ShipWorks.UI.Controls.MultiValueComboBox();
+            this.customsRecipientTINState = new System.Windows.Forms.CheckBox();
+            this.labelCustomsRecipientTIN = new System.Windows.Forms.Label();
+            this.customsRecipientTIN = new ShipWorks.UI.Controls.MultiValueTextBox();
+            this.customsRecipientTINTypeState = new System.Windows.Forms.CheckBox();
+            this.labelCustomsRecipientTINType = new System.Windows.Forms.Label();
+            this.customsRecipientTINType = new ShipWorks.UI.Controls.MultiValueComboBox();
+            this.customsRecipientEntityTypeState = new System.Windows.Forms.CheckBox();
+            this.labelCustomsRecipientEntityType = new System.Windows.Forms.Label();
+            this.customsRecipientEntityType = new ShipWorks.UI.Controls.MultiValueComboBox();
+            this.customsRecipientIssuingAuthorityState = new System.Windows.Forms.CheckBox();
+            this.labelCustomsRecipientIssuingAuthority = new System.Windows.Forms.Label();
+            this.customsRecipientIssuingAuthority = new ShipWorks.UI.Controls.MultiValueComboBox();
             this.labelContents = new System.Windows.Forms.Label();
             this.customsBorderEdge = new ComponentFactory.Krypton.Toolkit.KryptonBorderEdge();
             this.contents = new ShipWorks.UI.Controls.MultiValueComboBox();
@@ -145,12 +157,24 @@
             this.groupCustoms.Controls.Add(this.nonDeliveryState);
             this.groupCustoms.Controls.Add(this.labelNonDelivery);
             this.groupCustoms.Controls.Add(this.nonDelivery);
+            this.groupCustoms.Controls.Add(this.customsRecipientTINState);
+            this.groupCustoms.Controls.Add(this.labelCustomsRecipientTIN);
+            this.groupCustoms.Controls.Add(this.customsRecipientTIN);
+            this.groupCustoms.Controls.Add(this.customsRecipientTINTypeState);
+            this.groupCustoms.Controls.Add(this.labelCustomsRecipientTINType);
+            this.groupCustoms.Controls.Add(this.customsRecipientTINType);
+            this.groupCustoms.Controls.Add(this.customsRecipientEntityTypeState);
+            this.groupCustoms.Controls.Add(this.labelCustomsRecipientEntityType);
+            this.groupCustoms.Controls.Add(this.customsRecipientEntityType);
+            this.groupCustoms.Controls.Add(this.customsRecipientIssuingAuthorityState);
+            this.groupCustoms.Controls.Add(this.labelCustomsRecipientIssuingAuthority);
+            this.groupCustoms.Controls.Add(this.customsRecipientIssuingAuthority);
             this.groupCustoms.Controls.Add(this.labelContents);
             this.groupCustoms.Controls.Add(this.customsBorderEdge);
             this.groupCustoms.Controls.Add(this.contents);
             this.groupCustoms.Location = new System.Drawing.Point(6, 432);
             this.groupCustoms.Name = "groupCustoms";
-            this.groupCustoms.Size = new System.Drawing.Size(405, 81);
+            this.groupCustoms.Size = new System.Drawing.Size(405, 191);
             this.groupCustoms.TabIndex = 5;
             this.groupCustoms.TabStop = false;
             this.groupCustoms.Text = "Customs";
@@ -183,7 +207,7 @@
             // 
             this.labelNonDelivery.AutoSize = true;
             this.labelNonDelivery.BackColor = System.Drawing.Color.Transparent;
-            this.labelNonDelivery.Location = new System.Drawing.Point(50, 51);
+            this.labelNonDelivery.Location = new System.Drawing.Point(57, 51);
             this.labelNonDelivery.Name = "labelNonDelivery";
             this.labelNonDelivery.Size = new System.Drawing.Size(72, 13);
             this.labelNonDelivery.TabIndex = 106;
@@ -193,11 +217,137 @@
             // 
             this.nonDelivery.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.nonDelivery.FormattingEnabled = true;
-            this.nonDelivery.Location = new System.Drawing.Point(128, 48);
+            this.nonDelivery.Location = new System.Drawing.Point(138, 48);
             this.nonDelivery.Name = "nonDelivery";
             this.nonDelivery.PromptText = "(Multiple Values)";
-            this.nonDelivery.Size = new System.Drawing.Size(206, 21);
+            this.nonDelivery.Size = new System.Drawing.Size(196, 21);
             this.nonDelivery.TabIndex = 3;
+            // 
+            // customsRecipientTINState
+            // 
+            this.customsRecipientTINState.AutoSize = true;
+            this.customsRecipientTINState.Checked = true;
+            this.customsRecipientTINState.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.customsRecipientTINState.Location = new System.Drawing.Point(9, 78);
+            this.customsRecipientTINState.Name = "customsRecipientTINState";
+            this.customsRecipientTINState.Size = new System.Drawing.Size(15, 14);
+            this.customsRecipientTINState.TabIndex = 4;
+            this.customsRecipientTINState.Tag = "";
+            this.customsRecipientTINState.UseVisualStyleBackColor = true;
+            // 
+            // labelCustomsRecipientTIN
+            // 
+            this.labelCustomsRecipientTIN.AutoSize = true;
+            this.labelCustomsRecipientTIN.BackColor = System.Drawing.Color.Transparent;
+            this.labelCustomsRecipientTIN.Location = new System.Drawing.Point(40, 78);
+            this.labelCustomsRecipientTIN.Name = "labelCustomsRecipientTIN";
+            this.labelCustomsRecipientTIN.Size = new System.Drawing.Size(72, 13);
+            this.labelCustomsRecipientTIN.TabIndex = 116;
+            this.labelCustomsRecipientTIN.Text = "Recipient Tax Id:";
+            // 
+            // customsRecipientTIN
+            // 
+            this.customsRecipientTIN.BackColor = System.Drawing.Color.White;
+            this.customsRecipientTIN.Location = new System.Drawing.Point(138, 75);
+            this.customsRecipientTIN.Name = "customsRecipientTIN";
+            this.customsRecipientTIN.Size = new System.Drawing.Size(196, 21);
+            this.customsRecipientTIN.TabIndex = 5;
+            // 
+            // customsRecipientTINTypeState
+            // 
+            this.customsRecipientTINTypeState.AutoSize = true;
+            this.customsRecipientTINTypeState.Checked = true;
+            this.customsRecipientTINTypeState.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.customsRecipientTINTypeState.Location = new System.Drawing.Point(9, 105);
+            this.customsRecipientTINTypeState.Name = "customsRecipientTINTypeState";
+            this.customsRecipientTINTypeState.Size = new System.Drawing.Size(15, 14);
+            this.customsRecipientTINTypeState.TabIndex = 6;
+            this.customsRecipientTINTypeState.Tag = "";
+            this.customsRecipientTINTypeState.UseVisualStyleBackColor = true;
+            // 
+            // labelCustomsRecipientTINType
+            // 
+            this.labelCustomsRecipientTINType.AutoSize = true;
+            this.labelCustomsRecipientTINType.BackColor = System.Drawing.Color.Transparent;
+            this.labelCustomsRecipientTINType.Location = new System.Drawing.Point(77, 105);
+            this.labelCustomsRecipientTINType.Name = "labelCustomsRecipientTINType";
+            this.labelCustomsRecipientTINType.Size = new System.Drawing.Size(72, 13);
+            this.labelCustomsRecipientTINType.TabIndex = 126;
+            this.labelCustomsRecipientTINType.Text = "Tin Type:";
+            // 
+            // customsRecipientTINType
+            // 
+            this.customsRecipientTINType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.customsRecipientTINType.FormattingEnabled = true;
+            this.customsRecipientTINType.Location = new System.Drawing.Point(138, 102);
+            this.customsRecipientTINType.Name = "customsRecipientTINType";
+            this.customsRecipientTINType.PromptText = "(Select a Value)";
+            this.customsRecipientTINType.Size = new System.Drawing.Size(196, 21);
+            this.customsRecipientTINType.TabIndex = 7;
+            // 
+            // customsRecipientEntityTypeState
+            // 
+            this.customsRecipientEntityTypeState.AutoSize = true;
+            this.customsRecipientEntityTypeState.Checked = true;
+            this.customsRecipientEntityTypeState.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.customsRecipientEntityTypeState.Location = new System.Drawing.Point(9, 132);
+            this.customsRecipientEntityTypeState.Name = "customsRecipientEntityTypeState";
+            this.customsRecipientEntityTypeState.Size = new System.Drawing.Size(15, 14);
+            this.customsRecipientEntityTypeState.TabIndex = 8;
+            this.customsRecipientEntityTypeState.Tag = "";
+            this.customsRecipientEntityTypeState.UseVisualStyleBackColor = true;
+            // 
+            // labelCustomsRecipientEntityType
+            // 
+            this.labelCustomsRecipientEntityType.AutoSize = true;
+            this.labelCustomsRecipientEntityType.BackColor = System.Drawing.Color.Transparent;
+            this.labelCustomsRecipientEntityType.Location = new System.Drawing.Point(62, 132);
+            this.labelCustomsRecipientEntityType.Name = "labelCustomsRecipientEntityType";
+            this.labelCustomsRecipientEntityType.Size = new System.Drawing.Size(72, 13);
+            this.labelCustomsRecipientEntityType.TabIndex = 136;
+            this.labelCustomsRecipientEntityType.Text = "Entity Type:";
+            // 
+            // customsRecipientEntityType
+            // 
+            this.customsRecipientEntityType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.customsRecipientEntityType.FormattingEnabled = true;
+            this.customsRecipientEntityType.Location = new System.Drawing.Point(138, 129);
+            this.customsRecipientEntityType.Name = "customsRecipientEntityType";
+            this.customsRecipientEntityType.PromptText = "(Select a Value)";
+            this.customsRecipientEntityType.Size = new System.Drawing.Size(196, 21);
+            this.customsRecipientEntityType.TabIndex = 9;
+            // 
+            // customsRecipientIssuingAuthorityState
+            // 
+            this.customsRecipientIssuingAuthorityState.AutoSize = true;
+            this.customsRecipientIssuingAuthorityState.Checked = true;
+            this.customsRecipientIssuingAuthorityState.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.customsRecipientIssuingAuthorityState.Location = new System.Drawing.Point(9, 159);
+            this.customsRecipientIssuingAuthorityState.Name = "customsRecipientIssuingAuthorityState";
+            this.customsRecipientIssuingAuthorityState.Size = new System.Drawing.Size(15, 14);
+            this.customsRecipientIssuingAuthorityState.TabIndex = 10;
+            this.customsRecipientIssuingAuthorityState.Tag = "";
+            this.customsRecipientIssuingAuthorityState.UseVisualStyleBackColor = true;
+            // 
+            // labelCustomsRecipientIssuingAuthority
+            // 
+            this.labelCustomsRecipientIssuingAuthority.AutoSize = true;
+            this.labelCustomsRecipientIssuingAuthority.BackColor = System.Drawing.Color.Transparent;
+            this.labelCustomsRecipientIssuingAuthority.Location = new System.Drawing.Point(35, 159);
+            this.labelCustomsRecipientIssuingAuthority.Name = "labelCustomsRecipientIssuingAuthority";
+            this.labelCustomsRecipientIssuingAuthority.Size = new System.Drawing.Size(72, 13);
+            this.labelCustomsRecipientIssuingAuthority.TabIndex = 146;
+            this.labelCustomsRecipientIssuingAuthority.Text = "Issuing Authority:";
+            // 
+            // customsRecipientIssuingAuthority
+            // 
+            this.customsRecipientIssuingAuthority.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.customsRecipientIssuingAuthority.FormattingEnabled = true;
+            this.customsRecipientIssuingAuthority.Location = new System.Drawing.Point(138, 156);
+            this.customsRecipientIssuingAuthority.Name = "customsRecipientIssuingAuthority";
+            this.customsRecipientIssuingAuthority.PromptText = "(Select a Value)";
+            this.customsRecipientIssuingAuthority.Size = new System.Drawing.Size(196, 21);
+            this.customsRecipientIssuingAuthority.TabIndex = 11;
             // 
             // labelContents
             // 
@@ -217,17 +367,17 @@
             this.customsBorderEdge.BorderStyle = ComponentFactory.Krypton.Toolkit.PaletteBorderStyle.GridDataCellSheet;
             this.customsBorderEdge.Location = new System.Drawing.Point(29, 18);
             this.customsBorderEdge.Name = "customsBorderEdge";
-            this.customsBorderEdge.Size = new System.Drawing.Size(1, 51);
+            this.customsBorderEdge.Size = new System.Drawing.Size(1, 161);
             this.customsBorderEdge.Text = "customsBorderEdge";
             // 
             // contents
             // 
             this.contents.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.contents.FormattingEnabled = true;
-            this.contents.Location = new System.Drawing.Point(128, 21);
+            this.contents.Location = new System.Drawing.Point(138, 21);
             this.contents.Name = "contents";
             this.contents.PromptText = "(Multiple Values)";
-            this.contents.Size = new System.Drawing.Size(206, 21);
+            this.contents.Size = new System.Drawing.Size(196, 21);
             this.contents.TabIndex = 1;
             // 
             // groupLabels
@@ -579,6 +729,18 @@
         private System.Windows.Forms.CheckBox nonDeliveryState;
         private System.Windows.Forms.Label labelNonDelivery;
         private ShipWorks.UI.Controls.MultiValueComboBox nonDelivery;
+        private System.Windows.Forms.CheckBox customsRecipientTINState;
+        private System.Windows.Forms.Label labelCustomsRecipientTIN;
+        private ShipWorks.UI.Controls.MultiValueTextBox customsRecipientTIN;
+        private System.Windows.Forms.CheckBox customsRecipientTINTypeState;
+        private System.Windows.Forms.Label labelCustomsRecipientTINType;
+        private ShipWorks.UI.Controls.MultiValueComboBox customsRecipientTINType;
+        private System.Windows.Forms.CheckBox customsRecipientEntityTypeState;
+        private System.Windows.Forms.Label labelCustomsRecipientEntityType;
+        private ShipWorks.UI.Controls.MultiValueComboBox customsRecipientEntityType;
+        private System.Windows.Forms.CheckBox customsRecipientIssuingAuthorityState;
+        private System.Windows.Forms.Label labelCustomsRecipientIssuingAuthority;
+        private ShipWorks.UI.Controls.MultiValueComboBox customsRecipientIssuingAuthority;
         private System.Windows.Forms.Label labelContents;
         private ComponentFactory.Krypton.Toolkit.KryptonBorderEdge customsBorderEdge;
         private ShipWorks.UI.Controls.MultiValueComboBox contents;

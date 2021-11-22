@@ -32,6 +32,14 @@
             this.nonDeliveryType = new ShipWorks.UI.Controls.MultiValueComboBox();
             this.labelContent = new System.Windows.Forms.Label();
             this.labelNonDelivery = new System.Windows.Forms.Label();
+            this.labelCustomsRecipientTIN = new System.Windows.Forms.Label();
+            this.customsRecipientTIN = new ShipWorks.UI.Controls.MultiValueTextBox();
+            this.labelCustomsRecipientTINType = new System.Windows.Forms.Label();
+            this.customsRecipientTINType = new ShipWorks.UI.Controls.MultiValueComboBox();
+            this.labelCustomsRecipientEntityType = new System.Windows.Forms.Label();
+            this.customsRecipientEntityType = new ShipWorks.UI.Controls.MultiValueComboBox();
+            this.labelCustomsRecipientIssuingAuthority = new System.Windows.Forms.Label();
+            this.customsRecipientIssuingAuthority = new ShipWorks.UI.Controls.MultiValueComboBox();
             ((System.ComponentModel.ISupportInitialize)(this.sectionContents)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.sectionContents.ContentPanel)).BeginInit();
             this.sectionContents.ContentPanel.SuspendLayout();
@@ -50,16 +58,16 @@
             this.sectionContents.ContentPanel.Controls.Add(this.groupSelectedContent);
             this.sectionContents.ContentPanel.Controls.Add(this.delete);
             this.sectionContents.ContentPanel.Controls.Add(this.add);
-            this.sectionContents.Location = new System.Drawing.Point(6, 132);
+            this.sectionContents.Location = new System.Drawing.Point(6, 232);
             // 
             // label1
             // 
-            this.label1.Location = new System.Drawing.Point(70, 10);
+            this.label1.Location = new System.Drawing.Point(90, 10);
             this.label1.TabIndex = 0;
             // 
             // customsValue
             // 
-            this.customsValue.Location = new System.Drawing.Point(113, 7);
+            this.customsValue.Location = new System.Drawing.Point(138, 7);
             this.customsValue.Size = new System.Drawing.Size(95, 21);
             this.customsValue.TabIndex = 1;
             // 
@@ -74,14 +82,38 @@
             this.sectionGeneral.ContentPanel.Controls.Add(this.nonDeliveryType);
             this.sectionGeneral.ContentPanel.Controls.Add(this.labelContent);
             this.sectionGeneral.ContentPanel.Controls.Add(this.labelNonDelivery);
+            this.sectionGeneral.ContentPanel.Controls.Add(this.labelCustomsRecipientTIN);
+            this.sectionGeneral.ContentPanel.Controls.Add(this.customsRecipientTIN);
+            this.sectionGeneral.ContentPanel.Controls.Add(this.labelCustomsRecipientTINType);
+            this.sectionGeneral.ContentPanel.Controls.Add(this.customsRecipientTINType);
+            this.sectionGeneral.ContentPanel.Controls.Add(this.labelCustomsRecipientEntityType);
+            this.sectionGeneral.ContentPanel.Controls.Add(this.customsRecipientEntityType);
+            this.sectionGeneral.ContentPanel.Controls.Add(this.labelCustomsRecipientIssuingAuthority);
+            this.sectionGeneral.ContentPanel.Controls.Add(this.customsRecipientIssuingAuthority);
             this.sectionGeneral.Location = new System.Drawing.Point(6, 5);
-            this.sectionGeneral.Size = new System.Drawing.Size(572, 122);
+            this.sectionGeneral.Size = new System.Drawing.Size(572, 222);
+            // 
+            // groupSelectedContent
+            // 
+            this.groupSelectedContent.Size = new System.Drawing.Size(692, 190);
+            // 
+            // add
+            // 
+            this.add.Location = new System.Drawing.Point(641, 10);
+            // 
+            // delete
+            // 
+            this.delete.Location = new System.Drawing.Point(641, 37);
+            // 
+            // itemsGrid
+            // 
+            this.itemsGrid.Size = new System.Drawing.Size(627, 116);
             // 
             // contentType
             // 
             this.contentType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.contentType.FormattingEnabled = true;
-            this.contentType.Location = new System.Drawing.Point(113, 34);
+            this.contentType.Location = new System.Drawing.Point(138, 34);
             this.contentType.Name = "contentType";
             this.contentType.PromptText = "(Multiple Values)";
             this.contentType.Size = new System.Drawing.Size(160, 21);
@@ -91,7 +123,7 @@
             // 
             this.nonDeliveryType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.nonDeliveryType.FormattingEnabled = true;
-            this.nonDeliveryType.Location = new System.Drawing.Point(113, 61);
+            this.nonDeliveryType.Location = new System.Drawing.Point(138, 61);
             this.nonDeliveryType.Name = "nonDeliveryType";
             this.nonDeliveryType.PromptText = "(Multiple Values)";
             this.nonDeliveryType.Size = new System.Drawing.Size(160, 21);
@@ -101,7 +133,7 @@
             // 
             this.labelContent.AutoSize = true;
             this.labelContent.BackColor = System.Drawing.Color.Transparent;
-            this.labelContent.Location = new System.Drawing.Point(57, 37);
+            this.labelContent.Location = new System.Drawing.Point(78, 37);
             this.labelContent.Name = "labelContent";
             this.labelContent.Size = new System.Drawing.Size(50, 13);
             this.labelContent.TabIndex = 2;
@@ -111,11 +143,89 @@
             // 
             this.labelNonDelivery.AutoSize = true;
             this.labelNonDelivery.BackColor = System.Drawing.Color.Transparent;
-            this.labelNonDelivery.Location = new System.Drawing.Point(35, 64);
+            this.labelNonDelivery.Location = new System.Drawing.Point(55, 64);
             this.labelNonDelivery.Name = "labelNonDelivery";
             this.labelNonDelivery.Size = new System.Drawing.Size(72, 13);
             this.labelNonDelivery.TabIndex = 2;
             this.labelNonDelivery.Text = "Non Delivery:";
+            // 
+            // labelCustomsRecipientTIN
+            // 
+            this.labelCustomsRecipientTIN.AutoSize = true;
+            this.labelCustomsRecipientTIN.BackColor = System.Drawing.Color.Transparent;
+            this.labelCustomsRecipientTIN.Location = new System.Drawing.Point(40, 91);
+            this.labelCustomsRecipientTIN.Name = "labelCustomsRecipientTIN";
+            this.labelCustomsRecipientTIN.Size = new System.Drawing.Size(89, 13);
+            this.labelCustomsRecipientTIN.TabIndex = 116;
+            this.labelCustomsRecipientTIN.Text = "Recipient Tax Id:";
+            // 
+            // customsRecipientTIN
+            // 
+            this.customsRecipientTIN.BackColor = System.Drawing.Color.White;
+            this.customsRecipientTIN.Location = new System.Drawing.Point(138, 88);
+            this.customsRecipientTIN.Name = "customsRecipientTIN";
+            this.customsRecipientTIN.Size = new System.Drawing.Size(160, 21);
+            this.customsRecipientTIN.TabIndex = 5;
+            // 
+            // labelCustomsRecipientTINType
+            // 
+            this.labelCustomsRecipientTINType.AutoSize = true;
+            this.labelCustomsRecipientTINType.BackColor = System.Drawing.Color.Transparent;
+            this.labelCustomsRecipientTINType.Location = new System.Drawing.Point(77, 118);
+            this.labelCustomsRecipientTINType.Name = "labelCustomsRecipientTINType";
+            this.labelCustomsRecipientTINType.Size = new System.Drawing.Size(52, 13);
+            this.labelCustomsRecipientTINType.TabIndex = 126;
+            this.labelCustomsRecipientTINType.Text = "Tin Type:";
+            // 
+            // customsRecipientTINType
+            // 
+            this.customsRecipientTINType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.customsRecipientTINType.FormattingEnabled = true;
+            this.customsRecipientTINType.Location = new System.Drawing.Point(138, 115);
+            this.customsRecipientTINType.Name = "customsRecipientTINType";
+            this.customsRecipientTINType.PromptText = "(Multiple Values)";
+            this.customsRecipientTINType.Size = new System.Drawing.Size(160, 21);
+            this.customsRecipientTINType.TabIndex = 7;
+            // 
+            // labelCustomsRecipientEntityType
+            // 
+            this.labelCustomsRecipientEntityType.AutoSize = true;
+            this.labelCustomsRecipientEntityType.BackColor = System.Drawing.Color.Transparent;
+            this.labelCustomsRecipientEntityType.Location = new System.Drawing.Point(62, 145);
+            this.labelCustomsRecipientEntityType.Name = "labelCustomsRecipientEntityType";
+            this.labelCustomsRecipientEntityType.Size = new System.Drawing.Size(66, 13);
+            this.labelCustomsRecipientEntityType.TabIndex = 136;
+            this.labelCustomsRecipientEntityType.Text = "Entity Type:";
+            // 
+            // customsRecipientEntityType
+            // 
+            this.customsRecipientEntityType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.customsRecipientEntityType.FormattingEnabled = true;
+            this.customsRecipientEntityType.Location = new System.Drawing.Point(138, 142);
+            this.customsRecipientEntityType.Name = "customsRecipientEntityType";
+            this.customsRecipientEntityType.PromptText = "(Multiple Values)";
+            this.customsRecipientEntityType.Size = new System.Drawing.Size(160, 21);
+            this.customsRecipientEntityType.TabIndex = 9;
+            // 
+            // labelCustomsRecipientIssuingAuthority
+            // 
+            this.labelCustomsRecipientIssuingAuthority.AutoSize = true;
+            this.labelCustomsRecipientIssuingAuthority.BackColor = System.Drawing.Color.Transparent;
+            this.labelCustomsRecipientIssuingAuthority.Location = new System.Drawing.Point(35, 172);
+            this.labelCustomsRecipientIssuingAuthority.Name = "labelCustomsRecipientIssuingAuthority";
+            this.labelCustomsRecipientIssuingAuthority.Size = new System.Drawing.Size(93, 13);
+            this.labelCustomsRecipientIssuingAuthority.TabIndex = 146;
+            this.labelCustomsRecipientIssuingAuthority.Text = "Issuing Authority:";
+            // 
+            // customsRecipientIssuingAuthority
+            // 
+            this.customsRecipientIssuingAuthority.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.customsRecipientIssuingAuthority.FormattingEnabled = true;
+            this.customsRecipientIssuingAuthority.Location = new System.Drawing.Point(138, 169);
+            this.customsRecipientIssuingAuthority.Name = "customsRecipientIssuingAuthority";
+            this.customsRecipientIssuingAuthority.PromptText = "(Multiple Values)";
+            this.customsRecipientIssuingAuthority.Size = new System.Drawing.Size(160, 21);
+            this.customsRecipientIssuingAuthority.TabIndex = 11;
             // 
             // AsendiaCustomsControl
             // 
@@ -140,5 +250,13 @@
         private ShipWorks.UI.Controls.MultiValueComboBox nonDeliveryType;
         private System.Windows.Forms.Label labelContent;
         private System.Windows.Forms.Label labelNonDelivery;
+        private System.Windows.Forms.Label labelCustomsRecipientTIN;
+        private ShipWorks.UI.Controls.MultiValueTextBox customsRecipientTIN;
+        private System.Windows.Forms.Label labelCustomsRecipientTINType;
+        private ShipWorks.UI.Controls.MultiValueComboBox customsRecipientTINType;
+        private System.Windows.Forms.Label labelCustomsRecipientEntityType;
+        private ShipWorks.UI.Controls.MultiValueComboBox customsRecipientEntityType;
+        private System.Windows.Forms.Label labelCustomsRecipientIssuingAuthority;
+        private ShipWorks.UI.Controls.MultiValueComboBox customsRecipientIssuingAuthority;
     }
 }

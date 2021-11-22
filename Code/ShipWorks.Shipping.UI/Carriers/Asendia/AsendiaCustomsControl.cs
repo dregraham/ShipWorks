@@ -5,6 +5,7 @@ using Interapptive.Shared.Utility;
 using ShipWorks.UI.Controls;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.ShipEngine;
+using Interapptive.Shared.Enums;
 using Interapptive.Shared.ComponentRegistration;
 
 namespace ShipWorks.Shipping.UI.Carriers.Asendia
@@ -30,6 +31,9 @@ namespace ShipWorks.Shipping.UI.Carriers.Asendia
         {
             base.Initialize();
 
+            EnumHelper.BindComboBox<TaxIdType>(customsRecipientTINType);
+            EnumHelper.BindComboBox<CustomsRecipientEntityType>(customsRecipientEntityType);
+            EnumHelper.BindComboBox<CustomsTinIssuingAuthority>(customsRecipientIssuingAuthority);
             EnumHelper.BindComboBox<ShipEngineContentsType>(contentType);
             EnumHelper.BindComboBox<ShipEngineNonDeliveryType>(nonDeliveryType);
         }
@@ -64,6 +68,10 @@ namespace ShipWorks.Shipping.UI.Carriers.Asendia
 
                     contentType.ApplyMultiValue((ShipEngineContentsType) shipment.Asendia.Contents);
                     nonDeliveryType.ApplyMultiValue((ShipEngineNonDeliveryType) shipment.Asendia.NonDelivery);
+                    customsRecipientTIN.ApplyMultiText(shipment.Asendia.CustomsRecipientTin);
+                    customsRecipientTINType.ApplyMultiValue((TaxIdType) shipment.Asendia.CustomsRecipientTinType);
+                    customsRecipientEntityType.ApplyMultiValue((CustomsRecipientEntityType) shipment.Asendia.CustomsRecipientEntityType);
+                    customsRecipientIssuingAuthority.ApplyMultiValue((CustomsTinIssuingAuthority) shipment.Asendia.CustomsRecipientIssuingAuthority);
                 }
             }
 
@@ -95,6 +103,10 @@ namespace ShipWorks.Shipping.UI.Carriers.Asendia
             {
                 contentType.ReadMultiValue(v => shipment.Asendia.Contents = (int) (ShipEngineContentsType) v);
                 nonDeliveryType.ReadMultiValue(v => shipment.Asendia.NonDelivery = (int) (ShipEngineNonDeliveryType) v);
+                customsRecipientTIN.ReadMultiText(t => shipment.Asendia.CustomsRecipientTin = t);
+                customsRecipientTINType.ReadMultiValue(v => shipment.Asendia.CustomsRecipientTinType = (int) (TaxIdType) v);
+                customsRecipientEntityType.ReadMultiValue(v => shipment.Asendia.CustomsRecipientEntityType = (int) (CustomsRecipientEntityType) v);
+                customsRecipientIssuingAuthority.ReadMultiValue(v => shipment.Asendia.CustomsRecipientIssuingAuthority = (int) (CustomsTinIssuingAuthority) v);
             }
         }
     }
