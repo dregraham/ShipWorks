@@ -584,9 +584,9 @@ namespace ShipWorks.Data.Model.HelperClasses
 			this.AddElementFieldInfo("AsendiaProfileEntity", "Contents", typeof(Nullable<System.Int32>), false, false, false, true,  (int)AsendiaProfileFieldIndex.Contents, 0, 0, 10);
 			this.AddElementFieldInfo("AsendiaProfileEntity", "NonDelivery", typeof(Nullable<System.Int32>), false, false, false, true,  (int)AsendiaProfileFieldIndex.NonDelivery, 0, 0, 10);
 			this.AddElementFieldInfo("AsendiaProfileEntity", "CustomsRecipientTin", typeof(System.String), false, false, false, true,  (int)AsendiaProfileFieldIndex.CustomsRecipientTin, 24, 0, 0);
-			this.AddElementFieldInfo("AsendiaProfileEntity", "CustomsRecipientTinType", typeof(System.String), false, false, false, true,  (int)AsendiaProfileFieldIndex.CustomsRecipientTinType, 10, 0, 0);
-			this.AddElementFieldInfo("AsendiaProfileEntity", "CustomsRecipientEntityType", typeof(System.String), false, false, false, true,  (int)AsendiaProfileFieldIndex.CustomsRecipientEntityType, 24, 0, 0);
-			this.AddElementFieldInfo("AsendiaProfileEntity", "CustomsRecipientIssuingAuthority", typeof(System.String), false, false, false, true,  (int)AsendiaProfileFieldIndex.CustomsRecipientIssuingAuthority, 5, 0, 0);
+			this.AddElementFieldInfo("AsendiaProfileEntity", "CustomsRecipientTinType", typeof(Nullable<System.Int32>), false, false, false, true,  (int)AsendiaProfileFieldIndex.CustomsRecipientTinType, 0, 0, 10);
+			this.AddElementFieldInfo("AsendiaProfileEntity", "CustomsRecipientEntityType", typeof(Nullable<System.Int32>), false, false, false, true,  (int)AsendiaProfileFieldIndex.CustomsRecipientEntityType, 0, 0, 10);
+			this.AddElementFieldInfo("AsendiaProfileEntity", "CustomsRecipientIssuingAuthority", typeof(Nullable<System.Int32>), false, false, false, true,  (int)AsendiaProfileFieldIndex.CustomsRecipientIssuingAuthority, 0, 0, 10);
 		}
 		/// <summary>Inits AsendiaShipmentEntity's FieldInfo objects</summary>
 		private void InitAsendiaShipmentEntityInfos()
@@ -609,9 +609,9 @@ namespace ShipWorks.Data.Model.HelperClasses
 			this.AddElementFieldInfo("AsendiaShipmentEntity", "NonMachinable", typeof(System.Boolean), false, false, false, false,  (int)AsendiaShipmentFieldIndex.NonMachinable, 0, 0, 0);
 			this.AddElementFieldInfo("AsendiaShipmentEntity", "Insurance", typeof(System.Boolean), false, false, false, false,  (int)AsendiaShipmentFieldIndex.Insurance, 0, 0, 0);
 			this.AddElementFieldInfo("AsendiaShipmentEntity", "CustomsRecipientTin", typeof(System.String), false, false, false, true,  (int)AsendiaShipmentFieldIndex.CustomsRecipientTin, 24, 0, 0);
-			this.AddElementFieldInfo("AsendiaShipmentEntity", "CustomsRecipientTinType", typeof(System.String), false, false, false, true,  (int)AsendiaShipmentFieldIndex.CustomsRecipientTinType, 10, 0, 0);
-			this.AddElementFieldInfo("AsendiaShipmentEntity", "CustomsRecipientEntityType", typeof(System.String), false, false, false, true,  (int)AsendiaShipmentFieldIndex.CustomsRecipientEntityType, 24, 0, 0);
-			this.AddElementFieldInfo("AsendiaShipmentEntity", "CustomsRecipientIssuingAuthority", typeof(System.String), false, false, false, true,  (int)AsendiaShipmentFieldIndex.CustomsRecipientIssuingAuthority, 5, 0, 0);
+			this.AddElementFieldInfo("AsendiaShipmentEntity", "CustomsRecipientTinType", typeof(Nullable<System.Int32>), false, false, false, true,  (int)AsendiaShipmentFieldIndex.CustomsRecipientTinType, 0, 0, 10);
+			this.AddElementFieldInfo("AsendiaShipmentEntity", "CustomsRecipientEntityType", typeof(Nullable<System.Int32>), false, false, false, true,  (int)AsendiaShipmentFieldIndex.CustomsRecipientEntityType, 0, 0, 10);
+			this.AddElementFieldInfo("AsendiaShipmentEntity", "CustomsRecipientIssuingAuthority", typeof(Nullable<System.Int32>), false, false, false, true,  (int)AsendiaShipmentFieldIndex.CustomsRecipientIssuingAuthority, 0, 0, 10);
 		}
 		/// <summary>Inits AuditEntity's FieldInfo objects</summary>
 		private void InitAuditEntityInfos()

@@ -1,47 +1,47 @@
 ﻿PRINT N'Altering [dbo].[AsendiaShipment]'
 GO
-IF COL_LENGTH(N'[dbo].[AsendiaShipment]', N'CustomsRecipientTINType') IS NULL
-ALTER TABLE [dbo].[AsendiaShipment] ADD [CustomsRecipientTINType] [int] NULL
+IF COL_LENGTH(N'[dbo].[AsendiaShipment]', N'CustomsRecipientTinType') IS NULL
+ALTER TABLE [dbo].[AsendiaShipment] ADD [CustomsRecipientTinType] [int] NULL
 GO
-IF COL_LENGTH(N'[dbo].[AsendiaShipment]', N'CustomsRecipientTINType') IS NULL
-ALTER TABLE [dbo].[AsendiaShipment] ADD [CustomsRecipientTINType] [nvarchar] (10) NULL
+IF COL_LENGTH(N'[dbo].[AsendiaShipment]', N'CustomsRecipientTin') IS NULL
+ALTER TABLE [dbo].[AsendiaShipment] ADD [CustomsRecipientTin] [nvarchar] (24) NULL
 GO
 IF COL_LENGTH(N'[dbo].[AsendiaShipment]', N'CustomsRecipientEntityType') IS NULL
-ALTER TABLE [dbo].[AsendiaShipment] ADD [CustomsRecipientEntityType] [nvarchar] (24) NULL
+ALTER TABLE [dbo].[AsendiaShipment] ADD [CustomsRecipientEntityType] [int] NULL
 GO
 IF COL_LENGTH(N'[dbo].[AsendiaShipment]', N'CustomsRecipientIssuingAuthority') IS NULL
-ALTER TABLE [dbo].[AsendiaShipment] ADD [CustomsRecipientIssuingAuthority] [nvarchar] (5) NULL
+ALTER TABLE [dbo].[AsendiaShipment] ADD [CustomsRecipientIssuingAuthority] [int] NULL
 
 UPDATE asendiaShipment
-SET asendiaShipment.[CustomsRecipientTINType] = 4 
+SET asendiaShipment.[CustomsRecipientTinType] = 4 
 FROM [AsendiaShipment] asendiaShipment
-WHERE asendiaShipment.[CustomsRecipientTINType] IS NULL
+WHERE asendiaShipment.[CustomsRecipientTinType] IS NULL
 GO
 
 PRINT N'Altering [dbo].[AsendiaProfile]'
 GO
-IF COL_LENGTH(N'[dbo].[AsendiaProfile]', N'CustomsRecipientTIN') IS NULL
-ALTER TABLE [dbo].[AsendiaProfile] ADD [CustomsRecipientTIN] [nvarchar] (24) NULL
+IF COL_LENGTH(N'[dbo].[AsendiaProfile]', N'CustomsRecipientTinType') IS NULL
+ALTER TABLE [dbo].[AsendiaProfile] ADD [CustomsRecipientTINType] [int] NULL
 GO
-IF COL_LENGTH(N'[dbo].[AsendiaProfile]', N'CustomsRecipientTINType') IS NULL
-ALTER TABLE [dbo].[AsendiaProfile] ADD [CustomsRecipientTINType] [nvarchar] (10) NULL
+IF COL_LENGTH(N'[dbo].[AsendiaProfile]', N'CustomsRecipientTin') IS NULL
+ALTER TABLE [dbo].[AsendiaProfile] ADD [CustomsRecipientTin] [nvarchar] (24) NULL
 GO
 IF COL_LENGTH(N'[dbo].[AsendiaProfile]', N'CustomsRecipientEntityType') IS NULL
-ALTER TABLE [dbo].[AsendiaProfile] ADD [CustomsRecipientEntityType] [nvarchar] (24) NULL
+ALTER TABLE [dbo].[AsendiaProfile] ADD [CustomsRecipientEntityType] [int] NULL
 GO
 IF COL_LENGTH(N'[dbo].[AsendiaProfile]', N'CustomsRecipientIssuingAuthority') IS NULL
-ALTER TABLE [dbo].[AsendiaProfile] ADD [CustomsRecipientIssuingAuthority] [nvarchar] (5) NULL
+ALTER TABLE [dbo].[AsendiaProfile] ADD [CustomsRecipientIssuingAuthority] [int] NULL
 GO
 
 UPDATE asendiaProfile
 SET 
-    asendiaProfile.[CustomsRecipientTINType] = 4 , 
-    asendiaProfile.[CustomsRecipientTIN] = ''
+    asendiaProfile.[CustomsRecipientTinType] = 4 , 
+    asendiaProfile.[CustomsRecipientTin] = ''
 FROM [AsendiaProfile] asendiaProfile
 INNER JOIN ShippingProfile shipProfile
     ON asendiaProfile.ShippingProfileID = shipProfile.ShippingProfileID
 WHERE 
     shipProfile.ShipmentTypePrimary = 1 
-    AND asendiaProfile.[CustomsRecipientTINType] IS NULL 
-    AND asendiaProfile.[CustomsRecipientTIN] IS NULL
+    AND asendiaProfile.[CustomsRecipientTinType] IS NULL 
+    AND asendiaProfile.[CustomsRecipientTin] IS NULL
 GO

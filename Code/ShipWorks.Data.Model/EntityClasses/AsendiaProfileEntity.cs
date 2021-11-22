@@ -546,34 +546,34 @@ namespace ShipWorks.Data.Model.EntityClasses
 
 		/// <summary> The CustomsRecipientTinType property of the Entity AsendiaProfile<br/><br/></summary>
 		/// <remarks>Mapped on  table field: "AsendiaProfile"."CustomsRecipientTinType"<br/>
-		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 10<br/>
+		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
 		[DataMember]
-		public virtual System.String CustomsRecipientTinType
+		public virtual Nullable<System.Int32> CustomsRecipientTinType
 		{
-			get { return (System.String)GetValue((int)AsendiaProfileFieldIndex.CustomsRecipientTinType, true); }
+			get { return (Nullable<System.Int32>)GetValue((int)AsendiaProfileFieldIndex.CustomsRecipientTinType, false); }
 			set	{ SetValue((int)AsendiaProfileFieldIndex.CustomsRecipientTinType, value); }
 		}
 
 		/// <summary> The CustomsRecipientEntityType property of the Entity AsendiaProfile<br/><br/></summary>
 		/// <remarks>Mapped on  table field: "AsendiaProfile"."CustomsRecipientEntityType"<br/>
-		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 24<br/>
+		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
 		[DataMember]
-		public virtual System.String CustomsRecipientEntityType
+		public virtual Nullable<System.Int32> CustomsRecipientEntityType
 		{
-			get { return (System.String)GetValue((int)AsendiaProfileFieldIndex.CustomsRecipientEntityType, true); }
+			get { return (Nullable<System.Int32>)GetValue((int)AsendiaProfileFieldIndex.CustomsRecipientEntityType, false); }
 			set	{ SetValue((int)AsendiaProfileFieldIndex.CustomsRecipientEntityType, value); }
 		}
 
 		/// <summary> The CustomsRecipientIssuingAuthority property of the Entity AsendiaProfile<br/><br/></summary>
 		/// <remarks>Mapped on  table field: "AsendiaProfile"."CustomsRecipientIssuingAuthority"<br/>
-		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 5<br/>
+		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
 		[DataMember]
-		public virtual System.String CustomsRecipientIssuingAuthority
+		public virtual Nullable<System.Int32> CustomsRecipientIssuingAuthority
 		{
-			get { return (System.String)GetValue((int)AsendiaProfileFieldIndex.CustomsRecipientIssuingAuthority, true); }
+			get { return (Nullable<System.Int32>)GetValue((int)AsendiaProfileFieldIndex.CustomsRecipientIssuingAuthority, false); }
 			set	{ SetValue((int)AsendiaProfileFieldIndex.CustomsRecipientIssuingAuthority, value); }
 		}
 

@@ -100,21 +100,21 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
         /// <summary> The CustomsRecipientTinType property of the Entity AsendiaProfile<br/><br/>
         /// </summary>
         /// <remarks>Mapped on table field: "AsendiaProfile"."CustomsRecipientTinType"<br/>
-        /// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 10<br/>
+        /// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
-        public System.String CustomsRecipientTinType { get; }
+        public Nullable<System.Int32> CustomsRecipientTinType { get; }
         /// <summary> The CustomsRecipientEntityType property of the Entity AsendiaProfile<br/><br/>
         /// </summary>
         /// <remarks>Mapped on table field: "AsendiaProfile"."CustomsRecipientEntityType"<br/>
-        /// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 24<br/>
+        /// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
-        public System.String CustomsRecipientEntityType { get; }
+        public Nullable<System.Int32> CustomsRecipientEntityType { get; }
         /// <summary> The CustomsRecipientIssuingAuthority property of the Entity AsendiaProfile<br/><br/>
         /// </summary>
         /// <remarks>Mapped on table field: "AsendiaProfile"."CustomsRecipientIssuingAuthority"<br/>
-        /// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 5<br/>
+        /// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
-        public System.String CustomsRecipientIssuingAuthority { get; }
+        public Nullable<System.Int32> CustomsRecipientIssuingAuthority { get; }
         
         public IShippingProfileEntity ShippingProfile { get; }
         
