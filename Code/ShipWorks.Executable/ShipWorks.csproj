@@ -102,6 +102,9 @@
   <PropertyGroup>
     <ApplicationManifest>app.manifest</ApplicationManifest>
   </PropertyGroup>
+  <PropertyGroup>
+    <AutoUnifyAssemblyReferences>true</AutoUnifyAssemblyReferences>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="ActiproSoftware.Shared.Net20, Version=1.0.103.0, Culture=neutral, PublicKeyToken=36ff2196ab5654b9, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
