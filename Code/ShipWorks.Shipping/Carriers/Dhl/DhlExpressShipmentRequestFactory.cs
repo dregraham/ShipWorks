@@ -1,9 +1,9 @@
 ﻿using ShipWorks.Shipping.ShipEngine;
-using System.Collections.Generic;
-using ShipEngine.ApiClient.Model;
 using ShipWorks.Data.Model.EntityClasses;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Utility;
+using ShipEngine.CarrierApi.Client.Model;
+using System.Collections.Generic;
 
 namespace ShipWorks.Shipping.Carriers.Dhl
 {
@@ -83,6 +83,14 @@ namespace ShipWorks.Shipping.Carriers.Dhl
             };
 
             return customs;
+        }
+
+        /// <summary>
+        /// Creates the DHL Express tax identifier node
+        /// </summary>
+        protected override List<TaxIdentifier> CreateTaxIdentifiers(ShipmentEntity shipment)
+        {
+            return null;
         }
     }
 }
