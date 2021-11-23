@@ -94,7 +94,6 @@ namespace ShipWorks.Shipping.Carriers.Asendia
             {
                 IdentifierType = (TaxIdentifier.IdentifierTypeEnum) shipment.Asendia.CustomsRecipientTinType,
                 TaxableEntityType = ((Interapptive.Shared.Enums.CustomsRecipientEntityType) shipment.Asendia.CustomsRecipientEntityType).ToString(),
-                IssuingAuthority = shipment.Asendia.CustomsRecipientIssuingAuthority.ToString(),
                 Value = shipment.Asendia.CustomsRecipientTin
             };
 
