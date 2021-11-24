@@ -698,12 +698,12 @@ namespace ShipWorks.Data.Model.EntityClasses
 
 		/// <summary> The CustomsRecipientIssuingAuthority property of the Entity AsendiaShipment<br/><br/></summary>
 		/// <remarks>Mapped on  table field: "AsendiaShipment"."CustomsRecipientIssuingAuthority"<br/>
-		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
+		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 2<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
 		[DataMember]
-		public virtual Nullable<System.Int32> CustomsRecipientIssuingAuthority
+		public virtual System.String CustomsRecipientIssuingAuthority
 		{
-			get { return (Nullable<System.Int32>)GetValue((int)AsendiaShipmentFieldIndex.CustomsRecipientIssuingAuthority, false); }
+			get { return (System.String)GetValue((int)AsendiaShipmentFieldIndex.CustomsRecipientIssuingAuthority, true); }
 			set	{ SetValue((int)AsendiaShipmentFieldIndex.CustomsRecipientIssuingAuthority, value); }
 		}
 

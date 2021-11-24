@@ -4,6 +4,7 @@ using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Utility;
 using ShipWorks.Shipping.ShipEngine;
 using ShipEngine.CarrierApi.Client.Model;
+using System;
 
 namespace ShipWorks.Shipping.Carriers.Asendia
 {
@@ -90,15 +91,18 @@ namespace ShipWorks.Shipping.Carriers.Asendia
         protected override List<TaxIdentifier> CreateTaxIdentifiers(ShipmentEntity shipment)
         {
             List<TaxIdentifier> listTaxIds = new List<TaxIdentifier>();
-            TaxIdentifier taxIdentifier = new TaxIdentifier()
+            if (shipment.Asendia.CustomsRecipientTin != "")
             {
-                IdentifierType = (TaxIdentifier.IdentifierTypeEnum) shipment.Asendia.CustomsRecipientTinType,
-                TaxableEntityType = ((Interapptive.Shared.Enums.CustomsRecipientEntityType) shipment.Asendia.CustomsRecipientEntityType).ToString(),
-                Value = shipment.Asendia.CustomsRecipientTin
-            };
+                TaxIdentifier taxIdentifier = new TaxIdentifier()
+                {
+                    IdentifierType = (TaxIdentifier.IdentifierTypeEnum) shipment.Asendia.CustomsRecipientTinType,
+                    TaxableEntityType = ((Interapptive.Shared.Enums.CustomsRecipientEntityType) shipment.Asendia.CustomsRecipientEntityType).ToString(),
+                    IssuingAuthority = shipment.Asendia.CustomsRecipientIssuingAuthority,
+                    Value = shipment.Asendia.CustomsRecipientTin
+                };
 
-            listTaxIds.Add(taxIdentifier);
-
+                listTaxIds.Add(taxIdentifier);
+            }
             return listTaxIds;
         }
     }

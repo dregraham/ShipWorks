@@ -434,7 +434,7 @@
           <Field Name="AsendiaAccountID" Type="long" IsOptional="true" Precision="19" FieldIndex="1" />
           <Field Name="Contents" Type="int" IsOptional="true" Precision="10" FieldIndex="4" />
           <Field Name="CustomsRecipientEntityType" Type="int" IsOptional="true" FieldIndex="8" />
-          <Field Name="CustomsRecipientIssuingAuthority" Type="int" IsOptional="true" FieldIndex="9" />
+          <Field Name="CustomsRecipientIssuingAuthority" Type="string" IsOptional="true" MaxLength="2" FieldIndex="9" />
           <Field Name="CustomsRecipientTin" Type="string" IsOptional="true" MaxLength="24" FieldIndex="6" />
           <Field Name="CustomsRecipientTinType" Type="int" IsOptional="true" FieldIndex="7" />
           <Field Name="NonDelivery" Type="int" IsOptional="true" Precision="10" FieldIndex="5" />
@@ -448,7 +448,7 @@
           <Field Name="AsendiaAccountID" Type="long" Precision="19" FieldIndex="1" />
           <Field Name="Contents" Type="int" Precision="10" FieldIndex="4" />
           <Field Name="CustomsRecipientEntityType" Type="int" IsOptional="true" FieldIndex="18" />
-          <Field Name="CustomsRecipientIssuingAuthority" Type="int" IsOptional="true" FieldIndex="19" />
+          <Field Name="CustomsRecipientIssuingAuthority" Type="string" IsOptional="true" MaxLength="2" FieldIndex="19" />
           <Field Name="CustomsRecipientTin" Type="string" IsOptional="true" MaxLength="24" FieldIndex="16" />
           <Field Name="CustomsRecipientTinType" Type="int" IsOptional="true" FieldIndex="17" />
           <Field Name="DimsAddWeight" Type="bool" FieldIndex="11" />
@@ -4717,7 +4717,7 @@
       <Catalogs>
         <Catalog Name="ShipWorksLocal">
           <Schemas>
-            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2021-11-11T14:55:29.9817014Z">
+            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2021-11-12T21:42:44.8600289Z">
               <Tables>
                 <Table Name="Action">
                   <PkConstraintName Name="PK_Action" />
@@ -5046,7 +5046,7 @@
                     <Field Name="CustomsRecipientTin" Ordinal="7" IsOptional="true" DbType="12" Length="24" />
                     <Field Name="CustomsRecipientTinType" Ordinal="8" IsOptional="true" DbType="8" Precision="10" />
                     <Field Name="CustomsRecipientEntityType" Ordinal="9" IsOptional="true" DbType="8" Precision="10" />
-                    <Field Name="CustomsRecipientIssuingAuthority" Ordinal="10" IsOptional="true" DbType="8" Precision="10" />
+                    <Field Name="CustomsRecipientIssuingAuthority" Ordinal="10" IsOptional="true" DbType="12" Length="2" />
                   </Fields>
                 </Table>
                 <Table Name="AsendiaShipment">
@@ -5079,7 +5079,7 @@
                     <Field Name="CustomsRecipientTin" Ordinal="17" IsOptional="true" DbType="12" Length="24" />
                     <Field Name="CustomsRecipientTinType" Ordinal="18" IsOptional="true" DbType="8" Precision="10" />
                     <Field Name="CustomsRecipientEntityType" Ordinal="19" IsOptional="true" DbType="8" Precision="10" />
-                    <Field Name="CustomsRecipientIssuingAuthority" Ordinal="20" IsOptional="true" DbType="8" Precision="10" />
+                    <Field Name="CustomsRecipientIssuingAuthority" Ordinal="20" IsOptional="true" DbType="12" Length="2" />
                   </Fields>
                 </Table>
                 <Table Name="Audit">

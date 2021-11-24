@@ -14,9 +14,12 @@ ALTER TABLE [dbo].[AsendiaShipment] ADD [CustomsRecipientIssuingAuthority] [int]
 GO
 
 UPDATE asendiaShipment
-SET asendiaShipment.[CustomsRecipientTinType] = 4 
+SET asendiaShipment.[CustomsRecipientTinType] = 5,
+    asendiaShipment.[CustomsRecipientEntityType] = 0, 
+    asendiaShipment.[CustomsRecipientIssuingAuthority] = 'US', 
+    asendiaShipment.[CustomsRecipientTin] = ''
 FROM [AsendiaShipment] asendiaShipment
-WHERE asendiaShipment.[CustomsRecipientTinType] IS NULL
+WHERE asendiaShipment.[CustomsRecipientTin] IS NULL
 GO
 
 PRINT N'Altering [dbo].[AsendiaProfile]'
@@ -36,13 +39,14 @@ GO
 
 UPDATE asendiaProfile
 SET 
-    asendiaProfile.[CustomsRecipientTinType] = 4 , 
+    asendiaProfile.[CustomsRecipientTinType] = 5,
+    asendiaProfile.[CustomsRecipientEntityType] = 0, 
+    asendiaProfile.[CustomsRecipientIssuingAuthority] = 'US' , 
     asendiaProfile.[CustomsRecipientTin] = ''
 FROM [AsendiaProfile] asendiaProfile
 INNER JOIN ShippingProfile shipProfile
     ON asendiaProfile.ShippingProfileID = shipProfile.ShippingProfileID
 WHERE 
     shipProfile.ShipmentTypePrimary = 1 
-    AND asendiaProfile.[CustomsRecipientTinType] IS NULL 
     AND asendiaProfile.[CustomsRecipientTin] IS NULL
 GO

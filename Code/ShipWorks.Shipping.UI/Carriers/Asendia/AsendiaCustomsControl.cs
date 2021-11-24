@@ -7,6 +7,7 @@ using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.ShipEngine;
 using Interapptive.Shared.Enums;
 using Interapptive.Shared.ComponentRegistration;
+using Interapptive.Shared.Business.Geography;
 
 namespace ShipWorks.Shipping.UI.Carriers.Asendia
 {
@@ -33,7 +34,6 @@ namespace ShipWorks.Shipping.UI.Carriers.Asendia
 
             EnumHelper.BindComboBox<TaxIdType>(customsRecipientTINType);
             EnumHelper.BindComboBox<CustomsRecipientEntityType>(customsRecipientEntityType);
-            EnumHelper.BindComboBox<CustomsTinIssuingAuthority>(customsRecipientIssuingAuthority);
             EnumHelper.BindComboBox<ShipEngineContentsType>(contentType);
             EnumHelper.BindComboBox<ShipEngineNonDeliveryType>(nonDeliveryType);
         }
@@ -51,6 +51,12 @@ namespace ShipWorks.Shipping.UI.Carriers.Asendia
             }
 
             base.LoadShipments(shipments, enableEditing);
+
+            // If the Issuing Authority hasn't been loaded yet do that now
+            if (customsRecipientIssuingAuthority.DataSource == null)
+            {
+                customsRecipientIssuingAuthority.DataSource = Geography.Countries;
+            }
 
             contentType.SelectedIndexChanged -= this.OnChangeOption;
             nonDeliveryType.SelectedIndexChanged -= this.OnChangeOption;
@@ -71,7 +77,7 @@ namespace ShipWorks.Shipping.UI.Carriers.Asendia
                     customsRecipientTIN.ApplyMultiText(shipment.Asendia.CustomsRecipientTin);
                     customsRecipientTINType.ApplyMultiValue((TaxIdType) shipment.Asendia.CustomsRecipientTinType);
                     customsRecipientEntityType.ApplyMultiValue((CustomsRecipientEntityType) shipment.Asendia.CustomsRecipientEntityType);
-                    customsRecipientIssuingAuthority.ApplyMultiValue((CustomsTinIssuingAuthority) shipment.Asendia.CustomsRecipientIssuingAuthority);
+                    customsRecipientIssuingAuthority.ApplyMultiText(Geography.GetCountryName(shipment.Asendia.CustomsRecipientIssuingAuthority));
                 }
             }
 
@@ -106,7 +112,7 @@ namespace ShipWorks.Shipping.UI.Carriers.Asendia
                 customsRecipientTIN.ReadMultiText(t => shipment.Asendia.CustomsRecipientTin = t);
                 customsRecipientTINType.ReadMultiValue(v => shipment.Asendia.CustomsRecipientTinType = (int) (TaxIdType) v);
                 customsRecipientEntityType.ReadMultiValue(v => shipment.Asendia.CustomsRecipientEntityType = (int) (CustomsRecipientEntityType) v);
-                customsRecipientIssuingAuthority.ReadMultiValue(v => shipment.Asendia.CustomsRecipientIssuingAuthority = (int) (CustomsTinIssuingAuthority) v);
+                customsRecipientIssuingAuthority.ReadMultiText(v => shipment.Asendia.CustomsRecipientIssuingAuthority = Geography.GetCountryCode(v));
             }
         }
     }

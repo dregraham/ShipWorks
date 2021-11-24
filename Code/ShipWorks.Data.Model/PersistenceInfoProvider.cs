@@ -601,7 +601,7 @@ namespace ShipWorks.Data.Model
 			this.AddElementFieldMapping("AsendiaProfileEntity", "CustomsRecipientTin", "CustomsRecipientTin", true, "NVarChar", 24, 0, 0, false, "", null, typeof(System.String), 6);
 			this.AddElementFieldMapping("AsendiaProfileEntity", "CustomsRecipientTinType", "CustomsRecipientTinType", true, "Int", 0, 10, 0, false, "", null, typeof(System.Int32), 7);
 			this.AddElementFieldMapping("AsendiaProfileEntity", "CustomsRecipientEntityType", "CustomsRecipientEntityType", true, "Int", 0, 10, 0, false, "", null, typeof(System.Int32), 8);
-			this.AddElementFieldMapping("AsendiaProfileEntity", "CustomsRecipientIssuingAuthority", "CustomsRecipientIssuingAuthority", true, "Int", 0, 10, 0, false, "", null, typeof(System.Int32), 9);
+			this.AddElementFieldMapping("AsendiaProfileEntity", "CustomsRecipientIssuingAuthority", "CustomsRecipientIssuingAuthority", true, "NVarChar", 2, 0, 0, false, "", null, typeof(System.String), 9);
 		}
 
 		/// <summary>Inits AsendiaShipmentEntity's mappings</summary>
@@ -627,7 +627,7 @@ namespace ShipWorks.Data.Model
 			this.AddElementFieldMapping("AsendiaShipmentEntity", "CustomsRecipientTin", "CustomsRecipientTin", true, "NVarChar", 24, 0, 0, false, "", null, typeof(System.String), 16);
 			this.AddElementFieldMapping("AsendiaShipmentEntity", "CustomsRecipientTinType", "CustomsRecipientTinType", true, "Int", 0, 10, 0, false, "", null, typeof(System.Int32), 17);
 			this.AddElementFieldMapping("AsendiaShipmentEntity", "CustomsRecipientEntityType", "CustomsRecipientEntityType", true, "Int", 0, 10, 0, false, "", null, typeof(System.Int32), 18);
-			this.AddElementFieldMapping("AsendiaShipmentEntity", "CustomsRecipientIssuingAuthority", "CustomsRecipientIssuingAuthority", true, "Int", 0, 10, 0, false, "", null, typeof(System.Int32), 19);
+			this.AddElementFieldMapping("AsendiaShipmentEntity", "CustomsRecipientIssuingAuthority", "CustomsRecipientIssuingAuthority", true, "NVarChar", 2, 0, 0, false, "", null, typeof(System.String), 19);
 		}
 
 		/// <summary>Inits AuditEntity's mappings</summary>

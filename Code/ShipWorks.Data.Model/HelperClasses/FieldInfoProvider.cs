@@ -586,7 +586,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 			this.AddElementFieldInfo("AsendiaProfileEntity", "CustomsRecipientTin", typeof(System.String), false, false, false, true,  (int)AsendiaProfileFieldIndex.CustomsRecipientTin, 24, 0, 0);
 			this.AddElementFieldInfo("AsendiaProfileEntity", "CustomsRecipientTinType", typeof(Nullable<System.Int32>), false, false, false, true,  (int)AsendiaProfileFieldIndex.CustomsRecipientTinType, 0, 0, 10);
 			this.AddElementFieldInfo("AsendiaProfileEntity", "CustomsRecipientEntityType", typeof(Nullable<System.Int32>), false, false, false, true,  (int)AsendiaProfileFieldIndex.CustomsRecipientEntityType, 0, 0, 10);
-			this.AddElementFieldInfo("AsendiaProfileEntity", "CustomsRecipientIssuingAuthority", typeof(Nullable<System.Int32>), false, false, false, true,  (int)AsendiaProfileFieldIndex.CustomsRecipientIssuingAuthority, 0, 0, 10);
+			this.AddElementFieldInfo("AsendiaProfileEntity", "CustomsRecipientIssuingAuthority", typeof(System.String), false, false, false, true,  (int)AsendiaProfileFieldIndex.CustomsRecipientIssuingAuthority, 2, 0, 0);
 		}
 		/// <summary>Inits AsendiaShipmentEntity's FieldInfo objects</summary>
 		private void InitAsendiaShipmentEntityInfos()
@@ -611,7 +611,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 			this.AddElementFieldInfo("AsendiaShipmentEntity", "CustomsRecipientTin", typeof(System.String), false, false, false, true,  (int)AsendiaShipmentFieldIndex.CustomsRecipientTin, 24, 0, 0);
 			this.AddElementFieldInfo("AsendiaShipmentEntity", "CustomsRecipientTinType", typeof(Nullable<System.Int32>), false, false, false, true,  (int)AsendiaShipmentFieldIndex.CustomsRecipientTinType, 0, 0, 10);
 			this.AddElementFieldInfo("AsendiaShipmentEntity", "CustomsRecipientEntityType", typeof(Nullable<System.Int32>), false, false, false, true,  (int)AsendiaShipmentFieldIndex.CustomsRecipientEntityType, 0, 0, 10);
-			this.AddElementFieldInfo("AsendiaShipmentEntity", "CustomsRecipientIssuingAuthority", typeof(Nullable<System.Int32>), false, false, false, true,  (int)AsendiaShipmentFieldIndex.CustomsRecipientIssuingAuthority, 0, 0, 10);
+			this.AddElementFieldInfo("AsendiaShipmentEntity", "CustomsRecipientIssuingAuthority", typeof(System.String), false, false, false, true,  (int)AsendiaShipmentFieldIndex.CustomsRecipientIssuingAuthority, 2, 0, 0);
 		}
 		/// <summary>Inits AuditEntity's FieldInfo objects</summary>
 		private void InitAuditEntityInfos()

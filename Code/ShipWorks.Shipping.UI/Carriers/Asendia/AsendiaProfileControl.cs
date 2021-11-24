@@ -10,6 +10,7 @@ using Interapptive.Shared.ComponentRegistration;
 using ShipWorks.Shipping.ShipEngine;
 using Interapptive.Shared.Enums;
 using ShipWorks.Shipping.Carriers.Asendia;
+using Interapptive.Shared.Business.Geography;
 
 namespace ShipWorks.Shipping.UI.Carriers.Asendia
 {
@@ -50,9 +51,12 @@ namespace ShipWorks.Shipping.UI.Carriers.Asendia
             EnumHelper.BindComboBox<AsendiaServiceType>(service);
             EnumHelper.BindComboBox<TaxIdType>(customsRecipientTINType);
             EnumHelper.BindComboBox<CustomsRecipientEntityType>(customsRecipientEntityType);
-            EnumHelper.BindComboBox<CustomsTinIssuingAuthority>(customsRecipientIssuingAuthority);
             EnumHelper.BindComboBox<ShipEngineContentsType>(contents);
             EnumHelper.BindComboBox<ShipEngineNonDeliveryType>(nonDelivery);
+
+            customsRecipientIssuingAuthority.DisplayMember = "Key";
+            customsRecipientIssuingAuthority.ValueMember = "Value";
+            customsRecipientIssuingAuthority.DataSource = Geography.Countries.Select(n => new KeyValuePair<string, string>(n, Geography.GetCountryCode(n))).ToList();
 
             // From
             AddValueMapping(asendiaProfile, AsendiaProfileFields.AsendiaAccountID, accountState, asendiaAccount, labelAccount);

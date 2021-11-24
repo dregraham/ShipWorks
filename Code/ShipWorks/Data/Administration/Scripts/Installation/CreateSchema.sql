@@ -3061,7 +3061,7 @@ CREATE TABLE [dbo].[AsendiaProfile](
 	[CustomsRecipientTin] [nvarchar] (24) NULL,
 	[CustomsRecipientTinType] [int] NULL,
 	[CustomsRecipientEntityType] [int] NULL,
-	[CustomsRecipientIssuingAuthority] [int] NULL
+	[CustomsRecipientIssuingAuthority] [nvarchar] (2) NULL
 )
 GO
 PRINT N'Creating primary key [PK_AsendiaProfile] on [dbo].[AsendiaProfile]'
@@ -3094,7 +3094,7 @@ CREATE TABLE [dbo].[AsendiaShipment](
 	[CustomsRecipientTin] [nvarchar] (24) NULL,
 	[CustomsRecipientTinType] [int] NULL,
 	[CustomsRecipientEntityType] [int] NULL,
-	[CustomsRecipientIssuingAuthority] [int] NULL
+	[CustomsRecipientIssuingAuthority] [nvarchar] (2) NULL
 )
 GO
 PRINT N'Creating primary key [PK_AsendiaShipment] on [dbo].[AsendiaShipment]'
