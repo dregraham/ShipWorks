@@ -247,7 +247,7 @@ namespace ShipWorks.ApplicationCore.Crashes
         /// </summary>
         private void OnSupportClick(object sender, RoutedEventArgs e)
         {
-            WebHelper.OpenUrl("https://www.shipworks.com/contact-us/", this);
+            WebHelper.OpenUrl(ShipWorksBusinessConstants.ContactUrl, this);
         }
 
         /// <summary>
