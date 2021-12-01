@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Net;
@@ -675,51 +674,5 @@ namespace ShipWorks.Shipping.Insurance
             return true;
         }
 
-        /// <summary>
-        /// Load the header and footer images to display for the infobanner
-        /// </summary>
-        public static Tuple<Image, Image> LoadInfoBannerImages()
-        {
-            try
-            {
-                string localHeaderPath = Path.Combine(DataPath.SharedSettings, string.Format(@"Insurance\InfoBanner\{0}\header.png", infoBannerVersion));
-                string localFooterPath = Path.Combine(DataPath.SharedSettings, string.Format(@"Insurance\InfoBanner\{0}\footer.png", infoBannerVersion));
-
-                if (!File.Exists(localHeaderPath) || !File.Exists(localFooterPath))
-                {
-                    string onlineHeaderPath = "http://www.interapptive.com/insurance/insuranceInfoBannerHeader.png";
-                    string onlineFooterPath = "http://www.interapptive.com/insurance/insuranceInfoBannerFooter.png";
-
-                    Directory.CreateDirectory(Path.GetDirectoryName(localHeaderPath));
-
-                    using (WebClient webClient = new WebClient())
-                    {
-                        webClient.DownloadFile(onlineHeaderPath, localHeaderPath);
-                        webClient.DownloadFile(onlineFooterPath, localFooterPath);
-                    }
-                }
-
-                return Tuple.Create(Image.FromFile(localHeaderPath), Image.FromFile(localFooterPath));
-            }
-            catch (IOException ex)
-            {
-                log.Error("Error loading info banner.", ex);
-            }
-            catch (UnauthorizedAccessException ex)
-            {
-                log.Error("Error loading info banner.", ex);
-            }
-            catch (Exception ex)
-            {
-                if (WebHelper.IsWebException(ex))
-                {
-                    log.Error("Error loading info banner.", ex);
-                }
-
-                throw;
-            }
-
-            return null;
-        }
     }
 }
