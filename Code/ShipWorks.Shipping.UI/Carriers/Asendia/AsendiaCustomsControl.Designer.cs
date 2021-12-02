@@ -36,8 +36,6 @@
             this.customsRecipientTIN = new ShipWorks.UI.Controls.MultiValueTextBox();
             this.labelCustomsRecipientTINType = new System.Windows.Forms.Label();
             this.customsRecipientTINType = new ShipWorks.UI.Controls.MultiValueComboBox();
-            this.labelCustomsRecipientEntityType = new System.Windows.Forms.Label();
-            this.customsRecipientEntityType = new ShipWorks.UI.Controls.MultiValueComboBox();
             this.labelCustomsRecipientIssuingAuthority = new System.Windows.Forms.Label();
             this.customsRecipientIssuingAuthority = new ShipWorks.UI.Controls.MultiValueComboBox();
             ((System.ComponentModel.ISupportInitialize)(this.sectionContents)).BeginInit();
@@ -86,12 +84,10 @@
             this.sectionGeneral.ContentPanel.Controls.Add(this.customsRecipientTIN);
             this.sectionGeneral.ContentPanel.Controls.Add(this.labelCustomsRecipientTINType);
             this.sectionGeneral.ContentPanel.Controls.Add(this.customsRecipientTINType);
-            this.sectionGeneral.ContentPanel.Controls.Add(this.labelCustomsRecipientEntityType);
-            this.sectionGeneral.ContentPanel.Controls.Add(this.customsRecipientEntityType);
             this.sectionGeneral.ContentPanel.Controls.Add(this.labelCustomsRecipientIssuingAuthority);
             this.sectionGeneral.ContentPanel.Controls.Add(this.customsRecipientIssuingAuthority);
             this.sectionGeneral.Location = new System.Drawing.Point(6, 5);
-            this.sectionGeneral.Size = new System.Drawing.Size(572, 222);
+            this.sectionGeneral.Size = new System.Drawing.Size(538, 200);
             // 
             // groupSelectedContent
             // 
@@ -187,52 +183,32 @@
             this.customsRecipientTINType.Size = new System.Drawing.Size(160, 21);
             this.customsRecipientTINType.TabIndex = 7;
             // 
-            // labelCustomsRecipientEntityType
-            // 
-            this.labelCustomsRecipientEntityType.AutoSize = true;
-            this.labelCustomsRecipientEntityType.BackColor = System.Drawing.Color.Transparent;
-            this.labelCustomsRecipientEntityType.Location = new System.Drawing.Point(62, 145);
-            this.labelCustomsRecipientEntityType.Name = "labelCustomsRecipientEntityType";
-            this.labelCustomsRecipientEntityType.Size = new System.Drawing.Size(66, 13);
-            this.labelCustomsRecipientEntityType.TabIndex = 136;
-            this.labelCustomsRecipientEntityType.Text = "Entity Type:";
-            // 
-            // customsRecipientEntityType
-            // 
-            this.customsRecipientEntityType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.customsRecipientEntityType.FormattingEnabled = true;
-            this.customsRecipientEntityType.Location = new System.Drawing.Point(138, 142);
-            this.customsRecipientEntityType.Name = "customsRecipientEntityType";
-            this.customsRecipientEntityType.PromptText = "(Multiple Values)";
-            this.customsRecipientEntityType.Size = new System.Drawing.Size(160, 21);
-            this.customsRecipientEntityType.TabIndex = 9;
-            // 
             // labelCustomsRecipientIssuingAuthority
             // 
             this.labelCustomsRecipientIssuingAuthority.AutoSize = true;
             this.labelCustomsRecipientIssuingAuthority.BackColor = System.Drawing.Color.Transparent;
-            this.labelCustomsRecipientIssuingAuthority.Location = new System.Drawing.Point(35, 172);
+            this.labelCustomsRecipientIssuingAuthority.Location = new System.Drawing.Point(35, 145);
             this.labelCustomsRecipientIssuingAuthority.Name = "labelCustomsRecipientIssuingAuthority";
             this.labelCustomsRecipientIssuingAuthority.Size = new System.Drawing.Size(93, 13);
-            this.labelCustomsRecipientIssuingAuthority.TabIndex = 146;
+            this.labelCustomsRecipientIssuingAuthority.TabIndex = 136;
             this.labelCustomsRecipientIssuingAuthority.Text = "Issuing Authority:";
             // 
             // customsRecipientIssuingAuthority
             // 
             this.customsRecipientIssuingAuthority.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.customsRecipientIssuingAuthority.FormattingEnabled = true;
-            this.customsRecipientIssuingAuthority.Location = new System.Drawing.Point(138, 169);
+            this.customsRecipientIssuingAuthority.Location = new System.Drawing.Point(138, 142);
             this.customsRecipientIssuingAuthority.Name = "customsRecipientIssuingAuthority";
             this.customsRecipientIssuingAuthority.PromptText = "(Multiple Values)";
             this.customsRecipientIssuingAuthority.Size = new System.Drawing.Size(160, 21);
-            this.customsRecipientIssuingAuthority.TabIndex = 11;
+            this.customsRecipientIssuingAuthority.TabIndex = 9;
             // 
             // AsendiaCustomsControl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.Name = "AsendiaCustomsControl";
-            this.Size = new System.Drawing.Size(581, 525);
+            this.Size = new System.Drawing.Size(428, 525);
             ((System.ComponentModel.ISupportInitialize)(this.sectionContents.ContentPanel)).EndInit();
             this.sectionContents.ContentPanel.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.sectionContents)).EndInit();
@@ -254,8 +230,6 @@
         private ShipWorks.UI.Controls.MultiValueTextBox customsRecipientTIN;
         private System.Windows.Forms.Label labelCustomsRecipientTINType;
         private ShipWorks.UI.Controls.MultiValueComboBox customsRecipientTINType;
-        private System.Windows.Forms.Label labelCustomsRecipientEntityType;
-        private ShipWorks.UI.Controls.MultiValueComboBox customsRecipientEntityType;
         private System.Windows.Forms.Label labelCustomsRecipientIssuingAuthority;
         private ShipWorks.UI.Controls.MultiValueComboBox customsRecipientIssuingAuthority;
     }

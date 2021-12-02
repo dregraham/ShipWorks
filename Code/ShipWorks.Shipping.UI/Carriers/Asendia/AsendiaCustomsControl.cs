@@ -33,7 +33,6 @@ namespace ShipWorks.Shipping.UI.Carriers.Asendia
             base.Initialize();
 
             EnumHelper.BindComboBox<TaxIdType>(customsRecipientTINType);
-            EnumHelper.BindComboBox<CustomsRecipientEntityType>(customsRecipientEntityType);
             EnumHelper.BindComboBox<ShipEngineContentsType>(contentType);
             EnumHelper.BindComboBox<ShipEngineNonDeliveryType>(nonDeliveryType);
         }
@@ -76,7 +75,6 @@ namespace ShipWorks.Shipping.UI.Carriers.Asendia
                     nonDeliveryType.ApplyMultiValue((ShipEngineNonDeliveryType) shipment.Asendia.NonDelivery);
                     customsRecipientTIN.ApplyMultiText(shipment.Asendia.CustomsRecipientTin);
                     customsRecipientTINType.ApplyMultiValue((TaxIdType) shipment.Asendia.CustomsRecipientTinType);
-                    customsRecipientEntityType.ApplyMultiValue((CustomsRecipientEntityType) shipment.Asendia.CustomsRecipientEntityType);
                     customsRecipientIssuingAuthority.ApplyMultiText(Geography.GetCountryName(shipment.Asendia.CustomsRecipientIssuingAuthority));
                 }
             }
@@ -111,7 +109,6 @@ namespace ShipWorks.Shipping.UI.Carriers.Asendia
                 nonDeliveryType.ReadMultiValue(v => shipment.Asendia.NonDelivery = (int) (ShipEngineNonDeliveryType) v);
                 customsRecipientTIN.ReadMultiText(t => shipment.Asendia.CustomsRecipientTin = t);
                 customsRecipientTINType.ReadMultiValue(v => shipment.Asendia.CustomsRecipientTinType = (int) (TaxIdType) v);
-                customsRecipientEntityType.ReadMultiValue(v => shipment.Asendia.CustomsRecipientEntityType = (int) (CustomsRecipientEntityType) v);
                 customsRecipientIssuingAuthority.ReadMultiText(v => shipment.Asendia.CustomsRecipientIssuingAuthority = Geography.GetCountryCode(v));
             }
         }

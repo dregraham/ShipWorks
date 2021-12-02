@@ -50,7 +50,6 @@ namespace ShipWorks.Shipping.UI.Carriers.Asendia
 
             EnumHelper.BindComboBox<AsendiaServiceType>(service);
             EnumHelper.BindComboBox<TaxIdType>(customsRecipientTINType);
-            EnumHelper.BindComboBox<CustomsRecipientEntityType>(customsRecipientEntityType);
             EnumHelper.BindComboBox<ShipEngineContentsType>(contents);
             EnumHelper.BindComboBox<ShipEngineNonDeliveryType>(nonDelivery);
 
@@ -83,7 +82,6 @@ namespace ShipWorks.Shipping.UI.Carriers.Asendia
             //Tax Id
             AddValueMapping(asendiaProfile, AsendiaProfileFields.CustomsRecipientTin, customsRecipientTINState, customsRecipientTIN, labelCustomsRecipientTIN);
             AddValueMapping(asendiaProfile, AsendiaProfileFields.CustomsRecipientTinType, customsRecipientTINTypeState, customsRecipientTINType, labelCustomsRecipientTINType);
-            AddValueMapping(asendiaProfile, AsendiaProfileFields.CustomsRecipientEntityType, customsRecipientEntityTypeState, customsRecipientEntityType, labelCustomsRecipientEntityType);
             AddValueMapping(asendiaProfile, AsendiaProfileFields.CustomsRecipientIssuingAuthority, customsRecipientIssuingAuthorityState, customsRecipientIssuingAuthority, labelCustomsRecipientIssuingAuthority);
         }
 
