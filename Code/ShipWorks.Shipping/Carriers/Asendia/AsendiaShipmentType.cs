@@ -89,7 +89,7 @@ namespace ShipWorks.Shipping.Carriers.Asendia
             asendiaShipment.NonDelivery = (int) ShipEngineNonDeliveryType.ReturnToSender;
             asendiaShipment.CustomsRecipientTin = string.Empty;
             asendiaShipment.CustomsRecipientTinType = (int) TaxIdType.Ioss;
-            asendiaShipment.CustomsRecipientEntityType = (int) CustomsRecipientEntityType.Shipper;
+            asendiaShipment.CustomsRecipientEntityType = 0;
             asendiaShipment.CustomsRecipientIssuingAuthority = "US";
             asendiaShipment.NonMachinable = false;
             asendiaShipment.AsendiaAccountID = 0;
@@ -273,7 +273,7 @@ namespace ShipWorks.Shipping.Carriers.Asendia
             asendia.NonDelivery = (int) ShipEngineNonDeliveryType.ReturnToSender;
             asendia.CustomsRecipientTin = string.Empty;
             asendia.CustomsRecipientTinType = (int) TaxIdType.Ioss;
-            asendia.CustomsRecipientEntityType = (int) CustomsRecipientEntityType.Shipper;
+            asendia.CustomsRecipientEntityType = 0;
             asendia.CustomsRecipientIssuingAuthority = "US";
             asendia.NonMachinable = false;
         }
