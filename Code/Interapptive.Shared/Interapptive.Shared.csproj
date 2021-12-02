@@ -246,7 +246,6 @@
     <Compile Include="Enums\CombineSplitStatusType.cs" />
     <Compile Include="Enums\TaxIdType.cs" />
     <Compile Include="Enums\ShopSiteAuthenticationType.cs" />
-    <Compile Include="Enums\CustomsRecipientEntityType.cs" />
     <Compile Include="Enums\UnitType.cs" />
     <Compile Include="Extensions\CharExtensions.cs" />
     <Compile Include="Extensions\CollectionExtensions.cs" />
