@@ -1,0 +1,18 @@
+name: remove-extra-branches
+on:
+  push:
+    branches:
+      - master
+jobs:
+  find-and-delete-extra-branches:
+    strategy:
+      max-parallel: 1
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+      - name: Run the deletion script
+        run: git fetch -p;
+      - run: chmod +x .github/deleter.sh
+      - run: ./.github/deleter.sh

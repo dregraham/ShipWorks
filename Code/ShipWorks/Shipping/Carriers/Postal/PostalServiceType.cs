@@ -57,6 +57,9 @@ namespace ShipWorks.Shipping.Carriers.Postal
         [Description("Critical Mail")]
         CriticalMail = 14,
 
+        [Description("Pay-on-Use Return")]
+        PayOnUseReturn = 15,
+
         [Description("DHL SM Parcel Expedited")]
         [ApiValue("DHLGMSMPARCELSEXPEDITED")]
         DhlParcelExpedited = 100,
@@ -189,5 +192,10 @@ namespace ShipWorks.Shipping.Carriers.Postal
 
         [Description("GlobalPost Plus SmartSaver")]
         GlobalPostPlusSmartSaver = 232,
+
+        // New service, still in beta at Stamps.
+        [Deprecated]
+        [Description("GlobalPost Parcel Select SmartSaver")]
+        GlobalPostParcelSelectSmartSaver = 233,
     }
 }
