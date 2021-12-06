@@ -55,7 +55,7 @@ namespace ShipWorks.Stores.Platforms.Odbc.Download
         };
         private readonly string[] numericSystemTypes = { "byte", "int16", "int", "int32", "int64" };
 
-        private const int UploadOrdersBatchSize = 50;
+        private const int UploadOrdersBatchSize = 25;
 
 
         /// <summary>
