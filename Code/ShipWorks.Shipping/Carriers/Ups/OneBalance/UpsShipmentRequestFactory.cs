@@ -1,7 +1,8 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Utility;
-using ShipEngine.ApiClient.Model;
+using ShipEngine.CarrierApi.Client.Model;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Shipping.Carriers.Ups.ShipEngine;
@@ -231,6 +232,14 @@ namespace ShipWorks.Shipping.Carriers.Ups.OneBalance
             };
 
             return customs;
+        }
+
+        /// <summary>
+        /// Creates the UPS tax identifier node
+        /// </summary>
+        protected override List<TaxIdentifier> CreateTaxIdentifiers(ShipmentEntity shipment)
+        {
+            return null;
         }
     }
 }

@@ -1,4 +1,4 @@
-﻿using ShipEngine.ApiClient.Api;
+﻿using ShipEngine.CarrierApi.Client.Api;
 
 namespace ShipWorks.Shipping.ShipEngine
 {

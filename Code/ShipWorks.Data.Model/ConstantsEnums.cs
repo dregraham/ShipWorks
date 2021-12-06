@@ -898,6 +898,14 @@ namespace ShipWorks.Data.Model
 		Contents,
 		///<summary>NonDelivery. </summary>
 		NonDelivery,
+		///<summary>CustomsRecipientTin. </summary>
+		CustomsRecipientTin,
+		///<summary>CustomsRecipientTinType. </summary>
+		CustomsRecipientTinType,
+		///<summary>CustomsRecipientEntityType. </summary>
+		CustomsRecipientEntityType,
+		///<summary>CustomsRecipientIssuingAuthority. </summary>
+		CustomsRecipientIssuingAuthority,
 		/// <summary></summary>
 		AmountOfFields
 	}
@@ -936,6 +944,14 @@ namespace ShipWorks.Data.Model
 		NonMachinable,
 		///<summary>Insurance. </summary>
 		Insurance,
+		///<summary>CustomsRecipientTin. </summary>
+		CustomsRecipientTin,
+		///<summary>CustomsRecipientTinType. </summary>
+		CustomsRecipientTinType,
+		///<summary>CustomsRecipientEntityType. </summary>
+		CustomsRecipientEntityType,
+		///<summary>CustomsRecipientIssuingAuthority. </summary>
+		CustomsRecipientIssuingAuthority,
 		/// <summary></summary>
 		AmountOfFields
 	}

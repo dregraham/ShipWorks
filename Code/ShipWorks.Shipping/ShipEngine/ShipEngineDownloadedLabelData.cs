@@ -2,11 +2,11 @@
 using System.IO;
 using Interapptive.Shared.Pdf;
 using Interapptive.Shared.Utility;
-using ShipEngine.ApiClient.Model;
+using ShipEngine.CarrierApi.Client.Model;
 using ShipWorks.Common.IO.Hardware.Printers;
 using ShipWorks.Data;
 using ShipWorks.Data.Model.EntityClasses;
-using static ShipEngine.ApiClient.Model.Label;
+using static ShipEngine.CarrierApi.Client.Model.Label;
 
 namespace ShipWorks.Shipping.ShipEngine
 {

@@ -591,19 +591,23 @@ namespace ShipWorks.Data.Model
 		/// <summary>Inits AsendiaProfileEntity's mappings</summary>
 		private void InitAsendiaProfileEntityMappings()
 		{
-			this.AddElementMapping("AsendiaProfileEntity", @"ShipWorksLocal", @"dbo", "AsendiaProfile", 6, 0);
+			this.AddElementMapping("AsendiaProfileEntity", @"ShipWorksLocal", @"dbo", "AsendiaProfile", 10, 0);
 			this.AddElementFieldMapping("AsendiaProfileEntity", "ShippingProfileID", "ShippingProfileID", false, "BigInt", 0, 19, 0, false, "", null, typeof(System.Int64), 0);
 			this.AddElementFieldMapping("AsendiaProfileEntity", "AsendiaAccountID", "AsendiaAccountID", true, "BigInt", 0, 19, 0, false, "", null, typeof(System.Int64), 1);
 			this.AddElementFieldMapping("AsendiaProfileEntity", "Service", "Service", true, "Int", 0, 10, 0, false, "", null, typeof(System.Int32), 2);
 			this.AddElementFieldMapping("AsendiaProfileEntity", "NonMachinable", "NonMachinable", true, "Bit", 0, 0, 0, false, "", null, typeof(System.Boolean), 3);
 			this.AddElementFieldMapping("AsendiaProfileEntity", "Contents", "Contents", true, "Int", 0, 10, 0, false, "", null, typeof(System.Int32), 4);
 			this.AddElementFieldMapping("AsendiaProfileEntity", "NonDelivery", "NonDelivery", true, "Int", 0, 10, 0, false, "", null, typeof(System.Int32), 5);
+			this.AddElementFieldMapping("AsendiaProfileEntity", "CustomsRecipientTin", "CustomsRecipientTin", true, "NVarChar", 24, 0, 0, false, "", null, typeof(System.String), 6);
+			this.AddElementFieldMapping("AsendiaProfileEntity", "CustomsRecipientTinType", "CustomsRecipientTinType", true, "Int", 0, 10, 0, false, "", null, typeof(System.Int32), 7);
+			this.AddElementFieldMapping("AsendiaProfileEntity", "CustomsRecipientEntityType", "CustomsRecipientEntityType", true, "Int", 0, 10, 0, false, "", null, typeof(System.Int32), 8);
+			this.AddElementFieldMapping("AsendiaProfileEntity", "CustomsRecipientIssuingAuthority", "CustomsRecipientIssuingAuthority", true, "NVarChar", 2, 0, 0, false, "", null, typeof(System.String), 9);
 		}
 
 		/// <summary>Inits AsendiaShipmentEntity's mappings</summary>
 		private void InitAsendiaShipmentEntityMappings()
 		{
-			this.AddElementMapping("AsendiaShipmentEntity", @"ShipWorksLocal", @"dbo", "AsendiaShipment", 16, 0);
+			this.AddElementMapping("AsendiaShipmentEntity", @"ShipWorksLocal", @"dbo", "AsendiaShipment", 20, 0);
 			this.AddElementFieldMapping("AsendiaShipmentEntity", "ShipmentID", "ShipmentID", false, "BigInt", 0, 19, 0, false, "", null, typeof(System.Int64), 0);
 			this.AddElementFieldMapping("AsendiaShipmentEntity", "AsendiaAccountID", "AsendiaAccountID", false, "BigInt", 0, 19, 0, false, "", null, typeof(System.Int64), 1);
 			this.AddElementFieldMapping("AsendiaShipmentEntity", "Service", "Service", false, "Int", 0, 10, 0, false, "", null, typeof(System.Int32), 2);
@@ -620,6 +624,10 @@ namespace ShipWorks.Data.Model
 			this.AddElementFieldMapping("AsendiaShipmentEntity", "InsuranceValue", "InsuranceValue", false, "Money", 0, 19, 4, false, "", null, typeof(System.Decimal), 13);
 			this.AddElementFieldMapping("AsendiaShipmentEntity", "NonMachinable", "NonMachinable", false, "Bit", 0, 0, 0, false, "", null, typeof(System.Boolean), 14);
 			this.AddElementFieldMapping("AsendiaShipmentEntity", "Insurance", "Insurance", false, "Bit", 0, 0, 0, false, "", null, typeof(System.Boolean), 15);
+			this.AddElementFieldMapping("AsendiaShipmentEntity", "CustomsRecipientTin", "CustomsRecipientTin", true, "NVarChar", 24, 0, 0, false, "", null, typeof(System.String), 16);
+			this.AddElementFieldMapping("AsendiaShipmentEntity", "CustomsRecipientTinType", "CustomsRecipientTinType", true, "Int", 0, 10, 0, false, "", null, typeof(System.Int32), 17);
+			this.AddElementFieldMapping("AsendiaShipmentEntity", "CustomsRecipientEntityType", "CustomsRecipientEntityType", true, "Int", 0, 10, 0, false, "", null, typeof(System.Int32), 18);
+			this.AddElementFieldMapping("AsendiaShipmentEntity", "CustomsRecipientIssuingAuthority", "CustomsRecipientIssuingAuthority", true, "NVarChar", 2, 0, 0, false, "", null, typeof(System.String), 19);
 		}
 
 		/// <summary>Inits AuditEntity's mappings</summary>

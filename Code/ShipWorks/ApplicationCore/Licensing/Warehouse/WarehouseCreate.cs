@@ -9,7 +9,7 @@ using Interapptive.Shared.Net.RestSharp;
 using Interapptive.Shared.Utility;
 using Newtonsoft.Json.Linq;
 using RestSharp;
-using ShipEngine.ApiClient.Model;
+using ShipEngine.CarrierApi.Client.Model;
 using ShipWorks.ApplicationCore.Licensing.Warehouse.DTO;
 using ShipWorks.Common.Net;
 

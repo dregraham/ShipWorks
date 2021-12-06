@@ -2,7 +2,7 @@
 using ShipWorks.ApplicationCore.Logging;
 using System;
 using ShipWorks.Data.Model.EntityClasses;
-using ShipEngine.ApiClient.Model;
+using ShipEngine.CarrierApi.Client.Model;
 using log4net;
 using Interapptive.Shared.ComponentRegistration;
 using ShipWorks.Shipping.ShipEngine;

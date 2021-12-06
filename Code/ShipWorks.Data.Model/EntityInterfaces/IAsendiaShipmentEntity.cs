@@ -117,6 +117,30 @@ namespace ShipWorks.Data.Model.EntityInterfaces
         /// Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
         System.Boolean Insurance { get; }
+        /// <summary> The CustomsRecipientTin property of the Entity AsendiaShipment<br/><br/>
+        /// </summary>
+        /// <remarks>Mapped on table field: "AsendiaShipment"."CustomsRecipientTin"<br/>
+        /// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 24<br/>
+        /// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+        System.String CustomsRecipientTin { get; }
+        /// <summary> The CustomsRecipientTinType property of the Entity AsendiaShipment<br/><br/>
+        /// </summary>
+        /// <remarks>Mapped on table field: "AsendiaShipment"."CustomsRecipientTinType"<br/>
+        /// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
+        /// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+        Nullable<System.Int32> CustomsRecipientTinType { get; }
+        /// <summary> The CustomsRecipientEntityType property of the Entity AsendiaShipment<br/><br/>
+        /// </summary>
+        /// <remarks>Mapped on table field: "AsendiaShipment"."CustomsRecipientEntityType"<br/>
+        /// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
+        /// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+        Nullable<System.Int32> CustomsRecipientEntityType { get; }
+        /// <summary> The CustomsRecipientIssuingAuthority property of the Entity AsendiaShipment<br/><br/>
+        /// </summary>
+        /// <remarks>Mapped on table field: "AsendiaShipment"."CustomsRecipientIssuingAuthority"<br/>
+        /// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 2<br/>
+        /// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+        System.String CustomsRecipientIssuingAuthority { get; }
         
         IShipmentEntity Shipment { get; }
         

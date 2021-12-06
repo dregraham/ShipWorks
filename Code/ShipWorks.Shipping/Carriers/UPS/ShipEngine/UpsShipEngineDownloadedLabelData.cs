@@ -10,7 +10,7 @@ using System.Xml.XPath;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Pdf;
 using Interapptive.Shared.Utility;
-using ShipEngine.ApiClient.Model;
+using ShipEngine.CarrierApi.Client.Model;
 using ShipWorks.Common.IO.Hardware.Printers;
 using ShipWorks.Data;
 using ShipWorks.Data.Connection;

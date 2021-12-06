@@ -414,7 +414,7 @@ namespace ShipWorks
         private static void ApplyThirdPartyLicenses()
         {
             Rebex.Licensing.Key = "==FkhSvCGeTWZceYPGxAXhIFg8MsCGacCTnp+8iElvsPrtAft0NvMidZJIU4F0YbKZoH3sq==";
-            SyncfusionLicenseProvider.RegisterLicense("MzgxODJAMzEzNjJlMzMyZTMwQkhIaE4yS1NsbHliVVJYRjF3R3dPYmM0c01XbkdTcnVlLzZiOUdXeUlrTT0=");
+            SyncfusionLicenseProvider.RegisterLicense("NTQyMzQxQDMxMzYyZTM0MmUzMGk0aFJ0NGhSSTlOZGloL0JBMmNMUVppWmloNUlFL01xVTZQNXIrcTNaYWs9;NTQyMzQyQDMxMzYyZTM0MmUzMGpXTE43TmVEK1BITFBOMGhkVTJGdEtqMHdyNkxROTFKTFUzV0dJVmZyUWM9");
         }
     }
 }
