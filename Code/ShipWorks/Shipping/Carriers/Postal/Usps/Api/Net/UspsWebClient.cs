@@ -1305,30 +1305,40 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
             string toZipCode = shipment.ShipPostalCode;
             string toCountry = shipment.AdjustedShipCountryCode();
 
+            //split up from and to zipcode into the 5 and 4 digits
+            string fromZipCode5 = fromZipCode.Length <= 5 ? fromZipCode : fromZipCode.Substring(0, 5);
+            string fromZipCode4 = fromZipCode.Length <= 5 ? "" : fromZipCode.Substring(6, 4);
+            string toZipCode5 = toZipCode.Length <= 5 ? toZipCode : toZipCode.Substring(0, 5);
+            string toZipCode4 = toZipCode.Length <= 5 ? "" : toZipCode.Substring(6, 4);
+
             // Swap the to/from for return shipments.
             if (shipment.ReturnShipment)
             {
                 rate.From = new Address()
                 {
-                    ZIPCode = toZipCode,
+                    ZIPCode = toZipCode5,
+                    ZIPCodeAddOn = toZipCode4,
                 };
 
                 rate.To = new Address()
                 {
                     Country = shipment.AdjustedOriginCountryCode(),
-                    ZIPCode = fromZipCode,
+                    ZIPCode = fromZipCode5,
+                    ZIPCodeAddOn = fromZipCode4,
                 };
             }
             else
             {
                 rate.From = new Address()
                 {
-                    ZIPCode = fromZipCode,
+                    ZIPCode = fromZipCode5,
+                    ZIPCodeAddOn = fromZipCode4,
                 };
 
                 rate.To = new Address()
                 {
-                    ZIPCode = toZipCode,
+                    ZIPCode = toZipCode5,
+                    ZIPCodeAddOn = toZipCode4,
                     Country = toCountry,
                 };
             }
@@ -1363,7 +1373,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
         /// <summary>
         /// Create the rate object for the given shipment
         /// </summary>
-        protected virtual RateV40 CreateRateForProcessing(ShipmentEntity shipment, UspsAccountEntity account,Address toAddress, Address fromAddress)
+        protected virtual RateV40 CreateRateForProcessing(ShipmentEntity shipment, UspsAccountEntity account, Address toAddress, Address fromAddress)
         {
             PostalServiceType serviceType = (PostalServiceType) shipment.Postal.Service;
             PostalPackagingType packagingType = (PostalPackagingType) shipment.Postal.PackagingType;
@@ -1371,7 +1381,10 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
             RateV40 rate = CreateRateForRating(shipment, account);
             rate.ServiceType = UspsUtility.GetApiServiceType(serviceType);
             rate.PrintLayout = "Normal4X6";
-
+            if (serviceType == PostalServiceType.PayOnUseReturn)
+            {
+                rate.PrintLayout = "Return";
+            }
             // Get the confirmation type add ons
             List<AddOnV17> addOns = AddConfirmationTypeAddOnsForProcessing(shipment, serviceType, packagingType);
 
