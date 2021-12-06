@@ -10,7 +10,7 @@ IF COL_LENGTH(N'[dbo].[AsendiaShipment]', N'CustomsRecipientEntityType') IS NULL
 ALTER TABLE [dbo].[AsendiaShipment] ADD [CustomsRecipientEntityType] [int] NULL
 GO
 IF COL_LENGTH(N'[dbo].[AsendiaShipment]', N'CustomsRecipientIssuingAuthority') IS NULL
-ALTER TABLE [dbo].[AsendiaShipment] ADD [CustomsRecipientIssuingAuthority] [int] NULL
+ALTER TABLE [dbo].[AsendiaShipment] ADD [CustomsRecipientIssuingAuthority] [nvarchar] (2) NULL
 GO
 
 UPDATE asendiaShipment
@@ -34,7 +34,7 @@ IF COL_LENGTH(N'[dbo].[AsendiaProfile]', N'CustomsRecipientEntityType') IS NULL
 ALTER TABLE [dbo].[AsendiaProfile] ADD [CustomsRecipientEntityType] [int] NULL
 GO
 IF COL_LENGTH(N'[dbo].[AsendiaProfile]', N'CustomsRecipientIssuingAuthority') IS NULL
-ALTER TABLE [dbo].[AsendiaProfile] ADD [CustomsRecipientIssuingAuthority] [int] NULL
+ALTER TABLE [dbo].[AsendiaProfile] ADD [CustomsRecipientIssuingAuthority] [nvarchar] (2) NULL
 GO
 
 UPDATE asendiaProfile
