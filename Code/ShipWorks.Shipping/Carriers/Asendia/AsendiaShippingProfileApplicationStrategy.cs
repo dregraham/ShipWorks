@@ -46,6 +46,10 @@ namespace ShipWorks.Shipping.Carriers.Asendia
             ApplyProfileValue(asendiaProfile.NonMachinable, asendiaShipment, AsendiaShipmentFields.NonMachinable);
             ApplyProfileValue(asendiaProfile.NonDelivery, asendiaShipment, AsendiaShipmentFields.NonDelivery);
             ApplyProfileValue(asendiaProfile.Contents, asendiaShipment, AsendiaShipmentFields.Contents);
+            ApplyProfileValue(asendiaProfile.CustomsRecipientTin, asendiaShipment, AsendiaShipmentFields.CustomsRecipientTin);
+            ApplyProfileValue(asendiaProfile.CustomsRecipientTinType, asendiaShipment, AsendiaShipmentFields.CustomsRecipientTinType);
+            ApplyProfileValue(asendiaProfile.CustomsRecipientEntityType, asendiaShipment, AsendiaShipmentFields.CustomsRecipientEntityType);
+            ApplyProfileValue(asendiaProfile.CustomsRecipientIssuingAuthority, asendiaShipment, AsendiaShipmentFields.CustomsRecipientIssuingAuthority);
 
             IPackageProfileEntity packageProfile = profile.Packages.Single();
             if (packageProfile.Weight.HasValue && !packageProfile.Weight.Value.IsEquivalentTo(0))

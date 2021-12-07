@@ -1,4 +1,4 @@
-﻿using ShipEngine.ApiClient.Model;
+﻿using ShipEngine.CarrierApi.Client.Model;
 using ShipWorks.Shipping.Tracking;
 
 namespace ShipWorks.Shipping.ShipEngine

@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Interapptive.Shared.Utility;
-using ShipEngine.ApiClient.Model;
+using ShipEngine.CarrierApi.Client.Model;
 using ShipWorks.ApplicationCore.Licensing.Warehouse.DTO;
 
 namespace ShipWorks.ApplicationCore.Licensing.Warehouse

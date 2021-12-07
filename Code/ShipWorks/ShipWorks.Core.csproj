@@ -205,6 +205,9 @@
     <Reference Include="ICSharpCode.SharpZipLib, Version=0.86.0.518, Culture=neutral, PublicKeyToken=1b03e6acf1164f73, processorArchitecture=MSIL">
       <HintPath>..\..\packages\SharpZipLib.0.86.0\lib\20\ICSharpCode.SharpZipLib.dll</HintPath>
     </Reference>
+    <Reference Include="JsonSubTypes, Version=1.2.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\JsonSubTypes.1.2.0\lib\net46\JsonSubTypes.dll</HintPath>
+    </Reference>
     <Reference Include="log4net, Version=2.0.7.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a, processorArchitecture=MSIL">
       <HintPath>..\..\packages\log4net.2.0.7\lib\net45-full\log4net.dll</HintPath>
       <Private>True</Private>
@@ -328,6 +331,9 @@
     <Reference Include="ShipEngine.ApiClient, Version=1.0.0.0, Culture=neutral, PublicKeyToken=372d6fd19cbc5d92, processorArchitecture=MSIL">
       <HintPath>..\..\packages\Signed.ShipEngine.ApiClient.1.1.3\lib\net46\ShipEngine.ApiClient.dll</HintPath>
     </Reference>
+    <Reference Include="ShipEngine.CarrierApi.Client, Version=1.0.0.0, Culture=neutral, PublicKeyToken=c5149f357886d5cf, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\ShipEngine.CarrierApi.Client.1.2.1\lib\net46\ShipEngine.CarrierApi.Client.dll</HintPath>
+    </Reference>
     <Reference Include="SpreadsheetGear, Version=6.0.3.189, Culture=neutral, PublicKeyToken=39c186f5904944ec, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\Components\SpreadsheetGear.dll</HintPath>
@@ -335,35 +341,38 @@
     <Reference Include="Syncfusion.Compression.Base, Version=16.1460.0.26, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89, processorArchitecture=MSIL">
       <HintPath>..\..\packages\Syncfusion.Compression.Base46.16.1.0.26\lib\net46\Syncfusion.Compression.Base.dll</HintPath>
     </Reference>
-    <Reference Include="Syncfusion.Grid.Base, Version=16.1460.0.32, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\Syncfusion.Grid.Base.16.1.0.32\lib\net46\Syncfusion.Grid.Base.dll</HintPath>
+    <Reference Include="Syncfusion.Grid.Base, Version=16.4460.0.52, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Syncfusion.Grid.Base.16.4.0.52\lib\net46\Syncfusion.Grid.Base.dll</HintPath>
     </Reference>
-    <Reference Include="Syncfusion.Grid.Windows, Version=16.1460.0.32, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\Syncfusion.Grid.Windows.16.1.0.32\lib\net46\Syncfusion.Grid.Windows.dll</HintPath>
+    <Reference Include="Syncfusion.Grid.Windows, Version=16.4460.0.52, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Syncfusion.Grid.Windows.16.4.0.52\lib\net46\Syncfusion.Grid.Windows.dll</HintPath>
     </Reference>
-    <Reference Include="Syncfusion.Licensing, Version=16.3460.0.29, Culture=neutral, PublicKeyToken=632609b4d040f6b4, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\Syncfusion.Licensing.16.3.0.29\lib\net46\Syncfusion.Licensing.dll</HintPath>
+    <Reference Include="Syncfusion.Licensing, Version=16.4460.0.52, Culture=neutral, PublicKeyToken=632609b4d040f6b4, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Syncfusion.Licensing.16.4.0.52\lib\net46\Syncfusion.Licensing.dll</HintPath>
     </Reference>
-    <Reference Include="Syncfusion.SfInput.Wpf, Version=16.3460.0.29, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\Syncfusion.SfInput.WPF.16.3.0.29\lib\net46\Syncfusion.SfInput.Wpf.dll</HintPath>
+    <Reference Include="Syncfusion.SfInput.WPF, Version=16.4460.0.52, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Syncfusion.SfInput.WPF.16.4.0.52\lib\net46\Syncfusion.SfInput.WPF.dll</HintPath>
     </Reference>
-    <Reference Include="Syncfusion.SfShared.Wpf, Version=16.3460.0.29, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\Syncfusion.SfShared.WPF.16.3.0.29\lib\net46\Syncfusion.SfShared.Wpf.dll</HintPath>
+    <Reference Include="Syncfusion.SfShared.WPF, Version=16.4460.0.52, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Syncfusion.SfShared.WPF.16.4.0.52\lib\net46\Syncfusion.SfShared.WPF.dll</HintPath>
     </Reference>
-    <Reference Include="Syncfusion.Shared.Base, Version=16.1460.0.32, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\Syncfusion.Shared.Base.16.1.0.32\lib\net46\Syncfusion.Shared.Base.dll</HintPath>
+    <Reference Include="Syncfusion.Shared.Base, Version=16.4460.0.52, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Syncfusion.Shared.Base.16.4.0.52\lib\net46\Syncfusion.Shared.Base.dll</HintPath>
     </Reference>
-    <Reference Include="Syncfusion.Shared.Windows, Version=16.1460.0.32, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\Syncfusion.Shared.Windows.16.1.0.32\lib\net46\Syncfusion.Shared.Windows.dll</HintPath>
+    <Reference Include="Syncfusion.Shared.Windows, Version=16.4460.0.52, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Syncfusion.Shared.Windows.16.4.0.52\lib\net46\Syncfusion.Shared.Windows.dll</HintPath>
     </Reference>
-    <Reference Include="Syncfusion.SpellChecker.Base, Version=16.1460.0.32, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\Syncfusion.SpellChecker.Base.16.1.0.32\lib\net46\Syncfusion.SpellChecker.Base.dll</HintPath>
+    <Reference Include="Syncfusion.Shared.Wpf, Version=16.1460.0.26, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Syncfusion.Shared.WPF46.16.1.0.26\lib\net46\Syncfusion.Shared.Wpf.dll</HintPath>
     </Reference>
-    <Reference Include="Syncfusion.Tools.Base, Version=16.1460.0.32, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\Syncfusion.Tools.Base.16.1.0.32\lib\net46\Syncfusion.Tools.Base.dll</HintPath>
+    <Reference Include="Syncfusion.SpellChecker.Base, Version=16.4460.0.52, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Syncfusion.SpellChecker.Base.16.4.0.52\lib\net46\Syncfusion.SpellChecker.Base.dll</HintPath>
     </Reference>
-    <Reference Include="Syncfusion.Tools.Windows, Version=16.1460.0.32, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\Syncfusion.Tools.Windows.16.1.0.32\lib\net46\Syncfusion.Tools.Windows.dll</HintPath>
+    <Reference Include="Syncfusion.Tools.Base, Version=16.4460.0.52, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Syncfusion.Tools.Base.16.4.0.52\lib\net46\Syncfusion.Tools.Base.dll</HintPath>
+    </Reference>
+    <Reference Include="Syncfusion.Tools.Windows, Version=16.4460.0.52, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Syncfusion.Tools.Windows.16.4.0.52\lib\net46\Syncfusion.Tools.Windows.dll</HintPath>
     </Reference>
     <Reference Include="Syncfusion.XlsIO.Base, Version=16.1460.0.26, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89, processorArchitecture=MSIL">
       <HintPath>..\..\packages\Syncfusion.XlsIO.Base46.16.1.0.26\lib\net46\Syncfusion.XlsIO.Base.dll</HintPath>
@@ -797,7 +806,7 @@
     <Compile Include="Api\IApiService.cs" />
     <Compile Include="ApplicationCore\CommandLineOptions\AutoUpgradeFailureSubmitter.cs" />
     <Compile Include="ApplicationCore\Dashboard\Content\DashboardAccountTrialItem.cs" />
-    <Compile Include="ApplicationCore\Dashboard\Content\DashboardTrialItem.cs" />    
+    <Compile Include="ApplicationCore\Dashboard\Content\DashboardTrialItem.cs" />
     <Compile Include="ApplicationCore\Licensing\CustomerLicenseKeyType.cs" />
     <Compile Include="ApplicationCore\Licensing\TrialDetails.cs" />
     <Compile Include="ApplicationCore\Licensing\Warehouse\DTO\SqlConfigChangedDto.cs" />

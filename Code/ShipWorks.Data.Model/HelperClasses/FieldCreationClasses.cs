@@ -2037,6 +2037,26 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(AsendiaProfileFieldIndex.NonDelivery);}
 		}
+		/// <summary>Creates a new AsendiaProfileEntity.CustomsRecipientTin field instance</summary>
+		public static EntityField2 CustomsRecipientTin
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(AsendiaProfileFieldIndex.CustomsRecipientTin);}
+		}
+		/// <summary>Creates a new AsendiaProfileEntity.CustomsRecipientTinType field instance</summary>
+		public static EntityField2 CustomsRecipientTinType
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(AsendiaProfileFieldIndex.CustomsRecipientTinType);}
+		}
+		/// <summary>Creates a new AsendiaProfileEntity.CustomsRecipientEntityType field instance</summary>
+		public static EntityField2 CustomsRecipientEntityType
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(AsendiaProfileFieldIndex.CustomsRecipientEntityType);}
+		}
+		/// <summary>Creates a new AsendiaProfileEntity.CustomsRecipientIssuingAuthority field instance</summary>
+		public static EntityField2 CustomsRecipientIssuingAuthority
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(AsendiaProfileFieldIndex.CustomsRecipientIssuingAuthority);}
+		}
 	}
 
 	/// <summary>Field Creation Class for entity AsendiaShipmentEntity</summary>
@@ -2121,6 +2141,26 @@ namespace ShipWorks.Data.Model.HelperClasses
 		public static EntityField2 Insurance
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(AsendiaShipmentFieldIndex.Insurance);}
+		}
+		/// <summary>Creates a new AsendiaShipmentEntity.CustomsRecipientTin field instance</summary>
+		public static EntityField2 CustomsRecipientTin
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(AsendiaShipmentFieldIndex.CustomsRecipientTin);}
+		}
+		/// <summary>Creates a new AsendiaShipmentEntity.CustomsRecipientTinType field instance</summary>
+		public static EntityField2 CustomsRecipientTinType
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(AsendiaShipmentFieldIndex.CustomsRecipientTinType);}
+		}
+		/// <summary>Creates a new AsendiaShipmentEntity.CustomsRecipientEntityType field instance</summary>
+		public static EntityField2 CustomsRecipientEntityType
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(AsendiaShipmentFieldIndex.CustomsRecipientEntityType);}
+		}
+		/// <summary>Creates a new AsendiaShipmentEntity.CustomsRecipientIssuingAuthority field instance</summary>
+		public static EntityField2 CustomsRecipientIssuingAuthority
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(AsendiaShipmentFieldIndex.CustomsRecipientIssuingAuthority);}
 		}
 	}
 

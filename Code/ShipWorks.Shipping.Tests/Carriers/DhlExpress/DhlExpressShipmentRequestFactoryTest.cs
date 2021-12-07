@@ -1,7 +1,7 @@
 ﻿using Autofac.Extras.Moq;
 using Interapptive.Shared.Utility;
 using Moq;
-using ShipEngine.ApiClient.Model;
+using ShipEngine.CarrierApi.Client.Model;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.Dhl;
 using ShipWorks.Shipping.Services;

@@ -18,7 +18,7 @@ using Interapptive.Shared.Security;
 using Interapptive.Shared.Threading;
 using Interapptive.Shared.Utility;
 using log4net;
-using ShipEngine.ApiClient.Model;
+using ShipEngine.CarrierApi.Client.Model;
 using ShipWorks.ApplicationCore.Licensing.WebClientEnvironments;
 using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Data.Connection;

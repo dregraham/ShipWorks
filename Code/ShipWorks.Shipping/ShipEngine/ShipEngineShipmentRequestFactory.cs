@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using Interapptive.Shared.Utility;
-using ShipEngine.ApiClient.Model;
+using ShipEngine.CarrierApi.Client.Model;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Services;
 
@@ -51,6 +51,11 @@ namespace ShipWorks.Shipping.ShipEngine
 
             if (shipmentTypeManager.Get(shipment.ShipmentTypeCode).IsCustomsRequired(shipment))
             {
+                List<TaxIdentifier> newTaxIds = CreateTaxIdentifiers(shipment);
+                if (newTaxIds.Count > 0)
+                {
+                    request.Shipment.TaxIdentifiers = newTaxIds;
+                }
                 request.Shipment.Customs = CreateCustoms(shipment);
             }
 
@@ -134,6 +139,11 @@ namespace ShipWorks.Shipping.ShipEngine
         /// Creates the ShipEngine customs node
         /// </summary>
         protected abstract InternationalOptions CreateCustoms(ShipmentEntity shipment);
+
+        /// <summary>
+        /// Creates the ShipEngine tax identifier node
+        /// </summary>
+        protected abstract List<TaxIdentifier> CreateTaxIdentifiers (ShipmentEntity shipment);
 
         /// <summary>
         /// Gets the carrier specific packages

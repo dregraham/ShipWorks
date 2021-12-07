@@ -1,7 +1,7 @@
 ﻿using ShipWorks.Shipping.ShipEngine;
 using System.Collections.Generic;
 using System.Linq;
-using ShipEngine.ApiClient.Model;
+using ShipEngine.CarrierApi.Client.Model;
 using ShipWorks.Data.Model.EntityClasses;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Utility;
@@ -144,6 +144,14 @@ namespace ShipWorks.Shipping.Carriers.Amazon.SWA
         /// Creates the AmazonSWA customs node
         /// </summary>
         protected override InternationalOptions CreateCustoms(ShipmentEntity shipment)
+        {
+            return null;
+        }
+
+        /// <summary>
+        /// Creates the AmazonSWA tax identifier node
+        /// </summary>
+        protected override List<TaxIdentifier> CreateTaxIdentifiers(ShipmentEntity shipment)
         {
             return null;
         }

@@ -3057,7 +3057,11 @@ CREATE TABLE [dbo].[AsendiaProfile](
 	[Service] [int] NULL,
 	[NonMachinable] [bit] NULL,
 	[Contents] [int] NULL,
-	[NonDelivery] [int] NULL
+	[NonDelivery] [int] NULL,
+	[CustomsRecipientTin] [nvarchar] (24) NULL,
+	[CustomsRecipientTinType] [int] NULL,
+	[CustomsRecipientEntityType] [int] NULL,
+	[CustomsRecipientIssuingAuthority] [nvarchar] (2) NULL
 )
 GO
 PRINT N'Creating primary key [PK_AsendiaProfile] on [dbo].[AsendiaProfile]'
@@ -3086,7 +3090,11 @@ CREATE TABLE [dbo].[AsendiaShipment](
 	[DimsAddWeight] [bit] NOT NULL,
 	[DimsWeight] [float] NOT NULL,
 	[InsuranceValue] [money] NOT NULL,
-	[Insurance] [bit] NOT NULL
+	[Insurance] [bit] NOT NULL,
+	[CustomsRecipientTin] [nvarchar] (24) NULL,
+	[CustomsRecipientTinType] [int] NULL,
+	[CustomsRecipientEntityType] [int] NULL,
+	[CustomsRecipientIssuingAuthority] [nvarchar] (2) NULL
 )
 GO
 PRINT N'Creating primary key [PK_AsendiaShipment] on [dbo].[AsendiaShipment]'

@@ -10,6 +10,7 @@ using Interapptive.Shared.ComponentRegistration;
 using ShipWorks.Shipping.ShipEngine;
 using Interapptive.Shared.Enums;
 using ShipWorks.Shipping.Carriers.Asendia;
+using Interapptive.Shared.Business.Geography;
 
 namespace ShipWorks.Shipping.UI.Carriers.Asendia
 {
@@ -48,8 +49,13 @@ namespace ShipWorks.Shipping.UI.Carriers.Asendia
             LoadAsendiaAccounts();
 
             EnumHelper.BindComboBox<AsendiaServiceType>(service);
+            EnumHelper.BindComboBox<TaxIdType>(customsRecipientTINType);
             EnumHelper.BindComboBox<ShipEngineContentsType>(contents);
             EnumHelper.BindComboBox<ShipEngineNonDeliveryType>(nonDelivery);
+
+            customsRecipientIssuingAuthority.DisplayMember = "Key";
+            customsRecipientIssuingAuthority.ValueMember = "Value";
+            customsRecipientIssuingAuthority.DataSource = Geography.Countries.Select(n => new KeyValuePair<string, string>(n, Geography.GetCountryCode(n))).ToList();
 
             // From
             AddValueMapping(asendiaProfile, AsendiaProfileFields.AsendiaAccountID, accountState, asendiaAccount, labelAccount);
@@ -73,6 +79,10 @@ namespace ShipWorks.Shipping.UI.Carriers.Asendia
             //Customs
             AddValueMapping(asendiaProfile, AsendiaProfileFields.Contents, contentsState, contents, labelContents);
             AddValueMapping(asendiaProfile, AsendiaProfileFields.NonDelivery, nonDeliveryState, nonDelivery, labelNonDelivery);
+            //Tax Id
+            AddValueMapping(asendiaProfile, AsendiaProfileFields.CustomsRecipientTin, customsRecipientTINState, customsRecipientTIN, labelCustomsRecipientTIN);
+            AddValueMapping(asendiaProfile, AsendiaProfileFields.CustomsRecipientTinType, customsRecipientTINTypeState, customsRecipientTINType, labelCustomsRecipientTINType);
+            AddValueMapping(asendiaProfile, AsendiaProfileFields.CustomsRecipientIssuingAuthority, customsRecipientIssuingAuthorityState, customsRecipientIssuingAuthority, labelCustomsRecipientIssuingAuthority);
         }
 
         /// <summary>

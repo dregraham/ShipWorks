@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 using Autofac.Features.Indexed;
 using Interapptive.Shared.Utility;
 using log4net;
-using ShipEngine.ApiClient.Model;
+using ShipEngine.CarrierApi.Client.Model;
 using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Data.Model.EntityClasses;
 

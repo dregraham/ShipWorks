@@ -1,5 +1,5 @@
 ﻿using ShipWorks.Data.Model.EntityClasses;
-using ShipEngine.ApiClient.Model;
+using ShipEngine.CarrierApi.Client.Model;
 using Interapptive.Shared.ComponentRegistration;
 using ShipWorks.Data;
 using ShipWorks.Shipping.ShipEngine;

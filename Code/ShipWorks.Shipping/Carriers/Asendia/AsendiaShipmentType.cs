@@ -7,7 +7,7 @@ using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Enums;
 using Interapptive.Shared.Utility;
 using SD.LLBLGen.Pro.ORMSupportClasses;
-using ShipEngine.ApiClient.Model;
+using ShipEngine.CarrierApi.Client.Model;
 using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Common.IO.Hardware.Printers;
 using ShipWorks.Data;
@@ -87,6 +87,10 @@ namespace ShipWorks.Shipping.Carriers.Asendia
             asendiaShipment.RequestedLabelFormat = (int) ThermalLanguage.None;
             asendiaShipment.Contents = (int) ShipEngineContentsType.Merchandise;
             asendiaShipment.NonDelivery = (int) ShipEngineNonDeliveryType.ReturnToSender;
+            asendiaShipment.CustomsRecipientTin = string.Empty;
+            asendiaShipment.CustomsRecipientTinType = (int) TaxIdType.Ioss;
+            asendiaShipment.CustomsRecipientEntityType = 0;
+            asendiaShipment.CustomsRecipientIssuingAuthority = "US";
             asendiaShipment.NonMachinable = false;
             asendiaShipment.AsendiaAccountID = 0;
             asendiaShipment.ShipEngineLabelID = string.Empty;
@@ -267,6 +271,10 @@ namespace ShipWorks.Shipping.Carriers.Asendia
             asendia.Service = (int) AsendiaServiceType.AsendiaPriorityTracked;
             asendia.Contents = (int) ShipEngineContentsType.Merchandise;
             asendia.NonDelivery = (int) ShipEngineNonDeliveryType.ReturnToSender;
+            asendia.CustomsRecipientTin = string.Empty;
+            asendia.CustomsRecipientTinType = (int) TaxIdType.Ioss;
+            asendia.CustomsRecipientEntityType = 0;
+            asendia.CustomsRecipientIssuingAuthority = "US";
             asendia.NonMachinable = false;
         }
 
@@ -275,6 +283,9 @@ namespace ShipWorks.Shipping.Carriers.Asendia
         public override void GenerateTemplateElements(ElementOutline container, Func<ShipmentEntity> shipment, Func<ShipmentEntity> loaded)
         {
             Lazy<List<TemplateLabelData>> labels = new Lazy<List<TemplateLabelData>>(() => LoadLabelData(shipment));
+
+            //tax id
+            container.AddElement("TIN", () => loaded().Asendia.CustomsRecipientTin);
 
             // Add the labels content
             container.AddElement(
