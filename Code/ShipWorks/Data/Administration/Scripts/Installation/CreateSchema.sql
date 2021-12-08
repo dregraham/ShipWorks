@@ -2986,7 +2986,10 @@ CREATE TABLE [dbo].[DhlExpressShipment](
 	[ShipEngineLabelID] [nvarchar] (50) NULL,
 	[IntegratorTransactionID] [uniqueidentifier] NULL,
 	[StampsTransactionID] [uniqueidentifier] NULL,
-	[ResidentialDelivery] [bit] NOT NULL
+	[ResidentialDelivery] [bit] NOT NULL,
+	[CustomsRecipientTin] [nvarchar] (25) NULL,
+	[CustomsTaxIdType] [int] NULL,
+	[CustomsTinIssuingAuthority] [nvarchar] (2) NULL
 )
 GO
 PRINT N'Creating primary key [PK_DhlExpressShipment] on [dbo].[DhlExpressShipment]'
@@ -3038,7 +3041,10 @@ CREATE TABLE [dbo].[DhlExpressProfile](
 	[SaturdayDelivery] [bit] NULL,
 	[Contents][int] Null,
 	[NonDelivery] [int] Null,
-	[ResidentialDelivery] [bit] Null
+	[ResidentialDelivery] [bit] Null,
+	[CustomsRecipientTin] [nvarchar] (25) NULL,
+	[CustomsTaxIdType] [int] NULL,
+	[CustomsTinIssuingAuthority] [nvarchar] (2) NULL
 )
 GO
 PRINT N'Creating primary key [PK_DhlExpressProfile] on [dbo].[DhlExpressProfile]'

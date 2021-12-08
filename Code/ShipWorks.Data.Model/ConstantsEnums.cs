@@ -2534,6 +2534,12 @@ namespace ShipWorks.Data.Model
 		NonDelivery,
 		///<summary>ResidentialDelivery. </summary>
 		ResidentialDelivery,
+		///<summary>CustomsRecipientTin. </summary>
+		CustomsRecipientTin,
+		///<summary>CustomsTaxIdType. </summary>
+		CustomsTaxIdType,
+		///<summary>CustomsTinIssuingAuthority. </summary>
+		CustomsTinIssuingAuthority,
 		/// <summary></summary>
 		AmountOfFields
 	}
@@ -2566,6 +2572,12 @@ namespace ShipWorks.Data.Model
 		StampsTransactionID,
 		///<summary>ResidentialDelivery. </summary>
 		ResidentialDelivery,
+		///<summary>CustomsRecipientTin. </summary>
+		CustomsRecipientTin,
+		///<summary>CustomsTaxIdType. </summary>
+		CustomsTaxIdType,
+		///<summary>CustomsTinIssuingAuthority. </summary>
+		CustomsTinIssuingAuthority,
 		/// <summary></summary>
 		AmountOfFields
 	}
@@ -9996,6 +10008,8 @@ namespace ShipWorks.Data.Model
 		NoPostage,
 		///<summary>CustomsRecipientTin. </summary>
 		CustomsRecipientTin,
+		///<summary>CustomsRecipientTin_. </summary>
+		CustomsRecipientTin_,
 		/// <summary></summary>
 		AmountOfFields
 	}
@@ -10050,6 +10064,8 @@ namespace ShipWorks.Data.Model
 		Insurance,
 		///<summary>CustomsRecipientTin. </summary>
 		CustomsRecipientTin,
+		///<summary>CustomsRecipientTin_. </summary>
+		CustomsRecipientTin_,
 		/// <summary></summary>
 		AmountOfFields
 	}
@@ -13458,6 +13474,10 @@ namespace ShipWorks.Data.Model
 		CustomsRecipientTIN,
 		///<summary>CustomsRecipientTINType. </summary>
 		CustomsRecipientTINType,
+		///<summary>CustomsRecipientTIN_. </summary>
+		CustomsRecipientTIN_,
+		///<summary>CustomsRecipientTINType_. </summary>
+		CustomsRecipientTINType_,
 		/// <summary></summary>
 		AmountOfFields
 	}
@@ -13642,6 +13662,10 @@ namespace ShipWorks.Data.Model
 		CustomsRecipientTIN,
 		///<summary>CustomsRecipientTINType. </summary>
 		CustomsRecipientTINType,
+		///<summary>CustomsRecipientTIN_. </summary>
+		CustomsRecipientTIN_,
+		///<summary>CustomsRecipientTINType_. </summary>
+		CustomsRecipientTINType_,
 		/// <summary></summary>
 		AmountOfFields
 	}

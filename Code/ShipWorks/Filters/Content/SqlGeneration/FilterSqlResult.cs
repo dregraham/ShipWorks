@@ -119,10 +119,12 @@ namespace ShipWorks.Filters.Content.SqlGeneration
                     fieldCount++;
                 }
 
-                if (fieldCount != FilterNodeColumnMaskUtility.GetTableBitCount(columnMaskTableMap[entityType]))
+                var actualFIeldCount = FilterNodeColumnMaskUtility.GetTableBitCount(columnMaskTableMap[entityType]);
+
+                if (fieldCount != actualFIeldCount)
                 {
                     // FilterNodeColumnMaskUtility Constructor
-                    throw new InvalidOperationException("Looks like we need to update the bitcount we use to track table: " + entityType);
+                    throw new InvalidOperationException($"Looks like we need to update the bitcount we use to track table to: {actualFIeldCount} \n {entityType}");
                 }
             }
 

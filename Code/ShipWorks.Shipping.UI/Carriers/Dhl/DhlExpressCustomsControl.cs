@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
-using ShipWorks.Shipping.Editing;
-using Interapptive.Shared.Utility;
-using ShipWorks.UI.Controls;
-using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Shipping.ShipEngine;
 using Interapptive.Shared.ComponentRegistration;
+using Interapptive.Shared.Utility;
+using ShipWorks.Data.Model.EntityClasses;
+using Interapptive.Shared.Enums;
+using ShipWorks.Shipping.Editing;
+using ShipWorks.Shipping.ShipEngine;
+using ShipWorks.UI.Controls;
+using Interapptive.Shared.Business.Geography;
 
 namespace ShipWorks.Shipping.UI.Carriers.Dhl
 {
@@ -32,13 +34,14 @@ namespace ShipWorks.Shipping.UI.Carriers.Dhl
 
             EnumHelper.BindComboBox<ShipEngineContentsType>(contentType);
             EnumHelper.BindComboBox<ShipEngineNonDeliveryType>(nonDeliveryType);
+            EnumHelper.BindComboBox<TaxIdType>(taxIdType);
         }
 
         /// <summary>
         /// Load the shipments into the controls
         /// </summary>
         public override void LoadShipments(IEnumerable<ShipmentEntity> shipments, bool enableEditing)
-        {   
+        {
             // A null reference error was being thrown.  Discoverred by Crash Reports.
             // Let's figure out what is null....
             if (shipments == null)
@@ -47,6 +50,11 @@ namespace ShipWorks.Shipping.UI.Carriers.Dhl
             }
 
             base.LoadShipments(shipments, enableEditing);
+
+            if (customsTinIssuingAuthority.DataSource == null)
+            {
+                customsTinIssuingAuthority.DataSource = Geography.Countries;
+            }
 
             contentType.SelectedIndexChanged -= this.OnChangeOption;
             nonDeliveryType.SelectedIndexChanged -= this.OnChangeOption;
@@ -61,9 +69,13 @@ namespace ShipWorks.Shipping.UI.Carriers.Dhl
                     }
 
                     MethodConditions.EnsureArgumentIsNotNull(shipment.DhlExpress, "DhlExpress");
-                    
+
                     contentType.ApplyMultiValue((ShipEngineContentsType) shipment.DhlExpress.Contents);
-                    nonDeliveryType.ApplyMultiValue((ShipEngineNonDeliveryType)shipment.DhlExpress.NonDelivery);
+                    nonDeliveryType.ApplyMultiValue((ShipEngineNonDeliveryType) shipment.DhlExpress.NonDelivery);
+
+                    customsRecipientTin.ApplyMultiText(shipment.DhlExpress.CustomsRecipientTin);
+                    taxIdType.ApplyMultiValue((TaxIdType) shipment.DhlExpress.CustomsTaxIdType);
+                    customsTinIssuingAuthority.ApplyMultiText(Geography.GetCountryName(shipment.DhlExpress.CustomsTinIssuingAuthority));
                 }
             }
 
@@ -78,10 +90,10 @@ namespace ShipWorks.Shipping.UI.Carriers.Dhl
         {
             foreach (ShipmentEntity shipment in LoadedShipments)
             {
-                contentType.ReadMultiValue(v => shipment.DhlExpress.Contents = (int)(ShipEngineContentsType)v);
-                contentType.ReadMultiValue(v => shipment.DhlExpress.NonDelivery = (int)(ShipEngineNonDeliveryType)v);
+                contentType.ReadMultiValue(v => shipment.DhlExpress.Contents = (int) (ShipEngineContentsType) v);
+                contentType.ReadMultiValue(v => shipment.DhlExpress.NonDelivery = (int) (ShipEngineNonDeliveryType) v);
             }
-            
+
         }
 
         /// <summary>
@@ -94,7 +106,11 @@ namespace ShipWorks.Shipping.UI.Carriers.Dhl
             foreach (ShipmentEntity shipment in LoadedShipments)
             {
                 contentType.ReadMultiValue(v => shipment.DhlExpress.Contents = (int) (ShipEngineContentsType) v);
-                nonDeliveryType.ReadMultiValue(v => shipment.DhlExpress.NonDelivery = (int)(ShipEngineNonDeliveryType)v);
+                nonDeliveryType.ReadMultiValue(v => shipment.DhlExpress.NonDelivery = (int) (ShipEngineNonDeliveryType) v);
+
+                customsRecipientTin.ReadMultiText(s => shipment.DhlExpress.CustomsRecipientTin = s);
+                taxIdType.ReadMultiValue(v => shipment.DhlExpress.CustomsTaxIdType = (int) (TaxIdType) v);
+                customsTinIssuingAuthority.ReadMultiText(v => shipment.DhlExpress.CustomsTinIssuingAuthority = Geography.GetCountryCode(v));
             }
         }
     }

@@ -156,6 +156,9 @@ namespace ShipWorks.Shipping.Carriers.Dhl
             ApplyProfileValue(source.SaturdayDelivery, dhlShipment, DhlExpressShipmentFields.SaturdayDelivery);
             ApplyProfileValue(source.NonDelivery, dhlShipment, DhlExpressShipmentFields.NonDelivery);
             ApplyProfileValue(source.Contents, dhlShipment, DhlExpressShipmentFields.Contents);
+            ApplyProfileValue(source.CustomsRecipientTin, dhlShipment, DhlExpressShipmentFields.CustomsRecipientTin);
+            ApplyProfileValue(source.CustomsTaxIdType, dhlShipment, DhlExpressShipmentFields.CustomsTaxIdType);
+            ApplyProfileValue(source.CustomsTinIssuingAuthority, dhlShipment, DhlExpressShipmentFields.CustomsTinIssuingAuthority);
         }
     }
 }

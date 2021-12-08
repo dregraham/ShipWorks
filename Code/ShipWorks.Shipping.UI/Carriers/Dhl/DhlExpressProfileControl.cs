@@ -7,6 +7,7 @@ using System.Linq;
 using System.Windows.Forms;
 using Autofac;
 using Interapptive.Shared.ComponentRegistration;
+using Interapptive.Shared.Enums;
 using Interapptive.Shared.Utility;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Common.IO.Hardware.Printers;
@@ -15,6 +16,7 @@ using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Shipping.Carriers.Dhl;
 using ShipWorks.Shipping.Profiles;
 using ShipWorks.Shipping.ShipEngine;
+using Interapptive.Shared.Business.Geography;
 
 namespace ShipWorks.Shipping.UI.Carriers.Dhl
 {
@@ -60,6 +62,12 @@ namespace ShipWorks.Shipping.UI.Carriers.Dhl
             EnumHelper.BindComboBox<DhlExpressServiceType>(service);
             EnumHelper.BindComboBox<ShipEngineContentsType>(contents);
             EnumHelper.BindComboBox<ShipEngineNonDeliveryType>(nonDelivery);
+            EnumHelper.BindComboBox<TaxIdType>(taxIdType);
+
+            customsTinIssuingAuthority.DisplayMember = "Key";
+            customsTinIssuingAuthority.ValueMember = "Value";
+            customsTinIssuingAuthority.DataSource = Geography.Countries.Select(n => new KeyValuePair<string, string>(n, Geography.GetCountryCode(n))).ToList();
+
 
             //From
             AddValueMapping(DhlExpressProfile, DhlExpressProfileFields.DhlExpressAccountID, accountState, dhlExpressAccount, labelAccount);
@@ -82,6 +90,10 @@ namespace ShipWorks.Shipping.UI.Carriers.Dhl
             //Customs
             AddValueMapping(DhlExpressProfile, DhlExpressProfileFields.Contents, contentsState, contents, labelContents);
             AddValueMapping(DhlExpressProfile, DhlExpressProfileFields.NonDelivery, nonDeliveryState, nonDelivery, labelNonDelivery);
+
+            AddValueMapping(DhlExpressProfile, DhlExpressProfileFields.CustomsRecipientTin, customsRecipientTinState, customsRecipientTin, labelCustomsRecipientTin);
+            AddValueMapping(DhlExpressProfile, DhlExpressProfileFields.CustomsTaxIdType, taxIdTypeState, taxIdType, labelTaxIdType);
+            AddValueMapping(DhlExpressProfile, DhlExpressProfileFields.CustomsTinIssuingAuthority, customsTinIssuingAuthorityState, customsTinIssuingAuthority, labelCustomsTinIssuingAuthority);
 
             packagesState.Checked = profile.Packages.Count > 0;
             packagesCount.SelectedIndex = packagesState.Checked ? profile.Packages.Count - 1 : -1;

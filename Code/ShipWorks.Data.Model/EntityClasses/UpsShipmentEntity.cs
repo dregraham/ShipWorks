@@ -489,6 +489,10 @@ namespace ShipWorks.Data.Model.EntityClasses
 			_fieldsCustomProperties.Add("CustomsRecipientTIN", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
 			_fieldsCustomProperties.Add("CustomsRecipientTINType", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+			_fieldsCustomProperties.Add("CustomsRecipientTIN_", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+			_fieldsCustomProperties.Add("CustomsRecipientTINType_", fieldHashtable);
 		}
 		#endregion
 
@@ -1186,6 +1190,28 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			get { return (Nullable<System.Int32>)GetValue((int)UpsShipmentFieldIndex.CustomsRecipientTINType, false); }
 			set	{ SetValue((int)UpsShipmentFieldIndex.CustomsRecipientTINType, value); }
+		}
+
+		/// <summary> The CustomsRecipientTIN_ property of the Entity UpsShipment<br/><br/></summary>
+		/// <remarks>Mapped on  table field: "UpsShipment"."CustomsRecipientTIN"<br/>
+		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 35<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		[DataMember]
+		public virtual System.String CustomsRecipientTIN_
+		{
+			get { return (System.String)GetValue((int)UpsShipmentFieldIndex.CustomsRecipientTIN_, true); }
+			set	{ SetValue((int)UpsShipmentFieldIndex.CustomsRecipientTIN_, value); }
+		}
+
+		/// <summary> The CustomsRecipientTINType_ property of the Entity UpsShipment<br/><br/></summary>
+		/// <remarks>Mapped on  table field: "UpsShipment"."CustomsRecipientTINType"<br/>
+		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		[DataMember]
+		public virtual Nullable<System.Int32> CustomsRecipientTINType_
+		{
+			get { return (Nullable<System.Int32>)GetValue((int)UpsShipmentFieldIndex.CustomsRecipientTINType_, false); }
+			set	{ SetValue((int)UpsShipmentFieldIndex.CustomsRecipientTINType_, value); }
 		}
 
 		/// <summary> Gets the EntityCollection with the related entities of type 'UpsPackageEntity' which are related to this entity via a relation of type '1:n'. If the EntityCollection hasn't been fetched yet, the collection returned will be empty.<br/><br/></summary>
