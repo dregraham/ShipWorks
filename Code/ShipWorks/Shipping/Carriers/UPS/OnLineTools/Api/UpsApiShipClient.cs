@@ -807,9 +807,9 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api
 
             // UPS documentation says there are limits to the customs forms but this
             // does not appear to be true, though it does alter the return xml format tag
-            // from GraphicImage to GraphicImagePart, see SaveCN22Label
-
-            foreach (var shipmentCustomsItem in ups.Shipment.CustomsItems)
+            // from GraphicImage to GraphicImagePart after 3 records, see SaveCN22Label
+            // There is a hard limit of 30
+            foreach (var shipmentCustomsItem in ups.Shipment.CustomsItems.Take(30))
             {
                 // Start InternationalForms
                 xmlWriter.WriteStartElement("CN22Content");
@@ -1162,25 +1162,28 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api
         /// </summary>
         private static void CreateLabelImages(XPathNavigator packageNode, UpsPackageEntity package, ThermalLanguage? labelType)
         {
-            // This path is for 3 or less records
-            var labelBase64 = XPathUtility.Evaluate(packageNode, "LabelImage/GraphicImage", "");
-            if (!string.IsNullOrWhiteSpace(labelBase64))
+            using (SqlAdapter adapter = new SqlAdapter())
             {
-                // If we had saved an image for this package previously, but the shipment errored out later (like for an MPS), then clear before
-                // we start.
-                ObjectReferenceManager.ClearReferences(package.UpsPackageID);
-                SaveLabel("LabelImage", labelBase64);
-                return;
-            }
-
-            // This path is for more than 3 records
-            var nodes = packageNode.Select("LabelImage/GraphicImagePart");
-            if (nodes.MoveNext())
-            {
-                ObjectReferenceManager.ClearReferences(package.UpsPackageID);
-                for (var i = 0; i < nodes.Count; i++, nodes.MoveNext())
+                // This path is for 3 or less records
+                var labelBase64 = XPathUtility.Evaluate(packageNode, "LabelImage/GraphicImage", "");
+                if (!string.IsNullOrWhiteSpace(labelBase64))
                 {
-                    SaveLabel(i == 0 ? "LabelImage" : $"LabelImage{i}", nodes.Current.Value);
+                    // If we had saved an image for this package previously, but the shipment errored out later (like for an MPS), then clear before
+                    // we start.
+                    ObjectReferenceManager.ClearReferences(package.UpsPackageID);
+                    SaveLabel("LabelImage", labelBase64);
+                    return;
+                }
+
+                // This path is for more than 3 records
+                var nodes = packageNode.Select("LabelImage/GraphicImagePart");
+                if (nodes.MoveNext())
+                {
+                    ObjectReferenceManager.ClearReferences(package.UpsPackageID);
+                    for (var i = 0; i < nodes.Count; i++, nodes.MoveNext())
+                    {
+                        SaveLabel(i == 0 ? "LabelImage" : $"LabelImage{i}", nodes.Current.Value);
+                    }
                 }
             }
 
