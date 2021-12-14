@@ -1301,46 +1301,24 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
         {
             RateV40 rate = new RateV40();
 
-            string fromZipCode = !string.IsNullOrEmpty(account.MailingPostalCode) ? account.MailingPostalCode : shipment.OriginPostalCode;
-            string toZipCode = shipment.ShipPostalCode;
-            string toCountry = shipment.AdjustedShipCountryCode();
+            rate.To = CreateAddressForRating(shipment.ShipPerson);
 
-            //split up from and to zipcode into the 5 and 4 digits
-            string fromZipCode5 = fromZipCode.Length <= 5 ? fromZipCode : fromZipCode.Substring(0, 5);
-            string fromZipCode4 = fromZipCode.Length <= 5 ? "" : fromZipCode.Substring(6, 4);
-            string toZipCode5 = toZipCode.Length <= 5 ? toZipCode : toZipCode.Substring(0, 5);
-            string toZipCode4 = toZipCode.Length <= 5 ? "" : toZipCode.Substring(6, 4);
+            if (!string.IsNullOrWhiteSpace(account.MailingPostalCode) ||
+                !string.IsNullOrWhiteSpace(account.CountryCode))
+            {
+                rate.From = CreateAddressForRating(shipment.OriginPerson);
+            }
+            else
+            {
+                rate.From = CreateAddressForRating(account.Address);
+            }
 
             // Swap the to/from for return shipments.
             if (shipment.ReturnShipment)
             {
-                rate.From = new Address()
-                {
-                    ZIPCode = toZipCode5,
-                    ZIPCodeAddOn = toZipCode4,
-                };
-
-                rate.To = new Address()
-                {
-                    Country = shipment.AdjustedOriginCountryCode(),
-                    ZIPCode = fromZipCode5,
-                    ZIPCodeAddOn = fromZipCode4,
-                };
-            }
-            else
-            {
-                rate.From = new Address()
-                {
-                    ZIPCode = fromZipCode5,
-                    ZIPCodeAddOn = fromZipCode4,
-                };
-
-                rate.To = new Address()
-                {
-                    ZIPCode = toZipCode5,
-                    ZIPCodeAddOn = toZipCode4,
-                    Country = toCountry,
-                };
+                var originalFrom = rate.From;
+                rate.From = rate.To;
+                rate.To = originalFrom;
             }
 
             // Default the weight to 14oz for best rate if it is 0, so we can get a rate without needing the user to provide a value.  We do 14oz so it kicks it into a Priority shipment, which
@@ -1368,6 +1346,26 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
             }
 
             return rate;
+        }
+
+        /// <summary>
+        /// Get an address for rating
+        /// </summary>
+        private static Address CreateAddressForRating(PersonAdapter shipmentShipPerson)
+        {
+            var toAddress = new Address();
+            if (shipmentShipPerson.IsDomesticCountry())
+            {
+                toAddress.ZIPCode = shipmentShipPerson.PostalCode5;
+                toAddress.ZIPCodeAddOn = shipmentShipPerson.PostalCode4;
+            }
+            else
+            {
+                toAddress.PostalCode = shipmentShipPerson.PostalCode;
+                toAddress.Country = shipmentShipPerson.AdjustedCountryCode(ShipmentTypeCode.Usps);
+            }
+
+            return toAddress;
         }
 
         /// <summary>
