@@ -4919,7 +4919,7 @@ CREATE TABLE [dbo].[FilterNodeUpdatePending]
 (
 [FilterNodeContentID] [bigint] NOT NULL,
 [FilterTarget] [int] NOT NULL,
-[ColumnMask] [varbinary] (100) NOT NULL,
+[ColumnMask] [varbinary] (150) NOT NULL,
 [JoinMask] [int] NOT NULL,
 [Position] [int] NOT NULL
 )
