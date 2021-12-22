@@ -52,7 +52,7 @@ namespace ShipWorks.Shipping.Carriers
         private const string TestCredentialUspsPassword = "AYSaiZOMP3UcalGuDB+4aA==";
         private const string TestCredentialUspsCertificateVerificationData = "<Service><Subject><Value>OU=Data Center Operations, O=Stamps.com</Value><Value></Value></Subject></Service>";
 
-        private const string TestCredentialInsureCertificateVerficationData = "<Service><Subject><Value>*.insureship.com</Value><Value>Domain Control Validated</Value></Subject></Service>";
+        private const string TestCredentialInsureCertificateVerficationData = "<Service><Subject><Value>*.insureship.com</Value></Subject></Service>";
 
         // Key names of credential values in the dictionary 
         private const string FedExAccountNumberKeyName = "FedExAccountNumber";
