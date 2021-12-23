@@ -47,7 +47,7 @@ namespace ShipWorks.ApplicationCore.Licensing
             // Determine the capabilities node to use and extract the current user levels
             userLevelsNode = xmlResponse.SelectSingleNode("//UserLevels");
             capabilitiesNode = GetPricingCapabilitiesNode(xmlResponse);
-            
+
             ValidateCapabilitiesAndUserLevels(xmlResponse);
 
             // parse the ShipmentTypeFunctionality node from the response
@@ -184,7 +184,7 @@ namespace ShipWorks.ApplicationCore.Licensing
         /// Details about the trial
         /// </summary>
         public TrialDetails TrialDetails { get; set; }
-        
+
         /// <summary>
         /// The number of Active Channels in tango
         /// </summary>
@@ -200,7 +200,7 @@ namespace ShipWorks.ApplicationCore.Licensing
         /// </summary>
         /// <value><c>true</c> if this the capabilities allows best rate; otherwise, <c>false</c>.</value>
         public bool IsBestRateAllowed { get; private set; }
-        
+
         /// <summary>
         /// Get the ShipmentType functionality for the given ShipmentType and ShippingPolicyType
         /// </summary>
@@ -251,7 +251,7 @@ namespace ShipWorks.ApplicationCore.Licensing
                         AddRestrictionToList(restrictions.Current, restrictionsList);
                     }
 
-                    ShipmentTypeRestriction.Add((ShipmentTypeCode)shipmentTypeCode, restrictionsList);
+                    ShipmentTypeRestriction.Add((ShipmentTypeCode) shipmentTypeCode, restrictionsList);
 
                     // Create an empty dictionary of ShippingPolicyType, string to keep track of features
                     // for the shipmenttypecode we are on
@@ -264,7 +264,7 @@ namespace ShipWorks.ApplicationCore.Licensing
                         AddFeatureToDictionary(features.Current, featureDictionary);
                     }
 
-                    ShipmentTypeShippingPolicy.Add((ShipmentTypeCode)shipmentTypeCode, featureDictionary);
+                    ShipmentTypeShippingPolicy.Add((ShipmentTypeCode) shipmentTypeCode, featureDictionary);
                 }
             }
         }
@@ -363,7 +363,7 @@ namespace ShipWorks.ApplicationCore.Licensing
         {
             XPathNavigator xpath = xmlResponse.CreateNavigator();
 
-            UpsStatus = (UpsStatus)XPathUtility.Evaluate(xpath, "//UpsOnly/@status", 0);
+            UpsStatus = (UpsStatus) XPathUtility.Evaluate(xpath, "//UpsOnly/@status", 0);
 
             // Only subsidized accounts are limited to specific ups accounts
             if (UpsStatus == UpsStatus.Subsidized)
@@ -383,7 +383,7 @@ namespace ShipWorks.ApplicationCore.Licensing
                 UpsAccountNumbers.Count();
 
             UpsSurePost = XPathUtility.Evaluate(xpath, "//UpsSurePostEnabled/@status", 0) == 1;
-            PostalAvailability = (BrownPostalAvailability)XPathUtility.Evaluate(xpath, "//UpsOnly/@postal", (int)BrownPostalAvailability.AllServices);
+            PostalAvailability = (BrownPostalAvailability) XPathUtility.Evaluate(xpath, "//UpsOnly/@postal", (int) BrownPostalAvailability.AllServices);
         }
 
         /// <summary>

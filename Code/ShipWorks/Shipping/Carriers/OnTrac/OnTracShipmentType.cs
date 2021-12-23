@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Drawing.Imaging;
 using System.Linq;
+using Autofac;
 using Interapptive.Shared.Net;
 using Interapptive.Shared.Utility;
 using SD.LLBLGen.Pro.ORMSupportClasses;
@@ -304,7 +305,7 @@ namespace ShipWorks.Shipping.Carriers.OnTrac
         /// <summary>
         /// Create the settings control for OnTrac
         /// </summary>
-        protected override SettingsControlBase CreateSettingsControl()
+        protected override SettingsControlBase CreateSettingsControlInternal(ILifetimeScope scope)
         {
             return new OnTracSettingsControl();
         }
@@ -371,7 +372,7 @@ namespace ShipWorks.Shipping.Carriers.OnTrac
         /// <summary>
         /// Get postal Tracking link
         /// </summary>
-        protected override string GetCarrierTrackingUrlInternal(ShipmentEntity shipment) => 
+        protected override string GetCarrierTrackingUrlInternal(ShipmentEntity shipment) =>
             $"https://www.ontrac.com/trackingresults.asp?tracking_number={shipment.TrackingNumber}";
 
         /// <summary>

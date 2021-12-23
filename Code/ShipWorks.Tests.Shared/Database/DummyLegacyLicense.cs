@@ -39,6 +39,8 @@ namespace ShipWorks.Tests.Shared.Database
 
         public TrialDetails TrialDetails { get; }
 
+        public bool IsCtp { get; }
+
         public string Key
         {
             get

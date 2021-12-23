@@ -10,6 +10,7 @@ using Interapptive.Shared.Metrics;
 using Interapptive.Shared.UI;
 using Interapptive.Shared.Utility;
 using log4net;
+using ShipWorks.ApplicationCore.Licensing;
 using ShipWorks.Core.Messaging;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
@@ -129,6 +130,14 @@ namespace ShipWorks.Shipping.Settings
                 page.Tag = shipmentType;
 
                 optionControl.OptionPages.Add(page);
+            }
+
+            var licenses = lifetimeScope.Resolve<ILicenseService>().GetLicenses();
+
+            if (licenses.Any(x => x.IsCtp))
+            {
+                //Remove OneBalance
+                this.optionControl.OptionPages.RemoveAt(1);
             }
         }
 
@@ -321,12 +330,17 @@ namespace ShipWorks.Shipping.Settings
 
                 controlPanel.Controls.Add(upsControl);
 
-                OneBalanceUpsBannerControl upsOneBalanceControl = new OneBalanceUpsBannerControl();
-                upsOneBalanceControl.SetupComplete += new EventHandler(OnShipmentTypeSetupComplete);
+                var licenses = lifetimeScope.Resolve<ILicenseService>().GetLicenses();
 
-                upsOneBalanceControl.Dock = DockStyle.Top;
+                if (!licenses.Any(x => x.IsCtp))
+                {
+                    OneBalanceUpsBannerControl upsOneBalanceControl = new OneBalanceUpsBannerControl();
+                    upsOneBalanceControl.SetupComplete += new EventHandler(OnShipmentTypeSetupComplete);
 
-                controlPanel.Controls.Add(upsOneBalanceControl);
+                    upsOneBalanceControl.Dock = DockStyle.Top;
+
+                    controlPanel.Controls.Add(upsOneBalanceControl);
+                }
 
                 return controlPanel;
             }

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using Autofac;
 using Autofac.Features.Indexed;
 using log4net;
 using SD.LLBLGen.Pro.ORMSupportClasses;
@@ -156,7 +157,7 @@ namespace ShipWorks.Shipping.Carriers.BestRate
         /// <summary>
         /// Creates the UserControl that is used to edit the defaults\settings for the service
         /// </summary>
-        protected override SettingsControlBase CreateSettingsControl() => settingsControlFactory[ShipmentTypeCode.BestRate];
+        protected override SettingsControlBase CreateSettingsControlInternal(ILifetimeScope scope) => settingsControlFactory[ShipmentTypeCode.BestRate];
 
         /// <summary>
         /// Indicates if customs forms may be required to ship the shipment based on the

@@ -23,11 +23,15 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools
     /// </summary>
     public partial class UpsOltSettingsControl : SettingsControlBase
     {
+        private readonly ILifetimeScope scope;
+
         /// <summary>
         /// Constructor
         /// </summary>
-        public UpsOltSettingsControl()
+        public UpsOltSettingsControl(ILifetimeScope scope)
         {
+            this.scope = scope;
+
             InitializeComponent();
             oneBalanceUpsBannerControl.SetupComplete += OnOneBalanceSetupComplete;
             UpdateOneBalanceBannerVisibility();
@@ -47,8 +51,12 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools
         /// </summary>
         private void UpdateOneBalanceBannerVisibility()
         {
-            if (UpsAccountManager.AccountsReadOnly.None() || 
-                UpsAccountManager.AccountsReadOnly.All(a => string.IsNullOrWhiteSpace(a.ShipEngineCarrierId)))
+            var licenses = scope.Resolve<ILicenseService>().GetLicenses();
+
+            var shouldShow = (UpsAccountManager.AccountsReadOnly.None() || UpsAccountManager.AccountsReadOnly.All(a => string.IsNullOrWhiteSpace(a.ShipEngineCarrierId))) &&
+            licenses.None(x => x.IsCtp);
+
+            if (shouldShow)
             {
                 oneBalanceUpsBannerControl.Visible = true;
                 panel.Location = new Point(4, 89);

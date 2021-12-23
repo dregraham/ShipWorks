@@ -147,7 +147,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
         /// <summary>
         /// Create the settings control for Endicia
         /// </summary>
-        protected override SettingsControlBase CreateSettingsControl()
+        protected override SettingsControlBase CreateSettingsControlInternal(ILifetimeScope scope)
         {
             EndiciaSettingsControl settingsControl = new EndiciaSettingsControl(EndiciaReseller);
             settingsControl.Initialize(ShipmentTypeCode);
@@ -429,17 +429,27 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
         {
             switch (serviceType)
             {
-                case PostalServiceType.ExpressMail: return "PriorityExpress";
-                case PostalServiceType.FirstClass: return "First";
-                case PostalServiceType.LibraryMail: return "LibraryMail";
-                case PostalServiceType.MediaMail: return "MediaMail";
-                case PostalServiceType.StandardPost: return "StandardPost";
-                case PostalServiceType.ParcelSelect: return "ParcelSelect";
-                case PostalServiceType.PriorityMail: return "Priority";
-                case PostalServiceType.CriticalMail: return "CriticalMail";
+                case PostalServiceType.ExpressMail:
+                    return "PriorityExpress";
+                case PostalServiceType.FirstClass:
+                    return "First";
+                case PostalServiceType.LibraryMail:
+                    return "LibraryMail";
+                case PostalServiceType.MediaMail:
+                    return "MediaMail";
+                case PostalServiceType.StandardPost:
+                    return "StandardPost";
+                case PostalServiceType.ParcelSelect:
+                    return "ParcelSelect";
+                case PostalServiceType.PriorityMail:
+                    return "Priority";
+                case PostalServiceType.CriticalMail:
+                    return "CriticalMail";
 
-                case PostalServiceType.InternationalExpress: return "PriorityMailExpressInternational";
-                case PostalServiceType.InternationalPriority: return "PriorityMailInternational";
+                case PostalServiceType.InternationalExpress:
+                    return "PriorityMailExpressInternational";
+                case PostalServiceType.InternationalPriority:
+                    return "PriorityMailInternational";
 
                 case PostalServiceType.InternationalFirst:
                 {
@@ -518,7 +528,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
         {
             IEnumerable<long> excludedAccounts = bestRateExcludedAccountRepository.GetAll();
             IEnumerable<IEndiciaAccountEntity> nonExcludedAccounts = AccountRepository.AccountsReadOnly.Where(a => !excludedAccounts.Contains(a.AccountId));
-            
+
             if (nonExcludedAccounts.Any())
             {
                 return new EndiciaBestRateBroker(this, AccountRepository, "USPS", bestRateExcludedAccountRepository);

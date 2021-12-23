@@ -66,7 +66,7 @@ namespace ShipWorks.ApplicationCore.Licensing
             // The license info/capabilities should be cached for 10 minutes
             capabilitiesTimeToLive = new TimeSpan(0, 10, 0);
             lastRefreshTimeInUtc = DateTime.MinValue;
-            
+
             EnsureOnlyOneFeatureRestrictionPerEditionFeature();
         }
 
@@ -110,7 +110,7 @@ namespace ShipWorks.ApplicationCore.Licensing
         /// Details about the trial
         /// </summary>
         public TrialDetails TrialDetails => LicenseCapabilities?.TrialDetails ?? new TrialDetails();
- 
+
         /// <summary>
         /// Gets or sets the user name of the SDC account associated with this license.
         /// </summary>
@@ -122,10 +122,15 @@ namespace ShipWorks.ApplicationCore.Licensing
         public string StampsUsername { get; set; }
 
         /// <summary>
+        /// Whether or not this license is UPS CTP
+        /// </summary>
+        public bool IsCtp => LicenseCapabilities.UpsStatus != UpsStatus.None && LicenseCapabilities.UpsStatus != UpsStatus.Discount;
+
+        /// <summary>
         /// The license capabilities.
         /// </summary>
         private ILicenseCapabilities LicenseCapabilities { get; set; }
-        
+
         /// <summary>
         /// Activate a new store
         /// </summary>

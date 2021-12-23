@@ -42,25 +42,30 @@ namespace ShipWorks.ApplicationCore.Licensing
         /// The Tango CustomerID associated with this license
         /// </summary>
         string TangoCustomerID { get; }
-        
+
         /// <summary>
         /// Whether or not this license is in trial
         /// </summary>
         bool InTrial { get; }
-        
+
         /// <summary>
         /// The date the the recurly trial ends
         /// </summary>
         DateTime RecurlyTrialEndDate { get; }
-        
+
         /// <summary>
         /// How many days are left in the trial
         /// </summary>
         int DaysLeftInTrial { get; }
-        
+
         /// <summary>
         /// Whether or not the trial is expired
         /// </summary>
         bool TrialIsExpired { get; }
+
+        /// <summary>
+        /// The UPS Status
+        /// </summary>
+        UpsStatus UpsStatus { get; }
     }
 }

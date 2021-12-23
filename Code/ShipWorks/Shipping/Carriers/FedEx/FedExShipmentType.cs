@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using Autofac;
 using Interapptive.Shared;
@@ -196,7 +195,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         /// <summary>
         /// Create the UserControl used to edit the overall fedex settings
         /// </summary>
-        protected override SettingsControlBase CreateSettingsControl()
+        protected override SettingsControlBase CreateSettingsControlInternal(ILifetimeScope scope)
         {
             FedExSettingsControl control = new FedExSettingsControl();
             control.Initialize(ShipmentTypeCode);

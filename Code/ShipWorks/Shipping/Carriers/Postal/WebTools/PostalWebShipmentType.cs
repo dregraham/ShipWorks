@@ -3,12 +3,12 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.Linq;
+using Autofac;
 using ShipWorks.Data;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Editing;
 using ShipWorks.Shipping.Editing.Rating;
 using ShipWorks.Shipping.Insurance;
-using ShipWorks.Shipping.Profiles;
 using ShipWorks.Shipping.Settings;
 using ShipWorks.Templates.Processing.TemplateXml.ElementOutlines;
 
@@ -34,7 +34,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.WebTools
         /// <summary>
         /// Create the settings control for defaults & settings
         /// </summary>
-        protected override SettingsControlBase CreateSettingsControl() => new PostalWebSettingsControl();
+        protected override SettingsControlBase CreateSettingsControlInternal(ILifetimeScope scope) => new PostalWebSettingsControl();
 
         /// <summary>
         /// USPS supports getting postal service rates

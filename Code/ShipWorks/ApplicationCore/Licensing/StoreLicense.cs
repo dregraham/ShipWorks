@@ -1,4 +1,7 @@
-﻿using Interapptive.Shared.Utility;
+﻿using System;
+using System.Collections.Generic;
+using System.Windows.Forms;
+using Interapptive.Shared.Utility;
 using log4net;
 using ShipWorks.ApplicationCore.Dashboard.Content;
 using ShipWorks.ApplicationCore.Licensing.LicenseEnforcement;
@@ -7,12 +10,9 @@ using ShipWorks.Data;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Editions;
 using ShipWorks.Messaging.Messages;
-using ShipWorks.Users.Security;
-using System;
-using System.Collections.Generic;
-using System.Windows.Forms;
 using ShipWorks.Shipping;
 using ShipWorks.Shipping.Policies;
+using ShipWorks.Users.Security;
 
 namespace ShipWorks.ApplicationCore.Licensing
 {
@@ -39,7 +39,7 @@ namespace ShipWorks.ApplicationCore.Licensing
             log = logFactory(GetType());
             Key = store.License;
             TrialDetails = new TrialDetails();
-            nextStoreLicenseCheckTimeToLive = InterapptiveOnly.IsInterapptiveUser ? 
+            nextStoreLicenseCheckTimeToLive = InterapptiveOnly.IsInterapptiveUser ?
                                               new TimeSpan(0, 3, 0) : // 3 min for internal
                                               new TimeSpan(4, 0, 0);  // 4 hours for customers
         }
@@ -59,8 +59,16 @@ namespace ShipWorks.ApplicationCore.Licensing
         /// </summary>
         public string Key { get; }
 
+        /// <summary>
+        /// Trial information for this license
+        /// </summary>
         public TrialDetails TrialDetails { get; private set; }
-        
+
+        /// <summary>
+        /// Whether or not this license is UPS CTP
+        /// </summary>
+        public bool IsCtp { get; private set; }
+
         /// <summary>
         /// Store licenses do not have channel limits
         /// </summary>
@@ -119,7 +127,9 @@ namespace ShipWorks.ApplicationCore.Licensing
                 var accountDetail = LicenseActivationHelper.EnsureActive(store);
                 DisabledReason = string.Empty;
                 TrialDetails = new TrialDetails(accountDetail.InTrial, accountDetail.RecurlyTrialEndDate);
-                
+
+                IsCtp = accountDetail.UpsStatus != UpsStatus.None && accountDetail.UpsStatus != UpsStatus.Discount;
+
                 nextStoreLicenseCheckTime[store.StoreID] = dateTimeProvider.UtcNow.Add(nextStoreLicenseCheckTimeToLive);
 
                 // Let anyone who cares know that enabled carriers may have changed.
@@ -139,7 +149,7 @@ namespace ShipWorks.ApplicationCore.Licensing
         public void Refresh()
         {
             // If the store.StoreID is not in the cache or we've passed our time limit, force a refresh
-            if (!nextStoreLicenseCheckTime.ContainsKey(store.StoreID) || 
+            if (!nextStoreLicenseCheckTime.ContainsKey(store.StoreID) ||
                 nextStoreLicenseCheckTime[store.StoreID] < dateTimeProvider.UtcNow)
             {
                 // The license capabilities have expired

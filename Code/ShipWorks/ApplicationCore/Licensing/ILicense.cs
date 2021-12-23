@@ -34,7 +34,12 @@ namespace ShipWorks.ApplicationCore.Licensing
         /// Details about the trial
         /// </summary>
         TrialDetails TrialDetails { get; }
-        
+
+        /// <summary>
+        /// Whether or not this license is UPS CTP
+        /// </summary>
+        bool IsCtp { get; }
+
         /// <summary>
         /// Refresh the license capabilities from Tango
         /// </summary>

@@ -44,9 +44,9 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools
         /// <summary>
         /// Create the settings control for UPS
         /// </summary>
-        protected override SettingsControlBase CreateSettingsControl()
+        protected override SettingsControlBase CreateSettingsControlInternal(ILifetimeScope scope)
         {
-            UpsOltSettingsControl control = new UpsOltSettingsControl();
+            UpsOltSettingsControl control = new UpsOltSettingsControl(scope);
             control.Initialize(ShipmentTypeCode);
             return control;
         }
@@ -132,7 +132,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools
         private static List<TemplateLabelData> LoadLabelData(Func<ShipmentEntity> shipment)
         {
             List<TemplateLabelData> labelData = new List<TemplateLabelData>();
-        
+
             if (shipment().Ups.ShipEngineLabelID != null)
             {
                 return DataResourceManager.GetConsumerResourceReferences(shipment().ShipmentID)

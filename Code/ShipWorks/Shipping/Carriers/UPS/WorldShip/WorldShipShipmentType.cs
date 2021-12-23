@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Autofac;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Shipping.Carriers.BestRate;
 using ShipWorks.Shipping.Carriers.UPS.Enums;
 using ShipWorks.Shipping.Carriers.UPS.WorldShip.BestRate;
-using ShipWorks.Shipping.Profiles;
 using ShipWorks.Shipping.Settings;
 using ShipWorks.Shipping.Tracking;
 using ShipWorks.Templates.Processing.TemplateXml.ElementOutlines;
@@ -32,7 +32,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.WorldShip
         /// Created specifically for WorldShip.  A WorldShip shipment is processed in two phases - first it's processed
         /// Create settings control for WorldShip
         /// </summary>
-        protected override SettingsControlBase CreateSettingsControl()
+        protected override SettingsControlBase CreateSettingsControlInternal(ILifetimeScope scope)
         {
             WorldShipSettingsControl control = new WorldShipSettingsControl();
             control.Initialize(ShipmentTypeCode);
