@@ -805,10 +805,11 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api
                 xmlWriter.WriteElementString("CN22OtherDescription", otherDescription.Length > 20 ? otherDescription.Substring(0, 20) : otherDescription);
             }
 
-            // UPS only allows 1 customs item for MI shipments
-            int maximumAllowedCustomsItems = UpsUtility.IsUpsMiService(serviceType) ? 1 : 3;
-
-            foreach (var shipmentCustomsItem in ups.Shipment.CustomsItems.Take(maximumAllowedCustomsItems))
+            // UPS documentation says there are limits to the customs forms but this
+            // does not appear to be true, though it does alter the return xml format tag
+            // from GraphicImage to GraphicImagePart after 3 records, see SaveCN22Label
+            // There is a hard limit of 30
+            foreach (var shipmentCustomsItem in ups.Shipment.CustomsItems.Take(30))
             {
                 // Start InternationalForms
                 xmlWriter.WriteStartElement("CN22Content");
@@ -1126,22 +1127,33 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api
         /// <param name="shipment">The shipment.</param>
         private static void SaveCN22Label(XPathNavigator upsResponse, ShipmentEntity shipment)
         {
-
             if (XPathUtility.Evaluate(upsResponse, "/ShipmentAcceptResponse/ShipmentResults/Form/FormGroupIdName", "") != "CN22 Form")
             {
                 return;
             }
 
-            string cn22Label = XPathUtility.Evaluate(upsResponse, "/ShipmentAcceptResponse/ShipmentResults/Form/Image/GraphicImage", "");
-
-            if (string.IsNullOrWhiteSpace(cn22Label))
+            // This path is for 3 or less records
+            var cn22Label = XPathUtility.Evaluate(upsResponse, "/ShipmentAcceptResponse/ShipmentResults/Form/Image/GraphicImage", "");
+            if (!string.IsNullOrWhiteSpace(cn22Label))
             {
-                return;
+                using (var stream = new MemoryStream(Convert.FromBase64String(cn22Label)))
+                {
+                    DataResourceManager.CreateFromBytes(stream.ToArray(), shipment.Ups.Packages.First().UpsPackageID, "Customs", true);
+                    return;
+                }
             }
 
-            using (MemoryStream stream = new MemoryStream(Convert.FromBase64String(cn22Label)))
+            // This path is for more than 3 records
+            var nodes = upsResponse.Select("/ShipmentAcceptResponse/ShipmentResults/Form/Image/GraphicImagePart");
+            if (nodes.MoveNext())
             {
-                DataResourceManager.CreateFromBytes(stream.ToArray(), shipment.Ups.Packages.First().UpsPackageID, "Customs", true);
+                for (var i = 0; i < nodes.Count; i++, nodes.MoveNext())
+                {
+                    using (var stream = new MemoryStream(Convert.FromBase64String(nodes.Current.Value)))
+                    {
+                        DataResourceManager.CreateFromBytes(stream.ToArray(), shipment.Ups.Packages.First().UpsPackageID, i == 0 ? "Customs" : $"Customs{i}", true);
+                    }
+                }
             }
         }
 
@@ -1150,16 +1162,35 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api
         /// </summary>
         private static void CreateLabelImages(XPathNavigator packageNode, UpsPackageEntity package, ThermalLanguage? labelType)
         {
-            string labelBase64 = XPathUtility.Evaluate(packageNode, "LabelImage/GraphicImage", "");
-
-            // Save the label iamges
             using (SqlAdapter adapter = new SqlAdapter())
             {
-                // If we had saved an image for this package previously, but the shipment errored out later (like for an MPS), then clear before
-                // we start.
-                ObjectReferenceManager.ClearReferences(package.UpsPackageID);
+                // This path is for 3 or less records
+                var labelBase64 = XPathUtility.Evaluate(packageNode, "LabelImage/GraphicImage", "");
+                if (!string.IsNullOrWhiteSpace(labelBase64))
+                {
+                    // If we had saved an image for this package previously, but the shipment errored out later (like for an MPS), then clear before
+                    // we start.
+                    ObjectReferenceManager.ClearReferences(package.UpsPackageID);
+                    SaveLabel("LabelImage", labelBase64);
+                    return;
+                }
 
-                using (MemoryStream stream = new MemoryStream(Convert.FromBase64String(labelBase64)))
+                // This path is for more than 3 records
+                var nodes = packageNode.Select("LabelImage/GraphicImagePart");
+                if (nodes.MoveNext())
+                {
+                    ObjectReferenceManager.ClearReferences(package.UpsPackageID);
+                    for (var i = 0; i < nodes.Count; i++, nodes.MoveNext())
+                    {
+                        SaveLabel(i == 0 ? "LabelImage" : $"LabelImage{i}", nodes.Current.Value);
+                    }
+                }
+            }
+
+            void SaveLabel(string label, string base64)
+            {
+                // Save the label images
+                using (MemoryStream stream = new MemoryStream(Convert.FromBase64String(base64)))
                 {
                     if (labelType == null)
                     {
@@ -1175,16 +1206,14 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api
                                 {
                                     imageCrop.Save(imageStream, ImageFormat.Gif);
 
-                                    DataResourceManager.CreateFromBytes(imageStream.ToArray(), package.UpsPackageID, "LabelImage", true);
-
-                                    // imageCrop.Save(, ImageFormat.Gif);
+                                    DataResourceManager.CreateFromBytes(imageStream.ToArray(), package.UpsPackageID, label, true);
                                 }
                             }
                         }
                     }
                     else
                     {
-                        DataResourceManager.CreateFromBytes(stream.ToArray(), package.UpsPackageID, "LabelImage", true);
+                        DataResourceManager.CreateFromBytes(stream.ToArray(), package.UpsPackageID, label, true);
                     }
                 }
             }

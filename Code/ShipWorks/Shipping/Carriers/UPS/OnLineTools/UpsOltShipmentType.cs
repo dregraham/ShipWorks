@@ -146,22 +146,29 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools
             foreach (long packageID in DataProvider.GetRelatedKeys(shipment().ShipmentID, EntityType.UpsPackageEntity))
             {
                 // Get the resource list for our shipment
-                List<DataResourceReference> resources = DataResourceManager.GetConsumerResourceReferences(packageID);
+                var resources = DataResourceManager.GetConsumerResourceReferences(packageID);
 
                 // Can be missing for 2x upgraded shipments
-                if (resources.Count > 0)
+                if (resources.Count == 0)
                 {
-                    // Add our standard label output
-                    DataResourceReference labelResource = resources.Single(i => i.Label == "LabelImage");
-                    labelData.Add(new TemplateLabelData(packageID, "Label", TemplateLabelCategory.Primary, labelResource));
+                    break;
                 }
 
+                // Add our standard label output
+                var labelResources = resources
+                    .Where(r => r.Label.StartsWith("LabelImage"))
+                    .OrderBy(r => r.Label)
+                    .Select(r => new TemplateLabelData(packageID, "Label", TemplateLabelCategory.Primary, r));
+
+                labelData.AddRange(labelResources);
+
                 // Supporting documents
-                var customsResources = resources.Where(r => r.Label.StartsWith("Customs"));
-                foreach (DataResourceReference customsResource in customsResources)
-                {
-                    labelData.Add(new TemplateLabelData(null, customsResource.Label, TemplateLabelCategory.Supplemental, customsResource));
-                }
+                var customsResources = resources
+                    .Where(r => r.Label.StartsWith("Customs"))
+                    .OrderBy(r => r.Label)
+                    .Select(r => new TemplateLabelData(null, r.Label, TemplateLabelCategory.Supplemental, r));
+
+                labelData.AddRange(customsResources);
             }
 
             return labelData;
