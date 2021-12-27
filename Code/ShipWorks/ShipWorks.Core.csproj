@@ -11386,6 +11386,7 @@
     <None Include="Resources\solidcommerce.png" />
     <None Include="Resources\stagebloc.png" />
     <None Include="Resources\sparkpay.png" />
+    <Content Include="Resources\shipworks_insurance_logo.png" />
     <Content Include="Resources\split_icon_16x16.png" />
     <Content Include="Resources\split_icon_32x32.png" />
     <Content Include="Resources\split_icon_48x48.png" />
