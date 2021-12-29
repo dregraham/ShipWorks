@@ -110,7 +110,8 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Fims
                         new XElement("zipCode", shipment.OriginPostalCode),
                         new XElement("country", shipment.OriginCountryCode),
                         new XElement("phone", shipment.OriginPhone),
-                        new XElement("email", shipment.OriginEmail)),
+                        new XElement("email", shipment.OriginEmail),
+                        !string.IsNullOrEmpty(shipment.FedEx.CustomsRecipientTIN) ? new XElement("taxNo", shipment.FedEx.CustomsRecipientTIN ) : null ),
                     new XElement("consignee",
                         new XElement("name", new PersonName(shipment.ShipFirstName, shipment.ShipMiddleName, shipment.ShipLastName)),
                         new XElement("company", shipment.ShipCompany),
@@ -128,14 +129,6 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Fims
             if (!string.IsNullOrEmpty(shipment.FedEx.FimsAirWaybill))
             {
                 fimsRequestXml.Add(new XElement("airWaybill", shipment.FedEx.FimsAirWaybill));
-            }
-
-            if (!string.IsNullOrEmpty(shipment.FedEx.CustomsRecipientTIN))
-            {
-                fimsRequestXml.Add(new XElement("Tin", 
-                    new XElement("TinType", (TinType) shipment.FedEx.CustomsRecipientTINType),
-                    new XElement("Number", shipment.FedEx.CustomsRecipientTIN)
-                ));
             }
 
             return fimsRequestXml;

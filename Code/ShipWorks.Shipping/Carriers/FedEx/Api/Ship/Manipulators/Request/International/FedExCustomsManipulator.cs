@@ -225,9 +225,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Ship.Manipulators.Request.Intern
         /// <param name="request">The native request.</param>
         private ProcessShipmentRequest ConfigureTaxPayerIdentification(IShipmentEntity shipment, ProcessShipmentRequest request)
         {
-            if (request.RequestedShipment.Recipient.Tins == null || request.RequestedShipment.Recipient.Tins.Length == 0)
+            if (request.RequestedShipment.ShippingChargesPayment.Payor.ResponsibleParty.Tins == null || request.RequestedShipment.ShippingChargesPayment.Payor.ResponsibleParty.Tins.Length == 0)
             {
-                request.RequestedShipment.Recipient.Tins = new TaxpayerIdentification[1] { new TaxpayerIdentification() };
+                request.RequestedShipment.ShippingChargesPayment.Payor.ResponsibleParty.Tins = new TaxpayerIdentification[1] { new TaxpayerIdentification() };
             }
 
             // TODO: We may need to set shipping/recipient based on who's paying.  See ETD_Request.xml where The Tins info
@@ -235,7 +235,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Ship.Manipulators.Request.Intern
             
             //Set tin type to default value if user selects blank in dropdown
             var tinType = shipment.FedEx.CustomsRecipientTINType == -1 ? TinType.PERSONAL_STATE : (TinType) shipment.FedEx.CustomsRecipientTINType;
-            request.RequestedShipment.Recipient.Tins[0] = new TaxpayerIdentification() { Number = shipment.FedEx.CustomsRecipientTIN, TinType = tinType };
+            request.RequestedShipment.ShippingChargesPayment.Payor.ResponsibleParty.Tins[0] = new TaxpayerIdentification() { Number = shipment.FedEx.CustomsRecipientTIN, TinType = tinType };
 
             return request;
         }
