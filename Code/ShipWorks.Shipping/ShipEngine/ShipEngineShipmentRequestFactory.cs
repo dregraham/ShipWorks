@@ -52,7 +52,7 @@ namespace ShipWorks.Shipping.ShipEngine
             if (shipmentTypeManager.Get(shipment.ShipmentTypeCode).IsCustomsRequired(shipment))
             {
                 List<TaxIdentifier> newTaxIds = CreateTaxIdentifiers(shipment);
-                if (newTaxIds.Count > 0)
+                if (newTaxIds != null && newTaxIds.Count > 0)
                 {
                     request.Shipment.TaxIdentifiers = newTaxIds;
                 }
