@@ -9,6 +9,7 @@ using Interapptive.Shared.Collections;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Utility;
 using log4net;
+using ShipEngine.CarrierApi.Client.Model;
 using ShipWorks.Common.IO.Hardware.Printers;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
@@ -19,6 +20,9 @@ using ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net;
 using ShipWorks.Shipping.Carriers.Postal.Usps.WebServices;
 using ShipWorks.Shipping.Editing.Rating;
 using ShipWorks.Shipping.ShipEngine;
+using Syncfusion.XlsIO;
+using Address = ShipWorks.Shipping.Carriers.Postal.Usps.WebServices.Address;
+using Carrier = ShipWorks.Shipping.Carriers.Postal.Usps.WebServices.Carrier;
 
 namespace ShipWorks.Shipping.Carriers.Dhl.API.Stamps
 {
@@ -161,20 +165,18 @@ namespace ShipWorks.Shipping.Carriers.Dhl.API.Stamps
             {
                 WeightValue weightValue = new WeightValue(customsItem.Weight);
 
-                CustomsLine line = new CustomsLine
-                {
-                    Description = customsItem.Description.Truncate(60),
-                    Quantity = customsItem.Quantity,
-                    Value = customsItem.UnitValue,
+                CustomsLine line = new CustomsLine();
+                line.Description = customsItem.Description.Truncate(60);
+                line.Quantity = customsItem.Quantity;
+                line.Value = customsItem.UnitValue;
 
-                    WeightLb = weightValue.PoundsOnly,
-                    WeightOz = weightValue.OuncesOnly,
+                line.WeightLb = weightValue.PoundsOnly;
+                line.WeightOz = weightValue.OuncesOnly;
 
-                    HSTariffNumber = customsItem.HarmonizedCode,
-                    CountryOfOrigin = customsItem.CountryOfOrigin,
+                line.HSTariffNumber = customsItem.HarmonizedCode;
+                line.CountryOfOrigin = customsItem.CountryOfOrigin;
 
-                    sku = customsItem.Description.Truncate(20)
-                };
+                line.sku = customsItem.Description.Truncate(20);
 
                 lines.Add(line);
             }
@@ -232,7 +234,7 @@ namespace ShipWorks.Shipping.Carriers.Dhl.API.Stamps
         /// <summary>
         /// Create a rate object for processing
         /// </summary>
-        protected override RateV40 CreateRateForProcessing(ShipmentEntity shipment, UspsAccountEntity account, Address toAddress, Address fromAddress)
+        protected RateV40 CreateRateForProcessing(ShipmentEntity shipment, UspsAccountEntity account)
         {
             RateV40 rate = CreateRateForRating(shipment, account);
 

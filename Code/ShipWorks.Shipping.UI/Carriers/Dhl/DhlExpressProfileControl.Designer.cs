@@ -1,4 +1,7 @@
-﻿namespace ShipWorks.Shipping.UI.Carriers.Dhl
+﻿using System.Windows.Forms;
+using ShipWorks.UI.Controls;
+
+namespace ShipWorks.Shipping.UI.Carriers.Dhl
 {
     partial class DhlExpressProfileControl
     {
@@ -78,6 +81,15 @@
             this.resDelivery = new System.Windows.Forms.CheckBox();
             this.labelResDelivery = new System.Windows.Forms.Label();
             this.resDeliveryState = new System.Windows.Forms.CheckBox();
+            this.customsRecipientTin = new ShipWorks.UI.Controls.MultiValueTextBox();
+            this.labelCustomsRecipientTin = new System.Windows.Forms.Label();
+            this.customsRecipientTinState = new System.Windows.Forms.CheckBox();
+            this.labelTaxIdType = new System.Windows.Forms.Label();
+            this.taxIdType = new ShipWorks.UI.Controls.MultiValueComboBox();
+            this.taxIdTypeState = new System.Windows.Forms.CheckBox();
+            this.customsTinIssuingAuthority = new ShipWorks.UI.Controls.MultiValueComboBox();
+            this.labelCustomsTinIssuingAuthority = new Label();
+            this.customsTinIssuingAuthorityState = new CheckBox();
             this.tabControl.SuspendLayout();
             this.tabPageSettings.SuspendLayout();
             this.groupInsurance.SuspendLayout();
@@ -120,7 +132,7 @@
             // 
             // groupInsurance
             // 
-            this.groupInsurance.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            this.groupInsurance.Anchor = ((System.Windows.Forms.AnchorStyles) (((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
             this.groupInsurance.Controls.Add(this.insuranceControl);
             this.groupInsurance.Controls.Add(this.insuranceState);
@@ -134,7 +146,7 @@
             // 
             // insuranceControl
             // 
-            this.insuranceControl.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.insuranceControl.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (0)));
             this.insuranceControl.Location = new System.Drawing.Point(48, 21);
             this.insuranceControl.Name = "insuranceControl";
             this.insuranceControl.Size = new System.Drawing.Size(316, 52);
@@ -151,7 +163,7 @@
             // 
             // kryptonBorderEdge10
             // 
-            this.kryptonBorderEdge10.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            this.kryptonBorderEdge10.Anchor = ((System.Windows.Forms.AnchorStyles) (((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
             | System.Windows.Forms.AnchorStyles.Left)));
             this.kryptonBorderEdge10.AutoSize = false;
             this.kryptonBorderEdge10.BorderStyle = ComponentFactory.Krypton.Toolkit.PaletteBorderStyle.GridDataCellSheet;
@@ -160,9 +172,9 @@
             this.kryptonBorderEdge10.Size = new System.Drawing.Size(1, 52);
             this.kryptonBorderEdge10.Text = "kryptonBorderEdge1";
             // 
-            // groupBox1
+            // groupBox1 ~= groupBoxCustoms
             // 
-            this.groupBox1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            this.groupBox1.Anchor = ((System.Windows.Forms.AnchorStyles) (((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
             this.groupBox1.Controls.Add(this.contentsState);
             this.groupBox1.Controls.Add(this.nonDeliveryState);
@@ -171,9 +183,18 @@
             this.groupBox1.Controls.Add(this.labelContents);
             this.groupBox1.Controls.Add(this.kryptonBorderEdge4);
             this.groupBox1.Controls.Add(this.contents);
+            this.groupBox1.Controls.Add(this.customsRecipientTinState);
+            this.groupBox1.Controls.Add(this.labelCustomsRecipientTin);
+            this.groupBox1.Controls.Add(this.customsRecipientTin);
+            this.groupBox1.Controls.Add(this.taxIdTypeState);
+            this.groupBox1.Controls.Add(this.labelTaxIdType);
+            this.groupBox1.Controls.Add(this.taxIdType);
+            this.groupBox1.Controls.Add(this.customsTinIssuingAuthorityState);
+            this.groupBox1.Controls.Add(this.labelCustomsTinIssuingAuthority);
+            this.groupBox1.Controls.Add(this.customsTinIssuingAuthority);
             this.groupBox1.Location = new System.Drawing.Point(6, 413);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(405, 81);
+            this.groupBox1.Size = new System.Drawing.Size(405, 175);
             this.groupBox1.TabIndex = 5;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Customs";
@@ -206,7 +227,7 @@
             // 
             this.labelNonDelivery.AutoSize = true;
             this.labelNonDelivery.BackColor = System.Drawing.Color.Transparent;
-            this.labelNonDelivery.Location = new System.Drawing.Point(50, 51);
+            this.labelNonDelivery.Location = new System.Drawing.Point(65, 51);
             this.labelNonDelivery.Name = "labelNonDelivery";
             this.labelNonDelivery.Size = new System.Drawing.Size(72, 13);
             this.labelNonDelivery.TabIndex = 106;
@@ -216,7 +237,7 @@
             // 
             this.nonDelivery.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.nonDelivery.FormattingEnabled = true;
-            this.nonDelivery.Location = new System.Drawing.Point(128, 48);
+            this.nonDelivery.Location = new System.Drawing.Point(143, 48);
             this.nonDelivery.Name = "nonDelivery";
             this.nonDelivery.PromptText = "(Multiple Values)";
             this.nonDelivery.Size = new System.Drawing.Size(206, 21);
@@ -226,7 +247,7 @@
             // 
             this.labelContents.AutoSize = true;
             this.labelContents.BackColor = System.Drawing.Color.Transparent;
-            this.labelContents.Location = new System.Drawing.Point(67, 24);
+            this.labelContents.Location = new System.Drawing.Point(82, 24);
             this.labelContents.Name = "labelContents";
             this.labelContents.Size = new System.Drawing.Size(55, 13);
             this.labelContents.TabIndex = 89;
@@ -234,28 +255,118 @@
             // 
             // kryptonBorderEdge4
             // 
-            this.kryptonBorderEdge4.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            this.kryptonBorderEdge4.Anchor = ((System.Windows.Forms.AnchorStyles) (((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
             | System.Windows.Forms.AnchorStyles.Left)));
             this.kryptonBorderEdge4.AutoSize = false;
             this.kryptonBorderEdge4.BorderStyle = ComponentFactory.Krypton.Toolkit.PaletteBorderStyle.GridDataCellSheet;
             this.kryptonBorderEdge4.Location = new System.Drawing.Point(29, 20);
             this.kryptonBorderEdge4.Name = "kryptonBorderEdge11";
-            this.kryptonBorderEdge4.Size = new System.Drawing.Size(1, 50);
+            this.kryptonBorderEdge4.Size = new System.Drawing.Size(1, 160);
             this.kryptonBorderEdge4.Text = "kryptonBorderEdge11";
             // 
             // contents
             // 
             this.contents.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.contents.FormattingEnabled = true;
-            this.contents.Location = new System.Drawing.Point(128, 21);
+            this.contents.Location = new System.Drawing.Point(143, 21);
             this.contents.Name = "contents";
             this.contents.PromptText = "(Multiple Values)";
             this.contents.Size = new System.Drawing.Size(206, 21);
             this.contents.TabIndex = 1;
-            // 
+            //
+            // customsRecipientTinState;
+            //
+            this.customsRecipientTinState.AutoSize = true;
+            this.customsRecipientTinState.Checked = true;
+            this.customsRecipientTinState.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.customsRecipientTinState.Location = new System.Drawing.Point(9, 80);
+            this.customsRecipientTinState.Name = "customsRecipientTinState";
+            this.customsRecipientTinState.Size = new System.Drawing.Size(15, 14);
+            this.customsRecipientTinState.TabIndex = 4;
+            this.customsRecipientTinState.Tag = string.Empty;
+            this.customsRecipientTinState.UseVisualStyleBackColor = true;
+            //
+            // labelCustomsRecipientTin
+            //
+            this.labelCustomsRecipientTin.AutoSize = true;
+            this.labelCustomsRecipientTin.BackColor = System.Drawing.Color.Transparent;
+            this.labelCustomsRecipientTin.Location = new System.Drawing.Point(47, 80);
+            this.labelCustomsRecipientTin.Name = "labelCustomsRecipientTin";
+            this.labelCustomsRecipientTin.TabIndex = 110;
+            this.labelCustomsRecipientTin.Text = "Recipient Tax ID:";
+            //
+            // customsRecipientTin
+            //
+            this.customsRecipientTin.Location = new System.Drawing.Point(143, 77);
+            this.customsRecipientTin.Name = "customsRecipientTin";
+            this.customsRecipientTin.TabIndex = 5;
+            this.customsRecipientTin.Size = new System.Drawing.Size(206, 21);
+            //
+            // taxIdTypeState
+            //
+            this.taxIdTypeState.AutoSize = true;
+            this.taxIdTypeState.Checked = true;
+            this.taxIdTypeState.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.taxIdTypeState.Location = new System.Drawing.Point(9, 108);
+            this.taxIdTypeState.Name = "taxIdTypeState";
+            this.taxIdTypeState.Size = new System.Drawing.Size(15, 14);
+            this.taxIdTypeState.TabIndex = 6;
+            this.taxIdTypeState.Tag = string.Empty;
+            this.taxIdTypeState.UseVisualStyleBackColor = true;
+            //
+            // labelTaxIdType
+            //
+            this.labelTaxIdType.AutoSize = true;
+            this.labelTaxIdType.BackColor = System.Drawing.Color.Transparent;
+            this.labelTaxIdType.Location = new System.Drawing.Point(67, 108);
+            this.labelTaxIdType.Name = "labelTaxIdType";
+            this.labelTaxIdType.TabIndex = 111;
+            this.labelTaxIdType.Text = "TIN Type:";
+            //
+            // taxIdType
+            //
+            this.taxIdType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.taxIdType.FormattingEnabled = true;
+            this.taxIdType.Location = new System.Drawing.Point(143, 105);
+            this.taxIdType.Name = "taxIdType";
+            this.taxIdType.PromptText = "(Multiple Values)";
+            this.taxIdType.Size = new System.Drawing.Size(206, 21);
+            this.taxIdType.TabIndex = 7;
+            //
+            // customsTinIssuingAuthorityState
+            //
+            this.customsTinIssuingAuthorityState.AutoSize = true;
+            this.customsTinIssuingAuthorityState.Checked = true;
+            this.customsTinIssuingAuthorityState.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.customsTinIssuingAuthorityState.Location = new System.Drawing.Point(9, 136);
+            this.customsTinIssuingAuthorityState.Name = "customsTinIssuingAuthorityState";
+            this.customsTinIssuingAuthorityState.Size = new System.Drawing.Size(15, 14);
+            this.customsTinIssuingAuthorityState.TabIndex = 8;
+            this.customsTinIssuingAuthorityState.Tag = string.Empty;
+            this.customsTinIssuingAuthorityState.UseVisualStyleBackColor = true;
+            //
+            // labelCustomsTinIssuingAuthority
+            //
+            this.labelCustomsTinIssuingAuthority.AutoSize = true;
+            this.labelCustomsTinIssuingAuthority.BackColor = System.Drawing.Color.Transparent;
+            this.labelCustomsTinIssuingAuthority.Location = new System.Drawing.Point(46, 133);
+            this.labelCustomsTinIssuingAuthority.Name = "labelCustomsTinIssuingAuthority";
+            this.labelCustomsTinIssuingAuthority.TabIndex = 115;
+            this.labelCustomsTinIssuingAuthority.Text = "Issuing Authority:";
+            //
+            // customsTinIssuingAuthority
+            //
+            this.customsTinIssuingAuthority.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.customsTinIssuingAuthority.FormattingEnabled = true;
+            this.customsTinIssuingAuthority.Location = new System.Drawing.Point(143, 133);
+            this.customsTinIssuingAuthority.Name = "customsTinIssuingAuthority";
+            this.customsTinIssuingAuthority.PromptText = "(Multiple Values)";
+            this.customsTinIssuingAuthority.Size = new System.Drawing.Size(206, 21);
+            this.customsTinIssuingAuthority.TabIndex = 9;
+            //
             // groupLabels
             // 
-            this.groupLabels.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            this.groupLabels.Anchor = ((System.Windows.Forms.AnchorStyles) (((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
             this.groupLabels.Controls.Add(this.labelThermalNote);
             this.groupLabels.Controls.Add(this.requestedLabelFormat);
@@ -299,7 +410,7 @@
             // 
             // kryptonBorderEdge11
             // 
-            this.kryptonBorderEdge11.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            this.kryptonBorderEdge11.Anchor = ((System.Windows.Forms.AnchorStyles) (((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
             | System.Windows.Forms.AnchorStyles.Left)));
             this.kryptonBorderEdge11.AutoSize = false;
             this.kryptonBorderEdge11.BorderStyle = ComponentFactory.Krypton.Toolkit.PaletteBorderStyle.GridDataCellSheet;
@@ -310,7 +421,7 @@
             // 
             // groupOptions
             // 
-            this.groupOptions.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            this.groupOptions.Anchor = ((System.Windows.Forms.AnchorStyles) (((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
             this.groupOptions.Controls.Add(this.resDeliveryState);
             this.groupOptions.Controls.Add(this.resDelivery);
@@ -430,7 +541,7 @@
             // 
             // kryptonBorderEdge2
             // 
-            this.kryptonBorderEdge2.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            this.kryptonBorderEdge2.Anchor = ((System.Windows.Forms.AnchorStyles) (((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
             | System.Windows.Forms.AnchorStyles.Left)));
             this.kryptonBorderEdge2.AutoSize = false;
             this.kryptonBorderEdge2.BorderStyle = ComponentFactory.Krypton.Toolkit.PaletteBorderStyle.GridDataCellSheet;
@@ -441,7 +552,7 @@
             // 
             // groupShipment
             // 
-            this.groupShipment.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            this.groupShipment.Anchor = ((System.Windows.Forms.AnchorStyles) (((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
             this.groupShipment.Controls.Add(this.kryptonBorderEdge);
             this.groupShipment.Controls.Add(this.labelService);
@@ -456,7 +567,7 @@
             // 
             // kryptonBorderEdge
             // 
-            this.kryptonBorderEdge.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            this.kryptonBorderEdge.Anchor = ((System.Windows.Forms.AnchorStyles) (((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
             | System.Windows.Forms.AnchorStyles.Left)));
             this.kryptonBorderEdge.AutoSize = false;
             this.kryptonBorderEdge.BorderStyle = ComponentFactory.Krypton.Toolkit.PaletteBorderStyle.GridDataCellSheet;
@@ -499,7 +610,7 @@
             // 
             // groupBoxFrom
             // 
-            this.groupBoxFrom.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            this.groupBoxFrom.Anchor = ((System.Windows.Forms.AnchorStyles) (((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
             this.groupBoxFrom.Controls.Add(this.labelAccount);
             this.groupBoxFrom.Controls.Add(this.accountState);
@@ -545,7 +656,7 @@
             // 
             // kryptonBorderEdge1
             // 
-            this.kryptonBorderEdge1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            this.kryptonBorderEdge1.Anchor = ((System.Windows.Forms.AnchorStyles) (((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
             | System.Windows.Forms.AnchorStyles.Left)));
             this.kryptonBorderEdge1.AutoSize = false;
             this.kryptonBorderEdge1.BorderStyle = ComponentFactory.Krypton.Toolkit.PaletteBorderStyle.GridDataCellSheet;
@@ -569,7 +680,7 @@
             // 
             // panelPackageControls
             // 
-            this.panelPackageControls.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            this.panelPackageControls.Anchor = ((System.Windows.Forms.AnchorStyles) (((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
             this.panelPackageControls.Location = new System.Drawing.Point(6, 64);
             this.panelPackageControls.Name = "panelPackageControls";
@@ -578,7 +689,7 @@
             // 
             // groupBoxPackages
             // 
-            this.groupBoxPackages.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            this.groupBoxPackages.Anchor = ((System.Windows.Forms.AnchorStyles) (((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
             this.groupBoxPackages.Controls.Add(this.kryptonBorderEdge3);
             this.groupBoxPackages.Controls.Add(this.packagesCount);
@@ -593,7 +704,7 @@
             // 
             // kryptonBorderEdge3
             // 
-            this.kryptonBorderEdge3.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            this.kryptonBorderEdge3.Anchor = ((System.Windows.Forms.AnchorStyles) (((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
             | System.Windows.Forms.AnchorStyles.Left)));
             this.kryptonBorderEdge3.AutoSize = false;
             this.kryptonBorderEdge3.BorderStyle = ComponentFactory.Krypton.Toolkit.PaletteBorderStyle.GridDataCellSheet;
@@ -757,5 +868,14 @@
         private System.Windows.Forms.CheckBox resDeliveryState;
         private System.Windows.Forms.CheckBox resDelivery;
         private System.Windows.Forms.Label labelResDelivery;
+        private System.Windows.Forms.CheckBox customsRecipientTinState;
+        private ShipWorks.UI.Controls.MultiValueTextBox customsRecipientTin;
+        private System.Windows.Forms.Label labelCustomsRecipientTin;
+        private System.Windows.Forms.Label labelTaxIdType;
+        private ShipWorks.UI.Controls.MultiValueComboBox taxIdType;
+        private System.Windows.Forms.CheckBox taxIdTypeState;
+        private MultiValueComboBox customsTinIssuingAuthority;
+        private Label labelCustomsTinIssuingAuthority;
+        private CheckBox customsTinIssuingAuthorityState;
     }
 }
