@@ -6,6 +6,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Interapptive.Shared.Collections;
 using Interapptive.Shared.ComponentRegistration;
+using Interapptive.Shared.Enums;
 using Interapptive.Shared.Utility;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipEngine.CarrierApi.Client.Model;
@@ -98,6 +99,9 @@ namespace ShipWorks.Shipping.Carriers.Dhl
             dhlExpressShipmentEntity.DhlExpressAccountID = 0;
             dhlExpressShipmentEntity.ShipEngineLabelID = string.Empty;
             dhlExpressShipmentEntity.ResidentialDelivery = false;
+            dhlExpressShipmentEntity.CustomsRecipientTin = string.Empty;
+            dhlExpressShipmentEntity.CustomsTaxIdType = (int) TaxIdType.Ioss;
+            dhlExpressShipmentEntity.CustomsTinIssuingAuthority = "US";
 
             DhlExpressPackageEntity package = CreateDefaultPackage();
 
@@ -364,6 +368,9 @@ namespace ShipWorks.Shipping.Carriers.Dhl
             profile.DhlExpress.SaturdayDelivery = false;
             profile.DhlExpress.Contents = (int) ShipEngineContentsType.Merchandise;
             profile.DhlExpress.NonDelivery = (int) ShipEngineNonDeliveryType.ReturnToSender;
+            profile.DhlExpress.CustomsTaxIdType = (int) TaxIdType.Ioss;
+            profile.DhlExpress.CustomsRecipientTin = string.Empty;
+            profile.DhlExpress.CustomsTinIssuingAuthority = "US";
         }
 
         /// <summary>
@@ -408,7 +415,7 @@ namespace ShipWorks.Shipping.Carriers.Dhl
         public override void GenerateTemplateElements(ElementOutline container, Func<ShipmentEntity> shipment, Func<ShipmentEntity> loaded)
         {
             Lazy<List<TemplateLabelData>> labels = new Lazy<List<TemplateLabelData>>(() => LoadLabelData(shipment));
-
+            container.AddElement("TIN", () => loaded().DhlExpress.CustomsRecipientTin);
             // Add the labels content
             container.AddElement(
                 "Labels",

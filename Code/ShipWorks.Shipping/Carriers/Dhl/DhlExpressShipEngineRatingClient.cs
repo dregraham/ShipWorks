@@ -4,12 +4,12 @@ using System.Threading.Tasks;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Editing.Rating;
 using ShipWorks.Shipping.ShipEngine;
-using ShipEngine.CarrierApi.Client.Model;
 using ShipWorks.ApplicationCore.Logging;
 using Interapptive.Shared.ComponentRegistration;
 using Autofac.Features.Indexed;
 using Interapptive.Shared.Utility;
 using System.Collections.Generic;
+using ShipEngine.CarrierApi.Client.Model;
 
 namespace ShipWorks.Shipping.Carriers.Dhl
 {
