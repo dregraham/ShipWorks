@@ -427,6 +427,10 @@ namespace ShipWorks.Data.Model.EntityClasses
 			_fieldsCustomProperties.Add("CustomsRecipientTIN", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
 			_fieldsCustomProperties.Add("CustomsRecipientTINType", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+			_fieldsCustomProperties.Add("CustomsRecipientTIN_", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+			_fieldsCustomProperties.Add("CustomsRecipientTINType_", fieldHashtable);
 		}
 		#endregion
 
@@ -952,6 +956,28 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			get { return (Nullable<System.Int32>)GetValue((int)UpsProfileFieldIndex.CustomsRecipientTINType, false); }
 			set	{ SetValue((int)UpsProfileFieldIndex.CustomsRecipientTINType, value); }
+		}
+
+		/// <summary> The CustomsRecipientTIN_ property of the Entity UpsProfile<br/><br/></summary>
+		/// <remarks>Mapped on  table field: "UpsProfile"."CustomsRecipientTIN"<br/>
+		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 35<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		[DataMember]
+		public virtual System.String CustomsRecipientTIN_
+		{
+			get { return (System.String)GetValue((int)UpsProfileFieldIndex.CustomsRecipientTIN_, true); }
+			set	{ SetValue((int)UpsProfileFieldIndex.CustomsRecipientTIN_, value); }
+		}
+
+		/// <summary> The CustomsRecipientTINType_ property of the Entity UpsProfile<br/><br/></summary>
+		/// <remarks>Mapped on  table field: "UpsProfile"."CustomsRecipientTINType"<br/>
+		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		[DataMember]
+		public virtual Nullable<System.Int32> CustomsRecipientTINType_
+		{
+			get { return (Nullable<System.Int32>)GetValue((int)UpsProfileFieldIndex.CustomsRecipientTINType_, false); }
+			set	{ SetValue((int)UpsProfileFieldIndex.CustomsRecipientTINType_, value); }
 		}
 
 		/// <summary> Gets / sets related entity of type 'ShippingProfileEntity' which has to be set using a fetch action earlier. If no related entity is set for this property, null is returned.<br/><br/>

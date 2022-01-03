@@ -49,6 +49,9 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
             IntegratorTransactionID = source.IntegratorTransactionID;
             StampsTransactionID = source.StampsTransactionID;
             ResidentialDelivery = source.ResidentialDelivery;
+            CustomsRecipientTin = source.CustomsRecipientTin;
+            CustomsTaxIdType = source.CustomsTaxIdType;
+            CustomsTinIssuingAuthority = source.CustomsTinIssuingAuthority;
             
             Shipment = (IShipmentEntity) source.Shipment?.AsReadOnly(objectMap);
             
@@ -138,6 +141,24 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
         /// Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
         public System.Boolean ResidentialDelivery { get; }
+        /// <summary> The CustomsRecipientTin property of the Entity DhlExpressShipment<br/><br/>
+        /// </summary>
+        /// <remarks>Mapped on table field: "DhlExpressShipment"."CustomsRecipientTin"<br/>
+        /// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 25<br/>
+        /// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+        public System.String CustomsRecipientTin { get; }
+        /// <summary> The CustomsTaxIdType property of the Entity DhlExpressShipment<br/><br/>
+        /// </summary>
+        /// <remarks>Mapped on table field: "DhlExpressShipment"."CustomsTaxIdType"<br/>
+        /// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
+        /// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+        public Nullable<System.Int32> CustomsTaxIdType { get; }
+        /// <summary> The CustomsTinIssuingAuthority property of the Entity DhlExpressShipment<br/><br/>
+        /// </summary>
+        /// <remarks>Mapped on table field: "DhlExpressShipment"."CustomsTinIssuingAuthority"<br/>
+        /// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 2<br/>
+        /// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+        public System.String CustomsTinIssuingAuthority { get; }
         
         public IShipmentEntity Shipment { get; }
         
