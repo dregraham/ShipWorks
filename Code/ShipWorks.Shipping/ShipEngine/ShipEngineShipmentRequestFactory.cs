@@ -54,6 +54,11 @@ namespace ShipWorks.Shipping.ShipEngine
                 List<TaxIdentifier> newTaxIds = CreateTaxIdentifiers(shipment);
                 if (newTaxIds != null && newTaxIds.Count > 0)
                 {
+                    if (newTaxIds.Any(t => string.IsNullOrWhiteSpace(t.Value) || t.Value == string.Empty))
+                    {
+                        throw new ShippingException("Customs recipient TIN must have a value");
+                    }
+
                     request.Shipment.TaxIdentifiers = newTaxIds;
                 }
                 request.Shipment.Customs = CreateCustoms(shipment);
@@ -143,7 +148,7 @@ namespace ShipWorks.Shipping.ShipEngine
         /// <summary>
         /// Creates the ShipEngine tax identifier node
         /// </summary>
-        protected abstract List<TaxIdentifier> CreateTaxIdentifiers (ShipmentEntity shipment);
+        protected abstract List<TaxIdentifier> CreateTaxIdentifiers(ShipmentEntity shipment);
 
         /// <summary>
         /// Gets the carrier specific packages

@@ -1,9 +1,9 @@
 ﻿using System.Collections.Generic;
-using ShipWorks.Shipping.ShipEngine;
-using ShipWorks.Data.Model.EntityClasses;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Utility;
 using ShipEngine.CarrierApi.Client.Model;
+using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Shipping.ShipEngine;
 
 namespace ShipWorks.Shipping.Carriers.Dhl
 {
@@ -20,9 +20,9 @@ namespace ShipWorks.Shipping.Carriers.Dhl
         /// <summary>
         /// Constructor
         /// </summary>
-        public DhlExpressShipmentRequestFactory(IDhlExpressAccountRepository accountRepository, 
-            IShipEngineRequestFactory shipmentElementFactory, 
-            IShipmentTypeManager shipmentTypeManager) 
+        public DhlExpressShipmentRequestFactory(IDhlExpressAccountRepository accountRepository,
+            IShipEngineRequestFactory shipmentElementFactory,
+            IShipmentTypeManager shipmentTypeManager)
             : base(shipmentElementFactory, shipmentTypeManager)
         {
             this.accountRepository = accountRepository;
@@ -56,7 +56,7 @@ namespace ShipWorks.Shipping.Carriers.Dhl
         /// <summary>
         /// Gets the api value for the DHL Express service
         /// </summary>
-        protected override string GetServiceApiValue(ShipmentEntity shipment) => 
+        protected override string GetServiceApiValue(ShipmentEntity shipment) =>
             EnumHelper.GetApiValue((DhlExpressServiceType) shipment.DhlExpress.Service);
 
         /// <summary>
@@ -65,8 +65,8 @@ namespace ShipWorks.Shipping.Carriers.Dhl
         protected override AdvancedOptions CreateAdvancedOptions(ShipmentEntity shipment)
         {
             return new AdvancedOptions(
-                deliveredDutyPaid: shipment.DhlExpress.DeliveredDutyPaid, 
-                nonMachinable: shipment.DhlExpress.NonMachinable, 
+                deliveredDutyPaid: shipment.DhlExpress.DeliveredDutyPaid,
+                nonMachinable: shipment.DhlExpress.NonMachinable,
                 saturdayDelivery: shipment.DhlExpress.SaturdayDelivery);
         }
 
@@ -90,18 +90,20 @@ namespace ShipWorks.Shipping.Carriers.Dhl
         /// </summary>
         protected override List<TaxIdentifier> CreateTaxIdentifiers(ShipmentEntity shipment)
         {
-            List<TaxIdentifier> TaxIdentidiers = new List<TaxIdentifier>()
+            List<TaxIdentifier> TaxIdentifiers = new List<TaxIdentifier>();
+            if (!string.IsNullOrWhiteSpace(shipment.DhlExpress.CustomsRecipientTin) && shipment.DhlExpress.CustomsRecipientTin != string.Empty)
             {
-                new TaxIdentifier()
-                {
-                    IdentifierType = (TaxIdentifier.IdentifierTypeEnum) shipment.DhlExpress.CustomsTaxIdType,
-                    IssuingAuthority = shipment.DhlExpress.CustomsTinIssuingAuthority,
-                    TaxableEntityType = "shipper",
-                    Value = shipment.DhlExpress.CustomsRecipientTin,
-                },
+                TaxIdentifiers.Add(
+                    new TaxIdentifier()
+                    {
+                        IdentifierType = (TaxIdentifier.IdentifierTypeEnum) shipment.DhlExpress.CustomsTaxIdType,
+                        IssuingAuthority = shipment.DhlExpress.CustomsTinIssuingAuthority,
+                        TaxableEntityType = "shipper",
+                        Value = shipment.DhlExpress.CustomsRecipientTin,
+                    });
             };
 
-            return TaxIdentidiers;
+            return TaxIdentifiers;
         }
     }
 }
