@@ -2340,7 +2340,6 @@
           <Field Name="CustomsContentDescription" Type="string" IsOptional="true" MaxLength="50" FieldIndex="7" />
           <Field Name="CustomsContentType" Type="int" IsOptional="true" FieldIndex="6" />
           <Field Name="CustomsRecipientTin" Type="string" IsOptional="true" MaxLength="14" FieldIndex="15" />
-          <Field Name="CustomsRecipientTin_" Type="string" IsOptional="true" MaxLength="14" FieldIndex="16" />
           <Field Name="EntryFacility" Type="int" IsOptional="true" FieldIndex="10" />
           <Field Name="ExpressSignatureWaiver" Type="bool" IsOptional="true" FieldIndex="8" />
           <Field Name="Memo1" Type="string" IsOptional="true" MaxLength="300" FieldIndex="11" />
@@ -2361,7 +2360,6 @@
           <Field Name="CustomsContentDescription" Type="string" MaxLength="50" FieldIndex="13" />
           <Field Name="CustomsContentType" Type="int" FieldIndex="12" />
           <Field Name="CustomsRecipientTin" Type="string" IsOptional="true" MaxLength="14" FieldIndex="23" />
-          <Field Name="CustomsRecipientTin_" Type="string" IsOptional="true" MaxLength="14" FieldIndex="24" />
           <Field Name="DimsAddWeight" Type="bool" FieldIndex="9" />
           <Field Name="DimsHeight" Type="double" FieldIndex="7" />
           <Field Name="DimsLength" Type="double" FieldIndex="5" />
@@ -3290,9 +3288,7 @@
           <Field Name="CostCenter" Type="string" IsOptional="true" MaxLength="100" FieldIndex="28" />
           <Field Name="CustomsDescription" Type="string" IsOptional="true" MaxLength="150" FieldIndex="36" />
           <Field Name="CustomsRecipientTIN" Type="string" IsOptional="true" MaxLength="35" FieldIndex="37" />
-          <Field Name="CustomsRecipientTIN_" Type="string" IsOptional="true" MaxLength="35" FieldIndex="39" />
           <Field Name="CustomsRecipientTINType" Type="int" IsOptional="true" Precision="10" FieldIndex="38" />
-          <Field Name="CustomsRecipientTINType_" Type="int" IsOptional="true" Precision="10" FieldIndex="40" />
           <Field Name="DeliveryConfirmation" Type="int" IsOptional="true" FieldIndex="5" />
           <Field Name="EmailNotifyFrom" Type="string" IsOptional="true" MaxLength="100" FieldIndex="16" />
           <Field Name="EmailNotifyMessage" Type="string" IsOptional="true" MaxLength="120" FieldIndex="18" />
@@ -3373,9 +3369,7 @@
           <Field Name="CustomsDescription" Type="string" MaxLength="150" FieldIndex="22" />
           <Field Name="CustomsDocumentsOnly" Type="bool" FieldIndex="21" />
           <Field Name="CustomsRecipientTIN" Type="string" IsOptional="true" MaxLength="35" FieldIndex="52" />
-          <Field Name="CustomsRecipientTIN_" Type="string" IsOptional="true" MaxLength="35" FieldIndex="54" />
           <Field Name="CustomsRecipientTINType" Type="int" IsOptional="true" Precision="10" FieldIndex="53" />
-          <Field Name="CustomsRecipientTINType_" Type="int" IsOptional="true" Precision="10" FieldIndex="55" />
           <Field Name="DeliveryConfirmation" Type="int" FieldIndex="7" />
           <Field Name="EmailNotifyFrom" Type="string" MaxLength="100" FieldIndex="18" />
           <Field Name="EmailNotifyMessage" Type="string" MaxLength="120" FieldIndex="20" />
@@ -13434,7 +13428,6 @@
             <FieldMapping FieldName="CustomsContentDescription" TargetFieldName="CustomsContentDescription" />
             <FieldMapping FieldName="CustomsContentType" TargetFieldName="CustomsContentType" />
             <FieldMapping FieldName="CustomsRecipientTin" TargetFieldName="CustomsRecipientTin" />
-            <FieldMapping FieldName="CustomsRecipientTin_" TargetFieldName="CustomsRecipientTin" />
             <FieldMapping FieldName="EntryFacility" TargetFieldName="EntryFacility" />
             <FieldMapping FieldName="ExpressSignatureWaiver" TargetFieldName="ExpressSignatureWaiver" />
             <FieldMapping FieldName="Memo1" TargetFieldName="Memo1" />
@@ -13455,7 +13448,6 @@
             <FieldMapping FieldName="CustomsContentDescription" TargetFieldName="CustomsContentDescription" />
             <FieldMapping FieldName="CustomsContentType" TargetFieldName="CustomsContentType" />
             <FieldMapping FieldName="CustomsRecipientTin" TargetFieldName="CustomsRecipientTin" />
-            <FieldMapping FieldName="CustomsRecipientTin_" TargetFieldName="CustomsRecipientTin" />
             <FieldMapping FieldName="DimsAddWeight" TargetFieldName="DimsAddWeight" />
             <FieldMapping FieldName="DimsHeight" TargetFieldName="DimsHeight" />
             <FieldMapping FieldName="DimsLength" TargetFieldName="DimsLength" />
@@ -14393,9 +14385,7 @@
             <FieldMapping FieldName="CostCenter" TargetFieldName="CostCenter" />
             <FieldMapping FieldName="CustomsDescription" TargetFieldName="CustomsDescription" />
             <FieldMapping FieldName="CustomsRecipientTIN" TargetFieldName="CustomsRecipientTIN" />
-            <FieldMapping FieldName="CustomsRecipientTIN_" TargetFieldName="CustomsRecipientTIN" />
             <FieldMapping FieldName="CustomsRecipientTINType" TargetFieldName="CustomsRecipientTINType" />
-            <FieldMapping FieldName="CustomsRecipientTINType_" TargetFieldName="CustomsRecipientTINType" />
             <FieldMapping FieldName="DeliveryConfirmation" TargetFieldName="DeliveryConfirmation" />
             <FieldMapping FieldName="EmailNotifyFrom" TargetFieldName="EmailNotifyFrom" />
             <FieldMapping FieldName="EmailNotifyMessage" TargetFieldName="EmailNotifyMessage" />
@@ -14477,9 +14467,7 @@
             <FieldMapping FieldName="CustomsDescription" TargetFieldName="CustomsDescription" />
             <FieldMapping FieldName="CustomsDocumentsOnly" TargetFieldName="CustomsDocumentsOnly" />
             <FieldMapping FieldName="CustomsRecipientTIN" TargetFieldName="CustomsRecipientTIN" />
-            <FieldMapping FieldName="CustomsRecipientTIN_" TargetFieldName="CustomsRecipientTIN" />
             <FieldMapping FieldName="CustomsRecipientTINType" TargetFieldName="CustomsRecipientTINType" />
-            <FieldMapping FieldName="CustomsRecipientTINType_" TargetFieldName="CustomsRecipientTINType" />
             <FieldMapping FieldName="DeliveryConfirmation" TargetFieldName="DeliveryConfirmation" />
             <FieldMapping FieldName="EmailNotifyFrom" TargetFieldName="EmailNotifyFrom" />
             <FieldMapping FieldName="EmailNotifyMessage" TargetFieldName="EmailNotifyMessage" />

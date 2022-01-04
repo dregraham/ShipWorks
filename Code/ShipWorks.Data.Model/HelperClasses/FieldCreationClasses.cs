@@ -23502,11 +23502,6 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(PostalProfileFieldIndex.CustomsRecipientTin);}
 		}
-		/// <summary>Creates a new PostalProfileEntity.CustomsRecipientTin_ field instance</summary>
-		public static EntityField2 CustomsRecipientTin_
-		{
-			get { return (EntityField2)EntityFieldFactory.Create(PostalProfileFieldIndex.CustomsRecipientTin_);}
-		}
 	}
 
 	/// <summary>Field Creation Class for entity PostalShipmentEntity</summary>
@@ -23631,11 +23626,6 @@ namespace ShipWorks.Data.Model.HelperClasses
 		public static EntityField2 CustomsRecipientTin
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(PostalShipmentFieldIndex.CustomsRecipientTin);}
-		}
-		/// <summary>Creates a new PostalShipmentEntity.CustomsRecipientTin_ field instance</summary>
-		public static EntityField2 CustomsRecipientTin_
-		{
-			get { return (EntityField2)EntityFieldFactory.Create(PostalShipmentFieldIndex.CustomsRecipientTin_);}
 		}
 	}
 
@@ -31517,16 +31507,6 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(UpsProfileFieldIndex.CustomsRecipientTINType);}
 		}
-		/// <summary>Creates a new UpsProfileEntity.CustomsRecipientTIN_ field instance</summary>
-		public static EntityField2 CustomsRecipientTIN_
-		{
-			get { return (EntityField2)EntityFieldFactory.Create(UpsProfileFieldIndex.CustomsRecipientTIN_);}
-		}
-		/// <summary>Creates a new UpsProfileEntity.CustomsRecipientTINType_ field instance</summary>
-		public static EntityField2 CustomsRecipientTINType_
-		{
-			get { return (EntityField2)EntityFieldFactory.Create(UpsProfileFieldIndex.CustomsRecipientTINType_);}
-		}
 	}
 
 	/// <summary>Field Creation Class for entity UpsProfilePackageEntity</summary>
@@ -31946,16 +31926,6 @@ namespace ShipWorks.Data.Model.HelperClasses
 		public static EntityField2 CustomsRecipientTINType
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(UpsShipmentFieldIndex.CustomsRecipientTINType);}
-		}
-		/// <summary>Creates a new UpsShipmentEntity.CustomsRecipientTIN_ field instance</summary>
-		public static EntityField2 CustomsRecipientTIN_
-		{
-			get { return (EntityField2)EntityFieldFactory.Create(UpsShipmentFieldIndex.CustomsRecipientTIN_);}
-		}
-		/// <summary>Creates a new UpsShipmentEntity.CustomsRecipientTINType_ field instance</summary>
-		public static EntityField2 CustomsRecipientTINType_
-		{
-			get { return (EntityField2)EntityFieldFactory.Create(UpsShipmentFieldIndex.CustomsRecipientTINType_);}
 		}
 	}
 
