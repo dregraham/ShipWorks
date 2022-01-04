@@ -10008,8 +10008,6 @@ namespace ShipWorks.Data.Model
 		NoPostage,
 		///<summary>CustomsRecipientTin. </summary>
 		CustomsRecipientTin,
-		///<summary>CustomsRecipientTin_. </summary>
-		CustomsRecipientTin_,
 		/// <summary></summary>
 		AmountOfFields
 	}
@@ -10064,8 +10062,6 @@ namespace ShipWorks.Data.Model
 		Insurance,
 		///<summary>CustomsRecipientTin. </summary>
 		CustomsRecipientTin,
-		///<summary>CustomsRecipientTin_. </summary>
-		CustomsRecipientTin_,
 		/// <summary></summary>
 		AmountOfFields
 	}
@@ -13474,10 +13470,6 @@ namespace ShipWorks.Data.Model
 		CustomsRecipientTIN,
 		///<summary>CustomsRecipientTINType. </summary>
 		CustomsRecipientTINType,
-		///<summary>CustomsRecipientTIN_. </summary>
-		CustomsRecipientTIN_,
-		///<summary>CustomsRecipientTINType_. </summary>
-		CustomsRecipientTINType_,
 		/// <summary></summary>
 		AmountOfFields
 	}
@@ -13662,10 +13654,6 @@ namespace ShipWorks.Data.Model
 		CustomsRecipientTIN,
 		///<summary>CustomsRecipientTINType. </summary>
 		CustomsRecipientTINType,
-		///<summary>CustomsRecipientTIN_. </summary>
-		CustomsRecipientTIN_,
-		///<summary>CustomsRecipientTINType_. </summary>
-		CustomsRecipientTINType_,
 		/// <summary></summary>
 		AmountOfFields
 	}

@@ -2675,7 +2675,6 @@ namespace ShipWorks.Data.Model.HelperClasses
 			this.AddElementFieldInfo("PostalProfileEntity", "Memo3", typeof(System.String), false, false, false, true,  (int)PostalProfileFieldIndex.Memo3, 300, 0, 0);
 			this.AddElementFieldInfo("PostalProfileEntity", "NoPostage", typeof(Nullable<System.Boolean>), false, false, false, true,  (int)PostalProfileFieldIndex.NoPostage, 0, 0, 0);
 			this.AddElementFieldInfo("PostalProfileEntity", "CustomsRecipientTin", typeof(System.String), false, false, false, true,  (int)PostalProfileFieldIndex.CustomsRecipientTin, 14, 0, 0);
-			this.AddElementFieldInfo("PostalProfileEntity", "CustomsRecipientTin_", typeof(System.String), false, false, false, true,  (int)PostalProfileFieldIndex.CustomsRecipientTin_, 14, 0, 0);
 		}
 		/// <summary>Inits PostalShipmentEntity's FieldInfo objects</summary>
 		private void InitPostalShipmentEntityInfos()
@@ -2705,7 +2704,6 @@ namespace ShipWorks.Data.Model.HelperClasses
 			this.AddElementFieldInfo("PostalShipmentEntity", "NoPostage", typeof(System.Boolean), false, false, false, false,  (int)PostalShipmentFieldIndex.NoPostage, 0, 0, 0);
 			this.AddElementFieldInfo("PostalShipmentEntity", "Insurance", typeof(System.Boolean), false, false, false, false,  (int)PostalShipmentFieldIndex.Insurance, 0, 0, 0);
 			this.AddElementFieldInfo("PostalShipmentEntity", "CustomsRecipientTin", typeof(System.String), false, false, false, true,  (int)PostalShipmentFieldIndex.CustomsRecipientTin, 14, 0, 0);
-			this.AddElementFieldInfo("PostalShipmentEntity", "CustomsRecipientTin_", typeof(System.String), false, false, false, true,  (int)PostalShipmentFieldIndex.CustomsRecipientTin_, 14, 0, 0);
 		}
 		/// <summary>Inits PrintResultEntity's FieldInfo objects</summary>
 		private void InitPrintResultEntityInfos()
@@ -3720,8 +3718,6 @@ namespace ShipWorks.Data.Model.HelperClasses
 			this.AddElementFieldInfo("UpsProfileEntity", "CustomsDescription", typeof(System.String), false, false, false, true,  (int)UpsProfileFieldIndex.CustomsDescription, 150, 0, 0);
 			this.AddElementFieldInfo("UpsProfileEntity", "CustomsRecipientTIN", typeof(System.String), false, false, false, true,  (int)UpsProfileFieldIndex.CustomsRecipientTIN, 35, 0, 0);
 			this.AddElementFieldInfo("UpsProfileEntity", "CustomsRecipientTINType", typeof(Nullable<System.Int32>), false, false, false, true,  (int)UpsProfileFieldIndex.CustomsRecipientTINType, 0, 0, 10);
-			this.AddElementFieldInfo("UpsProfileEntity", "CustomsRecipientTIN_", typeof(System.String), false, false, false, true,  (int)UpsProfileFieldIndex.CustomsRecipientTIN_, 35, 0, 0);
-			this.AddElementFieldInfo("UpsProfileEntity", "CustomsRecipientTINType_", typeof(Nullable<System.Int32>), false, false, false, true,  (int)UpsProfileFieldIndex.CustomsRecipientTINType_, 0, 0, 10);
 		}
 		/// <summary>Inits UpsProfilePackageEntity's FieldInfo objects</summary>
 		private void InitUpsProfilePackageEntityInfos()
@@ -3813,8 +3809,6 @@ namespace ShipWorks.Data.Model.HelperClasses
 			this.AddElementFieldInfo("UpsShipmentEntity", "ShipEngineLabelID", typeof(System.String), false, false, false, true,  (int)UpsShipmentFieldIndex.ShipEngineLabelID, 50, 0, 0);
 			this.AddElementFieldInfo("UpsShipmentEntity", "CustomsRecipientTIN", typeof(System.String), false, false, false, true,  (int)UpsShipmentFieldIndex.CustomsRecipientTIN, 35, 0, 0);
 			this.AddElementFieldInfo("UpsShipmentEntity", "CustomsRecipientTINType", typeof(Nullable<System.Int32>), false, false, false, true,  (int)UpsShipmentFieldIndex.CustomsRecipientTINType, 0, 0, 10);
-			this.AddElementFieldInfo("UpsShipmentEntity", "CustomsRecipientTIN_", typeof(System.String), false, false, false, true,  (int)UpsShipmentFieldIndex.CustomsRecipientTIN_, 35, 0, 0);
-			this.AddElementFieldInfo("UpsShipmentEntity", "CustomsRecipientTINType_", typeof(Nullable<System.Int32>), false, false, false, true,  (int)UpsShipmentFieldIndex.CustomsRecipientTINType_, 0, 0, 10);
 		}
 		/// <summary>Inits UserEntity's FieldInfo objects</summary>
 		private void InitUserEntityInfos()
