@@ -407,6 +407,12 @@ namespace ShipWorks.Data.Model.EntityClasses
 			_fieldsCustomProperties.Add("StampsTransactionID", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
 			_fieldsCustomProperties.Add("ResidentialDelivery", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+			_fieldsCustomProperties.Add("CustomsRecipientTin", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+			_fieldsCustomProperties.Add("CustomsTaxIdType", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+			_fieldsCustomProperties.Add("CustomsTinIssuingAuthority", fieldHashtable);
 		}
 		#endregion
 
@@ -653,6 +659,39 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			get { return (System.Boolean)GetValue((int)DhlExpressShipmentFieldIndex.ResidentialDelivery, true); }
 			set	{ SetValue((int)DhlExpressShipmentFieldIndex.ResidentialDelivery, value); }
+		}
+
+		/// <summary> The CustomsRecipientTin property of the Entity DhlExpressShipment<br/><br/></summary>
+		/// <remarks>Mapped on  table field: "DhlExpressShipment"."CustomsRecipientTin"<br/>
+		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 25<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		[DataMember]
+		public virtual System.String CustomsRecipientTin
+		{
+			get { return (System.String)GetValue((int)DhlExpressShipmentFieldIndex.CustomsRecipientTin, true); }
+			set	{ SetValue((int)DhlExpressShipmentFieldIndex.CustomsRecipientTin, value); }
+		}
+
+		/// <summary> The CustomsTaxIdType property of the Entity DhlExpressShipment<br/><br/></summary>
+		/// <remarks>Mapped on  table field: "DhlExpressShipment"."CustomsTaxIdType"<br/>
+		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		[DataMember]
+		public virtual Nullable<System.Int32> CustomsTaxIdType
+		{
+			get { return (Nullable<System.Int32>)GetValue((int)DhlExpressShipmentFieldIndex.CustomsTaxIdType, false); }
+			set	{ SetValue((int)DhlExpressShipmentFieldIndex.CustomsTaxIdType, value); }
+		}
+
+		/// <summary> The CustomsTinIssuingAuthority property of the Entity DhlExpressShipment<br/><br/></summary>
+		/// <remarks>Mapped on  table field: "DhlExpressShipment"."CustomsTinIssuingAuthority"<br/>
+		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 2<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		[DataMember]
+		public virtual System.String CustomsTinIssuingAuthority
+		{
+			get { return (System.String)GetValue((int)DhlExpressShipmentFieldIndex.CustomsTinIssuingAuthority, true); }
+			set	{ SetValue((int)DhlExpressShipmentFieldIndex.CustomsTinIssuingAuthority, value); }
 		}
 
 		/// <summary> Gets the EntityCollection with the related entities of type 'DhlExpressPackageEntity' which are related to this entity via a relation of type '1:n'. If the EntityCollection hasn't been fetched yet, the collection returned will be empty.<br/><br/></summary>

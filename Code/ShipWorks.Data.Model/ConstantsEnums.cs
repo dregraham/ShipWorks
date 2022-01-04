@@ -2534,6 +2534,12 @@ namespace ShipWorks.Data.Model
 		NonDelivery,
 		///<summary>ResidentialDelivery. </summary>
 		ResidentialDelivery,
+		///<summary>CustomsRecipientTin. </summary>
+		CustomsRecipientTin,
+		///<summary>CustomsTaxIdType. </summary>
+		CustomsTaxIdType,
+		///<summary>CustomsTinIssuingAuthority. </summary>
+		CustomsTinIssuingAuthority,
 		/// <summary></summary>
 		AmountOfFields
 	}
@@ -2566,6 +2572,12 @@ namespace ShipWorks.Data.Model
 		StampsTransactionID,
 		///<summary>ResidentialDelivery. </summary>
 		ResidentialDelivery,
+		///<summary>CustomsRecipientTin. </summary>
+		CustomsRecipientTin,
+		///<summary>CustomsTaxIdType. </summary>
+		CustomsTaxIdType,
+		///<summary>CustomsTinIssuingAuthority. </summary>
+		CustomsTinIssuingAuthority,
 		/// <summary></summary>
 		AmountOfFields
 	}

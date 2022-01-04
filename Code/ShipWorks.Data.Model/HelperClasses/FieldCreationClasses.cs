@@ -5867,6 +5867,21 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(DhlExpressProfileFieldIndex.ResidentialDelivery);}
 		}
+		/// <summary>Creates a new DhlExpressProfileEntity.CustomsRecipientTin field instance</summary>
+		public static EntityField2 CustomsRecipientTin
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(DhlExpressProfileFieldIndex.CustomsRecipientTin);}
+		}
+		/// <summary>Creates a new DhlExpressProfileEntity.CustomsTaxIdType field instance</summary>
+		public static EntityField2 CustomsTaxIdType
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(DhlExpressProfileFieldIndex.CustomsTaxIdType);}
+		}
+		/// <summary>Creates a new DhlExpressProfileEntity.CustomsTinIssuingAuthority field instance</summary>
+		public static EntityField2 CustomsTinIssuingAuthority
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(DhlExpressProfileFieldIndex.CustomsTinIssuingAuthority);}
+		}
 	}
 
 	/// <summary>Field Creation Class for entity DhlExpressShipmentEntity</summary>
@@ -5936,6 +5951,21 @@ namespace ShipWorks.Data.Model.HelperClasses
 		public static EntityField2 ResidentialDelivery
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(DhlExpressShipmentFieldIndex.ResidentialDelivery);}
+		}
+		/// <summary>Creates a new DhlExpressShipmentEntity.CustomsRecipientTin field instance</summary>
+		public static EntityField2 CustomsRecipientTin
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(DhlExpressShipmentFieldIndex.CustomsRecipientTin);}
+		}
+		/// <summary>Creates a new DhlExpressShipmentEntity.CustomsTaxIdType field instance</summary>
+		public static EntityField2 CustomsTaxIdType
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(DhlExpressShipmentFieldIndex.CustomsTaxIdType);}
+		}
+		/// <summary>Creates a new DhlExpressShipmentEntity.CustomsTinIssuingAuthority field instance</summary>
+		public static EntityField2 CustomsTinIssuingAuthority
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(DhlExpressShipmentFieldIndex.CustomsTinIssuingAuthority);}
 		}
 	}
 

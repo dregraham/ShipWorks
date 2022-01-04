@@ -777,6 +777,9 @@
       <EntityDefinition Name="DhlExpressProfile" ObjectID="dcb08b8b-2494-4a85-908e-2da80b2a65f6">
         <Fields>
           <Field Name="Contents" Type="int" IsOptional="true" Precision="10" FieldIndex="6" />
+          <Field Name="CustomsRecipientTin" Type="string" IsOptional="true" MaxLength="25" FieldIndex="9" />
+          <Field Name="CustomsTaxIdType" Type="int" IsOptional="true" Precision="10" FieldIndex="10" />
+          <Field Name="CustomsTinIssuingAuthority" Type="string" IsOptional="true" MaxLength="2" FieldIndex="11" />
           <Field Name="DeliveryDutyPaid" Type="bool" IsOptional="true" FieldIndex="3" />
           <Field Name="DhlExpressAccountID" Type="long" IsOptional="true" Precision="19" FieldIndex="1" />
           <Field Name="NonDelivery" Type="int" IsOptional="true" Precision="10" FieldIndex="7" />
@@ -790,6 +793,9 @@
       <EntityDefinition Name="DhlExpressShipment" ObjectID="75fabbb6-2e0f-4566-b510-e8b363732b79">
         <Fields>
           <Field Name="Contents" Type="int" Precision="10" FieldIndex="7" />
+          <Field Name="CustomsRecipientTin" Type="string" IsOptional="true" MaxLength="25" FieldIndex="13" />
+          <Field Name="CustomsTaxIdType" Type="int" IsOptional="true" Precision="10" FieldIndex="14" />
+          <Field Name="CustomsTinIssuingAuthority" Type="string" IsOptional="true" MaxLength="2" FieldIndex="15" />
           <Field Name="DeliveredDutyPaid" Type="bool" FieldIndex="3" />
           <Field Name="DhlExpressAccountID" Type="long" Precision="19" FieldIndex="1" />
           <Field Name="IntegratorTransactionID" Type="guid" IsOptional="true" FieldIndex="10" />
@@ -4717,7 +4723,7 @@
       <Catalogs>
         <Catalog Name="ShipWorksLocal">
           <Schemas>
-            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2021-11-12T21:42:44.8600289Z">
+            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2021-12-07T19:29:18.7876123Z">
               <Tables>
                 <Table Name="Action">
                   <PkConstraintName Name="PK_Action" />
@@ -5484,6 +5490,9 @@
                     <Field Name="Contents" Ordinal="7" IsOptional="true" DbType="8" Precision="10" />
                     <Field Name="NonDelivery" Ordinal="8" IsOptional="true" DbType="8" Precision="10" />
                     <Field Name="ResidentialDelivery" Ordinal="9" IsOptional="true" DbType="2" />
+                    <Field Name="CustomsRecipientTin" Ordinal="10" IsOptional="true" DbType="12" Length="25" />
+                    <Field Name="CustomsTaxIdType" Ordinal="11" IsOptional="true" DbType="8" Precision="10" />
+                    <Field Name="CustomsTinIssuingAuthority" Ordinal="12" IsOptional="true" DbType="12" Length="2" />
                   </Fields>
                 </Table>
                 <Table Name="DhlExpressShipment">
@@ -5522,6 +5531,9 @@
                     <Field Name="IntegratorTransactionID" Ordinal="11" IsOptional="true" DbType="25" />
                     <Field Name="StampsTransactionID" Ordinal="12" IsOptional="true" DbType="25" />
                     <Field Name="ResidentialDelivery" Ordinal="13" DbType="2" />
+                    <Field Name="CustomsRecipientTin" Ordinal="14" IsOptional="true" DbType="12" Length="25" />
+                    <Field Name="CustomsTaxIdType" Ordinal="15" IsOptional="true" DbType="8" Precision="10" />
+                    <Field Name="CustomsTinIssuingAuthority" Ordinal="16" IsOptional="true" DbType="12" Length="2" />
                   </Fields>
                 </Table>
                 <Table Name="DimensionsProfile">
@@ -11811,6 +11823,9 @@
         <EntityMapping EntityName=":DhlExpressProfile" TargetName="ShipWorksLocal:dbo:DhlExpressProfile">
           <FieldMappings>
             <FieldMapping FieldName="Contents" TargetFieldName="Contents" />
+            <FieldMapping FieldName="CustomsRecipientTin" TargetFieldName="CustomsRecipientTin" />
+            <FieldMapping FieldName="CustomsTaxIdType" TargetFieldName="CustomsTaxIdType" />
+            <FieldMapping FieldName="CustomsTinIssuingAuthority" TargetFieldName="CustomsTinIssuingAuthority" />
             <FieldMapping FieldName="DeliveryDutyPaid" TargetFieldName="DeliveryDutyPaid" />
             <FieldMapping FieldName="DhlExpressAccountID" TargetFieldName="DhlExpressAccountID" />
             <FieldMapping FieldName="NonDelivery" TargetFieldName="NonDelivery" />
@@ -11824,6 +11839,9 @@
         <EntityMapping EntityName=":DhlExpressShipment" TargetName="ShipWorksLocal:dbo:DhlExpressShipment">
           <FieldMappings>
             <FieldMapping FieldName="Contents" TargetFieldName="Contents" />
+            <FieldMapping FieldName="CustomsRecipientTin" TargetFieldName="CustomsRecipientTin" />
+            <FieldMapping FieldName="CustomsTaxIdType" TargetFieldName="CustomsTaxIdType" />
+            <FieldMapping FieldName="CustomsTinIssuingAuthority" TargetFieldName="CustomsTinIssuingAuthority" />
             <FieldMapping FieldName="DeliveredDutyPaid" TargetFieldName="DeliveredDutyPaid" />
             <FieldMapping FieldName="DhlExpressAccountID" TargetFieldName="DhlExpressAccountID" />
             <FieldMapping FieldName="IntegratorTransactionID" TargetFieldName="IntegratorTransactionID" />

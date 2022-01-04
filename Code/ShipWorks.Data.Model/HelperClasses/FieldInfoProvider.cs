@@ -961,6 +961,9 @@ namespace ShipWorks.Data.Model.HelperClasses
 			this.AddElementFieldInfo("DhlExpressProfileEntity", "Contents", typeof(Nullable<System.Int32>), false, false, false, true,  (int)DhlExpressProfileFieldIndex.Contents, 0, 0, 10);
 			this.AddElementFieldInfo("DhlExpressProfileEntity", "NonDelivery", typeof(Nullable<System.Int32>), false, false, false, true,  (int)DhlExpressProfileFieldIndex.NonDelivery, 0, 0, 10);
 			this.AddElementFieldInfo("DhlExpressProfileEntity", "ResidentialDelivery", typeof(Nullable<System.Boolean>), false, false, false, true,  (int)DhlExpressProfileFieldIndex.ResidentialDelivery, 0, 0, 0);
+			this.AddElementFieldInfo("DhlExpressProfileEntity", "CustomsRecipientTin", typeof(System.String), false, false, false, true,  (int)DhlExpressProfileFieldIndex.CustomsRecipientTin, 25, 0, 0);
+			this.AddElementFieldInfo("DhlExpressProfileEntity", "CustomsTaxIdType", typeof(Nullable<System.Int32>), false, false, false, true,  (int)DhlExpressProfileFieldIndex.CustomsTaxIdType, 0, 0, 10);
+			this.AddElementFieldInfo("DhlExpressProfileEntity", "CustomsTinIssuingAuthority", typeof(System.String), false, false, false, true,  (int)DhlExpressProfileFieldIndex.CustomsTinIssuingAuthority, 2, 0, 0);
 		}
 		/// <summary>Inits DhlExpressShipmentEntity's FieldInfo objects</summary>
 		private void InitDhlExpressShipmentEntityInfos()
@@ -979,6 +982,9 @@ namespace ShipWorks.Data.Model.HelperClasses
 			this.AddElementFieldInfo("DhlExpressShipmentEntity", "IntegratorTransactionID", typeof(Nullable<System.Guid>), false, false, false, true,  (int)DhlExpressShipmentFieldIndex.IntegratorTransactionID, 0, 0, 0);
 			this.AddElementFieldInfo("DhlExpressShipmentEntity", "StampsTransactionID", typeof(Nullable<System.Guid>), false, false, false, true,  (int)DhlExpressShipmentFieldIndex.StampsTransactionID, 0, 0, 0);
 			this.AddElementFieldInfo("DhlExpressShipmentEntity", "ResidentialDelivery", typeof(System.Boolean), false, false, false, false,  (int)DhlExpressShipmentFieldIndex.ResidentialDelivery, 0, 0, 0);
+			this.AddElementFieldInfo("DhlExpressShipmentEntity", "CustomsRecipientTin", typeof(System.String), false, false, false, true,  (int)DhlExpressShipmentFieldIndex.CustomsRecipientTin, 25, 0, 0);
+			this.AddElementFieldInfo("DhlExpressShipmentEntity", "CustomsTaxIdType", typeof(Nullable<System.Int32>), false, false, false, true,  (int)DhlExpressShipmentFieldIndex.CustomsTaxIdType, 0, 0, 10);
+			this.AddElementFieldInfo("DhlExpressShipmentEntity", "CustomsTinIssuingAuthority", typeof(System.String), false, false, false, true,  (int)DhlExpressShipmentFieldIndex.CustomsTinIssuingAuthority, 2, 0, 0);
 		}
 		/// <summary>Inits DimensionsProfileEntity's FieldInfo objects</summary>
 		private void InitDimensionsProfileEntityInfos()
