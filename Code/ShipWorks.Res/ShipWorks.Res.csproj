@@ -297,6 +297,7 @@
     <EmbeddedResource Include="Data\Administration\Scripts\Update\9.1\9.1.0.0.sql" />
     <EmbeddedResource Include="Data\Administration\Scripts\Update\9.3\9.3.3.1.sql" />
     <EmbeddedResource Include="Data\Administration\Scripts\Update\9.4\9.4.3.0.sql" />
+    <EmbeddedResource Include="Data\Administration\Scripts\Update\9.5\9.5.1.2.sql" />
     <EmbeddedResource Include="Templates\Distribution\Source.zip" />
   </ItemGroup>
   <ItemGroup>
