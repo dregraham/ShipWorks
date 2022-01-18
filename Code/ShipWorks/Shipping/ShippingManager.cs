@@ -9,6 +9,7 @@ using Interapptive.Shared;
 using Interapptive.Shared.Business;
 using Interapptive.Shared.Collections;
 using Interapptive.Shared.Data;
+using Interapptive.Shared.Enums;
 using Interapptive.Shared.Utility;
 using log4net;
 using SD.LLBLGen.Pro.ORMSupportClasses;
@@ -195,6 +196,7 @@ namespace ShipWorks.Shipping
             shipment.ShipSenseChangeSets = new XElement("ChangeSets").ToString();
             shipment.ShipSenseEntry = new byte[0];
             shipment.OnlineShipmentID = string.Empty;
+            shipment.TrackingStatus = TrackingStatus.Pending;
 
             //TODO: Remove this once the profile copying is implemented.
             shipment.RequestedLabelFormat = (int) ThermalLanguage.None;
