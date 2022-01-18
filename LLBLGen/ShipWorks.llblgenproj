@@ -108,6 +108,7 @@
     <TypeShortcut Shortcut="ShopSiteAuthenticationType" Type="Interapptive.Shared.Enums.ShopSiteAuthenticationType, Interapptive.Shared, Version=0.0.0.0, Culture=neutral, PublicKeyToken=6a464ecbd35cd6df" />
     <TypeShortcut Shortcut="ShortcutHotkey" Type="System.String" />
     <TypeShortcut Shortcut="SingleScanConfirmationMode" Type="ShipWorks.Settings.SingleScanConfirmationMode, ShipWorks.Shared, Version=0.0.0.0, Culture=neutral, PublicKeyToken=6a464ecbd35cd6df" />
+    <TypeShortcut Shortcut="TrackingStatus" Type="Interapptive.Shared.Enums.TrackingStatus, Interapptive.Shared, Version=0.0.0.0, Culture=neutral, PublicKeyToken=6a464ecbd35cd6df" />
     <TypeShortcut Shortcut="UIMode" Type="ShipWorks.Settings.UIMode, ShipWorks.Shared, Version=0.0.0.0, Culture=neutral, PublicKeyToken=6a464ecbd35cd6df" />
     <TypeShortcut Shortcut="VirtualKeys" Type="Interapptive.Shared.Win32.Native.VirtualKeys, Interapptive.Shared, Version=0.0.0.0, Culture=neutral, PublicKeyToken=6a464ecbd35cd6df" />
   </TypeShortcuts>
@@ -2690,15 +2691,18 @@
       </EntityDefinition>
       <EntityDefinition Name="Shipment" ObjectID="a808842d-a47d-471e-9481-6db39275513e">
         <Fields>
+          <Field Name="ActualDeliveryDate" Type="datetime" IsOptional="true" Precision="3" FieldIndex="83" />
           <Field Name="ActualLabelFormat" Type="int" IsOptional="true" FieldIndex="20" />
           <Field Name="ApplyReturnProfile" Type="bool" FieldIndex="75" />
           <Field Name="BestRateEvents" Type="byte" FieldIndex="66" />
           <Field Name="BilledType" Type="int" FieldIndex="71" />
           <Field Name="BilledWeight" Type="double" FieldIndex="72" />
           <Field Name="CarrierAccount" Type="string" IsOptional="true" MaxLength="25" FieldIndex="79" />
+          <Field Name="CarrierStatusDescription" Type="string" MaxLength="100" FieldIndex="84" />
           <Field Name="ContentWeight" Type="double" FieldIndex="4" />
           <Field Name="CustomsGenerated" Type="bool" FieldIndex="17" />
           <Field Name="CustomsValue" Type="decimal" Precision="19" Scale="4" FieldIndex="18" />
+          <Field Name="EstimatedDeliveryDate" Type="datetime" IsOptional="true" Precision="3" FieldIndex="82" />
           <Field Name="IncludeReturn" Type="bool" FieldIndex="74" />
           <Field Name="Insurance" Type="bool" FieldIndex="60" />
           <Field Name="InsuranceProvider" Type="int" FieldIndex="61" />
@@ -2765,7 +2769,9 @@
           <Field Name="ShipUnparsedName" Type="string" MaxLength="100" FieldIndex="63" />
           <Field Name="ShipUSTerritory" Type="int" FieldIndex="39" />
           <Field Name="TotalWeight" Type="double" Precision="29" Scale="9" FieldIndex="5" />
+          <Field Name="TrackingHubTimestamp" Type="datetime" IsOptional="true" Precision="3" FieldIndex="80" />
           <Field Name="TrackingNumber" Type="string" MaxLength="50" FieldIndex="16" />
+          <Field Name="TrackingStatus" Type="TrackingStatus" FieldIndex="81" />
           <Field Name="Voided" Type="bool" FieldIndex="12" />
           <Field Name="VoidedComputerID" Type="long" IsOptional="true" FieldIndex="15" />
           <Field Name="VoidedDate" Type="datetime" IsOptional="true" FieldIndex="13" />
@@ -4723,7 +4729,7 @@
       <Catalogs>
         <Catalog Name="ShipWorksLocal">
           <Schemas>
-            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2021-12-07T19:29:18.7876123Z">
+            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2022-01-18T17:04:02.4785935Z">
               <Tables>
                 <Table Name="Action">
                   <PkConstraintName Name="PK_Action" />
@@ -5049,8 +5055,8 @@
                     <Field Name="NonMachinable" Ordinal="4" IsOptional="true" DbType="2" />
                     <Field Name="Contents" Ordinal="5" IsOptional="true" DbType="8" Precision="10" />
                     <Field Name="NonDelivery" Ordinal="6" IsOptional="true" DbType="8" Precision="10" />
-                    <Field Name="CustomsRecipientTin" Ordinal="7" IsOptional="true" DbType="12" Length="24" />
-                    <Field Name="CustomsRecipientTinType" Ordinal="8" IsOptional="true" DbType="8" Precision="10" />
+                    <Field Name="CustomsRecipientTinType" Ordinal="7" IsOptional="true" DbType="8" Precision="10" />
+                    <Field Name="CustomsRecipientTin" Ordinal="8" IsOptional="true" DbType="12" Length="24" />
                     <Field Name="CustomsRecipientEntityType" Ordinal="9" IsOptional="true" DbType="8" Precision="10" />
                     <Field Name="CustomsRecipientIssuingAuthority" Ordinal="10" IsOptional="true" DbType="12" Length="2" />
                   </Fields>
@@ -5082,8 +5088,8 @@
                     <Field Name="DimsWeight" Ordinal="14" DbType="6" Precision="38" />
                     <Field Name="InsuranceValue" Ordinal="15" DbType="9" Precision="19" Scale="4" />
                     <Field Name="Insurance" Ordinal="16" DbType="2" />
-                    <Field Name="CustomsRecipientTin" Ordinal="17" IsOptional="true" DbType="12" Length="24" />
-                    <Field Name="CustomsRecipientTinType" Ordinal="18" IsOptional="true" DbType="8" Precision="10" />
+                    <Field Name="CustomsRecipientTinType" Ordinal="17" IsOptional="true" DbType="8" Precision="10" />
+                    <Field Name="CustomsRecipientTin" Ordinal="18" IsOptional="true" DbType="12" Length="24" />
                     <Field Name="CustomsRecipientEntityType" Ordinal="19" IsOptional="true" DbType="8" Precision="10" />
                     <Field Name="CustomsRecipientIssuingAuthority" Ordinal="20" IsOptional="true" DbType="12" Length="2" />
                   </Fields>
@@ -6955,7 +6961,7 @@
                   <Fields>
                     <Field Name="FilterNodeContentID" Ordinal="1" DbType="0" Precision="19" />
                     <Field Name="FilterTarget" Ordinal="2" DbType="8" Precision="10" />
-                    <Field Name="ColumnMask" Ordinal="3" DbType="23" Length="100" />
+                    <Field Name="ColumnMask" Ordinal="3" IsOptional="true" DbType="23" Length="150" />
                     <Field Name="JoinMask" Ordinal="4" DbType="8" Precision="10" />
                     <Field Name="Position" Ordinal="5" DbType="8" Precision="10" />
                   </Fields>
@@ -8675,6 +8681,11 @@
                     <Field Name="LoggedShippedToHub" Ordinal="78" IsOptional="true" DbType="2" />
                     <Field Name="LoggedVoidToHub" Ordinal="79" IsOptional="true" DbType="2" />
                     <Field Name="CarrierAccount" Ordinal="80" IsOptional="true" DbType="12" Length="25" />
+                    <Field Name="TrackingHubTimestamp" Ordinal="81" IsOptional="true" DbType="29" Precision="3" />
+                    <Field Name="TrackingStatus" Ordinal="82" HasDefaultValue="true" DefaultValue="(0)" DbType="22" Precision="3" />
+                    <Field Name="EstimatedDeliveryDate" Ordinal="83" IsOptional="true" DbType="29" Precision="3" />
+                    <Field Name="ActualDeliveryDate" Ordinal="84" IsOptional="true" DbType="29" Precision="3" />
+                    <Field Name="CarrierStatusDescription" Ordinal="85" HasDefaultValue="true" DefaultValue="''" DbType="12" Length="100" />
                   </Fields>
                 </Table>
                 <Table Name="ShipmentCustomsItem">
@@ -13779,15 +13790,18 @@
         </EntityMapping>
         <EntityMapping EntityName=":Shipment" TargetName="ShipWorksLocal:dbo:Shipment">
           <FieldMappings>
+            <FieldMapping FieldName="ActualDeliveryDate" TargetFieldName="ActualDeliveryDate" />
             <FieldMapping FieldName="ActualLabelFormat" TargetFieldName="ActualLabelFormat" />
             <FieldMapping FieldName="ApplyReturnProfile" TargetFieldName="ApplyReturnProfile" />
             <FieldMapping FieldName="BestRateEvents" TargetFieldName="BestRateEvents" />
             <FieldMapping FieldName="BilledType" TargetFieldName="BilledType" />
             <FieldMapping FieldName="BilledWeight" TargetFieldName="BilledWeight" />
             <FieldMapping FieldName="CarrierAccount" TargetFieldName="CarrierAccount" />
+            <FieldMapping FieldName="CarrierStatusDescription" TargetFieldName="CarrierStatusDescription" />
             <FieldMapping FieldName="ContentWeight" TargetFieldName="ContentWeight" />
             <FieldMapping FieldName="CustomsGenerated" TargetFieldName="CustomsGenerated" />
             <FieldMapping FieldName="CustomsValue" TargetFieldName="CustomsValue" />
+            <FieldMapping FieldName="EstimatedDeliveryDate" TargetFieldName="EstimatedDeliveryDate" />
             <FieldMapping FieldName="IncludeReturn" TargetFieldName="IncludeReturn" />
             <FieldMapping FieldName="Insurance" TargetFieldName="Insurance" />
             <FieldMapping FieldName="InsuranceProvider" TargetFieldName="InsuranceProvider" />
@@ -13854,7 +13868,9 @@
             <FieldMapping FieldName="ShipUnparsedName" TargetFieldName="ShipUnparsedName" />
             <FieldMapping FieldName="ShipUSTerritory" TargetFieldName="ShipUSTerritory" />
             <FieldMapping FieldName="TotalWeight" TargetFieldName="TotalWeight" TypeConverterToUse="SD.LLBLGen.Pro.TypeConverters.DoubleDecimalConverter" />
+            <FieldMapping FieldName="TrackingHubTimestamp" TargetFieldName="TrackingHubTimestamp" />
             <FieldMapping FieldName="TrackingNumber" TargetFieldName="TrackingNumber" />
+            <FieldMapping FieldName="TrackingStatus" TargetFieldName="TrackingStatus" />
             <FieldMapping FieldName="Voided" TargetFieldName="Voided" />
             <FieldMapping FieldName="VoidedComputerID" TargetFieldName="VoidedComputerID" />
             <FieldMapping FieldName="VoidedDate" TargetFieldName="VoidedDate" />

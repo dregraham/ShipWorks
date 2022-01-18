@@ -27292,6 +27292,31 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(ShipmentFieldIndex.CarrierAccount);}
 		}
+		/// <summary>Creates a new ShipmentEntity.TrackingHubTimestamp field instance</summary>
+		public static EntityField2 TrackingHubTimestamp
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ShipmentFieldIndex.TrackingHubTimestamp);}
+		}
+		/// <summary>Creates a new ShipmentEntity.TrackingStatus field instance</summary>
+		public static EntityField2 TrackingStatus
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ShipmentFieldIndex.TrackingStatus);}
+		}
+		/// <summary>Creates a new ShipmentEntity.EstimatedDeliveryDate field instance</summary>
+		public static EntityField2 EstimatedDeliveryDate
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ShipmentFieldIndex.EstimatedDeliveryDate);}
+		}
+		/// <summary>Creates a new ShipmentEntity.ActualDeliveryDate field instance</summary>
+		public static EntityField2 ActualDeliveryDate
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ShipmentFieldIndex.ActualDeliveryDate);}
+		}
+		/// <summary>Creates a new ShipmentEntity.CarrierStatusDescription field instance</summary>
+		public static EntityField2 CarrierStatusDescription
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ShipmentFieldIndex.CarrierStatusDescription);}
+		}
 	}
 
 	/// <summary>Field Creation Class for entity ShipmentCustomsItemEntity</summary>

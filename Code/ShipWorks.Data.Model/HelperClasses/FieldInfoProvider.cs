@@ -3121,6 +3121,11 @@ namespace ShipWorks.Data.Model.HelperClasses
 			this.AddElementFieldInfo("ShipmentEntity", "LoggedShippedToHub", typeof(Nullable<System.Boolean>), false, false, false, true,  (int)ShipmentFieldIndex.LoggedShippedToHub, 0, 0, 0);
 			this.AddElementFieldInfo("ShipmentEntity", "LoggedVoidToHub", typeof(Nullable<System.Boolean>), false, false, false, true,  (int)ShipmentFieldIndex.LoggedVoidToHub, 0, 0, 0);
 			this.AddElementFieldInfo("ShipmentEntity", "CarrierAccount", typeof(System.String), false, false, false, true,  (int)ShipmentFieldIndex.CarrierAccount, 25, 0, 0);
+			this.AddElementFieldInfo("ShipmentEntity", "TrackingHubTimestamp", typeof(Nullable<System.DateTime>), false, false, false, true,  (int)ShipmentFieldIndex.TrackingHubTimestamp, 0, 0, 3);
+			this.AddElementFieldInfo("ShipmentEntity", "TrackingStatus", typeof(Interapptive.Shared.Enums.TrackingStatus), false, false, false, false,  (int)ShipmentFieldIndex.TrackingStatus, 0, 0, 3);
+			this.AddElementFieldInfo("ShipmentEntity", "EstimatedDeliveryDate", typeof(Nullable<System.DateTime>), false, false, false, true,  (int)ShipmentFieldIndex.EstimatedDeliveryDate, 0, 0, 3);
+			this.AddElementFieldInfo("ShipmentEntity", "ActualDeliveryDate", typeof(Nullable<System.DateTime>), false, false, false, true,  (int)ShipmentFieldIndex.ActualDeliveryDate, 0, 0, 3);
+			this.AddElementFieldInfo("ShipmentEntity", "CarrierStatusDescription", typeof(System.String), false, false, false, false,  (int)ShipmentFieldIndex.CarrierStatusDescription, 100, 0, 0);
 		}
 		/// <summary>Inits ShipmentCustomsItemEntity's FieldInfo objects</summary>
 		private void InitShipmentCustomsItemEntityInfos()

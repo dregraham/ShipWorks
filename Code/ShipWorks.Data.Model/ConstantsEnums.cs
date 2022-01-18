@@ -11632,6 +11632,16 @@ namespace ShipWorks.Data.Model
 		LoggedVoidToHub,
 		///<summary>CarrierAccount. </summary>
 		CarrierAccount,
+		///<summary>TrackingHubTimestamp. </summary>
+		TrackingHubTimestamp,
+		///<summary>TrackingStatus. </summary>
+		TrackingStatus,
+		///<summary>EstimatedDeliveryDate. </summary>
+		EstimatedDeliveryDate,
+		///<summary>ActualDeliveryDate. </summary>
+		ActualDeliveryDate,
+		///<summary>CarrierStatusDescription. </summary>
+		CarrierStatusDescription,
 		/// <summary></summary>
 		AmountOfFields
 	}
