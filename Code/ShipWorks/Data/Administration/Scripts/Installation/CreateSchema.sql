@@ -1338,7 +1338,13 @@ CREATE TABLE [dbo].[Shipment]
 [ReturnProfileID] [bigint] NOT NULL CONSTRAINT [DF_Shipment_ReturnProfileID] DEFAULT ((-1)),
 [LoggedShippedToHub] [bit] NULL,
 [LoggedVoidToHub] [bit] NULL,
-[CarrierAccount][nvarchar](25) NULL
+[CarrierAccount][nvarchar](25) NULL,
+[TrackingHubTimestamp] [datetime2] (3) NULL,
+[TrackingStatus] [tinyint] NOT NULL CONSTRAINT [DF_Shipment_TrackingStatus] DEFAULT ((0)),
+[EstimatedDeliveryDate] [datetime2] (3) NULL,
+[ActualDeliveryDate] [datetime2] (3) NULL,
+[CarrierStatusDescription] [nvarchar] (100) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL CONSTRAINT [DF_Shipment_CarrierStatusDescription] DEFAULT ('')
+
 )
 GO
 PRINT N'Creating primary key [PK_Shipment] on [dbo].[Shipment]'
@@ -1415,6 +1421,10 @@ GO
 PRINT N'Creating index [IX_SWDefault_Shipment_ShipmentType] on [dbo].[Shipment]'
 GO
 CREATE NONCLUSTERED INDEX [IX_SWDefault_Shipment_ShipmentType] ON [dbo].[Shipment] ([ShipmentType]) INCLUDE ([OrderID])
+GO
+CREATE NONCLUSTERED INDEX [IX_SWDefault_Shipment_TrackingHubTimestamp] ON [dbo].[Shipment] ([TrackingHubTimestamp]) WHERE ([TrackingHubTimestamp] IS NOT NULL)
+GO
+CREATE NONCLUSTERED INDEX [IX_SWDefault_Shipment_TrackingNumber] ON [dbo].[Shipment] ([TrackingNumber]) WHERE ([TrackingNumber]<>'')
 GO
 ALTER TABLE [dbo].[Shipment] ENABLE CHANGE_TRACKING
 GO

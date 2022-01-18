@@ -298,6 +298,7 @@
     <EmbeddedResource Include="Data\Administration\Scripts\Update\9.3\9.3.3.1.sql" />
     <EmbeddedResource Include="Data\Administration\Scripts\Update\9.4\9.4.3.0.sql" />
     <EmbeddedResource Include="Data\Administration\Scripts\Update\9.5\9.5.1.2.sql" />
+    <EmbeddedResource Include="Data\Administration\Scripts\Update\9.6\9.6.0.0.sql" />
     <EmbeddedResource Include="Templates\Distribution\Source.zip" />
   </ItemGroup>
   <ItemGroup>
@@ -796,7 +797,6 @@
     <EmbeddedResource Include="Templates\Distribution\Source\System\Snippets\FormatAddress\template.xsl" />
     <EmbeddedResource Include="Templates\Distribution\Source\System\Snippets\FormatAddress\settings.xml" />
   </ItemGroup>
-  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
