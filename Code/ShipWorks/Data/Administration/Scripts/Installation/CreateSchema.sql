@@ -1342,9 +1342,7 @@ CREATE TABLE [dbo].[Shipment]
 [TrackingHubTimestamp] [datetime2] (3) NULL,
 [TrackingStatus] [tinyint] NOT NULL CONSTRAINT [DF_Shipment_TrackingStatus] DEFAULT ((0)),
 [EstimatedDeliveryDate] [datetime2] (3) NULL,
-[ActualDeliveryDate] [datetime2] (3) NULL,
-[CarrierStatusDescription] [nvarchar] (100) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL CONSTRAINT [DF_Shipment_CarrierStatusDescription] DEFAULT ('')
-
+[ActualDeliveryDate] [datetime2] (3) NULL
 )
 GO
 PRINT N'Creating primary key [PK_Shipment] on [dbo].[Shipment]'

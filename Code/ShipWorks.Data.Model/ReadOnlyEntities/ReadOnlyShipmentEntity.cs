@@ -120,7 +120,6 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
             TrackingStatus = source.TrackingStatus;
             EstimatedDeliveryDate = source.EstimatedDeliveryDate;
             ActualDeliveryDate = source.ActualDeliveryDate;
-            CarrierStatusDescription = source.CarrierStatusDescription;
             
             AmazonSFP = (IAmazonSFPShipmentEntity) source.AmazonSFP?.AsReadOnly(objectMap);
             AmazonSWA = (IAmazonSWAShipmentEntity) source.AmazonSWA?.AsReadOnly(objectMap);
@@ -652,12 +651,6 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
         /// Table field type characteristics (type, precision, scale, length): DateTime2, 3, 0, 0<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
         public Nullable<System.DateTime> ActualDeliveryDate { get; }
-        /// <summary> The CarrierStatusDescription property of the Entity Shipment<br/><br/>
-        /// </summary>
-        /// <remarks>Mapped on table field: "Shipment"."CarrierStatusDescription"<br/>
-        /// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 100<br/>
-        /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
-        public System.String CarrierStatusDescription { get; }
         
         public IAmazonSFPShipmentEntity AmazonSFP { get; }
         

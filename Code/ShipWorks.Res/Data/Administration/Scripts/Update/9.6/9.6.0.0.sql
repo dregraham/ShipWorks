@@ -12,9 +12,11 @@ IF COL_LENGTH(N'[dbo].[Shipment]', N'EstimatedDeliveryDate') IS NULL
 ALTER TABLE [dbo].[Shipment] ADD[EstimatedDeliveryDate] [datetime2] (3) NULL
 IF COL_LENGTH(N'[dbo].[Shipment]', N'ActualDeliveryDate') IS NULL
 ALTER TABLE [dbo].[Shipment] ADD[ActualDeliveryDate] [datetime2] (3) NULL
-IF COL_LENGTH(N'[dbo].[Shipment]', N'CarrierStatusDescription') IS NULL
-ALTER TABLE [dbo].[Shipment] ADD[CarrierStatusDescription] [nvarchar] (100) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL CONSTRAINT [DF_Shipment_CarrierStatusDescription] DEFAULT ('')
 GO
+
+-- Not wrapped in if as this really doesn't do any harm 
+EXEC sp_rename N'[dbo].[AsendiaProfile].[CustomsRecipientTINType]', N'CustomsRecipientTinType', N'COLUMN'
+
 PRINT N'Creating index [IX_SWDefault_Shipment_TrackingHubTimestamp] on [dbo].[Shipment]'
 GO
 IF NOT EXISTS (SELECT 1 FROM sys.indexes WHERE name = N'IX_SWDefault_Shipment_TrackingHubTimestamp' AND object_id = OBJECT_ID(N'[dbo].[Shipment]'))

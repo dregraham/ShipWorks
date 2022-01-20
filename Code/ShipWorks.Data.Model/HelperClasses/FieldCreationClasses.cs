@@ -27312,11 +27312,6 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(ShipmentFieldIndex.ActualDeliveryDate);}
 		}
-		/// <summary>Creates a new ShipmentEntity.CarrierStatusDescription field instance</summary>
-		public static EntityField2 CarrierStatusDescription
-		{
-			get { return (EntityField2)EntityFieldFactory.Create(ShipmentFieldIndex.CarrierStatusDescription);}
-		}
 	}
 
 	/// <summary>Field Creation Class for entity ShipmentCustomsItemEntity</summary>

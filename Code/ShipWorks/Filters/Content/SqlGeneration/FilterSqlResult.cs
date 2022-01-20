@@ -124,7 +124,7 @@ namespace ShipWorks.Filters.Content.SqlGeneration
                 if (fieldCount != actualFIeldCount)
                 {
                     // FilterNodeColumnMaskUtility Constructor
-                    throw new InvalidOperationException($"Looks like we need to update the bitcount we use to track table to: {actualFIeldCount} \n {entityType}");
+                    throw new InvalidOperationException($"Looks like we need to update the bitcount we use to track table to: {actualFIeldCount} for {entityType}");
                 }
             }
 

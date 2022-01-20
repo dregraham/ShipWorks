@@ -25,19 +25,19 @@ namespace Interapptive.Shared.Enums
         
         [Description("Delivered")]
         [ApiValue("DE")]
-        InTransit = 4,
+        Delivered = 4,
         
         [Description("Exception")]
         [ApiValue("EX")]
-        InTransit = 5,
+        Exception = 5,
         
         [Description("Unknown")]
         [ApiValue("UN")]
-        InTransit = 6,
+        Unknown = 6,
         
         [Description("Delivery Attempt")]
         [ApiValue("AT")]
-        InTransit = 7,
+        Attempted = 7,
         
         [Description("Not Yet In System")]
         [ApiValue("NY")]

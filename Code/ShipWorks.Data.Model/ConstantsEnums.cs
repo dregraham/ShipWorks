@@ -11640,8 +11640,6 @@ namespace ShipWorks.Data.Model
 		EstimatedDeliveryDate,
 		///<summary>ActualDeliveryDate. </summary>
 		ActualDeliveryDate,
-		///<summary>CarrierStatusDescription. </summary>
-		CarrierStatusDescription,
 		/// <summary></summary>
 		AmountOfFields
 	}

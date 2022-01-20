@@ -2698,7 +2698,6 @@
           <Field Name="BilledType" Type="int" FieldIndex="71" />
           <Field Name="BilledWeight" Type="double" FieldIndex="72" />
           <Field Name="CarrierAccount" Type="string" IsOptional="true" MaxLength="25" FieldIndex="79" />
-          <Field Name="CarrierStatusDescription" Type="string" MaxLength="100" FieldIndex="84" />
           <Field Name="ContentWeight" Type="double" FieldIndex="4" />
           <Field Name="CustomsGenerated" Type="bool" FieldIndex="17" />
           <Field Name="CustomsValue" Type="decimal" Precision="19" Scale="4" FieldIndex="18" />
@@ -4729,7 +4728,7 @@
       <Catalogs>
         <Catalog Name="ShipWorksLocal">
           <Schemas>
-            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2022-01-18T17:04:02.4785935Z">
+            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2022-01-20T17:31:49.1065182Z">
               <Tables>
                 <Table Name="Action">
                   <PkConstraintName Name="PK_Action" />
@@ -8685,7 +8684,6 @@
                     <Field Name="TrackingStatus" Ordinal="82" HasDefaultValue="true" DefaultValue="(0)" DbType="22" Precision="3" />
                     <Field Name="EstimatedDeliveryDate" Ordinal="83" IsOptional="true" DbType="29" Precision="3" />
                     <Field Name="ActualDeliveryDate" Ordinal="84" IsOptional="true" DbType="29" Precision="3" />
-                    <Field Name="CarrierStatusDescription" Ordinal="85" HasDefaultValue="true" DefaultValue="''" DbType="12" Length="100" />
                   </Fields>
                 </Table>
                 <Table Name="ShipmentCustomsItem">
@@ -13797,7 +13795,6 @@
             <FieldMapping FieldName="BilledType" TargetFieldName="BilledType" />
             <FieldMapping FieldName="BilledWeight" TargetFieldName="BilledWeight" />
             <FieldMapping FieldName="CarrierAccount" TargetFieldName="CarrierAccount" />
-            <FieldMapping FieldName="CarrierStatusDescription" TargetFieldName="CarrierStatusDescription" />
             <FieldMapping FieldName="ContentWeight" TargetFieldName="ContentWeight" />
             <FieldMapping FieldName="CustomsGenerated" TargetFieldName="CustomsGenerated" />
             <FieldMapping FieldName="CustomsValue" TargetFieldName="CustomsValue" />
