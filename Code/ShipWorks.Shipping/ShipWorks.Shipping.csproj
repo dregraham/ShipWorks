@@ -723,7 +723,9 @@
     <Compile Include="RateHashingService.cs" />
     <Compile Include="TemplateLabelUtilityWrapper.cs" />
     <Compile Include="Tracking\IPlatformShipmentTrackerClient.cs" />
+    <Compile Include="Tracking\ITrackingRepository.cs" />
     <Compile Include="Tracking\TrackingNotification.cs" />
+    <Compile Include="Tracking\TrackingRepository.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Interapptive.Shared\Interapptive.Shared.csproj">

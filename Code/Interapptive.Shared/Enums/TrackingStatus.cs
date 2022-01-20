@@ -15,32 +15,36 @@ namespace Interapptive.Shared.Enums
         [Description("Pending")]
         Pending = 1,
         
+        // Shipment uploaded to hub, but haven't gotten any updates
+        [Description("Awaiting Update")]
+        AwaitingUpdate = 2,
+
         [Description("Accepted")]
         [ApiValue("AC")]
-        Accepted = 2,
+        Accepted = 3,
         
         [Description("In Transit")]
         [ApiValue("IT")]
-        InTransit = 3,
+        InTransit = 4,
         
         [Description("Delivered")]
         [ApiValue("DE")]
-        Delivered = 4,
+        Delivered = 5,
         
         [Description("Exception")]
         [ApiValue("EX")]
-        Exception = 5,
+        Exception = 6,
         
         [Description("Unknown")]
         [ApiValue("UN")]
-        Unknown = 6,
+        Unknown = 7,
         
         [Description("Delivery Attempt")]
         [ApiValue("AT")]
-        Attempted = 7,
+        Attempted = 8,
         
         [Description("Not Yet In System")]
         [ApiValue("NY")]
-        NotYetInSystem = 8
+        NotYetInSystem = 9
     }
 }
