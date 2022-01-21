@@ -1,9 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Enums;
 using SD.LLBLGen.Pro.QuerySpec;
-using ShipWorks.ApplicationCore.Licensing.Warehouse;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.FactoryClasses;
@@ -14,7 +14,8 @@ namespace ShipWorks.Shipping.Tracking
     /// <summary>
     /// Tracking Repository
     /// </summary>
-    class TrackingRepository : ITrackingRepository
+    [Component]
+    public class TrackingRepository : ITrackingRepository
     {
         private readonly ISqlAdapter sqlAdapter;
         private readonly IShippingManager shippingManager;
@@ -49,9 +50,26 @@ namespace ShipWorks.Shipping.Tracking
                 shipment.TrackingStatus = notification.TrackingStatus;
                 shipment.ActualDeliveryDate = notification.ActualDeliveryDate;
                 shipment.EstimatedDeliveryDate = notification.EstimatedDeliveryDate;
+                shipment.TrackingHubTimestamp = notification.HubTimestamp;
             }
 
             sqlAdapter.SaveEntityCollection(shipments);
+        }
+
+        /// <summary>
+        /// Fetch a batch of Shipments to track
+        /// </summary>
+        public IEnumerable<ShipmentEntity> FetchShipmentsToTrack()
+        {
+            var query = new QueryFactory().Shipment
+                .Where(ShipmentFields.TrackingStatus == TrackingStatus.Pending)
+                .Where(ShipmentFields.ShipmentType != ShipmentTypeCode.Other)
+                .Where(ShipmentFields.ShipmentType != ShipmentTypeCode.AmazonSFP)
+                .Where(ShipmentFields.ShipmentType != ShipmentTypeCode.AmazonSWA)
+                .Where(ShipmentFields.Processed == true)
+                .Where(ShipmentFields.Voided == false);
+
+            return QueryShipmentEntities(query);
         }
 
         /// <summary>
@@ -62,6 +80,11 @@ namespace ShipWorks.Shipping.Tracking
             var query = new QueryFactory().Shipment
                 .Where(ShipmentFields.TrackingNumber == trackingNumber);
 
+            return QueryShipmentEntities(query);
+        }
+
+        private EntityCollection<ShipmentEntity> QueryShipmentEntities(EntityQuery<ShipmentEntity> query)
+        {
             var shipments = new EntityCollection<ShipmentEntity>();
             sqlAdapter.FetchQuery(query, shipments);
 
