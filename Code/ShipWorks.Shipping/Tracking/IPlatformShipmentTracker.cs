@@ -1,4 +1,5 @@
 ﻿using System.Threading;
+using System.Threading.Tasks;
 
 namespace ShipWorks.Shipping.Tracking
 {
@@ -10,11 +11,11 @@ namespace ShipWorks.Shipping.Tracking
         /// <summary>
         /// Get all the shipments and send them up to hub for tracking
         /// </summary>
-        void TrackShipments(CancellationToken cancellationToken);
+        Task TrackShipments(CancellationToken cancellationToken);
 
         /// <summary>
         /// Fetch tracking notifications from the hub and populate them
         /// </summary>
-        void PopulateLatestTracking(CancellationToken cancellationToken);
+        Task PopulateLatestTracking(CancellationToken cancellationToken);
     }
 }

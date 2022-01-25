@@ -725,6 +725,7 @@
     <Compile Include="Tracking\IPlatformShipmentTracker.cs" />
     <Compile Include="Tracking\IPlatformShipmentTrackerClient.cs" />
     <Compile Include="Tracking\ITrackingRepository.cs" />
+    <Compile Include="Tracking\PlatformShipmentTrackerCoordinator.cs" />
     <Compile Include="Tracking\PlatformShipmentTracker.cs" />
     <Compile Include="Tracking\TrackingNotification.cs" />
     <Compile Include="Tracking\TrackingRepository.cs" />

@@ -2,6 +2,7 @@ using System;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading;
+using System.Threading.Tasks;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Utility;
 using log4net;
@@ -34,12 +35,13 @@ namespace ShipWorks.Shipping.Tracking
         /// <summary>
         /// Get all the shipments and send them up to hub for tracking
         /// </summary>
-        public void TrackShipments(CancellationToken cancellationToken)
+        public async Task TrackShipments(CancellationToken cancellationToken)
         {
             // Doesn't matter if warehouseId is blank. This is used to filter out shipments. If not a warehouse customer,
             // we will get back all the shipments with a blank warehouse.
             var warehouseId = configurationData.FetchReadOnly().WarehouseID;
-            var shipmentsToTrack = trackingRepository.FetchShipmentsToTrack().ToList();
+            var shipmentsToTrack = (await trackingRepository.FetchShipmentsToTrack().ConfigureAwait(false))
+                .ToList();
             while (shipmentsToTrack.Any() && !cancellationToken.IsCancellationRequested)
             {
                 foreach (var shipment in shipmentsToTrack)
@@ -51,6 +53,9 @@ namespace ShipWorks.Shipping.Tracking
                         return;
                     }
                 }
+
+                shipmentsToTrack = (await trackingRepository.FetchShipmentsToTrack().ConfigureAwait(false))
+                    .ToList();
             }
         }
 
@@ -60,41 +65,52 @@ namespace ShipWorks.Shipping.Tracking
             {
                 return "usps";
             }
-            else if (shipmentTypeManager.IsUps(shipmentType))
+
+            if (shipmentTypeManager.IsUps(shipmentType))
             {
                 return "ups";
             }
-            else if (shipmentType == ShipmentTypeCode.Asendia)
+            
+            switch (shipmentType)
             {
-                return "asendia";
+                case ShipmentTypeCode.Asendia:
+                    return "asendia";
+                case ShipmentTypeCode.DhlExpress:
+                    return "dhl_express";
+                case ShipmentTypeCode.FedEx:
+                    return "fedex";
+                case ShipmentTypeCode.OnTrac:
+                    return "ontrac";
             }
-            else if (shipmentType == ShipmentTypeCode.DhlExpress)
-            {
-                return "dhl_express";
-            } 
-            else if (shipmentType == ShipmentTypeCode.FedEx)
-            {
-                return "fedex";
-            } 
-            else if (shipmentType == ShipmentTypeCode.OnTrac)
-            {
-                return "ontrac";
-            }
-            else
-            {
-                // Should never happen.
-                Debug.Fail("Unsupported tracking type. Shouldn't have gotten this shipment.");
-                log.Warn("Unsupported shipment type found in PlatformShipmentTracker.");
-                return EnumHelper.GetDescription(shipmentType).ToLower();
-            }
+
+            // Should never happen.
+            Debug.Fail("Unsupported tracking type. Shouldn't have gotten this shipment.");
+            log.Warn("Unsupported shipment type found in PlatformShipmentTracker.");
+            return EnumHelper.GetDescription(shipmentType).ToLower();
         }
 
         /// <summary>
         /// Fetch tracking notifications from the hub and populate them
         /// </summary>
-        public void PopulateLatestTracking(CancellationToken cancellationToken)
+        public async Task PopulateLatestTracking(CancellationToken cancellationToken)
         {
-            throw new System.NotImplementedException();
+            var warehouseId = configurationData.FetchReadOnly().WarehouseID;
+            
+            var latestNotificationDate = await trackingRepository.GetLatestNotificationDate().ConfigureAwait(false);
+            while (!cancellationToken.IsCancellationRequested)
+            {
+                var notifications = platformShipmentTrackerClient.GetShipments(warehouseId, latestNotificationDate).ToList();
+                if (!notifications.Any())
+                {
+                    break;
+                }
+
+                foreach (var notification in notifications)
+                {
+                    latestNotificationDate = notification.HubTimestamp;
+                    await trackingRepository.SaveNotification(notification).ConfigureAwait(false);
+                }
+            }
         }
     }
 }

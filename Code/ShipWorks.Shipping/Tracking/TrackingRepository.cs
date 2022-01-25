@@ -1,6 +1,8 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Enums;
 using SD.LLBLGen.Pro.QuerySpec;
@@ -18,33 +20,26 @@ namespace ShipWorks.Shipping.Tracking
     public class TrackingRepository : ITrackingRepository
     {
         private readonly ISqlAdapter sqlAdapter;
-        private readonly IShippingManager shippingManager;
-
-        public TrackingRepository(ISqlAdapter sqlAdapter, IShippingManager shippingManager)
+        
+        public TrackingRepository(ISqlAdapterFactory sqlAdapterFactory)
         {
-            this.sqlAdapter = sqlAdapter;
-            this.shippingManager = shippingManager;
+            sqlAdapter = sqlAdapterFactory.Create();
         }
         /// <summary>
         /// Marks the shipment with a status of AwaitingResponse
         /// </summary>
-        public void MarkAsSent(ShipmentEntity shipment)
+        public async Task MarkAsSent(ShipmentEntity shipment)
         {
             shipment.TrackingStatus = TrackingStatus.AwaitingUpdate;
-            var result = shippingManager.SaveShipmentToDatabase(shipment, false);
-            var ex = result.SingleOrDefault().Value;
-            if (ex != null)
-            {
-                throw ex;
-            }
+            await sqlAdapter.SaveEntityAsync(shipment).ConfigureAwait(false);
         }
 
         /// <summary>
         /// Save the notification to a shipment
         /// </summary>
-        public void SaveNotification(TrackingNotification notification)
+        public async Task SaveNotification(TrackingNotification notification)
         {
-            var shipments = GetShipments(notification.TrackingNumber);
+            var shipments = await GetShipments(notification.TrackingNumber).ConfigureAwait(false);
             foreach (var shipment in shipments)
             {
                 shipment.TrackingStatus = notification.TrackingStatus;
@@ -53,13 +48,13 @@ namespace ShipWorks.Shipping.Tracking
                 shipment.TrackingHubTimestamp = notification.HubTimestamp;
             }
 
-            sqlAdapter.SaveEntityCollection(shipments);
+            await sqlAdapter.SaveEntityCollectionAsync(shipments).ConfigureAwait(false);
         }
 
         /// <summary>
         /// Fetch a batch of Shipments to track
         /// </summary>
-        public IEnumerable<ShipmentEntity> FetchShipmentsToTrack()
+        public async Task<IEnumerable<ShipmentEntity>> FetchShipmentsToTrack()
         {
             var query = new QueryFactory().Shipment
                 .Where(ShipmentFields.TrackingStatus == TrackingStatus.Pending)
@@ -67,26 +62,34 @@ namespace ShipWorks.Shipping.Tracking
                 .Where(ShipmentFields.ShipmentType != ShipmentTypeCode.AmazonSFP)
                 .Where(ShipmentFields.ShipmentType != ShipmentTypeCode.AmazonSWA)
                 .Where(ShipmentFields.Processed == true)
-                .Where(ShipmentFields.Voided == false);
+                .Where(ShipmentFields.Voided == false)
+                .Limit(100);
 
-            return QueryShipmentEntities(query);
+            return await QueryShipmentEntities(query).ConfigureAwait(false);
+        }
+
+        public async Task<DateTime> GetLatestNotificationDate()
+        {
+            var queryFactory = new QueryFactory();
+            var query = queryFactory.Create().Select(queryFactory.Shipment.Select(ShipmentFields.TrackingHubTimestamp).Max());
+            return await sqlAdapter.FetchScalarAsync<DateTime>(query).ConfigureAwait(false);
         }
 
         /// <summary>
         /// Get shipments matching the tracking number
         /// </summary>
-        private EntityCollection<ShipmentEntity> GetShipments(string trackingNumber)
+        private async Task<EntityCollection<ShipmentEntity>> GetShipments(string trackingNumber)
         {
             var query = new QueryFactory().Shipment
                 .Where(ShipmentFields.TrackingNumber == trackingNumber);
 
-            return QueryShipmentEntities(query);
+            return await QueryShipmentEntities(query).ConfigureAwait(false);
         }
 
-        private EntityCollection<ShipmentEntity> QueryShipmentEntities(EntityQuery<ShipmentEntity> query)
+        private async Task<EntityCollection<ShipmentEntity>> QueryShipmentEntities(EntityQuery<ShipmentEntity> query)
         {
             var shipments = new EntityCollection<ShipmentEntity>();
-            sqlAdapter.FetchQuery(query, shipments);
+            await sqlAdapter.FetchQueryAsync(query, shipments).ConfigureAwait(false);
 
             return shipments;
         }

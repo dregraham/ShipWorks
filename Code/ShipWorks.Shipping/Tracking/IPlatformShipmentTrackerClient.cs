@@ -17,6 +17,6 @@ namespace ShipWorks.Shipping.Tracking
         /// <summary>
         /// Get tracking information from the hub
         /// </summary>
-        IEnumerable<ShipmentNotification> GetShipments(string WarehouseID, DateTime lastUpdateDate);
+        IEnumerable<TrackingNotification> GetShipments(string WarehouseID, DateTime lastUpdateDate);
     }
 }

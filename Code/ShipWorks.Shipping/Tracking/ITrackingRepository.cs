@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 using ShipWorks.Data.Model.EntityClasses;
 
 namespace ShipWorks.Shipping.Tracking
@@ -11,17 +13,18 @@ namespace ShipWorks.Shipping.Tracking
         /// <summary>
         /// Marks the shipment with a status of AwaitingResponse
         /// </summary>
-        void MarkAsSent(ShipmentEntity shipment);
+        Task MarkAsSent(ShipmentEntity shipment);
 
         /// <summary>
         /// Save the notification to a shipment
         /// </summary>
-        void SaveNotification(TrackingNotification notification);
+        Task SaveNotification(TrackingNotification notification);
 
         /// <summary>
         /// Fetch a batch of Shipments to track
         /// </summary>
-        IEnumerable<ShipmentEntity> FetchShipmentsToTrack();
+        Task<IEnumerable<ShipmentEntity>> FetchShipmentsToTrack();
 
+        Task<DateTime> GetLatestNotificationDate();
     }
 }
