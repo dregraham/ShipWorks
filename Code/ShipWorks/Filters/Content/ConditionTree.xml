@@ -469,6 +469,7 @@
       </Group>
       <Separator/>
       <Condition identifier="Shipment.Status" />
+      <Condition identifier="Shipment.TrackingStatus" />
       <Condition identifier="Shipment.ProcessedDate" />
       <Condition identifier="Shipment.ProcessedUser" />
       <Condition identifier="Shipment.VoidedDate" />

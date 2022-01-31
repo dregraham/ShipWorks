@@ -10,6 +10,7 @@ using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.FactoryClasses;
 using ShipWorks.Data.Model.HelperClasses;
+using ShipWorks.Shipping.Tracking.DTO;
 
 namespace ShipWorks.Shipping.Tracking
 {
@@ -68,11 +69,15 @@ namespace ShipWorks.Shipping.Tracking
             return await QueryShipmentEntities(query).ConfigureAwait(false);
         }
 
+        /// <summary>
+        /// Get the most recent tracking notification
+        /// </summary>
         public async Task<DateTime> GetLatestNotificationDate()
         {
             var queryFactory = new QueryFactory();
             var query = queryFactory.Create().Select(queryFactory.Shipment.Select(ShipmentFields.TrackingHubTimestamp).Max());
-            return await sqlAdapter.FetchScalarAsync<DateTime>(query).ConfigureAwait(false);
+            return await sqlAdapter.FetchScalarAsync<DateTime?>(query).ConfigureAwait(false) ??
+                   DateTime.MinValue;
         }
 
         /// <summary>
@@ -86,6 +91,9 @@ namespace ShipWorks.Shipping.Tracking
             return await QueryShipmentEntities(query).ConfigureAwait(false);
         }
 
+        /// <summary>
+        /// Fetches a collection of shipment entities for the specified query
+        /// </summary>
         private async Task<EntityCollection<ShipmentEntity>> QueryShipmentEntities(EntityQuery<ShipmentEntity> query)
         {
             var shipments = new EntityCollection<ShipmentEntity>();

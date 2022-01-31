@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Data.Common;
-using System.Reactive;
 using System.Threading;
 using System.Threading.Tasks;
 using Interapptive.Shared.ComponentRegistration.Ordering;
@@ -11,113 +9,43 @@ using ShipWorks.Data.Connection;
 
 namespace ShipWorks.Shipping.Tracking
 {
+    /// <summary>
+    /// Sends shipments to be tracked and imports notifications
+    /// </summary>
     [Order(typeof(IInitializeForCurrentUISession), Order.Unordered)]
-    public class PlatformShipmentTrackerCoordinator : IInitializeForCurrentUISession, IDisposable
+    public class PlatformShipmentTrackerCoordinator : ReoccurringAppLockedTask, IInitializeForCurrentUISession
     {
-        private readonly ISqlSession sqlSession;
-        private readonly ISqlAppLock sqlAppLock;
-
-        private const string AppLockName = "PlatformShipmentTrackerRunning";
-        private const int RunInterval = 60 * 1000;
-        
-        private CancellationTokenSource cancellationTokenSource;
-        private CancellationToken cancellationToken;
-        private readonly ILog log;
-        
-        private TaskCompletionSource<Unit> delayTaskCompletionSource;
+        private readonly IPlatformShipmentTracker tracker;
 
         public PlatformShipmentTrackerCoordinator(
             Func<Type, ILog> logFactory, 
             ISqlSession sqlSession,
-            ISqlAppLock sqlAppLock)
+            ISqlAppLock sqlAppLock,
+            IPlatformShipmentTracker tracker) : base(logFactory, sqlSession, sqlAppLock)
         {
-            this.sqlSession = sqlSession;
-            this.sqlAppLock = sqlAppLock;
-            log = logFactory(GetType());
+            this.tracker = tracker;
         }
+
+        /// <summary>
+        /// 2 minutes
+        /// </summary>
+        protected override int RunInterval => 60 * 1000;
         
         /// <summary>
-        /// Initialize for the current session
+        /// The name of the lock taken. Must be unique!
         /// </summary>
-        public void InitializeForCurrentSession()
-        {
-            if (cancellationTokenSource == null || cancellationToken.IsCancellationRequested)
-            {
-                cancellationTokenSource = new CancellationTokenSource();
-                cancellationToken = cancellationTokenSource.Token;
-            }
-
-            Task.Run(() => Run().ConfigureAwait(false), cancellationToken);
-        }
+        protected override string AppLockName => "PlatformShipmentTrackerRunning";
 
         /// <summary>
-        /// End the current session
+        /// The thing that runs defined in the subclass 
         /// </summary>
-        public void EndSession()
+        protected override async Task ProcessTask(CancellationToken token)
         {
-            Dispose();
-        }
-
-        /// <summary>
-        /// Start the thread to process the queue periodically.
-        /// </summary>
-        private async Task Run()
-        {
-            while (!cancellationToken.IsCancellationRequested)
-            {
-                try
-                {
-                    await Process().ConfigureAwait(false);
-                }
-                catch (Exception ex)
-                {
-                    log.Error("Error while Processing", ex);
-                }
-
-                delayTaskCompletionSource = new TaskCompletionSource<Unit>();
-                await Task.WhenAny(Task.Delay(RunInterval, cancellationToken), delayTaskCompletionSource.Task)
-                    .ConfigureAwait(false);
-                delayTaskCompletionSource = null;
-            }
-        }
-        
-        /// <summary>
-        /// Process any shipments that need lo
-        /// </summary>
-        public async Task Process()
-        {
-            if (sqlSession == null || ConnectionSensitiveScope.IsActive)
-            {
-                return;
-            }
-
-            using (DbConnection connection = sqlSession.OpenConnection())
-            {
-                using (sqlAppLock.Take(connection, AppLockName, TimeSpan.FromMilliseconds(10)))
-                {
-                    if (!sqlAppLock.LockAcquired)
-                    {
-                        return;
-                    }
-
-                    try
-                    {
-                        
-                    }
-                    catch (Exception ex)
-                    {
-                        log.Error("Error while Processing", ex);
-                    }
-                }
-            }
-        }
-        
-        /// <summary>
-        /// Stop the processing
-        /// </summary>
-        public void Dispose()
-        {
-            cancellationTokenSource?.Cancel(true);
+            Log.Info("Sending shipments to track.");
+            await tracker.TrackShipments(token).ConfigureAwait(false);
+            
+            Log.Info("Process tracking notifications");
+            await tracker.PopulateLatestTracking(token).ConfigureAwait(false);
         }
     }
 }

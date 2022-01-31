@@ -46,7 +46,7 @@ namespace ShipWorks.Shipping.Tracking
             {
                 foreach (var shipment in shipmentsToTrack)
                 {
-                    platformShipmentTrackerClient.SendShipment(shipment.TrackingNumber, GetCarrierName(shipment.ShipmentTypeCode), warehouseId);
+                    await platformShipmentTrackerClient.SendShipment(shipment.TrackingNumber, GetCarrierName(shipment.ShipmentTypeCode), warehouseId).ConfigureAwait(false);
                     trackingRepository.MarkAsSent(shipment);
                     if (cancellationToken.IsCancellationRequested)
                     {
@@ -99,7 +99,10 @@ namespace ShipWorks.Shipping.Tracking
             var latestNotificationDate = await trackingRepository.GetLatestNotificationDate().ConfigureAwait(false);
             while (!cancellationToken.IsCancellationRequested)
             {
-                var notifications = platformShipmentTrackerClient.GetShipments(warehouseId, latestNotificationDate).ToList();
+                var notifications = await platformShipmentTrackerClient
+                    .GetTracking(warehouseId, latestNotificationDate).ConfigureAwait(false);
+                notifications = notifications.ToList();
+                
                 if (!notifications.Any())
                 {
                     break;

@@ -5,6 +5,7 @@ using Moq;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
+using ShipWorks.Shipping;
 
 namespace ShipWorks.Tests.Shared.ExtensionMethods
 {
@@ -77,6 +78,11 @@ namespace ShipWorks.Tests.Shared.ExtensionMethods
         /// Any IOrder
         /// </summary>
         public static IOrderEntity AnyIOrder => It.IsAny<IOrderEntity>();
+
+        /// <summary>
+        /// Any ShipmentTypeCode
+        /// </summary>
+        public static ShipmentTypeCode AnyShipmentTypeCode => It.IsAny<ShipmentTypeCode>();
 
         /// <summary>
         /// Checks a parameter for a shipment with given tracking number

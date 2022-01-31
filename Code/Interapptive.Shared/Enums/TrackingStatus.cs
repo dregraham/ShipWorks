@@ -4,7 +4,7 @@ using Interapptive.Shared.Utility;
 
 namespace Interapptive.Shared.Enums
 {
-    [Obfuscation]
+    [Obfuscation(Feature = "PreserveLiteralValues", Exclude = false, StripAfterObfuscation = false)]
     public enum TrackingStatus
     {
         // Default value for existing shipments

@@ -1,7 +1,7 @@
 ﻿using System;
 using Interapptive.Shared.Enums;
 
-namespace ShipWorks.Shipping.Tracking
+namespace ShipWorks.Shipping.Tracking.DTO
 {
     public class TrackingNotification
     {

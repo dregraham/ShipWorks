@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
+using ShipWorks.Shipping.Tracking.DTO;
 using ShipWorks.Stores.Warehouse;
 
 namespace ShipWorks.Shipping.Tracking
@@ -12,11 +14,11 @@ namespace ShipWorks.Shipping.Tracking
         /// <summary>
         /// Send Shipment information to the hub
         /// </summary>
-        void SendShipment(string trackingNumber, string carrierCode, string warehouseID);
+        Task SendShipment(string trackingNumber, string carrierCode, string warehouseID);
 
         /// <summary>
         /// Get tracking information from the hub
         /// </summary>
-        IEnumerable<TrackingNotification> GetShipments(string WarehouseID, DateTime lastUpdateDate);
+        Task<IEnumerable<TrackingNotification>> GetTracking(string WarehouseID, DateTime lastUpdateDate);
     }
 }

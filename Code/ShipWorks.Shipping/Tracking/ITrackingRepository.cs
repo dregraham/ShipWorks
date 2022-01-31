@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Shipping.Tracking.DTO;
 
 namespace ShipWorks.Shipping.Tracking
 {

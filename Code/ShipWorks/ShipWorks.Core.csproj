@@ -810,6 +810,7 @@
     <Compile Include="ApplicationCore\Licensing\CustomerLicenseKeyType.cs" />
     <Compile Include="ApplicationCore\Licensing\TrialDetails.cs" />
     <Compile Include="ApplicationCore\Licensing\Warehouse\DTO\SqlConfigChangedDto.cs" />
+    <Compile Include="ApplicationCore\ReoccurringAppLockedTask.cs" />
     <Compile Include="ApplicationCore\Settings\ICubiscanSettingsPage.cs" />
     <Compile Include="AutoInstall\DTO\AutoInstallShipWorksDto.cs" />
     <Compile Include="ApplicationCore\CommandLineOptions\GetUpdateWindowCommandLineOption.cs" />
@@ -995,6 +996,7 @@
     <Compile Include="Data\ProductCatalogTelemetryService.cs" />
     <Compile Include="Filters\Content\Conditions\Orders\VerifiedCondition.cs" />
     <Compile Include="Filters\Content\Conditions\Shipments\AccountCondition.cs" />
+    <Compile Include="Filters\Content\Conditions\Shipments\TrackingStatusCondition.cs" />
     <Compile Include="Messaging\Messages\ChangeDimensionsMessage.cs" />
     <Compile Include="Messaging\Messages\Orders\OrderLookupUnverifyMessage.cs" />
     <Compile Include="Messaging\Messages\Orders\OrderVerifiedMessage.cs" />
