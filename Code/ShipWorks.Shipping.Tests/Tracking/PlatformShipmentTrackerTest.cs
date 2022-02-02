@@ -4,6 +4,7 @@ using System;
 using System.Threading;
 using System.Threading.Tasks;
 using Interapptive.Shared.Utility;
+using RestSharp;
 using ShipWorks.Data;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Tracking;
@@ -60,6 +61,34 @@ namespace ShipWorks.Shipping.Tests.Tracking
             
             mock.Mock<IPlatformShipmentTrackerClient>().Verify(c=>c.SendShipment(AnyString, AnyString, AnyString), Times.Exactly(3));
             mock.Mock<ITrackingRepository>().Verify(r=>r.FetchShipmentsToTrack(), Times.Exactly(3));
+        }
+
+        [Theory]
+        [InlineData(true, 1)]
+        [InlineData(false, 0)]
+        public async Task TrackShipments_MarksShipmentSent_WhenTrackingSentSuccessfully(bool sucessfullySentToPlatform, int timesMarkedAsSent)
+        {
+            var trackingRepository = mock.Mock<ITrackingRepository>();
+            trackingRepository.SetupSequence(r => r.FetchShipmentsToTrack())
+                .ReturnsAsync(new[]
+                {
+                    new ShipmentEntity
+                    {
+                        TrackingNumber = "t1",
+                        ShipmentTypeCode = ShipmentTypeCode.FedEx,
+                    }
+                })
+                .ReturnsAsync(new ShipmentEntity[] { });
+            mock.Mock<IPlatformShipmentTrackerClient>()
+                .Setup(c => c.SendShipment(AnyString, AnyString, AnyString))
+                .ReturnsAsync(sucessfullySentToPlatform
+                    ? GenericResult.FromSuccess(mock.Mock<IRestResponse>().Object)
+                    : GenericResult.FromError<IRestResponse>(new Exception()));
+
+            var testObject = mock.Create<PlatformShipmentTracker>();
+            await testObject.TrackShipments(new CancellationToken()).ConfigureAwait(false);
+            
+            mock.Mock<ITrackingRepository>().Verify(r=>r.MarkAsSent(AnyShipment), Times.Exactly(timesMarkedAsSent));
         }
 
         [Theory]

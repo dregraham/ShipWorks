@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Interapptive.Shared.Enums;
 using Interapptive.Shared.Utility;
 using log4net;
 using ShipWorks.Data.Model.EntityClasses;
@@ -253,6 +254,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.WorldShip
             upsShipment.UspsTrackingNumber = uspsTrackingNumber;
             upsPackage.TrackingNumber = trackingNumber;
             shipment.TrackingNumber = leadTrackingNumber;
+            shipment.TrackingStatus = TrackingStatus.Pending;
         }
 
         /// <summary>

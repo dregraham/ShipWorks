@@ -3,6 +3,7 @@ using System.Data;
 using System.Text;
 using log4net;
 using Interapptive.Shared.ComponentRegistration;
+using Interapptive.Shared.Enums;
 using ShipWorks.Data;
 using ShipWorks.Data.Model.EntityClasses;
 
@@ -107,6 +108,7 @@ namespace ShipWorks.Shipping.Carriers.iParcel
                     if (rowIndex == 0)
                     {
                         shipment.TrackingNumber = packageEntity.TrackingNumber;
+                        shipment.TrackingStatus = TrackingStatus.Pending;
                     }
 
                     decimal packageCost = 0;

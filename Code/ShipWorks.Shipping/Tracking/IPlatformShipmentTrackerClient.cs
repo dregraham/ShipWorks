@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Interapptive.Shared.Utility;
+using RestSharp;
 using ShipWorks.Shipping.Tracking.DTO;
 using ShipWorks.Stores.Warehouse;
 
@@ -14,7 +16,7 @@ namespace ShipWorks.Shipping.Tracking
         /// <summary>
         /// Send Shipment information to the hub
         /// </summary>
-        Task SendShipment(string trackingNumber, string carrierCode, string warehouseID);
+        Task<GenericResult<IRestResponse>> SendShipment(string trackingNumber, string carrierCode, string warehouseID);
 
         /// <summary>
         /// Get tracking information from the hub

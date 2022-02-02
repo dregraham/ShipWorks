@@ -159,8 +159,8 @@ namespace ShipWorks.Data.Grid.Columns.Definitions
                 
                 new GridColumnDefinition("{D2C6DA88-0A41-4CB7-ACCC-15B0A8DED169}",
                         new GridEnumDisplayType<TrackingStatus>(EnumSortMethod.Description),
-                        "DeliveryStatus",  TrackingStatus.Delivered,
-                        ProcessedShipmentFields.tr)
+                        "Delivery Status",  TrackingStatus.Delivered,
+                        ProcessedShipmentFields.TrackingStatus)
                     { DefaultWidth = 100 },
             };
         }

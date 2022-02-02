@@ -2767,6 +2767,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 			this.AddElementFieldInfo("ProcessedShipmentEntity", "CombineSplitStatus", typeof(System.Int32), false, false, false, false,  (int)ProcessedShipmentFieldIndex.CombineSplitStatus, 0, 0, 10);
 			this.AddElementFieldInfo("ProcessedShipmentEntity", "ReturnShipment", typeof(System.Boolean), false, false, false, false,  (int)ProcessedShipmentFieldIndex.ReturnShipment, 0, 0, 0);
 			this.AddElementFieldInfo("ProcessedShipmentEntity", "Verified", typeof(System.Boolean), false, false, false, false,  (int)ProcessedShipmentFieldIndex.Verified, 0, 0, 0);
+			this.AddElementFieldInfo("ProcessedShipmentEntity", "TrackingStatus", typeof(Interapptive.Shared.Enums.TrackingStatus), false, false, false, false,  (int)ProcessedShipmentFieldIndex.TrackingStatus, 0, 0, 3);
 		}
 		/// <summary>Inits ProductEntity's FieldInfo objects</summary>
 		private void InitProductEntityInfos()

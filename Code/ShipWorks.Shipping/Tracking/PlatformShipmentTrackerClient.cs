@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Interapptive.Shared.ComponentRegistration;
+using Interapptive.Shared.Utility;
 using RestSharp;
 using ShipWorks.ApplicationCore.Licensing.Warehouse;
 using ShipWorks.Shipping.Tracking.DTO;
@@ -29,7 +30,7 @@ namespace ShipWorks.Shipping.Tracking
         /// <summary>
         /// Send Shipment information to the hub
         /// </summary>
-        public async Task SendShipment(string trackingNumber, string carrierCode, string warehouseID)
+        public async Task<GenericResult<IRestResponse>> SendShipment(string trackingNumber, string carrierCode, string warehouseID)
         {
             var trackingRequest = new TrackingRequest()
             {
@@ -39,6 +40,7 @@ namespace ShipWorks.Shipping.Tracking
             };
             var request = warehouseRequestFactory.Create(WarehouseEndpoints.Tracking, Method.POST, trackingRequest);
             var result = await warehouseRequestClient.MakeRequest(request, "Tracking").ConfigureAwait(false);
+            return result;
         }
 
         /// <summary>
@@ -48,7 +50,6 @@ namespace ShipWorks.Shipping.Tracking
         {
             var request = warehouseRequestFactory.Create(WarehouseEndpoints.GetTrackingUpdatesAfter(lastUpdateDate), Method.GET, null);
             return await warehouseRequestClient.MakeRequest<IEnumerable<TrackingNotification>>(request, "Tracking").ConfigureAwait(false);
-            
         }
     }
 }

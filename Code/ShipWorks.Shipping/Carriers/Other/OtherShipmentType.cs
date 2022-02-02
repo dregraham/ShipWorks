@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Interapptive.Shared.Enums;
 using Interapptive.Shared.Utility;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.BestRate;

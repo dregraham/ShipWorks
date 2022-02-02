@@ -10180,6 +10180,8 @@ namespace ShipWorks.Data.Model
 		ReturnShipment,
 		///<summary>Verified. </summary>
 		Verified,
+		///<summary>TrackingStatus. </summary>
+		TrackingStatus,
 		/// <summary></summary>
 		AmountOfFields
 	}

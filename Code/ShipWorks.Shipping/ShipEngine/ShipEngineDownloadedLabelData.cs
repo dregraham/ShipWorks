@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Drawing;
 using System.IO;
+using Interapptive.Shared.Enums;
 using Interapptive.Shared.Pdf;
 using Interapptive.Shared.Utility;
 using ShipEngine.CarrierApi.Client.Model;
@@ -86,6 +88,7 @@ namespace ShipWorks.Shipping.ShipEngine
         protected virtual void SaveLabelInfoToEntity(ShipmentEntity shipment, Label label)
         {
             shipment.TrackingNumber = label.TrackingNumber;
+            shipment.TrackingStatus = TrackingStatus.Pending;
             shipment.ShipmentCost = (decimal) label.ShipmentCost.Amount;
             SaveShipEngineLabelID(shipment, label);
         }

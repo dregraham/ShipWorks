@@ -1424,6 +1424,8 @@ CREATE NONCLUSTERED INDEX [IX_SWDefault_Shipment_TrackingHubTimestamp] ON [dbo].
 GO
 CREATE NONCLUSTERED INDEX [IX_SWDefault_Shipment_TrackingNumber] ON [dbo].[Shipment] ([TrackingNumber]) WHERE ([TrackingNumber]<>'')
 GO
+CREATE NONCLUSTERED INDEX [IX_SWDefault_Shipment_TrackingStatus] ON [dbo].[Shipment] ([TrackingStatus])
+GO
 ALTER TABLE [dbo].[Shipment] ENABLE CHANGE_TRACKING
 GO
 PRINT N'Altering [dbo].[Shipment]'

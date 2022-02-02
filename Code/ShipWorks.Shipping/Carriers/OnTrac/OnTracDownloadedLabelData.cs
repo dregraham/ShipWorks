@@ -5,6 +5,7 @@ using System.IO;
 using System.Text;
 using log4net;
 using Interapptive.Shared.ComponentRegistration;
+using Interapptive.Shared.Enums;
 using Interapptive.Shared.Imaging;
 using Interapptive.Shared.Pdf;
 using ShipWorks.Data;
@@ -45,6 +46,7 @@ namespace ShipWorks.Shipping.Carriers.OnTrac
         public void Save()
         {
             shipment.TrackingNumber = shipmentResponse.Tracking;
+            shipment.TrackingStatus = TrackingStatus.Pending;
             shipment.ShipmentCost = shipmentResponse.TotalChrg;
             double billedWeight;
             if (double.TryParse(shipmentResponse.BilledWeight, out billedWeight))

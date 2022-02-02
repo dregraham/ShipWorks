@@ -27,3 +27,6 @@ GO
 IF NOT EXISTS (SELECT 1 FROM sys.indexes WHERE name = N'IX_SWDefault_Shipment_TrackingNumber' AND object_id = OBJECT_ID(N'[dbo].[Shipment]'))
 CREATE NONCLUSTERED INDEX [IX_SWDefault_Shipment_TrackingNumber] ON [dbo].[Shipment] ([TrackingNumber]) WHERE ([TrackingNumber]<>'')
 GO
+IF NOT EXISTS (SELECT 1 FROM sys.indexes WHERE name = N'IX_SWDefault_Shipment_TrackingStatus' AND object_id = OBJECT_ID(N'[dbo].[Shipment]'))
+CREATE NONCLUSTERED INDEX [IX_SWDefault_Shipment_TrackingStatus] ON [dbo].[Shipment] ([TrackingStatus])
+GO

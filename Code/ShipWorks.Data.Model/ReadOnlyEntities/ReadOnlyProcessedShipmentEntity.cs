@@ -66,6 +66,7 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
             CombineSplitStatus = source.CombineSplitStatus;
             ReturnShipment = source.ReturnShipment;
             Verified = source.Verified;
+            TrackingStatus = source.TrackingStatus;
             
             
             
@@ -254,6 +255,12 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
         /// View field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
         /// View field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
         public System.Boolean Verified { get; }
+        /// <summary> The TrackingStatus property of the Entity ProcessedShipment<br/><br/>
+        /// </summary>
+        /// <remarks>Mapped on view field: "ProcessedShipmentsView"."TrackingStatus"<br/>
+        /// View field type characteristics (type, precision, scale, length): TinyInt, 3, 0, 0<br/>
+        /// View field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+        public Interapptive.Shared.Enums.TrackingStatus TrackingStatus { get; }
         
         
         

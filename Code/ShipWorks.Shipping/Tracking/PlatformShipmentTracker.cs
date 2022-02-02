@@ -46,8 +46,13 @@ namespace ShipWorks.Shipping.Tracking
             {
                 foreach (var shipment in shipmentsToTrack)
                 {
-                    await platformShipmentTrackerClient.SendShipment(shipment.TrackingNumber, GetCarrierName(shipment.ShipmentTypeCode), warehouseId).ConfigureAwait(false);
-                    trackingRepository.MarkAsSent(shipment);
+                    var clientResult = await platformShipmentTrackerClient.SendShipment(shipment.TrackingNumber, GetCarrierName(shipment.ShipmentTypeCode), warehouseId).ConfigureAwait(false);
+
+                    if (clientResult.Success)
+                    {
+                        await trackingRepository.MarkAsSent(shipment).ConfigureAwait(false);
+                    }
+
                     if (cancellationToken.IsCancellationRequested)
                     {
                         return;

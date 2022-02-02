@@ -23902,6 +23902,11 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(ProcessedShipmentFieldIndex.Verified);}
 		}
+		/// <summary>Creates a new ProcessedShipmentEntity.TrackingStatus field instance</summary>
+		public static EntityField2 TrackingStatus
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ProcessedShipmentFieldIndex.TrackingStatus);}
+		}
 	}
 
 	/// <summary>Field Creation Class for entity ProductEntity</summary>

@@ -2437,6 +2437,7 @@
           <Field Name="ShipUSTerritory" Type="int" Precision="10" FieldIndex="25" />
           <Field Name="TotalWeight" Type="double" IsReadOnly="true" FieldIndex="12" />
           <Field Name="TrackingNumber" Type="string" IsReadOnly="true" MaxLength="50" FieldIndex="13" />
+          <Field Name="TrackingStatus" Type="TrackingStatus" FieldIndex="30" />
           <Field Name="Verified" Type="bool" FieldIndex="29" />
           <Field Name="Voided" Type="bool" IsReadOnly="true" FieldIndex="8" />
           <Field Name="VoidedComputerID" Type="long" IsReadOnly="true" IsOptional="true" Precision="19" FieldIndex="11" />
@@ -4728,7 +4729,7 @@
       <Catalogs>
         <Catalog Name="ShipWorksLocal">
           <Schemas>
-            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2022-01-20T17:31:49.1065182Z">
+            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2022-01-31T15:48:32.9091116Z">
               <Tables>
                 <Table Name="Action">
                   <PkConstraintName Name="PK_Action" />
@@ -9973,6 +9974,7 @@
                     <Field Name="CombineSplitStatus" Ordinal="28" DbType="8" Precision="10" />
                     <Field Name="Service" Ordinal="29" IsOptional="true" DbType="12" Length="101" />
                     <Field Name="Verified" Ordinal="30" DbType="2" />
+                    <Field Name="TrackingStatus" Ordinal="31" DbType="22" Precision="3" />
                   </Fields>
                 </View>
                 <View Name="ProductListView">
@@ -13533,6 +13535,7 @@
             <FieldMapping FieldName="ShipUSTerritory" TargetFieldName="ShipUSTerritory" />
             <FieldMapping FieldName="TotalWeight" TargetFieldName="TotalWeight" TypeConverterToUse="SD.LLBLGen.Pro.TypeConverters.DoubleDecimalConverter" />
             <FieldMapping FieldName="TrackingNumber" TargetFieldName="TrackingNumber" />
+            <FieldMapping FieldName="TrackingStatus" TargetFieldName="TrackingStatus" />
             <FieldMapping FieldName="Verified" TargetFieldName="Verified" />
             <FieldMapping FieldName="Voided" TargetFieldName="Voided" />
             <FieldMapping FieldName="VoidedComputerID" TargetFieldName="VoidedComputerID" />

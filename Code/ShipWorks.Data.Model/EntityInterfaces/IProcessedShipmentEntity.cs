@@ -201,6 +201,12 @@ namespace ShipWorks.Data.Model.EntityInterfaces
         /// View field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
         /// View field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
         System.Boolean Verified { get; }
+        /// <summary> The TrackingStatus property of the Entity ProcessedShipment<br/><br/>
+        /// </summary>
+        /// <remarks>Mapped on view field: "ProcessedShipmentsView"."TrackingStatus"<br/>
+        /// View field type characteristics (type, precision, scale, length): TinyInt, 3, 0, 0<br/>
+        /// View field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+        Interapptive.Shared.Enums.TrackingStatus TrackingStatus { get; }
         
         
         
