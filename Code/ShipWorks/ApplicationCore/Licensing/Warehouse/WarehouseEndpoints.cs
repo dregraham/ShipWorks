@@ -99,6 +99,6 @@ namespace ShipWorks.ApplicationCore.Licensing.Warehouse
         /// Create a get tracking updates route
         /// </summary>
         public static string GetTrackingUpdatesAfter(DateTime lastSeenTimestamp) =>
-            string.Format(getTrackingUpdates, lastSeenTimestamp.ToString("o"));
+            string.Format(getTrackingUpdates, lastSeenTimestamp.ToUniversalTime().ToString("o"));
     }
 }

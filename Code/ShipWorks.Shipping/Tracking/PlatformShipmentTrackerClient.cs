@@ -49,7 +49,8 @@ namespace ShipWorks.Shipping.Tracking
         public async Task<IEnumerable<TrackingNotification>> GetTracking(string WarehouseID, DateTime lastUpdateDate)
         {
             var request = warehouseRequestFactory.Create(WarehouseEndpoints.GetTrackingUpdatesAfter(lastUpdateDate), Method.GET, null);
-            return await warehouseRequestClient.MakeRequest<IEnumerable<TrackingNotification>>(request, "Tracking").ConfigureAwait(false);
+            request.OnBeforeDeserialization = resp => { resp.ContentType = "application/json"; };
+            return await warehouseRequestClient.MakeRequest<List<TrackingNotification>>(request, "Tracking").ConfigureAwait(false);
         }
     }
 }

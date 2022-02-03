@@ -42,8 +42,10 @@ namespace ShipWorks.Shipping.Tracking
             var warehouseId = configurationData.FetchReadOnly().WarehouseID;
             var shipmentsToTrack = (await trackingRepository.FetchShipmentsToTrack().ConfigureAwait(false))
                 .ToList();
+            
             while (shipmentsToTrack.Any() && !cancellationToken.IsCancellationRequested)
             {
+                bool oneShipmentWorked = false;
                 foreach (var shipment in shipmentsToTrack)
                 {
                     var clientResult = await platformShipmentTrackerClient.SendShipment(shipment.TrackingNumber, GetCarrierName(shipment.ShipmentTypeCode), warehouseId).ConfigureAwait(false);
@@ -51,12 +53,18 @@ namespace ShipWorks.Shipping.Tracking
                     if (clientResult.Success)
                     {
                         await trackingRepository.MarkAsSent(shipment).ConfigureAwait(false);
+                        oneShipmentWorked = true;
                     }
 
                     if (cancellationToken.IsCancellationRequested)
                     {
                         return;
                     }
+                }
+
+                if (!oneShipmentWorked)
+                {
+                    return;
                 }
 
                 shipmentsToTrack = (await trackingRepository.FetchShipmentsToTrack().ConfigureAwait(false))

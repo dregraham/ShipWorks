@@ -5,6 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Enums;
+using Interapptive.Shared.Utility;
 using SD.LLBLGen.Pro.QuerySpec;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
@@ -43,7 +44,7 @@ namespace ShipWorks.Shipping.Tracking
             var shipments = await GetShipments(notification.TrackingNumber).ConfigureAwait(false);
             foreach (var shipment in shipments)
             {
-                shipment.TrackingStatus = notification.TrackingStatus;
+                shipment.TrackingStatus = EnumHelper.GetEnumByApiValue<TrackingStatus>(notification.TrackingStatus);
                 shipment.ActualDeliveryDate = notification.ActualDeliveryDate;
                 shipment.EstimatedDeliveryDate = notification.EstimatedDeliveryDate;
                 shipment.TrackingHubTimestamp = notification.HubTimestamp;
