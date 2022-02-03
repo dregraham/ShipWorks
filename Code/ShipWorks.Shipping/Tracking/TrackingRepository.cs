@@ -67,6 +67,9 @@ namespace ShipWorks.Shipping.Tracking
                 .Where(ShipmentFields.ShipmentType != ShipmentTypeCode.Other)
                 .Where(ShipmentFields.ShipmentType != ShipmentTypeCode.AmazonSFP)
                 .Where(ShipmentFields.ShipmentType != ShipmentTypeCode.AmazonSWA)
+                .Where(ShipmentFields.ShipmentType != ShipmentTypeCode.DhlExpress)
+                .Where(ShipmentFields.ShipmentType != ShipmentTypeCode.Asendia)
+                .Where(ShipmentFields.ShipmentType != ShipmentTypeCode.OnTrac)
                 .Where(ShipmentFields.Processed == true)
                 .Where(ShipmentFields.Voided == false)
                 .Limit(100);

@@ -75,7 +75,9 @@ namespace ShipWorks.Shipping.Tracking
             }
         }
 
-        
+        /// <summary>
+        /// Return the platform friendly carrier name
+        /// </summary>
         private string GetCarrierName(ShipmentTypeCode shipmentType)
         {
             if (shipmentTypeManager.IsPostal(shipmentType))
