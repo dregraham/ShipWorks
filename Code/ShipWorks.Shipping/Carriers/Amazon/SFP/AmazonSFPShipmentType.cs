@@ -4,7 +4,6 @@ using System.Diagnostics.CodeAnalysis;
 using System.Drawing.Imaging;
 using System.Linq;
 using Interapptive.Shared.Collections;
-using Interapptive.Shared.Enums;
 using Interapptive.Shared.Utility;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.ApplicationCore.Licensing;

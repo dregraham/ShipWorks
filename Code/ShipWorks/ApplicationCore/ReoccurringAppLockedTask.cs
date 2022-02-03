@@ -21,6 +21,9 @@ namespace ShipWorks.ApplicationCore
         private CancellationToken cancellationToken;
         private TaskCompletionSource<Unit> delayTaskCompletionSource;
 
+        /// <summary>
+        /// Constructor
+        /// </summary>
         protected ReoccurringAppLockedTask( 
             Func<Type, ILog> logFactory, 
             ISqlSession sqlSession,

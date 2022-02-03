@@ -22,6 +22,9 @@ namespace ShipWorks.Shipping.Tracking
         private readonly IShipmentTypeManager shipmentTypeManager;
         private readonly ILog log;
 
+        /// <summary>
+        /// Constructor
+        /// </summary>
         public PlatformShipmentTracker(ITrackingRepository trackingRepository, 
             IPlatformShipmentTrackerClient platformShipmentTrackerClient, IConfigurationData configurationData,
             IShipmentTypeManager shipmentTypeManager, Func<Type, ILog> logFactory)
@@ -72,6 +75,7 @@ namespace ShipWorks.Shipping.Tracking
             }
         }
 
+        
         private string GetCarrierName(ShipmentTypeCode shipmentType)
         {
             if (shipmentTypeManager.IsPostal(shipmentType))
@@ -83,22 +87,15 @@ namespace ShipWorks.Shipping.Tracking
             {
                 return "ups";
             }
-            
-            switch (shipmentType)
+
+            if (shipmentType == ShipmentTypeCode.FedEx)
             {
-                case ShipmentTypeCode.Asendia:
-                    return "asendia";
-                case ShipmentTypeCode.DhlExpress:
-                    return "dhl_express";
-                case ShipmentTypeCode.FedEx:
-                    return "fedex";
-                case ShipmentTypeCode.OnTrac:
-                    return "ontrac";
+                return "fedex";
             }
 
             // Should never happen.
-            Debug.Fail("Unsupported tracking type. Shouldn't have gotten this shipment.");
-            log.Warn("Unsupported shipment type found in PlatformShipmentTracker.");
+            Debug.Fail($"Unsupported shipment type {shipmentType}. Shouldn't have gotten this shipment.");
+            log.Warn($"Unsupported shipment type {shipmentType} found in PlatformShipmentTracker.");
             return EnumHelper.GetDescription(shipmentType).ToLower();
         }
 

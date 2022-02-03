@@ -23,10 +23,14 @@ namespace ShipWorks.Shipping.Tracking
     {
         private readonly ISqlAdapter sqlAdapter;
         
+        /// <summary>
+        /// Constructor
+        /// </summary>
         public TrackingRepository(ISqlAdapterFactory sqlAdapterFactory)
         {
             sqlAdapter = sqlAdapterFactory.Create();
         }
+        
         /// <summary>
         /// Marks the shipment with a status of AwaitingResponse
         /// </summary>

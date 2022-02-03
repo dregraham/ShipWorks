@@ -7,7 +7,6 @@ using Autofac;
 using Interapptive.Shared.Business;
 using Interapptive.Shared.Collections;
 using Interapptive.Shared.ComponentRegistration;
-using Interapptive.Shared.Enums;
 using Interapptive.Shared.Utility;
 using log4net;
 using ShipEngine.CarrierApi.Client.Model;
@@ -410,7 +409,6 @@ namespace ShipWorks.Shipping.Carriers.Dhl.API.Stamps
         protected override void SaveLabelInformation(ShipmentEntity shipment, CreateIndiciumResult result, ThermalLanguage? thermalType)
         {
             shipment.TrackingNumber = result.TrackingNumber;
-            shipment.TrackingStatus = TrackingStatus.Pending;
             shipment.ShipmentCost = GetRateTotalWithSurchargesAndAddOns(shipment, result.Rate);
             shipment.DhlExpress.StampsTransactionID = result.StampsTxID;
             shipment.BilledWeight = result.Rate.EffectiveWeightInOunces / 16D;

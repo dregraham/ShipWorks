@@ -26,6 +26,9 @@ namespace ShipWorks.Shipping.Tracking
         /// </summary>
         Task<IEnumerable<ShipmentEntity>> FetchShipmentsToTrack();
 
+        /// <summary>
+        /// Gets the latest notification date from all the tracked shipments
+        /// </summary>
         Task<DateTime> GetLatestNotificationDate();
     }
 }
