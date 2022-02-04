@@ -29,7 +29,7 @@ namespace ShipWorks.Shipping.Tracking
         /// <summary>
         /// 2 minutes
         /// </summary>
-        protected override int RunInterval => 60 * 1000;
+        protected override int RunInterval => (int) TimeSpan.FromMinutes(2).TotalMilliseconds;
         
         /// <summary>
         /// The name of the lock taken. Must be unique!

@@ -32,7 +32,7 @@ namespace ShipWorks.Shipping.Tracking
         }
         
         /// <summary>
-        /// Marks the shipment with a status of AwaitingResponse
+        /// Marks the shipment with a status of AwaitingUpdate
         /// </summary>
         public async Task MarkAsSent(ShipmentEntity shipment)
         {
@@ -64,14 +64,14 @@ namespace ShipWorks.Shipping.Tracking
         {
             var query = new QueryFactory().Shipment
                 .Where(ShipmentFields.TrackingStatus == TrackingStatus.Pending)
-                .Where(ShipmentFields.ShipmentType != ShipmentTypeCode.Other)
-                .Where(ShipmentFields.ShipmentType != ShipmentTypeCode.AmazonSFP)
-                .Where(ShipmentFields.ShipmentType != ShipmentTypeCode.AmazonSWA)
-                .Where(ShipmentFields.ShipmentType != ShipmentTypeCode.DhlExpress)
-                .Where(ShipmentFields.ShipmentType != ShipmentTypeCode.Asendia)
-                .Where(ShipmentFields.ShipmentType != ShipmentTypeCode.OnTrac)
-                .Where(ShipmentFields.Processed == true)
-                .Where(ShipmentFields.Voided == false)
+                .AndWhere(ShipmentFields.ShipmentType != ShipmentTypeCode.Other)
+                .AndWhere(ShipmentFields.ShipmentType != ShipmentTypeCode.AmazonSFP)
+                .AndWhere(ShipmentFields.ShipmentType != ShipmentTypeCode.AmazonSWA)
+                .AndWhere(ShipmentFields.ShipmentType != ShipmentTypeCode.DhlExpress)
+                .AndWhere(ShipmentFields.ShipmentType != ShipmentTypeCode.Asendia)
+                .AndWhere(ShipmentFields.ShipmentType != ShipmentTypeCode.OnTrac)
+                .AndWhere(ShipmentFields.Processed == true)
+                .AndWhere(ShipmentFields.Voided == false)
                 .Limit(100);
 
             return await QueryShipmentEntities(query).ConfigureAwait(false);
