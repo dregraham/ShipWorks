@@ -1,8 +1,10 @@
 ﻿using System;
+using System.Reflection;
 using Interapptive.Shared.Enums;
 
 namespace ShipWorks.Shipping.Tracking.DTO
 {
+    [Obfuscation]
     public class TrackingNotification
     {
         public string TrackingNumber { get; set; }
