@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Enums;
 using Interapptive.Shared.Utility;
+using log4net;
 using SD.LLBLGen.Pro.QuerySpec;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
@@ -22,13 +23,15 @@ namespace ShipWorks.Shipping.Tracking
     public class TrackingRepository : ITrackingRepository
     {
         private readonly ISqlAdapter sqlAdapter;
-        
+        private readonly ILog log;
+
         /// <summary>
         /// Constructor
         /// </summary>
-        public TrackingRepository(ISqlAdapterFactory sqlAdapterFactory)
+        public TrackingRepository(ISqlAdapterFactory sqlAdapterFactory, Func<Type, ILog> typeFactory)
         {
             sqlAdapter = sqlAdapterFactory.Create();
+            log = typeFactory(typeof(TrackingRepository));
         }
         
         /// <summary>
@@ -48,7 +51,11 @@ namespace ShipWorks.Shipping.Tracking
             var shipments = await GetShipments(notification.TrackingNumber).ConfigureAwait(false);
             foreach (var shipment in shipments)
             {
-                shipment.TrackingStatus = EnumHelper.GetEnumByApiValue<TrackingStatus>(notification.TrackingStatus);
+                if (!EnumHelper.TryGetEnumByApiValue(notification.TrackingStatus, out TrackingStatus? status))
+                {
+                    log.Warn($"Unknown tracking api code encountered: {notification.TrackingStatus}");
+                }
+                shipment.TrackingStatus = status ?? TrackingStatus.Unknown;
                 shipment.ActualDeliveryDate = notification.ActualDeliveryDate;
                 shipment.EstimatedDeliveryDate = notification.EstimatedDeliveryDate;
                 shipment.TrackingHubTimestamp = notification.HubTimestamp;
