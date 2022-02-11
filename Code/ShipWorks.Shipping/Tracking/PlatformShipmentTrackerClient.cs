@@ -39,7 +39,7 @@ namespace ShipWorks.Shipping.Tracking
                 WarehouseId = warehouseID
             };
             var request = warehouseRequestFactory.Create(WarehouseEndpoints.Tracking, Method.POST, trackingRequest);
-            var result = await warehouseRequestClient.MakeRequest(request, "Tracking").ConfigureAwait(false);
+            var result = await warehouseRequestClient.MakeRequest(request, "TrackingSendShipment").ConfigureAwait(false);
             return result;
         }
 
@@ -50,7 +50,7 @@ namespace ShipWorks.Shipping.Tracking
         {
             var request = warehouseRequestFactory.Create(WarehouseEndpoints.GetTrackingUpdatesAfter(lastUpdateDate), Method.GET, null);
             request.OnBeforeDeserialization = resp => { resp.ContentType = "application/json"; };
-            return await warehouseRequestClient.MakeRequest<List<TrackingNotification>>(request, "Tracking").ConfigureAwait(false);
+            return await warehouseRequestClient.MakeRequest<List<TrackingNotification>>(request, "GetTracking").ConfigureAwait(false);
         }
     }
 }

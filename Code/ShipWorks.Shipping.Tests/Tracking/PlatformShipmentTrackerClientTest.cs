@@ -37,7 +37,7 @@ namespace ShipWorks.Shipping.Tests.Tracking
             await testObject.SendShipment("t", "c", "w").ConfigureAwait(false);
 
             mock.Mock<IWarehouseRequestClient>()
-                .Verify(c=>c.MakeRequest(request.Object, "Tracking"), Times.Once);
+                .Verify(c=>c.MakeRequest(request.Object, "SendShipment"), Times.Once);
         }
 
         [Fact]
@@ -62,7 +62,7 @@ namespace ShipWorks.Shipping.Tests.Tracking
             await testObject.GetTracking("w", lastUpdateDate).ConfigureAwait(false);
             
             mock.Mock<IWarehouseRequestClient>()
-                .Verify(c=>c.MakeRequest<IEnumerable<TrackingNotification>>(request.Object, "Tracking"), Times.Once);
+                .Verify(c=>c.MakeRequest<IEnumerable<TrackingNotification>>(request.Object, "GetTracking"), Times.Once);
         }
 
         public void Dispose()
