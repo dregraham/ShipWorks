@@ -17,6 +17,7 @@ namespace ShipWorks.ApplicationCore.Licensing.TangoRequests
         private readonly ITangoWebRequestClient webRequestClient;
         private readonly ITangoWebClient tangoWebClient;
         private readonly ICustomerLicenseReader customerLicenseReader;
+        private readonly ILicenseService licenseService;
 
         /// <summary>
         /// Constructor
@@ -25,12 +26,14 @@ namespace ShipWorks.ApplicationCore.Licensing.TangoRequests
             IHttpRequestSubmitterFactory requestSubmitterFactory,
             ITangoWebRequestClient webRequestClient,
             ITangoWebClient tangoWebClient,
-            ICustomerLicenseReader customerLicenseReader)
+            ICustomerLicenseReader customerLicenseReader,
+            ILicenseService licenseService)
         {
             this.tangoWebClient = tangoWebClient;
             this.webRequestClient = webRequestClient;
             this.requestSubmitterFactory = requestSubmitterFactory;
             this.customerLicenseReader = customerLicenseReader;
+            this.licenseService = licenseService;
         }
 
         /// <summary>
@@ -38,7 +41,8 @@ namespace ShipWorks.ApplicationCore.Licensing.TangoRequests
         /// </summary>
         public GenericResult<TokenResponse> GetRedirectToken()
         {
-            string customerKey = customerLicenseReader.Read();
+            
+            string customerKey = licenseService.GetCustomerLicenseKey();
 
             if (string.IsNullOrEmpty(customerKey))
             {
