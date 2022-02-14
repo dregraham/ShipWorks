@@ -68,6 +68,9 @@ namespace ShipWorks.Templates.Processing.TemplateXml.ElementOutlines
         {
             AddElement("ShipmentType", CreateShipmentTypeOutline(context));
             AddElement("Status", () => GetShipmentStatus(Shipment));
+            AddElement("DeliveryStatus", () => EnumHelper.GetDescription(Shipment.TrackingStatus));
+            AddElement("DeliveryDate", () => Shipment.ActualDeliveryDate);
+            AddElement("EstimatedDeliveryDate", () => Shipment.EstimatedDeliveryDate);
             AddElement("Processed", () => Shipment.Processed);
             AddElementLegacy2x("IsProcessed", () => Shipment.Processed);
             AddElement("ProcessedDate", () => Shipment.ProcessedDate);

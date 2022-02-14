@@ -7,6 +7,7 @@ using System.Xml.Linq;
 using Interapptive.Shared;
 using Interapptive.Shared.Business;
 using Interapptive.Shared.Collections;
+using Interapptive.Shared.Enums;
 using Interapptive.Shared.Net;
 using Interapptive.Shared.Security;
 using Interapptive.Shared.Utility;
@@ -757,6 +758,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Express1.Net
             shipment.TrackingNumber = tracking;
             shipment.ShipmentCost = rate.Amount + (rate.AddOns != null ? rate.AddOns.Sum(a => a.Amount) : 0);
             shipment.Postal.Usps.UspsTransactionID = uspsGuid;
+
+            shipment.TrackingStatus = TrackingStatus.Pending;
 
             // Set the thermal type for the shipment
             shipment.ActualLabelFormat = (int?) thermalType;

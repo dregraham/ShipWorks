@@ -9,6 +9,7 @@ using Interapptive.Shared;
 using Interapptive.Shared.Business;
 using Interapptive.Shared.Collections;
 using Interapptive.Shared.Data;
+using Interapptive.Shared.Enums;
 using Interapptive.Shared.Utility;
 using log4net;
 using SD.LLBLGen.Pro.ORMSupportClasses;
@@ -185,6 +186,7 @@ namespace ShipWorks.Shipping
             shipment.Voided = false;
             shipment.ShipmentCost = 0;
             shipment.TrackingNumber = "";
+            shipment.TrackingStatus = TrackingStatus.NotTracked;
             shipment.ResidentialDetermination = (int) ResidentialDeterminationType.CommercialIfCompany;
             shipment.ResidentialResult = true;
             shipment.ReturnShipment = false;
@@ -195,7 +197,7 @@ namespace ShipWorks.Shipping
             shipment.ShipSenseChangeSets = new XElement("ChangeSets").ToString();
             shipment.ShipSenseEntry = new byte[0];
             shipment.OnlineShipmentID = string.Empty;
-
+            
             //TODO: Remove this once the profile copying is implemented.
             shipment.RequestedLabelFormat = (int) ThermalLanguage.None;
 
@@ -359,6 +361,7 @@ namespace ShipWorks.Shipping
             clonedShipment.Processed = false;
             clonedShipment.ProcessedDate = null;
             clonedShipment.TrackingNumber = "";
+            clonedShipment.TrackingStatus = TrackingStatus.NotTracked;
             clonedShipment.Voided = false;
             clonedShipment.VoidedComputerID = null;
             clonedShipment.VoidedDate = null;

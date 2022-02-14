@@ -23902,6 +23902,11 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(ProcessedShipmentFieldIndex.Verified);}
 		}
+		/// <summary>Creates a new ProcessedShipmentEntity.TrackingStatus field instance</summary>
+		public static EntityField2 TrackingStatus
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ProcessedShipmentFieldIndex.TrackingStatus);}
+		}
 	}
 
 	/// <summary>Field Creation Class for entity ProductEntity</summary>
@@ -27291,6 +27296,26 @@ namespace ShipWorks.Data.Model.HelperClasses
 		public static EntityField2 CarrierAccount
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(ShipmentFieldIndex.CarrierAccount);}
+		}
+		/// <summary>Creates a new ShipmentEntity.TrackingHubTimestamp field instance</summary>
+		public static EntityField2 TrackingHubTimestamp
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ShipmentFieldIndex.TrackingHubTimestamp);}
+		}
+		/// <summary>Creates a new ShipmentEntity.TrackingStatus field instance</summary>
+		public static EntityField2 TrackingStatus
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ShipmentFieldIndex.TrackingStatus);}
+		}
+		/// <summary>Creates a new ShipmentEntity.EstimatedDeliveryDate field instance</summary>
+		public static EntityField2 EstimatedDeliveryDate
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ShipmentFieldIndex.EstimatedDeliveryDate);}
+		}
+		/// <summary>Creates a new ShipmentEntity.ActualDeliveryDate field instance</summary>
+		public static EntityField2 ActualDeliveryDate
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ShipmentFieldIndex.ActualDeliveryDate);}
 		}
 	}
 

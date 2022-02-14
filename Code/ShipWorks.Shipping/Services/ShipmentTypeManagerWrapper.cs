@@ -127,6 +127,11 @@ namespace ShipWorks.Shipping.Services
         public bool IsDhl(PostalServiceType serviceType) => ShipmentTypeManager.IsDhl(serviceType);
 
         /// <summary>
+        /// Indicates if the shipment type is UPS
+        /// </summary>
+        public bool IsUps(ShipmentTypeCode shipmentType) => ShipmentTypeManager.IsUps(shipmentType);
+
+        /// <summary>
         /// Get the last rule that is applicable for the given shipment
         /// </summary>
         private ShippingProviderRuleEntity GetLastApplicableRule(ShipmentEntity shipment) =>

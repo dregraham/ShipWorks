@@ -7,4 +7,6 @@
     <typeImport typeName="Interapptive.Shared.Enums.AmazonIsPrime" assemblyFile="..\..\Artifacts\Application\Interapptive.Shared.dll"/> 
     <typeImport typeName="Interapptive.Shared.Win32.Native.VirtualKeys" assemblyFile="..\..\Artifacts\Application\Interapptive.Shared.dll"/>         
     <typeImport typeName="Interapptive.Shared.IO.Hardware.DeviceModel" assemblyFile="..\..\Artifacts\Application\Interapptive.Shared.dll"/>
+    <typeImport typeName="Interapptive.Shared.IO.Hardware.DeviceModel" assemblyFile="..\..\Artifacts\Application\Interapptive.Shared.dll"/>
+    <typeImport typeName="Interapptive.Shared.Enums.TrackingStatus" assemblyFile="..\..\Artifacts\Application\Interapptive.Shared.dll"/>
 </typeImports> 

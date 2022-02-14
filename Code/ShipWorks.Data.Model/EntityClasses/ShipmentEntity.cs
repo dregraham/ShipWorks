@@ -1099,6 +1099,14 @@ namespace ShipWorks.Data.Model.EntityClasses
 			_fieldsCustomProperties.Add("LoggedVoidToHub", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
 			_fieldsCustomProperties.Add("CarrierAccount", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+			_fieldsCustomProperties.Add("TrackingHubTimestamp", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+			_fieldsCustomProperties.Add("TrackingStatus", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+			_fieldsCustomProperties.Add("EstimatedDeliveryDate", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+			_fieldsCustomProperties.Add("ActualDeliveryDate", fieldHashtable);
 		}
 		#endregion
 
@@ -2589,6 +2597,50 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			get { return (System.String)GetValue((int)ShipmentFieldIndex.CarrierAccount, true); }
 			set	{ SetValue((int)ShipmentFieldIndex.CarrierAccount, value); }
+		}
+
+		/// <summary> The TrackingHubTimestamp property of the Entity Shipment<br/><br/></summary>
+		/// <remarks>Mapped on  table field: "Shipment"."TrackingHubTimestamp"<br/>
+		/// Table field type characteristics (type, precision, scale, length): DateTime2, 3, 0, 0<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		[DataMember]
+		public virtual Nullable<System.DateTime> TrackingHubTimestamp
+		{
+			get { return (Nullable<System.DateTime>)GetValue((int)ShipmentFieldIndex.TrackingHubTimestamp, false); }
+			set	{ SetValue((int)ShipmentFieldIndex.TrackingHubTimestamp, value); }
+		}
+
+		/// <summary> The TrackingStatus property of the Entity Shipment<br/><br/></summary>
+		/// <remarks>Mapped on  table field: "Shipment"."TrackingStatus"<br/>
+		/// Table field type characteristics (type, precision, scale, length): TinyInt, 3, 0, 0<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
+		public virtual Interapptive.Shared.Enums.TrackingStatus TrackingStatus
+		{
+			get { return (Interapptive.Shared.Enums.TrackingStatus)GetValue((int)ShipmentFieldIndex.TrackingStatus, true); }
+			set	{ SetValue((int)ShipmentFieldIndex.TrackingStatus, value); }
+		}
+
+		/// <summary> The EstimatedDeliveryDate property of the Entity Shipment<br/><br/></summary>
+		/// <remarks>Mapped on  table field: "Shipment"."EstimatedDeliveryDate"<br/>
+		/// Table field type characteristics (type, precision, scale, length): DateTime2, 3, 0, 0<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		[DataMember]
+		public virtual Nullable<System.DateTime> EstimatedDeliveryDate
+		{
+			get { return (Nullable<System.DateTime>)GetValue((int)ShipmentFieldIndex.EstimatedDeliveryDate, false); }
+			set	{ SetValue((int)ShipmentFieldIndex.EstimatedDeliveryDate, value); }
+		}
+
+		/// <summary> The ActualDeliveryDate property of the Entity Shipment<br/><br/></summary>
+		/// <remarks>Mapped on  table field: "Shipment"."ActualDeliveryDate"<br/>
+		/// Table field type characteristics (type, precision, scale, length): DateTime2, 3, 0, 0<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		[DataMember]
+		public virtual Nullable<System.DateTime> ActualDeliveryDate
+		{
+			get { return (Nullable<System.DateTime>)GetValue((int)ShipmentFieldIndex.ActualDeliveryDate, false); }
+			set	{ SetValue((int)ShipmentFieldIndex.ActualDeliveryDate, value); }
 		}
 
 		/// <summary> Gets the EntityCollection with the related entities of type 'ShipmentCustomsItemEntity' which are related to this entity via a relation of type '1:n'. If the EntityCollection hasn't been fetched yet, the collection returned will be empty.<br/><br/></summary>

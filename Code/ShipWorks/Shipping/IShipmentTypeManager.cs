@@ -72,6 +72,11 @@ namespace ShipWorks.Shipping
         /// Indicates if the shipment type is DHL
         /// </summary>
         bool IsDhl(PostalServiceType serviceType);
+        
+        /// <summary>
+        /// Indicates if the shipment type is UPS
+        /// </summary>
+        bool IsUps(ShipmentTypeCode shipmentType);
 
         /// <summary>
         /// List of shipment types excluded by best rate
