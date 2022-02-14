@@ -1,4 +1,5 @@
-﻿using ShipWorks.Data.Model.EntityInterfaces;
+﻿using System;
+using ShipWorks.Data.Model.EntityInterfaces;
 
 namespace ShipWorks.ApplicationCore.Licensing.Warehouse
 {
@@ -22,14 +23,16 @@ namespace ShipWorks.ApplicationCore.Licensing.Warehouse
         public const string SetActivationBulk = "api/products/activation";
         public const string GetConfig = "api/config";
         public const string GetSmsVerificationNumber = "api/config/smsVerificationNumber";
-        
+        public const string Tracking = "api/tracking";
+            
         private const string notifyShipped = "api/customer/notifyShipped/{0}";
         private const string linkWarehouse = "api/warehouses/{0}/link";
         private const string orders = "api/warehouses/{0}/orders";
         private const string shipOrder = "api/orders/{0}/ship";
         private const string voidShipment = "api/orders/{0}/void";
         private const string rerouteOrderItems = "api/orders/{0}/rerouteItems";
-
+        private const string getTrackingUpdates = "api/tracking/{0}";
+         
         /// <summary>
         /// Create a link warehouse endpoint
         /// </summary>
@@ -91,5 +94,11 @@ namespace ShipWorks.ApplicationCore.Licensing.Warehouse
 
         public static string NotifyShipped(string salesOrderId) =>
             string.Format(notifyShipped, salesOrderId);
+
+        /// <summary>
+        /// Create a get tracking updates route
+        /// </summary>
+        public static string GetTrackingUpdatesAfter(DateTime lastSeenTimestamp) =>
+            string.Format(getTrackingUpdates, lastSeenTimestamp.ToUniversalTime().ToString("o"));
     }
 }

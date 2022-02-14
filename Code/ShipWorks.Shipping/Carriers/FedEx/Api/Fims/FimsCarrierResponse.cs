@@ -1,4 +1,5 @@
-﻿using Interapptive.Shared.Utility;
+﻿using Interapptive.Shared.Enums;
+using Interapptive.Shared.Utility;
 using ShipWorks.Common.IO.Hardware.Printers;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.Api;
@@ -51,6 +52,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Fims
         public void Process()
         {
             shipmentEntity.TrackingNumber = string.IsNullOrEmpty(fimsShipResponse.ParcelID) ? fimsShipResponse.TrackingNumber : fimsShipResponse.ParcelID;
+            shipmentEntity.TrackingStatus = TrackingStatus.Pending;
             shipmentEntity.FedEx.Packages[0].TrackingNumber = shipmentEntity.TrackingNumber;
             shipmentEntity.FedEx.MasterFormID = string.Empty;
             shipmentEntity.ShipmentCost = 0;

@@ -380,6 +380,8 @@ namespace ShipWorks.Data.Model.EntityClasses
 			_fieldsCustomProperties.Add("ReturnShipment", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
 			_fieldsCustomProperties.Add("Verified", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+			_fieldsCustomProperties.Add("TrackingStatus", fieldHashtable);
 		}
 		#endregion
 
@@ -766,6 +768,17 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			get { return (System.Boolean)GetValue((int)ProcessedShipmentFieldIndex.Verified, true); }
 			set	{ SetValue((int)ProcessedShipmentFieldIndex.Verified, value); }
+		}
+
+		/// <summary> The TrackingStatus property of the Entity ProcessedShipment<br/><br/></summary>
+		/// <remarks>Mapped on  view field: "ProcessedShipmentsView"."TrackingStatus"<br/>
+		/// View field type characteristics (type, precision, scale, length): TinyInt, 3, 0, 0<br/>
+		/// View field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
+		public virtual Interapptive.Shared.Enums.TrackingStatus TrackingStatus
+		{
+			get { return (Interapptive.Shared.Enums.TrackingStatus)GetValue((int)ProcessedShipmentFieldIndex.TrackingStatus, true); }
+			set	{ SetValue((int)ProcessedShipmentFieldIndex.TrackingStatus, value); }
 		}
 	
 		/// <summary> Gets the type of the hierarchy this entity is in. </summary>

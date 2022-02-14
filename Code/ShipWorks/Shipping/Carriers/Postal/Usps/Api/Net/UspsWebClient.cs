@@ -15,6 +15,7 @@ using Interapptive.Shared;
 using Interapptive.Shared.Business;
 using Interapptive.Shared.Business.Geography;
 using Interapptive.Shared.Collections;
+using Interapptive.Shared.Enums;
 using Interapptive.Shared.Extensions;
 using Interapptive.Shared.Net;
 using Interapptive.Shared.Security;
@@ -1160,6 +1161,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
             shipment.ShipmentCost = result.ShipmentCost;
             shipment.Postal.Usps.UspsTransactionID = result.StampsTxID;
             shipment.BilledWeight = result.Rate.EffectiveWeightInOunces / 16D;
+
+            shipment.TrackingStatus = TrackingStatus.Pending;
 
             // Set the thermal type for the shipment
             shipment.ActualLabelFormat = (int?) thermalType;

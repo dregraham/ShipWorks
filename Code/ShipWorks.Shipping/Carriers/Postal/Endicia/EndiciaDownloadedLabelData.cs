@@ -3,6 +3,7 @@ using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
 using Interapptive.Shared.ComponentRegistration;
+using Interapptive.Shared.Enums;
 using ShipWorks.Data;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.Postal.Endicia.WebServices.LabelService;
@@ -44,6 +45,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
             {
                 // Tracking and cost
                 shipment.TrackingNumber = response.TrackingNumber;
+                shipment.TrackingStatus = TrackingStatus.Pending;
                 shipment.ShipmentCost = shipment.Postal.NoPostage ? 0 : response.FinalPostage;
                 shipment.Postal.Endicia.TransactionID = response.TransactionID;
 

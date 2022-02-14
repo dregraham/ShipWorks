@@ -68,6 +68,23 @@ namespace ShipWorks.ApplicationCore.Licensing
         public bool IsHub => CheckRestriction(EditionFeature.Warehouse, null) == EditionRestrictionLevel.None;
 
         /// <summary>
+        /// Gets the customer's license type
+        /// </summary>
+        private CustomerLicenseKeyType GetCustomerLicenseKeyType()
+        {
+            return IsLegacy ? CustomerLicenseKeyType.Legacy : CustomerLicenseKeyType.WebReg;
+        }
+
+        /// <summary>
+        /// Get the customers license key
+        /// </summary>
+        public string GetCustomerLicenseKey()
+        {
+            var customerLicenseKeyType = GetCustomerLicenseKeyType();
+            return reader.Value.Read(customerLicenseKeyType);
+        }
+        
+        /// <summary>
         /// Get the customers license key
         /// </summary>
         public string GetCustomerLicenseKey(CustomerLicenseKeyType licenseKeyType)
