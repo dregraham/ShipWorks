@@ -1,3 +1,4 @@
+using Interapptive.Shared.Enums;
 using Interapptive.Shared.Utility;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.FedEx.Api.Shipping;
@@ -63,6 +64,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Ship.Manipulators.Response
             if (response.CompletedShipmentDetail.MasterTrackingId != null)
             {
                 shipment.TrackingNumber = response.CompletedShipmentDetail.MasterTrackingId.TrackingNumber;
+                shipment.TrackingStatus = TrackingStatus.Pending;
                 shipment.FedEx.MasterFormID = response.CompletedShipmentDetail.MasterTrackingId.FormId;
             }
             else
@@ -75,6 +77,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Ship.Manipulators.Response
 
                 string trackingNumber = response.CompletedShipmentDetail.CompletedPackageDetails[0].TrackingIds[0].TrackingNumber;
                 shipment.TrackingNumber = FedExUtility.BuildTrackingNumber(trackingNumber, shipment.FedEx);
+                shipment.TrackingStatus = TrackingStatus.Pending;
 
                 shipment.FedEx.MasterFormID = "";
             }

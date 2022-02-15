@@ -11,6 +11,7 @@ using System.Xml.XPath;
 using Interapptive.Shared.Imaging;
 using Interapptive.Shared.Utility;
 using Interapptive.Shared.ComponentRegistration;
+using Interapptive.Shared.Enums;
 using ShipWorks.Data;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
@@ -94,6 +95,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.WebTools
 
             string barcode = XPathUtility.Evaluate(xpath, "//EMConfirmationNumber", "");
             postalShipment.Shipment.TrackingNumber = barcode;
+            postalShipment.Shipment.TrackingStatus = TrackingStatus.Pending;
 
             string imageBase64 = XPathUtility.Evaluate(xpath, "//EMLabel", "");
 
@@ -139,6 +141,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.WebTools
 
             // Update the tracking number
             postalShipment.Shipment.TrackingNumber = tracking;
+            postalShipment.Shipment.TrackingStatus = TrackingStatus.Pending;
 
             // Save the label images
             SaveLabelImagesDomestic(postalShipment, imageBase64, isCustomsRequired);
@@ -166,6 +169,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.WebTools
 
             string barcode = XPathUtility.Evaluate(xpath, "//BarcodeNumber", "");
             postalShipment.Shipment.TrackingNumber = barcode;
+            postalShipment.Shipment.TrackingStatus = TrackingStatus.Pending;
 
             string label = XPathUtility.Evaluate(xpath, "//LabelImage", "");
             string part2 = XPathUtility.Evaluate(xpath, "//Page2Image", "");

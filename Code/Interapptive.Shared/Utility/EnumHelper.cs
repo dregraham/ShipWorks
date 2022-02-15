@@ -90,18 +90,47 @@ namespace Interapptive.Shared.Utility
                 throw new ArgumentNullException("apiValue");
             }
 
-            // Iterate through each enum value and see if ApiValue matches
-            foreach (T value in Enum.GetValues(typeof(T)))
+            if (TryGetEnumByApiValue<T>(apiValue, out var value) && value.HasValue)
             {
-                EnumMetadata metadata = GetEnumMetadata((Enum) (object) value);
-                if (!string.IsNullOrWhiteSpace(metadata.ApiValue) && metadata.ApiValue.ToLowerInvariant() == apiValue.ToLowerInvariant() && !metadata.Deprecated)
-                {
-                    return value;
-                }
+                return value.Value;
             }
 
             // If we didn't find out, throw
-            throw new InvalidOperationException(string.Format("No matching Enum was found for Enum type '{0}', apiValue '{1}'.", typeof(T).ToString(), apiValue));
+            throw new InvalidOperationException($"No matching Enum was found for Enum type '{typeof(T)}', apiValue '{apiValue}'.");
+        }
+        
+        
+        /// <summary>
+        /// Trys to get the Enum by ApiValue
+        /// </summary>
+        /// <typeparam name="T">The type of Enum for which to find by ApiValue</typeparam>
+        /// <param name="apiValue">The text on which to query</param>
+        /// <param name="value">
+        /// The first T enum whose ApiValue matches the provided apiValue
+        /// If no T enum is found or apiValue is null, value will be null
+        /// </param>
+        /// <returns>True if apiValue is found. Otherwise null</returns>
+        public static bool TryGetEnumByApiValue<T>(string apiValue, out T? value) where T : struct
+        {
+            if (string.IsNullOrWhiteSpace(apiValue))
+            {
+                value = null;
+                return false;
+            }
+
+            // Iterate through each enum value and see if ApiValue matches
+            foreach (T enumValue in Enum.GetValues(typeof(T)))
+            {
+                EnumMetadata metadata = GetEnumMetadata((Enum) (object) enumValue);
+                if (!string.IsNullOrWhiteSpace(metadata.ApiValue) && metadata.ApiValue.ToLowerInvariant() == apiValue.ToLowerInvariant() && !metadata.Deprecated)
+                {
+                    value = enumValue;
+                    return true;
+                }
+            }
+
+            value = null;
+            return false;
         }
 
         /// <summary>

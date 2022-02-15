@@ -10180,6 +10180,8 @@ namespace ShipWorks.Data.Model
 		ReturnShipment,
 		///<summary>Verified. </summary>
 		Verified,
+		///<summary>TrackingStatus. </summary>
+		TrackingStatus,
 		/// <summary></summary>
 		AmountOfFields
 	}
@@ -11632,6 +11634,14 @@ namespace ShipWorks.Data.Model
 		LoggedVoidToHub,
 		///<summary>CarrierAccount. </summary>
 		CarrierAccount,
+		///<summary>TrackingHubTimestamp. </summary>
+		TrackingHubTimestamp,
+		///<summary>TrackingStatus. </summary>
+		TrackingStatus,
+		///<summary>EstimatedDeliveryDate. </summary>
+		EstimatedDeliveryDate,
+		///<summary>ActualDeliveryDate. </summary>
+		ActualDeliveryDate,
 		/// <summary></summary>
 		AmountOfFields
 	}

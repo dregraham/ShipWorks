@@ -1024,6 +1024,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api
             // Update shipment info
             shipment.ShipmentCost = XPathUtility.Evaluate(xpath, "//TotalCharges/MonetaryValue", 0m);
             shipment.TrackingNumber = XPathUtility.Evaluate(xpath, "//ShipmentIdentificationNumber", "");
+            shipment.TrackingStatus = TrackingStatus.Pending;
 
             shipment.Ups.PublishedCharges = shipment.ShipmentCost;
 
@@ -1100,6 +1101,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api
                     {
                         currentPackage.TrackingNumber = currentPackage.UspsTrackingNumber;
                         shipment.TrackingNumber = currentPackage.TrackingNumber;
+                        shipment.TrackingStatus = TrackingStatus.Pending;
                     }
                 }
 

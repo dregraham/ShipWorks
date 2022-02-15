@@ -56,6 +56,31 @@ namespace Interapptive.Shared.Tests.Utility
 
             Assert.Equal(OtherTestEnum.BlahOnOtherEnum, testResult.Value);
         }
+
+        [Fact]
+        public void TryGetByApiValue_ForEnum_ReturnsTrueWhenValueFound()
+        {
+            var result = EnumHelper.TryGetEnumByApiValue("BlahOnOtherEnum", out TestEnum? retrievedEnum);
+            Assert.True(result);
+            Assert.True(retrievedEnum.HasValue);
+            Assert.Equal(TestEnum.HasDetails, retrievedEnum.Value);
+        }
+        
+        [Fact]
+        public void TryGetByApiValue_ForEnum_ReturnsFalseWhenValueNotFound()
+        {
+            var result = EnumHelper.TryGetEnumByApiValue("lsjdflk", out TestEnum? retrievedEnum);
+            Assert.False(result);
+            Assert.False(retrievedEnum.HasValue);
+        }
+
+        [Fact]
+        public void GetByApiValue_ForEnum_ReturnsApiValue()
+        {
+            var result = EnumHelper.GetEnumByApiValue<TestEnum>("BlahOnOtherEnum");
+            
+            Assert.Equal(TestEnum.HasDetails, result);
+        }
     }
 
     [Obfuscation(Exclude = true, ApplyToMembers = true, StripAfterObfuscation = false)]

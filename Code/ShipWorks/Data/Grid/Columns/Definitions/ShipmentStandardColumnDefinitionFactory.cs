@@ -1,4 +1,5 @@
-﻿using SD.LLBLGen.Pro.ORMSupportClasses;
+﻿using Interapptive.Shared.Enums;
+using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.AddressValidation.Enums;
 using ShipWorks.Common.IO.Hardware.Printers;
 using ShipWorks.Data.Grid.Columns.DisplayTypes;
@@ -195,6 +196,12 @@ namespace ShipWorks.Data.Grid.Columns.Definitions
                 new GridColumnDefinition("{B7B9C011-C66B-4B2F-933D-466A0B3AD4AE}", false,
                     new GridActualLabelFormatDisplayType(), "Actual Label Format", ThermalLanguage.None,
                     ShipmentFields.ActualLabelFormat)  { DefaultWidth = 60 },
+                
+                new GridColumnDefinition("{0BA21D67-5990-413D-B9A2-DFF90F9B3D61}",
+                        new GridEnumDisplayType<TrackingStatus>(EnumSortMethod.Description),
+                        "Delivery Status",  TrackingStatus.Delivered,
+                        ShipmentFields.TrackingStatus)
+                    { DefaultWidth = 100 },
             };
         }
 

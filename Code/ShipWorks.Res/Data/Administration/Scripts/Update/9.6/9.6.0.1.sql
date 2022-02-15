@@ -1,4 +1,7 @@
-﻿SET NUMERIC_ROUNDABORT OFF
+﻿-- We shouldn't be doing this here. There is a defect where the support scripts weren't running and this was the 
+-- fastest way to fix it. We need to make sure these scripts always get deployed even if SW crashes during
+-- the upgrade.
+SET NUMERIC_ROUNDABORT OFF
 GO
 SET ANSI_PADDING, ANSI_WARNINGS, CONCAT_NULL_YIELDS_NULL, ARITHABORT, QUOTED_IDENTIFIER, ANSI_NULLS ON
 GO

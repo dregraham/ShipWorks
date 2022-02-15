@@ -10,6 +10,7 @@ using System.Windows.Forms;
 using Autofac;
 using Interapptive.Shared;
 using Interapptive.Shared.Collections;
+using Interapptive.Shared.Enums;
 using Interapptive.Shared.Extensions;
 using Interapptive.Shared.Metrics;
 using Interapptive.Shared.UI;
@@ -2426,6 +2427,7 @@ namespace ShipWorks.Shipping
                         shipment.VoidedDate = null;
                         shipment.TrackingNumber = "";
                         shipment.ShipmentCost = 0;
+                        shipment.TrackingStatus = TrackingStatus.NotTracked;
 
                         adapter.SaveAndRefetch(shipment);
                     }

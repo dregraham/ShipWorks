@@ -22,6 +22,11 @@ namespace ShipWorks.ApplicationCore.Licensing
         /// True if Hub customer
         /// </summary>
         bool IsHub { get; }
+        
+        /// <summary>
+        /// Get the customers license key
+        /// </summary>
+        string GetCustomerLicenseKey();
 
         /// <summary>
         /// Get the customers license key

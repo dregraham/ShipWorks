@@ -2885,7 +2885,7 @@ namespace ShipWorks.Data.Model
 		/// <summary>Inits ProcessedShipmentEntity's mappings</summary>
 		private void InitProcessedShipmentEntityMappings()
 		{
-			this.AddElementMapping("ProcessedShipmentEntity", @"ShipWorksLocal", @"dbo", "ProcessedShipmentsView", 30, 4);
+			this.AddElementMapping("ProcessedShipmentEntity", @"ShipWorksLocal", @"dbo", "ProcessedShipmentsView", 31, 4);
 			this.AddElementFieldMapping("ProcessedShipmentEntity", "ShipmentID", "ShipmentID", false, "BigInt", 0, 19, 0, false, "", null, typeof(System.Int64), 0);
 			this.AddElementFieldMapping("ProcessedShipmentEntity", "ShipmentType", "ShipmentType", false, "Int", 0, 10, 0, false, "", null, typeof(System.Int32), 1);
 			this.AddElementFieldMapping("ProcessedShipmentEntity", "ShipDate", "ShipDate", false, "DateTime", 0, 0, 0, false, "", null, typeof(System.DateTime), 2);
@@ -2916,6 +2916,7 @@ namespace ShipWorks.Data.Model
 			this.AddElementFieldMapping("ProcessedShipmentEntity", "CombineSplitStatus", "CombineSplitStatus", false, "Int", 0, 10, 0, false, "", null, typeof(System.Int32), 27);
 			this.AddElementFieldMapping("ProcessedShipmentEntity", "ReturnShipment", "ReturnShipment", false, "Bit", 0, 0, 0, false, "", null, typeof(System.Boolean), 28);
 			this.AddElementFieldMapping("ProcessedShipmentEntity", "Verified", "Verified", false, "Bit", 0, 0, 0, false, "", null, typeof(System.Boolean), 29);
+			this.AddElementFieldMapping("ProcessedShipmentEntity", "TrackingStatus", "TrackingStatus", false, "TinyInt", 0, 3, 0, false, "", null, typeof(System.Byte), 30);
 		}
 
 		/// <summary>Inits ProductEntity's mappings</summary>
@@ -3213,7 +3214,7 @@ namespace ShipWorks.Data.Model
 		/// <summary>Inits ShipmentEntity's mappings</summary>
 		private void InitShipmentEntityMappings()
 		{
-			this.AddElementMapping("ShipmentEntity", @"ShipWorksLocal", @"dbo", "Shipment", 80, 0);
+			this.AddElementMapping("ShipmentEntity", @"ShipWorksLocal", @"dbo", "Shipment", 84, 0);
 			this.AddElementFieldMapping("ShipmentEntity", "ShipmentID", "ShipmentID", false, "BigInt", 0, 19, 0, true, "SCOPE_IDENTITY()", null, typeof(System.Int64), 0);
 			this.AddElementFieldMapping("ShipmentEntity", "RowVersion", "RowVersion", false, "Timestamp", 2147483647, 0, 0, false, "", null, typeof(System.Byte[]), 1);
 			this.AddElementFieldMapping("ShipmentEntity", "OrderID", "OrderID", false, "BigInt", 0, 19, 0, false, "", null, typeof(System.Int64), 2);
@@ -3294,6 +3295,10 @@ namespace ShipWorks.Data.Model
 			this.AddElementFieldMapping("ShipmentEntity", "LoggedShippedToHub", "LoggedShippedToHub", true, "Bit", 0, 0, 0, false, "", null, typeof(System.Boolean), 77);
 			this.AddElementFieldMapping("ShipmentEntity", "LoggedVoidToHub", "LoggedVoidToHub", true, "Bit", 0, 0, 0, false, "", null, typeof(System.Boolean), 78);
 			this.AddElementFieldMapping("ShipmentEntity", "CarrierAccount", "CarrierAccount", true, "NVarChar", 25, 0, 0, false, "", null, typeof(System.String), 79);
+			this.AddElementFieldMapping("ShipmentEntity", "TrackingHubTimestamp", "TrackingHubTimestamp", true, "DateTime2", 0, 3, 0, false, "", null, typeof(System.DateTime), 80);
+			this.AddElementFieldMapping("ShipmentEntity", "TrackingStatus", "TrackingStatus", false, "TinyInt", 0, 3, 0, false, "", null, typeof(System.Byte), 81);
+			this.AddElementFieldMapping("ShipmentEntity", "EstimatedDeliveryDate", "EstimatedDeliveryDate", true, "DateTime2", 0, 3, 0, false, "", null, typeof(System.DateTime), 82);
+			this.AddElementFieldMapping("ShipmentEntity", "ActualDeliveryDate", "ActualDeliveryDate", true, "DateTime2", 0, 3, 0, false, "", null, typeof(System.DateTime), 83);
 		}
 
 		/// <summary>Inits ShipmentCustomsItemEntity's mappings</summary>

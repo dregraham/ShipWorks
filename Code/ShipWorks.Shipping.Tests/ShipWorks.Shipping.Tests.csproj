@@ -447,6 +447,8 @@
     <Compile Include="ShipEngine\ShipEngineWebClientTest.cs" />
     <Compile Include="ShipEngine\ShipEnginePartnerWebClientTest.cs" />
     <Compile Include="ShipEngine\ShipmentElementFactoryTest.cs" />
+    <Compile Include="Tracking\PlatformShipmentTrackerTest.cs" />
+    <Compile Include="Tracking\PlatformShipmentTrackerClientTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Interapptive.Shared\Interapptive.Shared.csproj">

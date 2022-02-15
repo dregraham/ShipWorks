@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Xml.XPath;
 using Interapptive.Shared.ComponentRegistration;
+using Interapptive.Shared.Enums;
 using Interapptive.Shared.Pdf;
 using Interapptive.Shared.Utility;
 using ShipEngine.CarrierApi.Client.Model;
@@ -50,6 +51,7 @@ namespace ShipWorks.Shipping.Carriers.Ups.ShipEngine
             shipment.Ups.PublishedCharges = shipment.ShipmentCost;
             shipment.Ups.NegotiatedRate = true;
             shipment.BilledType = (int) BilledType.Unknown;
+            shipment.TrackingStatus = TrackingStatus.Pending;
 
             UpsShipmentEntity upsShipment = shipment.Ups;
 

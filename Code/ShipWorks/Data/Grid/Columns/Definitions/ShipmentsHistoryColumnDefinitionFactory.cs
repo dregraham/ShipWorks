@@ -1,4 +1,5 @@
-﻿using Interapptive.Shared.Utility;
+﻿using Interapptive.Shared.Enums;
+using Interapptive.Shared.Utility;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.AddressValidation.Enums;
 using ShipWorks.Common.IO.Hardware.Printers;
@@ -155,6 +156,12 @@ namespace ShipWorks.Data.Grid.Columns.Definitions
                     },
                     "Verified", "Yes",
                     ProcessedShipmentFields.Verified),
+                
+                new GridColumnDefinition("{D2C6DA88-0A41-4CB7-ACCC-15B0A8DED169}",
+                        new GridEnumDisplayType<TrackingStatus>(EnumSortMethod.Description),
+                        "Delivery Status",  TrackingStatus.Delivered,
+                        ProcessedShipmentFields.TrackingStatus)
+                    { DefaultWidth = 100 },
             };
         }
     }
