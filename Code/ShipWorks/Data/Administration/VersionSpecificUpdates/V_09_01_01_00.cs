@@ -50,6 +50,7 @@ namespace ShipWorks.Data.Administration.VersionSpecificUpdates
         {
             log.Info("Applying programmatic update V_09_01_01_00");
             configurationData.CheckForChangesNeeded();
+            storeManager.InitializeForCurrentSession();
             storeManager.CheckForChanges();
             
             log.Info("Checking if legacy.");

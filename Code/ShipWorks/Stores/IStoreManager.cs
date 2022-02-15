@@ -12,6 +12,12 @@ namespace ShipWorks.Stores
     /// </summary>
     public interface IStoreManager
     {
+
+        /// <summary>
+        /// Initialize the store manager
+        /// </summary>
+        void InitializeForCurrentSession();
+
         /// <summary>
         /// Get the store for the related entity
         /// </summary>
