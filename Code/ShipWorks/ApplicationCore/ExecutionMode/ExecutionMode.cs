@@ -23,8 +23,6 @@ namespace ShipWorks.ApplicationCore.ExecutionMode
     /// </summary>
     public abstract class ExecutionMode
     {
-        private const int SecurityProtocolTypeTls12 = 3072;
-        private const int SecurityProtocolTypeTls11 = 768;
         private static readonly ILog log = LogManager.GetLogger(typeof(ExecutionMode));
         private SynchronizationContext synchronizationContext;
 
@@ -127,29 +125,19 @@ namespace ShipWorks.ApplicationCore.ExecutionMode
         }
 
         /// <summary>
-        /// Attempt to add TLS 1.1 and 1.2 support for any customers running Windows 7 or higher with .NET 4.5 or higher
+        /// Attempt to add TLS 1.2 support for any customers running Windows 7 or higher with .NET 4.5 or higher
         /// </summary>
         private static void SetAllowedSecurityProtocols()
         {
             try
             {
-                if (MyComputer.IsWindowsVista)
-                {
-                    // Vista will allow the protocols to be added to the available list, but does not actually support them.
-                    // The only reason we call this out separately is to avoid confusion where we say support is loaded, but actually isn't available
-                    log.Info("Could not add TLS1.1 and 1.2 protocols: Windows Vista does not support these protocols");
-                }
-                else
-                {
-                    ServicePointManager.SecurityProtocol |=
-                        (SecurityProtocolType) SecurityProtocolTypeTls12 |
-                        (SecurityProtocolType) SecurityProtocolTypeTls11;
-                    log.Info("Successfully added TLS1.1 and 1.2 protocols.");
-                }
+                ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
+                log.Info("Successfully set 1.2 protocols.");
             }
             catch (NotSupportedException ex)
             {
-                log.Info("Could not add TLS1.1 and 1.2 protocols: ", ex);
+                log.Error("Could not add 1.2 protocols: ", ex);
+                throw;
             }
 
             log.Debug("Supported security protocols: " + ServicePointManager.SecurityProtocol);
