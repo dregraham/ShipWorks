@@ -8,7 +8,6 @@ using ShipWorks.Data.Model.EntityClasses;
 
 namespace ShipWorks.FileTransfer
 {
-
     /// <summary>
     /// FTP utility functions
     /// </summary>
@@ -367,6 +366,8 @@ namespace ShipWorks.FileTransfer
         private static IFtp OpenFtpConnection(FtpAccountEntity account)
         {
             Ftp ftp = new Ftp();
+            ftp.Settings.SslAllowedVersions = TlsVersion.TLS12;
+            
             ftp.Timeout = (int) TimeSpan.FromSeconds(10).TotalMilliseconds;
             ftp.Settings.ReuseControlConnectionSession = (bool) account.ReuseControlConnectionSession;
 
@@ -381,6 +382,7 @@ namespace ShipWorks.FileTransfer
         private static async Task<IFtp> OpenFtpConnectionAsync(FtpAccountEntity account)
         {
             Ftp ftp = new Ftp();
+            ftp.Settings.SslAllowedVersions = TlsVersion.TLS12;
             ftp.Timeout = (int) TimeSpan.FromSeconds(10).TotalMilliseconds;
             ftp.Settings.ReuseControlConnectionSession = (bool) account.ReuseControlConnectionSession;
             ftp.Settings.SslAcceptAllCertificates = true;

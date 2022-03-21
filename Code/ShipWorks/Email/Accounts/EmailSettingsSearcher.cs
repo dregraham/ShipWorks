@@ -389,6 +389,7 @@ namespace ShipWorks.Email.Accounts
         {
             using (Smtp smtp = new Smtp())
             {
+                smtp.Settings.SslAllowedVersions = TlsVersion.TLS12;
                 smtp.Connect(host, port, sslMode);
                 Debug.Assert(smtp.IsSecured == (sslMode != SslMode.None));
 
@@ -444,6 +445,7 @@ namespace ShipWorks.Email.Accounts
         {
             using (Imap imap = new Imap())
             {
+                imap.Settings.SslAllowedVersions = TlsVersion.TLS12;
                 // Casting to ImapSecurity is OK - we use the same raw values
                 imap.Connect(host, port, (SslMode) incomingSecurity);
                 Debug.Assert(imap.IsSecured == (incomingSecurity != EmailIncomingSecurityType.Unsecure));
@@ -501,6 +503,8 @@ namespace ShipWorks.Email.Accounts
         {
             using (Pop3 pop3 = new Pop3())
             {
+                pop3.Settings.SslAllowedVersions = TlsVersion.TLS12;
+                
                 // Casting to Pop3Security is OK - we use the same raw values
                 pop3.Connect(host, port, (SslMode) incomingSecurity);
                 Debug.Assert(pop3.IsSecured == (incomingSecurity != EmailIncomingSecurityType.Unsecure));

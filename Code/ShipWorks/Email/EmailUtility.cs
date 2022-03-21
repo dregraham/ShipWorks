@@ -138,6 +138,7 @@ namespace ShipWorks.Email
         public static Smtp LogonToSmtp(EmailAccountEntity account)
         {
             Smtp smtp = new Smtp();
+            smtp.Settings.SslAllowedVersions = TlsVersion.TLS12;
 
             try
             {
@@ -225,6 +226,7 @@ namespace ShipWorks.Email
             }
 
             Pop3 pop3 = new Pop3();
+            pop3.Settings.SslAllowedVersions = TlsVersion.TLS12;
 
             try
             {
@@ -272,6 +274,7 @@ namespace ShipWorks.Email
             }
 
             Imap imap = new Imap();
+            imap.Settings.SslAllowedVersions = TlsVersion.TLS12;
 
             try
             {

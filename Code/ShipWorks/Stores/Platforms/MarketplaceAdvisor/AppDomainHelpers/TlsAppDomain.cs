@@ -56,7 +56,9 @@ namespace ShipWorks.Stores.Platforms.MarketplaceAdvisor.AppDomainHelpers
             /// </summary>
             private SecurityProtocolSettings()
             {
-                ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls | SecurityProtocolType.Ssl3;
+                // Marketplace advisor is dead. Commenting this out as we don't have a story to remove it yet but want to 
+                // disable antiquated security protocols
+                //ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls | SecurityProtocolType.Ssl3;
             }
         }
     }
