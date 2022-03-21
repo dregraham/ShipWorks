@@ -175,6 +175,7 @@ namespace ShipWorks.Stores.Platforms.Walmart
                 submitter.Headers.Add("WM_QOS.CORRELATION_ID", Guid.NewGuid().ToString());
                 submitter.Headers.Add("Authorization", authString);
                 submitter.Headers.Add("WM_SEC.ACCESS_TOKEN", accessToken);
+                submitter.Headers.Add("Accept", "application/xml");
 
                 IApiLogEntry logEntry = apiLogEntryFactory(ApiLogSource.Walmart, action);
                 logEntry.LogRequest(submitter);
