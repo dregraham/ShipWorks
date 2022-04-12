@@ -3,14 +3,12 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Interapptive.Shared.ComponentRegistration;
 using log4net;
-using ShipWorks.Actions.Tasks;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping;
 using ShipWorks.Shipping.Carriers;
 using ShipWorks.Shipping.Carriers.Postal;
 using ShipWorks.Stores.Content;
-using ShipWorks.Warehouse.Orders;
 
 namespace ShipWorks.Stores.Platforms.Platform.OnlineUpdating
 {
@@ -25,16 +23,16 @@ namespace ShipWorks.Stores.Platforms.Platform.OnlineUpdating
         private readonly IOrderManager orderManager;
         private readonly IShippingManager shippingManager;
         private readonly ISqlAdapterFactory sqlAdapterFactory;
-        private readonly Func<IWarehouseOrderClient> createWarehouseOrderClient;
+        private readonly IUploadPlatformShipmentFactory uploadPlatformShipmentFactory;
 
         /// <summary>
         /// Constructor
         /// </summary>
         public PlatformOnlineUpdater(IOrderManager orderManager, IShippingManager shippingManager,
-            ISqlAdapterFactory sqlAdapterFactory, Func<IWarehouseOrderClient> createWarehouseOrderClient)
+            ISqlAdapterFactory sqlAdapterFactory, IUploadPlatformShipmentFactory uploadPlatformShipmentFactory)
         {
             this.sqlAdapterFactory = sqlAdapterFactory;
-            this.createWarehouseOrderClient = createWarehouseOrderClient;
+            this.uploadPlatformShipmentFactory = uploadPlatformShipmentFactory;
             this.shippingManager = shippingManager;
             this.orderManager = orderManager;
         }
@@ -107,7 +105,7 @@ namespace ShipWorks.Stores.Platforms.Platform.OnlineUpdating
         /// </summary>
         public async Task UploadShipmentDetails(List<ShipmentEntity> shipments)
         {
-            var client = createWarehouseOrderClient();
+            var client = uploadPlatformShipmentFactory.Create();
 
             foreach (var shipment in shipments)
             {
@@ -115,7 +113,7 @@ namespace ShipWorks.Stores.Platforms.Platform.OnlineUpdating
                 string carrier = GetCarrierName(shipment);
                 var result = await client.NotifyShipped(shipment.Order.ChannelOrderID, shipment.TrackingNumber, carrier).ConfigureAwait(false);
                 result.OnFailure(ex => throw new PlatformStoreException($"Error uploading shipment details: {ex.Message}", ex));
-            }            
+            }
         }
 
         /// <summary>
@@ -132,7 +130,7 @@ namespace ShipWorks.Stores.Platforms.Platform.OnlineUpdating
             }
 
             string sfpName = string.Empty;
-            if(shipmentTypeCode == ShipmentTypeCode.AmazonSFP)
+            if (shipmentTypeCode == ShipmentTypeCode.AmazonSFP)
             {
                 sfpName = shipment.AmazonSFP.CarrierName.ToUpperInvariant();
             }
@@ -153,20 +151,20 @@ namespace ShipWorks.Stores.Platforms.Platform.OnlineUpdating
                 case true when sfpName.Equals("USPS", StringComparison.OrdinalIgnoreCase):
                 case true when sfpName.Equals("STAMPS_DOT_COM", StringComparison.OrdinalIgnoreCase):
                     return "stamps_com";
-                    
+
                 case true when ShipmentTypeManager.IsFedEx(shipmentTypeCode):
                 case true when otherDesc?.IsFedEx ?? false:
                 case true when sfpName.Equals("FEDEX", StringComparison.OrdinalIgnoreCase):
                     return "fedex";
-                    
+
                 case true when ShipmentTypeManager.IsUps(shipmentTypeCode):
                 case true when otherDesc?.IsUPS ?? false:
                 case true when sfpName.Equals("UPS", StringComparison.OrdinalIgnoreCase):
                     return "ups";
-                    
+
                 case true when shipmentTypeCode == ShipmentTypeCode.DhlExpress:
                     return "dhl_express";
-                    
+
                 case true when shipmentTypeCode == ShipmentTypeCode.OnTrac:
                 case true when sfpName.Equals("ONTRAC", StringComparison.OrdinalIgnoreCase):
                     return "ontrac";
@@ -178,7 +176,7 @@ namespace ShipWorks.Stores.Platforms.Platform.OnlineUpdating
                     return "asendia";
 
                 default:
-                    return "other";                
+                    return "other";
             }
         }
     }
