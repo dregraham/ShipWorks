@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.UI;
 using Interapptive.Shared.Utility;
 using log4net;
@@ -14,8 +15,7 @@ namespace ShipWorks.Stores.Platforms.Amazon.OnlineUpdating
     /// <summary>
     /// Create online update commands for Amazon stores
     /// </summary>
-    /// TODO: Either remove this class, or add switching logic to use this with orders that platform doesn't know about
-    //[KeyedComponent(typeof(IOnlineUpdateCommandCreator), StoreTypeCode.Amazon)]
+    [KeyedComponent(typeof(IOnlineUpdateCommandCreator), StoreTypeCode.Amazon)]
     public class AmazonOnlineUpdateCommandCreator : IOnlineUpdateCommandCreator
     {
         private readonly IMessageHelper messageHelper;

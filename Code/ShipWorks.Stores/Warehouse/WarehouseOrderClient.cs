@@ -16,7 +16,6 @@ using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Editions;
 using ShipWorks.Stores.Communication;
-using ShipWorks.Stores.Platforms.Platform.OnlineUpdating;
 using ShipWorks.Warehouse.Orders;
 using ShipWorks.Warehouse.Orders.DTO;
 
@@ -26,8 +25,7 @@ namespace ShipWorks.Stores.Warehouse
     /// Client for retrieving orders from the ShipWorks Warehouse app
     /// </summary>
     [Component]
-    [KeyedComponent(typeof(IUploadPlatformShipment), UploadPlatformShipmentType.ThroughHub)]
-    public class WarehouseOrderClient : IWarehouseOrderClient, IUploadPlatformShipment
+    public class WarehouseOrderClient : IWarehouseOrderClient
     {
         private readonly IWarehouseRequestClient warehouseRequestClient;
         private readonly ILicenseService licenseService;

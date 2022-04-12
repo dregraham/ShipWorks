@@ -1253,11 +1253,7 @@
     <Compile Include="Shipping\Carriers\UPS\Enums\UpsCustomsRecipientTINType.cs" />
     <Compile Include="Stores\ILegacyStoreTrialKeyConverter.cs" />
     <Compile Include="Stores\Platforms\Platform\OnlineUpdating\IPlatformOnlineUpdater.cs" />
-    <Compile Include="Stores\Platforms\Platform\OnlineUpdating\IUploadPlatformShipment.cs" />
-    <Compile Include="Stores\Platforms\Platform\OnlineUpdating\IUploadPlatformShipmentFactory.cs" />
     <Compile Include="Stores\Platforms\Platform\OnlineUpdating\PlatformOnlineUpdater.cs" />
-    <Compile Include="Stores\Platforms\Platform\OnlineUpdating\UploadPlatformShipmentFactory.cs" />
-    <Compile Include="Stores\Platforms\Platform\OnlineUpdating\UploadPlatformShipmentType.cs" />
     <Compile Include="Stores\Platforms\Platform\PlatformStoreException.cs" />
     <Compile Include="UI\Controls\WeightChangedEventArgs.cs" />
     <Compile Include="Users\ComputerManagerWrapper.cs" />

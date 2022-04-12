@@ -21,7 +21,6 @@ namespace ShipWorks.Stores.Platforms.Platform.OnlineUpdating
     [KeyedComponent(typeof(IOnlineUpdateCommandCreator), StoreTypeCode.ChannelAdvisorHub)]
     [KeyedComponent(typeof(IOnlineUpdateCommandCreator), StoreTypeCode.VolusionHub)]
     [KeyedComponent(typeof(IOnlineUpdateCommandCreator), StoreTypeCode.GrouponHub)]
-    [KeyedComponent(typeof(IOnlineUpdateCommandCreator), StoreTypeCode.Amazon)]
     public class PlatformUpdateCommandCreator : IOnlineUpdateCommandCreator
     {
         private readonly IPlatformOnlineUpdater platformOnlineUpdater;
@@ -87,7 +86,7 @@ namespace ShipWorks.Stores.Platforms.Platform.OnlineUpdating
                     return Result.FromSuccess();
                 }
             }
-            catch (Exception ex)
+            catch(Exception ex)
             {
                 log.ErrorFormat("Error uploading shipment information for orders {0}", ex.Message);
 
