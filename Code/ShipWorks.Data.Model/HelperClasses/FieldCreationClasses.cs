@@ -1537,6 +1537,11 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(AmazonStoreFieldIndex.AmazonVATS);}
 		}
+		/// <summary>Creates a new AmazonStoreEntity.ContinuationToken field instance</summary>
+		public static EntityField2 ContinuationToken
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(AmazonStoreFieldIndex.ContinuationToken);}
+		}
 	}
 
 	/// <summary>Field Creation Class for entity AmazonSWAAccountEntity</summary>

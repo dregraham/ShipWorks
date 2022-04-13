@@ -674,6 +674,8 @@ namespace ShipWorks.Data.Model
 		DomainName,
 		///<summary>AmazonVATS. </summary>
 		AmazonVATS,
+		///<summary>ContinuationToken. </summary>
+		ContinuationToken,
 		/// <summary></summary>
 		AmountOfFields
 	}

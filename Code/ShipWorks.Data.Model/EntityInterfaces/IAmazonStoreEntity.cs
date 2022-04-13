@@ -129,6 +129,12 @@ namespace ShipWorks.Data.Model.EntityInterfaces
         /// Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
         System.Boolean AmazonVATS { get; }
+        /// <summary> The ContinuationToken property of the Entity AmazonStore<br/><br/>
+        /// </summary>
+        /// <remarks>Mapped on table field: "AmazonStore"."ContinuationToken"<br/>
+        /// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 2048<br/>
+        /// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+        System.String ContinuationToken { get; }
         
         
         

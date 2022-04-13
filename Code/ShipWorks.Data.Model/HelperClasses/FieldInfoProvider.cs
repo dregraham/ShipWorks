@@ -494,6 +494,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 			this.AddElementFieldInfo("AmazonStoreEntity", "ExcludeFBA", typeof(System.Boolean), false, false, false, false,  (int)AmazonStoreFieldIndex.ExcludeFBA, 0, 0, 0);
 			this.AddElementFieldInfo("AmazonStoreEntity", "DomainName", typeof(System.String), false, false, false, false,  (int)AmazonStoreFieldIndex.DomainName, 50, 0, 0);
 			this.AddElementFieldInfo("AmazonStoreEntity", "AmazonVATS", typeof(System.Boolean), false, false, false, false,  (int)AmazonStoreFieldIndex.AmazonVATS, 0, 0, 0);
+			this.AddElementFieldInfo("AmazonStoreEntity", "ContinuationToken", typeof(System.String), false, false, false, true,  (int)AmazonStoreFieldIndex.ContinuationToken, 2048, 0, 0);
 		}
 		/// <summary>Inits AmazonSWAAccountEntity's FieldInfo objects</summary>
 		private void InitAmazonSWAAccountEntityInfos()

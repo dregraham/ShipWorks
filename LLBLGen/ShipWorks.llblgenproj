@@ -344,6 +344,7 @@
           <Field Name="AmazonVATS" Type="bool" FieldIndex="17" />
           <Field Name="AuthToken" Type="string" MaxLength="100" FieldIndex="7" />
           <Field Name="Certificate" Type="byte[]" IsOptional="true" MaxLength="2048" FieldIndex="11" />
+          <Field Name="ContinuationToken" Type="string" IsOptional="true" MaxLength="2048" FieldIndex="18" />
           <Field Name="Cookie" Type="string" MaxLength="2147483647" FieldIndex="8" />
           <Field Name="CookieExpires" Type="datetime" FieldIndex="9" />
           <Field Name="CookieWaitUntil" Type="datetime" FieldIndex="10" />
@@ -4729,7 +4730,7 @@
       <Catalogs>
         <Catalog Name="ShipWorksLocal">
           <Schemas>
-            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2022-01-31T15:48:32.9091116Z">
+            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2022-04-12T21:25:56.9094788Z">
               <Tables>
                 <Table Name="Action">
                   <PkConstraintName Name="PK_Action" />
@@ -4958,6 +4959,7 @@
                     <Field Name="ExcludeFBA" Ordinal="17" DbType="2" />
                     <Field Name="DomainName" Ordinal="18" DbType="12" Length="50" />
                     <Field Name="AmazonVATS" Ordinal="19" DbType="2" />
+                    <Field Name="ContinuationToken" Ordinal="20" IsOptional="true" DbType="12" Length="2048" />
                   </Fields>
                 </Table>
                 <Table Name="AmazonSWAAccount">
@@ -11394,6 +11396,7 @@
             <FieldMapping FieldName="AmazonVATS" TargetFieldName="AmazonVATS" />
             <FieldMapping FieldName="AuthToken" TargetFieldName="AuthToken" />
             <FieldMapping FieldName="Certificate" TargetFieldName="Certificate" />
+            <FieldMapping FieldName="ContinuationToken" TargetFieldName="ContinuationToken" />
             <FieldMapping FieldName="Cookie" TargetFieldName="Cookie" />
             <FieldMapping FieldName="CookieExpires" TargetFieldName="CookieExpires" />
             <FieldMapping FieldName="CookieWaitUntil" TargetFieldName="CookieWaitUntil" />
