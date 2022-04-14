@@ -94,15 +94,15 @@ namespace ShipWorks.Stores.Platforms.Amazon
         /// Create the collection of setup wizard pages for configuring the integration
         /// </summary>
         /// <param name="scope"></param>
-        public override List<WizardPage> CreateAddStoreWizardPages(ILifetimeScope scope)
-        {
-            return new List<WizardPage>()
-            {
-                new AmazonMwsCountryPage(),
-                new AmazonMwsPage(),
-                new AmazonMwsDownloadCriteriaPage()
-            };
-        }
+        // public override List<WizardPage> CreateAddStoreWizardPages(ILifetimeScope scope)
+        // {
+        //     return new List<WizardPage>()
+        //     {
+        //         new AmazonMwsCountryPage(),
+        //         new AmazonMwsPage(),
+        //         new AmazonMwsDownloadCriteriaPage()
+        //     };
+        // }
 
         /// <summary>
         /// Create the control for generating the online update shipment tasks

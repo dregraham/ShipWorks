@@ -12,7 +12,7 @@ using ShipWorks.Common.Net;
 namespace ShipWorks.ApplicationCore.Licensing.Warehouse
 {
     /// <summary>
-    /// Create an initilized request for a warehouse
+    /// Create an initialized request for a warehouse
     /// </summary>
     [Component]
     public class WarehouseRequestFactory : IWarehouseRequestFactory
@@ -28,7 +28,7 @@ namespace ShipWorks.ApplicationCore.Licensing.Warehouse
         }
 
         /// <summary>
-        /// Create an initilized request for a warehouse
+        /// Create an initialized request for a warehouse
         /// </summary>
         public IRestRequest Create(string endpoint, Method method, object payload)
         {

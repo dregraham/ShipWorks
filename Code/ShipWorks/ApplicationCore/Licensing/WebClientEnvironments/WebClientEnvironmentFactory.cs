@@ -12,7 +12,7 @@ namespace ShipWorks.ApplicationCore.Licensing.WebClientEnvironments
     /// Class for getting ShipWorks web client environments
     /// </summary>
     [Component(RegistrationType.Self, SingleInstance = true)]
-    public class WebClientEnvironmentFactory
+    public class WebClientEnvironmentFactory 
     {
         // Logger
         private static readonly ILog log = LogManager.GetLogger(typeof(WebClientEnvironmentFactory));
