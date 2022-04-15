@@ -350,6 +350,7 @@
           <Field Name="DomainName" Type="string" MaxLength="50" FieldIndex="16" />
           <Field Name="ExcludeFBA" Type="bool" FieldIndex="15" />
           <Field Name="MarketplaceID" Type="string" MaxLength="50" FieldIndex="14" />
+          <Field Name="MaxOrderDatePreMigration" Type="datetime" IsOptional="true" FieldIndex="18" />
           <Field Name="MerchantID" Type="string" MaxLength="50" FieldIndex="13" />
           <Field Name="MerchantName" Type="string" MaxLength="64" FieldIndex="4" />
           <Field Name="MerchantToken" Type="string" MaxLength="32" FieldIndex="5" />
@@ -2330,11 +2331,6 @@
           <Field Name="UserID" Type="long" IsAutoCreated="true" FieldIndex="1" />
         </Fields>
       </EntityDefinition>
-      <EntityDefinition Name="PlatformStore" ObjectID="2b09576a-9fa8-4615-b224-9449426e9af9" InheritanceType="2">
-        <Fields>
-          <Field Name="OrderSourceID" Type="string" MaxLength="50" FieldIndex="0" />
-        </Fields>
-      </EntityDefinition>
       <EntityDefinition Name="PostalProfile" ObjectID="9a3253aa-3a35-438a-9773-a14bb7c7a0c0">
         <Fields>
           <Field Name="Confirmation" Type="int" IsOptional="true" FieldIndex="2" />
@@ -3049,6 +3045,7 @@
           <Field Name="ManagedInHub" Type="bool" FieldIndex="34" />
           <Field Name="ManualOrderPostfix" Type="string" MaxLength="10" FieldIndex="28" />
           <Field Name="ManualOrderPrefix" Type="string" MaxLength="10" FieldIndex="27" />
+          <Field Name="OrderSourceID" Type="string" IsOptional="true" MaxLength="50" FieldIndex="35" />
           <Field Name="Phone" Type="string" MaxLength="35" FieldIndex="16" />
           <Field Name="PostalCode" Type="string" MaxLength="20" FieldIndex="14" />
           <Field Name="RowVersion" Type="byte[]" IsReadOnly="true" FieldIndex="1" />
@@ -4644,7 +4641,6 @@
       <InheritanceHierarchy SuperType=":Store" SubType=":OverstockStore" />
       <InheritanceHierarchy SuperType=":Order" SubType=":PayPalOrder" />
       <InheritanceHierarchy SuperType=":Store" SubType=":PayPalStore" />
-      <InheritanceHierarchy SuperType=":Store" SubType=":PlatformStore" />
       <InheritanceHierarchy SuperType=":Order" SubType=":ProStoresOrder" />
       <InheritanceHierarchy SuperType=":Store" SubType=":ProStoresStore" />
       <InheritanceHierarchy SuperType=":Order" SubType=":RakutenOrder" />
@@ -4729,7 +4725,7 @@
       <Catalogs>
         <Catalog Name="ShipWorksLocal">
           <Schemas>
-            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2022-01-31T15:48:32.9091116Z">
+            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2022-04-15T13:18:52.851182Z">
               <Tables>
                 <Table Name="Action">
                   <PkConstraintName Name="PK_Action" />
@@ -4958,6 +4954,7 @@
                     <Field Name="ExcludeFBA" Ordinal="17" DbType="2" />
                     <Field Name="DomainName" Ordinal="18" DbType="12" Length="50" />
                     <Field Name="AmazonVATS" Ordinal="19" DbType="2" />
+                    <Field Name="MaxOrderDatePreMigration" Ordinal="20" IsOptional="true" DbType="4" />
                   </Fields>
                 </Table>
                 <Table Name="AmazonSWAAccount">
@@ -5055,8 +5052,8 @@
                     <Field Name="NonMachinable" Ordinal="4" IsOptional="true" DbType="2" />
                     <Field Name="Contents" Ordinal="5" IsOptional="true" DbType="8" Precision="10" />
                     <Field Name="NonDelivery" Ordinal="6" IsOptional="true" DbType="8" Precision="10" />
-                    <Field Name="CustomsRecipientTinType" Ordinal="7" IsOptional="true" DbType="8" Precision="10" />
-                    <Field Name="CustomsRecipientTin" Ordinal="8" IsOptional="true" DbType="12" Length="24" />
+                    <Field Name="CustomsRecipientTin" Ordinal="7" IsOptional="true" DbType="12" Length="24" />
+                    <Field Name="CustomsRecipientTinType" Ordinal="8" IsOptional="true" DbType="8" Precision="10" />
                     <Field Name="CustomsRecipientEntityType" Ordinal="9" IsOptional="true" DbType="8" Precision="10" />
                     <Field Name="CustomsRecipientIssuingAuthority" Ordinal="10" IsOptional="true" DbType="12" Length="2" />
                   </Fields>
@@ -5088,8 +5085,8 @@
                     <Field Name="DimsWeight" Ordinal="14" DbType="6" Precision="38" />
                     <Field Name="InsuranceValue" Ordinal="15" DbType="9" Precision="19" Scale="4" />
                     <Field Name="Insurance" Ordinal="16" DbType="2" />
-                    <Field Name="CustomsRecipientTinType" Ordinal="17" IsOptional="true" DbType="8" Precision="10" />
-                    <Field Name="CustomsRecipientTin" Ordinal="18" IsOptional="true" DbType="12" Length="24" />
+                    <Field Name="CustomsRecipientTin" Ordinal="17" IsOptional="true" DbType="12" Length="24" />
+                    <Field Name="CustomsRecipientTinType" Ordinal="18" IsOptional="true" DbType="8" Precision="10" />
                     <Field Name="CustomsRecipientEntityType" Ordinal="19" IsOptional="true" DbType="8" Precision="10" />
                     <Field Name="CustomsRecipientIssuingAuthority" Ordinal="20" IsOptional="true" DbType="12" Length="2" />
                   </Fields>
@@ -6961,7 +6958,7 @@
                   <Fields>
                     <Field Name="FilterNodeContentID" Ordinal="1" DbType="0" Precision="19" />
                     <Field Name="FilterTarget" Ordinal="2" DbType="8" Precision="10" />
-                    <Field Name="ColumnMask" Ordinal="3" IsOptional="true" DbType="23" Length="150" />
+                    <Field Name="ColumnMask" Ordinal="3" DbType="23" Length="150" />
                     <Field Name="JoinMask" Ordinal="4" DbType="8" Precision="10" />
                     <Field Name="Position" Ordinal="5" DbType="8" Precision="10" />
                   </Fields>
@@ -8013,13 +8010,6 @@
                     <Field Name="ObjectID" Ordinal="4" IsOptional="true" DbType="0" Precision="19" />
                   </Fields>
                 </Table>
-                <Table Name="PlatformStore">
-                  <PkConstraintName Name="PK_PlatformStore" />
-                  <Fields>
-                    <Field Name="StoreID" Ordinal="1" IsPrimaryKey="true" DbType="0" Precision="19" />
-                    <Field Name="OrderSourceID" Ordinal="2" DbType="12" Length="50" />
-                  </Fields>
-                </Table>
                 <Table Name="PostalProfile">
                   <PkConstraintName Name="PK_PostalProfile" />
                   <Fields>
@@ -9015,6 +9005,7 @@
                     <Field Name="InsureShipApiKey" Ordinal="33" IsOptional="true" DbType="12" Length="255" />
                     <Field Name="WarehouseStoreID" Ordinal="34" IsOptional="true" DbType="25" />
                     <Field Name="ManagedInHub" Ordinal="35" HasDefaultValue="true" DefaultValue="(0)" DbType="2" />
+                    <Field Name="OrderSourceID" Ordinal="36" IsOptional="true" DbType="12" Length="50" />
                   </Fields>
                 </Table>
                 <Table Name="SystemData">
@@ -10780,11 +10771,6 @@
                 <FieldPair PkField="dbo:User:UserID" FkField="dbo:Permission:UserID" />
               </FieldPairs>
             </ForeignKeyConstraint>
-            <ForeignKeyConstraint Name="dbo:PlatformStore:FK_PlatformStore_Store">
-              <FieldPairs>
-                <FieldPair PkField="dbo:Store:StoreID" FkField="dbo:PlatformStore:StoreID" />
-              </FieldPairs>
-            </ForeignKeyConstraint>
             <ForeignKeyConstraint Name="dbo:PostalProfile:FK_PostalProfile_ShippingProfile" DeleteRuleAction="1">
               <FieldPairs>
                 <FieldPair PkField="dbo:ShippingProfile:ShippingProfileID" FkField="dbo:PostalProfile:ShippingProfileID" />
@@ -11400,6 +11386,7 @@
             <FieldMapping FieldName="DomainName" TargetFieldName="DomainName" />
             <FieldMapping FieldName="ExcludeFBA" TargetFieldName="ExcludeFBA" />
             <FieldMapping FieldName="MarketplaceID" TargetFieldName="MarketplaceID" />
+            <FieldMapping FieldName="MaxOrderDatePreMigration" TargetFieldName="MaxOrderDatePreMigration" />
             <FieldMapping FieldName="MerchantID" TargetFieldName="MerchantID" />
             <FieldMapping FieldName="MerchantName" TargetFieldName="MerchantName" />
             <FieldMapping FieldName="MerchantToken" TargetFieldName="MerchantToken" />
@@ -13427,12 +13414,6 @@
             <FieldMapping FieldName="UserID" TargetFieldName="UserID" />
           </FieldMappings>
         </EntityMapping>
-        <EntityMapping EntityName=":PlatformStore" TargetName="ShipWorksLocal:dbo:PlatformStore">
-          <FieldMappings>
-            <FieldMapping FieldName="OrderSourceID" TargetFieldName="OrderSourceID" />
-            <FieldMapping FieldName="StoreID" TargetFieldName="StoreID" />
-          </FieldMappings>
-        </EntityMapping>
         <EntityMapping EntityName=":PostalProfile" TargetName="ShipWorksLocal:dbo:PostalProfile">
           <FieldMappings>
             <FieldMapping FieldName="Confirmation" TargetFieldName="Confirmation" />
@@ -14153,6 +14134,7 @@
             <FieldMapping FieldName="ManagedInHub" TargetFieldName="ManagedInHub" />
             <FieldMapping FieldName="ManualOrderPostfix" TargetFieldName="ManualOrderPostfix" />
             <FieldMapping FieldName="ManualOrderPrefix" TargetFieldName="ManualOrderPrefix" />
+            <FieldMapping FieldName="OrderSourceID" TargetFieldName="OrderSourceID" />
             <FieldMapping FieldName="Phone" TargetFieldName="Phone" />
             <FieldMapping FieldName="PostalCode" TargetFieldName="PostalCode" />
             <FieldMapping FieldName="RowVersion" TargetFieldName="RowVersion" />

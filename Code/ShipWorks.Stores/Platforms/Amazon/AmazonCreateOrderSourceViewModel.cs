@@ -48,7 +48,7 @@ namespace ShipWorks.Stores.Platforms.Amazon
             }
             catch (Exception ex)
             {
-                messageHelper.ShowError((ex.GetBaseException().Message));    
+                messageHelper.ShowError((ex.GetBaseException().Message));
             }
         }
 
@@ -69,8 +69,7 @@ namespace ShipWorks.Stores.Platforms.Amazon
         /// </summary>
         public void Load(AmazonStoreEntity store)
         {
-            // implement in next story
-            // OrderSourceId = store.OrderSourceId 
+            OrderSourceId = store.OrderSourceID;
         }
 
         /// <summary>
@@ -78,7 +77,7 @@ namespace ShipWorks.Stores.Platforms.Amazon
         /// </summary>
         public void Save(AmazonStoreEntity store)
         {
-            // store.OrderSourceId = OrderSourceId
+            store.OrderSourceID = OrderSourceId;
         }
     }
 }

@@ -367,6 +367,8 @@ namespace ShipWorks.Data.Model.EntityClasses
 			_fieldsCustomProperties.Add("DomainName", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
 			_fieldsCustomProperties.Add("AmazonVATS", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+			_fieldsCustomProperties.Add("MaxOrderDatePreMigration", fieldHashtable);
 		}
 		#endregion
 
@@ -616,6 +618,17 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			get { return (System.Boolean)GetValue((int)AmazonStoreFieldIndex.AmazonVATS, true); }
 			set	{ SetValue((int)AmazonStoreFieldIndex.AmazonVATS, value); }
+		}
+
+		/// <summary> The MaxOrderDatePreMigration property of the Entity AmazonStore<br/><br/></summary>
+		/// <remarks>Mapped on  table field: "AmazonStore"."MaxOrderDatePreMigration"<br/>
+		/// Table field type characteristics (type, precision, scale, length): DateTime, 0, 0, 0<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		[DataMember]
+		public virtual Nullable<System.DateTime> MaxOrderDatePreMigration
+		{
+			get { return (Nullable<System.DateTime>)GetValue((int)AmazonStoreFieldIndex.MaxOrderDatePreMigration, false); }
+			set	{ SetValue((int)AmazonStoreFieldIndex.MaxOrderDatePreMigration, value); }
 		}
 	
 		/// <summary> Gets the type of the hierarchy this entity is in. </summary>
