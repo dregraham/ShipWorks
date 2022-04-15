@@ -297,7 +297,6 @@
     <Compile Include="Platforms\Manual\CreateDefaultStoreActivity.cs" />
     <Compile Include="Platforms\Odbc\Mapping\OdbcStoreRepository.cs" />
     <Compile Include="Platforms\Odbc\Mapping\RefreshingOdbcStore.cs" />
-    <Compile Include="Platforms\Platform\Apollo\PlatformApolloDTO.cs" />
     <Compile Include="Platforms\Platform\CoreExtensions\Actions\PlatformShipmentUploadTask.cs" />
     <Compile Include="Platforms\Platform\OnlineUpdating\PlatformOnlineUpdateCommandCreator.cs" />
     <Compile Include="Platforms\Platform\PlatformStoreDownloader.cs" />

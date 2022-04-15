@@ -1255,6 +1255,9 @@
     <Compile Include="Stores\Platforms\Platform\OnlineUpdating\IPlatformOnlineUpdater.cs" />
     <Compile Include="Stores\Platforms\Platform\OnlineUpdating\PlatformOnlineUpdater.cs" />
     <Compile Include="Stores\Platforms\Platform\PlatformStoreException.cs" />
+    <Compile Include="Stores\Platforms\ShipEngine\Apollo\PlatformApolloDTO.cs" />
+    <Compile Include="Stores\Platforms\ShipEngine\IPlatformOrderWebClient.cs" />
+    <Compile Include="Stores\Platforms\ShipEngine\PlatformOrderWebClient.cs" />
     <Compile Include="UI\Controls\WeightChangedEventArgs.cs" />
     <Compile Include="Users\ComputerManagerWrapper.cs" />
     <Compile Include="Users\IComputerManager.cs" />

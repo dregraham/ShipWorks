@@ -1,11 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using Interapptive.Shared.ComponentRegistration;
 using RestSharp;
 using ShipWorks.ApplicationCore.Licensing.Warehouse;
+using ShipWorks.Stores.Platforms.ShipEngine.Apollo;
 
 namespace ShipWorks.Stores.Platforms.ShipEngine
 {
@@ -28,12 +25,12 @@ namespace ShipWorks.Stores.Platforms.ShipEngine
         /// <summary>
         /// Get a page of orders from a platform order source
         /// </summary>
-        public async Task<object> GetOrders(string orderSourceId, string continuationToken)
+        public async Task<PaginatedPlatformServiceResponseOfOrderSourceApiSalesOrder> GetOrders(string orderSourceId, string continuationToken)
         {
             var request = new RestRequest($"api/ordersource/{orderSourceId}", Method.GET);
             request.AddQueryParameter("ContinuationToken", continuationToken);
 
-            return await warehouseRequestClient.MakeRequest<object>(request, "PlatformGetOrders").ConfigureAwait(false);
+            return await warehouseRequestClient.MakeRequest<PaginatedPlatformServiceResponseOfOrderSourceApiSalesOrder>(request, "PlatformGetOrders").ConfigureAwait(false);
         }
     }
 }
