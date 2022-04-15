@@ -8,6 +8,7 @@ using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Net;
 using Interapptive.Shared.UI;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Stores.Platforms.Platform;
 
 namespace ShipWorks.Stores.Platforms.Amazon
 {
@@ -17,17 +18,19 @@ namespace ShipWorks.Stores.Platforms.Amazon
     [Component]
     public class AmazonCreateOrderSourceViewModel : ViewModelBase, IAmazonCreateOrderSourceViewModel
     {
+        private const string orderSourceName = "amazon";
+        
         private readonly IWebHelper webHelper;
-        private readonly IAmazonSpClient amazonSpClient;
+        private readonly IHubMonoauthClient hubMonoauthClient;
         private readonly IMessageHelper messageHelper;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public AmazonCreateOrderSourceViewModel(IWebHelper webHelper, IAmazonSpClient amazonSpClient, IMessageHelper messageHelper)
+        public AmazonCreateOrderSourceViewModel(IWebHelper webHelper, IHubMonoauthClient hubMonoauthClient, IMessageHelper messageHelper)
         {
             this.webHelper = webHelper;
-            this.amazonSpClient = amazonSpClient;
+            this.hubMonoauthClient = hubMonoauthClient;
             this.messageHelper = messageHelper;
 
             GetOrderSourceId = new RelayCommand(async () => await GetOrderSourceIdCommand().ConfigureAwait(true));
@@ -40,7 +43,7 @@ namespace ShipWorks.Stores.Platforms.Amazon
         {
             try
             {
-                var url = await amazonSpClient.GetMonauthInitiateUrl().ConfigureAwait(true);
+                var url = await hubMonoauthClient.GetMonauthInitiateUrl(orderSourceName).ConfigureAwait(true);
                 webHelper.OpenUrl(url);
             }
             catch (Exception ex)
