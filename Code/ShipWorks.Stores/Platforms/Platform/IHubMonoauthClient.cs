@@ -1,15 +1,15 @@
 ﻿using System.Threading.Tasks;
 
-namespace ShipWorks.Stores.Platforms.Amazon
+namespace ShipWorks.Stores.Platforms.Platform
 {
     /// <summary>
     /// Client to communicate with SP (Via Platform)
     /// </summary>
-    public interface IAmazonSpClient
+    public interface IHubMonoauthClient
     {
         /// <summary>
         /// Get the URL to initiate Monoauth
         /// </summary>
-        Task<string> GetMonauthInitiateUrl();
+        Task<string> GetMonauthInitiateUrl(string orderSourceName);
     }
 }

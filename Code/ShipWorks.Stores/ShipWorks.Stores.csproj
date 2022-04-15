@@ -269,11 +269,10 @@
     <Compile Include="Orders\Split\Local\OrderSplitAuditLocal.cs" />
     <Compile Include="Orders\Split\RoutingErrorViewModel.cs" />
     <Compile Include="Platforms\Amazon\AmazonCreateOrderSourceViewModel.cs" />
-    <Compile Include="Platforms\Amazon\AmazonSPClient.cs" />
     <Compile Include="Platforms\Amazon\Content\AmazonQuickSearchSql.cs" />
     <Compile Include="Platforms\Amazon\Content\AmazonSplitOrderAction.cs" />
     <Compile Include="Platforms\Amazon\DTO\GetMonauthInitiateUrlResponse.cs" />
-    <Compile Include="Platforms\Amazon\IAmazonSpClient.cs" />
+    <Compile Include="Platforms\Amazon\IAmazonCreateOrderSourceViewModel.cs" />
     <Compile Include="Platforms\Amazon\OnlineUpdating\AmazonOnlineUpdateCommandCreator.cs" />
     <Compile Include="Platforms\Amazon\OnlineUpdating\AmazonOnlineUpdater.cs" />
     <Compile Include="Platforms\Amazon\OnlineUpdating\AmazonOrderSearchProvider.cs" />
@@ -301,6 +300,8 @@
     <Compile Include="Platforms\Odbc\Mapping\OdbcStoreRepository.cs" />
     <Compile Include="Platforms\Odbc\Mapping\RefreshingOdbcStore.cs" />
     <Compile Include="Platforms\Platform\CoreExtensions\Actions\PlatformShipmentUploadTask.cs" />
+    <Compile Include="Platforms\Platform\HubMonoauthClient.cs" />
+    <Compile Include="Platforms\Platform\IHubMonoauthClient.cs" />
     <Compile Include="Platforms\Platform\OnlineUpdating\PlatformOnlineUpdateCommandCreator.cs" />
     <Compile Include="Platforms\Platform\PlatformStoreDownloader.cs" />
     <Compile Include="Platforms\Platform\PlatformStoreSetup.cs" />
