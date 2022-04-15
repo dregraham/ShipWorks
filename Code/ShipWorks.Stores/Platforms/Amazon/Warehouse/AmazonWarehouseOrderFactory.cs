@@ -66,6 +66,7 @@ namespace ShipWorks.Stores.Platforms.Amazon.Warehouse
             amazonOrderEntity.EarliestExpectedDeliveryDate = amazonWarehouseOrder.EarliestExpectedDeliveryDate;
             amazonOrderEntity.LatestExpectedDeliveryDate = amazonWarehouseOrder.LatestExpectedDeliveryDate;
             amazonOrderEntity.PurchaseOrderNumber = amazonWarehouseOrder.PurchaseOrderNumber;
+            amazonOrderEntity.ChannelOrderID = warehouseOrder.ShipEngineSalesOrderId;
         }
 
         /// <summary>
