@@ -32,16 +32,10 @@ namespace ShipWorks.Stores.Tests.Orders.Archive
         }
 
         [Fact]
-        public void CopyDatabaseSql_ReturnsNonEmptyString()
-        {
-            Assert.False(testObject.CopyDatabaseSql(AnyString, AnyDate, AnyString).IsNullOrWhiteSpace());
-        }
+        public void CopyDatabaseSql_ReturnsNonEmptyString() => Assert.False(testObject.CopyDatabaseSql(AnyString, AnyDate, AnyString).IsNullOrWhiteSpace());
 
         [Fact]
-        public void ArchiveOrderDataSql_ReturnsNonEmptyString()
-        {
-            Assert.False(testObject.ArchiveOrderDataSql(AnyString, DateTime.Now, It.IsAny<OrderArchiverOrderDataComparisonType>()).IsNullOrWhiteSpace());
-        }
+        public void ArchiveOrderDataSql_ReturnsNonEmptyString() => Assert.False(testObject.ArchiveOrderDataSql(AnyString, DateTime.Now, It.IsAny<OrderArchiverOrderDataComparisonType>()).IsNullOrWhiteSpace());
 
         [Fact]
         public void ArchiveOrderDataSql_HasCorrectDate()
@@ -94,15 +88,11 @@ namespace ShipWorks.Stores.Tests.Orders.Archive
                               $"entities that should be archived, be sure to update ArchiveOrderData.sql." +
                               $"{Environment.NewLine}{Environment.NewLine}{newEntities}";
                 output.WriteLine(newEntities);
-            }            
+            }
             Assert.Equal(string.Empty, newEntities);
         }
 
-        private IEnumerable<Type> CurrentlySupportedEntities
-        {
-            get
-            {
-                return new Type[]
+        private IEnumerable<Type> CurrentlySupportedEntities => new Type[]
                 {
                     typeof(AmazonOrderEntity),
                     typeof(AmazonOrderItemEntity),
@@ -211,13 +201,7 @@ namespace ShipWorks.Stores.Tests.Orders.Archive
                     typeof(YahooOrderItemEntity),
                     typeof(YahooOrderSearchEntity)
                 };
-            }
-        }
-        private IEnumerable<Type> ExcludedEntities
-        {
-            get
-            {
-                return new Type[]
+        private IEnumerable<Type> ExcludedEntities => new Type[]
                 {
                     typeof(ActionEntity),
                     typeof(ActionFilterTriggerEntity),
@@ -295,7 +279,6 @@ namespace ShipWorks.Stores.Tests.Orders.Archive
                     typeof(PayPalStoreEntity),
                     typeof(PermissionEntity),
                     typeof(PostalProfileEntity),
-                    typeof(PlatformStoreEntity),
                     typeof(ProcessedShipmentEntity),
                     typeof(ProductEntity),
                     typeof(ProductVariantEntity),
@@ -358,12 +341,7 @@ namespace ShipWorks.Stores.Tests.Orders.Archive
                     typeof(YahooProductEntity),
                     typeof(YahooStoreEntity)
                 };
-            }
-        }
 
-        public void Dispose()
-        {
-            mock.Dispose();
-        }
+        public void Dispose() => mock.Dispose();
     }
 }
