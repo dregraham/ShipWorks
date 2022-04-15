@@ -2,7 +2,7 @@
 GO
 
 IF COL_LENGTH(N'[dbo].[Store]', N'OrderSourceID') IS NULL
-	ALTER TABLE [dbo].[Store] ADD [OrderSourceID] [nvarchar] (50) NULL;
+	ALTER TABLE [dbo].[Store] ADD [OrderSourceID] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NULL;
 GO
 
 IF OBJECT_ID(N'[dbo].[PlatformStore]', 'u') IS NOT NULL
