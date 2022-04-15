@@ -48,5 +48,15 @@ namespace ShipWorks.Stores.Warehouse.StoreData
         /// </summary>
         [JsonProperty("amazonVats")]
         public bool AmazonVATS { get; set; }
+
+        /// <summary>
+        /// The platform order source id 
+        /// </summary>
+        public string OrderSourceID { get; set; }
+
+        /// <summary>
+        /// The platform account id (Account Service AccountId)
+        /// </summary>
+        public string AccountId { get; set; }
     }
 }
