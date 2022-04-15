@@ -46,7 +46,7 @@ namespace ShipWorks.Data.Model
 		/// <summary>Method which initializes the internal datastores with the structure of hierarchical types.</summary>
 		private void Init()
 		{
-			this.InitClass(245);
+			this.InitClass(244);
 			InitActionEntityMappings();
 			InitActionFilterTriggerEntityMappings();
 			InitActionQueueEntityMappings();
@@ -196,7 +196,6 @@ namespace ShipWorks.Data.Model
 			InitPayPalOrderSearchEntityMappings();
 			InitPayPalStoreEntityMappings();
 			InitPermissionEntityMappings();
-			InitPlatformStoreEntityMappings();
 			InitPostalProfileEntityMappings();
 			InitPostalShipmentEntityMappings();
 			InitPrintResultEntityMappings();
@@ -483,7 +482,7 @@ namespace ShipWorks.Data.Model
 		/// <summary>Inits AmazonStoreEntity's mappings</summary>
 		private void InitAmazonStoreEntityMappings()
 		{
-			this.AddElementMapping("AmazonStoreEntity", @"ShipWorksLocal", @"dbo", "AmazonStore", 19, 0);
+			this.AddElementMapping("AmazonStoreEntity", @"ShipWorksLocal", @"dbo", "AmazonStore", 20, 0);
 			this.AddElementFieldMapping("AmazonStoreEntity", "StoreID", "StoreID", false, "BigInt", 0, 19, 0, false, "", null, typeof(System.Int64), 0);
 			this.AddElementFieldMapping("AmazonStoreEntity", "AmazonApi", "AmazonApi", false, "Int", 0, 10, 0, false, "", null, typeof(System.Int32), 1);
 			this.AddElementFieldMapping("AmazonStoreEntity", "AmazonApiRegion", "AmazonApiRegion", false, "Char", 2, 0, 0, false, "", null, typeof(System.String), 2);
@@ -503,6 +502,7 @@ namespace ShipWorks.Data.Model
 			this.AddElementFieldMapping("AmazonStoreEntity", "ExcludeFBA", "ExcludeFBA", false, "Bit", 0, 0, 0, false, "", null, typeof(System.Boolean), 16);
 			this.AddElementFieldMapping("AmazonStoreEntity", "DomainName", "DomainName", false, "NVarChar", 50, 0, 0, false, "", null, typeof(System.String), 17);
 			this.AddElementFieldMapping("AmazonStoreEntity", "AmazonVATS", "AmazonVATS", false, "Bit", 0, 0, 0, false, "", null, typeof(System.Boolean), 18);
+			this.AddElementFieldMapping("AmazonStoreEntity", "MaxOrderDatePreMigration", "MaxOrderDatePreMigration", true, "DateTime", 0, 0, 0, false, "", null, typeof(System.DateTime), 19);
 		}
 
 		/// <summary>Inits AmazonSWAAccountEntity's mappings</summary>
@@ -2793,14 +2793,6 @@ namespace ShipWorks.Data.Model
 			this.AddElementFieldMapping("PermissionEntity", "EntityID", "ObjectID", true, "BigInt", 0, 19, 0, false, "", null, typeof(System.Int64), 3);
 		}
 
-		/// <summary>Inits PlatformStoreEntity's mappings</summary>
-		private void InitPlatformStoreEntityMappings()
-		{
-			this.AddElementMapping("PlatformStoreEntity", @"ShipWorksLocal", @"dbo", "PlatformStore", 2, 0);
-			this.AddElementFieldMapping("PlatformStoreEntity", "StoreID", "StoreID", false, "BigInt", 0, 19, 0, false, "", null, typeof(System.Int64), 0);
-			this.AddElementFieldMapping("PlatformStoreEntity", "OrderSourceID", "OrderSourceID", false, "NVarChar", 50, 0, 0, false, "", null, typeof(System.String), 1);
-		}
-
 		/// <summary>Inits PostalProfileEntity's mappings</summary>
 		private void InitPostalProfileEntityMappings()
 		{
@@ -3592,7 +3584,7 @@ namespace ShipWorks.Data.Model
 		/// <summary>Inits StoreEntity's mappings</summary>
 		private void InitStoreEntityMappings()
 		{
-			this.AddElementMapping("StoreEntity", @"ShipWorksLocal", @"dbo", "Store", 35, 0);
+			this.AddElementMapping("StoreEntity", @"ShipWorksLocal", @"dbo", "Store", 36, 0);
 			this.AddElementFieldMapping("StoreEntity", "StoreID", "StoreID", false, "BigInt", 0, 19, 0, true, "SCOPE_IDENTITY()", null, typeof(System.Int64), 0);
 			this.AddElementFieldMapping("StoreEntity", "RowVersion", "RowVersion", false, "Timestamp", 2147483647, 0, 0, false, "", null, typeof(System.Byte[]), 1);
 			this.AddElementFieldMapping("StoreEntity", "License", "License", false, "NVarChar", 150, 0, 0, false, "", null, typeof(System.String), 2);
@@ -3628,6 +3620,7 @@ namespace ShipWorks.Data.Model
 			this.AddElementFieldMapping("StoreEntity", "InsureShipApiKey", "InsureShipApiKey", true, "NVarChar", 255, 0, 0, false, "", null, typeof(System.String), 32);
 			this.AddElementFieldMapping("StoreEntity", "WarehouseStoreID", "WarehouseStoreID", true, "UniqueIdentifier", 0, 0, 0, false, "", null, typeof(System.Guid), 33);
 			this.AddElementFieldMapping("StoreEntity", "ManagedInHub", "ManagedInHub", false, "Bit", 0, 0, 0, false, "", null, typeof(System.Boolean), 34);
+			this.AddElementFieldMapping("StoreEntity", "OrderSourceID", "OrderSourceID", true, "NVarChar", 50, 0, 0, false, "", null, typeof(System.String), 35);
 		}
 
 		/// <summary>Inits SystemDataEntity's mappings</summary>

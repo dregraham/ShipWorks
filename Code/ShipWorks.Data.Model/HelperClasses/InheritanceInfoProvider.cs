@@ -112,7 +112,6 @@ namespace ShipWorks.Data.Model.HelperClasses
 			this.AddEntityInfo("PackageProfileEntity", string.Empty, new PackageProfileRelations(), new PackageProfileEntityFactory());
 			this.AddEntityInfo("PayPalOrderEntity", "OrderEntity", new PayPalOrderRelations(), new PayPalOrderEntityFactory(), 1-1);
 			this.AddEntityInfo("PayPalStoreEntity", "StoreEntity", new PayPalStoreRelations(), new PayPalStoreEntityFactory(), 1-1);
-			this.AddEntityInfo("PlatformStoreEntity", "StoreEntity", new PlatformStoreRelations(), new PlatformStoreEntityFactory(), 1-1);
 			this.AddEntityInfo("ProStoresOrderEntity", "OrderEntity", new ProStoresOrderRelations(), new ProStoresOrderEntityFactory(), 1-1);
 			this.AddEntityInfo("ProStoresStoreEntity", "StoreEntity", new ProStoresStoreRelations(), new ProStoresStoreEntityFactory(), 1-1);
 			this.AddEntityInfo("RakutenOrderEntity", "OrderEntity", new RakutenOrderRelations(), new RakutenOrderEntityFactory(), 1-1);

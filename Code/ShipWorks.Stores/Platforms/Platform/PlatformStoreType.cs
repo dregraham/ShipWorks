@@ -1,5 +1,4 @@
-﻿using System;
-using ShipWorks.Data.Model.EntityClasses;
+﻿using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Stores.Content;
 
@@ -23,10 +22,7 @@ namespace ShipWorks.Stores.Platforms.Platform
         public PlatformStoreType(StoreEntity store)
             : base(store)
         {
-            if (store != null && !(store is PlatformStoreEntity))
-            {
-                throw new ArgumentException("PlatformStoretype - StoreEntity is not instance of PlatformStoreEntity.");
-            }
+
         }
 
         /// <summary>
@@ -41,8 +37,7 @@ namespace ShipWorks.Stores.Platforms.Platform
         {
             get
             {
-                PlatformStoreEntity store = (PlatformStoreEntity) Store;
-                return store.OrderSourceID;
+                return Store.OrderSourceID;
             }
         }
 
@@ -59,11 +54,9 @@ namespace ShipWorks.Stores.Platforms.Platform
         /// </summary>
         public override StoreEntity CreateStoreInstance()
         {
-            PlatformStoreEntity store = new PlatformStoreEntity();
+            var store = new StoreEntity();
 
             InitializeStoreDefaults(store);
-
-            store.OrderSourceID = "";
 
             return store;
         }

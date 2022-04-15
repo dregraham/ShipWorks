@@ -8499,63 +8499,6 @@ namespace ShipWorks.Data.Model.Custom
 
 	
 	/// <summary>
-	/// Strongly typed collection of PlatformStoreEntity
-	/// </summary>
-	public class PlatformStoreCollection : EntityCollection<PlatformStoreEntity>
-	{
-        /// <summary>
-        /// Gets the count of all PlatformStoreEntity rows
-        /// </summary>
-        public static int GetCount(IDataAccessAdapter adapter)
-        {
-            return GetCount(adapter, null);
-        }
-
-        /// <summary>
-        /// Gets the count of all PlatformStoreEntity rows filtered by the given predicate
-        /// </summary>
-        public static int GetCount(IDataAccessAdapter adapter, IPredicate filter)
-        {
-            RelationPredicateBucket bucket = null;
-
-            if (filter != null)
-            {
-                bucket = new RelationPredicateBucket(filter);
-            }
-
-            return adapter.GetDbCount(new PlatformStoreEntityFactory().CreateFields(), bucket);
-        }
-
-        /// <summary>
-        /// Fetch a new collection object that matches the specified filter.
-        /// </summary>
-        public static PlatformStoreCollection Fetch(IDataAccessAdapter adapter, IPredicate filter)
-        {
-			return Fetch(adapter, filter, null);
-        }
-
-		/// <summary>
-        /// Fetch a new collection object that matches the specified filter and uses the given prefetch.
-        /// </summary>
-        public static PlatformStoreCollection Fetch(IDataAccessAdapter adapter, IPredicate filter, IPrefetchPath2 prefetchPath)
-        {
-            PlatformStoreCollection collection = new PlatformStoreCollection();
-
-            RelationPredicateBucket bucket = null;
-
-            if (filter != null)
-            {
-                bucket = new RelationPredicateBucket(filter);
-            }
-
-            adapter.FetchEntityCollection(collection, bucket, prefetchPath);
-
-            return collection;
-        }
-	}
-
-	
-	/// <summary>
 	/// Strongly typed collection of PostalProfileEntity
 	/// </summary>
 	public class PostalProfileCollection : EntityCollection<PostalProfileEntity>
