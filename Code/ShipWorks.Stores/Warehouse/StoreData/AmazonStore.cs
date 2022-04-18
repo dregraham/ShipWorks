@@ -57,6 +57,6 @@ namespace ShipWorks.Stores.Warehouse.StoreData
         /// <summary>
         /// The platform account id (Account Service AccountId)
         /// </summary>
-        public string AccountId { get; set; }
+        public string PlatformAccountId { get; set; }
     }
 }

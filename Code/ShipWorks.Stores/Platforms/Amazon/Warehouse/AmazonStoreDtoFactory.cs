@@ -54,7 +54,7 @@ namespace ShipWorks.Stores.Warehouse
                     .ConfigureAwait(false);
 
                 store.OrderSourceID = storeEntity.OrderSourceID;
-                store.AccountId = tangoWebClient.GetTangoCustomerId();
+                store.PlatformAccountId = tangoWebClient.GetTangoCustomerId();
             }
 
             return store;
