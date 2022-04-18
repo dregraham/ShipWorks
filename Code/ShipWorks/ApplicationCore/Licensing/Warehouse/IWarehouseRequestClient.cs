@@ -24,5 +24,10 @@ namespace ShipWorks.ApplicationCore.Licensing.Warehouse
         /// Make an authenticated request
         /// </summary>
         Task<T> MakeRequest<T>(IRestRequest restRequest, string logName, CancellationToken cancellationToken);
+        
+        /// <summary>
+        /// Get the WarehouseUrl
+        /// </summary>
+        string WarehouseUrl { get; }
     }
 }

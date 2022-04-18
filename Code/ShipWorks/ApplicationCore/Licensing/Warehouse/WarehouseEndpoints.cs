@@ -24,7 +24,7 @@ namespace ShipWorks.ApplicationCore.Licensing.Warehouse
         public const string GetConfig = "api/config";
         public const string GetSmsVerificationNumber = "api/config/smsVerificationNumber";
         public const string Tracking = "api/tracking";
-            
+
         private const string notifyShipped = "api/customer/notifyShipped/{0}";
         private const string linkWarehouse = "api/warehouses/{0}/link";
         private const string orders = "api/warehouses/{0}/orders";
@@ -32,6 +32,7 @@ namespace ShipWorks.ApplicationCore.Licensing.Warehouse
         private const string voidShipment = "api/orders/{0}/void";
         private const string rerouteOrderItems = "api/orders/{0}/rerouteItems";
         private const string getTrackingUpdates = "api/tracking/{0}";
+        private const string initiateMonoauth = "api/ordersource/{0}/auth?RedirectUrl={1}/callbacks/{0}monoauth/subscribe";
          
         /// <summary>
         /// Create a link warehouse endpoint
@@ -100,5 +101,11 @@ namespace ShipWorks.ApplicationCore.Licensing.Warehouse
         /// </summary>
         public static string GetTrackingUpdatesAfter(DateTime lastSeenTimestamp) =>
             string.Format(getTrackingUpdates, lastSeenTimestamp.ToUniversalTime().ToString("o"));
+
+        /// <summary>
+        /// Get the URL to get the InitiateMonoauthUrl
+        /// </summary>
+        public static string GetInitiateMonoauthUrl(string orderSourceName, string redirectUrl) =>
+            string.Format(initiateMonoauth, orderSourceName, redirectUrl);
     }
 }

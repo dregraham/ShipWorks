@@ -636,6 +636,8 @@ namespace ShipWorks.Data.Model
 		WarehouseStoreID,
 		///<summary>ManagedInHub. Inherited from Store</summary>
 		ManagedInHub,
+		///<summary>OrderSourceID. Inherited from Store</summary>
+		OrderSourceID,
 		///<summary>StoreID. </summary>
 		StoreID,
 		///<summary>AmazonApi. </summary>
@@ -674,6 +676,8 @@ namespace ShipWorks.Data.Model
 		DomainName,
 		///<summary>AmazonVATS. </summary>
 		AmazonVATS,
+		///<summary>MaxOrderDatePreMigration. </summary>
+		MaxOrderDatePreMigration,
 		///<summary>ContinuationToken. </summary>
 		ContinuationToken,
 		/// <summary></summary>
@@ -832,6 +836,8 @@ namespace ShipWorks.Data.Model
 		WarehouseStoreID,
 		///<summary>ManagedInHub. Inherited from Store</summary>
 		ManagedInHub,
+		///<summary>OrderSourceID. Inherited from Store</summary>
+		OrderSourceID,
 		///<summary>StoreID. </summary>
 		StoreID,
 		///<summary>Username. </summary>
@@ -1236,6 +1242,8 @@ namespace ShipWorks.Data.Model
 		WarehouseStoreID,
 		///<summary>ManagedInHub. Inherited from Store</summary>
 		ManagedInHub,
+		///<summary>OrderSourceID. Inherited from Store</summary>
+		OrderSourceID,
 		///<summary>StoreID. </summary>
 		StoreID,
 		///<summary>ApiUrl. </summary>
@@ -1426,6 +1434,8 @@ namespace ShipWorks.Data.Model
 		WarehouseStoreID,
 		///<summary>ManagedInHub. Inherited from Store</summary>
 		ManagedInHub,
+		///<summary>OrderSourceID. Inherited from Store</summary>
+		OrderSourceID,
 		///<summary>StoreID. </summary>
 		StoreID,
 		///<summary>FtpUsername. </summary>
@@ -1834,6 +1844,8 @@ namespace ShipWorks.Data.Model
 		WarehouseStoreID,
 		///<summary>ManagedInHub. Inherited from Store</summary>
 		ManagedInHub,
+		///<summary>OrderSourceID. Inherited from Store</summary>
+		OrderSourceID,
 		///<summary>StoreID. </summary>
 		StoreID,
 		///<summary>AccountKey. </summary>
@@ -3126,6 +3138,8 @@ namespace ShipWorks.Data.Model
 		WarehouseStoreID,
 		///<summary>ManagedInHub. Inherited from Store</summary>
 		ManagedInHub,
+		///<summary>OrderSourceID. Inherited from Store</summary>
+		OrderSourceID,
 		///<summary>StoreID. </summary>
 		StoreID,
 		///<summary>EBayUserID. </summary>
@@ -3782,6 +3796,8 @@ namespace ShipWorks.Data.Model
 		WarehouseStoreID,
 		///<summary>ManagedInHub. Inherited from Store</summary>
 		ManagedInHub,
+		///<summary>OrderSourceID. Inherited from Store</summary>
+		OrderSourceID,
 		///<summary>StoreID. </summary>
 		StoreID,
 		///<summary>EtsyShopID. </summary>
@@ -4720,6 +4736,8 @@ namespace ShipWorks.Data.Model
 		WarehouseStoreID,
 		///<summary>ManagedInHub. Inherited from Store</summary>
 		ManagedInHub,
+		///<summary>OrderSourceID. Inherited from Store</summary>
+		OrderSourceID,
 		///<summary>StoreID. </summary>
 		StoreID,
 		///<summary>FileFormat. </summary>
@@ -5122,6 +5140,8 @@ namespace ShipWorks.Data.Model
 		WarehouseStoreID,
 		///<summary>ManagedInHub. Inherited from Store</summary>
 		ManagedInHub,
+		///<summary>OrderSourceID. Inherited from Store</summary>
+		OrderSourceID,
 		///<summary>StoreID. </summary>
 		StoreID,
 		///<summary>ModuleUsername. </summary>
@@ -5604,6 +5624,8 @@ namespace ShipWorks.Data.Model
 		WarehouseStoreID,
 		///<summary>ManagedInHub. Inherited from Store</summary>
 		ManagedInHub,
+		///<summary>OrderSourceID. Inherited from Store</summary>
+		OrderSourceID,
 		///<summary>StoreID. </summary>
 		StoreID,
 		///<summary>SupplierID. </summary>
@@ -5772,6 +5794,8 @@ namespace ShipWorks.Data.Model
 		WarehouseStoreID,
 		///<summary>ManagedInHub. Inherited from Store</summary>
 		ManagedInHub,
+		///<summary>OrderSourceID. Inherited from Store</summary>
+		OrderSourceID,
 		///<summary>StoreID. </summary>
 		StoreID,
 		///<summary>ApiToken. </summary>
@@ -6302,6 +6326,8 @@ namespace ShipWorks.Data.Model
 		WarehouseStoreID,
 		///<summary>ManagedInHub. Inherited from Store</summary>
 		ManagedInHub,
+		///<summary>OrderSourceID. Inherited from Store</summary>
+		OrderSourceID,
 		///<summary>StoreID. </summary>
 		StoreID,
 		///<summary>ApiUser. </summary>
@@ -6712,6 +6738,8 @@ namespace ShipWorks.Data.Model
 		WarehouseStoreID,
 		///<summary>ManagedInHub. Inherited from Store</summary>
 		ManagedInHub,
+		///<summary>OrderSourceID. Inherited from Store</summary>
+		OrderSourceID,
 		///<summary>StoreID. </summary>
 		StoreID,
 		///<summary>Token. </summary>
@@ -7018,6 +7046,8 @@ namespace ShipWorks.Data.Model
 		WarehouseStoreID,
 		///<summary>ManagedInHub. Inherited from Store</summary>
 		ManagedInHub,
+		///<summary>OrderSourceID. Inherited from Store</summary>
+		OrderSourceID,
 		///<summary>StoreID. Inherited from GenericModuleStore</summary>
 		StoreID_GenericModuleStore,
 		///<summary>ModuleUsername. Inherited from GenericModuleStore</summary>
@@ -7368,6 +7398,8 @@ namespace ShipWorks.Data.Model
 		WarehouseStoreID,
 		///<summary>ManagedInHub. Inherited from Store</summary>
 		ManagedInHub,
+		///<summary>OrderSourceID. Inherited from Store</summary>
+		OrderSourceID,
 		///<summary>StoreID. </summary>
 		StoreID,
 		///<summary>Username. </summary>
@@ -7482,6 +7514,8 @@ namespace ShipWorks.Data.Model
 		WarehouseStoreID,
 		///<summary>ManagedInHub. Inherited from Store</summary>
 		ManagedInHub,
+		///<summary>OrderSourceID. Inherited from Store</summary>
+		OrderSourceID,
 		///<summary>StoreID. Inherited from GenericModuleStore</summary>
 		StoreID_GenericModuleStore,
 		///<summary>ModuleUsername. Inherited from GenericModuleStore</summary>
@@ -7830,6 +7864,8 @@ namespace ShipWorks.Data.Model
 		WarehouseStoreID,
 		///<summary>ManagedInHub. Inherited from Store</summary>
 		ManagedInHub,
+		///<summary>OrderSourceID. Inherited from Store</summary>
+		OrderSourceID,
 		///<summary>StoreID. </summary>
 		StoreID,
 		///<summary>UserToken. </summary>
@@ -8208,6 +8244,8 @@ namespace ShipWorks.Data.Model
 		WarehouseStoreID,
 		///<summary>ManagedInHub. Inherited from Store</summary>
 		ManagedInHub,
+		///<summary>OrderSourceID. Inherited from Store</summary>
+		OrderSourceID,
 		///<summary>StoreID. </summary>
 		StoreID,
 		///<summary>SellerID. </summary>
@@ -8350,6 +8388,8 @@ namespace ShipWorks.Data.Model
 		WarehouseStoreID,
 		///<summary>ManagedInHub. Inherited from Store</summary>
 		ManagedInHub,
+		///<summary>OrderSourceID. Inherited from Store</summary>
+		OrderSourceID,
 		///<summary>StoreID. </summary>
 		StoreID,
 		///<summary>ImportConnectionString. </summary>
@@ -9096,6 +9136,8 @@ namespace ShipWorks.Data.Model
 		WarehouseStoreID,
 		///<summary>ManagedInHub. Inherited from Store</summary>
 		ManagedInHub,
+		///<summary>OrderSourceID. Inherited from Store</summary>
+		OrderSourceID,
 		///<summary>StoreID. </summary>
 		StoreID,
 		///<summary>OrderMotionEmailAccountID. </summary>
@@ -9540,6 +9582,8 @@ namespace ShipWorks.Data.Model
 		WarehouseStoreID,
 		///<summary>ManagedInHub. Inherited from Store</summary>
 		ManagedInHub,
+		///<summary>OrderSourceID. Inherited from Store</summary>
+		OrderSourceID,
 		///<summary>StoreID. </summary>
 		StoreID,
 		///<summary>Username. </summary>
@@ -9862,6 +9906,8 @@ namespace ShipWorks.Data.Model
 		WarehouseStoreID,
 		///<summary>ManagedInHub. Inherited from Store</summary>
 		ManagedInHub,
+		///<summary>OrderSourceID. Inherited from Store</summary>
+		OrderSourceID,
 		///<summary>StoreID. </summary>
 		StoreID,
 		///<summary>ApiCredentialType. </summary>
@@ -9892,86 +9938,6 @@ namespace ShipWorks.Data.Model
 		PermissionType,
 		///<summary>EntityID. </summary>
 		EntityID,
-		/// <summary></summary>
-		AmountOfFields
-	}
-	/// <summary>Index enum to fast-access EntityFields in the IEntityFields collection for the entity: PlatformStore.</summary>
-	public enum PlatformStoreFieldIndex
-	{
-		///<summary>StoreID. Inherited from Store</summary>
-		StoreID_Store,
-		///<summary>RowVersion. Inherited from Store</summary>
-		RowVersion,
-		///<summary>License. Inherited from Store</summary>
-		License,
-		///<summary>Edition. Inherited from Store</summary>
-		Edition,
-		///<summary>TypeCode. Inherited from Store</summary>
-		TypeCode,
-		///<summary>Enabled. Inherited from Store</summary>
-		Enabled,
-		///<summary>SetupComplete. Inherited from Store</summary>
-		SetupComplete,
-		///<summary>StoreName. Inherited from Store</summary>
-		StoreName,
-		///<summary>Company. Inherited from Store</summary>
-		Company,
-		///<summary>Street1. Inherited from Store</summary>
-		Street1,
-		///<summary>Street2. Inherited from Store</summary>
-		Street2,
-		///<summary>Street3. Inherited from Store</summary>
-		Street3,
-		///<summary>City. Inherited from Store</summary>
-		City,
-		///<summary>StateProvCode. Inherited from Store</summary>
-		StateProvCode,
-		///<summary>PostalCode. Inherited from Store</summary>
-		PostalCode,
-		///<summary>CountryCode. Inherited from Store</summary>
-		CountryCode,
-		///<summary>Phone. Inherited from Store</summary>
-		Phone,
-		///<summary>Fax. Inherited from Store</summary>
-		Fax,
-		///<summary>Email. Inherited from Store</summary>
-		Email,
-		///<summary>Website. Inherited from Store</summary>
-		Website,
-		///<summary>AutoDownload. Inherited from Store</summary>
-		AutoDownload,
-		///<summary>AutoDownloadMinutes. Inherited from Store</summary>
-		AutoDownloadMinutes,
-		///<summary>AutoDownloadOnlyAway. Inherited from Store</summary>
-		AutoDownloadOnlyAway,
-		///<summary>DomesticAddressValidationSetting. Inherited from Store</summary>
-		DomesticAddressValidationSetting,
-		///<summary>InternationalAddressValidationSetting. Inherited from Store</summary>
-		InternationalAddressValidationSetting,
-		///<summary>ComputerDownloadPolicy. Inherited from Store</summary>
-		ComputerDownloadPolicy,
-		///<summary>DefaultEmailAccountID. Inherited from Store</summary>
-		DefaultEmailAccountID,
-		///<summary>ManualOrderPrefix. Inherited from Store</summary>
-		ManualOrderPrefix,
-		///<summary>ManualOrderPostfix. Inherited from Store</summary>
-		ManualOrderPostfix,
-		///<summary>InitialDownloadDays. Inherited from Store</summary>
-		InitialDownloadDays,
-		///<summary>InitialDownloadOrder. Inherited from Store</summary>
-		InitialDownloadOrder,
-		///<summary>InsureShipClientID. Inherited from Store</summary>
-		InsureShipClientID,
-		///<summary>InsureShipApiKey. Inherited from Store</summary>
-		InsureShipApiKey,
-		///<summary>WarehouseStoreID. Inherited from Store</summary>
-		WarehouseStoreID,
-		///<summary>ManagedInHub. Inherited from Store</summary>
-		ManagedInHub,
-		///<summary>StoreID. </summary>
-		StoreID,
-		///<summary>OrderSourceID. </summary>
-		OrderSourceID,
 		/// <summary></summary>
 		AmountOfFields
 	}
@@ -10620,6 +10586,8 @@ namespace ShipWorks.Data.Model
 		WarehouseStoreID,
 		///<summary>ManagedInHub. Inherited from Store</summary>
 		ManagedInHub,
+		///<summary>OrderSourceID. Inherited from Store</summary>
+		OrderSourceID,
 		///<summary>StoreID. </summary>
 		StoreID,
 		///<summary>ShortName. </summary>
@@ -10940,6 +10908,8 @@ namespace ShipWorks.Data.Model
 		WarehouseStoreID,
 		///<summary>ManagedInHub. Inherited from Store</summary>
 		ManagedInHub,
+		///<summary>OrderSourceID. Inherited from Store</summary>
+		OrderSourceID,
 		///<summary>StoreID. </summary>
 		StoreID,
 		///<summary>AuthKey. </summary>
@@ -11380,6 +11350,8 @@ namespace ShipWorks.Data.Model
 		WarehouseStoreID,
 		///<summary>ManagedInHub. Inherited from Store</summary>
 		ManagedInHub,
+		///<summary>OrderSourceID. Inherited from Store</summary>
+		OrderSourceID,
 		///<summary>StoreID. </summary>
 		StoreID,
 		///<summary>SearsEmail. </summary>
@@ -12340,6 +12312,8 @@ namespace ShipWorks.Data.Model
 		WarehouseStoreID,
 		///<summary>ManagedInHub. Inherited from Store</summary>
 		ManagedInHub,
+		///<summary>OrderSourceID. Inherited from Store</summary>
+		OrderSourceID,
 		///<summary>StoreID. </summary>
 		StoreID,
 		///<summary>ShopifyShopUrlName. </summary>
@@ -12434,6 +12408,8 @@ namespace ShipWorks.Data.Model
 		WarehouseStoreID,
 		///<summary>ManagedInHub. Inherited from Store</summary>
 		ManagedInHub,
+		///<summary>OrderSourceID. Inherited from Store</summary>
+		OrderSourceID,
 		///<summary>StoreID. </summary>
 		StoreID,
 		///<summary>Username. </summary>
@@ -12554,6 +12530,8 @@ namespace ShipWorks.Data.Model
 		WarehouseStoreID,
 		///<summary>ManagedInHub. Inherited from Store</summary>
 		ManagedInHub,
+		///<summary>OrderSourceID. Inherited from Store</summary>
+		OrderSourceID,
 		///<summary>StoreID. </summary>
 		StoreID,
 		///<summary>Token. </summary>
@@ -12656,6 +12634,8 @@ namespace ShipWorks.Data.Model
 		WarehouseStoreID,
 		///<summary>ManagedInHub. </summary>
 		ManagedInHub,
+		///<summary>OrderSourceID. </summary>
+		OrderSourceID,
 		/// <summary></summary>
 		AmountOfFields
 	}
@@ -13166,6 +13146,8 @@ namespace ShipWorks.Data.Model
 		WarehouseStoreID,
 		///<summary>ManagedInHub. Inherited from Store</summary>
 		ManagedInHub,
+		///<summary>OrderSourceID. Inherited from Store</summary>
+		OrderSourceID,
 		///<summary>StoreID. </summary>
 		StoreID,
 		///<summary>StoreUrl. </summary>
@@ -14012,6 +13994,8 @@ namespace ShipWorks.Data.Model
 		WarehouseStoreID,
 		///<summary>ManagedInHub. Inherited from Store</summary>
 		ManagedInHub,
+		///<summary>OrderSourceID. Inherited from Store</summary>
+		OrderSourceID,
 		///<summary>StoreID. </summary>
 		StoreID,
 		///<summary>StoreUrl. </summary>
@@ -14412,6 +14396,8 @@ namespace ShipWorks.Data.Model
 		WarehouseStoreID,
 		///<summary>ManagedInHub. Inherited from Store</summary>
 		ManagedInHub,
+		///<summary>OrderSourceID. Inherited from Store</summary>
+		OrderSourceID,
 		///<summary>StoreID. </summary>
 		StoreID,
 		///<summary>ConsumerID. </summary>
@@ -15108,6 +15094,8 @@ namespace ShipWorks.Data.Model
 		WarehouseStoreID,
 		///<summary>ManagedInHub. Inherited from Store</summary>
 		ManagedInHub,
+		///<summary>OrderSourceID. Inherited from Store</summary>
+		OrderSourceID,
 		///<summary>StoreID. </summary>
 		StoreID,
 		///<summary>YahooEmailAccountID. </summary>
@@ -15467,8 +15455,6 @@ namespace ShipWorks.Data.Model
 		PayPalStoreEntity,
 		///<summary>Permission</summary>
 		PermissionEntity,
-		///<summary>PlatformStore</summary>
-		PlatformStoreEntity,
 		///<summary>PostalProfile</summary>
 		PostalProfileEntity,
 		///<summary>PostalShipment</summary>

@@ -1,6 +1,7 @@
 using System;
 using System.Threading.Tasks;
 using Interapptive.Shared.ComponentRegistration;
+using ShipWorks.ApplicationCore.Licensing;
 using ShipWorks.ApplicationCore.Licensing.Warehouse.DTO;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Communication;
@@ -16,14 +17,16 @@ namespace ShipWorks.Stores.Warehouse
     {
         private readonly IDownloadStartingPoint downloadStartingPoint;
         private readonly IStoreDtoHelpers helpers;
+        private readonly ITangoWebClient tangoWebClient;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public AmazonStoreDtoFactory(IDownloadStartingPoint downloadStartingPoint, IStoreDtoHelpers helpers)
+        public AmazonStoreDtoFactory(IDownloadStartingPoint downloadStartingPoint, IStoreDtoHelpers helpers, ITangoWebClient tangoWebClient)
         {
             this.helpers = helpers;
             this.downloadStartingPoint = downloadStartingPoint;
+            this.tangoWebClient = tangoWebClient;
         }
 
         /// <summary>
@@ -49,6 +52,9 @@ namespace ShipWorks.Stores.Warehouse
                 store.DownloadStartDate = helpers.GetUnixTimestampMillis(downloadStartDate);
                 store.AuthToken = await helpers.EncryptSecret(storeEntity.AuthToken)
                     .ConfigureAwait(false);
+
+                store.OrderSourceID = storeEntity.OrderSourceID;
+                store.PlatformAccountId = tangoWebClient.GetTangoCustomerId();
             }
 
             return store;

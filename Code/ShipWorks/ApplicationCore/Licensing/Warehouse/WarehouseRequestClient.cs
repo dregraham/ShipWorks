@@ -112,6 +112,11 @@ namespace ShipWorks.ApplicationCore.Licensing.Warehouse
             MakeRequest<T>(restRequest, logName, CancellationToken.None);
 
         /// <summary>
+        /// Get the WarehouseUrl
+        /// </summary>
+        public string WarehouseUrl => webClientEnvironmentFactory.SelectedEnvironment.WarehouseUrl;
+
+        /// <summary>
         /// Make an authenticated request
         /// </summary>
         public async Task<T> MakeRequest<T>(IRestRequest restRequest, string logName, CancellationToken cancellationToken)
