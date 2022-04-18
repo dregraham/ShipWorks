@@ -61,7 +61,8 @@
                 <Button
                     Padding="8,4"
                     Command="{Binding GetOrderSourceId}"
-                    Style="{StaticResource SmallSecondaryButton}">
+                    Style="{StaticResource SmallSecondaryButton}"
+                    IsEnabled="{Binding OpeningUrl, Converter={ui:InverseBooleanConverter}}">
                     Get Order Source ID
                 </Button>
             </Grid>

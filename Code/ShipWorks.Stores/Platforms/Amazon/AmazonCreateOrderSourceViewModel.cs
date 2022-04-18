@@ -23,6 +23,7 @@ namespace ShipWorks.Stores.Platforms.Amazon
         private readonly IWebHelper webHelper;
         private readonly IHubMonoauthClient hubMonoauthClient;
         private readonly IMessageHelper messageHelper;
+        private bool openingUrl;
 
         /// <summary>
         /// Constructor
@@ -41,6 +42,7 @@ namespace ShipWorks.Stores.Platforms.Amazon
         /// </summary>
         private async Task GetOrderSourceIdCommand()
         {
+            OpeningUrl = true;
             try
             {
                 var url = await hubMonoauthClient.GetMonauthInitiateUrl(orderSourceName).ConfigureAwait(true);
@@ -49,6 +51,10 @@ namespace ShipWorks.Stores.Platforms.Amazon
             catch (Exception ex)
             {
                 messageHelper.ShowError((ex.GetBaseException().Message));
+            }
+            finally
+            {
+                OpeningUrl = false;
             }
         }
 
@@ -63,6 +69,16 @@ namespace ShipWorks.Stores.Platforms.Amazon
         /// </summary>
         [Obfuscation(Exclude = true)]
         public string OrderSourceId { get; set; }
+        
+        /// <summary>
+        /// Are we currently trying to open the Url
+        /// </summary>
+        [Obfuscation(Exclude = true)]
+        public bool OpeningUrl
+        {
+            get => openingUrl;
+            private set => Set(ref openingUrl, value);
+        }
 
         /// <summary>
         /// Load the order source
