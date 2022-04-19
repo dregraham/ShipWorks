@@ -93,6 +93,18 @@ namespace ShipWorks.Data.Model.EntityInterfaces
         /// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 2<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
         System.String CustomsTinIssuingAuthority { get; }
+        /// <summary> The PackagingType property of the Entity DhlEcommerceProfile<br/><br/>
+        /// </summary>
+        /// <remarks>Mapped on table field: "DhlEcommerceProfile"."PackagingType"<br/>
+        /// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
+        /// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+        Nullable<System.Int32> PackagingType { get; }
+        /// <summary> The Reference1 property of the Entity DhlEcommerceProfile<br/><br/>
+        /// </summary>
+        /// <remarks>Mapped on table field: "DhlEcommerceProfile"."Reference1"<br/>
+        /// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 300<br/>
+        /// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+        System.String Reference1 { get; }
         
         IShippingProfileEntity ShippingProfile { get; }
         

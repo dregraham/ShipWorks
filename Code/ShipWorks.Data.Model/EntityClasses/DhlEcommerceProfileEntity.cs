@@ -373,6 +373,10 @@ namespace ShipWorks.Data.Model.EntityClasses
 			_fieldsCustomProperties.Add("CustomsTaxIdType", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
 			_fieldsCustomProperties.Add("CustomsTinIssuingAuthority", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+			_fieldsCustomProperties.Add("PackagingType", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+			_fieldsCustomProperties.Add("Reference1", fieldHashtable);
 		}
 		#endregion
 
@@ -601,6 +605,28 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			get { return (System.String)GetValue((int)DhlEcommerceProfileFieldIndex.CustomsTinIssuingAuthority, true); }
 			set	{ SetValue((int)DhlEcommerceProfileFieldIndex.CustomsTinIssuingAuthority, value); }
+		}
+
+		/// <summary> The PackagingType property of the Entity DhlEcommerceProfile<br/><br/></summary>
+		/// <remarks>Mapped on  table field: "DhlEcommerceProfile"."PackagingType"<br/>
+		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		[DataMember]
+		public virtual Nullable<System.Int32> PackagingType
+		{
+			get { return (Nullable<System.Int32>)GetValue((int)DhlEcommerceProfileFieldIndex.PackagingType, false); }
+			set	{ SetValue((int)DhlEcommerceProfileFieldIndex.PackagingType, value); }
+		}
+
+		/// <summary> The Reference1 property of the Entity DhlEcommerceProfile<br/><br/></summary>
+		/// <remarks>Mapped on  table field: "DhlEcommerceProfile"."Reference1"<br/>
+		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 300<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		[DataMember]
+		public virtual System.String Reference1
+		{
+			get { return (System.String)GetValue((int)DhlEcommerceProfileFieldIndex.Reference1, true); }
+			set	{ SetValue((int)DhlEcommerceProfileFieldIndex.Reference1, value); }
 		}
 
 		/// <summary> Gets / sets related entity of type 'ShippingProfileEntity' which has to be set using a fetch action earlier. If no related entity is set for this property, null is returned.<br/><br/>

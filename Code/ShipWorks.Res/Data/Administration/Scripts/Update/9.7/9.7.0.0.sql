@@ -21,7 +21,9 @@ IF OBJECT_ID(N'[dbo].[DhlEcommerceProfile]', 'U') IS NULL
 	[ResidentialDelivery] [bit] NULL,
 	[CustomsRecipientTin] [nvarchar] (25) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
 	[CustomsTaxIdType] [int] NULL,
-	[CustomsTinIssuingAuthority] [nvarchar] (2) COLLATE SQL_Latin1_General_CP1_CI_AS NULL
+	[CustomsTinIssuingAuthority] [nvarchar] (2) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
+	[PackagingType] [int] NULL,
+	[Reference1] [nvarchar](300) NULL
 	)
 GO
 PRINT N'Creating primary key [PK_DhlEcommerceProfile] on [dbo].[DhlEcommerceProfile]'
@@ -67,6 +69,14 @@ CREATE TABLE [dbo].[DhlEcommerceShipment]
 	[IntegratorTransactionID] [uniqueidentifier] NULL,
 	[StampsTransactionID] [uniqueidentifier] NULL,
 	[ResidentialDelivery] [bit] NOT NULL,
+	[PackagingType] [int] NOT NULL,
+	[DimsProfileID] [bigint] NOT NULL,
+	[DimsLength] [float] NOT NULL,
+	[DimsWidth] [float] NOT NULL,
+	[DimsHeight] [float] NOT NULL,
+	[DimsWeight] [float] NOT NULL,
+	[DimsAddWeight] [bit] NOT NULL,
+	[Reference1] [nvarchar](300) NOT NULL,
 	[CustomsRecipientTin] [nvarchar] (25) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
 	[CustomsTaxIdType] [int] NULL,
 	[CustomsTinIssuingAuthority] [nvarchar] (2) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,

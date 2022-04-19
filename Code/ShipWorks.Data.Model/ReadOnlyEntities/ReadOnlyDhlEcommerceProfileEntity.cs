@@ -48,6 +48,8 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
             CustomsRecipientTin = source.CustomsRecipientTin;
             CustomsTaxIdType = source.CustomsTaxIdType;
             CustomsTinIssuingAuthority = source.CustomsTinIssuingAuthority;
+            PackagingType = source.PackagingType;
+            Reference1 = source.Reference1;
             
             ShippingProfile = (IShippingProfileEntity) source.ShippingProfile?.AsReadOnly(objectMap);
             
@@ -129,6 +131,18 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
         /// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 2<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
         public System.String CustomsTinIssuingAuthority { get; }
+        /// <summary> The PackagingType property of the Entity DhlEcommerceProfile<br/><br/>
+        /// </summary>
+        /// <remarks>Mapped on table field: "DhlEcommerceProfile"."PackagingType"<br/>
+        /// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
+        /// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+        public Nullable<System.Int32> PackagingType { get; }
+        /// <summary> The Reference1 property of the Entity DhlEcommerceProfile<br/><br/>
+        /// </summary>
+        /// <remarks>Mapped on table field: "DhlEcommerceProfile"."Reference1"<br/>
+        /// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 300<br/>
+        /// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+        public System.String Reference1 { get; }
         
         public IShippingProfileEntity ShippingProfile { get; }
         

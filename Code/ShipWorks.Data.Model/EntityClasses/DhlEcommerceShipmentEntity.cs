@@ -421,6 +421,22 @@ namespace ShipWorks.Data.Model.EntityClasses
 			_fieldsCustomProperties.Add("CustomsTinIssuingAuthority", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
 			_fieldsCustomProperties.Add("ScanFormBatchID", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+			_fieldsCustomProperties.Add("PackagingType", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+			_fieldsCustomProperties.Add("DimsProfileID", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+			_fieldsCustomProperties.Add("DimsLength", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+			_fieldsCustomProperties.Add("DimsWidth", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+			_fieldsCustomProperties.Add("DimsHeight", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+			_fieldsCustomProperties.Add("DimsWeight", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+			_fieldsCustomProperties.Add("DimsAddWeight", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+			_fieldsCustomProperties.Add("Reference1", fieldHashtable);
 		}
 		#endregion
 
@@ -744,6 +760,94 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			get { return (Nullable<System.Int64>)GetValue((int)DhlEcommerceShipmentFieldIndex.ScanFormBatchID, false); }
 			set	{ SetValue((int)DhlEcommerceShipmentFieldIndex.ScanFormBatchID, value); }
+		}
+
+		/// <summary> The PackagingType property of the Entity DhlEcommerceShipment<br/><br/></summary>
+		/// <remarks>Mapped on  table field: "DhlEcommerceShipment"."PackagingType"<br/>
+		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
+		public virtual System.Int32 PackagingType
+		{
+			get { return (System.Int32)GetValue((int)DhlEcommerceShipmentFieldIndex.PackagingType, true); }
+			set	{ SetValue((int)DhlEcommerceShipmentFieldIndex.PackagingType, value); }
+		}
+
+		/// <summary> The DimsProfileID property of the Entity DhlEcommerceShipment<br/><br/></summary>
+		/// <remarks>Mapped on  table field: "DhlEcommerceShipment"."DimsProfileID"<br/>
+		/// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
+		public virtual System.Int64 DimsProfileID
+		{
+			get { return (System.Int64)GetValue((int)DhlEcommerceShipmentFieldIndex.DimsProfileID, true); }
+			set	{ SetValue((int)DhlEcommerceShipmentFieldIndex.DimsProfileID, value); }
+		}
+
+		/// <summary> The DimsLength property of the Entity DhlEcommerceShipment<br/><br/></summary>
+		/// <remarks>Mapped on  table field: "DhlEcommerceShipment"."DimsLength"<br/>
+		/// Table field type characteristics (type, precision, scale, length): Float, 38, 0, 0<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
+		public virtual System.Double DimsLength
+		{
+			get { return (System.Double)GetValue((int)DhlEcommerceShipmentFieldIndex.DimsLength, true); }
+			set	{ SetValue((int)DhlEcommerceShipmentFieldIndex.DimsLength, value); }
+		}
+
+		/// <summary> The DimsWidth property of the Entity DhlEcommerceShipment<br/><br/></summary>
+		/// <remarks>Mapped on  table field: "DhlEcommerceShipment"."DimsWidth"<br/>
+		/// Table field type characteristics (type, precision, scale, length): Float, 38, 0, 0<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
+		public virtual System.Double DimsWidth
+		{
+			get { return (System.Double)GetValue((int)DhlEcommerceShipmentFieldIndex.DimsWidth, true); }
+			set	{ SetValue((int)DhlEcommerceShipmentFieldIndex.DimsWidth, value); }
+		}
+
+		/// <summary> The DimsHeight property of the Entity DhlEcommerceShipment<br/><br/></summary>
+		/// <remarks>Mapped on  table field: "DhlEcommerceShipment"."DimsHeight"<br/>
+		/// Table field type characteristics (type, precision, scale, length): Float, 38, 0, 0<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
+		public virtual System.Double DimsHeight
+		{
+			get { return (System.Double)GetValue((int)DhlEcommerceShipmentFieldIndex.DimsHeight, true); }
+			set	{ SetValue((int)DhlEcommerceShipmentFieldIndex.DimsHeight, value); }
+		}
+
+		/// <summary> The DimsWeight property of the Entity DhlEcommerceShipment<br/><br/></summary>
+		/// <remarks>Mapped on  table field: "DhlEcommerceShipment"."DimsWeight"<br/>
+		/// Table field type characteristics (type, precision, scale, length): Float, 38, 0, 0<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
+		public virtual System.Double DimsWeight
+		{
+			get { return (System.Double)GetValue((int)DhlEcommerceShipmentFieldIndex.DimsWeight, true); }
+			set	{ SetValue((int)DhlEcommerceShipmentFieldIndex.DimsWeight, value); }
+		}
+
+		/// <summary> The DimsAddWeight property of the Entity DhlEcommerceShipment<br/><br/></summary>
+		/// <remarks>Mapped on  table field: "DhlEcommerceShipment"."DimsAddWeight"<br/>
+		/// Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
+		public virtual System.Boolean DimsAddWeight
+		{
+			get { return (System.Boolean)GetValue((int)DhlEcommerceShipmentFieldIndex.DimsAddWeight, true); }
+			set	{ SetValue((int)DhlEcommerceShipmentFieldIndex.DimsAddWeight, value); }
+		}
+
+		/// <summary> The Reference1 property of the Entity DhlEcommerceShipment<br/><br/></summary>
+		/// <remarks>Mapped on  table field: "DhlEcommerceShipment"."Reference1"<br/>
+		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 300<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
+		public virtual System.String Reference1
+		{
+			get { return (System.String)GetValue((int)DhlEcommerceShipmentFieldIndex.Reference1, true); }
+			set	{ SetValue((int)DhlEcommerceShipmentFieldIndex.Reference1, value); }
 		}
 
 		/// <summary> Gets / sets related entity of type 'ScanFormBatchEntity' which has to be set using a fetch action earlier. If no related entity is set for this property, null is returned..<br/><br/></summary>

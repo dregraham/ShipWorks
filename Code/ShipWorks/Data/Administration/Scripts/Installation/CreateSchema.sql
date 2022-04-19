@@ -3036,6 +3036,14 @@ CREATE TABLE [dbo].[DhlEcommerceShipment](
 	[IntegratorTransactionID] [uniqueidentifier] NULL,
 	[StampsTransactionID] [uniqueidentifier] NULL,
 	[ResidentialDelivery] [bit] NOT NULL,
+	[PackagingType] [int] NOT NULL,
+	[DimsProfileID] [bigint] NOT NULL,
+	[DimsLength] [float] NOT NULL,
+	[DimsWidth] [float] NOT NULL,
+	[DimsHeight] [float] NOT NULL,
+	[DimsWeight] [float] NOT NULL,
+	[DimsAddWeight] [bit] NOT NULL,
+	[Reference1] [nvarchar](300) NOT NULL,
 	[CustomsRecipientTin] [nvarchar](25) NULL,
 	[CustomsTaxIdType] [int] NULL,
 	[CustomsTinIssuingAuthority] [nvarchar](2) NULL,
@@ -3096,6 +3104,8 @@ CREATE TABLE [dbo].[DhlEcommerceProfile](
 	[CustomsRecipientTin] [nvarchar](25) NULL,
 	[CustomsTaxIdType] [int] NULL,
 	[CustomsTinIssuingAuthority] [nvarchar](2) NULL,
+	[PackagingType] [int] NULL,
+	[Reference1] [nvarchar](300) NULL
  CONSTRAINT [PK_DhlEcommerceProfile] PRIMARY KEY CLUSTERED 
 (
 	[ShippingProfileID] ASC

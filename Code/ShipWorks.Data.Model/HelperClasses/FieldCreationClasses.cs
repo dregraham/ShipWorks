@@ -5837,6 +5837,16 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(DhlEcommerceProfileFieldIndex.CustomsTinIssuingAuthority);}
 		}
+		/// <summary>Creates a new DhlEcommerceProfileEntity.PackagingType field instance</summary>
+		public static EntityField2 PackagingType
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(DhlEcommerceProfileFieldIndex.PackagingType);}
+		}
+		/// <summary>Creates a new DhlEcommerceProfileEntity.Reference1 field instance</summary>
+		public static EntityField2 Reference1
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(DhlEcommerceProfileFieldIndex.Reference1);}
+		}
 	}
 
 	/// <summary>Field Creation Class for entity DhlEcommerceScanFormEntity</summary>
@@ -5966,6 +5976,46 @@ namespace ShipWorks.Data.Model.HelperClasses
 		public static EntityField2 ScanFormBatchID
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(DhlEcommerceShipmentFieldIndex.ScanFormBatchID);}
+		}
+		/// <summary>Creates a new DhlEcommerceShipmentEntity.PackagingType field instance</summary>
+		public static EntityField2 PackagingType
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(DhlEcommerceShipmentFieldIndex.PackagingType);}
+		}
+		/// <summary>Creates a new DhlEcommerceShipmentEntity.DimsProfileID field instance</summary>
+		public static EntityField2 DimsProfileID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(DhlEcommerceShipmentFieldIndex.DimsProfileID);}
+		}
+		/// <summary>Creates a new DhlEcommerceShipmentEntity.DimsLength field instance</summary>
+		public static EntityField2 DimsLength
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(DhlEcommerceShipmentFieldIndex.DimsLength);}
+		}
+		/// <summary>Creates a new DhlEcommerceShipmentEntity.DimsWidth field instance</summary>
+		public static EntityField2 DimsWidth
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(DhlEcommerceShipmentFieldIndex.DimsWidth);}
+		}
+		/// <summary>Creates a new DhlEcommerceShipmentEntity.DimsHeight field instance</summary>
+		public static EntityField2 DimsHeight
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(DhlEcommerceShipmentFieldIndex.DimsHeight);}
+		}
+		/// <summary>Creates a new DhlEcommerceShipmentEntity.DimsWeight field instance</summary>
+		public static EntityField2 DimsWeight
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(DhlEcommerceShipmentFieldIndex.DimsWeight);}
+		}
+		/// <summary>Creates a new DhlEcommerceShipmentEntity.DimsAddWeight field instance</summary>
+		public static EntityField2 DimsAddWeight
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(DhlEcommerceShipmentFieldIndex.DimsAddWeight);}
+		}
+		/// <summary>Creates a new DhlEcommerceShipmentEntity.Reference1 field instance</summary>
+		public static EntityField2 Reference1
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(DhlEcommerceShipmentFieldIndex.Reference1);}
 		}
 	}
 

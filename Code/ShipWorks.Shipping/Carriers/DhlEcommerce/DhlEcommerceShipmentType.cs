@@ -93,8 +93,7 @@ namespace ShipWorks.Shipping.Carriers.DhlEcommerce
 
             DhlEcommerceShipmentEntity dhlEcommerceShipmentEntity = shipment.DhlEcommerce;
 
-            // TODO: DHLECommerce set default service
-            //dhlEcommerceShipmentEntity.Service = (int) DhlEcommerceServiceType.EcommerceWorldWide;
+            dhlEcommerceShipmentEntity.Service = (int) DhlEcommerceServiceType.US_DhlSmartMailParcelGround;
             dhlEcommerceShipmentEntity.DeliveredDutyPaid = false;
             dhlEcommerceShipmentEntity.NonMachinable = false;
             dhlEcommerceShipmentEntity.SaturdayDelivery = false;
@@ -121,13 +120,10 @@ namespace ShipWorks.Shipping.Carriers.DhlEcommerce
                 ShippingManager.EnsureShipmentLoaded(shipment);
             }
 
-            // TODO: DHLECommerce Determine if we need package adapters or shipment adapter
-            //return new List<IPackageAdapter>()
-            //{
-            //    new DhlEcommercePackageAdapter(shipment, shipment.Postal.Usps)
-            //};
-
-            return null;
+            return new List<IPackageAdapter>()
+            {
+                new DhlEcommercePackageAdapter(shipment)
+            };
         }
 
         /// <summary>
@@ -137,38 +133,11 @@ namespace ShipWorks.Shipping.Carriers.DhlEcommerce
         {
             base.UpdateDynamicShipmentData(shipment);
 
-            RedistributeContentWeight(shipment);
-
             // TODO: DHLECommerce Check insurance stuff below.
             //shipment.Insurance = shipment.DhlEcommerce
             //shipment.InsuranceProvider = (int) InsuranceProvider.ShipWorks;
 
             shipment.RequestedLabelFormat = shipment.DhlEcommerce.RequestedLabelFormat;
-        }
-
-        /// <summary>
-        /// Redistribute the ContentWeight from the shipment to each package in the shipment.  This only does something
-        /// if the ContentWeight is different from the total Content.  Returns true if weight had to be redistributed.
-        /// </summary>
-        public static bool RedistributeContentWeight(ShipmentEntity shipment)
-        {
-            // TODO: DHLECommerce Check calcs below
-
-            //// Determine what our content weight should be
-            //double contentWeight = shipment.DhlEcommerce.Packages.Sum(p => p.Weight);
-
-            //// If the content weight changed outside of us, redistribute what the new weight among the packages
-            //if (!contentWeight.IsEquivalentTo(shipment.ContentWeight))
-            //{
-            //    foreach (DhlEcommercePackageEntity package in shipment.DhlEcommerce.Packages)
-            //    {
-            //        package.Weight = shipment.ContentWeight / shipment.DhlEcommerce.Packages.Count;
-            //    }
-
-            //    return true;
-            //}
-
-            return false;
         }
 
         /// <summary>
@@ -182,16 +151,16 @@ namespace ShipWorks.Shipping.Carriers.DhlEcommerce
             DhlEcommerceAccountEntity account = accountRepository.GetAccount(dhlEcommerceShipmentEntity.DhlEcommerceAccountID);
 
             // TODO: DHLECommerce Check account number
-            //commonDetail.OriginAccount = (account == null) ? "" : account.AccountNumber.ToString();
+            //commonDetail.OriginAccount = (account == null) ? "" : account.xxxxxx.ToString();
             commonDetail.ServiceType = dhlEcommerceShipmentEntity.Service;
 
+            // TODO: DHLECommerce determine if DHL eCommerce has packaging type
             // i-Parcel doesn't have a packaging type concept, so default to 0
             commonDetail.PackagingType = 0;
 
-            // TODO: DHLECommerce Check dims below
-            //commonDetail.PackageLength = dhlEcommerceShipmentEntity.Packages[0].DimsLength;
-            //commonDetail.PackageWidth = dhlEcommerceShipmentEntity.Packages[0].DimsWidth;
-            //commonDetail.PackageHeight = dhlEcommerceShipmentEntity.Packages[0].DimsHeight;
+            commonDetail.PackageLength = dhlEcommerceShipmentEntity.DimsLength;
+            commonDetail.PackageWidth = dhlEcommerceShipmentEntity.DimsWidth;
+            commonDetail.PackageHeight = dhlEcommerceShipmentEntity.DimsHeight;
 
             return commonDetail;
         }
@@ -205,37 +174,6 @@ namespace ShipWorks.Shipping.Carriers.DhlEcommerce
         protected override void LoadShipmentDataInternal(ShipmentEntity shipment, bool refreshIfPresent)
         {
             ShipmentTypeDataService.LoadShipmentData(this, shipment, shipment, "DhlEcommerce", typeof(DhlEcommerceShipmentEntity), refreshIfPresent);
-
-            DhlEcommerceShipmentEntity dhlEcommerceShipmentEntity = shipment.DhlEcommerce;
-
-            // TODO: DHLECommerce Check code below
-            //if (refreshIfPresent)
-            //{
-            //    dhlEcommerceShipmentEntity.Packages.Clear();
-            //}
-
-            //// If there are no packages load them now
-            //if (dhlEcommerceShipmentEntity.Packages.Count == 0)
-            //{
-            //    using (SqlAdapter adapter = new SqlAdapter())
-            //    {
-            //        adapter.FetchEntityCollection(dhlEcommerceShipmentEntity.Packages,
-            //                                      new RelationPredicateBucket(DhlEcommercePackageFields.ShipmentID == shipment.ShipmentID));
-
-            //        dhlEcommerceShipmentEntity.Packages.Sort((int) DhlEcommercePackageFieldIndex.DhlEcommercePackageID, ListSortDirection.Ascending);
-            //    }
-
-            //    // We reloaded the packages, so reset the tracker
-            //    dhlEcommerceShipmentEntity.Packages.RemovedEntitiesTracker = new DhlEcommercePackageCollection();
-            //}
-
-            //// There has to be at least one package.  Really the only way there would not already be a package is if this is a new shipment,
-            //// and the default profile set included no package stuff.
-            //if (dhlEcommerceShipmentEntity.Packages.None())
-            //{
-            //    // This was changed to an exception instead of creating the package when the creation was moved to ConfigureNewShipment
-            //    throw new NotFoundException("Primary package not found.");
-            //}
         }
 
         /// <summary>
@@ -275,20 +213,12 @@ namespace ShipWorks.Shipping.Carriers.DhlEcommerce
         {
             MethodConditions.EnsureArgumentIsNotNull(shipment, nameof(shipment));
 
-            // TODO: DHLECommerce check below
-            //if (parcelIndex >= 0 && parcelIndex < shipment.DhlEcommerce.Packages.Count)
-            //{
-            //    DhlEcommercePackageEntity package = shipment.DhlEcommerce.Packages[parcelIndex];
-
-            //    return new ShipmentParcel(shipment, package.DhlEcommercePackageID, package.TrackingNumber,
-            //        new DhlEcommerceInsuranceChoice(shipment, package),
-            //        new DimensionsAdapter(package))
-            //    {
-            //        TotalWeight = package.Weight + (package.DimsAddWeight ? package.DimsWeight : 0)
-            //    };
-            //}
-
-            throw new ArgumentException($"'{parcelIndex}' is out of range for the shipment.", "parcelIndex");
+            return new ShipmentParcel(shipment, null,
+                new InsuranceChoice(shipment, shipment.DhlEcommerce, shipment.DhlEcommerce, shipment.DhlEcommerce),
+                new DimensionsAdapter(shipment.DhlEcommerce))
+            {
+                TotalWeight = shipment.TotalWeight
+            };
         }
 
         /// <summary>

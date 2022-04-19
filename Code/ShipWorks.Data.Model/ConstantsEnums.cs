@@ -2518,6 +2518,10 @@ namespace ShipWorks.Data.Model
 		CustomsTaxIdType,
 		///<summary>CustomsTinIssuingAuthority. </summary>
 		CustomsTinIssuingAuthority,
+		///<summary>PackagingType. </summary>
+		PackagingType,
+		///<summary>Reference1. </summary>
+		Reference1,
 		/// <summary></summary>
 		AmountOfFields
 	}
@@ -2578,6 +2582,22 @@ namespace ShipWorks.Data.Model
 		CustomsTinIssuingAuthority,
 		///<summary>ScanFormBatchID. </summary>
 		ScanFormBatchID,
+		///<summary>PackagingType. </summary>
+		PackagingType,
+		///<summary>DimsProfileID. </summary>
+		DimsProfileID,
+		///<summary>DimsLength. </summary>
+		DimsLength,
+		///<summary>DimsWidth. </summary>
+		DimsWidth,
+		///<summary>DimsHeight. </summary>
+		DimsHeight,
+		///<summary>DimsWeight. </summary>
+		DimsWeight,
+		///<summary>DimsAddWeight. </summary>
+		DimsAddWeight,
+		///<summary>Reference1. </summary>
+		Reference1,
 		/// <summary></summary>
 		AmountOfFields
 	}

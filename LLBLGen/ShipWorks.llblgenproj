@@ -773,6 +773,8 @@
           <Field Name="DhlEcommerceAccountID" Type="long" IsOptional="true" Precision="19" FieldIndex="1" />
           <Field Name="NonDelivery" Type="int" IsOptional="true" Precision="10" FieldIndex="7" />
           <Field Name="NonMachinable" Type="bool" IsOptional="true" FieldIndex="4" />
+          <Field Name="PackagingType" Type="int" IsOptional="true" Precision="10" FieldIndex="12" />
+          <Field Name="Reference1" Type="string" IsOptional="true" MaxLength="300" FieldIndex="13" />
           <Field Name="ResidentialDelivery" Type="bool" IsOptional="true" FieldIndex="8" />
           <Field Name="SaturdayDelivery" Type="bool" IsOptional="true" FieldIndex="5" />
           <Field Name="Service" Type="int" IsOptional="true" Precision="10" FieldIndex="2" />
@@ -798,9 +800,17 @@
           <Field Name="CustomsTinIssuingAuthority" Type="string" IsOptional="true" MaxLength="2" FieldIndex="15" />
           <Field Name="DeliveredDutyPaid" Type="bool" FieldIndex="3" />
           <Field Name="DhlEcommerceAccountID" Type="long" Precision="19" FieldIndex="1" />
+          <Field Name="DimsAddWeight" Type="bool" FieldIndex="23" />
+          <Field Name="DimsHeight" Type="double" Precision="38" FieldIndex="21" />
+          <Field Name="DimsLength" Type="double" Precision="38" FieldIndex="19" />
+          <Field Name="DimsProfileID" Type="long" Precision="19" FieldIndex="18" />
+          <Field Name="DimsWeight" Type="double" Precision="38" FieldIndex="22" />
+          <Field Name="DimsWidth" Type="double" Precision="38" FieldIndex="20" />
           <Field Name="IntegratorTransactionID" Type="guid" IsOptional="true" FieldIndex="10" />
           <Field Name="NonDelivery" Type="int" Precision="10" FieldIndex="8" />
           <Field Name="NonMachinable" Type="bool" FieldIndex="4" />
+          <Field Name="PackagingType" Type="int" Precision="10" FieldIndex="17" />
+          <Field Name="Reference1" Type="string" MaxLength="300" FieldIndex="24" />
           <Field Name="RequestedLabelFormat" Type="int" Precision="10" FieldIndex="6" />
           <Field Name="ResidentialDelivery" Type="bool" FieldIndex="12" />
           <Field Name="SaturdayDelivery" Type="bool" FieldIndex="5" />
@@ -4824,7 +4834,7 @@
       <Catalogs>
         <Catalog Name="ShipWorksLocal">
           <Schemas>
-            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2022-04-19T16:06:06.6456684Z">
+            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2022-04-19T20:29:55.635971Z">
               <Tables>
                 <Table Name="Action">
                   <PkConstraintName Name="PK_Action" />
@@ -5581,6 +5591,8 @@
                     <Field Name="CustomsRecipientTin" Ordinal="10" IsOptional="true" DbType="12" Length="25" />
                     <Field Name="CustomsTaxIdType" Ordinal="11" IsOptional="true" DbType="8" Precision="10" />
                     <Field Name="CustomsTinIssuingAuthority" Ordinal="12" IsOptional="true" DbType="12" Length="2" />
+                    <Field Name="PackagingType" Ordinal="13" IsOptional="true" DbType="8" Precision="10" />
+                    <Field Name="Reference1" Ordinal="14" IsOptional="true" DbType="12" Length="300" />
                   </Fields>
                 </Table>
                 <Table Name="DhlEcommerceScanForm">
@@ -5631,10 +5643,18 @@
                     <Field Name="IntegratorTransactionID" Ordinal="11" IsOptional="true" DbType="25" />
                     <Field Name="StampsTransactionID" Ordinal="12" IsOptional="true" DbType="25" />
                     <Field Name="ResidentialDelivery" Ordinal="13" DbType="2" />
-                    <Field Name="CustomsRecipientTin" Ordinal="14" IsOptional="true" DbType="12" Length="25" />
-                    <Field Name="CustomsTaxIdType" Ordinal="15" IsOptional="true" DbType="8" Precision="10" />
-                    <Field Name="CustomsTinIssuingAuthority" Ordinal="16" IsOptional="true" DbType="12" Length="2" />
-                    <Field Name="ScanFormBatchID" Ordinal="17" IsOptional="true" DbType="0" Precision="19" />
+                    <Field Name="PackagingType" Ordinal="14" DbType="8" Precision="10" />
+                    <Field Name="DimsProfileID" Ordinal="15" DbType="0" Precision="19" />
+                    <Field Name="DimsLength" Ordinal="16" DbType="6" Precision="38" />
+                    <Field Name="DimsWidth" Ordinal="17" DbType="6" Precision="38" />
+                    <Field Name="DimsHeight" Ordinal="18" DbType="6" Precision="38" />
+                    <Field Name="DimsWeight" Ordinal="19" DbType="6" Precision="38" />
+                    <Field Name="DimsAddWeight" Ordinal="20" DbType="2" />
+                    <Field Name="Reference1" Ordinal="21" DbType="12" Length="300" />
+                    <Field Name="CustomsRecipientTin" Ordinal="22" IsOptional="true" DbType="12" Length="25" />
+                    <Field Name="CustomsTaxIdType" Ordinal="23" IsOptional="true" DbType="8" Precision="10" />
+                    <Field Name="CustomsTinIssuingAuthority" Ordinal="24" IsOptional="true" DbType="12" Length="2" />
+                    <Field Name="ScanFormBatchID" Ordinal="25" IsOptional="true" DbType="0" Precision="19" />
                   </Fields>
                 </Table>
                 <Table Name="DhlExpressAccount">
@@ -12043,6 +12063,8 @@
             <FieldMapping FieldName="DhlEcommerceAccountID" TargetFieldName="DhlEcommerceAccountID" />
             <FieldMapping FieldName="NonDelivery" TargetFieldName="NonDelivery" />
             <FieldMapping FieldName="NonMachinable" TargetFieldName="NonMachinable" />
+            <FieldMapping FieldName="PackagingType" TargetFieldName="PackagingType" />
+            <FieldMapping FieldName="Reference1" TargetFieldName="Reference1" />
             <FieldMapping FieldName="ResidentialDelivery" TargetFieldName="ResidentialDelivery" />
             <FieldMapping FieldName="SaturdayDelivery" TargetFieldName="SaturdayDelivery" />
             <FieldMapping FieldName="Service" TargetFieldName="Service" />
@@ -12068,9 +12090,17 @@
             <FieldMapping FieldName="CustomsTinIssuingAuthority" TargetFieldName="CustomsTinIssuingAuthority" />
             <FieldMapping FieldName="DeliveredDutyPaid" TargetFieldName="DeliveredDutyPaid" />
             <FieldMapping FieldName="DhlEcommerceAccountID" TargetFieldName="DhlEcommerceAccountID" />
+            <FieldMapping FieldName="DimsAddWeight" TargetFieldName="DimsAddWeight" />
+            <FieldMapping FieldName="DimsHeight" TargetFieldName="DimsHeight" />
+            <FieldMapping FieldName="DimsLength" TargetFieldName="DimsLength" />
+            <FieldMapping FieldName="DimsProfileID" TargetFieldName="DimsProfileID" />
+            <FieldMapping FieldName="DimsWeight" TargetFieldName="DimsWeight" />
+            <FieldMapping FieldName="DimsWidth" TargetFieldName="DimsWidth" />
             <FieldMapping FieldName="IntegratorTransactionID" TargetFieldName="IntegratorTransactionID" />
             <FieldMapping FieldName="NonDelivery" TargetFieldName="NonDelivery" />
             <FieldMapping FieldName="NonMachinable" TargetFieldName="NonMachinable" />
+            <FieldMapping FieldName="PackagingType" TargetFieldName="PackagingType" />
+            <FieldMapping FieldName="Reference1" TargetFieldName="Reference1" />
             <FieldMapping FieldName="RequestedLabelFormat" TargetFieldName="RequestedLabelFormat" />
             <FieldMapping FieldName="ResidentialDelivery" TargetFieldName="ResidentialDelivery" />
             <FieldMapping FieldName="SaturdayDelivery" TargetFieldName="SaturdayDelivery" />
