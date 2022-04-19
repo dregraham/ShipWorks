@@ -30,6 +30,8 @@ namespace ShipWorks.Data.Model.RelationClasses
 		public virtual List<IEntityRelation> GetAllRelations()
 		{
 			List<IEntityRelation> toReturn = new List<IEntityRelation>();
+			toReturn.Add(this.DhlEcommerceScanFormEntityUsingScanFormBatchID);
+			toReturn.Add(this.DhlEcommerceShipmentEntityUsingScanFormBatchID);
 			toReturn.Add(this.EndiciaScanFormEntityUsingScanFormBatchID);
 			toReturn.Add(this.EndiciaShipmentEntityUsingScanFormBatchID);
 			toReturn.Add(this.UspsScanFormEntityUsingScanFormBatchID);
@@ -38,6 +40,36 @@ namespace ShipWorks.Data.Model.RelationClasses
 		}
 
 		#region Class Property Declarations
+
+		/// <summary>Returns a new IEntityRelation object, between ScanFormBatchEntity and DhlEcommerceScanFormEntity over the 1:n relation they have, using the relation between the fields:
+		/// ScanFormBatch.ScanFormBatchID - DhlEcommerceScanForm.ScanFormBatchID
+		/// </summary>
+		public virtual IEntityRelation DhlEcommerceScanFormEntityUsingScanFormBatchID
+		{
+			get
+			{
+				IEntityRelation relation = new EntityRelation(SD.LLBLGen.Pro.ORMSupportClasses.RelationType.OneToMany, "DhlEcommerceScanForm" , true);
+				relation.AddEntityFieldPair(ScanFormBatchFields.ScanFormBatchID, DhlEcommerceScanFormFields.ScanFormBatchID);
+				relation.InheritanceInfoPkSideEntity = InheritanceInfoProviderSingleton.GetInstance().GetInheritanceInfo("ScanFormBatchEntity", true);
+				relation.InheritanceInfoFkSideEntity = InheritanceInfoProviderSingleton.GetInstance().GetInheritanceInfo("DhlEcommerceScanFormEntity", false);
+				return relation;
+			}
+		}
+
+		/// <summary>Returns a new IEntityRelation object, between ScanFormBatchEntity and DhlEcommerceShipmentEntity over the 1:n relation they have, using the relation between the fields:
+		/// ScanFormBatch.ScanFormBatchID - DhlEcommerceShipment.ScanFormBatchID
+		/// </summary>
+		public virtual IEntityRelation DhlEcommerceShipmentEntityUsingScanFormBatchID
+		{
+			get
+			{
+				IEntityRelation relation = new EntityRelation(SD.LLBLGen.Pro.ORMSupportClasses.RelationType.OneToMany, "DhlEcommerceShipment" , true);
+				relation.AddEntityFieldPair(ScanFormBatchFields.ScanFormBatchID, DhlEcommerceShipmentFields.ScanFormBatchID);
+				relation.InheritanceInfoPkSideEntity = InheritanceInfoProviderSingleton.GetInstance().GetInheritanceInfo("ScanFormBatchEntity", true);
+				relation.InheritanceInfoFkSideEntity = InheritanceInfoProviderSingleton.GetInstance().GetInheritanceInfo("DhlEcommerceShipmentEntity", false);
+				return relation;
+			}
+		}
 
 		/// <summary>Returns a new IEntityRelation object, between ScanFormBatchEntity and EndiciaScanFormEntity over the 1:n relation they have, using the relation between the fields:
 		/// ScanFormBatch.ScanFormBatchID - EndiciaScanForm.ScanFormBatchID
@@ -114,6 +146,8 @@ namespace ShipWorks.Data.Model.RelationClasses
 	/// <summary>Static class which is used for providing relationship instances which are re-used internally for syncing</summary>
 	internal static class StaticScanFormBatchRelations
 	{
+		internal static readonly IEntityRelation DhlEcommerceScanFormEntityUsingScanFormBatchIDStatic = new ScanFormBatchRelations().DhlEcommerceScanFormEntityUsingScanFormBatchID;
+		internal static readonly IEntityRelation DhlEcommerceShipmentEntityUsingScanFormBatchIDStatic = new ScanFormBatchRelations().DhlEcommerceShipmentEntityUsingScanFormBatchID;
 		internal static readonly IEntityRelation EndiciaScanFormEntityUsingScanFormBatchIDStatic = new ScanFormBatchRelations().EndiciaScanFormEntityUsingScanFormBatchID;
 		internal static readonly IEntityRelation EndiciaShipmentEntityUsingScanFormBatchIDStatic = new ScanFormBatchRelations().EndiciaShipmentEntityUsingScanFormBatchID;
 		internal static readonly IEntityRelation UspsScanFormEntityUsingScanFormBatchIDStatic = new ScanFormBatchRelations().UspsScanFormEntityUsingScanFormBatchID;

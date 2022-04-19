@@ -57,6 +57,8 @@ namespace ShipWorks.Api.Orders.Shipments
         /// </summary>
         private IEnumerable<long> GetLabelConsumerIds(ICarrierShipmentAdapter shipmentAdapter)
         {
+            // TODO: DHLECommerce Do we need to add DhlEcommerce here too?
+
             // Single package carriers and DHL Express store label data under the shipmentId
             // DHL Express is a ShipEngine carrier and therefor uses the common ShipEngine logic
             // for storing labels which is why it uses the shipmentId and not the packageId

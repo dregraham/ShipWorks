@@ -11,6 +11,7 @@ namespace ShipWorks.Shipping.Carriers
     /// <summary>
     /// Manipulate the date of the given shipment
     /// </summary>
+    // TODO: DHLECommerce Do we need to add DhlEcommerce here?
     [KeyedComponent(typeof(IShipmentDateManipulator), ShipmentTypeCode.Asendia)]
     [KeyedComponent(typeof(IShipmentDateManipulator), ShipmentTypeCode.DhlExpress)]
     [KeyedComponent(typeof(IShipmentDateManipulator), ShipmentTypeCode.FedEx)]

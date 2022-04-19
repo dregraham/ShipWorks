@@ -63,6 +63,11 @@ namespace ShipWorks.Shipping.Insurance.InsureShip
                     carrierCode = "DHL-E-I-P1";
                     break;
 
+                // TODO: DHLECommerce implement
+                //case ShipmentTypeCode.DhlEcommerce:
+                //    carrierCode = "DHL-E-I-P1";
+                //    break;
+
                 case ShipmentTypeCode.Asendia:
                     carrierCode = ShipmentTypeManager.GetType(shipment.ShipmentTypeCode).IsDomestic(shipment) ? "ASE-DOM" : "ASE-INTL";
                     break;

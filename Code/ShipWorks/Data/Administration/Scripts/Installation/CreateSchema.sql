@@ -2981,6 +2981,143 @@ PRINT N'Creating index [IX_SWDefault_OnTracShipment_PackagingType] on [dbo].[OnT
 GO
 CREATE NONCLUSTERED INDEX [IX_SWDefault_OnTracShipment_PackagingType] ON [dbo].[OnTracShipment] ([PackagingType])
 GO
+
+PRINT N'Creating [dbo].[DhlEcommerceAccount]'
+GO
+CREATE TABLE [dbo].[DhlEcommerceAccount](
+	[DhlEcommerceAccountID] [bigint] IDENTITY(1106,1000) NOT NULL,
+	[RowVersion] [timestamp] NOT NULL,
+	[ShipEngineCarrierId] [nvarchar](50) NOT NULL,
+	[ClientId] [nvarchar](60) NOT NULL,
+	[ApiSecret] [nvarchar](400) NOT NULL,
+	[PickupNumber] [nvarchar](20) NOT NULL,
+	[DistributionCenter] [nvarchar](12) NOT NULL,
+	[SoldTo] [nvarchar](50) NOT NULL,
+	[Description] [nvarchar](50) NOT NULL,
+	[FirstName] [nvarchar](30) NOT NULL,
+	[MiddleName] [nvarchar](30) NOT NULL,
+	[LastName] [nvarchar](30) NOT NULL,
+	[Company] [nvarchar](30) NOT NULL,
+	[Street1] [nvarchar](60) NOT NULL,
+	[Street2] [nvarchar](60) NOT NULL,
+	[Street3] [nvarchar](60) NOT NULL,
+	[City] [nvarchar](50) NOT NULL,
+	[StateProvCode] [nvarchar](50) NOT NULL,
+	[PostalCode] [nvarchar](20) NOT NULL,
+	[CountryCode] [nvarchar](50) NOT NULL,
+	[Phone] [nvarchar](26) NOT NULL,
+	[Email] [nvarchar](100) NOT NULL,
+	[CreatedDate] [datetime] NOT NULL
+ CONSTRAINT [PK_PostalDhlEcommerceAccount] PRIMARY KEY CLUSTERED 
+(
+	[DhlEcommerceAccountID] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+
+PRINT N'Enabling Change Tracking for [dbo].[DhlEcommerceAccount]'
+GO
+ALTER TABLE [dbo].[DhlEcommerceAccount] ENABLE CHANGE_TRACKING
+GO
+
+PRINT N'Creating [dbo].[DhlEcommerceShipment]'
+GO
+CREATE TABLE [dbo].[DhlEcommerceShipment](
+	[ShipmentID] [bigint] NOT NULL,
+	[DhlEcommerceAccountID] [bigint] NOT NULL,
+	[Service] [int] NOT NULL,
+	[DeliveredDutyPaid] [bit] NOT NULL,
+	[NonMachinable] [bit] NOT NULL,
+	[SaturdayDelivery] [bit] NOT NULL,
+	[RequestedLabelFormat] [int] NOT NULL,
+	[Contents] [int] NOT NULL,
+	[NonDelivery] [int] NOT NULL,
+	[ShipEngineLabelID] [nvarchar](50) NULL,
+	[IntegratorTransactionID] [uniqueidentifier] NULL,
+	[StampsTransactionID] [uniqueidentifier] NULL,
+	[ResidentialDelivery] [bit] NOT NULL,
+	[CustomsRecipientTin] [nvarchar](25) NULL,
+	[CustomsTaxIdType] [int] NULL,
+	[CustomsTinIssuingAuthority] [nvarchar](2) NULL,
+	[ScanFormBatchID] [bigint] NULL,
+ CONSTRAINT [PK_DhlEcommerceShipment] PRIMARY KEY CLUSTERED 
+(
+	[ShipmentID] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+
+ALTER TABLE [dbo].[DhlEcommerceShipment]  WITH CHECK ADD  CONSTRAINT [FK_DhlEcommerceShipment_ScanFormBatch] FOREIGN KEY([ScanFormBatchID])
+REFERENCES [dbo].[ScanFormBatch] ([ScanFormBatchID])
+GO
+
+ALTER TABLE [dbo].[DhlEcommerceShipment] CHECK CONSTRAINT [FK_DhlEcommerceShipment_ScanFormBatch]
+GO
+
+ALTER TABLE [dbo].[DhlEcommerceShipment]  WITH CHECK ADD  CONSTRAINT [FK_DhlEcommerceShipment_Shipment] FOREIGN KEY([ShipmentID])
+REFERENCES [dbo].[Shipment] ([ShipmentID])
+ON DELETE CASCADE
+GO
+
+PRINT N'Creating [dbo].[DhlEcommerceScanForm]'
+GO
+CREATE TABLE [dbo].[DhlEcommerceScanForm](
+	[DhlEcommerceScanFormID] [bigint] IDENTITY(1107,1000) NOT NULL,
+	[DhlEcommerceAccountID] [bigint] NOT NULL,
+	[ScanFormTransactionID] [varchar](100) NOT NULL,
+	[ScanFormUrl] [varchar](2048) NOT NULL,
+	[CreatedDate] [datetime] NOT NULL,
+	[ScanFormBatchID] [bigint] NOT NULL,
+	[Description] [nvarchar](100) NOT NULL,
+ CONSTRAINT [PK_DhlEcommerceScanForm] PRIMARY KEY CLUSTERED 
+(
+	[DhlEcommerceScanFormID] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+ALTER TABLE [dbo].[DhlEcommerceScanForm]  WITH CHECK ADD  CONSTRAINT [FK_DhlEcommerceScanForm_ScanFormBatch] FOREIGN KEY([ScanFormBatchID])
+REFERENCES [dbo].[ScanFormBatch] ([ScanFormBatchID])
+GO
+ALTER TABLE [dbo].[DhlEcommerceScanForm] CHECK CONSTRAINT [FK_DhlEcommerceScanForm_ScanFormBatch]
+GO
+
+PRINT N'Creating [dbo].[DhlEcommerceProfile]'
+GO
+CREATE TABLE [dbo].[DhlEcommerceProfile](
+	[ShippingProfileID] [bigint] NOT NULL,
+	[DhlEcommerceAccountID] [bigint] NULL,
+	[Service] [int] NULL,
+	[DeliveryDutyPaid] [bit] NULL,
+	[NonMachinable] [bit] NULL,
+	[SaturdayDelivery] [bit] NULL,
+	[Contents] [int] NULL,
+	[NonDelivery] [int] NULL,
+	[ResidentialDelivery] [bit] NULL,
+	[CustomsRecipientTin] [nvarchar](25) NULL,
+	[CustomsTaxIdType] [int] NULL,
+	[CustomsTinIssuingAuthority] [nvarchar](2) NULL,
+ CONSTRAINT [PK_DhlEcommerceProfile] PRIMARY KEY CLUSTERED 
+(
+	[ShippingProfileID] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+
+ALTER TABLE [dbo].[DhlEcommerceProfile]  WITH CHECK ADD  CONSTRAINT [FK_DhlEcommerceProfile_ShippingProfile] FOREIGN KEY([ShippingProfileID])
+REFERENCES [dbo].[ShippingProfile] ([ShippingProfileID])
+ON DELETE CASCADE
+GO
+
+ALTER TABLE [dbo].[DhlEcommerceProfile] CHECK CONSTRAINT [FK_DhlEcommerceProfile_ShippingProfile]
+GO
+
+
+
+
+
+
+
+
 PRINT N'Creating [dbo].[DhlExpressShipment]'
 GO
 CREATE TABLE [dbo].[DhlExpressShipment](
@@ -8007,6 +8144,16 @@ GO
 EXEC sys.sp_addextendedproperty @name=N'AuditFormat', @value=N'1' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'DhlExpressShipment', @level2type=N'COLUMN',@level2name=N'NonMachinable'
 GO
 EXEC sys.sp_addextendedproperty @name=N'AuditFormat', @value=N'1' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'DhlExpressShipment', @level2type=N'COLUMN',@level2name=N'SaturdayDelivery'
+GO
+EXEC sys.sp_addextendedproperty @name=N'AuditFormat', @value=N'4' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'DhlEcommerceShipment', @level2type=N'COLUMN',@level2name=N'DhlEcommerceAccountID'
+GO
+EXEC sys.sp_addextendedproperty @name=N'AuditFormat', @value=N'130' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'DhlEcommerceShipment', @level2type=N'COLUMN',@level2name=N'Service'
+GO
+EXEC sys.sp_addextendedproperty @name=N'AuditFormat', @value=N'1' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'DhlEcommerceShipment', @level2type=N'COLUMN',@level2name=N'DeliveredDutyPaid'
+GO
+EXEC sys.sp_addextendedproperty @name=N'AuditFormat', @value=N'1' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'DhlEcommerceShipment', @level2type=N'COLUMN',@level2name=N'NonMachinable'
+GO
+EXEC sys.sp_addextendedproperty @name=N'AuditFormat', @value=N'1' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'DhlEcommerceShipment', @level2type=N'COLUMN',@level2name=N'SaturdayDelivery'
 GO
 
 PRINT N'Adding FilterNodeSetSwFilterNodeID trigger'

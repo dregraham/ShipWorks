@@ -178,6 +178,7 @@ namespace ShipWorks.Shipping
         /// </summary>
         private static bool ShouldPrintCommercialInvoice(ShipmentTypeCode shipmentTypeCode)
         {
+            // TODO: DHLECommerce Determine if DhlEcommerce should be here too
             List<ShipmentTypeCode> shipmentTypesWithCommercialInvoices = new List<ShipmentTypeCode>
             {
                 ShipmentTypeCode.FedEx,

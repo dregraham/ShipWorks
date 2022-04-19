@@ -110,6 +110,7 @@ namespace ShipWorks.Data.Model.EntityInterfaces
         IAmazonSWAProfileEntity AmazonSWA { get; }
         IAsendiaProfileEntity Asendia { get; }
         IBestRateProfileEntity BestRate { get; }
+        IDhlEcommerceProfileEntity DhlEcommerceProfile { get; }
         IDhlExpressProfileEntity DhlExpress { get; }
         IFedExProfileEntity FedEx { get; }
         IIParcelProfileEntity IParcel { get; }
@@ -150,6 +151,7 @@ namespace ShipWorks.Data.Model.EntityClasses
         IAmazonSWAProfileEntity IShippingProfileEntity.AmazonSWA => AmazonSWA;
         IAsendiaProfileEntity IShippingProfileEntity.Asendia => Asendia;
         IBestRateProfileEntity IShippingProfileEntity.BestRate => BestRate;
+        IDhlEcommerceProfileEntity IShippingProfileEntity.DhlEcommerceProfile => DhlEcommerceProfile;
         IDhlExpressProfileEntity IShippingProfileEntity.DhlExpress => DhlExpress;
         IFedExProfileEntity IShippingProfileEntity.FedEx => FedEx;
         IIParcelProfileEntity IShippingProfileEntity.IParcel => IParcel;

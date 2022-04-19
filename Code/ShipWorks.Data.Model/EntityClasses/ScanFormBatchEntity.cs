@@ -32,6 +32,8 @@ namespace ShipWorks.Data.Model.EntityClasses
 		// __LLBLGENPRO_USER_CODE_REGION_END	
 	{
 		#region Class Member Declarations
+		private EntityCollection<DhlEcommerceScanFormEntity> _dhlEcommerceScanForm;
+		private EntityCollection<DhlEcommerceShipmentEntity> _dhlEcommerceShipment;
 		private EntityCollection<EndiciaScanFormEntity> _endiciaScanForms;
 		private EntityCollection<EndiciaShipmentEntity> _endiciaShipment;
 		private EntityCollection<UspsScanFormEntity> _uspsScanForms;
@@ -48,6 +50,10 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <summary>All names of fields mapped onto a relation. Usable for in-memory filtering</summary>
 		public static partial class MemberNames
 		{
+			/// <summary>Member name DhlEcommerceScanForm</summary>
+			public static readonly string DhlEcommerceScanForm = "DhlEcommerceScanForm";
+			/// <summary>Member name DhlEcommerceShipment</summary>
+			public static readonly string DhlEcommerceShipment = "DhlEcommerceShipment";
 			/// <summary>Member name EndiciaScanForms</summary>
 			public static readonly string EndiciaScanForms = "EndiciaScanForms";
 			/// <summary>Member name EndiciaShipment</summary>
@@ -113,6 +119,8 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			if(SerializationHelper.Optimization != SerializationOptimization.Fast) 
 			{
+				_dhlEcommerceScanForm = (EntityCollection<DhlEcommerceScanFormEntity>)info.GetValue("_dhlEcommerceScanForm", typeof(EntityCollection<DhlEcommerceScanFormEntity>));
+				_dhlEcommerceShipment = (EntityCollection<DhlEcommerceShipmentEntity>)info.GetValue("_dhlEcommerceShipment", typeof(EntityCollection<DhlEcommerceShipmentEntity>));
 				_endiciaScanForms = (EntityCollection<EndiciaScanFormEntity>)info.GetValue("_endiciaScanForms", typeof(EntityCollection<EndiciaScanFormEntity>));
 				_endiciaShipment = (EntityCollection<EndiciaShipmentEntity>)info.GetValue("_endiciaShipment", typeof(EntityCollection<EndiciaShipmentEntity>));
 				_uspsScanForms = (EntityCollection<UspsScanFormEntity>)info.GetValue("_uspsScanForms", typeof(EntityCollection<UspsScanFormEntity>));
@@ -132,6 +140,12 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			switch(propertyName)
 			{
+				case "DhlEcommerceScanForm":
+					this.DhlEcommerceScanForm.Add((DhlEcommerceScanFormEntity)entity);
+					break;
+				case "DhlEcommerceShipment":
+					this.DhlEcommerceShipment.Add((DhlEcommerceShipmentEntity)entity);
+					break;
 				case "EndiciaScanForms":
 					this.EndiciaScanForms.Add((EndiciaScanFormEntity)entity);
 					break;
@@ -166,6 +180,12 @@ namespace ShipWorks.Data.Model.EntityClasses
 			RelationCollection toReturn = new RelationCollection();
 			switch(fieldName)
 			{
+				case "DhlEcommerceScanForm":
+					toReturn.Add(Relations.DhlEcommerceScanFormEntityUsingScanFormBatchID);
+					break;
+				case "DhlEcommerceShipment":
+					toReturn.Add(Relations.DhlEcommerceShipmentEntityUsingScanFormBatchID);
+					break;
 				case "EndiciaScanForms":
 					toReturn.Add(Relations.EndiciaScanFormEntityUsingScanFormBatchID);
 					break;
@@ -206,6 +226,12 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			switch(fieldName)
 			{
+				case "DhlEcommerceScanForm":
+					this.DhlEcommerceScanForm.Add((DhlEcommerceScanFormEntity)relatedEntity);
+					break;
+				case "DhlEcommerceShipment":
+					this.DhlEcommerceShipment.Add((DhlEcommerceShipmentEntity)relatedEntity);
+					break;
 				case "EndiciaScanForms":
 					this.EndiciaScanForms.Add((EndiciaScanFormEntity)relatedEntity);
 					break;
@@ -231,6 +257,12 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			switch(fieldName)
 			{
+				case "DhlEcommerceScanForm":
+					this.PerformRelatedEntityRemoval(this.DhlEcommerceScanForm, relatedEntity, signalRelatedEntityManyToOne);
+					break;
+				case "DhlEcommerceShipment":
+					this.PerformRelatedEntityRemoval(this.DhlEcommerceShipment, relatedEntity, signalRelatedEntityManyToOne);
+					break;
 				case "EndiciaScanForms":
 					this.PerformRelatedEntityRemoval(this.EndiciaScanForms, relatedEntity, signalRelatedEntityManyToOne);
 					break;
@@ -270,6 +302,8 @@ namespace ShipWorks.Data.Model.EntityClasses
 		protected override List<IEntityCollection2> GetMemberEntityCollections()
 		{
 			List<IEntityCollection2> toReturn = new List<IEntityCollection2>();
+			toReturn.Add(this.DhlEcommerceScanForm);
+			toReturn.Add(this.DhlEcommerceShipment);
 			toReturn.Add(this.EndiciaScanForms);
 			toReturn.Add(this.EndiciaShipment);
 			toReturn.Add(this.UspsScanForms);
@@ -285,6 +319,8 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			if (SerializationHelper.Optimization != SerializationOptimization.Fast) 
 			{
+				info.AddValue("_dhlEcommerceScanForm", ((_dhlEcommerceScanForm!=null) && (_dhlEcommerceScanForm.Count>0) && !this.MarkedForDeletion)?_dhlEcommerceScanForm:null);
+				info.AddValue("_dhlEcommerceShipment", ((_dhlEcommerceShipment!=null) && (_dhlEcommerceShipment.Count>0) && !this.MarkedForDeletion)?_dhlEcommerceShipment:null);
 				info.AddValue("_endiciaScanForms", ((_endiciaScanForms!=null) && (_endiciaScanForms.Count>0) && !this.MarkedForDeletion)?_endiciaScanForms:null);
 				info.AddValue("_endiciaShipment", ((_endiciaShipment!=null) && (_endiciaShipment.Count>0) && !this.MarkedForDeletion)?_endiciaShipment:null);
 				info.AddValue("_uspsScanForms", ((_uspsScanForms!=null) && (_uspsScanForms.Count>0) && !this.MarkedForDeletion)?_uspsScanForms:null);
@@ -302,6 +338,24 @@ namespace ShipWorks.Data.Model.EntityClasses
 		protected override List<IEntityRelation> GetAllRelations()
 		{
 			return new ScanFormBatchRelations().GetAllRelations();
+		}
+
+		/// <summary> Creates a new IRelationPredicateBucket object which contains the predicate expression and relation collection to fetch the related entities of type 'DhlEcommerceScanForm' to this entity.</summary>
+		/// <returns></returns>
+		public virtual IRelationPredicateBucket GetRelationInfoDhlEcommerceScanForm()
+		{
+			IRelationPredicateBucket bucket = new RelationPredicateBucket();
+			bucket.PredicateExpression.Add(new FieldCompareValuePredicate(DhlEcommerceScanFormFields.ScanFormBatchID, null, ComparisonOperator.Equal, this.ScanFormBatchID));
+			return bucket;
+		}
+
+		/// <summary> Creates a new IRelationPredicateBucket object which contains the predicate expression and relation collection to fetch the related entities of type 'DhlEcommerceShipment' to this entity.</summary>
+		/// <returns></returns>
+		public virtual IRelationPredicateBucket GetRelationInfoDhlEcommerceShipment()
+		{
+			IRelationPredicateBucket bucket = new RelationPredicateBucket();
+			bucket.PredicateExpression.Add(new FieldCompareValuePredicate(DhlEcommerceShipmentFields.ScanFormBatchID, null, ComparisonOperator.Equal, this.ScanFormBatchID));
+			return bucket;
 		}
 
 		/// <summary> Creates a new IRelationPredicateBucket object which contains the predicate expression and relation collection to fetch the related entities of type 'EndiciaScanForm' to this entity.</summary>
@@ -352,6 +406,8 @@ namespace ShipWorks.Data.Model.EntityClasses
 		protected override void AddToMemberEntityCollectionsQueue(Queue<IEntityCollection2> collectionsQueue) 
 		{
 			base.AddToMemberEntityCollectionsQueue(collectionsQueue);
+			collectionsQueue.Enqueue(this._dhlEcommerceScanForm);
+			collectionsQueue.Enqueue(this._dhlEcommerceShipment);
 			collectionsQueue.Enqueue(this._endiciaScanForms);
 			collectionsQueue.Enqueue(this._endiciaShipment);
 			collectionsQueue.Enqueue(this._uspsScanForms);
@@ -363,6 +419,8 @@ namespace ShipWorks.Data.Model.EntityClasses
 		protected override void GetFromMemberEntityCollectionsQueue(Queue<IEntityCollection2> collectionsQueue)
 		{
 			base.GetFromMemberEntityCollectionsQueue(collectionsQueue);
+			this._dhlEcommerceScanForm = (EntityCollection<DhlEcommerceScanFormEntity>) collectionsQueue.Dequeue();
+			this._dhlEcommerceShipment = (EntityCollection<DhlEcommerceShipmentEntity>) collectionsQueue.Dequeue();
 			this._endiciaScanForms = (EntityCollection<EndiciaScanFormEntity>) collectionsQueue.Dequeue();
 			this._endiciaShipment = (EntityCollection<EndiciaShipmentEntity>) collectionsQueue.Dequeue();
 			this._uspsScanForms = (EntityCollection<UspsScanFormEntity>) collectionsQueue.Dequeue();
@@ -375,6 +433,8 @@ namespace ShipWorks.Data.Model.EntityClasses
 		protected override bool HasPopulatedMemberEntityCollections()
 		{
 			bool toReturn = false;
+			toReturn |=(this._dhlEcommerceScanForm != null);
+			toReturn |=(this._dhlEcommerceShipment != null);
 			toReturn |=(this._endiciaScanForms != null);
 			toReturn |=(this._endiciaShipment != null);
 			toReturn |=(this._uspsScanForms != null);
@@ -388,6 +448,8 @@ namespace ShipWorks.Data.Model.EntityClasses
 		protected override void CreateMemberEntityCollectionsQueue(Queue<IEntityCollection2> collectionsQueue, Queue<bool> requiredQueue) 
 		{
 			base.CreateMemberEntityCollectionsQueue(collectionsQueue, requiredQueue);
+			collectionsQueue.Enqueue(requiredQueue.Dequeue() ? new EntityCollection<DhlEcommerceScanFormEntity>(EntityFactoryCache2.GetEntityFactory(typeof(DhlEcommerceScanFormEntityFactory))) : null);
+			collectionsQueue.Enqueue(requiredQueue.Dequeue() ? new EntityCollection<DhlEcommerceShipmentEntity>(EntityFactoryCache2.GetEntityFactory(typeof(DhlEcommerceShipmentEntityFactory))) : null);
 			collectionsQueue.Enqueue(requiredQueue.Dequeue() ? new EntityCollection<EndiciaScanFormEntity>(EntityFactoryCache2.GetEntityFactory(typeof(EndiciaScanFormEntityFactory))) : null);
 			collectionsQueue.Enqueue(requiredQueue.Dequeue() ? new EntityCollection<EndiciaShipmentEntity>(EntityFactoryCache2.GetEntityFactory(typeof(EndiciaShipmentEntityFactory))) : null);
 			collectionsQueue.Enqueue(requiredQueue.Dequeue() ? new EntityCollection<UspsScanFormEntity>(EntityFactoryCache2.GetEntityFactory(typeof(UspsScanFormEntityFactory))) : null);
@@ -399,6 +461,8 @@ namespace ShipWorks.Data.Model.EntityClasses
 		protected override Dictionary<string, object> GetRelatedData()
 		{
 			Dictionary<string, object> toReturn = new Dictionary<string, object>();
+			toReturn.Add("DhlEcommerceScanForm", _dhlEcommerceScanForm);
+			toReturn.Add("DhlEcommerceShipment", _dhlEcommerceShipment);
 			toReturn.Add("EndiciaScanForms", _endiciaScanForms);
 			toReturn.Add("EndiciaShipment", _endiciaShipment);
 			toReturn.Add("UspsScanForms", _uspsScanForms);
@@ -464,6 +528,20 @@ namespace ShipWorks.Data.Model.EntityClasses
 		public  static Dictionary<string, string> CustomProperties
 		{
 			get { return _customProperties;}
+		}
+
+		/// <summary> Creates a new PrefetchPathElement2 object which contains all the information to prefetch the related entities of type 'DhlEcommerceScanForm' for this entity.</summary>
+		/// <returns>Ready to use IPrefetchPathElement2 implementation.</returns>
+		public static IPrefetchPathElement2 PrefetchPathDhlEcommerceScanForm
+		{
+			get	{ return new PrefetchPathElement2( new EntityCollection<DhlEcommerceScanFormEntity>(EntityFactoryCache2.GetEntityFactory(typeof(DhlEcommerceScanFormEntityFactory))), (IEntityRelation)GetRelationsForField("DhlEcommerceScanForm")[0], (int)ShipWorks.Data.Model.EntityType.ScanFormBatchEntity, (int)ShipWorks.Data.Model.EntityType.DhlEcommerceScanFormEntity, 0, null, null, null, null, "DhlEcommerceScanForm", SD.LLBLGen.Pro.ORMSupportClasses.RelationType.OneToMany);	}
+		}
+
+		/// <summary> Creates a new PrefetchPathElement2 object which contains all the information to prefetch the related entities of type 'DhlEcommerceShipment' for this entity.</summary>
+		/// <returns>Ready to use IPrefetchPathElement2 implementation.</returns>
+		public static IPrefetchPathElement2 PrefetchPathDhlEcommerceShipment
+		{
+			get	{ return new PrefetchPathElement2( new EntityCollection<DhlEcommerceShipmentEntity>(EntityFactoryCache2.GetEntityFactory(typeof(DhlEcommerceShipmentEntityFactory))), (IEntityRelation)GetRelationsForField("DhlEcommerceShipment")[0], (int)ShipWorks.Data.Model.EntityType.ScanFormBatchEntity, (int)ShipWorks.Data.Model.EntityType.DhlEcommerceShipmentEntity, 0, null, null, null, null, "DhlEcommerceShipment", SD.LLBLGen.Pro.ORMSupportClasses.RelationType.OneToMany);	}
 		}
 
 		/// <summary> Creates a new PrefetchPathElement2 object which contains all the information to prefetch the related entities of type 'EndiciaScanForm' for this entity.</summary>
@@ -560,6 +638,22 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			get { return (System.Int32)GetValue((int)ScanFormBatchFieldIndex.ShipmentCount, true); }
 			set	{ SetValue((int)ScanFormBatchFieldIndex.ShipmentCount, value); }
+		}
+
+		/// <summary> Gets the EntityCollection with the related entities of type 'DhlEcommerceScanFormEntity' which are related to this entity via a relation of type '1:n'. If the EntityCollection hasn't been fetched yet, the collection returned will be empty.<br/><br/></summary>
+		[TypeContainedAttribute(typeof(DhlEcommerceScanFormEntity))]
+		[DataMember]
+		public virtual EntityCollection<DhlEcommerceScanFormEntity> DhlEcommerceScanForm
+		{
+			get { return GetOrCreateEntityCollection<DhlEcommerceScanFormEntity, DhlEcommerceScanFormEntityFactory>("ScanFormBatch", true, false, ref _dhlEcommerceScanForm);	}
+		}
+
+		/// <summary> Gets the EntityCollection with the related entities of type 'DhlEcommerceShipmentEntity' which are related to this entity via a relation of type '1:n'. If the EntityCollection hasn't been fetched yet, the collection returned will be empty.<br/><br/></summary>
+		[TypeContainedAttribute(typeof(DhlEcommerceShipmentEntity))]
+		[DataMember]
+		public virtual EntityCollection<DhlEcommerceShipmentEntity> DhlEcommerceShipment
+		{
+			get { return GetOrCreateEntityCollection<DhlEcommerceShipmentEntity, DhlEcommerceShipmentEntityFactory>("ScanFormBatch", true, false, ref _dhlEcommerceShipment);	}
 		}
 
 		/// <summary> Gets the EntityCollection with the related entities of type 'EndiciaScanFormEntity' which are related to this entity via a relation of type '1:n'. If the EntityCollection hasn't been fetched yet, the collection returned will be empty.<br/><br/></summary>

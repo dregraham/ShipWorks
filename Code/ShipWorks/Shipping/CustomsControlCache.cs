@@ -76,6 +76,10 @@ namespace ShipWorks.Shipping
                 case ShipmentTypeCode.DhlExpress:
                     return (int)ShipmentTypeCode.DhlExpress;
 
+                // TODO: DHLECommerce implement
+                //case ShipmentTypeCode.DhlEcommerce:
+                //    return (int) ShipmentTypeCode.DhlEcommerce;
+
                 case ShipmentTypeCode.Asendia:
                     return (int) ShipmentTypeCode.Asendia;
 

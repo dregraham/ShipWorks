@@ -87,6 +87,11 @@ namespace ShipWorks.Shipping
         [WpfImageSource("/ShipWorks.UI;component/Resources/amazon.png")]
         AmazonSWA = 19,
 
+        [Description("DHL Ecommerce")]
+        [ShipmentTypeIcon("dhl")]
+        [WpfImageSource("/ShipWorks.UI;component/Resources/dhl.png")]
+        DhlEcommerce = 20,
+
         [Description("None")]
         None = 99
     }

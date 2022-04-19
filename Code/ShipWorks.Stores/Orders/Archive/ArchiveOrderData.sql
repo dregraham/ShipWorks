@@ -148,6 +148,7 @@ BEGIN
 	exec PurgeEntities 'AsendiaShipment', 'ShipmentID', 'ShipmentID'
 	exec PurgeEntities 'BestRateShipment', 'ShipmentID', 'ShipmentID'
 	exec PurgeEntities 'DhlExpressShipment', 'ShipmentID', 'ShipmentID'
+	exec PurgeEntities 'DhlEcommerceShipment', 'ShipmentID', 'ShipmentID'
 	exec PurgeEntities 'FedExShipment', 'ShipmentID', 'ShipmentID'
 	exec PurgeEntities 'InsurancePolicy', 'ShipmentID', 'ShipmentID'
 	exec PurgeEntities 'iParcelShipment', 'ShipmentID', 'ShipmentID'
