@@ -52,6 +52,7 @@ namespace ShipWorks.Stores.Warehouse.StoreData
         /// <summary>
         /// The platform order source id 
         /// </summary>
+        [JsonProperty("orderSourceId")]
         public string OrderSourceID { get; set; }
 
         /// <summary>
