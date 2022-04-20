@@ -133,10 +133,7 @@ namespace ShipWorks.ApplicationCore.Licensing
         public string CustomerID {
             get
             {
-                if (LicenseCapabilities == null)
-                {
-                    ForceRefresh();
-                }
+                Refresh();
 
                 return LicenseCapabilities.CustomerID;
             }
