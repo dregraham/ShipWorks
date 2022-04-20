@@ -126,6 +126,22 @@ namespace ShipWorks.ApplicationCore.Licensing
         /// </summary>
         public bool IsCtp => LicenseCapabilities.UpsStatus != UpsStatus.None && LicenseCapabilities.UpsStatus != UpsStatus.Discount;
 
+
+        /// <summary>
+        /// Gets the CustomerID.
+        /// </summary>
+        public string CustomerID {
+            get
+            {
+                if (LicenseCapabilities == null)
+                {
+                    ForceRefresh();
+                }
+
+                return LicenseCapabilities.CustomerID;
+            }
+        }
+
         /// <summary>
         /// The license capabilities.
         /// </summary>
