@@ -92,8 +92,8 @@ namespace ShipWorks.Shipping.Carriers.DhlEcommerce
             }
 
             DhlEcommerceShipmentEntity dhlEcommerceShipmentEntity = shipment.DhlEcommerce;
-
-            dhlEcommerceShipmentEntity.Service = (int) DhlEcommerceServiceType.US_DhlSmartMailParcelGround;
+            
+            dhlEcommerceShipmentEntity.PackagingType = (int) DhlEcommercePackagingType.ParcelSelectMachinable;
             dhlEcommerceShipmentEntity.DeliveredDutyPaid = false;
             dhlEcommerceShipmentEntity.NonMachinable = false;
             dhlEcommerceShipmentEntity.SaturdayDelivery = false;
@@ -106,6 +106,12 @@ namespace ShipWorks.Shipping.Carriers.DhlEcommerce
             dhlEcommerceShipmentEntity.CustomsRecipientTin = string.Empty;
             dhlEcommerceShipmentEntity.CustomsTaxIdType = (int) TaxIdType.Ioss;
             dhlEcommerceShipmentEntity.CustomsTinIssuingAuthority = "US";
+            dhlEcommerceShipmentEntity.DimsAddWeight = false;
+            dhlEcommerceShipmentEntity.DimsHeight = 0;
+            dhlEcommerceShipmentEntity.DimsLength = 0;
+            dhlEcommerceShipmentEntity.DimsProfileID = 0;
+            dhlEcommerceShipmentEntity.DimsWeight = 0;
+            dhlEcommerceShipmentEntity.DimsWidth = 0;
 
             base.ConfigureNewShipment(shipment);
         }
@@ -154,10 +160,7 @@ namespace ShipWorks.Shipping.Carriers.DhlEcommerce
             //commonDetail.OriginAccount = (account == null) ? "" : account.xxxxxx.ToString();
             commonDetail.ServiceType = dhlEcommerceShipmentEntity.Service;
 
-            // TODO: DHLECommerce determine if DHL eCommerce has packaging type
-            // i-Parcel doesn't have a packaging type concept, so default to 0
-            commonDetail.PackagingType = 0;
-
+            commonDetail.PackagingType = (int) dhlEcommerceShipmentEntity.PackagingType;
             commonDetail.PackageLength = dhlEcommerceShipmentEntity.DimsLength;
             commonDetail.PackageWidth = dhlEcommerceShipmentEntity.DimsWidth;
             commonDetail.PackageHeight = dhlEcommerceShipmentEntity.DimsHeight;
