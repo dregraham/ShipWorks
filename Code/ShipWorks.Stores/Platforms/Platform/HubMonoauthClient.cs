@@ -25,19 +25,38 @@ namespace ShipWorks.Stores.Platforms.Platform
         }
 
         /// <summary>
-        /// Get the URL to initiate Monoauth
+        /// Get the monoauth URL to initiate an order source creation
         /// </summary>
         /// <remarks>
         /// Note that the orderSourceName will be used in both the URL used to communicate with the hub and the
         /// redirectUrl the hub will send on to monoauth
         /// </remarks>
-        public async Task<string> GetMonauthInitiateUrl(string orderSourceName)
+        public async Task<string> GetCreateOrderSourceInitiateUrl(string orderSourceName)
         {
             var request = warehouseRequestFactory.Create(
-                WarehouseEndpoints.GetInitiateMonoauthUrl(orderSourceName, warehouseRequestClient.WarehouseUrl), Method.GET,
+                WarehouseEndpoints.GetCreateOrderSourceInitiateUrl(orderSourceName, warehouseRequestClient.WarehouseUrl), Method.GET,
                 null);
 
             var result = await warehouseRequestClient.MakeRequest<GetMonauthInitiateUrlResponse>(request, "GetMonoauthInitiateUrl")
+                .ConfigureAwait(false);
+
+            return result.InitiateUrl;
+        }
+
+        /// <summary>
+        /// Get the Monoauth URL to initiate an order source credential change
+        /// </summary>
+        /// <remarks>
+        /// Note that the orderSourceName will be used in both the URL used to communicate with the hub and the
+        /// redirectUrl the hub will send on to monoauth
+        /// </remarks>
+        public async Task<string> GetUpdateOrderSourceInitiateUrl(string orderSourceName, string orderSourceId)
+        {
+            var request = warehouseRequestFactory.Create(
+                WarehouseEndpoints.GetUpdateOrderSourceInitiateUrl(orderSourceName, warehouseRequestClient.WarehouseUrl, orderSourceId), Method.GET,
+                null);
+
+            var result = await warehouseRequestClient.MakeRequest<GetMonauthInitiateUrlResponse>(request, "GetInitiateUpdateOrderSourceUrl")
                 .ConfigureAwait(false);
 
             return result.InitiateUrl;

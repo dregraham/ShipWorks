@@ -87,8 +87,8 @@ namespace ShipWorks.Stores.Platforms.Amazon
         /// <summary>
         /// Create the account settings control
         /// </summary>
-        public override AccountSettingsControlBase CreateAccountSettingsControl() =>
-            new AmazonMwsAccountSettingsControl();
+        // public override AccountSettingsControlBase CreateAccountSettingsControl() =>
+        //     new AmazonMwsAccountSettingsControl();
 
         /// <summary>
         /// Create the collection of setup wizard pages for configuring the integration

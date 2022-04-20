@@ -268,10 +268,12 @@
     <Compile Include="Orders\Split\OrderSplitValidator.cs" />
     <Compile Include="Orders\Split\Local\OrderSplitAuditLocal.cs" />
     <Compile Include="Orders\Split\RoutingErrorViewModel.cs" />
+    <Compile Include="Platforms\Amazon\AmazonAccountSettingsViewModel.cs" />
     <Compile Include="Platforms\Amazon\AmazonCreateOrderSourceViewModel.cs" />
     <Compile Include="Platforms\Amazon\Content\AmazonQuickSearchSql.cs" />
     <Compile Include="Platforms\Amazon\Content\AmazonSplitOrderAction.cs" />
     <Compile Include="Platforms\Amazon\DTO\GetMonauthInitiateUrlResponse.cs" />
+    <Compile Include="Platforms\Amazon\IAmazonAccountSettingsViewModel.cs" />
     <Compile Include="Platforms\Amazon\IAmazonCreateOrderSourceViewModel.cs" />
     <Compile Include="Platforms\Amazon\OnlineUpdating\AmazonOnlineUpdateCommandCreator.cs" />
     <Compile Include="Platforms\Amazon\OnlineUpdating\AmazonOnlineUpdater.cs" />
