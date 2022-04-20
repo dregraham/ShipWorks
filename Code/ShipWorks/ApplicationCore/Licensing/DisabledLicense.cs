@@ -78,6 +78,8 @@ namespace ShipWorks.ApplicationCore.Licensing
             }
         }
 
+        public string CustomerID { get; }
+
         /// <summary>
         /// Details about the trial
         /// </summary>

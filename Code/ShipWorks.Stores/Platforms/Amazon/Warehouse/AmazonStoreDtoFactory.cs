@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using System.Threading.Tasks;
 using Interapptive.Shared.ComponentRegistration;
 using RestSharp.Extensions;
@@ -18,19 +19,19 @@ namespace ShipWorks.Stores.Warehouse
     {
         private readonly IDownloadStartingPoint downloadStartingPoint;
         private readonly IStoreDtoHelpers helpers;
-        private readonly ICustomerLicense customerLicense;
+        private readonly ILicense license;
         private readonly ITangoWebClient tangoWebClient;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public AmazonStoreDtoFactory(IDownloadStartingPoint downloadStartingPoint, IStoreDtoHelpers helpers, 
-            ICustomerLicense customerLicense, ITangoWebClient tangoWebClient)
+        public AmazonStoreDtoFactory(IDownloadStartingPoint downloadStartingPoint, IStoreDtoHelpers helpers,
+            ILicenseService licenseService, ITangoWebClient tangoWebClient)
         {
             this.helpers = helpers;
             this.downloadStartingPoint = downloadStartingPoint;
-            this.customerLicense = customerLicense;
             this.tangoWebClient = tangoWebClient;
+            this.license = licenseService.GetLicenses()?.FirstOrDefault();
         }
 
         /// <summary>
@@ -58,9 +59,9 @@ namespace ShipWorks.Stores.Warehouse
                     .ConfigureAwait(false);
 
                 store.OrderSourceID = storeEntity.OrderSourceID;
-
-                store.PlatformAccountId = customerLicense?.CustomerID.HasValue() == true ? 
-                    customerLicense.CustomerID : 
+                
+                store.PlatformAccountId = license?.CustomerID.HasValue() == true ?
+                    license.CustomerID : 
                     tangoWebClient.GetTangoCustomerId();
             }
 

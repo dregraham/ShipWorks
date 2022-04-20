@@ -59,6 +59,8 @@ namespace ShipWorks.ApplicationCore.Licensing
         /// </summary>
         public string Key { get; }
 
+        public string CustomerID { get; private set; }
+
         /// <summary>
         /// Trial information for this license
         /// </summary>
@@ -129,6 +131,8 @@ namespace ShipWorks.ApplicationCore.Licensing
                 TrialDetails = new TrialDetails(accountDetail.InTrial, accountDetail.RecurlyTrialEndDate);
 
                 IsCtp = accountDetail.UpsStatus != UpsStatus.None && accountDetail.UpsStatus != UpsStatus.Discount;
+
+                CustomerID = accountDetail.TangoCustomerID;
 
                 nextStoreLicenseCheckTime[store.StoreID] = dateTimeProvider.UtcNow.Add(nextStoreLicenseCheckTimeToLive);
 
