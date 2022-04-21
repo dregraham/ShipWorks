@@ -9,7 +9,7 @@ namespace ShipWorks.Shipping.Carriers.DhlEcommerce.CoreExtensions.Filters
     /// <summary>
     /// Condition for the DhlEcommerce service type
     /// </summary>
-    [ConditionElement("DhlEcommerce Service", "Shipment.DhlEcommerce.ServiceType")]
+    [ConditionElement("DHL eCommerce Service", "Shipment.DhlEcommerce.ServiceType")]
     public class DhlEcommerceServiceTypeCondition : EnumCondition<DhlEcommerceServiceType>
     {
         /// <summary>
