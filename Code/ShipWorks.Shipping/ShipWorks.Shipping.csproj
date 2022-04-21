@@ -231,6 +231,7 @@
     <Compile Include="Carriers\DhlEcommerce\DhlEcommerceAccountRepository.cs" />
     <Compile Include="Carriers\DhlEcommerce\DhlEcommerceShipmentType.cs" />
     <Compile Include="Carriers\DhlEcommerce\IDhlEcommerceAccountRepository.cs" />
+    <Compile Include="Carriers\DhlEcommerce\DhlEcommerceDistributionCenters.cs" />
     <Compile Include="Carriers\Dhl\API\DhlExpressLabelClientFactory.cs" />
     <Compile Include="Carriers\Dhl\API\IDhlExpressLabelClient.cs" />
     <Compile Include="Carriers\Dhl\API\IDhlExpressLabelClientFactory.cs" />
