@@ -146,7 +146,7 @@ namespace ShipWorks.Data.Model.RelationClasses
 		{
 			get
 			{
-				IEntityRelation relation = new EntityRelation(SD.LLBLGen.Pro.ORMSupportClasses.RelationType.OneToOne, "DhlEcommerceProfile", true);
+				IEntityRelation relation = new EntityRelation(SD.LLBLGen.Pro.ORMSupportClasses.RelationType.OneToOne, "DhlEcommerce", true);
 
 				relation.AddEntityFieldPair(ShippingProfileFields.ShippingProfileID, DhlEcommerceProfileFields.ShippingProfileID);
 

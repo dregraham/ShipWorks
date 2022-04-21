@@ -4007,7 +4007,7 @@
           <FieldFieldRelationship FkField="ComputerID" PkField="ComputerID" />
         </FieldRelationships>
       </NormalRelationship>
-      <NormalRelationship Name="DhlEcommerceProfile.ShippingProfile-ShippingProfile.DhlEcommerceProfile" Start=":DhlEcommerceProfile" End=":ShippingProfile" StartNavigator="ShippingProfile" EndNavigator="DhlEcommerceProfile" Type="1" StartIsOptional="true" DeleteRuleAction="1">
+      <NormalRelationship Name="DhlEcommerceProfile.ShippingProfile-ShippingProfile.DhlEcommerce" Start=":DhlEcommerceProfile" End=":ShippingProfile" StartNavigator="ShippingProfile" EndNavigator="DhlEcommerce" Type="1" StartIsOptional="true" DeleteRuleAction="1">
         <FieldRelationships>
           <FieldFieldRelationship FkField="ShippingProfileID" PkField="ShippingProfileID" />
         </FieldRelationships>

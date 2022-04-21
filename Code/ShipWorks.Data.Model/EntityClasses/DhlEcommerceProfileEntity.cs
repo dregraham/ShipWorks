@@ -385,7 +385,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <param name="resetFKFields">if set to true it will also reset the FK fields pointing to the related entity</param>
 		private void DesetupSyncShippingProfile(bool signalRelatedEntity, bool resetFKFields)
 		{
-			this.PerformDesetupSyncRelatedEntity( _shippingProfile, new PropertyChangedEventHandler( OnShippingProfilePropertyChanged ), "ShippingProfile", ShipWorks.Data.Model.RelationClasses.StaticDhlEcommerceProfileRelations.ShippingProfileEntityUsingShippingProfileIDStatic, true, signalRelatedEntity, "DhlEcommerceProfile", false, new int[] { (int)DhlEcommerceProfileFieldIndex.ShippingProfileID } );
+			this.PerformDesetupSyncRelatedEntity( _shippingProfile, new PropertyChangedEventHandler( OnShippingProfilePropertyChanged ), "ShippingProfile", ShipWorks.Data.Model.RelationClasses.StaticDhlEcommerceProfileRelations.ShippingProfileEntityUsingShippingProfileIDStatic, true, signalRelatedEntity, "DhlEcommerce", false, new int[] { (int)DhlEcommerceProfileFieldIndex.ShippingProfileID } );
 			_shippingProfile = null;
 		}
 		
@@ -641,7 +641,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 				if(this.IsDeserializing)
 				{
 					SetupSyncShippingProfile(value);
-					CallSetRelatedEntityDuringDeserialization(value, "DhlEcommerceProfile");
+					CallSetRelatedEntityDuringDeserialization(value, "DhlEcommerce");
 				}
 				else
 				{
@@ -658,7 +658,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 					{
 						if(_shippingProfile!=value)
 						{
-							((IEntity2)value).SetRelatedEntity(this, "DhlEcommerceProfile");
+							((IEntity2)value).SetRelatedEntity(this, "DhlEcommerce");
 							SetupSyncShippingProfile(value);
 						}
 					}

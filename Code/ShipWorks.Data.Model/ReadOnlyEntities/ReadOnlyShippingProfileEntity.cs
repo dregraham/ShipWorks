@@ -55,7 +55,7 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
             AmazonSWA = (IAmazonSWAProfileEntity) source.AmazonSWA?.AsReadOnly(objectMap);
             Asendia = (IAsendiaProfileEntity) source.Asendia?.AsReadOnly(objectMap);
             BestRate = (IBestRateProfileEntity) source.BestRate?.AsReadOnly(objectMap);
-            DhlEcommerceProfile = (IDhlEcommerceProfileEntity) source.DhlEcommerceProfile?.AsReadOnly(objectMap);
+            DhlEcommerce = (IDhlEcommerceProfileEntity) source.DhlEcommerce?.AsReadOnly(objectMap);
             DhlExpress = (IDhlExpressProfileEntity) source.DhlExpress?.AsReadOnly(objectMap);
             FedEx = (IFedExProfileEntity) source.FedEx?.AsReadOnly(objectMap);
             IParcel = (IIParcelProfileEntity) source.IParcel?.AsReadOnly(objectMap);
@@ -165,7 +165,7 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
         
         public IBestRateProfileEntity BestRate { get; }
         
-        public IDhlEcommerceProfileEntity DhlEcommerceProfile { get; }
+        public IDhlEcommerceProfileEntity DhlEcommerce { get; }
         
         public IDhlExpressProfileEntity DhlExpress { get; }
         

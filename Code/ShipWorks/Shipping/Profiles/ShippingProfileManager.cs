@@ -378,9 +378,8 @@ namespace ShipWorks.Shipping.Profiles
                     return ("AmazonSWA", typeof(AmazonSWAProfileEntity));
                 case ShipmentTypeCode.DhlExpress:
                     return ("DhlExpress", typeof(DhlExpressProfileEntity));
-                // TODO: DHLECommerce implement
-                //case ShipmentTypeCode.DhlEcommerce:
-                //    return ("DhlEcommerce", typeof(DhlEcommerceProfileEntity));
+                case ShipmentTypeCode.DhlEcommerce:
+                    return ("DhlEcommerce", typeof(DhlEcommerceProfileEntity));
                 case ShipmentTypeCode.Asendia:
                     return ("Asendia", typeof(AsendiaProfileEntity));
                 default:
