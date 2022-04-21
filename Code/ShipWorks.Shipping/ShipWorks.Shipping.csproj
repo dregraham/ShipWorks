@@ -230,6 +230,10 @@
     <Compile Include="Carriers\BestRate\Footnote\ShippingAccountRequiredForRatingFootnoteViewModel.cs" />
     <Compile Include="Carriers\DhlEcommerce\DhlEcommerceAccountRepository.cs" />
     <Compile Include="Carriers\DhlEcommerce\DhlEcommerceShipmentType.cs" />
+    <Compile Include="Carriers\DhlEcommerce\DhlEcommerceShippingProfileApplicationStrategy.cs" />
+    <Compile Include="Carriers\DhlEcommerce\DhlEcommerceRateHashingService.cs" />
+    <Compile Include="Carriers\DhlEcommerce\DhlEcommerceRatingService.cs" />
+    <Compile Include="Carriers\DhlEcommerce\IDhlEcommerceShipmentAdapter.cs" />
     <Compile Include="Carriers\DhlEcommerce\IDhlEcommerceAccountRepository.cs" />
     <Compile Include="Carriers\DhlEcommerce\DhlEcommerceDistributionCenters.cs" />
     <Compile Include="Carriers\Dhl\API\DhlExpressLabelClientFactory.cs" />

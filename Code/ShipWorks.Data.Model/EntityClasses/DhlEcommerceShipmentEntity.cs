@@ -437,6 +437,12 @@ namespace ShipWorks.Data.Model.EntityClasses
 			_fieldsCustomProperties.Add("DimsAddWeight", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
 			_fieldsCustomProperties.Add("Reference1", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+			_fieldsCustomProperties.Add("Insurance", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+			_fieldsCustomProperties.Add("InsuranceValue", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+			_fieldsCustomProperties.Add("InsurancePennyOne", fieldHashtable);
 		}
 		#endregion
 
@@ -848,6 +854,39 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			get { return (System.String)GetValue((int)DhlEcommerceShipmentFieldIndex.Reference1, true); }
 			set	{ SetValue((int)DhlEcommerceShipmentFieldIndex.Reference1, value); }
+		}
+
+		/// <summary> The Insurance property of the Entity DhlEcommerceShipment<br/><br/></summary>
+		/// <remarks>Mapped on  table field: "DhlEcommerceShipment"."Insurance"<br/>
+		/// Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		[DataMember]
+		public virtual Nullable<System.Boolean> Insurance
+		{
+			get { return (Nullable<System.Boolean>)GetValue((int)DhlEcommerceShipmentFieldIndex.Insurance, false); }
+			set	{ SetValue((int)DhlEcommerceShipmentFieldIndex.Insurance, value); }
+		}
+
+		/// <summary> The InsuranceValue property of the Entity DhlEcommerceShipment<br/><br/></summary>
+		/// <remarks>Mapped on  table field: "DhlEcommerceShipment"."InsuranceValue"<br/>
+		/// Table field type characteristics (type, precision, scale, length): Money, 19, 4, 0<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		[DataMember]
+		public virtual Nullable<System.Decimal> InsuranceValue
+		{
+			get { return (Nullable<System.Decimal>)GetValue((int)DhlEcommerceShipmentFieldIndex.InsuranceValue, false); }
+			set	{ SetValue((int)DhlEcommerceShipmentFieldIndex.InsuranceValue, value); }
+		}
+
+		/// <summary> The InsurancePennyOne property of the Entity DhlEcommerceShipment<br/><br/></summary>
+		/// <remarks>Mapped on  table field: "DhlEcommerceShipment"."InsurancePennyOne"<br/>
+		/// Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		[DataMember]
+		public virtual Nullable<System.Boolean> InsurancePennyOne
+		{
+			get { return (Nullable<System.Boolean>)GetValue((int)DhlEcommerceShipmentFieldIndex.InsurancePennyOne, false); }
+			set	{ SetValue((int)DhlEcommerceShipmentFieldIndex.InsurancePennyOne, value); }
 		}
 
 		/// <summary> Gets / sets related entity of type 'ScanFormBatchEntity' which has to be set using a fetch action earlier. If no related entity is set for this property, null is returned..<br/><br/></summary>

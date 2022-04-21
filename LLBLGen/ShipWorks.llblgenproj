@@ -806,6 +806,9 @@
           <Field Name="DimsProfileID" Type="long" Precision="19" FieldIndex="18" />
           <Field Name="DimsWeight" Type="double" Precision="38" FieldIndex="22" />
           <Field Name="DimsWidth" Type="double" Precision="38" FieldIndex="20" />
+          <Field Name="Insurance" Type="bool" IsOptional="true" FieldIndex="25" />
+          <Field Name="InsurancePennyOne" Type="bool" IsOptional="true" FieldIndex="27" />
+          <Field Name="InsuranceValue" Type="decimal" IsOptional="true" Precision="19" Scale="4" FieldIndex="26" />
           <Field Name="IntegratorTransactionID" Type="guid" IsOptional="true" FieldIndex="10" />
           <Field Name="NonDelivery" Type="int" Precision="10" FieldIndex="8" />
           <Field Name="NonMachinable" Type="bool" FieldIndex="4" />
@@ -4834,7 +4837,7 @@
       <Catalogs>
         <Catalog Name="ShipWorksLocal">
           <Schemas>
-            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2022-04-19T20:29:55.635971Z">
+            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2022-04-21T17:33:12.7012573Z">
               <Tables>
                 <Table Name="Action">
                   <PkConstraintName Name="PK_Action" />
@@ -5655,6 +5658,9 @@
                     <Field Name="CustomsTaxIdType" Ordinal="23" IsOptional="true" DbType="8" Precision="10" />
                     <Field Name="CustomsTinIssuingAuthority" Ordinal="24" IsOptional="true" DbType="12" Length="2" />
                     <Field Name="ScanFormBatchID" Ordinal="25" IsOptional="true" DbType="0" Precision="19" />
+                    <Field Name="Insurance" Ordinal="26" IsOptional="true" DbType="2" />
+                    <Field Name="InsuranceValue" Ordinal="27" IsOptional="true" DbType="9" Precision="19" Scale="4" />
+                    <Field Name="InsurancePennyOne" Ordinal="28" IsOptional="true" DbType="2" />
                   </Fields>
                 </Table>
                 <Table Name="DhlExpressAccount">
@@ -12096,6 +12102,9 @@
             <FieldMapping FieldName="DimsProfileID" TargetFieldName="DimsProfileID" />
             <FieldMapping FieldName="DimsWeight" TargetFieldName="DimsWeight" />
             <FieldMapping FieldName="DimsWidth" TargetFieldName="DimsWidth" />
+            <FieldMapping FieldName="Insurance" TargetFieldName="Insurance" />
+            <FieldMapping FieldName="InsurancePennyOne" TargetFieldName="InsurancePennyOne" />
+            <FieldMapping FieldName="InsuranceValue" TargetFieldName="InsuranceValue" />
             <FieldMapping FieldName="IntegratorTransactionID" TargetFieldName="IntegratorTransactionID" />
             <FieldMapping FieldName="NonDelivery" TargetFieldName="NonDelivery" />
             <FieldMapping FieldName="NonMachinable" TargetFieldName="NonMachinable" />

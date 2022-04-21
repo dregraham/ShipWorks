@@ -2598,6 +2598,12 @@ namespace ShipWorks.Data.Model
 		DimsAddWeight,
 		///<summary>Reference1. </summary>
 		Reference1,
+		///<summary>Insurance. </summary>
+		Insurance,
+		///<summary>InsuranceValue. </summary>
+		InsuranceValue,
+		///<summary>InsurancePennyOne. </summary>
+		InsurancePennyOne,
 		/// <summary></summary>
 		AmountOfFields
 	}

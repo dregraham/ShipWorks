@@ -492,8 +492,12 @@
         <Condition identifier="Shipment.FedEx.PackagingType" displayAs="Packaging" />
       </Group>
       <Group name="UPS">
-        <Condition identifier="Shipment.UPS.ServiceType" displayAs="Service" />
-        <Condition identifier="Shipment.UPS.ReturnServiceType" displayAs="Return Service"/>
+	      <Condition identifier="Shipment.UPS.ServiceType" displayAs="Service" />
+	      <Condition identifier="Shipment.UPS.ReturnServiceType" displayAs="Return Service"/>
+      </Group>
+      <Group name="DHL eCommerce">
+        <Condition identifier="Shipment.DhlEcommerce.ServiceType" displayAs="Service" />
+        <Condition identifier="Shipment.DhlEcommerce.PackagingType" displayAs="Packaging" />
       </Group>
     </Category>
 

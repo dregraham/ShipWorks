@@ -171,6 +171,24 @@ namespace ShipWorks.Data.Model.EntityInterfaces
         /// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 300<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
         System.String Reference1 { get; }
+        /// <summary> The Insurance property of the Entity DhlEcommerceShipment<br/><br/>
+        /// </summary>
+        /// <remarks>Mapped on table field: "DhlEcommerceShipment"."Insurance"<br/>
+        /// Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
+        /// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+        Nullable<System.Boolean> Insurance { get; }
+        /// <summary> The InsuranceValue property of the Entity DhlEcommerceShipment<br/><br/>
+        /// </summary>
+        /// <remarks>Mapped on table field: "DhlEcommerceShipment"."InsuranceValue"<br/>
+        /// Table field type characteristics (type, precision, scale, length): Money, 19, 4, 0<br/>
+        /// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+        Nullable<System.Decimal> InsuranceValue { get; }
+        /// <summary> The InsurancePennyOne property of the Entity DhlEcommerceShipment<br/><br/>
+        /// </summary>
+        /// <remarks>Mapped on table field: "DhlEcommerceShipment"."InsurancePennyOne"<br/>
+        /// Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
+        /// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+        Nullable<System.Boolean> InsurancePennyOne { get; }
         
         IShipmentEntity Shipment { get; }
         

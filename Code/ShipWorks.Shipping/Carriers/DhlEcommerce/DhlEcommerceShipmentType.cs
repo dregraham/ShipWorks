@@ -92,7 +92,8 @@ namespace ShipWorks.Shipping.Carriers.DhlEcommerce
             }
 
             DhlEcommerceShipmentEntity dhlEcommerceShipmentEntity = shipment.DhlEcommerce;
-            
+
+            dhlEcommerceShipmentEntity.Service = (int) DhlEcommerceServiceType.US_DhlSmartMailParcelGround;
             dhlEcommerceShipmentEntity.PackagingType = (int) DhlEcommercePackagingType.ParcelSelectMachinable;
             dhlEcommerceShipmentEntity.DeliveredDutyPaid = false;
             dhlEcommerceShipmentEntity.NonMachinable = false;
@@ -112,6 +113,10 @@ namespace ShipWorks.Shipping.Carriers.DhlEcommerce
             dhlEcommerceShipmentEntity.DimsProfileID = 0;
             dhlEcommerceShipmentEntity.DimsWeight = 0;
             dhlEcommerceShipmentEntity.DimsWidth = 0;
+            dhlEcommerceShipmentEntity.Reference1 = string.Empty;
+            dhlEcommerceShipmentEntity.Insurance = false;
+            dhlEcommerceShipmentEntity.InsuranceValue = 0;
+            dhlEcommerceShipmentEntity.InsurancePennyOne = false;
 
             base.ConfigureNewShipment(shipment);
         }

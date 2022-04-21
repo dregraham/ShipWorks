@@ -999,6 +999,9 @@ namespace ShipWorks.Data.Model.HelperClasses
 			this.AddElementFieldInfo("DhlEcommerceShipmentEntity", "DimsWeight", typeof(System.Double), false, false, false, false,  (int)DhlEcommerceShipmentFieldIndex.DimsWeight, 0, 0, 38);
 			this.AddElementFieldInfo("DhlEcommerceShipmentEntity", "DimsAddWeight", typeof(System.Boolean), false, false, false, false,  (int)DhlEcommerceShipmentFieldIndex.DimsAddWeight, 0, 0, 0);
 			this.AddElementFieldInfo("DhlEcommerceShipmentEntity", "Reference1", typeof(System.String), false, false, false, false,  (int)DhlEcommerceShipmentFieldIndex.Reference1, 300, 0, 0);
+			this.AddElementFieldInfo("DhlEcommerceShipmentEntity", "Insurance", typeof(Nullable<System.Boolean>), false, false, false, true,  (int)DhlEcommerceShipmentFieldIndex.Insurance, 0, 0, 0);
+			this.AddElementFieldInfo("DhlEcommerceShipmentEntity", "InsuranceValue", typeof(Nullable<System.Decimal>), false, false, false, true,  (int)DhlEcommerceShipmentFieldIndex.InsuranceValue, 0, 4, 19);
+			this.AddElementFieldInfo("DhlEcommerceShipmentEntity", "InsurancePennyOne", typeof(Nullable<System.Boolean>), false, false, false, true,  (int)DhlEcommerceShipmentFieldIndex.InsurancePennyOne, 0, 0, 0);
 		}
 		/// <summary>Inits DhlExpressAccountEntity's FieldInfo objects</summary>
 		private void InitDhlExpressAccountEntityInfos()

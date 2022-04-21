@@ -97,6 +97,7 @@ namespace ShipWorks.Filters.Content.SqlGeneration
             columnMaskTableMap[EntityType.YahooOrderSearchEntity] = FilterNodeColumnMaskTable.YahooOrderSearch;
             columnMaskTableMap[EntityType.GenericModuleOrderEntity] = FilterNodeColumnMaskTable.GenericModuleOrder;
             columnMaskTableMap[EntityType.OverstockOrderEntity] = FilterNodeColumnMaskTable.OverstockOrder;
+            columnMaskTableMap[EntityType.DhlEcommerceShipmentEntity] = FilterNodeColumnMaskTable.DhlEcommerceShipment;
 
             // Make sure we've mapped each table
             if (columnMaskTableMap.Keys.Count != Enum.GetValues(typeof(FilterNodeColumnMaskTable)).Length)

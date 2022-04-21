@@ -8,7 +8,6 @@ namespace ShipWorks.Shipping.Carriers
     /// <summary>
     /// For carriers that do not support package types, returns an empty list
     /// </summary>
-    // TODO: DHLECommerce Do we need to add DhlEcommerce here?
     [KeyedComponent(typeof(IShipmentPackageTypesBuilder), ShipmentTypeCode.AmazonSWA, SingleInstance = true)]
     [KeyedComponent(typeof(IShipmentPackageTypesBuilder), ShipmentTypeCode.Asendia, SingleInstance = true)]
     [KeyedComponent(typeof(IShipmentPackageTypesBuilder), ShipmentTypeCode.DhlExpress, SingleInstance = true)]
@@ -17,6 +16,7 @@ namespace ShipWorks.Shipping.Carriers
     [KeyedComponent(typeof(IShipmentPackageTypesBuilder), ShipmentTypeCode.Other, SingleInstance = true)]
     [KeyedComponent(typeof(IShipmentPackageTypesBuilder), ShipmentTypeCode.BestRate, SingleInstance = true)]
     [KeyedComponent(typeof(IShipmentPackageTypesBuilder), ShipmentTypeCode.AmazonSFP, SingleInstance = true)]
+    [KeyedComponent(typeof(IShipmentPackageTypesBuilder), ShipmentTypeCode.DhlEcommerce, SingleInstance = true)]
 
     public class NullShipmentPackageTypesBuilder : IShipmentPackageTypesBuilder
     {

@@ -6017,6 +6017,21 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(DhlEcommerceShipmentFieldIndex.Reference1);}
 		}
+		/// <summary>Creates a new DhlEcommerceShipmentEntity.Insurance field instance</summary>
+		public static EntityField2 Insurance
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(DhlEcommerceShipmentFieldIndex.Insurance);}
+		}
+		/// <summary>Creates a new DhlEcommerceShipmentEntity.InsuranceValue field instance</summary>
+		public static EntityField2 InsuranceValue
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(DhlEcommerceShipmentFieldIndex.InsuranceValue);}
+		}
+		/// <summary>Creates a new DhlEcommerceShipmentEntity.InsurancePennyOne field instance</summary>
+		public static EntityField2 InsurancePennyOne
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(DhlEcommerceShipmentFieldIndex.InsurancePennyOne);}
+		}
 	}
 
 	/// <summary>Field Creation Class for entity DhlExpressAccountEntity</summary>

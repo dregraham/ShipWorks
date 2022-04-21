@@ -1015,7 +1015,7 @@ namespace ShipWorks.Data.Model
 		/// <summary>Inits DhlEcommerceShipmentEntity's mappings</summary>
 		private void InitDhlEcommerceShipmentEntityMappings()
 		{
-			this.AddElementMapping("DhlEcommerceShipmentEntity", @"ShipWorksLocal", @"dbo", "DhlEcommerceShipment", 25, 0);
+			this.AddElementMapping("DhlEcommerceShipmentEntity", @"ShipWorksLocal", @"dbo", "DhlEcommerceShipment", 28, 0);
 			this.AddElementFieldMapping("DhlEcommerceShipmentEntity", "ShipmentID", "ShipmentID", false, "BigInt", 0, 19, 0, false, "", null, typeof(System.Int64), 0);
 			this.AddElementFieldMapping("DhlEcommerceShipmentEntity", "DhlEcommerceAccountID", "DhlEcommerceAccountID", false, "BigInt", 0, 19, 0, false, "", null, typeof(System.Int64), 1);
 			this.AddElementFieldMapping("DhlEcommerceShipmentEntity", "Service", "Service", false, "Int", 0, 10, 0, false, "", null, typeof(System.Int32), 2);
@@ -1041,6 +1041,9 @@ namespace ShipWorks.Data.Model
 			this.AddElementFieldMapping("DhlEcommerceShipmentEntity", "DimsWeight", "DimsWeight", false, "Float", 0, 38, 0, false, "", null, typeof(System.Double), 22);
 			this.AddElementFieldMapping("DhlEcommerceShipmentEntity", "DimsAddWeight", "DimsAddWeight", false, "Bit", 0, 0, 0, false, "", null, typeof(System.Boolean), 23);
 			this.AddElementFieldMapping("DhlEcommerceShipmentEntity", "Reference1", "Reference1", false, "NVarChar", 300, 0, 0, false, "", null, typeof(System.String), 24);
+			this.AddElementFieldMapping("DhlEcommerceShipmentEntity", "Insurance", "Insurance", true, "Bit", 0, 0, 0, false, "", null, typeof(System.Boolean), 25);
+			this.AddElementFieldMapping("DhlEcommerceShipmentEntity", "InsuranceValue", "InsuranceValue", true, "Money", 0, 19, 4, false, "", null, typeof(System.Decimal), 26);
+			this.AddElementFieldMapping("DhlEcommerceShipmentEntity", "InsurancePennyOne", "InsurancePennyOne", true, "Bit", 0, 0, 0, false, "", null, typeof(System.Boolean), 27);
 		}
 
 		/// <summary>Inits DhlExpressAccountEntity's mappings</summary>
