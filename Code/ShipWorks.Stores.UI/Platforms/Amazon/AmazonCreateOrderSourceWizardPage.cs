@@ -1,5 +1,4 @@
-﻿using System.Windows.Forms;
-using Interapptive.Shared.ComponentRegistration;
+﻿using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.ComponentRegistration.Ordering;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Management;

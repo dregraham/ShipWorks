@@ -27,13 +27,15 @@ namespace ShipWorks.ApplicationCore.Licensing.Warehouse
 
         private const string notifyShipped = "api/customer/notifyShipped/{0}";
         private const string linkWarehouse = "api/warehouses/{0}/link";
+
         private const string orders = "api/warehouses/{0}/orders";
         private const string shipOrder = "api/orders/{0}/ship";
         private const string voidShipment = "api/orders/{0}/void";
         private const string rerouteOrderItems = "api/orders/{0}/rerouteItems";
         private const string getTrackingUpdates = "api/tracking/{0}";
-        private const string initiateMonoauth = "api/ordersource/{0}/auth?RedirectUrl={1}/callbacks/{0}monoauth/subscribe";
-         
+        private const string createOrderSourceInitiateUrl = "api/ordersource/{0}/auth?RedirectUrl={1}/callbacks/{0}monoauth/subscribe";
+        private const string updateOrderSourceInitiateUrl = "api/ordersource/{0}/auth?RedirectUrl={1}/callbacks/{0}monoauth/update&OrderSourceId={2}";
+
         /// <summary>
         /// Create a link warehouse endpoint
         /// </summary>
@@ -93,6 +95,9 @@ namespace ShipWorks.ApplicationCore.Licensing.Warehouse
         public static string GetProductsAfterSequence(string warehouseId, long sequence) =>
             $"api/products/sync/{warehouseId}/after/{sequence}";
 
+        /// <summary>
+        /// Notify platform the order has shipped
+        /// </summary>
         public static string NotifyShipped(string salesOrderId) =>
             string.Format(notifyShipped, salesOrderId);
 
@@ -103,9 +108,15 @@ namespace ShipWorks.ApplicationCore.Licensing.Warehouse
             string.Format(getTrackingUpdates, lastSeenTimestamp.ToUniversalTime().ToString("o"));
 
         /// <summary>
-        /// Get the URL to get the InitiateMonoauthUrl
+        /// Get the URL to get the InitiateMonoauthUrl for creating a new order source
         /// </summary>
-        public static string GetInitiateMonoauthUrl(string orderSourceName, string redirectUrl) =>
-            string.Format(initiateMonoauth, orderSourceName, redirectUrl);
+        public static string GetCreateOrderSourceInitiateUrl(string orderSourceName, string redirectUrl) =>
+            string.Format(createOrderSourceInitiateUrl, orderSourceName, redirectUrl);
+
+        /// <summary>
+        /// Get the URL to get the InitiateMonoauthUrl for updating an order source
+        /// </summary>
+        public static string GetUpdateOrderSourceInitiateUrl(string orderSourceName, string redirectUrl, string orderSourceId) =>
+            string.Format(updateOrderSourceInitiateUrl, orderSourceName, redirectUrl, orderSourceId);
     }
 }

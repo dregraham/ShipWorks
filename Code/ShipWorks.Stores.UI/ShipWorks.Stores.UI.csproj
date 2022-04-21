@@ -198,6 +198,15 @@
     <Compile Include="Orders\Split\RoutingErrorDialog.xaml.cs">
       <DependentUpon>RoutingErrorDialog.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Platforms\Amazon\AmazonAccountSettings.xaml.cs">
+      <DependentUpon>AmazonAccountSettings.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Platforms\Amazon\AmazonAccountSettingsControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Platforms\Amazon\AmazonAccountSettingsControl.Designer.cs">
+      <DependentUpon>AmazonAccountSettingsControl.cs</DependentUpon>
+    </Compile>
     <Compile Include="Platforms\Amazon\AmazonCreateOrderSource.xaml.cs">
       <DependentUpon>AmazonCreateOrderSource.xaml</DependentUpon>
     </Compile>
@@ -666,6 +675,9 @@
     <EmbeddedResource Include="Controls\StoreWizardFinishPageControl.resx">
       <DependentUpon>StoreWizardFinishPageControl.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Platforms\Amazon\AmazonAccountSettingsControl.resx">
+      <DependentUpon>AmazonAccountSettingsControl.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Platforms\Amazon\AmazonCreateOrderSourceWizardPage.resx">
       <DependentUpon>AmazonCreateOrderSourceWizardPage.cs</DependentUpon>
     </EmbeddedResource>
@@ -923,6 +935,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Platforms\Amazon\AmazonAccountSettings.xaml" />
     <Page Include="Platforms\Amazon\AmazonCreateOrderSource.xaml" />
     <Page Include="Platforms\BigCommerce\BigCommerceAccountSettings.xaml">
       <SubType>Designer</SubType>

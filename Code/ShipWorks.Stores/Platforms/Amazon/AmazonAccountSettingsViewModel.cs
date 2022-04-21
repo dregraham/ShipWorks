@@ -1,51 +1,69 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
+using System.Text;
 using System.Threading.Tasks;
-using System.Windows.Input;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.CommandWpf;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Net;
 using Interapptive.Shared.UI;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Stores.Platforms.Platform;
 
 namespace ShipWorks.Stores.Platforms.Amazon
 {
     /// <summary>
-    /// Viewmodel to set up an Amazon Order Source
+    /// Viewmodel to initiate the updating of a user's Amazon Credentials
     /// </summary>
     [Component]
-    public class AmazonCreateOrderSourceViewModel : ViewModelBase, IAmazonCreateOrderSourceViewModel
+    public class AmazonAccountSettingsViewModel : ViewModelBase, IAmazonAccountSettingsViewModel
     {
         private const string orderSourceName = "amazon";
-        
+
+        private IAmazonStoreEntity store;
+        private bool openingUrl;
         private readonly IWebHelper webHelper;
         private readonly IHubMonoauthClient hubMonoauthClient;
         private readonly IMessageHelper messageHelper;
-        private bool openingUrl;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public AmazonCreateOrderSourceViewModel(IWebHelper webHelper, IHubMonoauthClient hubMonoauthClient, IMessageHelper messageHelper)
+        public AmazonAccountSettingsViewModel(IWebHelper webHelper, IHubMonoauthClient hubMonoauthClient, IMessageHelper messageHelper)
         {
             this.webHelper = webHelper;
             this.hubMonoauthClient = hubMonoauthClient;
             this.messageHelper = messageHelper;
 
-            GetOrderSourceId = new RelayCommand(async () => await GetOrderSourceIdCommand().ConfigureAwait(true));
+            UpdateOrderSource = new RelayCommand(async () => await UpdateOrderSourceCommand().ConfigureAwait(true));
         }
 
         /// <summary>
-        /// Grabs a URL and opens up the browser to that page
+        /// Open the browser update the order source credentials
         /// </summary>
-        private async Task GetOrderSourceIdCommand()
+        [Obfuscation(Exclude = true)]
+        public RelayCommand UpdateOrderSource { get; }
+
+        /// <summary>
+        /// Load the amazon store into the control
+        /// </summary>
+        public void Load(IAmazonStoreEntity amazonStoreEntity)
+        {
+            store = amazonStoreEntity;
+        }
+
+        /// <summary>
+        /// Open the browser update the order source credentials
+        /// </summary>
+        private async Task UpdateOrderSourceCommand()
         {
             OpeningUrl = true;
             try
             {
-                var url = await hubMonoauthClient.GetCreateOrderSourceInitiateUrl(orderSourceName).ConfigureAwait(true);
+                var url = await hubMonoauthClient.GetUpdateOrderSourceInitiateUrl(orderSourceName, store.OrderSourceID).ConfigureAwait(true);
                 webHelper.OpenUrl(url);
             }
             catch (Exception ex)
@@ -59,18 +77,6 @@ namespace ShipWorks.Stores.Platforms.Amazon
         }
 
         /// <summary>
-        /// Open the browser to get a token
-        /// </summary>
-        [Obfuscation(Exclude = true)]
-        public ICommand GetOrderSourceId { get; }
-
-        /// <summary>
-        /// The OrderSourceId
-        /// </summary>
-        [Obfuscation(Exclude = true)]
-        public string OrderSourceId { get; set; }
-        
-        /// <summary>
         /// Are we currently trying to open the Url
         /// </summary>
         [Obfuscation(Exclude = true)]
@@ -78,22 +84,6 @@ namespace ShipWorks.Stores.Platforms.Amazon
         {
             get => openingUrl;
             private set => Set(ref openingUrl, value);
-        }
-
-        /// <summary>
-        /// Load the order source
-        /// </summary>
-        public void Load(AmazonStoreEntity store)
-        {
-            OrderSourceId = store.OrderSourceID;
-        }
-
-        /// <summary>
-        /// Save the order source
-        /// </summary>
-        public void Save(AmazonStoreEntity store)
-        {
-            store.OrderSourceID = OrderSourceId;
         }
     }
 }
