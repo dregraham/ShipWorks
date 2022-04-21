@@ -16,7 +16,7 @@
                 <ResourceDictionary Source="/ShipWorks.UI;component/Styles/GlobalStyle.xaml" />
                 <ResourceDictionary Source="/ShipWorks.UI;component/Styles/BlueSteel/BlueSteelStyle.xaml" />
             </ResourceDictionary.MergedDictionaries>
-
+            <ui:BooleanToVisibilityConverter x:Key="BooleanToVisibility" />
             <Style TargetType="TextBlock" BasedOn="{StaticResource Grid.TextBlock.Label}" />
             
             <Style x:Key="StepBlock" TargetType="FrameworkElement">
@@ -62,9 +62,17 @@
                     Command="{Binding UpdateOrderSource}"
                     Style="{StaticResource SmallSecondaryButton}"
                     IsEnabled="{Binding OpeningUrl, Converter={ui:InverseBooleanConverter}}">
-                    Get Order Source ID
+                    Update Order Source
                 </Button>
             </Grid>
         </StackPanel>
+        <ui:WaitSpinner Grid.Row="1" 
+                        BorderBrush="{StaticResource BorderColor}"
+                        FontFamily="/ShipWorks.OrderLookup;component/#Roboto"
+                        FontSize="12"
+                        Foreground="{StaticResource ControlTextColor}"
+                        Visibility="{Binding OpeningUrl, Converter={StaticResource BooleanToVisibility}}">
+            Opening Browser
+        </ui:WaitSpinner>
     </Grid>
 </UserControl>

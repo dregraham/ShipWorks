@@ -14,6 +14,9 @@ namespace ShipWorks.Stores.Platforms.Platform
     {
         private readonly IWarehouseRequestFactory warehouseRequestFactory;
         private readonly IWarehouseRequestClient warehouseRequestClient;
+        
+        private const string GetMonoauthInitiateUrl = "GetMonoauthInitiateUrl";
+        private const string GetInitiateUpdateOrderSourceUrl = "GetInitiateUpdateOrderSourceUrl";
     
         /// <summary>
         /// Constructor
@@ -37,7 +40,7 @@ namespace ShipWorks.Stores.Platforms.Platform
                 WarehouseEndpoints.GetCreateOrderSourceInitiateUrl(orderSourceName, warehouseRequestClient.WarehouseUrl), Method.GET,
                 null);
 
-            var result = await warehouseRequestClient.MakeRequest<GetMonauthInitiateUrlResponse>(request, "GetMonoauthInitiateUrl")
+            var result = await warehouseRequestClient.MakeRequest<GetMonauthInitiateUrlResponse>(request, GetMonoauthInitiateUrl)
                 .ConfigureAwait(false);
 
             return result.InitiateUrl;
@@ -56,7 +59,7 @@ namespace ShipWorks.Stores.Platforms.Platform
                 WarehouseEndpoints.GetUpdateOrderSourceInitiateUrl(orderSourceName, warehouseRequestClient.WarehouseUrl, orderSourceId), Method.GET,
                 null);
 
-            var result = await warehouseRequestClient.MakeRequest<GetMonauthInitiateUrlResponse>(request, "GetInitiateUpdateOrderSourceUrl")
+            var result = await warehouseRequestClient.MakeRequest<GetMonauthInitiateUrlResponse>(request, GetInitiateUpdateOrderSourceUrl)
                 .ConfigureAwait(false);
 
             return result.InitiateUrl;

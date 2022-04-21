@@ -95,6 +95,9 @@ namespace ShipWorks.ApplicationCore.Licensing.Warehouse
         public static string GetProductsAfterSequence(string warehouseId, long sequence) =>
             $"api/products/sync/{warehouseId}/after/{sequence}";
 
+        /// <summary>
+        /// Notify platform the order has shipped
+        /// </summary>
         public static string NotifyShipped(string salesOrderId) =>
             string.Format(notifyShipped, salesOrderId);
 
@@ -105,11 +108,14 @@ namespace ShipWorks.ApplicationCore.Licensing.Warehouse
             string.Format(getTrackingUpdates, lastSeenTimestamp.ToUniversalTime().ToString("o"));
 
         /// <summary>
-        /// Get the URL to get the InitiateMonoauthUrl
+        /// Get the URL to get the InitiateMonoauthUrl for creating a new order source
         /// </summary>
         public static string GetCreateOrderSourceInitiateUrl(string orderSourceName, string redirectUrl) =>
             string.Format(createOrderSourceInitiateUrl, orderSourceName, redirectUrl);
 
+        /// <summary>
+        /// Get the URL to get the InitiateMonoauthUrl for updating an order source
+        /// </summary>
         public static string GetUpdateOrderSourceInitiateUrl(string orderSourceName, string redirectUrl, string orderSourceId) =>
             string.Format(updateOrderSourceInitiateUrl, orderSourceName, redirectUrl, orderSourceId);
     }

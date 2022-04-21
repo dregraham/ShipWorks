@@ -7,6 +7,9 @@ namespace ShipWorks.Stores.Platforms.Amazon
     /// </summary>
     public interface IAmazonAccountSettingsViewModel
     {
+        /// <summary>
+        /// Load the viewmodel from a store
+        /// </summary>
         void Load(IAmazonStoreEntity amazonStoreEntity);
     }
 }
