@@ -118,7 +118,6 @@ namespace ShipWorks.ApplicationCore.Licensing
         {
             Edition edition = InstantiateEdition(xpath);
 
-            // Now see if there are endicia special stuff set. We do this at the end, basically ignoring them if any other editions are active.
             bool dhlEcommerceMax = XPathUtility.Evaluate(xpath, "//DhlEcommerceSmParcelExpeditedMaxEnabled/@status", 0) == 1;
             edition.SharedOptions.DhlEcommerceSmParcelExpeditedMaxEnabled = dhlEcommerceMax;
 
