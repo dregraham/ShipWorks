@@ -4,7 +4,7 @@ using System.IO;
 namespace Interapptive.Shared.Security
 {
     /// <summary>
-    /// 
+    /// An encryption provider for SecureText encryption
     /// </summary>
     public class SecureTextEncryptionProvider : IEncryptionProvider
     {

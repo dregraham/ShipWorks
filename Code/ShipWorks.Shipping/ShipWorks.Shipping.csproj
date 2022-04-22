@@ -228,6 +228,7 @@
     <Compile Include="Carriers\BestRate\Footnote\BrokerExceptionsRateFootnoteViewModel.cs" />
     <Compile Include="Carriers\BestRate\Footnote\CounterRatesInvalidStoreAddressFootnoteViewModel.cs" />
     <Compile Include="Carriers\BestRate\Footnote\ShippingAccountRequiredForRatingFootnoteViewModel.cs" />
+    <Compile Include="Carriers\DhlEcommerce\DhlEcommerceAccountManager.cs" />
     <Compile Include="Carriers\DhlEcommerce\DhlEcommerceAccountRepository.cs" />
     <Compile Include="Carriers\DhlEcommerce\DhlEcommerceShipmentType.cs" />
     <Compile Include="Carriers\DhlEcommerce\DhlEcommerceShippingProfileApplicationStrategy.cs" />
@@ -236,9 +237,10 @@
     <Compile Include="Carriers\DhlEcommerce\DhlEcommerceShipEngineRatingClient.cs" />
     <Compile Include="Carriers\DhlEcommerce\DhlEcommerceShipmentRequestFactory.cs" />
     <Compile Include="Carriers\DhlEcommerce\DhlEcommerceException.cs" />
+    <Compile Include="Carriers\DhlEcommerce\Enums\DhlEcommerceDistributionCenters.cs" />
     <Compile Include="Carriers\DhlEcommerce\IDhlEcommerceShipmentAdapter.cs" />
     <Compile Include="Carriers\DhlEcommerce\IDhlEcommerceAccountRepository.cs" />
-    <Compile Include="Carriers\DhlEcommerce\DhlEcommerceDistributionCenters.cs" />
+    <Compile Include="Carriers\DhlEcommerce\Enums\DhlEcommerceAncillaryEndorsement.cs" />
     <Compile Include="Carriers\DhlEcommerce\IDhlEcommerceShipEngineRatingClient.cs" />
     <Compile Include="Carriers\Dhl\API\DhlExpressLabelClientFactory.cs" />
     <Compile Include="Carriers\Dhl\API\IDhlExpressLabelClient.cs" />

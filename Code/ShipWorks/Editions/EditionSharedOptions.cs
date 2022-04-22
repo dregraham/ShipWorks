@@ -7,6 +7,11 @@ namespace ShipWorks.Editions
     public class EditionSharedOptions
     {
         /// <summary>
+        /// Indicates if DHL eCommerce Max is enabled and allowed for the edition
+        /// </summary>
+        public bool DhlEcommerceSmParcelExpeditedMaxEnabled { get; set; }
+
+        /// <summary>
         /// Indicates if DHL is enabled and allowed for the edition
         /// </summary>
         public bool EndiciaDhlEnabled { get; set; }

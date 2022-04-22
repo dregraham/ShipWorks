@@ -765,6 +765,7 @@
       </EntityDefinition>
       <EntityDefinition Name="DhlEcommerceProfile" ObjectID="3184e164-6f92-4337-9c4a-8c637c2d4f34">
         <Fields>
+          <Field Name="AncillaryEndorsement" Type="string" IsOptional="true" MaxLength="50" FieldIndex="14" />
           <Field Name="Contents" Type="int" IsOptional="true" Precision="10" FieldIndex="6" />
           <Field Name="CustomsRecipientTin" Type="string" IsOptional="true" MaxLength="25" FieldIndex="9" />
           <Field Name="CustomsTaxIdType" Type="int" IsOptional="true" Precision="10" FieldIndex="10" />
@@ -794,6 +795,7 @@
       </EntityDefinition>
       <EntityDefinition Name="DhlEcommerceShipment" ObjectID="91e3778a-90d7-4e71-9382-adf1709f228c">
         <Fields>
+          <Field Name="AncillaryEndorsement" Type="string" MaxLength="50" FieldIndex="28" />
           <Field Name="Contents" Type="int" Precision="10" FieldIndex="7" />
           <Field Name="CustomsRecipientTin" Type="string" IsOptional="true" MaxLength="25" FieldIndex="13" />
           <Field Name="CustomsTaxIdType" Type="int" IsOptional="true" Precision="10" FieldIndex="14" />
@@ -806,9 +808,9 @@
           <Field Name="DimsProfileID" Type="long" Precision="19" FieldIndex="18" />
           <Field Name="DimsWeight" Type="double" Precision="38" FieldIndex="22" />
           <Field Name="DimsWidth" Type="double" Precision="38" FieldIndex="20" />
-          <Field Name="Insurance" Type="bool" IsOptional="true" FieldIndex="25" />
-          <Field Name="InsurancePennyOne" Type="bool" IsOptional="true" FieldIndex="27" />
-          <Field Name="InsuranceValue" Type="decimal" IsOptional="true" Precision="19" Scale="4" FieldIndex="26" />
+          <Field Name="Insurance" Type="bool" FieldIndex="25" />
+          <Field Name="InsurancePennyOne" Type="bool" FieldIndex="27" />
+          <Field Name="InsuranceValue" Type="decimal" Precision="19" Scale="4" FieldIndex="26" />
           <Field Name="IntegratorTransactionID" Type="guid" IsOptional="true" FieldIndex="10" />
           <Field Name="NonDelivery" Type="int" Precision="10" FieldIndex="8" />
           <Field Name="NonMachinable" Type="bool" FieldIndex="4" />
@@ -4837,7 +4839,7 @@
       <Catalogs>
         <Catalog Name="ShipWorksLocal">
           <Schemas>
-            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2022-04-21T17:33:12.7012573Z">
+            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2022-04-22T16:37:31.9172785Z">
               <Tables>
                 <Table Name="Action">
                   <PkConstraintName Name="PK_Action" />
@@ -5556,26 +5558,26 @@
                   <Fields>
                     <Field Name="DhlEcommerceAccountID" Ordinal="1" IsIdentity="true" IsPrimaryKey="true" DbType="0" Precision="19" />
                     <Field Name="RowVersion" Ordinal="2" IsTimestamp="true" DbType="21" />
-                    <Field Name="ShipEngineCarrierId" Ordinal="3" DbType="12" Length="50" />
-                    <Field Name="ClientId" Ordinal="4" DbType="12" Length="60" />
-                    <Field Name="ApiSecret" Ordinal="5" DbType="12" Length="400" />
-                    <Field Name="PickupNumber" Ordinal="6" DbType="12" Length="20" />
-                    <Field Name="DistributionCenter" Ordinal="7" DbType="12" Length="12" />
-                    <Field Name="SoldTo" Ordinal="8" DbType="12" Length="50" />
-                    <Field Name="Description" Ordinal="9" DbType="12" Length="50" />
-                    <Field Name="FirstName" Ordinal="10" DbType="12" Length="30" />
-                    <Field Name="MiddleName" Ordinal="11" DbType="12" Length="30" />
-                    <Field Name="LastName" Ordinal="12" DbType="12" Length="30" />
-                    <Field Name="Company" Ordinal="13" DbType="12" Length="30" />
-                    <Field Name="Street1" Ordinal="14" DbType="12" Length="60" />
-                    <Field Name="Street2" Ordinal="15" DbType="12" Length="60" />
-                    <Field Name="Street3" Ordinal="16" DbType="12" Length="60" />
-                    <Field Name="City" Ordinal="17" DbType="12" Length="50" />
-                    <Field Name="StateProvCode" Ordinal="18" DbType="12" Length="50" />
-                    <Field Name="PostalCode" Ordinal="19" DbType="12" Length="20" />
-                    <Field Name="CountryCode" Ordinal="20" DbType="12" Length="50" />
-                    <Field Name="Phone" Ordinal="21" DbType="12" Length="26" />
-                    <Field Name="Email" Ordinal="22" DbType="12" Length="100" />
+                    <Field Name="ShipEngineCarrierId" Ordinal="3" HasDefaultValue="true" DefaultValue="''" DbType="12" Length="50" />
+                    <Field Name="ClientId" Ordinal="4" HasDefaultValue="true" DefaultValue="''" DbType="12" Length="60" />
+                    <Field Name="ApiSecret" Ordinal="5" HasDefaultValue="true" DefaultValue="''" DbType="12" Length="400" />
+                    <Field Name="PickupNumber" Ordinal="6" HasDefaultValue="true" DefaultValue="''" DbType="12" Length="20" />
+                    <Field Name="DistributionCenter" Ordinal="7" HasDefaultValue="true" DefaultValue="''" DbType="12" Length="12" />
+                    <Field Name="SoldTo" Ordinal="8" HasDefaultValue="true" DefaultValue="''" DbType="12" Length="50" />
+                    <Field Name="Description" Ordinal="9" HasDefaultValue="true" DefaultValue="''" DbType="12" Length="50" />
+                    <Field Name="FirstName" Ordinal="10" HasDefaultValue="true" DefaultValue="''" DbType="12" Length="30" />
+                    <Field Name="MiddleName" Ordinal="11" HasDefaultValue="true" DefaultValue="''" DbType="12" Length="30" />
+                    <Field Name="LastName" Ordinal="12" HasDefaultValue="true" DefaultValue="''" DbType="12" Length="30" />
+                    <Field Name="Company" Ordinal="13" HasDefaultValue="true" DefaultValue="''" DbType="12" Length="30" />
+                    <Field Name="Street1" Ordinal="14" HasDefaultValue="true" DefaultValue="''" DbType="12" Length="60" />
+                    <Field Name="Street2" Ordinal="15" HasDefaultValue="true" DefaultValue="''" DbType="12" Length="60" />
+                    <Field Name="Street3" Ordinal="16" HasDefaultValue="true" DefaultValue="''" DbType="12" Length="60" />
+                    <Field Name="City" Ordinal="17" HasDefaultValue="true" DefaultValue="''" DbType="12" Length="50" />
+                    <Field Name="StateProvCode" Ordinal="18" HasDefaultValue="true" DefaultValue="''" DbType="12" Length="50" />
+                    <Field Name="PostalCode" Ordinal="19" HasDefaultValue="true" DefaultValue="''" DbType="12" Length="20" />
+                    <Field Name="CountryCode" Ordinal="20" HasDefaultValue="true" DefaultValue="''" DbType="12" Length="50" />
+                    <Field Name="Phone" Ordinal="21" HasDefaultValue="true" DefaultValue="''" DbType="12" Length="26" />
+                    <Field Name="Email" Ordinal="22" HasDefaultValue="true" DefaultValue="''" DbType="12" Length="100" />
                     <Field Name="CreatedDate" Ordinal="23" DbType="4" />
                   </Fields>
                 </Table>
@@ -5596,6 +5598,7 @@
                     <Field Name="CustomsTinIssuingAuthority" Ordinal="12" IsOptional="true" DbType="12" Length="2" />
                     <Field Name="PackagingType" Ordinal="13" IsOptional="true" DbType="8" Precision="10" />
                     <Field Name="Reference1" Ordinal="14" IsOptional="true" DbType="12" Length="300" />
+                    <Field Name="AncillaryEndorsement" Ordinal="15" IsOptional="true" DbType="12" Length="50" />
                   </Fields>
                 </Table>
                 <Table Name="DhlEcommerceScanForm">
@@ -5603,11 +5606,11 @@
                   <Fields>
                     <Field Name="DhlEcommerceScanFormID" Ordinal="1" IsIdentity="true" IsPrimaryKey="true" DbType="0" Precision="19" />
                     <Field Name="DhlEcommerceAccountID" Ordinal="2" DbType="0" Precision="19" />
-                    <Field Name="ScanFormTransactionID" Ordinal="3" DbType="24" Length="100" />
-                    <Field Name="ScanFormUrl" Ordinal="4" DbType="24" Length="2048" />
+                    <Field Name="ScanFormTransactionID" Ordinal="3" HasDefaultValue="true" DefaultValue="''" DbType="24" Length="100" />
+                    <Field Name="ScanFormUrl" Ordinal="4" HasDefaultValue="true" DefaultValue="''" DbType="24" Length="2048" />
                     <Field Name="CreatedDate" Ordinal="5" DbType="4" />
                     <Field Name="ScanFormBatchID" Ordinal="6" DbType="0" Precision="19" />
-                    <Field Name="Description" Ordinal="7" DbType="12" Length="100" />
+                    <Field Name="Description" Ordinal="7" HasDefaultValue="true" DefaultValue="''" DbType="12" Length="100" />
                   </Fields>
                 </Table>
                 <Table Name="DhlEcommerceShipment">
@@ -5653,14 +5656,15 @@
                     <Field Name="DimsHeight" Ordinal="18" DbType="6" Precision="38" />
                     <Field Name="DimsWeight" Ordinal="19" DbType="6" Precision="38" />
                     <Field Name="DimsAddWeight" Ordinal="20" DbType="2" />
-                    <Field Name="Reference1" Ordinal="21" DbType="12" Length="300" />
+                    <Field Name="Reference1" Ordinal="21" HasDefaultValue="true" DefaultValue="''" DbType="12" Length="300" />
                     <Field Name="CustomsRecipientTin" Ordinal="22" IsOptional="true" DbType="12" Length="25" />
                     <Field Name="CustomsTaxIdType" Ordinal="23" IsOptional="true" DbType="8" Precision="10" />
                     <Field Name="CustomsTinIssuingAuthority" Ordinal="24" IsOptional="true" DbType="12" Length="2" />
                     <Field Name="ScanFormBatchID" Ordinal="25" IsOptional="true" DbType="0" Precision="19" />
-                    <Field Name="Insurance" Ordinal="26" IsOptional="true" DbType="2" />
-                    <Field Name="InsuranceValue" Ordinal="27" IsOptional="true" DbType="9" Precision="19" Scale="4" />
-                    <Field Name="InsurancePennyOne" Ordinal="28" IsOptional="true" DbType="2" />
+                    <Field Name="Insurance" Ordinal="26" HasDefaultValue="true" DefaultValue="(0)" DbType="2" />
+                    <Field Name="InsuranceValue" Ordinal="27" HasDefaultValue="true" DefaultValue="(0)" DbType="9" Precision="19" Scale="4" />
+                    <Field Name="InsurancePennyOne" Ordinal="28" HasDefaultValue="true" DefaultValue="(0)" DbType="2" />
+                    <Field Name="AncillaryEndorsement" Ordinal="29" HasDefaultValue="true" DefaultValue="''" DbType="12" Length="50" />
                   </Fields>
                 </Table>
                 <Table Name="DhlExpressAccount">
@@ -12061,6 +12065,7 @@
         </EntityMapping>
         <EntityMapping EntityName=":DhlEcommerceProfile" TargetName="ShipWorksLocal:dbo:DhlEcommerceProfile">
           <FieldMappings>
+            <FieldMapping FieldName="AncillaryEndorsement" TargetFieldName="AncillaryEndorsement" />
             <FieldMapping FieldName="Contents" TargetFieldName="Contents" />
             <FieldMapping FieldName="CustomsRecipientTin" TargetFieldName="CustomsRecipientTin" />
             <FieldMapping FieldName="CustomsTaxIdType" TargetFieldName="CustomsTaxIdType" />
@@ -12090,6 +12095,7 @@
         </EntityMapping>
         <EntityMapping EntityName=":DhlEcommerceShipment" TargetName="ShipWorksLocal:dbo:DhlEcommerceShipment">
           <FieldMappings>
+            <FieldMapping FieldName="AncillaryEndorsement" TargetFieldName="AncillaryEndorsement" />
             <FieldMapping FieldName="Contents" TargetFieldName="Contents" />
             <FieldMapping FieldName="CustomsRecipientTin" TargetFieldName="CustomsRecipientTin" />
             <FieldMapping FieldName="CustomsTaxIdType" TargetFieldName="CustomsTaxIdType" />

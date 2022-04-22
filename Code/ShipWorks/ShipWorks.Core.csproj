@@ -808,6 +808,7 @@
     <Compile Include="ApplicationCore\Dashboard\Content\DashboardAccountTrialItem.cs" />
     <Compile Include="ApplicationCore\Dashboard\Content\DashboardTrialItem.cs" />
     <Compile Include="ApplicationCore\Licensing\CustomerLicenseKeyType.cs" />
+    <Compile Include="ApplicationCore\Licensing\FeatureRestrictions\DhlEcommerce\DhlEcommerceMaxRestriction.cs" />
     <Compile Include="ApplicationCore\Licensing\TrialDetails.cs" />
     <Compile Include="ApplicationCore\Licensing\Warehouse\DTO\SqlConfigChangedDto.cs" />
     <Compile Include="ApplicationCore\ReoccurringAppLockedTask.cs" />
@@ -1256,6 +1257,7 @@
     <Compile Include="Shipping\Carriers\DhlEcommerce\DhlEcommercePackageAdapter.cs" />
     <Compile Include="Shipping\Carriers\FedEx\Enums\FedexTINType.cs" />
     <Compile Include="Shipping\Carriers\UPS\Enums\UpsCustomsRecipientTINType.cs" />
+    <Compile Include="Shipping\ShipEngine\DTOs\Registration\DhlEcommerceRegistrationRequest.cs" />
     <Compile Include="Stores\ILegacyStoreTrialKeyConverter.cs" />
     <Compile Include="Stores\Platforms\Platform\OnlineUpdating\IPlatformOnlineUpdater.cs" />
     <Compile Include="Stores\Platforms\Platform\OnlineUpdating\PlatformOnlineUpdater.cs" />
