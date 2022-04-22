@@ -35,11 +35,15 @@
             this.labelInfo2 = new System.Windows.Forms.Label();
             this.labelInfo1 = new System.Windows.Forms.Label();
             this.wizardPageCredentials = new ShipWorks.UI.Wizard.WizardPage();
+            this.ancillaryEndorsement = new System.Windows.Forms.ComboBox();
+            this.labelAncillaryEndorsement = new System.Windows.Forms.Label();
+            this.soldTo = new ShipWorks.UI.Controls.NumericTextBox();
+            this.labelSoldTo = new System.Windows.Forms.Label();
             this.labelDistributionCenter = new System.Windows.Forms.Label();
             this.distributionCenters = new System.Windows.Forms.ComboBox();
             this.labelPickupNumber = new System.Windows.Forms.Label();
-            this.pickupNumber = new System.Windows.Forms.TextBox();
-            this.clientId = new ShipWorks.UI.Controls.NumericTextBox();
+            this.clientId = new System.Windows.Forms.TextBox();
+            this.pickupNumber = new ShipWorks.UI.Controls.NumericTextBox();
             this.apiSecret = new System.Windows.Forms.TextBox();
             this.labelApiSecret = new System.Windows.Forms.Label();
             this.labelClientId = new System.Windows.Forms.Label();
@@ -49,6 +53,8 @@
             this.wizardPageContactInfo = new ShipWorks.UI.Wizard.WizardPage();
             this.contactInformation = new ShipWorks.Data.Controls.AutofillPersonControl();
             this.fieldLengthProvider = new ShipWorks.Data.Utility.EntityFieldLengthProvider(this.components);
+            this.labelDescription = new System.Windows.Forms.Label();
+            this.accountDescription = new System.Windows.Forms.TextBox();
             this.mainPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox)).BeginInit();
             this.topPanel.SuspendLayout();
@@ -75,7 +81,7 @@
             // 
             // mainPanel
             // 
-            this.mainPanel.Controls.Add(this.wizardPageWelcome);
+            this.mainPanel.Controls.Add(this.wizardPageCredentials);
             this.mainPanel.Size = new System.Drawing.Size(567, 437);
             // 
             // etchBottom
@@ -142,11 +148,17 @@
             // 
             // wizardPageCredentials
             // 
+            this.wizardPageCredentials.Controls.Add(this.accountDescription);
+            this.wizardPageCredentials.Controls.Add(this.labelDescription);
+            this.wizardPageCredentials.Controls.Add(this.ancillaryEndorsement);
+            this.wizardPageCredentials.Controls.Add(this.labelAncillaryEndorsement);
+            this.wizardPageCredentials.Controls.Add(this.soldTo);
+            this.wizardPageCredentials.Controls.Add(this.labelSoldTo);
             this.wizardPageCredentials.Controls.Add(this.labelDistributionCenter);
             this.wizardPageCredentials.Controls.Add(this.distributionCenters);
             this.wizardPageCredentials.Controls.Add(this.labelPickupNumber);
-            this.wizardPageCredentials.Controls.Add(this.pickupNumber);
             this.wizardPageCredentials.Controls.Add(this.clientId);
+            this.wizardPageCredentials.Controls.Add(this.pickupNumber);
             this.wizardPageCredentials.Controls.Add(this.apiSecret);
             this.wizardPageCredentials.Controls.Add(this.labelApiSecret);
             this.wizardPageCredentials.Controls.Add(this.labelClientId);
@@ -159,24 +171,56 @@
             this.wizardPageCredentials.Size = new System.Drawing.Size(567, 437);
             this.wizardPageCredentials.TabIndex = 0;
             this.wizardPageCredentials.Title = "DHL eCommerce Credentials";
-            this.wizardPageCredentials.StepNext += new System.EventHandler<ShipWorks.UI.Wizard.WizardStepEventArgs>(this.OnNextStepCredentials);
+            // 
+            // ancillaryEndorsement
+            // 
+            this.ancillaryEndorsement.FormattingEnabled = true;
+            this.ancillaryEndorsement.Location = new System.Drawing.Point(151, 144);
+            this.ancillaryEndorsement.Name = "ancillaryEndorsement";
+            this.ancillaryEndorsement.Size = new System.Drawing.Size(162, 21);
+            this.ancillaryEndorsement.TabIndex = 10;
+            // 
+            // labelAncillaryEndorsement
+            // 
+            this.labelAncillaryEndorsement.AutoSize = true;
+            this.labelAncillaryEndorsement.Location = new System.Drawing.Point(28, 147);
+            this.labelAncillaryEndorsement.Name = "labelAncillaryEndorsement";
+            this.labelAncillaryEndorsement.Size = new System.Drawing.Size(117, 13);
+            this.labelAncillaryEndorsement.TabIndex = 9;
+            this.labelAncillaryEndorsement.Text = "Ancillary Endorsement:";
+            // 
+            // soldTo
+            // 
+            this.soldTo.Location = new System.Drawing.Point(151, 117);
+            this.soldTo.Name = "soldTo";
+            this.soldTo.Size = new System.Drawing.Size(162, 21);
+            this.soldTo.TabIndex = 8;
+            // 
+            // labelSoldTo
+            // 
+            this.labelSoldTo.AutoSize = true;
+            this.labelSoldTo.Location = new System.Drawing.Point(17, 120);
+            this.labelSoldTo.Name = "labelSoldTo";
+            this.labelSoldTo.Size = new System.Drawing.Size(128, 13);
+            this.labelSoldTo.TabIndex = 7;
+            this.labelSoldTo.Text = "Sold To Account Number:";
             // 
             // labelDistributionCenter
             // 
             this.labelDistributionCenter.AutoSize = true;
-            this.labelDistributionCenter.Location = new System.Drawing.Point(44, 120);
+            this.labelDistributionCenter.Location = new System.Drawing.Point(44, 174);
             this.labelDistributionCenter.Name = "labelDistributionCenter";
             this.labelDistributionCenter.Size = new System.Drawing.Size(101, 13);
-            this.labelDistributionCenter.TabIndex = 170;
+            this.labelDistributionCenter.TabIndex = 11;
             this.labelDistributionCenter.Text = "Distribution Center:";
             // 
             // distributionCenters
             // 
             this.distributionCenters.FormattingEnabled = true;
-            this.distributionCenters.Location = new System.Drawing.Point(151, 117);
+            this.distributionCenters.Location = new System.Drawing.Point(151, 171);
             this.distributionCenters.Name = "distributionCenters";
             this.distributionCenters.Size = new System.Drawing.Size(162, 21);
-            this.distributionCenters.TabIndex = 169;
+            this.distributionCenters.TabIndex = 12;
             // 
             // labelPickupNumber
             // 
@@ -184,24 +228,23 @@
             this.labelPickupNumber.Location = new System.Drawing.Point(22, 93);
             this.labelPickupNumber.Name = "labelPickupNumber";
             this.labelPickupNumber.Size = new System.Drawing.Size(123, 13);
-            this.labelPickupNumber.TabIndex = 167;
+            this.labelPickupNumber.TabIndex = 5;
             this.labelPickupNumber.Text = "Pickup Account Number:";
-            // 
-            // pickupNumber
-            // 
-            this.pickupNumber.Location = new System.Drawing.Point(151, 90);
-            this.pickupNumber.MaxLength = 50;
-            this.pickupNumber.Name = "pickupNumber";
-            this.pickupNumber.Size = new System.Drawing.Size(162, 21);
-            this.pickupNumber.TabIndex = 166;
-            this.pickupNumber.UseSystemPasswordChar = true;
             // 
             // clientId
             // 
             this.clientId.Location = new System.Drawing.Point(151, 36);
+            this.clientId.MaxLength = 50;
             this.clientId.Name = "clientId";
             this.clientId.Size = new System.Drawing.Size(162, 21);
-            this.clientId.TabIndex = 1;
+            this.clientId.TabIndex = 2;
+            // 
+            // pickupNumber
+            // 
+            this.pickupNumber.Location = new System.Drawing.Point(151, 90);
+            this.pickupNumber.Name = "pickupNumber";
+            this.pickupNumber.Size = new System.Drawing.Size(162, 21);
+            this.pickupNumber.TabIndex = 6;
             // 
             // apiSecret
             // 
@@ -209,7 +252,7 @@
             this.apiSecret.MaxLength = 50;
             this.apiSecret.Name = "apiSecret";
             this.apiSecret.Size = new System.Drawing.Size(162, 21);
-            this.apiSecret.TabIndex = 2;
+            this.apiSecret.TabIndex = 4;
             this.apiSecret.UseSystemPasswordChar = true;
             // 
             // labelApiSecret
@@ -218,7 +261,7 @@
             this.labelApiSecret.Location = new System.Drawing.Point(83, 66);
             this.labelApiSecret.Name = "labelApiSecret";
             this.labelApiSecret.Size = new System.Drawing.Size(62, 13);
-            this.labelApiSecret.TabIndex = 165;
+            this.labelApiSecret.TabIndex = 3;
             this.labelApiSecret.Text = "API Secret:";
             // 
             // labelClientId
@@ -227,7 +270,7 @@
             this.labelClientId.Location = new System.Drawing.Point(93, 39);
             this.labelClientId.Name = "labelClientId";
             this.labelClientId.Size = new System.Drawing.Size(52, 13);
-            this.labelClientId.TabIndex = 164;
+            this.labelClientId.TabIndex = 1;
             this.labelClientId.Text = "Client ID:";
             // 
             // label1
@@ -295,6 +338,23 @@
             this.contactInformation.Size = new System.Drawing.Size(355, 381);
             this.contactInformation.TabIndex = 0;
             // 
+            // labelDescription
+            // 
+            this.labelDescription.AutoSize = true;
+            this.labelDescription.Location = new System.Drawing.Point(81, 201);
+            this.labelDescription.Name = "labelDescription";
+            this.labelDescription.Size = new System.Drawing.Size(64, 13);
+            this.labelDescription.TabIndex = 13;
+            this.labelDescription.Text = "Description:";
+            // 
+            // accountDescription
+            // 
+            this.accountDescription.Location = new System.Drawing.Point(151, 198);
+            this.accountDescription.MaxLength = 50;
+            this.accountDescription.Name = "accountDescription";
+            this.accountDescription.Size = new System.Drawing.Size(162, 21);
+            this.accountDescription.TabIndex = 14;
+            // 
             // DhlEcommerceSetupWizard
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -343,10 +403,16 @@
         private ShipWorks.UI.Wizard.WizardPage wizardPageContactInfo;
         private Data.Controls.AutofillPersonControl contactInformation;
         private Data.Utility.EntityFieldLengthProvider fieldLengthProvider;
-        private ShipWorks.UI.Controls.NumericTextBox clientId;
+        private ShipWorks.UI.Controls.NumericTextBox pickupNumber;
         private System.Windows.Forms.Label labelDistributionCenter;
         private System.Windows.Forms.Label labelPickupNumber;
-        private System.Windows.Forms.TextBox pickupNumber;
+        private System.Windows.Forms.TextBox clientId;
         private System.Windows.Forms.ComboBox distributionCenters;
+        private ShipWorks.UI.Controls.NumericTextBox soldTo;
+        private System.Windows.Forms.Label labelSoldTo;
+        private System.Windows.Forms.ComboBox ancillaryEndorsement;
+        private System.Windows.Forms.Label labelAncillaryEndorsement;
+        private System.Windows.Forms.TextBox accountDescription;
+        private System.Windows.Forms.Label labelDescription;
     }
 }

@@ -3050,7 +3050,8 @@ CREATE TABLE [dbo].[DhlEcommerceShipment](
 	[ScanFormBatchID] [bigint] NULL,
 	[Insurance] [bit] NOT NULL CONSTRAINT [DF_DhlEcommerceShipment_Insurance] DEFAULT ((0)),
 	[InsuranceValue] [money] NOT NULL CONSTRAINT [DF_DhlEcommerceShipment_InsuranceValue] DEFAULT ((0)),
-	[InsurancePennyOne] [bit] NOT NULL CONSTRAINT [DF_DhlEcommerceShipment_InsurancePennyOne] DEFAULT ((0))
+	[InsurancePennyOne] [bit] NOT NULL CONSTRAINT [DF_DhlEcommerceShipment_InsurancePennyOne] DEFAULT ((0)),
+	[AncillaryEndorsement] [nvarchar](50) NOT NULL
  CONSTRAINT [PK_DhlEcommerceShipment] PRIMARY KEY CLUSTERED 
 (
 	[ShipmentID] ASC
@@ -3108,7 +3109,8 @@ CREATE TABLE [dbo].[DhlEcommerceProfile](
 	[CustomsTaxIdType] [int] NULL,
 	[CustomsTinIssuingAuthority] [nvarchar](2) NULL,
 	[PackagingType] [int] NULL,
-	[Reference1] [nvarchar](300) NULL
+	[Reference1] [nvarchar](300) NULL,
+	[AncillaryEndorsement] [nvarchar](50) NULL
  CONSTRAINT [PK_DhlEcommerceProfile] PRIMARY KEY CLUSTERED 
 (
 	[ShippingProfileID] ASC

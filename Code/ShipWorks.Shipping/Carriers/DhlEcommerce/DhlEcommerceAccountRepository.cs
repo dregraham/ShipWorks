@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 using Interapptive.Shared.ComponentRegistration;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
@@ -11,8 +10,6 @@ namespace ShipWorks.Shipping.Carriers.DhlEcommerce
     [KeyedComponent(typeof(ICarrierAccountRepository<DhlEcommerceAccountEntity, IDhlEcommerceAccountEntity>), ShipmentTypeCode.DhlEcommerce)]
     public class DhlEcommerceAccountRepository : CarrierAccountRepositoryBase<DhlEcommerceAccountEntity, IDhlEcommerceAccountEntity>, IDhlEcommerceAccountRepository
     {
-        // TODO: DHLECommerce Use DhlEcommerceAccountManager once its created throughout this class.
-
         /// <summary>
         /// Gets the accounts for the carrier.
         /// </summary>
@@ -20,8 +17,7 @@ namespace ShipWorks.Shipping.Carriers.DhlEcommerce
         {
             get
             {
-                // return DhlEcommerceAccountManager.Accounts;
-                return Enumerable.Empty<DhlEcommerceAccountEntity>(); 
+                return DhlEcommerceAccountManager.Accounts;
             }
         }
 
@@ -37,8 +33,7 @@ namespace ShipWorks.Shipping.Carriers.DhlEcommerce
         {
             get
             {
-                //DhlEcommerceAccountManager.AccountsReadOnly;
-                return Enumerable.Empty<DhlEcommerceAccountEntity>(); 
+                return DhlEcommerceAccountManager.AccountsReadOnly;
             }
         }
 
@@ -47,7 +42,7 @@ namespace ShipWorks.Shipping.Carriers.DhlEcommerce
         /// </summary>
         public override void CheckForChangesNeeded()
         {
-            //DhlEcommerceAccountManager.CheckForChangesNeeded()
+            DhlEcommerceAccountManager.CheckForChangesNeeded();
         }
 
         /// <summary>
@@ -55,7 +50,7 @@ namespace ShipWorks.Shipping.Carriers.DhlEcommerce
         /// </summary>
         public override void Initialize()
         {
-            //DhlEcommerceAccountManager.Initialize();
+            DhlEcommerceAccountManager.Initialize();
         }
 
         /// <summary>
@@ -63,8 +58,7 @@ namespace ShipWorks.Shipping.Carriers.DhlEcommerce
         /// </summary>
         public override DhlEcommerceAccountEntity GetAccount(long accountID)
         {
-            //return DhlEcommerceAccountManager.GetAccount(accountID);
-            return new DhlEcommerceAccountEntity();
+            return DhlEcommerceAccountManager.GetAccount(accountID);
         }
 
         /// <summary>
@@ -72,8 +66,7 @@ namespace ShipWorks.Shipping.Carriers.DhlEcommerce
         /// </summary>
         public override IDhlEcommerceAccountEntity GetAccountReadOnly(long accountID)
         {
-            //return DhlEcommerceAccountManager.GetAccountReadOnly(accountID);
-            return new DhlEcommerceAccountEntity();
+            return DhlEcommerceAccountManager.GetAccountReadOnly(accountID);
         }
 
         /// <summary>
@@ -81,7 +74,7 @@ namespace ShipWorks.Shipping.Carriers.DhlEcommerce
         /// </summary>
         public override void Save(DhlEcommerceAccountEntity account)
         {
-            //DhlEcommerceAccountManager.SaveAccount(account);
+            DhlEcommerceAccountManager.SaveAccount(account);
         }
 
         /// <summary>
@@ -91,7 +84,7 @@ namespace ShipWorks.Shipping.Carriers.DhlEcommerce
         /// <exception cref="System.NotImplementedException"></exception>
         public override void DeleteAccount(DhlEcommerceAccountEntity account)
         {
-            //DhlEcommerceAccountManager.DeleteAccount(account);
+            DhlEcommerceAccountManager.DeleteAccount(account);
         }
 
         /// <summary>

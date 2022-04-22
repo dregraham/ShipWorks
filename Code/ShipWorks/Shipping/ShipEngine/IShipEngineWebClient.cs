@@ -5,6 +5,7 @@ using Interapptive.Shared.Utility;
 using ShipEngine.CarrierApi.Client.Model;
 using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Data.Model.EntityInterfaces;
+using ShipWorks.Shipping.ShipEngine.DTOs.Registration;
 
 namespace ShipWorks.Shipping.ShipEngine
 {
@@ -18,6 +19,11 @@ namespace ShipWorks.Shipping.ShipEngine
         /// </summary>
         /// <returns>The CarrierId</returns>
         Task<GenericResult<string>> ConnectDhlAccount(string accountNumber);
+
+        /// <summary>
+        /// Connect the given DHL eCommerce account to ShipEngine
+        /// </summary>
+        Task<GenericResult<string>> ConnectDhlEcommerceAccount(DhlEcommerceRegistrationRequest dhlRequest);
 
         /// <summary>
         /// Connects the given Asendia account to the users ShipEngine account

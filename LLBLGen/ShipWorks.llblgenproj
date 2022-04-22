@@ -765,6 +765,7 @@
       </EntityDefinition>
       <EntityDefinition Name="DhlEcommerceProfile" ObjectID="3184e164-6f92-4337-9c4a-8c637c2d4f34">
         <Fields>
+          <Field Name="AncillaryEndorsement" Type="string" IsOptional="true" MaxLength="50" FieldIndex="14" />
           <Field Name="Contents" Type="int" IsOptional="true" Precision="10" FieldIndex="6" />
           <Field Name="CustomsRecipientTin" Type="string" IsOptional="true" MaxLength="25" FieldIndex="9" />
           <Field Name="CustomsTaxIdType" Type="int" IsOptional="true" Precision="10" FieldIndex="10" />
@@ -794,6 +795,7 @@
       </EntityDefinition>
       <EntityDefinition Name="DhlEcommerceShipment" ObjectID="91e3778a-90d7-4e71-9382-adf1709f228c">
         <Fields>
+          <Field Name="AncillaryEndorsement" Type="string" MaxLength="50" FieldIndex="28" />
           <Field Name="Contents" Type="int" Precision="10" FieldIndex="7" />
           <Field Name="CustomsRecipientTin" Type="string" IsOptional="true" MaxLength="25" FieldIndex="13" />
           <Field Name="CustomsTaxIdType" Type="int" IsOptional="true" Precision="10" FieldIndex="14" />
@@ -806,9 +808,9 @@
           <Field Name="DimsProfileID" Type="long" Precision="19" FieldIndex="18" />
           <Field Name="DimsWeight" Type="double" Precision="38" FieldIndex="22" />
           <Field Name="DimsWidth" Type="double" Precision="38" FieldIndex="20" />
-          <Field Name="Insurance" Type="bool" IsOptional="true" FieldIndex="25" />
-          <Field Name="InsurancePennyOne" Type="bool" IsOptional="true" FieldIndex="27" />
-          <Field Name="InsuranceValue" Type="decimal" IsOptional="true" Precision="19" Scale="4" FieldIndex="26" />
+          <Field Name="Insurance" Type="bool" FieldIndex="25" />
+          <Field Name="InsurancePennyOne" Type="bool" FieldIndex="27" />
+          <Field Name="InsuranceValue" Type="decimal" Precision="19" Scale="4" FieldIndex="26" />
           <Field Name="IntegratorTransactionID" Type="guid" IsOptional="true" FieldIndex="10" />
           <Field Name="NonDelivery" Type="int" Precision="10" FieldIndex="8" />
           <Field Name="NonMachinable" Type="bool" FieldIndex="4" />
@@ -4837,7 +4839,7 @@
       <Catalogs>
         <Catalog Name="ShipWorksLocal">
           <Schemas>
-            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2022-04-21T17:33:12.7012573Z">
+            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2022-04-22T14:54:32.0134885Z">
               <Tables>
                 <Table Name="Action">
                   <PkConstraintName Name="PK_Action" />
@@ -5163,8 +5165,8 @@
                     <Field Name="NonMachinable" Ordinal="4" IsOptional="true" DbType="2" />
                     <Field Name="Contents" Ordinal="5" IsOptional="true" DbType="8" Precision="10" />
                     <Field Name="NonDelivery" Ordinal="6" IsOptional="true" DbType="8" Precision="10" />
-                    <Field Name="CustomsRecipientTinType" Ordinal="7" IsOptional="true" DbType="8" Precision="10" />
-                    <Field Name="CustomsRecipientTin" Ordinal="8" IsOptional="true" DbType="12" Length="24" />
+                    <Field Name="CustomsRecipientTin" Ordinal="7" IsOptional="true" DbType="12" Length="24" />
+                    <Field Name="CustomsRecipientTinType" Ordinal="8" IsOptional="true" DbType="8" Precision="10" />
                     <Field Name="CustomsRecipientEntityType" Ordinal="9" IsOptional="true" DbType="8" Precision="10" />
                     <Field Name="CustomsRecipientIssuingAuthority" Ordinal="10" IsOptional="true" DbType="12" Length="2" />
                   </Fields>
@@ -5196,8 +5198,8 @@
                     <Field Name="DimsWeight" Ordinal="14" DbType="6" Precision="38" />
                     <Field Name="InsuranceValue" Ordinal="15" DbType="9" Precision="19" Scale="4" />
                     <Field Name="Insurance" Ordinal="16" DbType="2" />
-                    <Field Name="CustomsRecipientTinType" Ordinal="17" IsOptional="true" DbType="8" Precision="10" />
-                    <Field Name="CustomsRecipientTin" Ordinal="18" IsOptional="true" DbType="12" Length="24" />
+                    <Field Name="CustomsRecipientTin" Ordinal="17" IsOptional="true" DbType="12" Length="24" />
+                    <Field Name="CustomsRecipientTinType" Ordinal="18" IsOptional="true" DbType="8" Precision="10" />
                     <Field Name="CustomsRecipientEntityType" Ordinal="19" IsOptional="true" DbType="8" Precision="10" />
                     <Field Name="CustomsRecipientIssuingAuthority" Ordinal="20" IsOptional="true" DbType="12" Length="2" />
                   </Fields>
@@ -5596,6 +5598,7 @@
                     <Field Name="CustomsTinIssuingAuthority" Ordinal="12" IsOptional="true" DbType="12" Length="2" />
                     <Field Name="PackagingType" Ordinal="13" IsOptional="true" DbType="8" Precision="10" />
                     <Field Name="Reference1" Ordinal="14" IsOptional="true" DbType="12" Length="300" />
+                    <Field Name="AncillaryEndorsement" Ordinal="15" IsOptional="true" DbType="12" Length="50" />
                   </Fields>
                 </Table>
                 <Table Name="DhlEcommerceScanForm">
@@ -5658,9 +5661,10 @@
                     <Field Name="CustomsTaxIdType" Ordinal="23" IsOptional="true" DbType="8" Precision="10" />
                     <Field Name="CustomsTinIssuingAuthority" Ordinal="24" IsOptional="true" DbType="12" Length="2" />
                     <Field Name="ScanFormBatchID" Ordinal="25" IsOptional="true" DbType="0" Precision="19" />
-                    <Field Name="Insurance" Ordinal="26" IsOptional="true" DbType="2" />
-                    <Field Name="InsuranceValue" Ordinal="27" IsOptional="true" DbType="9" Precision="19" Scale="4" />
-                    <Field Name="InsurancePennyOne" Ordinal="28" IsOptional="true" DbType="2" />
+                    <Field Name="Insurance" Ordinal="26" HasDefaultValue="true" DefaultValue="(0)" DbType="2" />
+                    <Field Name="InsuranceValue" Ordinal="27" HasDefaultValue="true" DefaultValue="(0)" DbType="9" Precision="19" Scale="4" />
+                    <Field Name="InsurancePennyOne" Ordinal="28" HasDefaultValue="true" DefaultValue="(0)" DbType="2" />
+                    <Field Name="AncillaryEndorsement" Ordinal="29" HasDefaultValue="true" DefaultValue="''" DbType="12" Length="50" />
                   </Fields>
                 </Table>
                 <Table Name="DhlExpressAccount">
@@ -7181,7 +7185,7 @@
                   <Fields>
                     <Field Name="FilterNodeContentID" Ordinal="1" DbType="0" Precision="19" />
                     <Field Name="FilterTarget" Ordinal="2" DbType="8" Precision="10" />
-                    <Field Name="ColumnMask" Ordinal="3" IsOptional="true" DbType="23" Length="150" />
+                    <Field Name="ColumnMask" Ordinal="3" DbType="23" Length="150" />
                     <Field Name="JoinMask" Ordinal="4" DbType="8" Precision="10" />
                     <Field Name="Position" Ordinal="5" DbType="8" Precision="10" />
                   </Fields>
@@ -12061,6 +12065,7 @@
         </EntityMapping>
         <EntityMapping EntityName=":DhlEcommerceProfile" TargetName="ShipWorksLocal:dbo:DhlEcommerceProfile">
           <FieldMappings>
+            <FieldMapping FieldName="AncillaryEndorsement" TargetFieldName="AncillaryEndorsement" />
             <FieldMapping FieldName="Contents" TargetFieldName="Contents" />
             <FieldMapping FieldName="CustomsRecipientTin" TargetFieldName="CustomsRecipientTin" />
             <FieldMapping FieldName="CustomsTaxIdType" TargetFieldName="CustomsTaxIdType" />
@@ -12090,6 +12095,7 @@
         </EntityMapping>
         <EntityMapping EntityName=":DhlEcommerceShipment" TargetName="ShipWorksLocal:dbo:DhlEcommerceShipment">
           <FieldMappings>
+            <FieldMapping FieldName="AncillaryEndorsement" TargetFieldName="AncillaryEndorsement" />
             <FieldMapping FieldName="Contents" TargetFieldName="Contents" />
             <FieldMapping FieldName="CustomsRecipientTin" TargetFieldName="CustomsRecipientTin" />
             <FieldMapping FieldName="CustomsTaxIdType" TargetFieldName="CustomsTaxIdType" />

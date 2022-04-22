@@ -11,9 +11,10 @@ using Interapptive.Shared.Net;
 using Interapptive.Shared.Utility;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using Newtonsoft.Json.Serialization;
 using RestSharp;
-using ShipEngine.CarrierApi.Client.Api;
 using ShipEngine.CarrierApi.Client;
+using ShipEngine.CarrierApi.Client.Api;
 using ShipEngine.CarrierApi.Client.Model;
 using ShipWorks.ApplicationCore.Licensing.WebClientEnvironments;
 using ShipWorks.ApplicationCore.Logging;
@@ -83,6 +84,61 @@ namespace ShipWorks.Shipping.ShipEngine
             catch (ApiException ex)
             {
                 return GenericResult.FromError<string>(GetErrorMessage(ex));
+            }
+        }
+
+        /// <summary>
+        /// Connect the given DHL eCommerce account to ShipEngine
+        /// </summary>
+        public async Task<GenericResult<string>> ConnectDhlEcommerceAccount(DhlEcommerceRegistrationRequest dhlRequest)
+        {
+            try
+            {
+                // Check to see if the carrier already exists in ShipEngine (they use clientId-pickupNumber for the accountId)
+                var existingAccount = await GetCarrierId($"{dhlRequest.ClientId}-{dhlRequest.PickupNumber}");
+
+                if (existingAccount.Success)
+                {
+                    return existingAccount;
+                }
+
+                var apiKey = await GetApiKey();
+
+                var client = new RestClient("https://platform.shipengine.com");
+
+                var request = new RestRequest("v1/connections/carriers/dhl_ecommerce", Method.POST);
+                request.AddHeader("Content-Type", "application/json");
+                request.AddHeader("api-key", apiKey);
+
+                request.JsonSerializer = new RestSharpJsonNetSerializer(new JsonSerializerSettings
+                {
+                    ContractResolver = new DefaultContractResolver
+                    {
+                        NamingStrategy = new SnakeCaseNamingStrategy(),
+                    },
+                });
+
+                request.AddJsonBody(dhlRequest);
+
+                ApiLogEntry logEntry = new ApiLogEntry(ApiLogSource.ShipEngine, "ConnectDhlEcommerceAccount");
+                logEntry.LogRequest(request, client, "txt");
+
+                IRestResponse response = await client.ExecuteTaskAsync(request).ConfigureAwait(false);
+
+                logEntry.LogResponse(response, "txt");
+
+                if (response.StatusCode == HttpStatusCode.OK)
+                {
+                    JObject responseObject = JObject.Parse(response.Content);
+
+                    return responseObject["carrier_id"].ToString();
+                }
+
+                return GenericResult.FromError<string>(JObject.Parse(response.Content)["errors"].FirstOrDefault()?["message"].ToString());
+            }
+            catch (Exception ex)
+            {
+                return GenericResult.FromError<string>("An error occurred connecting the DHL eCommerce account", ex);
             }
         }
 
@@ -287,25 +343,37 @@ namespace ShipWorks.Shipping.ShipEngine
         }
 
         /// <summary>
-        /// Get the CarrierId for the given account number
+        /// Get the CarrierId for the given accountNumber
         /// </summary>
         private async Task<GenericResult<string>> GetCarrierId(string accountNumber)
         {
-            string key = await GetApiKey();
-            // If for some reason the key is blank show an error because we have to have the key to make the request
-            if (string.IsNullOrWhiteSpace(key))
+            try
             {
-                return GenericResult.FromError<string>("Unable to add your account at this time. Please try again later.");
-            }
+                string key = await GetApiKey();
 
-            // First check and see if we already have the account connected
-            string accountId = await GetCarrierIdByAccountNumber(accountNumber, key);
-            if (!string.IsNullOrWhiteSpace(accountId))
+                // If for some reason the key is blank show an error because we have to have the key to make the request
+                if (string.IsNullOrWhiteSpace(key))
+                {
+                    return GenericResult.FromError<string>("Unable to find carrier. Api Key was blank.");
+                }
+
+                ICarriersApi carrierApi = shipEngineApiFactory.CreateCarrierApi();
+                ConfigureLogging(carrierApi, ApiLogSource.ShipEngine, $"FindAccount{accountNumber}", LogActionType.Other);
+
+                CarrierListResponse result = await carrierApi.CarriersListAsync(key);
+                var carrierId = result?.Carriers?.FirstOrDefault(c => c.AccountNumber == accountNumber)?.CarrierId ?? string.Empty;
+
+                if (!carrierId.IsNullOrWhiteSpace())
+                {
+                    return GenericResult.FromSuccess(carrierId);
+                }
+
+                return GenericResult.FromError<string>("Unable to find carrier");
+            }
+            catch (Exception ex)
             {
-                return GenericResult.FromSuccess(accountId);
+                return GenericResult.FromError<string>($"Unable to find carrier: {ex.Message}");
             }
-
-            return GenericResult.FromError<string>("Unable to find account");
         }
 
         /// <summary>
@@ -322,24 +390,6 @@ namespace ShipWorks.Shipping.ShipEngine
             ConnectAccountResponseDTO result = await connect.ConfigureAwait(false);
 
             return GenericResult.FromSuccess(result.CarrierId);
-        }
-
-        /// <summary>
-        /// Get the account if it exists
-        /// </summary>
-        public async Task<string> GetCarrierIdByAccountNumber(string accountNumber, string key)
-        {
-            ICarriersApi carrierApi = shipEngineApiFactory.CreateCarrierApi();
-            ConfigureLogging(carrierApi, ApiLogSource.ShipEngine, $"FindAccount{accountNumber}", LogActionType.Other);
-            try
-            {
-                CarrierListResponse result = await carrierApi.CarriersListAsync(key);
-                return result?.Carriers?.FirstOrDefault(c => c.AccountNumber == accountNumber)?.CarrierId ?? string.Empty;
-            }
-            catch (ApiException)
-            {
-                return null;
-            }
         }
 
         /// <summary>
@@ -664,7 +714,7 @@ namespace ShipWorks.Shipping.ShipEngine
                 {
                     return Result.FromSuccess();
                 }
-                
+
                 JObject responseBody = JObject.Parse(response.Content);
 
                 JToken error = responseBody["errors"]?.FirstOrDefault() ?? responseBody["message"];
