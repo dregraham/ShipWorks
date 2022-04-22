@@ -32,34 +32,38 @@ namespace ShipWorks.Shipping.UI.Carriers.DhlEcommerce
         {
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(DhlEcommerceAccountEditorDlg));
-            this.labelAccountNumber = new System.Windows.Forms.Label();
+            this.labelClientId = new System.Windows.Forms.Label();
             this.ok = new System.Windows.Forms.Button();
             this.cancel = new System.Windows.Forms.Button();
             this.labelDhlEcommerceAccount = new System.Windows.Forms.Label();
             this.labelDescription = new System.Windows.Forms.Label();
             this.pictureBox = new System.Windows.Forms.PictureBox();
             this.labelNote = new System.Windows.Forms.Label();
-            this.description = new ShipWorks.UI.Controls.PromptTextBox();
+            this.description = new System.Windows.Forms.TextBox();
             this.contactInformation = new ShipWorks.Data.Controls.PersonControl();
-            this.accountNumber = new ShipWorks.UI.Controls.NumericTextBox();
             this.fieldLengthProvider = new ShipWorks.Data.Utility.EntityFieldLengthProvider(this.components);
+            this.clientId = new System.Windows.Forms.TextBox();
+            this.pickupNumber = new System.Windows.Forms.TextBox();
+            this.labelPickupNumber = new System.Windows.Forms.Label();
+            this.labelDistributionCenter = new System.Windows.Forms.Label();
+            this.distributionCenter = new System.Windows.Forms.TextBox();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.fieldLengthProvider)).BeginInit();
             this.SuspendLayout();
             // 
-            // labelAccountNumber
+            // labelClientId
             // 
-            this.labelAccountNumber.AutoSize = true;
-            this.labelAccountNumber.Location = new System.Drawing.Point(24, 31);
-            this.labelAccountNumber.Name = "labelAccountNumber";
-            this.labelAccountNumber.Size = new System.Drawing.Size(61, 13);
-            this.labelAccountNumber.TabIndex = 171;
-            this.labelAccountNumber.Text = "Account #:";
+            this.labelClientId.AutoSize = true;
+            this.labelClientId.Location = new System.Drawing.Point(58, 33);
+            this.labelClientId.Name = "labelClientId";
+            this.labelClientId.Size = new System.Drawing.Size(52, 13);
+            this.labelClientId.TabIndex = 0;
+            this.labelClientId.Text = "Client ID:";
             // 
             // ok
             // 
             this.ok.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.ok.Location = new System.Drawing.Point(201, 414);
+            this.ok.Location = new System.Drawing.Point(204, 456);
             this.ok.Name = "ok";
             this.ok.Size = new System.Drawing.Size(75, 23);
             this.ok.TabIndex = 175;
@@ -71,7 +75,7 @@ namespace ShipWorks.Shipping.UI.Carriers.DhlEcommerce
             // 
             this.cancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.cancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.cancel.Location = new System.Drawing.Point(282, 414);
+            this.cancel.Location = new System.Drawing.Point(285, 456);
             this.cancel.Name = "cancel";
             this.cancel.Size = new System.Drawing.Size(75, 23);
             this.cancel.TabIndex = 176;
@@ -82,7 +86,7 @@ namespace ShipWorks.Shipping.UI.Carriers.DhlEcommerce
             // 
             this.labelDhlEcommerceAccount.AutoSize = true;
             this.labelDhlEcommerceAccount.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.labelDhlEcommerceAccount.Location = new System.Drawing.Point(17, 9);
+            this.labelDhlEcommerceAccount.Location = new System.Drawing.Point(9, 9);
             this.labelDhlEcommerceAccount.Name = "labelDhlEcommerceAccount";
             this.labelDhlEcommerceAccount.Size = new System.Drawing.Size(149, 13);
             this.labelDhlEcommerceAccount.TabIndex = 178;
@@ -91,7 +95,7 @@ namespace ShipWorks.Shipping.UI.Carriers.DhlEcommerce
             // labelDescription
             // 
             this.labelDescription.AutoSize = true;
-            this.labelDescription.Location = new System.Drawing.Point(21, 58);
+            this.labelDescription.Location = new System.Drawing.Point(46, 114);
             this.labelDescription.Name = "labelDescription";
             this.labelDescription.Size = new System.Drawing.Size(64, 13);
             this.labelDescription.TabIndex = 179;
@@ -100,7 +104,7 @@ namespace ShipWorks.Shipping.UI.Carriers.DhlEcommerce
             // pictureBox
             // 
             this.pictureBox.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox.Image")));
-            this.pictureBox.Location = new System.Drawing.Point(11, 363);
+            this.pictureBox.Location = new System.Drawing.Point(20, 415);
             this.pictureBox.Name = "pictureBox";
             this.pictureBox.Size = new System.Drawing.Size(16, 16);
             this.pictureBox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.AutoSize;
@@ -110,7 +114,7 @@ namespace ShipWorks.Shipping.UI.Carriers.DhlEcommerce
             // labelNote
             // 
             this.labelNote.ForeColor = System.Drawing.Color.DimGray;
-            this.labelNote.Location = new System.Drawing.Point(33, 363);
+            this.labelNote.Location = new System.Drawing.Point(42, 417);
             this.labelNote.Name = "labelNote";
             this.labelNote.Size = new System.Drawing.Size(325, 27);
             this.labelNote.TabIndex = 182;
@@ -119,12 +123,10 @@ namespace ShipWorks.Shipping.UI.Carriers.DhlEcommerce
             // 
             // description
             // 
-            this.description.Location = new System.Drawing.Point(91, 56);
+            this.description.Location = new System.Drawing.Point(116, 111);
             this.fieldLengthProvider.SetMaxLengthSource(this.description, ShipWorks.Data.Utility.EntityFieldLengthSource.DhlEcommerceDescription);
             this.description.Name = "description";
-            this.description.PromptColor = System.Drawing.SystemColors.GrayText;
-            this.description.PromptText = null;
-            this.description.Size = new System.Drawing.Size(212, 21);
+            this.description.Size = new System.Drawing.Size(238, 21);
             this.description.TabIndex = 180;
             // 
             // contactInformation
@@ -140,7 +142,7 @@ namespace ShipWorks.Shipping.UI.Carriers.DhlEcommerce
             this.contactInformation.EnableValidationControls = false;
             this.contactInformation.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.contactInformation.FullName = "";
-            this.contactInformation.Location = new System.Drawing.Point(15, 76);
+            this.contactInformation.Location = new System.Drawing.Point(12, 130);
             this.contactInformation.MaxStreetLines = 1;
             this.contactInformation.Name = "contactInformation";
             this.contactInformation.RequiredFields = ((ShipWorks.Data.Controls.PersonFields)((((((ShipWorks.Data.Controls.PersonFields.Name | ShipWorks.Data.Controls.PersonFields.Company) 
@@ -153,14 +155,50 @@ namespace ShipWorks.Shipping.UI.Carriers.DhlEcommerce
             this.contactInformation.ValidatedAddressScope = null;
             this.contactInformation.ContentChanged += new System.EventHandler(this.OnPersonContentChanged);
             // 
-            // accountNumber
+            // clientId
             // 
-            this.accountNumber.BackColor = System.Drawing.SystemColors.Control;
-            this.accountNumber.Enabled = false;
-            this.accountNumber.Location = new System.Drawing.Point(91, 28);
-            this.accountNumber.Name = "accountNumber";
-            this.accountNumber.Size = new System.Drawing.Size(162, 21);
-            this.accountNumber.TabIndex = 169;
+            this.clientId.Location = new System.Drawing.Point(116, 30);
+            this.fieldLengthProvider.SetMaxLengthSource(this.clientId, ShipWorks.Data.Utility.EntityFieldLengthSource.DhlEcommerceDescription);
+            this.clientId.Name = "clientId";
+            this.clientId.ReadOnly = true;
+            this.clientId.Size = new System.Drawing.Size(238, 21);
+            this.clientId.TabIndex = 1;
+            // 
+            // pickupNumber
+            // 
+            this.pickupNumber.Location = new System.Drawing.Point(116, 57);
+            this.fieldLengthProvider.SetMaxLengthSource(this.pickupNumber, ShipWorks.Data.Utility.EntityFieldLengthSource.DhlEcommerceDescription);
+            this.pickupNumber.Name = "pickupNumber";
+            this.pickupNumber.ReadOnly = true;
+            this.pickupNumber.Size = new System.Drawing.Size(238, 21);
+            this.pickupNumber.TabIndex = 3;
+            // 
+            // labelPickupNumber
+            // 
+            this.labelPickupNumber.AutoSize = true;
+            this.labelPickupNumber.Location = new System.Drawing.Point(29, 60);
+            this.labelPickupNumber.Name = "labelPickupNumber";
+            this.labelPickupNumber.Size = new System.Drawing.Size(81, 13);
+            this.labelPickupNumber.TabIndex = 2;
+            this.labelPickupNumber.Text = "Pickup Number:";
+            // 
+            // labelDistributionCenter
+            // 
+            this.labelDistributionCenter.AutoSize = true;
+            this.labelDistributionCenter.Location = new System.Drawing.Point(9, 87);
+            this.labelDistributionCenter.Name = "labelDistributionCenter";
+            this.labelDistributionCenter.Size = new System.Drawing.Size(101, 13);
+            this.labelDistributionCenter.TabIndex = 4;
+            this.labelDistributionCenter.Text = "Distribution Center:";
+            // 
+            // distributionCenter
+            // 
+            this.distributionCenter.Location = new System.Drawing.Point(116, 84);
+            this.fieldLengthProvider.SetMaxLengthSource(this.distributionCenter, ShipWorks.Data.Utility.EntityFieldLengthSource.DhlEcommerceDescription);
+            this.distributionCenter.Name = "distributionCenter";
+            this.distributionCenter.ReadOnly = true;
+            this.distributionCenter.Size = new System.Drawing.Size(238, 21);
+            this.distributionCenter.TabIndex = 5;
             // 
             // DhlEcommerceAccountEditorDlg
             // 
@@ -168,7 +206,12 @@ namespace ShipWorks.Shipping.UI.Carriers.DhlEcommerce
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this.cancel;
-            this.ClientSize = new System.Drawing.Size(369, 449);
+            this.ClientSize = new System.Drawing.Size(372, 491);
+            this.Controls.Add(this.distributionCenter);
+            this.Controls.Add(this.labelDistributionCenter);
+            this.Controls.Add(this.labelPickupNumber);
+            this.Controls.Add(this.pickupNumber);
+            this.Controls.Add(this.clientId);
             this.Controls.Add(this.pictureBox);
             this.Controls.Add(this.labelNote);
             this.Controls.Add(this.labelDescription);
@@ -177,8 +220,7 @@ namespace ShipWorks.Shipping.UI.Carriers.DhlEcommerce
             this.Controls.Add(this.contactInformation);
             this.Controls.Add(this.ok);
             this.Controls.Add(this.cancel);
-            this.Controls.Add(this.accountNumber);
-            this.Controls.Add(this.labelAccountNumber);
+            this.Controls.Add(this.labelClientId);
             this.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
             this.MaximizeBox = false;
@@ -197,16 +239,20 @@ namespace ShipWorks.Shipping.UI.Carriers.DhlEcommerce
         }
 
         #endregion
-        private System.Windows.Forms.Label labelAccountNumber;
+        private System.Windows.Forms.Label labelClientId;
         private System.Windows.Forms.Button ok;
         private System.Windows.Forms.Button cancel;
         private Data.Controls.PersonControl contactInformation;
         private System.Windows.Forms.Label labelDhlEcommerceAccount;
         private Data.Utility.EntityFieldLengthProvider fieldLengthProvider;
-        private NumericTextBox accountNumber;
         private System.Windows.Forms.Label labelDescription;
-        private PromptTextBox description;
+        private System.Windows.Forms.TextBox description;
         private System.Windows.Forms.PictureBox pictureBox;
         private System.Windows.Forms.Label labelNote;
+        private System.Windows.Forms.TextBox clientId;
+        private System.Windows.Forms.TextBox pickupNumber;
+        private System.Windows.Forms.Label labelPickupNumber;
+        private System.Windows.Forms.Label labelDistributionCenter;
+        private System.Windows.Forms.TextBox distributionCenter;
     }
 }

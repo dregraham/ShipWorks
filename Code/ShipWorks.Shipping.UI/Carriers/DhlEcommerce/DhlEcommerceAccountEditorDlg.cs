@@ -46,11 +46,11 @@ namespace ShipWorks.Shipping.UI.Carriers.DhlEcommerce
         /// </summary>
         private void OnLoad(object sender, EventArgs e)
         {
-            accountNumber.Text = $"{account.ClientId}-{account.PickupNumber}"; // TODO: DHLECommerce verify with product this is what we want to show here
-
+            clientId.Text = account.ClientId;
+            pickupNumber.Text = account.PickupNumber;
+            distributionCenter.Text = account.DistributionCenter;
             description.Text = account.Description;
 
-            description.PromptText = account.Description;
             contactInformation.LoadEntity(account.Address);
         }
 
@@ -60,7 +60,6 @@ namespace ShipWorks.Shipping.UI.Carriers.DhlEcommerce
         private void OnPersonContentChanged(object sender, EventArgs e)
         {
             contactInformation.SaveToEntity();
-            description.PromptText = account.Description;
         }
 
         /// <summary>
