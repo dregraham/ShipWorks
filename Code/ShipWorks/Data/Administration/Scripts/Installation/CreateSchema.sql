@@ -2987,26 +2987,26 @@ GO
 CREATE TABLE [dbo].[DhlEcommerceAccount](
 	[DhlEcommerceAccountID] [bigint] IDENTITY(1106,1000) NOT NULL,
 	[RowVersion] [timestamp] NOT NULL,
-	[ShipEngineCarrierId] [nvarchar](50) NOT NULL,
-	[ClientId] [nvarchar](60) NOT NULL,
-	[ApiSecret] [nvarchar](400) NOT NULL,
-	[PickupNumber] [nvarchar](20) NOT NULL,
-	[DistributionCenter] [nvarchar](12) NOT NULL,
-	[SoldTo] [nvarchar](50) NOT NULL,
-	[Description] [nvarchar](50) NOT NULL,
-	[FirstName] [nvarchar](30) NOT NULL,
-	[MiddleName] [nvarchar](30) NOT NULL,
-	[LastName] [nvarchar](30) NOT NULL,
-	[Company] [nvarchar](30) NOT NULL,
-	[Street1] [nvarchar](60) NOT NULL,
-	[Street2] [nvarchar](60) NOT NULL,
-	[Street3] [nvarchar](60) NOT NULL,
-	[City] [nvarchar](50) NOT NULL,
-	[StateProvCode] [nvarchar](50) NOT NULL,
-	[PostalCode] [nvarchar](20) NOT NULL,
-	[CountryCode] [nvarchar](50) NOT NULL,
-	[Phone] [nvarchar](26) NOT NULL,
-	[Email] [nvarchar](100) NOT NULL,
+	[ShipEngineCarrierId] [nvarchar](50) NOT NULL DEFAULT(('')),
+	[ClientId] [nvarchar](60) NOT NULL DEFAULT(('')),
+	[ApiSecret] [nvarchar](400) NOT NULL DEFAULT(('')),
+	[PickupNumber] [nvarchar](20) NOT NULL DEFAULT(('')),
+	[DistributionCenter] [nvarchar](12) NOT NULL DEFAULT(('')),
+	[SoldTo] [nvarchar](50) NOT NULL DEFAULT(('')),
+	[Description] [nvarchar](50) NOT NULL DEFAULT(('')),
+	[FirstName] [nvarchar](30) NOT NULL DEFAULT(('')),
+	[MiddleName] [nvarchar](30) NOT NULL DEFAULT(('')),
+	[LastName] [nvarchar](30) NOT NULL DEFAULT(('')),
+	[Company] [nvarchar](30) NOT NULL DEFAULT(('')),
+	[Street1] [nvarchar](60) NOT NULL DEFAULT(('')),
+	[Street2] [nvarchar](60) NOT NULL DEFAULT(('')),
+	[Street3] [nvarchar](60) NOT NULL DEFAULT(('')),
+	[City] [nvarchar](50) NOT NULL DEFAULT(('')),
+	[StateProvCode] [nvarchar](50) NOT NULL DEFAULT(('')),
+	[PostalCode] [nvarchar](20) NOT NULL DEFAULT(('')),
+	[CountryCode] [nvarchar](50) NOT NULL DEFAULT(('')),
+	[Phone] [nvarchar](26) NOT NULL DEFAULT(('')),
+	[Email] [nvarchar](100) NOT NULL DEFAULT(('')),
 	[CreatedDate] [datetime] NOT NULL
  CONSTRAINT [PK_PostalDhlEcommerceAccount] PRIMARY KEY CLUSTERED 
 (
@@ -3043,7 +3043,7 @@ CREATE TABLE [dbo].[DhlEcommerceShipment](
 	[DimsHeight] [float] NOT NULL,
 	[DimsWeight] [float] NOT NULL,
 	[DimsAddWeight] [bit] NOT NULL,
-	[Reference1] [nvarchar](300) NOT NULL,
+	[Reference1] [nvarchar](300) NOT NULL DEFAULT(('')),
 	[CustomsRecipientTin] [nvarchar](25) NULL,
 	[CustomsTaxIdType] [int] NULL,
 	[CustomsTinIssuingAuthority] [nvarchar](2) NULL,
@@ -3051,7 +3051,7 @@ CREATE TABLE [dbo].[DhlEcommerceShipment](
 	[Insurance] [bit] NOT NULL CONSTRAINT [DF_DhlEcommerceShipment_Insurance] DEFAULT ((0)),
 	[InsuranceValue] [money] NOT NULL CONSTRAINT [DF_DhlEcommerceShipment_InsuranceValue] DEFAULT ((0)),
 	[InsurancePennyOne] [bit] NOT NULL CONSTRAINT [DF_DhlEcommerceShipment_InsurancePennyOne] DEFAULT ((0)),
-	[AncillaryEndorsement] [nvarchar](50) NOT NULL
+	[AncillaryEndorsement] [nvarchar](50) NOT NULL DEFAULT((''))
  CONSTRAINT [PK_DhlEcommerceShipment] PRIMARY KEY CLUSTERED 
 (
 	[ShipmentID] ASC
@@ -3076,11 +3076,11 @@ GO
 CREATE TABLE [dbo].[DhlEcommerceScanForm](
 	[DhlEcommerceScanFormID] [bigint] IDENTITY(1107,1000) NOT NULL,
 	[DhlEcommerceAccountID] [bigint] NOT NULL,
-	[ScanFormTransactionID] [varchar](100) NOT NULL,
-	[ScanFormUrl] [varchar](2048) NOT NULL,
+	[ScanFormTransactionID] [varchar](100) NOT NULL DEFAULT(('')),
+	[ScanFormUrl] [varchar](2048) NOT NULL DEFAULT(('')),
 	[CreatedDate] [datetime] NOT NULL,
 	[ScanFormBatchID] [bigint] NOT NULL,
-	[Description] [nvarchar](100) NOT NULL,
+	[Description] [nvarchar](100) NOT NULL DEFAULT(('')),
  CONSTRAINT [PK_DhlEcommerceScanForm] PRIMARY KEY CLUSTERED 
 (
 	[DhlEcommerceScanFormID] ASC
@@ -3125,13 +3125,6 @@ GO
 
 ALTER TABLE [dbo].[DhlEcommerceProfile] CHECK CONSTRAINT [FK_DhlEcommerceProfile_ShippingProfile]
 GO
-
-
-
-
-
-
-
 
 PRINT N'Creating [dbo].[DhlExpressShipment]'
 GO
@@ -3226,8 +3219,8 @@ CREATE TABLE [dbo].[AsendiaProfile](
 	[NonMachinable] [bit] NULL,
 	[Contents] [int] NULL,
 	[NonDelivery] [int] NULL,
-	[CustomsRecipientTin] [nvarchar] (24) NULL,
 	[CustomsRecipientTinType] [int] NULL,
+	[CustomsRecipientTin] [nvarchar] (24) NULL,
 	[CustomsRecipientEntityType] [int] NULL,
 	[CustomsRecipientIssuingAuthority] [nvarchar] (2) NULL
 )
@@ -3259,8 +3252,8 @@ CREATE TABLE [dbo].[AsendiaShipment](
 	[DimsWeight] [float] NOT NULL,
 	[InsuranceValue] [money] NOT NULL,
 	[Insurance] [bit] NOT NULL,
-	[CustomsRecipientTin] [nvarchar] (24) NULL,
 	[CustomsRecipientTinType] [int] NULL,
+	[CustomsRecipientTin] [nvarchar] (24) NULL,
 	[CustomsRecipientEntityType] [int] NULL,
 	[CustomsRecipientIssuingAuthority] [nvarchar] (2) NULL
 )
@@ -5087,7 +5080,7 @@ CREATE TABLE [dbo].[FilterNodeUpdatePending]
 (
 [FilterNodeContentID] [bigint] NOT NULL,
 [FilterTarget] [int] NOT NULL,
-[ColumnMask] [varbinary] (150) NOT NULL,
+[ColumnMask] [varbinary] (150) NULL,
 [JoinMask] [int] NOT NULL,
 [Position] [int] NOT NULL
 )

@@ -40,6 +40,9 @@ namespace ShipWorks.Shipping.ShipEngine
         private readonly WebClientEnvironmentFactory webClientEnvironmentFactory;
         private const string ShipEngineProxyEndpoint = "shipEngine";
 
+        private const string ShipEngineEndpoint = "https://platform.shipengine.com";
+        private const string DhlEcommerceAccountCreationResource = "v1/connections/carriers/dhl_ecommerce";
+
         /// <summary>
         /// Constructor
         /// </summary>
@@ -95,7 +98,7 @@ namespace ShipWorks.Shipping.ShipEngine
             try
             {
                 // Check to see if the carrier already exists in ShipEngine (they use clientId-pickupNumber for the accountId)
-                var existingAccount = await GetCarrierId($"{dhlRequest.ClientId}-{dhlRequest.PickupNumber}");
+                var existingAccount = await GetCarrierId($"{dhlRequest.ClientId}-{dhlRequest.PickupNumber}").ConfigureAwait(false);
 
                 if (existingAccount.Success)
                 {
@@ -104,9 +107,9 @@ namespace ShipWorks.Shipping.ShipEngine
 
                 var apiKey = await GetApiKey();
 
-                var client = new RestClient("https://platform.shipengine.com");
+                var client = new RestClient(ShipEngineEndpoint);
 
-                var request = new RestRequest("v1/connections/carriers/dhl_ecommerce", Method.POST);
+                var request = new RestRequest(DhlEcommerceAccountCreationResource, Method.POST);
                 request.AddHeader("Content-Type", "application/json");
                 request.AddHeader("api-key", apiKey);
 
@@ -360,7 +363,7 @@ namespace ShipWorks.Shipping.ShipEngine
                 ICarriersApi carrierApi = shipEngineApiFactory.CreateCarrierApi();
                 ConfigureLogging(carrierApi, ApiLogSource.ShipEngine, $"FindAccount{accountNumber}", LogActionType.Other);
 
-                CarrierListResponse result = await carrierApi.CarriersListAsync(key);
+                CarrierListResponse result = await carrierApi.CarriersListAsync(key).ConfigureAwait(false);
                 var carrierId = result?.Carriers?.FirstOrDefault(c => c.AccountNumber == accountNumber)?.CarrierId ?? string.Empty;
 
                 if (!carrierId.IsNullOrWhiteSpace())
