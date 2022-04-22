@@ -13,20 +13,18 @@ namespace ShipWorks.Shipping.Carriers.DhlEcommerce
     [KeyedComponent(typeof(IRatingService), ShipmentTypeCode.DhlEcommerce)]
     public class DhlEcommerceRatingService : IRatingService
     {
-        // TODO: DHLECommerce implement rating
-
-        //private readonly IDhlEcommerceShipEngineRatingClient shipEngineRatingClient;
+        private readonly IDhlEcommerceShipEngineRatingClient shipEngineRatingClient;
         private readonly IDhlEcommerceAccountRepository accountRepository;
 
         /// <summary>
         /// Constructor
         /// </summary>
         public DhlEcommerceRatingService(
-            //IDhlEcommerceShipEngineRatingClient shipEngineRatingClient,
+            IDhlEcommerceShipEngineRatingClient shipEngineRatingClient,
             IDhlEcommerceAccountRepository accountRepository)
         {
 
-            //this.shipEngineRatingClient = shipEngineRatingClient;
+            this.shipEngineRatingClient = shipEngineRatingClient;
             this.accountRepository = accountRepository;
         }
 
@@ -45,8 +43,7 @@ namespace ShipWorks.Shipping.Carriers.DhlEcommerce
             {
                 IDhlEcommerceAccountEntity account = accountRepository.GetAccountReadOnly(shipment);
 
-                //return shipEngineRatingClient.GetRates(shipment);
-                return new RateGroup(Enumerable.Empty<RateResult>());
+                return shipEngineRatingClient.GetRates(shipment);
             }
             catch (Exception ex)
             {

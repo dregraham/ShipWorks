@@ -233,9 +233,13 @@
     <Compile Include="Carriers\DhlEcommerce\DhlEcommerceShippingProfileApplicationStrategy.cs" />
     <Compile Include="Carriers\DhlEcommerce\DhlEcommerceRateHashingService.cs" />
     <Compile Include="Carriers\DhlEcommerce\DhlEcommerceRatingService.cs" />
+    <Compile Include="Carriers\DhlEcommerce\DhlEcommerceShipEngineRatingClient.cs" />
+    <Compile Include="Carriers\DhlEcommerce\DhlEcommerceShipmentRequestFactory.cs" />
+    <Compile Include="Carriers\DhlEcommerce\DhlEcommerceException.cs" />
     <Compile Include="Carriers\DhlEcommerce\IDhlEcommerceShipmentAdapter.cs" />
     <Compile Include="Carriers\DhlEcommerce\IDhlEcommerceAccountRepository.cs" />
     <Compile Include="Carriers\DhlEcommerce\DhlEcommerceDistributionCenters.cs" />
+    <Compile Include="Carriers\DhlEcommerce\IDhlEcommerceShipEngineRatingClient.cs" />
     <Compile Include="Carriers\Dhl\API\DhlExpressLabelClientFactory.cs" />
     <Compile Include="Carriers\Dhl\API\IDhlExpressLabelClient.cs" />
     <Compile Include="Carriers\Dhl\API\IDhlExpressLabelClientFactory.cs" />
