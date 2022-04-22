@@ -808,6 +808,7 @@
     <Compile Include="ApplicationCore\Dashboard\Content\DashboardAccountTrialItem.cs" />
     <Compile Include="ApplicationCore\Dashboard\Content\DashboardTrialItem.cs" />
     <Compile Include="ApplicationCore\Licensing\CustomerLicenseKeyType.cs" />
+    <Compile Include="ApplicationCore\Licensing\FeatureRestrictions\DhlEcommerce\DhlEcommerceMaxRestriction.cs" />
     <Compile Include="ApplicationCore\Licensing\TrialDetails.cs" />
     <Compile Include="ApplicationCore\Licensing\Warehouse\DTO\SqlConfigChangedDto.cs" />
     <Compile Include="ApplicationCore\ReoccurringAppLockedTask.cs" />

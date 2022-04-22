@@ -90,6 +90,7 @@ namespace ShipWorks.Editions
                 case EditionFeature.PostalApoFpoPoboxOnly:
                     return CheckPostalApoFpoRestriction((ShipmentEntity) data);
 
+                case EditionFeature.DhlEcommerceMax:
                 case EditionFeature.EndiciaInsurance:
                 case EditionFeature.EndiciaDhl:
                 case EditionFeature.StampsDhl:
