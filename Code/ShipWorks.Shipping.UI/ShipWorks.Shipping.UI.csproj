@@ -171,6 +171,21 @@
     <Reference Include="WindowsFormsIntegration" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Carriers\DhlEcommerce\DhlEcommerceAccountEditorDlg.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Carriers\DhlEcommerce\DhlEcommerceAccountEditorDlg.Designer.cs">
+      <DependentUpon>DhlEcommerceAccountEditorDlg.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Carriers\DhlEcommerce\DhlEcommerceServicePickerControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Carriers\DhlEcommerce\DhlEcommerceSettingsControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Carriers\DhlEcommerce\DhlEcommerceSettingsControl.Designer.cs">
+      <DependentUpon>DhlEcommerceSettingsControl.cs</DependentUpon>
+    </Compile>
     <Compile Include="Carriers\DhlEcommerce\DhlEcommerceSetupWizard.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -677,6 +692,13 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Carriers\Asendia\AsendiaProfileControl.resx">
       <DependentUpon>AsendiaProfileControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Carriers\DhlEcommerce\DhlEcommerceAccountEditorDlg.resx">
+      <DependentUpon>DhlEcommerceAccountEditorDlg.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Carriers\DhlEcommerce\DhlEcommerceSettingsControl.resx">
+      <DependentUpon>DhlEcommerceSettingsControl.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Carriers\DhlEcommerce\DhlEcommerceSetupWizard.resx">
       <DependentUpon>DhlEcommerceSetupWizard.cs</DependentUpon>
