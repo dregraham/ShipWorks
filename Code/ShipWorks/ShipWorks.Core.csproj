@@ -1252,6 +1252,7 @@
     <Compile Include="Shipping\Carriers\FedEx\Enums\FedexTINType.cs" />
     <Compile Include="Shipping\Carriers\UPS\Enums\UpsCustomsRecipientTINType.cs" />
     <Compile Include="Stores\ILegacyStoreTrialKeyConverter.cs" />
+    <Compile Include="Stores\Platforms\Amazon\AmazonPlatformDownloader.cs" />
     <Compile Include="Stores\Platforms\Platform\OnlineUpdating\IPlatformOnlineUpdater.cs" />
     <Compile Include="Stores\Platforms\Platform\OnlineUpdating\PlatformOnlineUpdater.cs" />
     <Compile Include="Stores\Platforms\Platform\PlatformStoreException.cs" />
