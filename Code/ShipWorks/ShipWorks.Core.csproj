@@ -1257,7 +1257,7 @@
     <Compile Include="Shipping\Carriers\DhlEcommerce\DhlEcommercePackageAdapter.cs" />
     <Compile Include="Shipping\Carriers\FedEx\Enums\FedexTINType.cs" />
     <Compile Include="Shipping\Carriers\UPS\Enums\UpsCustomsRecipientTINType.cs" />
-    <Compile Include="Shipping\ShipEngine\DTOs\Registration\DhlEcommerceRegistrationRequest.cs" />
+    <Compile Include="Shipping\ShipEngine\DTOs\CarrierAccount\DhlEcommerceRegistrationRequest.cs" />
     <Compile Include="Stores\ILegacyStoreTrialKeyConverter.cs" />
     <Compile Include="Stores\Platforms\Platform\OnlineUpdating\IPlatformOnlineUpdater.cs" />
     <Compile Include="Stores\Platforms\Platform\OnlineUpdating\PlatformOnlineUpdater.cs" />

@@ -1,4 +1,4 @@
-﻿namespace ShipWorks.Shipping.ShipEngine.DTOs.Registration
+﻿namespace ShipWorks.Shipping.ShipEngine.DTOs.CarrierAccount
 {
     /// <summary>
     /// Request DTO for registering 
