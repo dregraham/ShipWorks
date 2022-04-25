@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Windows.Forms;
-using Autofac.Features.Indexed;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.UI;
 using Interapptive.Shared.Utility;
@@ -20,25 +19,22 @@ namespace ShipWorks.Shipping.UI.Carriers.DhlEcommerce
         private readonly DhlEcommerceAccountEntity account;
         private readonly ICarrierAccountRetrieverFactory accountRetrieverFactory;
         private readonly IMessageHelper messageHelper;
-        private readonly ICarrierAccountDescription accountDescription;
 
         /// <summary>
         /// Constructor
         /// </summary>
         public DhlEcommerceAccountEditorDlg(ICarrierAccount account,
             ICarrierAccountRetrieverFactory accountRetrieverFactory,
-            IMessageHelper messageHelper,
-            IIndex<ShipmentTypeCode, ICarrierAccountDescription> accountDescriptionFactory)
+            IMessageHelper messageHelper)
         {
             InitializeComponent();
 
             var dhlEcommerceAccount = account as DhlEcommerceAccountEntity;
-            MethodConditions.EnsureArgumentIsNotNull(dhlEcommerceAccount, "dhlEcommerceAccount");
+            MethodConditions.EnsureArgumentIsNotNull(dhlEcommerceAccount, nameof(dhlEcommerceAccount));
 
             this.account = dhlEcommerceAccount;
             this.accountRetrieverFactory = accountRetrieverFactory;
             this.messageHelper = messageHelper;
-            this.accountDescription = accountDescriptionFactory[ShipmentTypeCode.Asendia];
         }
 
         /// <summary>
@@ -81,7 +77,7 @@ namespace ShipWorks.Shipping.UI.Carriers.DhlEcommerce
             }
             catch (ORMConcurrencyException)
             {
-                messageHelper.ShowError(this, "Your changes cannot be saved because another use has deleted the account.");
+                messageHelper.ShowError(this, "Your changes cannot be saved because another user has deleted the account.");
 
                 DialogResult = DialogResult.Abort;
             }

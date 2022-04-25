@@ -113,7 +113,8 @@ namespace ShipWorks.Shipping.Carriers.DhlEcommerce
 
         US_DhlSMMarketingParcelGround = 19,
 
-        /* [Description("DHL SmartMail Parcel Return Light")]
+        /* Currently platform doesn't support returns through DHL eCommerce
+         * [Description("DHL SmartMail Parcel Return Light")]
          [ApiValue("dhl_smartmail_parcel_return_light")]
          US_DhlSmartMailParcelReturnLight = 20,
 
