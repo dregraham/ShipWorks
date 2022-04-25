@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace ShipWorks.Shipping.ShipEngine.DTOs.CarrierAccount
+﻿namespace ShipWorks.Shipping.ShipEngine.DTOs.CarrierAccount
 {
     public class AsendiaAccountRegistrationRequest
     {
@@ -12,7 +6,7 @@ namespace ShipWorks.Shipping.ShipEngine.DTOs.CarrierAccount
 
         public string AccountNumber { get; set; }
 
-        public string FtpUsername { get; set; 
+        public string FtpUsername { get; set; }
 
         public string FtpPassword { get; set; }
     }

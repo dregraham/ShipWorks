@@ -5,7 +5,7 @@ using Interapptive.Shared.Utility;
 using ShipEngine.CarrierApi.Client.Model;
 using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Data.Model.EntityInterfaces;
-using ShipWorks.Shipping.ShipEngine.DTOs.Registration;
+using ShipWorks.Shipping.ShipEngine.DTOs.CarrierAccount;
 
 namespace ShipWorks.Shipping.ShipEngine
 {

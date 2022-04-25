@@ -1,5 +1,7 @@
 ﻿using System.Collections.Generic;
+using System.Reflection;
 using Interapptive.Shared.Utility;
+using Newtonsoft.Json;
 
 namespace ShipWorks.Shipping.ShipEngine.DTOs
 {
@@ -69,12 +71,15 @@ namespace ShipWorks.Shipping.ShipEngine.DTOs
 
     public class Dimensions
     {
+        [Obfuscation(Exclude = true, ApplyToMembers = true, StripAfterObfuscation = false)]
         public enum UnitEnum
         {
             [ApiValue("inch")]
+            [JsonProperty("inch")]
             Inch = 1,
 
             [ApiValue("centimeter")]
+            [JsonProperty("centimeter")]
             Centimeter = 2,
         }
 

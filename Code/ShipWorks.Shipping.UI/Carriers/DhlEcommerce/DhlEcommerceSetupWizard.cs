@@ -18,7 +18,7 @@ using ShipWorks.Shipping.Profiles;
 using ShipWorks.Shipping.Settings;
 using ShipWorks.Shipping.Settings.WizardPages;
 using ShipWorks.Shipping.ShipEngine;
-using ShipWorks.Shipping.ShipEngine.DTOs.Registration;
+using ShipWorks.Shipping.ShipEngine.DTOs.CarrierAccount;
 using ShipWorks.UI.Wizard;
 
 namespace ShipWorks.Shipping.UI.Carriers.DhlEcommerce
