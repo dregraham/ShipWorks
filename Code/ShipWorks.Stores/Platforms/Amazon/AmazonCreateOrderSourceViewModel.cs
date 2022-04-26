@@ -24,6 +24,7 @@ namespace ShipWorks.Stores.Platforms.Amazon
         private readonly IHubMonoauthClient hubMonoauthClient;
         private readonly IMessageHelper messageHelper;
         private bool openingUrl;
+        private AmazonStoreEntity store;
 
         /// <summary>
         /// Constructor
@@ -45,7 +46,7 @@ namespace ShipWorks.Stores.Platforms.Amazon
             OpeningUrl = true;
             try
             {
-                var url = await hubMonoauthClient.GetCreateOrderSourceInitiateUrl(orderSourceName).ConfigureAwait(true);
+                var url = await hubMonoauthClient.GetCreateOrderSourceInitiateUrl(orderSourceName, store.AmazonApiRegion).ConfigureAwait(true);
                 webHelper.OpenUrl(url);
             }
             catch (Exception ex)
@@ -86,6 +87,7 @@ namespace ShipWorks.Stores.Platforms.Amazon
         public void Load(AmazonStoreEntity store)
         {
             OrderSourceId = store.OrderSourceID;
+            this.store = store;
         }
 
         /// <summary>
