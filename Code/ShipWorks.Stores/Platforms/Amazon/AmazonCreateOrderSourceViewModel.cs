@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Reflection;
+using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using GalaSoft.MvvmLight;
@@ -66,11 +67,11 @@ namespace ShipWorks.Stores.Platforms.Amazon
         public ICommand GetOrderSourceId { get; }
 
         /// <summary>
-        /// The OrderSourceId
+        /// The EncodedOrderSource
         /// </summary>
         [Obfuscation(Exclude = true)]
-        public string OrderSourceId { get; set; }
-        
+        public string EncodedOrderSource { get; set; }
+
         /// <summary>
         /// Are we currently trying to open the Url
         /// </summary>
@@ -86,8 +87,8 @@ namespace ShipWorks.Stores.Platforms.Amazon
         /// </summary>
         public void Load(AmazonStoreEntity store)
         {
-            OrderSourceId = store.OrderSourceID;
             this.store = store;
+            EncodedOrderSource = Encode(store);
         }
 
         /// <summary>
@@ -95,7 +96,50 @@ namespace ShipWorks.Stores.Platforms.Amazon
         /// </summary>
         public void Save(AmazonStoreEntity store)
         {
-            store.OrderSourceID = OrderSourceId;
+            if (!Decode(EncodedOrderSource, store))
+            {
+                Console.WriteLine("Failed to decode the encoded order source.");
+            }
+        }
+
+        /// <summary>
+        /// Encodes the Amazon store's data fields into a formatted base64 encoded value.
+        /// </summary>
+        private static string Encode(AmazonStoreEntity store)
+        {
+            var plainText = $"{store.MerchantID}_{store.MarketplaceID}_{store.OrderSourceID}";
+            var plainBytes = Encoding.UTF8.GetBytes(plainText);
+            return Convert.ToBase64String(plainBytes);
+        }
+
+        /// <summary>
+        /// Decodes the provided value and if successful populates the store's data fields.
+        /// </summary>
+        private static bool Decode(string encodedOrderSource, AmazonStoreEntity store)
+        {
+            try
+            {
+                var data = Convert.FromBase64String(encodedOrderSource);
+                var decodedString = Encoding.UTF8.GetString(data);
+                var splitString = decodedString.Split('_');
+
+                if (splitString.Length != 3)
+                {
+                    Console.WriteLine("The provided Base64 string did not have 3 sections separated by the '_' character.");
+                    return false;
+                }
+
+                store.MerchantID = splitString[0];
+                store.MarketplaceID = splitString[1];
+                store.OrderSourceID = splitString[2];
+
+                return true;
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                return false;
+            }
         }
     }
 }

@@ -83,7 +83,7 @@
                     Width="250"
                     Padding="8,4"
                     Style="{StaticResource BlueSteelTextBox}"
-                    Text="{Binding OrderSourceId, UpdateSourceTrigger=PropertyChanged}" />
+                    Text="{Binding EncodedOrderSource, UpdateSourceTrigger=PropertyChanged}" />
             </Grid>
         </StackPanel>
     </Grid>
