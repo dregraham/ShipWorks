@@ -19,14 +19,16 @@ namespace ShipWorks.Shipping.Carriers.DhlEcommerce
     {
         private readonly DhlEcommerceShipmentType shipmentType;
         private readonly IExcludedServiceTypeRepository excludedServiceTypeRepository;
+        private readonly IShippingManager shippingManager;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public DhlEcommerceShipmentServicesBuilder(DhlEcommerceShipmentType shipmentType, IExcludedServiceTypeRepository excludedServiceTypeRepository)
+        public DhlEcommerceShipmentServicesBuilder(DhlEcommerceShipmentType shipmentType, IExcludedServiceTypeRepository excludedServiceTypeRepository, IShippingManager shippingManager)
         {
             this.shipmentType = shipmentType;
             this.excludedServiceTypeRepository = excludedServiceTypeRepository;
+            this.shippingManager = shippingManager;
         }
 
         /// <summary>
@@ -38,7 +40,7 @@ namespace ShipWorks.Shipping.Carriers.DhlEcommerce
         /// </remarks>
         public Dictionary<int, string> BuildServiceTypeDictionary(IEnumerable<ShipmentEntity> shipments)
         {
-            List<ShipmentEntity> overriddenShipments = shipments.Select(ShippingManager.GetOverriddenStoreShipment).ToList();
+            List<ShipmentEntity> overriddenShipments = shipments.Select(shippingManager.GetOverriddenStoreShipment).ToList();
 
             bool allInternational = overriddenShipments.None(shipmentType.IsDomestic);
             bool allDomestic = overriddenShipments.All(shipmentType.IsDomestic);
@@ -52,7 +54,7 @@ namespace ShipWorks.Shipping.Carriers.DhlEcommerce
             }
 
             var availableServices = shipmentType
-                .GetAvailableServiceTypes()
+                .GetAvailableServiceTypes(excludedServiceTypeRepository)
                 .Cast<DhlEcommerceServiceType>().ToList();
 
             IEnumerable<DhlEcommerceServiceType> validServices = new List<DhlEcommerceServiceType>();

@@ -197,6 +197,8 @@
     <Compile Include="Carriers\CarrierSetup\UpsCarrierSetupTest.cs" />
     <Compile Include="Carriers\CarrierSetup\UspsCarrierSetupTest.cs" />
     <Compile Include="Carriers\DefaultShipmentDateManipulator.cs" />
+    <Compile Include="Carriers\DhlEcommerce\DhlEcommerceShipmentServicesBuilderTest.cs" />
+    <Compile Include="Carriers\DhlEcommerce\DhlEcommerceShipmentTypeTest.cs" />
     <Compile Include="Carriers\DhlExpress\API\DhlExpressLabelClientFactoryTest.cs" />
     <Compile Include="Carriers\DhlExpress\API\ShipEngine\DhlExpressShipEngineRatingClientTest.cs" />
     <Compile Include="Carriers\DhlExpress\API\Stamps\DhlExpressStampsLabelClientTest.cs" />

@@ -7,29 +7,28 @@ using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Utility;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Services.Builders;
+using ShipWorks.Shipping.Settings;
 
 namespace ShipWorks.Shipping.Carriers.DhlEcommerce
 {
     [KeyedComponent(typeof(IShipmentPackageTypesBuilder), ShipmentTypeCode.DhlEcommerce, SingleInstance = true)]
     public class DhlEcommerceShipmentPackageTypesBuilder : IShipmentPackageTypesBuilder
     {
-        private readonly DhlEcommerceShipmentType DhlEcommerceShipmentType;
+        private readonly DhlEcommerceShipmentType dhlEcommerceShipmentType;
+        private readonly IExcludedPackageTypeRepository excludedPackageTypeRepository;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public DhlEcommerceShipmentPackageTypesBuilder(DhlEcommerceShipmentType DhlEcommerceShipmentType)
+        public DhlEcommerceShipmentPackageTypesBuilder(DhlEcommerceShipmentType dhlEcommerceShipmentType, IExcludedPackageTypeRepository excludedPackageTypeRepository)
         {
-            this.DhlEcommerceShipmentType = DhlEcommerceShipmentType;;
+            this.dhlEcommerceShipmentType = dhlEcommerceShipmentType;
+            this.excludedPackageTypeRepository = excludedPackageTypeRepository;
         }
 
         /// <summary>
         /// Gets the AvailablePackageTypes for this shipment type and shipment along with their descriptions.
         /// </summary>
-        public Dictionary<int, string> BuildPackageTypeDictionary(IEnumerable<ShipmentEntity> shipments)
-        {
-            return Enum.GetValues(typeof(DhlEcommercePackagingType)).Cast<DhlEcommercePackagingType>()
-                .ToDictionary(p => (int) p, p => EnumHelper.GetDescription(p));
-        }
+        public Dictionary<int, string> BuildPackageTypeDictionary(IEnumerable<ShipmentEntity> shipments) => dhlEcommerceShipmentType.BuildPackageTypeDictionary(shipments.ToList(), excludedPackageTypeRepository);
     }
 }
