@@ -634,7 +634,6 @@
     <Compile Include="ShipEngine\IRatesApi.cs" />
     <Compile Include="ShipEngine\ITrackingApi.cs" />
     <Compile Include="ShipEngine\ILabelsApi.cs" />
-    <Compile Include="ShipEngine\DTOs\ListCarriersResponse.cs" />
     <Compile Include="ShipEngine\DTOs\Registration\Address.cs" />
     <Compile Include="ShipEngine\DTOs\Registration\IUpsRegistrationRequestFactory.cs" />
     <Compile Include="ShipEngine\DTOs\Registration\UpsRegistrationRequest.cs" />
