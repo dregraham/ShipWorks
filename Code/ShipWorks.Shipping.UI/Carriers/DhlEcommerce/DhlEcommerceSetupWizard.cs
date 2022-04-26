@@ -102,13 +102,13 @@ namespace ShipWorks.Shipping.UI.Carriers.DhlEcommerce
         /// <summary>
         /// Load the given combobox from the enum T
         /// </summary>
-        private void LoadComboBox<T>(ComboBox comboBox) where T : Enum
+        private void LoadComboBox<T>(ComboBox comboBox) where T : struct
         {
             var values = new Dictionary<string, string>();
 
             Enum.GetValues(typeof(T))
                 .Cast<T>()
-                .ForEach(x => values.Add(EnumHelper.GetApiValue(x), EnumHelper.GetDescription(x)));
+                .ForEach(x => values.Add(EnumHelper.GetApiValue(x as Enum), EnumHelper.GetDescription(x as Enum)));
 
             comboBox.DataSource = new BindingSource(values, null);
             comboBox.ValueMember = "Key";
