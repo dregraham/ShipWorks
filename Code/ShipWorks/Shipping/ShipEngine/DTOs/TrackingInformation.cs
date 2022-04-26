@@ -4,7 +4,6 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Runtime.Serialization;
 using System.Text;
-using System.Threading.Tasks;
 using Newtonsoft.Json;
 
 namespace ShipWorks.Shipping.ShipEngine.DTOs
@@ -13,7 +12,7 @@ namespace ShipWorks.Shipping.ShipEngine.DTOs
     /// TrackingInformation
     /// </summary>
     [DataContract]
-    public partial class TrackingInformation : IEquatable<TrackingInformation>, IValidatableObject
+    public partial class TrackingInformation : BaseShipEngineResponse, IEquatable<TrackingInformation>, IValidatableObject
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="TrackingInformation" /> class.

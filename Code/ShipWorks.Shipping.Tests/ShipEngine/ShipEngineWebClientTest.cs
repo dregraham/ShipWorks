@@ -1,16 +1,17 @@
-﻿using Autofac.Extras.Moq;
-using System;
+﻿using System;
 using System.Collections.Generic;
+using System.Net;
 using System.Threading.Tasks;
-using Moq;
-using Xunit;
-using ShipWorks.Shipping.ShipEngine;
-using ShipWorks.Tests.Shared;
+using Autofac.Extras.Moq;
+using Interapptive.Shared.Net.RestSharp;
 using Interapptive.Shared.Utility;
-using Interapptive.Shared.Net;
+using Moq;
+using RestSharp;
 using ShipWorks.ApplicationCore.Logging;
-using ShipWorks.Shipping.ShipEngine.API;
+using ShipWorks.Shipping.ShipEngine;
 using ShipWorks.Shipping.ShipEngine.DTOs;
+using ShipWorks.Tests.Shared;
+using Xunit;
 
 namespace ShipWorks.Shipping.Tests.ShipEngine
 {
@@ -18,13 +19,11 @@ namespace ShipWorks.Shipping.Tests.ShipEngine
     {
         private readonly AutoMock mock;
         private readonly Mock<IShipEngineApiKey> apiKey;
-        private readonly Mock<IShipEngineApiFactory> shipEngineApiFactory;
-        private readonly Mock<ICarrierAccountsApi> accountsApi;
-        private readonly Mock<ICarriersApi> carriersApi;
-        private readonly Mock<IRatesApi> ratesApi;
-        private readonly Mock<ILabelsApi> labelsApi;
+        private readonly Mock<IRestClientFactory> restClientFactory;
+        private readonly Mock<IRestClient> restClient;
+        private readonly Mock<IRestRequestFactory> restRequestFactory;
         private readonly ShipEngineWebClient testObject;
-        private TelemetricResult<IDownloadedLabelData> telemetricResult;
+        private readonly TelemetricResult<IDownloadedLabelData> telemetricResult;
 
         public ShipEngineWebClientTest()
         {
@@ -33,10 +32,8 @@ namespace ShipWorks.Shipping.Tests.ShipEngine
             apiKey = mock.Mock<IShipEngineApiKey>();
             apiKey.SetupGet(k => k.Value).Returns("abcd");
 
-            accountsApi = mock.Mock<ICarrierAccountsApi>();
-            carriersApi = mock.Mock<ICarriersApi>();
-            ratesApi = mock.Mock<IRatesApi>();
-            labelsApi = mock.Mock<ILabelsApi>();
+            restClientFactory = mock.Mock<IRestClientFactory>();
+            restRequestFactory = mock.Mock<IRestRequestFactory>();
 
             CarrierListResponse carriers =
                 new CarrierListResponse(new List<Carrier>()
@@ -44,13 +41,7 @@ namespace ShipWorks.Shipping.Tests.ShipEngine
                     new Carrier(accountNumber: "1234", carrierId: "se-12345")
                 });
 
-            carriersApi.Setup(c => c.CarriersListAsync(It.IsAny<string>(), It.IsAny<string>())).Returns(Task.FromResult(carriers));
-
-            shipEngineApiFactory = mock.Mock<IShipEngineApiFactory>();
-            shipEngineApiFactory.Setup(c => c.CreateCarrierAccountsApi()).Returns(accountsApi);
-            shipEngineApiFactory.Setup(c => c.CreateCarrierApi()).Returns(carriersApi);
-            shipEngineApiFactory.Setup(c => c.CreateRatesApi()).Returns(ratesApi);
-            shipEngineApiFactory.Setup(c => c.CreateLabelsApi()).Returns(labelsApi);
+            restClientFactory.Setup(x => x.Create()).Returns(restClient.Object);
 
             testObject = mock.Create<ShipEngineWebClient>();
 
@@ -68,22 +59,12 @@ namespace ShipWorks.Shipping.Tests.ShipEngine
         }
 
         [Fact]
-        public void ConnectDHLAccount_DelegatesToIShipEngineApiFactory()
-        {
-            testObject.ConnectDhlAccount("abcd");
-
-            shipEngineApiFactory.Verify(i => i.CreateCarrierAccountsApi());
-        }
-
-        [Fact]
-        public async Task ConnectDHLAccount_ReturnsFailureWhenConnectAccountThrowsException()
+        public async Task ConnectDHLAccount_ReturnsFailureWhenConnectAccountReturnsError()
         {
             string error =
                 "{\r\n  \"request_id\": \"c3d0f656-1ec8-4f1f-935c-25599e1e8d2a\",\r\n  \"errors\": [\r\n    {\r\n      \"error_code\": \"\",\r\n      \"message\": \"\'account_number\' must be 9 characters in length. You entered 3 characters.\"\r\n    }\r\n  ]\r\n}";
 
-            accountsApi.Setup(a =>
-                a.DHLExpressAccountCarrierConnectAccountAsync(It.IsAny<DHLExpressAccountInformationDTO>(),
-                    It.IsAny<string>(), It.IsAny<string>())).Throws(new Exception($"500 {error}"));
+            restClient.Setup(x => x.ExecuteTaskAsync(It.IsAny<IRestRequest>())).ReturnsAsync(new RestResponse() { Content = error, StatusCode = HttpStatusCode.BadRequest });
 
             GenericResult<string> result = await testObject.ConnectDhlAccount("abcd");
 

@@ -1,10 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
 using System.Runtime.Serialization;
 using System.Text;
-using System.Threading.Tasks;
 using Newtonsoft.Json;
 
 namespace ShipWorks.Shipping.ShipEngine.DTOs
@@ -13,7 +11,7 @@ namespace ShipWorks.Shipping.ShipEngine.DTOs
     /// VoidLabelResponse
     /// </summary>
     [DataContract]
-    public partial class VoidLabelResponse : IEquatable<VoidLabelResponse>, IValidatableObject
+    public partial class VoidLabelResponse : BaseShipEngineResponse, IEquatable<VoidLabelResponse>, IValidatableObject
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="VoidLabelResponse" /> class.

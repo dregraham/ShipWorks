@@ -15,7 +15,7 @@ namespace ShipWorks.Shipping.ShipEngine.DTOs
     /// </summary>
     [DataContract]
     [Obfuscation(Exclude = true, ApplyToMembers = true, StripAfterObfuscation = false)]
-    public class Label : IEquatable<Label>, IValidatableObject
+    public class Label : BaseShipEngineResponse, IEquatable<Label>, IValidatableObject
     {
         /// <summary>
         /// Defines Status
@@ -327,7 +327,7 @@ namespace ShipWorks.Shipping.ShipEngine.DTOs
         /// </summary>
         [DataMember(Name = "packages", EmitDefaultValue = false)]
         public List<LabelPackage> Packages { get; set; }
-        
+
         /// <summary>
         /// Returns the string presentation of the object
         /// </summary>

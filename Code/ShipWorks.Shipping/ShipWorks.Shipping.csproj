@@ -621,19 +621,7 @@
     <Compile Include="Services\Telemetry\UspsTelemetryMutator.cs" />
     <Compile Include="Settings\ConfigurationShipmentTypeSetupWizard.cs" />
     <Compile Include="Settings\ShipmentTypeSetupWizardFactory.cs" />
-    <Compile Include="ShipEngine\API\ICarrierAccountsApi.cs" />
-    <Compile Include="ShipEngine\API\ICarriersApi.cs" />
-    <Compile Include="ShipEngine\API\RatesApi.cs" />
-    <Compile Include="ShipEngine\API\TrackingApi.cs" />
-    <Compile Include="ShipEngine\API\LabelsApi.cs" />
-    <Compile Include="ShipEngine\DTOs\CarrierAccount\AsendiaAccountRegistrationRequest.cs" />
-    <Compile Include="ShipEngine\DTOs\CarrierAccount\CarrierAccountCreationResponse.cs" />
-    <Compile Include="ShipEngine\DTOs\CarrierAccount\StampsAccountRegistrationRequest.cs" />
     <Compile Include="ShipEngine\DTOs\CreateShipEngineAccount.cs" />
-    <Compile Include="ShipEngine\DTOs\CarrierAccount\DhlExpressAccountRegistrationRequest.cs" />
-    <Compile Include="ShipEngine\IRatesApi.cs" />
-    <Compile Include="ShipEngine\ITrackingApi.cs" />
-    <Compile Include="ShipEngine\ILabelsApi.cs" />
     <Compile Include="ShipEngine\DTOs\Registration\Address.cs" />
     <Compile Include="ShipEngine\DTOs\Registration\IUpsRegistrationRequestFactory.cs" />
     <Compile Include="ShipEngine\DTOs\Registration\UpsRegistrationRequest.cs" />
@@ -641,7 +629,6 @@
     <Compile Include="ShipEngine\DTOs\Registration\UpsRegistrationResponse.cs" />
     <Compile Include="ShipEngine\ICarrierShipmentRequestFactory.cs" />
     <Compile Include="ShipEngine\IProxiedShipEngineWebClient.cs" />
-    <Compile Include="ShipEngine\IShipEngineApiFactory.cs" />
     <Compile Include="ShipEngine\IShipEngineApiKey.cs" />
     <Compile Include="ShipEngine\IShipEnginePartnerWebClient.cs" />
     <Compile Include="ShipEngine\IShipEngineRateGroupFactory.cs" />
@@ -650,7 +637,6 @@
     <Compile Include="ShipEngine\IShipEngineTrackingResultFactory.cs" />
     <Compile Include="ShipEngine\IUpsCredentials.cs" />
     <Compile Include="ShipEngine\ProxiedShipEngineWebClient.cs" />
-    <Compile Include="ShipEngine\ShipEngineApiFactory.cs" />
     <Compile Include="ShipEngine\ShipEngineApiKey.cs" />
     <Compile Include="ShipEngine\ShipEngineContentsType.cs" />
     <Compile Include="ShipEngine\ShipEngineDownloadedLabelData.cs" />
@@ -802,10 +788,7 @@
     <Analyzer Include="..\..\packages\System.Security.Cryptography.Hashing.Algorithms.Analyzers.1.1.0\analyzers\dotnet\cs\System.Security.Cryptography.Hashing.Algorithms.Analyzers.dll" />
     <Analyzer Include="..\..\packages\System.Security.Cryptography.Hashing.Algorithms.Analyzers.1.1.0\analyzers\dotnet\cs\System.Security.Cryptography.Hashing.Algorithms.CSharp.Analyzers.dll" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="ShipEngine\DTOs\Label\" />
-    <Folder Include="ShipEngine\DTOs\Rating\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>

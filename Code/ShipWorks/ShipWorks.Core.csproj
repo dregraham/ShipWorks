@@ -1256,7 +1256,6 @@
     <Compile Include="Shipping\ShipEngine\DTOs\AdvancedOptions.cs" />
     <Compile Include="Shipping\ShipEngine\DTOs\AmazonShippingUsAccountInformationRequest.cs" />
     <Compile Include="Shipping\ShipEngine\DTOs\AmazonShippingUsAccountSettingsDTO.cs" />
-    <Compile Include="Shipping\ShipEngine\DTOs\ApiException.cs" />
     <Compile Include="Shipping\ShipEngine\DTOs\AsendiaAccountInformationDTO.cs" />
     <Compile Include="Shipping\ShipEngine\DTOs\BaseShipEngineResponse.cs" />
     <Compile Include="Shipping\ShipEngine\DTOs\Carrier.cs" />

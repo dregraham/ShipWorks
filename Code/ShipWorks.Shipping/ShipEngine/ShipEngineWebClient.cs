@@ -7,7 +7,7 @@ using Interapptive.Shared;
 using Interapptive.Shared.Business;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Extensions;
-using Interapptive.Shared.Net;
+using Interapptive.Shared.Net.RestSharp;
 using Interapptive.Shared.Utility;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
@@ -26,21 +26,21 @@ namespace ShipWorks.Shipping.ShipEngine
     [Component]
     public class ShipEngineWebClient : IShipEngineWebClient, IShipEngineResourceDownloader
     {
-        private readonly ILogEntryFactory apiLogEntryFactory;
-        private readonly IShipEngineApiFactory shipEngineApiFactory;
         private readonly IProxiedShipEngineWebClient proxiedShipEngineWebClient;
+        private readonly IRestClientFactory restClientFactory;
+        private readonly IRestRequestFactory restRequestFactory;
 
         /// <summary>
         /// Constructor
         /// </summary>
         [NDependIgnoreTooManyParams]
-        public ShipEngineWebClient(ILogEntryFactory apiLogEntryFactory,
-            IShipEngineApiFactory shipEngineApiFactory,
-            IProxiedShipEngineWebClient proxiedShipEngineWebClient)
+        public ShipEngineWebClient(IProxiedShipEngineWebClient proxiedShipEngineWebClient,
+            IRestClientFactory restClientFactory,
+            IRestRequestFactory restRequestFactory)
         {
-            this.apiLogEntryFactory = apiLogEntryFactory;
-            this.shipEngineApiFactory = shipEngineApiFactory;
             this.proxiedShipEngineWebClient = proxiedShipEngineWebClient;
+            this.restClientFactory = restClientFactory;
+            this.restRequestFactory = restRequestFactory;
         }
 
         /// <summary>
@@ -57,9 +57,9 @@ namespace ShipWorks.Shipping.ShipEngine
                 return existingAccount;
             }
 
-            var dhlAccountInfo = new DhlExpressAccountRegistrationRequest { AccountNumber = accountNumber, Nickname = accountNumber };
+            var dhlAccountInfo = new DHLExpressAccountInformationDTO { AccountNumber = accountNumber, Nickname = accountNumber };
 
-            var response = await MakeRequest<CarrierAccountCreationResponse>(
+            var response = await MakeRequest<ConnectAccountResponseDTO>(
                 ShipEngineEndpoints.DhlExpressAccountCreation, Method.POST, dhlAccountInfo, "ConnectDHLExpressAccount");
 
             if (response.Failure)
@@ -83,7 +83,7 @@ namespace ShipWorks.Shipping.ShipEngine
                 return existingAccount;
             }
 
-            var response = await MakeRequest<CarrierAccountCreationResponse>(
+            var response = await MakeRequest<ConnectAccountResponseDTO>(
             ShipEngineEndpoints.DhlEcommerceAccountCreation, Method.POST, dhlRequest, "ConnectDHLEcommerceAccount");
 
             if (response.Failure)
@@ -121,6 +121,29 @@ namespace ShipWorks.Shipping.ShipEngine
             await proxiedShipEngineWebClient.ConnectAmazonShippingAccount(authCode, GetAmazonShippingCarrierID);
 
         /// <summary>
+        /// Get the Amazon Shipping carrier ID. There can only ever be one connected per api key.
+        /// </summary>
+        private async Task<GenericResult<string>> GetAmazonShippingCarrierID()
+        {
+            var response = await MakeRequest<CarrierListResponse>(
+            ShipEngineEndpoints.ListCarriers, Method.GET, null, "ListCarriers");
+
+            if (response.Failure)
+            {
+                return GenericResult.FromError<string>(response.Message);
+            }
+
+            var carrierId = response.Value?.Carriers?.FirstOrDefault(c => c.CarrierCode.Equals("amazon_shipping_us", StringComparison.OrdinalIgnoreCase))?.CarrierId ?? string.Empty;
+
+            if (!carrierId.IsNullOrWhiteSpace())
+            {
+                return GenericResult.FromSuccess(carrierId);
+            }
+
+            return GenericResult.FromError<string>("Unable to find carrier");
+        }
+
+        /// <summary>
         /// Connect an Asendia account
         /// </summary>
         public async Task<GenericResult<string>> ConnectAsendiaAccount(string accountNumber, string username, string password)
@@ -133,7 +156,7 @@ namespace ShipWorks.Shipping.ShipEngine
                 return existingAccount;
             }
 
-            var asendiaAccountInfo = new AsendiaAccountRegistrationRequest
+            var asendiaAccountInfo = new AsendiaAccountInformationDTO
             {
                 AccountNumber = accountNumber,
                 Nickname = accountNumber,
@@ -141,7 +164,7 @@ namespace ShipWorks.Shipping.ShipEngine
                 FtpPassword = password
             };
 
-            var response = await MakeRequest<CarrierAccountCreationResponse>(
+            var response = await MakeRequest<ConnectAccountResponseDTO>(
             ShipEngineEndpoints.AsendiaAccountCreation, Method.POST, asendiaAccountInfo, "ConnectAsendiaAccount");
 
             if (response.Failure)
@@ -186,16 +209,15 @@ namespace ShipWorks.Shipping.ShipEngine
         /// </summary>
         public async Task<Label> PurchaseLabelWithRate(string rateId, PurchaseLabelWithoutShipmentRequest request, ApiLogSource apiLogSource)
         {
-            ILabelsApi labelsApi = shipEngineApiFactory.CreateLabelsApi();
+            var response = await MakeRequest<Label>(
+                ShipEngineEndpoints.PurchaseLabelWithRate(rateId), Method.POST, request, "PurchaseLabelWithRate", null, apiLogSource);
 
-            try
+            if (response.Failure)
             {
-                return await labelsApi.LabelsPurchaseLabelWithRateAsync(rateId, request, await GetApiKey());
+                throw new ShipEngineException($"An error occurred purchasing a label: {response.Message}");
             }
-            catch (Exception ex)
-            {
-                throw new ShipEngineException(GetErrorMessage(ex));
-            }
+
+            return response.Value;
         }
 
         /// <summary>
@@ -203,23 +225,17 @@ namespace ShipWorks.Shipping.ShipEngine
         /// </summary>
         public async Task<Label> PurchaseLabel(PurchaseLabelRequest request, ApiLogSource apiLogSource, TelemetricResult<IDownloadedLabelData> telemetricResult)
         {
-            ILabelsApi labelsApi = shipEngineApiFactory.CreateLabelsApi();
+            var response = await telemetricResult.RunTimedEventAsync(TelemetricEventType.GetLabel,
+                () => MakeRequest<Label>(ShipEngineEndpoints.PurchaseLabel, Method.POST, request, "PurchaseLabel", null, apiLogSource)
+                )
+                .ConfigureAwait(false);
 
-            try
+            if (response.Failure)
             {
-                string localApiKey = await GetApiKey();
-
-                Label label = await telemetricResult.RunTimedEventAsync(TelemetricEventType.GetLabel,
-                        () => labelsApi.LabelsPurchaseLabelAsync(request, localApiKey)
-                        )
-                    .ConfigureAwait(false);
-
-                return label;
+                throw new ShipEngineException($"An error occurred purchasing a label: {response.Message}");
             }
-            catch (Exception ex)
-            {
-                throw new ShipEngineException(GetErrorMessage(ex));
-            }
+
+            return response.Value;
         }
 
         /// <summary>
@@ -229,16 +245,15 @@ namespace ShipWorks.Shipping.ShipEngine
         /// <returns>The rate shipment response</returns>
         public async Task<RateShipmentResponse> RateShipment(RateShipmentRequest request, ApiLogSource apiLogSource)
         {
-            IRatesApi ratesApi = shipEngineApiFactory.CreateRatesApi();
+            var response = await MakeRequest<RateShipmentResponse>(
+                ShipEngineEndpoints.RateShipment, Method.POST, request, "RateShipment", null, apiLogSource);
 
-            try
+            if (response.Failure)
             {
-                return await ratesApi.RatesRateShipmentAsync(request, await GetApiKey());
+                throw new ShipEngineException($"An error occurred fetching rates: {response.Message}");
             }
-            catch (Exception ex)
-            {
-                throw new ShipEngineException(GetErrorMessage(ex));
-            }
+
+            return response.Value;
         }
 
         /// <summary>
@@ -246,16 +261,15 @@ namespace ShipWorks.Shipping.ShipEngine
         /// </summary>
         public async Task<VoidLabelResponse> VoidLabel(string labelId, ApiLogSource apiLogSource)
         {
-            ILabelsApi labelsApi = shipEngineApiFactory.CreateLabelsApi();
+            var response = await MakeRequest<VoidLabelResponse>(
+                ShipEngineEndpoints.VoidLabel(labelId), Method.PUT, null, "VoidLabel", null, apiLogSource);
 
-            try
+            if (response.Failure)
             {
-                return await labelsApi.LabelsVoidLabelAsync(labelId, await GetApiKey());
+                throw new ShipEngineException($"An error occurred voiding a label: {response.Message}");
             }
-            catch (Exception ex)
-            {
-                throw new ShipEngineException(GetErrorMessage(ex));
-            }
+
+            return response.Value;
         }
 
         /// <summary>
@@ -263,16 +277,15 @@ namespace ShipWorks.Shipping.ShipEngine
         /// </summary>
         public async Task<TrackingInformation> Track(string labelId, ApiLogSource apiLogSource)
         {
-            ILabelsApi labelsApi = shipEngineApiFactory.CreateLabelsApi();
+            var response = await MakeRequest<TrackingInformation>(
+                ShipEngineEndpoints.TrackLabel(labelId), Method.GET, null, "RateShipment", null, apiLogSource);
 
-            try
+            if (response.Failure)
             {
-                return await labelsApi.LabelsTrackAsync(labelId, await GetApiKey());
+                throw new ShipEngineException($"An error occurred tracking a label: {response.Message}");
             }
-            catch (Exception ex)
-            {
-                throw new ShipEngineException(GetErrorMessage(ex));
-            }
+
+            return response.Value;
         }
 
         /// <summary>
@@ -280,16 +293,15 @@ namespace ShipWorks.Shipping.ShipEngine
         /// </summary>
         public async Task<TrackingInformation> Track(string carrier, string trackingNumber, ApiLogSource apiLogSource)
         {
-            ITrackingApi trackingApi = shipEngineApiFactory.CreateTrackingApi();
+            var response = await MakeRequest<TrackingInformation>(
+                ShipEngineEndpoints.Track, Method.GET, null, "RateShipment", null, apiLogSource);
 
-            try
+            if (response.Failure)
             {
-                return await trackingApi.TrackingTrackAsync(await GetApiKey(), carrier, trackingNumber);
+                throw new ShipEngineException($"An error occurred getting tracking information: {response.Message}");
             }
-            catch (Exception ex)
-            {
-                throw new ShipEngineException(GetErrorMessage(ex));
-            }
+
+            return response.Value;
         }
 
         /// <summary>
@@ -297,14 +309,6 @@ namespace ShipWorks.Shipping.ShipEngine
         /// </summary>
         private async Task<string> GetApiKey() =>
             await proxiedShipEngineWebClient.GetApiKey();
-
-        /// <summary>
-        /// Get the error message from an ApiException
-        /// </summary>
-        private static string GetErrorMessage(Exception ex)
-        {
-            throw new Exception("We're getting rid of this.");
-        }
 
         /// <summary>
         /// Download the resource at the given uri
@@ -322,29 +326,6 @@ namespace ShipWorks.Shipping.ShipEngine
         }
 
         /// <summary>
-        /// Get the Amazon Shipping carrier ID. There can only ever be one connected per api key.
-        /// </summary>
-        private async Task<GenericResult<string>> GetAmazonShippingCarrierID()
-        {
-            var response = await MakeRequest<CarrierListResponse>(
-            ShipEngineEndpoints.ListCarriers, Method.GET, null, "ListCarriers");
-
-            if (response.Failure)
-            {
-                return GenericResult.FromError<string>(response.Message);
-            }
-
-            var carrierId = response.Value?.Carriers?.FirstOrDefault(c => c.CarrierCode.Equals("amazon_shipping_us", StringComparison.OrdinalIgnoreCase))?.CarrierId ?? string.Empty;
-
-            if (!carrierId.IsNullOrWhiteSpace())
-            {
-                return GenericResult.FromSuccess(carrierId);
-            }
-
-            return GenericResult.FromError<string>("Unable to find carrier");
-        }
-
-        /// <summary>
         /// Connects the given stamps.com account to the users ShipEngine account
         /// </summary>
         public async Task<GenericResult<string>> ConnectStampsAccount(string username, string password)
@@ -357,14 +338,14 @@ namespace ShipWorks.Shipping.ShipEngine
                 return existingAccount;
             }
 
-            var stampsAccountInfo = new StampsAccountRegistrationRequest
+            var stampsAccountInfo = new StampsAccountInformationDTO
             {
                 Nickname = username,
                 Username = username,
                 Password = password
             };
 
-            var response = await MakeRequest<CarrierAccountCreationResponse>(
+            var response = await MakeRequest<ConnectAccountResponseDTO>(
             ShipEngineEndpoints.StampsAccountCreation, Method.POST, stampsAccountInfo, "ConnectStampsAccount");
 
             if (response.Failure)
@@ -411,8 +392,12 @@ namespace ShipWorks.Shipping.ShipEngine
         /// <summary>
         /// Make a request with no body and a base response
         /// </summary>
-        private async Task<GenericResult<BaseShipEngineResponse>> MakeRequest(string endpoint, Method method, string logName, List<HttpStatusCode> allowedStatusCodes = null) =>
-            await MakeRequest<BaseShipEngineResponse>(endpoint, method, null, logName, allowedStatusCodes);
+        private async Task<GenericResult<BaseShipEngineResponse>> MakeRequest(string endpoint,
+            Method method,
+            string logName,
+            List<HttpStatusCode> allowedStatusCodes = null,
+            ApiLogSource logSource = ApiLogSource.ShipEngine) =>
+            await MakeRequest<BaseShipEngineResponse>(endpoint, method, null, logName, allowedStatusCodes, logSource);
 
         /// <summary>
         /// Make a request to ShipEngine
@@ -421,7 +406,8 @@ namespace ShipWorks.Shipping.ShipEngine
             Method method,
             object body,
             string logName,
-            List<HttpStatusCode> allowedStatusCodes = null) where TResponse : BaseShipEngineResponse
+            List<HttpStatusCode> allowedStatusCodes = null,
+            ApiLogSource logSource = ApiLogSource.ShipEngine) where TResponse : BaseShipEngineResponse
         {
             try
             {
@@ -435,9 +421,9 @@ namespace ShipWorks.Shipping.ShipEngine
 
                 var apiKey = await GetApiKey();
 
-                var client = new RestClient(ShipEngineEndpoints.BaseUrl);
+                var client = restClientFactory.Create(ShipEngineEndpoints.BaseUrl);
 
-                var request = new RestRequest(endpoint, method);
+                var request = restRequestFactory.Create(endpoint, method);
                 request.AddHeader("Content-Type", "application/json");
                 request.AddHeader("api-key", apiKey);
 
@@ -454,7 +440,7 @@ namespace ShipWorks.Shipping.ShipEngine
                     request.AddJsonBody(body);
                 }
 
-                ApiLogEntry logEntry = new ApiLogEntry(ApiLogSource.ShipEngine, logName);
+                ApiLogEntry logEntry = new ApiLogEntry(logSource, logName);
                 logEntry.LogRequest(request, client, "txt");
 
                 IRestResponse response = await client.ExecuteTaskAsync(request).ConfigureAwait(false);

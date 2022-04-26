@@ -4,7 +4,6 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Runtime.Serialization;
 using System.Text;
-using System.Threading.Tasks;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 
@@ -14,7 +13,7 @@ namespace ShipWorks.Shipping.ShipEngine.DTOs
     /// RateShipmentResponse
     /// </summary>
     [DataContract]
-    public partial class RateShipmentResponse : IEquatable<RateShipmentResponse>, IValidatableObject
+    public partial class RateShipmentResponse : BaseShipEngineResponse, IEquatable<RateShipmentResponse>, IValidatableObject
     {
         /// <summary>
         /// Defines ShipmentStatus
