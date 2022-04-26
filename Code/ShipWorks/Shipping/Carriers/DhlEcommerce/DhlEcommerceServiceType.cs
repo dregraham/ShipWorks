@@ -113,17 +113,18 @@ namespace ShipWorks.Shipping.Carriers.DhlEcommerce
 
         US_DhlSMMarketingParcelGround = 19,
 
-        [Description("DHL SmartMail Parcel Return Light")]
-        [ApiValue("dhl_smartmail_parcel_return_light")]
-        US_DhlSmartMailParcelReturnLight = 20,
+        /* Currently platform doesn't support returns through DHL eCommerce
+         * [Description("DHL SmartMail Parcel Return Light")]
+         [ApiValue("dhl_smartmail_parcel_return_light")]
+         US_DhlSmartMailParcelReturnLight = 20,
 
-        [Description("DHL SmartMail Parcel Return Plus")]
-        [ApiValue("dhl_smartmail_parcel_return_plus")]
-        US_DhlSmartMailParcelReturnPlus = 21,
+         [Description("DHL SmartMail Parcel Return Plus")]
+         [ApiValue("dhl_smartmail_parcel_return_plus")]
+         US_DhlSmartMailParcelReturnPlus = 21,
 
-        [Description("DHL SmartMail Parcel Return Ground")]
-        [ApiValue("dhl_smartmail_parcel_return_ground")]
-        US_DhlSmartMailParcelReturnGround = 22,
+         [Description("DHL SmartMail Parcel Return Ground")]
+         [ApiValue("dhl_smartmail_parcel_return_ground")]
+         US_DhlSmartMailParcelReturnGround = 22,*/
 
         [Description("DHL SM Parcel Expedited Max")]
         [ApiValue("dhl_sm_parcel_expedited_max")]
