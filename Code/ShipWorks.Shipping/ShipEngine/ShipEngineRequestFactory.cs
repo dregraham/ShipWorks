@@ -26,7 +26,7 @@ namespace ShipWorks.Shipping.ShipEngine
                 {
                     ShipTo = CreateShipToAddress(shipment),
                     ShipFrom = CreateShipFromAddress(shipment),
-                    ShipDate = shipment.ShipDate
+                    ShipDate = shipment.ShipDate,
                 }
             };
             return request;

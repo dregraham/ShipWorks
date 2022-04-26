@@ -186,8 +186,7 @@ namespace ShipWorks.Shipping.ShipEngine
         /// </summary>
         private async Task<GenericResult<string>> GetCarrierId(string accountNumber)
         {
-            var response = await MakeRequest<CarrierListResponse>(
-            ShipEngineEndpoints.ListCarriers, Method.GET, null, "ListCarriers");
+            var response = await MakeRequest<CarrierListResponse>(ShipEngineEndpoints.ListCarriers, Method.GET, null, "ListCarriers");
 
             if (response.Failure)
             {
