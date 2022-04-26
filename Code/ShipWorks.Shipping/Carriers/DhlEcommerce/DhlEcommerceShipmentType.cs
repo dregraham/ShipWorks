@@ -18,7 +18,6 @@ using ShipWorks.Shipping.Insurance;
 using ShipWorks.Shipping.Services;
 using ShipWorks.Shipping.Settings;
 using ShipWorks.Shipping.ShipEngine;
-using ShipEngine.CarrierApi.Client.Model;
 using ShipWorks.ApplicationCore.Licensing;
 using ShipWorks.Editions;
 using ShipWorks.Templates.Processing.TemplateXml.ElementOutlines;
@@ -312,7 +311,7 @@ namespace ShipWorks.Shipping.Carriers.DhlEcommerce
             try
             {
                 string labelID = shipment.DhlEcommerce?.ShipEngineLabelID;
-                TrackingInformation trackingInfo;
+                ShipEngine.DTOs.TrackingInformation trackingInfo;
                 if (string.IsNullOrWhiteSpace(labelID))
                 {
                     trackingInfo = Task.Run(() =>

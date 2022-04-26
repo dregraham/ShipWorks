@@ -41,7 +41,7 @@ namespace ShipWorks.Shipping.Services
         {
             this.messages = messages;
             this.messageHelper = messageHelper;
-            this.log = logManager(typeof(LabelPrintingService));
+            log = logManager(typeof(LabelPrintingService));
             this.owner = owner;
         }
 

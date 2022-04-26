@@ -106,12 +106,6 @@
       <HintPath>..\..\packages\SD.LLBLGen.Pro.ORMSupportClasses.5.1.2\lib\net45\SD.LLBLGen.Pro.ORMSupportClasses.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="ShipEngine.ApiClient, Version=1.0.0.0, Culture=neutral, PublicKeyToken=372d6fd19cbc5d92, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\Signed.ShipEngine.ApiClient.1.1.3\lib\net46\ShipEngine.ApiClient.dll</HintPath>
-    </Reference>
-    <Reference Include="ShipEngine.CarrierApi.Client, Version=1.0.0.0, Culture=neutral, PublicKeyToken=c5149f357886d5cf, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\ShipEngine.CarrierApi.Client.1.2.1\lib\net46\ShipEngine.CarrierApi.Client.dll</HintPath>
-    </Reference>
     <Reference Include="Syncfusion.Compression.Base, Version=16.1460.0.26, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89, processorArchitecture=MSIL">
       <HintPath>..\..\packages\Syncfusion.Compression.Base46.16.1.0.26\lib\net46\Syncfusion.Compression.Base.dll</HintPath>
     </Reference>
@@ -627,12 +621,19 @@
     <Compile Include="Services\Telemetry\UspsTelemetryMutator.cs" />
     <Compile Include="Settings\ConfigurationShipmentTypeSetupWizard.cs" />
     <Compile Include="Settings\ShipmentTypeSetupWizardFactory.cs" />
-    <Compile Include="ShipEngine\DTOs\BaseShipEngineResponse.cs" />
+    <Compile Include="ShipEngine\API\ICarrierAccountsApi.cs" />
+    <Compile Include="ShipEngine\API\ICarriersApi.cs" />
+    <Compile Include="ShipEngine\API\RatesApi.cs" />
+    <Compile Include="ShipEngine\API\TrackingApi.cs" />
+    <Compile Include="ShipEngine\API\LabelsApi.cs" />
     <Compile Include="ShipEngine\DTOs\CarrierAccount\AsendiaAccountRegistrationRequest.cs" />
     <Compile Include="ShipEngine\DTOs\CarrierAccount\CarrierAccountCreationResponse.cs" />
     <Compile Include="ShipEngine\DTOs\CarrierAccount\StampsAccountRegistrationRequest.cs" />
     <Compile Include="ShipEngine\DTOs\CreateShipEngineAccount.cs" />
     <Compile Include="ShipEngine\DTOs\CarrierAccount\DhlExpressAccountRegistrationRequest.cs" />
+    <Compile Include="ShipEngine\IRatesApi.cs" />
+    <Compile Include="ShipEngine\ITrackingApi.cs" />
+    <Compile Include="ShipEngine\ILabelsApi.cs" />
     <Compile Include="ShipEngine\DTOs\ListCarriersResponse.cs" />
     <Compile Include="ShipEngine\DTOs\Registration\Address.cs" />
     <Compile Include="ShipEngine\DTOs\Registration\IUpsRegistrationRequestFactory.cs" />
@@ -802,7 +803,10 @@
     <Analyzer Include="..\..\packages\System.Security.Cryptography.Hashing.Algorithms.Analyzers.1.1.0\analyzers\dotnet\cs\System.Security.Cryptography.Hashing.Algorithms.Analyzers.dll" />
     <Analyzer Include="..\..\packages\System.Security.Cryptography.Hashing.Algorithms.Analyzers.1.1.0\analyzers\dotnet\cs\System.Security.Cryptography.Hashing.Algorithms.CSharp.Analyzers.dll" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="ShipEngine\DTOs\Label\" />
+    <Folder Include="ShipEngine\DTOs\Rating\" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>

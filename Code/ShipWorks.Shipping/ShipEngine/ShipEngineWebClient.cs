@@ -12,9 +12,6 @@ using Interapptive.Shared.Utility;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 using RestSharp;
-using ShipEngine.CarrierApi.Client;
-using ShipEngine.CarrierApi.Client.Api;
-using ShipEngine.CarrierApi.Client.Model;
 using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Common.Net;
 using ShipWorks.Data.Model.EntityInterfaces;
@@ -166,7 +163,7 @@ namespace ShipWorks.Shipping.ShipEngine
         /// </summary>
         private async Task<GenericResult<string>> GetCarrierId(string accountNumber)
         {
-            var response = await MakeRequest<ListCarriersResponse>(
+            var response = await MakeRequest<CarrierListResponse>(
             ShipEngineEndpoints.ListCarriers, Method.GET, null, "ListCarriers");
 
             if (response.Failure)
@@ -190,12 +187,12 @@ namespace ShipWorks.Shipping.ShipEngine
         public async Task<Label> PurchaseLabelWithRate(string rateId, PurchaseLabelWithoutShipmentRequest request, ApiLogSource apiLogSource)
         {
             ILabelsApi labelsApi = shipEngineApiFactory.CreateLabelsApi();
-            ConfigureLogging(labelsApi, apiLogSource, "PurchaseLabel", LogActionType.Other);
+
             try
             {
                 return await labelsApi.LabelsPurchaseLabelWithRateAsync(rateId, request, await GetApiKey());
             }
-            catch (ApiException ex)
+            catch (Exception ex)
             {
                 throw new ShipEngineException(GetErrorMessage(ex));
             }
@@ -207,7 +204,7 @@ namespace ShipWorks.Shipping.ShipEngine
         public async Task<Label> PurchaseLabel(PurchaseLabelRequest request, ApiLogSource apiLogSource, TelemetricResult<IDownloadedLabelData> telemetricResult)
         {
             ILabelsApi labelsApi = shipEngineApiFactory.CreateLabelsApi();
-            ConfigureLogging(labelsApi, apiLogSource, "PurchaseLabel", LogActionType.Other);
+
             try
             {
                 string localApiKey = await GetApiKey();
@@ -219,7 +216,7 @@ namespace ShipWorks.Shipping.ShipEngine
 
                 return label;
             }
-            catch (ApiException ex)
+            catch (Exception ex)
             {
                 throw new ShipEngineException(GetErrorMessage(ex));
             }
@@ -233,12 +230,12 @@ namespace ShipWorks.Shipping.ShipEngine
         public async Task<RateShipmentResponse> RateShipment(RateShipmentRequest request, ApiLogSource apiLogSource)
         {
             IRatesApi ratesApi = shipEngineApiFactory.CreateRatesApi();
-            ConfigureLogging(ratesApi, apiLogSource, "RateShipment", LogActionType.GetRates);
+
             try
             {
                 return await ratesApi.RatesRateShipmentAsync(request, await GetApiKey());
             }
-            catch (ApiException ex)
+            catch (Exception ex)
             {
                 throw new ShipEngineException(GetErrorMessage(ex));
             }
@@ -250,13 +247,12 @@ namespace ShipWorks.Shipping.ShipEngine
         public async Task<VoidLabelResponse> VoidLabel(string labelId, ApiLogSource apiLogSource)
         {
             ILabelsApi labelsApi = shipEngineApiFactory.CreateLabelsApi();
-            ConfigureLogging(labelsApi, apiLogSource, "VoidShipment", LogActionType.Other);
 
             try
             {
                 return await labelsApi.LabelsVoidLabelAsync(labelId, await GetApiKey());
             }
-            catch (ApiException ex)
+            catch (Exception ex)
             {
                 throw new ShipEngineException(GetErrorMessage(ex));
             }
@@ -269,12 +265,11 @@ namespace ShipWorks.Shipping.ShipEngine
         {
             ILabelsApi labelsApi = shipEngineApiFactory.CreateLabelsApi();
 
-            ConfigureLogging(labelsApi, apiLogSource, "Track", LogActionType.GetRates);
             try
             {
                 return await labelsApi.LabelsTrackAsync(labelId, await GetApiKey());
             }
-            catch (ApiException ex)
+            catch (Exception ex)
             {
                 throw new ShipEngineException(GetErrorMessage(ex));
             }
@@ -287,12 +282,11 @@ namespace ShipWorks.Shipping.ShipEngine
         {
             ITrackingApi trackingApi = shipEngineApiFactory.CreateTrackingApi();
 
-            ConfigureLogging(trackingApi, apiLogSource, "Track", LogActionType.GetRates);
             try
             {
                 return await trackingApi.TrackingTrackAsync(await GetApiKey(), carrier, trackingNumber);
             }
-            catch (ApiException ex)
+            catch (Exception ex)
             {
                 throw new ShipEngineException(GetErrorMessage(ex));
             }
@@ -305,38 +299,11 @@ namespace ShipWorks.Shipping.ShipEngine
             await proxiedShipEngineWebClient.GetApiKey();
 
         /// <summary>
-        /// Configure logging for the apiAccessor
-        /// </summary>
-        /// <param name="apiAccessor">the api accessor to configure</param>
-        /// <param name="logSource">the log source</param>
-        /// <param name="action">the action being logged</param>
-        private void ConfigureLogging(IApiAccessor apiAccessor, ApiLogSource logSource, string action, LogActionType logActionType)
-        {
-            IApiLogEntry apiLogEntry = apiLogEntryFactory.GetLogEntry(logSource, action, logActionType);
-
-            apiAccessor.Configuration.ApiClient.RequestLogger = apiLogEntry.LogRequest;
-            apiAccessor.Configuration.ApiClient.ResponseLogger = apiLogEntry.LogResponse;
-        }
-
-        /// <summary>
         /// Get the error message from an ApiException
         /// </summary>
-        private static string GetErrorMessage(ApiException ex)
+        private static string GetErrorMessage(Exception ex)
         {
-            try
-            {
-                ApiErrorResponseDTO error = JsonConvert.DeserializeObject<ApiErrorResponseDTO>(ex.ErrorContent);
-                if (error?.Errors?.Any() ?? false)
-                {
-                    return error.Errors.First().Message;
-                }
-            }
-            catch (JsonReaderException)
-            {
-                return ex.Message;
-            }
-
-            return ex.Message;
+            throw new Exception("We're getting rid of this.");
         }
 
         /// <summary>
@@ -359,7 +326,7 @@ namespace ShipWorks.Shipping.ShipEngine
         /// </summary>
         private async Task<GenericResult<string>> GetAmazonShippingCarrierID()
         {
-            var response = await MakeRequest<ListCarriersResponse>(
+            var response = await MakeRequest<CarrierListResponse>(
             ShipEngineEndpoints.ListCarriers, Method.GET, null, "ListCarriers");
 
             if (response.Failure)

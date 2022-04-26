@@ -1,5 +1,5 @@
 ﻿using Interapptive.Shared.ComponentRegistration;
-using ShipEngine.CarrierApi.Client.Api;
+using ShipWorks.Shipping.ShipEngine.API;
 
 namespace ShipWorks.Shipping.ShipEngine
 {

@@ -11,8 +11,7 @@ using Interapptive.Shared.Utility;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using RestSharp;
-using ShipEngine.ApiClient.Client;
-using ShipEngine.ApiClient.Model;
+using ShipWorks.Shipping.ShipEngine.DTOs;
 using ShipWorks.ApplicationCore.Licensing.WebClientEnvironments;
 using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Common.Net;
@@ -104,7 +103,7 @@ namespace ShipWorks.Shipping.ShipEngine
 
                 return GenericResult.FromError<string>(error.ToString());
             }
-            catch (ApiException ex)
+            catch (Exception ex)
             {
                 string error = GetErrorMessage(ex);
                 return Result.FromError(error);
@@ -166,7 +165,7 @@ namespace ShipWorks.Shipping.ShipEngine
 
                 return GenericResult.FromError<string>(JObject.Parse(response.Content)["errors"].FirstOrDefault()?["message"].ToString());
             }
-            catch (ApiException ex)
+            catch (Exception ex)
             {
                 string error = GetErrorMessage(ex);
 
@@ -226,7 +225,7 @@ namespace ShipWorks.Shipping.ShipEngine
 
                 return GenericResult.FromError<string>(error.ToString());
             }
-            catch (ApiException ex)
+            catch (Exception ex)
             {
                 string error = GetErrorMessage(ex);
                 return Result.FromError(error);
@@ -380,22 +379,9 @@ namespace ShipWorks.Shipping.ShipEngine
         /// <summary>
         /// Get the error message from an ApiException
         /// </summary>
-        private static string GetErrorMessage(ApiException ex)
+        private static string GetErrorMessage(Exception ex)
         {
-            try
-            {
-                ApiErrorResponseDTO error = JsonConvert.DeserializeObject<ApiErrorResponseDTO>(ex.ErrorContent);
-                if (error?.Errors?.Any() ?? false)
-                {
-                    return error.Errors.First().Message;
-                }
-            }
-            catch (JsonReaderException)
-            {
-                return ex.Message;
-            }
-
-            return ex.Message;
+            throw new Exception("We're getting rid of this.");
         }
     }
 }

@@ -3,15 +3,14 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Moq;
-using ShipEngine.CarrierApi.Client.Api;
-using ShipEngine.CarrierApi.Client;
-using ShipEngine.CarrierApi.Client.Model;
 using Xunit;
 using ShipWorks.Shipping.ShipEngine;
 using ShipWorks.Tests.Shared;
 using Interapptive.Shared.Utility;
 using Interapptive.Shared.Net;
 using ShipWorks.ApplicationCore.Logging;
+using ShipWorks.Shipping.ShipEngine.API;
+using ShipWorks.Shipping.ShipEngine.DTOs;
 
 namespace ShipWorks.Shipping.Tests.ShipEngine
 {
@@ -84,7 +83,7 @@ namespace ShipWorks.Shipping.Tests.ShipEngine
 
             accountsApi.Setup(a =>
                 a.DHLExpressAccountCarrierConnectAccountAsync(It.IsAny<DHLExpressAccountInformationDTO>(),
-                    It.IsAny<string>(), It.IsAny<string>())).Throws(new ApiException(500, "", error));
+                    It.IsAny<string>(), It.IsAny<string>())).Throws(new Exception($"500 {error}"));
 
             GenericResult<string> result = await testObject.ConnectDhlAccount("abcd");
 
@@ -100,22 +99,6 @@ namespace ShipWorks.Shipping.Tests.ShipEngine
             accountsApi.Verify(i =>
                 i.DHLExpressAccountCarrierConnectAccountAsync(
                     It.Is<DHLExpressAccountInformationDTO>(d => d.AccountNumber == "AccountNumber"), "abcd", It.IsAny<string>()));
-        }
-
-        [Fact]
-        public void ConnectDHLAccount_SetsLoggingActionsOnCarrierAccountsApi()
-        {
-            var apiEntry = mock.CreateMock<IApiLogEntry>();
-            mock.MockFunc(apiEntry);
-            testObject.ConnectDhlAccount("AccountNumber");
-
-            // This does not work due to a bug in moq
-            // https://github.com/moq/moq4/issues/430
-            //accountsApi.VerifySet(i => i.Configuration.ApiClient.RequestLogger = apiEntry.Object.LogRequest);
-            //accountsApi.VerifySet(i => i.Configuration.ApiClient.ResponseLogger = apiEntry.Object.LogResponse);
-
-            Assert.NotNull(accountsApi.Object.Configuration.ApiClient.ResponseLogger);
-            Assert.NotNull(accountsApi.Object.Configuration.ApiClient.RequestLogger);
         }
 
         [Fact]
@@ -144,25 +127,9 @@ namespace ShipWorks.Shipping.Tests.ShipEngine
 
             ratesApi.Setup(a =>
                 a.RatesRateShipmentAsync(It.IsAny<RateShipmentRequest>(),
-                    It.IsAny<string>(), It.IsAny<string>())).ThrowsAsync(new ApiException(500, "", error));
+                    It.IsAny<string>(), It.IsAny<string>())).ThrowsAsync(new Exception($"500 {error}"));
 
             await Assert.ThrowsAsync<ShipEngineException>(() => testObject.RateShipment(new RateShipmentRequest(), ApiLogSource.ShipEngine));
-        }
-
-        [Fact]
-        public async Task RateShipment_SetsLoggingAction()
-        {
-            var apiEntry = mock.CreateMock<IApiLogEntry>();
-            mock.MockFunc(apiEntry);
-            await testObject.RateShipment(new RateShipmentRequest(), ApiLogSource.ShipEngine);
-
-            // This does not work due to a bug in moq
-            // https://github.com/moq/moq4/issues/430
-            //accountsApi.VerifySet(i => i.Configuration.ApiClient.RequestLogger = apiEntry.Object.LogRequest);
-            //accountsApi.VerifySet(i => i.Configuration.ApiClient.ResponseLogger = apiEntry.Object.LogResponse);
-
-            Assert.NotNull(ratesApi.Object.Configuration.ApiClient.ResponseLogger);
-            Assert.NotNull(ratesApi.Object.Configuration.ApiClient.RequestLogger);
         }
 
         [Fact]
@@ -191,25 +158,9 @@ namespace ShipWorks.Shipping.Tests.ShipEngine
 
             labelsApi.Setup(a =>
                 a.LabelsPurchaseLabelAsync(It.IsAny<PurchaseLabelRequest>(),
-                    It.IsAny<string>(), It.IsAny<string>())).Throws(new ApiException(500, "", error));
+                    It.IsAny<string>(), It.IsAny<string>())).Throws(new Exception($"500 {error}"));
 
             await Assert.ThrowsAsync<ShipEngineException>(() => testObject.PurchaseLabel(new PurchaseLabelRequest(), ApiLogSource.ShipEngine, telemetricResult));
-        }
-
-        [Fact]
-        public void PurchaseLabelRequest_SetsLoggingAction()
-        {
-            var apiEntry = mock.CreateMock<IApiLogEntry>();
-            mock.MockFunc(apiEntry);
-            testObject.PurchaseLabel(new PurchaseLabelRequest(), ApiLogSource.ShipEngine, telemetricResult);
-
-            // This does not work due to a bug in moq
-            // https://github.com/moq/moq4/issues/430
-            //accountsApi.VerifySet(i => i.Configuration.ApiClient.RequestLogger = apiEntry.Object.LogRequest);
-            //accountsApi.VerifySet(i => i.Configuration.ApiClient.ResponseLogger = apiEntry.Object.LogResponse);
-
-            Assert.NotNull(labelsApi.Object.Configuration.ApiClient.ResponseLogger);
-            Assert.NotNull(labelsApi.Object.Configuration.ApiClient.RequestLogger);
         }
 
         [Fact]
@@ -246,7 +197,7 @@ namespace ShipWorks.Shipping.Tests.ShipEngine
 
             accountsApi.Setup(a =>
                 a.AsendiaAccountCarrierConnectAccountAsync(It.IsAny<AsendiaAccountInformationDTO>(),
-                    It.IsAny<string>(), It.IsAny<string>())).Throws(new ApiException(500, "", error));
+                    It.IsAny<string>(), It.IsAny<string>())).Throws(new Exception($"500 {error}"));
 
             GenericResult<string> result = await testObject.ConnectAsendiaAccount("abcd", "username", "password");
 
@@ -262,7 +213,7 @@ namespace ShipWorks.Shipping.Tests.ShipEngine
 
             accountsApi.Setup(a =>
                 a.AsendiaAccountCarrierConnectAccountAsync(It.IsAny<AsendiaAccountInformationDTO>(),
-                    It.IsAny<string>(), It.IsAny<string>())).Throws(new ApiException(500, "", error));
+                    It.IsAny<string>(), It.IsAny<string>())).Throws(new Exception($"500 {error}"));
 
             GenericResult<string> result = await testObject.ConnectAsendiaAccount("abcd", "username", "password");
 
@@ -278,22 +229,6 @@ namespace ShipWorks.Shipping.Tests.ShipEngine
             accountsApi.Verify(i =>
                 i.AsendiaAccountCarrierConnectAccountAsync(
                     It.Is<AsendiaAccountInformationDTO>(d => d.AccountNumber == "AccountNumber"), "abcd", It.IsAny<string>()));
-        }
-
-        [Fact]
-        public void ConnectAsendia_SetsLoggingActionsOnCarrierAccountsApi()
-        {
-            var apiEntry = mock.CreateMock<IApiLogEntry>();
-            mock.MockFunc(apiEntry);
-            testObject.ConnectAsendiaAccount("AccountNumber", "username", "password");
-
-            // This does not work due to a bug in moq
-            // https://github.com/moq/moq4/issues/430
-            //accountsApi.VerifySet(i => i.Configuration.ApiClient.RequestLogger = apiEntry.Object.LogRequest);
-            //accountsApi.VerifySet(i => i.Configuration.ApiClient.ResponseLogger = apiEntry.Object.LogResponse);
-
-            Assert.NotNull(accountsApi.Object.Configuration.ApiClient.ResponseLogger);
-            Assert.NotNull(accountsApi.Object.Configuration.ApiClient.RequestLogger);
         }
 
         public void Dispose()
