@@ -175,6 +175,7 @@ namespace ShipWorks.Data.Utility
 
         DhlExpressDescription,
         AsendiaDescription,
-        AmazonSWADescription
+        AmazonSWADescription,
+        DhlEcommerceDescription,
     }
 }
