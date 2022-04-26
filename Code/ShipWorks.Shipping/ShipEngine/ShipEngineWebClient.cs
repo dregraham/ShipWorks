@@ -29,6 +29,7 @@ namespace ShipWorks.Shipping.ShipEngine
         private readonly IProxiedShipEngineWebClient proxiedShipEngineWebClient;
         private readonly IRestClientFactory restClientFactory;
         private readonly IRestRequestFactory restRequestFactory;
+        private readonly ILogEntryFactory logEntryFactory;
 
         /// <summary>
         /// Constructor
@@ -36,11 +37,13 @@ namespace ShipWorks.Shipping.ShipEngine
         [NDependIgnoreTooManyParams]
         public ShipEngineWebClient(IProxiedShipEngineWebClient proxiedShipEngineWebClient,
             IRestClientFactory restClientFactory,
-            IRestRequestFactory restRequestFactory)
+            IRestRequestFactory restRequestFactory,
+            ILogEntryFactory logEntryFactory)
         {
             this.proxiedShipEngineWebClient = proxiedShipEngineWebClient;
             this.restClientFactory = restClientFactory;
             this.restRequestFactory = restRequestFactory;
+            this.logEntryFactory = logEntryFactory;
         }
 
         /// <summary>
@@ -440,7 +443,7 @@ namespace ShipWorks.Shipping.ShipEngine
                     request.AddJsonBody(body);
                 }
 
-                ApiLogEntry logEntry = new ApiLogEntry(logSource, logName);
+                var logEntry = logEntryFactory.GetLogEntry(logSource, logName, LogActionType.Other);
                 logEntry.LogRequest(request, client, "txt");
 
                 IRestResponse response = await client.ExecuteTaskAsync(request).ConfigureAwait(false);
