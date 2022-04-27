@@ -52,7 +52,7 @@ namespace ShipWorks.Shipping.Services
             this.storeTypeManager = storeTypeManager;
             this.orderManager = orderManager;
             this.shippingSettings = shippingSettings;
-            this.log = logFactory(this.GetType());
+            log = logFactory(GetType());
         }
 
         /// <summary>

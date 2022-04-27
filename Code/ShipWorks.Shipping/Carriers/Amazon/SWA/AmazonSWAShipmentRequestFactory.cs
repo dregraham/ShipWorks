@@ -1,7 +1,6 @@
 ﻿using ShipWorks.Shipping.ShipEngine;
 using System.Collections.Generic;
 using System.Linq;
-using ShipEngine.CarrierApi.Client.Model;
 using ShipWorks.Data.Model.EntityClasses;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Utility;
@@ -9,6 +8,7 @@ using ShipWorks.Shipping.Services;
 using Interapptive.Shared.Collections;
 using ShipWorks.Stores.Platforms.Amazon;
 using System;
+using ShipWorks.Shipping.ShipEngine.DTOs;
 
 namespace ShipWorks.Shipping.Carriers.Amazon.SWA
 {
@@ -63,7 +63,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon.SWA
         /// </summary>
         public override RateShipmentRequest CreateRateShipmentRequest(ShipmentEntity shipment)
         {
-            RateShipmentRequest request = base.CreateRateShipmentRequest(shipment);
+            var request = base.CreateRateShipmentRequest(shipment);
 
             request.Shipment.Items = GetShipmentItems(shipment);
 
@@ -80,7 +80,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon.SWA
         /// </summary>
         public override PurchaseLabelRequest CreatePurchaseLabelRequest(ShipmentEntity shipment)
         {
-            PurchaseLabelRequest request = base.CreatePurchaseLabelRequest(shipment);
+            var request = base.CreatePurchaseLabelRequest(shipment);
 
             if (shipment.Order is AmazonOrderEntity)
             {
@@ -97,7 +97,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon.SWA
         /// </summary>
         private static List<ShipmentItem> GetShipmentItems(ShipmentEntity shipment)
         {
-            List<ShipmentItem> result = new List<ShipmentItem>();
+            var result = new List<ShipmentItem>();
 
             AmazonOrderEntity amazonOrder = shipment.Order as AmazonOrderEntity;
             foreach (OrderItemEntity item in shipment.Order.OrderItems)

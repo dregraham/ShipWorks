@@ -1,7 +1,6 @@
 ﻿using Autofac.Extras.Moq;
 using Interapptive.Shared.Enums;
 using Moq;
-using ShipEngine.CarrierApi.Client.Model;
 using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
@@ -132,7 +131,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.Asendia
                 }
             };
 
-            var trackingInformation = new TrackingInformation();
+            var trackingInformation = new ShipWorks.Shipping.ShipEngine.DTOs.TrackingInformation();
 
             mock.Mock<IShipEngineWebClient>()
                 .Setup(c => c.Track(ParameterShorteners.AnyString, ApiLogSource.Asendia))
@@ -159,7 +158,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.Asendia
             TrackingResult trackingResult = new TrackingResult();
 
             mock.Mock<IShipEngineTrackingResultFactory>()
-                .Setup(c => c.Create(It.IsAny<TrackingInformation>()))
+                .Setup(c => c.Create(It.IsAny<ShipWorks.Shipping.ShipEngine.DTOs.TrackingInformation>()))
                 .Returns(trackingResult);
 
             var testResult = testObject.TrackShipment(shipment);
@@ -182,7 +181,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.Asendia
             };
 
             mock.Mock<IShipEngineTrackingResultFactory>()
-                .Setup(c => c.Create(It.IsAny<TrackingInformation>()))
+                .Setup(c => c.Create(It.IsAny<ShipWorks.Shipping.ShipEngine.DTOs.TrackingInformation>()))
                 .Throws(new Exception());
 
             var testResult = testObject.TrackShipment(shipment);

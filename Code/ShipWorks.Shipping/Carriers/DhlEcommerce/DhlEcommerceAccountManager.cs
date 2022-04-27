@@ -107,7 +107,7 @@ namespace ShipWorks.Shipping.Carriers.DhlEcommerce
         /// </summary>
         void ICheckForChangesNeeded.CheckForChangesNeeded()
         {
-            DhlEcommerceAccountManager.CheckForChangesNeeded();
+            CheckForChangesNeeded();
         }
 
         /// <summary>

@@ -6,7 +6,6 @@ using System.Threading.Tasks;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Enums;
 using Interapptive.Shared.Utility;
-using ShipEngine.CarrierApi.Client.Model;
 using ShipWorks.ApplicationCore.Licensing;
 using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Common.IO.Hardware.Printers;
@@ -312,7 +311,7 @@ namespace ShipWorks.Shipping.Carriers.DhlEcommerce
             try
             {
                 string labelID = shipment.DhlEcommerce?.ShipEngineLabelID;
-                TrackingInformation trackingInfo;
+                ShipEngine.DTOs.TrackingInformation trackingInfo;
                 if (string.IsNullOrWhiteSpace(labelID))
                 {
                     trackingInfo = Task.Run(() =>
