@@ -25,6 +25,7 @@ namespace Interapptive.Shared.Utility
             public DetailsAttribute DetailsAttribute { get; set; }
             public Image Image { get; set; }
             public WpfImageSourceAttribute WpfImageSourceAttribute { get; set; }
+            public InternationalServiceAttribute InternationalServiceAttribute { get; set;}
             public bool Deprecated { get; set; }
             public int? SortOrder { get; set; }
             public string ApiValue { get; set; }
@@ -186,6 +187,20 @@ namespace Interapptive.Shared.Utility
         }
 
         /// <summary>
+        /// Get the international service attribute of the given enumerated value.
+        /// </summary>
+        public static InternationalServiceAttribute GetInternationalServiceAttribute(Enum value)
+        {
+            InternationalServiceAttribute internationalService = GetEnumMetadata(value).InternationalServiceAttribute;
+            if (internationalService == null)
+            {
+                return new InternationalServiceAttribute(null, false);
+            }
+
+            return internationalService;
+        }
+
+        /// <summary>
         /// Gets the details of the given enumerated value
         /// </summary>
         public static string GetDetails(Enum value)
@@ -303,6 +318,7 @@ namespace Interapptive.Shared.Utility
                 SortOrder = fieldInfo.GetCustomAttribute<SortOrderAttribute>()?.Position,
                 Deprecated = fieldInfo.GetCustomAttribute<DeprecatedAttribute>() != null,
                 ApiValue = fieldInfo.GetCustomAttribute<ApiValueAttribute>()?.ApiValue,
+                InternationalServiceAttribute = (InternationalServiceAttribute) Attribute.GetCustomAttribute(fieldInfo, typeof(InternationalServiceAttribute))
             };
         }
 

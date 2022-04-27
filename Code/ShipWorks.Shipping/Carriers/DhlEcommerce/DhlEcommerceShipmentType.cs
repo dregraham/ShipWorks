@@ -377,6 +377,27 @@ namespace ShipWorks.Shipping.Carriers.DhlEcommerce
         }
 
         /// <summary>
+        /// Gets the AvailablePackageTypes for this shipment type and shipment along with their descriptions.
+        /// </summary>
+        public override Dictionary<int, string> BuildPackageTypeDictionary(List<ShipmentEntity> shipments, IExcludedPackageTypeRepository excludedServiceTypeRepository)
+        {
+            // Get valid packaging types
+            List<int> validPackageTypes = Enum.GetValues(typeof(DhlEcommercePackagingType)).Cast<int>().ToList();
+            IEnumerable<int> excludedPackageTypes = GetExcludedPackageTypes(excludedServiceTypeRepository);
+
+            // If there's an existing shipment with a package type that has been excluded, we need to re-add it here
+            if (shipments != null && shipments.Any())
+            {
+                IEnumerable<int> neededPackageTypes = shipments.Select(s => s.DhlEcommerce.PackagingType).Distinct().ToList();
+                excludedPackageTypes = excludedPackageTypes.Except(neededPackageTypes);
+                validPackageTypes.AddRange(neededPackageTypes);
+            }
+
+            return validPackageTypes.Except(excludedPackageTypes)
+                .ToDictionary(t => t, t => EnumHelper.GetDescription((DhlEcommercePackagingType) t));
+        }
+
+        /// <summary>
         /// Load all the label data for the given shipmentID
         /// </summary>
         private static List<TemplateLabelData> LoadLabelData(Func<ShipmentEntity> shipmentFactory)
