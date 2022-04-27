@@ -765,7 +765,6 @@
       </EntityDefinition>
       <EntityDefinition Name="DhlEcommerceProfile" ObjectID="3184e164-6f92-4337-9c4a-8c637c2d4f34">
         <Fields>
-          <Field Name="AncillaryEndorsement" Type="string" IsOptional="true" MaxLength="50" FieldIndex="14" />
           <Field Name="Contents" Type="int" IsOptional="true" Precision="10" FieldIndex="6" />
           <Field Name="CustomsRecipientTin" Type="string" IsOptional="true" MaxLength="25" FieldIndex="9" />
           <Field Name="CustomsTaxIdType" Type="int" IsOptional="true" Precision="10" FieldIndex="10" />
@@ -795,7 +794,6 @@
       </EntityDefinition>
       <EntityDefinition Name="DhlEcommerceShipment" ObjectID="91e3778a-90d7-4e71-9382-adf1709f228c">
         <Fields>
-          <Field Name="AncillaryEndorsement" Type="string" MaxLength="50" FieldIndex="28" />
           <Field Name="Contents" Type="int" Precision="10" FieldIndex="7" />
           <Field Name="CustomsRecipientTin" Type="string" IsOptional="true" MaxLength="25" FieldIndex="13" />
           <Field Name="CustomsTaxIdType" Type="int" IsOptional="true" Precision="10" FieldIndex="14" />
@@ -12065,7 +12063,6 @@
         </EntityMapping>
         <EntityMapping EntityName=":DhlEcommerceProfile" TargetName="ShipWorksLocal:dbo:DhlEcommerceProfile">
           <FieldMappings>
-            <FieldMapping FieldName="AncillaryEndorsement" TargetFieldName="AncillaryEndorsement" />
             <FieldMapping FieldName="Contents" TargetFieldName="Contents" />
             <FieldMapping FieldName="CustomsRecipientTin" TargetFieldName="CustomsRecipientTin" />
             <FieldMapping FieldName="CustomsTaxIdType" TargetFieldName="CustomsTaxIdType" />
@@ -12095,7 +12092,6 @@
         </EntityMapping>
         <EntityMapping EntityName=":DhlEcommerceShipment" TargetName="ShipWorksLocal:dbo:DhlEcommerceShipment">
           <FieldMappings>
-            <FieldMapping FieldName="AncillaryEndorsement" TargetFieldName="AncillaryEndorsement" />
             <FieldMapping FieldName="Contents" TargetFieldName="Contents" />
             <FieldMapping FieldName="CustomsRecipientTin" TargetFieldName="CustomsRecipientTin" />
             <FieldMapping FieldName="CustomsTaxIdType" TargetFieldName="CustomsTaxIdType" />

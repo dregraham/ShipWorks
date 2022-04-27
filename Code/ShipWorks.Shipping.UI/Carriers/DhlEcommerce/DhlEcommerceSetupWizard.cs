@@ -183,8 +183,6 @@ namespace ShipWorks.Shipping.UI.Carriers.DhlEcommerce
                 var shipmentType = shipmentTypeManager.Get(ShipmentTypeCode.DhlEcommerce);
                 var defaultProfile = shippingProfileManager.GetOrCreatePrimaryProfile(shipmentType);
 
-                defaultProfile.DhlEcommerce.AncillaryEndorsement = ancillaryEndorsement.SelectedValue.ToString();
-
                 shippingProfileManager.SaveProfile(defaultProfile);
             }
             catch (Exception ex)

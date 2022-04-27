@@ -105,12 +105,6 @@ namespace ShipWorks.Data.Model.EntityInterfaces
         /// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 300<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
         System.String Reference1 { get; }
-        /// <summary> The AncillaryEndorsement property of the Entity DhlEcommerceProfile<br/><br/>
-        /// </summary>
-        /// <remarks>Mapped on table field: "DhlEcommerceProfile"."AncillaryEndorsement"<br/>
-        /// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 50<br/>
-        /// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
-        System.String AncillaryEndorsement { get; }
         
         IShippingProfileEntity ShippingProfile { get; }
         
