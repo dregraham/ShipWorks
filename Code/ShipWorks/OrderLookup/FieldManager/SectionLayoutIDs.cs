@@ -21,5 +21,6 @@ namespace ShipWorks.OrderLookup.FieldManager
         FedExEmailNotifications,
         UPSReference,
         UPSQuantumViewNotify,
+        DhlEcommerceReference
     }
 }
