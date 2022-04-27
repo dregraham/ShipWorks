@@ -587,6 +587,7 @@
     <Compile Include="Utility\IDateTimeProvider.cs" />
     <Compile Include="Utility\IEnvironmentWrapper.cs" />
     <Compile Include="Utility\ImageExtensions.cs" />
+    <Compile Include="Utility\InternationalServiceAttribute.cs" />
     <Compile Include="Utility\IResult.cs" />
     <Compile Include="Utility\ITelemetryCollection.cs" />
     <Compile Include="Utility\ITimer.cs" />
