@@ -4,6 +4,8 @@ using Interapptive.Shared.Utility;
 using ShipWorks.Shipping.ShipEngine.DTOs;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.DhlEcommerce;
+using ShipWorks.Shipping.Insurance;
+using ShipWorks.Shipping.Services;
 using ShipWorks.Shipping.ShipEngine;
 
 namespace ShipWorks.Shipping.Carriers.Dhl
@@ -69,6 +71,18 @@ namespace ShipWorks.Shipping.Carriers.Dhl
                 deliveredDutyPaid: shipment.DhlEcommerce.DeliveredDutyPaid,
                 nonMachinable: shipment.DhlEcommerce.NonMachinable,
                 saturdayDelivery: shipment.DhlEcommerce.SaturdayDelivery);
+        }
+
+        /// <summary>
+        /// Sets insurance on the package
+        /// </summary>
+        protected override void SetPackageInsurance(ShipmentPackage shipmentPackage, IPackageAdapter packageAdapter)
+        {
+            if (packageAdapter.InsuranceChoice.Insured &&
+                packageAdapter.InsuranceChoice.InsuranceProvider == InsuranceProvider.Carrier)
+            {
+                shipmentPackage.InsuredValue = new MoneyDTO(MoneyDTO.CurrencyEnum.USD, decimal.ToDouble(packageAdapter.InsuranceChoice.InsuranceValue));
+            }
         }
 
         /// <summary>
