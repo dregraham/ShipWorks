@@ -77,6 +77,15 @@ namespace ShipWorks.Shipping.UI.Carriers.DhlEcommerce
             this.saturdayState = new System.Windows.Forms.CheckBox();
             this.dividerOptions = new ComponentFactory.Krypton.Toolkit.KryptonBorderEdge();
             this.groupShipment = new System.Windows.Forms.GroupBox();
+            this.dimensions = new ShipWorks.Shipping.Editing.DimensionsControl();
+            this.labelDimensions = new System.Windows.Forms.Label();
+            this.dimensionsState = new System.Windows.Forms.CheckBox();
+            this.weight = new ShipWorks.UI.Controls.WeightControl();
+            this.labelWeight = new System.Windows.Forms.Label();
+            this.weightState = new System.Windows.Forms.CheckBox();
+            this.labelPackageType = new System.Windows.Forms.Label();
+            this.packageTypeState = new System.Windows.Forms.CheckBox();
+            this.packageType = new ShipWorks.UI.Controls.MultiValueComboBox();
             this.dividerShipment = new ComponentFactory.Krypton.Toolkit.KryptonBorderEdge();
             this.labelService = new System.Windows.Forms.Label();
             this.service = new ShipWorks.UI.Controls.MultiValueComboBox();
@@ -86,15 +95,6 @@ namespace ShipWorks.Shipping.UI.Carriers.DhlEcommerce
             this.accountState = new System.Windows.Forms.CheckBox();
             this.dhlEcommerceAccount = new ShipWorks.UI.Controls.MultiValueComboBox();
             this.dividerFrom = new ComponentFactory.Krypton.Toolkit.KryptonBorderEdge();
-            this.packageType = new ShipWorks.UI.Controls.MultiValueComboBox();
-            this.packageTypeState = new System.Windows.Forms.CheckBox();
-            this.labelPackageType = new System.Windows.Forms.Label();
-            this.weightState = new System.Windows.Forms.CheckBox();
-            this.labelWeight = new System.Windows.Forms.Label();
-            this.weight = new ShipWorks.UI.Controls.WeightControl();
-            this.dimensionsState = new System.Windows.Forms.CheckBox();
-            this.labelDimensions = new System.Windows.Forms.Label();
-            this.dimensions = new ShipWorks.Shipping.Editing.DimensionsControl();
             this.tabControl.SuspendLayout();
             this.tabPageSettings.SuspendLayout();
             this.groupInsurance.SuspendLayout();
@@ -485,7 +485,7 @@ namespace ShipWorks.Shipping.UI.Carriers.DhlEcommerce
             this.resDeliveryState.AutoSize = true;
             this.resDeliveryState.Checked = true;
             this.resDeliveryState.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.resDeliveryState.Location = new System.Drawing.Point(9, 79);
+            this.resDeliveryState.Location = new System.Drawing.Point(9, 107);
             this.resDeliveryState.Name = "resDeliveryState";
             this.resDeliveryState.Size = new System.Drawing.Size(15, 14);
             this.resDeliveryState.TabIndex = 88;
@@ -527,7 +527,7 @@ namespace ShipWorks.Shipping.UI.Carriers.DhlEcommerce
             this.nonMachinableState.AutoSize = true;
             this.nonMachinableState.Checked = true;
             this.nonMachinableState.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.nonMachinableState.Location = new System.Drawing.Point(9, 107);
+            this.nonMachinableState.Location = new System.Drawing.Point(9, 79);
             this.nonMachinableState.Name = "nonMachinableState";
             this.nonMachinableState.Size = new System.Drawing.Size(15, 14);
             this.nonMachinableState.TabIndex = 4;
@@ -643,6 +643,106 @@ namespace ShipWorks.Shipping.UI.Carriers.DhlEcommerce
             this.groupShipment.TabStop = false;
             this.groupShipment.Text = "Shipment";
             // 
+            // dimensions
+            // 
+            this.dimensions.Cleared = false;
+            this.dimensions.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.dimensions.Location = new System.Drawing.Point(116, 101);
+            this.dimensions.Name = "dimensions";
+            this.dimensions.Size = new System.Drawing.Size(210, 77);
+            this.dimensions.TabIndex = 61;
+            // 
+            // labelDimensions
+            // 
+            this.labelDimensions.AutoSize = true;
+            this.labelDimensions.BackColor = System.Drawing.Color.Transparent;
+            this.labelDimensions.Location = new System.Drawing.Point(49, 107);
+            this.labelDimensions.Name = "labelDimensions";
+            this.labelDimensions.Size = new System.Drawing.Size(64, 13);
+            this.labelDimensions.TabIndex = 60;
+            this.labelDimensions.Text = "Dimensions:";
+            // 
+            // dimensionsState
+            // 
+            this.dimensionsState.AutoSize = true;
+            this.dimensionsState.Checked = true;
+            this.dimensionsState.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.dimensionsState.Location = new System.Drawing.Point(9, 107);
+            this.dimensionsState.Name = "dimensionsState";
+            this.dimensionsState.Size = new System.Drawing.Size(15, 14);
+            this.dimensionsState.TabIndex = 59;
+            this.dimensionsState.Tag = "";
+            this.dimensionsState.UseVisualStyleBackColor = true;
+            // 
+            // weight
+            // 
+            this.weight.AutoSize = true;
+            this.weight.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.weight.BackColor = System.Drawing.Color.Transparent;
+            this.weight.ConfigureTelemetryEntityCounts = null;
+            this.weight.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.weight.Location = new System.Drawing.Point(119, 76);
+            this.weight.Name = "weight";
+            this.weight.RangeMax = 300D;
+            this.weight.RangeMin = 0D;
+            this.weight.Size = new System.Drawing.Size(282, 24);
+            this.weight.TabIndex = 58;
+            this.weight.Weight = 0D;
+            // 
+            // labelWeight
+            // 
+            this.labelWeight.AutoSize = true;
+            this.labelWeight.BackColor = System.Drawing.Color.Transparent;
+            this.labelWeight.Location = new System.Drawing.Point(68, 79);
+            this.labelWeight.Name = "labelWeight";
+            this.labelWeight.Size = new System.Drawing.Size(45, 13);
+            this.labelWeight.TabIndex = 57;
+            this.labelWeight.Text = "Weight:";
+            // 
+            // weightState
+            // 
+            this.weightState.AutoSize = true;
+            this.weightState.Checked = true;
+            this.weightState.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.weightState.Location = new System.Drawing.Point(9, 79);
+            this.weightState.Name = "weightState";
+            this.weightState.Size = new System.Drawing.Size(15, 14);
+            this.weightState.TabIndex = 56;
+            this.weightState.Tag = "";
+            this.weightState.UseVisualStyleBackColor = true;
+            // 
+            // labelPackageType
+            // 
+            this.labelPackageType.AutoSize = true;
+            this.labelPackageType.BackColor = System.Drawing.Color.Transparent;
+            this.labelPackageType.Location = new System.Drawing.Point(35, 51);
+            this.labelPackageType.Name = "labelPackageType";
+            this.labelPackageType.Size = new System.Drawing.Size(78, 13);
+            this.labelPackageType.TabIndex = 55;
+            this.labelPackageType.Text = "Package Type:";
+            // 
+            // packageTypeState
+            // 
+            this.packageTypeState.AutoSize = true;
+            this.packageTypeState.Checked = true;
+            this.packageTypeState.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.packageTypeState.Location = new System.Drawing.Point(9, 51);
+            this.packageTypeState.Name = "packageTypeState";
+            this.packageTypeState.Size = new System.Drawing.Size(15, 14);
+            this.packageTypeState.TabIndex = 54;
+            this.packageTypeState.Tag = "";
+            this.packageTypeState.UseVisualStyleBackColor = true;
+            // 
+            // packageType
+            // 
+            this.packageType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.packageType.FormattingEnabled = true;
+            this.packageType.Location = new System.Drawing.Point(119, 48);
+            this.packageType.Name = "packageType";
+            this.packageType.PromptText = "(Multiple Values)";
+            this.packageType.Size = new System.Drawing.Size(206, 21);
+            this.packageType.TabIndex = 53;
+            // 
             // dividerShipment
             // 
             this.dividerShipment.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
@@ -742,106 +842,6 @@ namespace ShipWorks.Shipping.UI.Carriers.DhlEcommerce
             this.dividerFrom.Name = "kryptonBorderEdge1";
             this.dividerFrom.Size = new System.Drawing.Size(1, 28);
             this.dividerFrom.Text = "kryptonBorderEdge1";
-            // 
-            // packageType
-            // 
-            this.packageType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.packageType.FormattingEnabled = true;
-            this.packageType.Location = new System.Drawing.Point(119, 48);
-            this.packageType.Name = "packageType";
-            this.packageType.PromptText = "(Multiple Values)";
-            this.packageType.Size = new System.Drawing.Size(206, 21);
-            this.packageType.TabIndex = 53;
-            // 
-            // packageTypeState
-            // 
-            this.packageTypeState.AutoSize = true;
-            this.packageTypeState.Checked = true;
-            this.packageTypeState.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.packageTypeState.Location = new System.Drawing.Point(9, 51);
-            this.packageTypeState.Name = "packageTypeState";
-            this.packageTypeState.Size = new System.Drawing.Size(15, 14);
-            this.packageTypeState.TabIndex = 54;
-            this.packageTypeState.Tag = "";
-            this.packageTypeState.UseVisualStyleBackColor = true;
-            // 
-            // labelPackageType
-            // 
-            this.labelPackageType.AutoSize = true;
-            this.labelPackageType.BackColor = System.Drawing.Color.Transparent;
-            this.labelPackageType.Location = new System.Drawing.Point(35, 51);
-            this.labelPackageType.Name = "labelPackageType";
-            this.labelPackageType.Size = new System.Drawing.Size(78, 13);
-            this.labelPackageType.TabIndex = 55;
-            this.labelPackageType.Text = "Package Type:";
-            // 
-            // weightState
-            // 
-            this.weightState.AutoSize = true;
-            this.weightState.Checked = true;
-            this.weightState.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.weightState.Location = new System.Drawing.Point(9, 79);
-            this.weightState.Name = "weightState";
-            this.weightState.Size = new System.Drawing.Size(15, 14);
-            this.weightState.TabIndex = 56;
-            this.weightState.Tag = "";
-            this.weightState.UseVisualStyleBackColor = true;
-            // 
-            // labelWeight
-            // 
-            this.labelWeight.AutoSize = true;
-            this.labelWeight.BackColor = System.Drawing.Color.Transparent;
-            this.labelWeight.Location = new System.Drawing.Point(68, 79);
-            this.labelWeight.Name = "labelWeight";
-            this.labelWeight.Size = new System.Drawing.Size(45, 13);
-            this.labelWeight.TabIndex = 57;
-            this.labelWeight.Text = "Weight:";
-            // 
-            // weight
-            // 
-            this.weight.AutoSize = true;
-            this.weight.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.weight.BackColor = System.Drawing.Color.Transparent;
-            this.weight.ConfigureTelemetryEntityCounts = null;
-            this.weight.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.weight.Location = new System.Drawing.Point(119, 76);
-            this.weight.Name = "weight";
-            this.weight.RangeMax = 300D;
-            this.weight.RangeMin = 0D;
-            this.weight.Size = new System.Drawing.Size(282, 24);
-            this.weight.TabIndex = 58;
-            this.weight.Weight = 0D;
-            // 
-            // dimensionsState
-            // 
-            this.dimensionsState.AutoSize = true;
-            this.dimensionsState.Checked = true;
-            this.dimensionsState.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.dimensionsState.Location = new System.Drawing.Point(9, 107);
-            this.dimensionsState.Name = "dimensionsState";
-            this.dimensionsState.Size = new System.Drawing.Size(15, 14);
-            this.dimensionsState.TabIndex = 59;
-            this.dimensionsState.Tag = "";
-            this.dimensionsState.UseVisualStyleBackColor = true;
-            // 
-            // labelDimensions
-            // 
-            this.labelDimensions.AutoSize = true;
-            this.labelDimensions.BackColor = System.Drawing.Color.Transparent;
-            this.labelDimensions.Location = new System.Drawing.Point(49, 107);
-            this.labelDimensions.Name = "labelDimensions";
-            this.labelDimensions.Size = new System.Drawing.Size(64, 13);
-            this.labelDimensions.TabIndex = 60;
-            this.labelDimensions.Text = "Dimensions:";
-            // 
-            // dimensions
-            // 
-            this.dimensions.Cleared = false;
-            this.dimensions.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.dimensions.Location = new System.Drawing.Point(116, 101);
-            this.dimensions.Name = "dimensions";
-            this.dimensions.Size = new System.Drawing.Size(210, 77);
-            this.dimensions.TabIndex = 61;
             // 
             // DhlEcommerceProfileControl
             // 
