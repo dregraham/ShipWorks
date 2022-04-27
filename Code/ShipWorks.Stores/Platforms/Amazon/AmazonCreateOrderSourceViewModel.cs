@@ -8,6 +8,7 @@ using GalaSoft.MvvmLight.CommandWpf;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Net;
 using Interapptive.Shared.UI;
+using log4net;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Platforms.Platform;
 
@@ -24,17 +25,19 @@ namespace ShipWorks.Stores.Platforms.Amazon
         private readonly IWebHelper webHelper;
         private readonly IHubMonoauthClient hubMonoauthClient;
         private readonly IMessageHelper messageHelper;
+        private readonly ILog log;
         private bool openingUrl;
         private AmazonStoreEntity store;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public AmazonCreateOrderSourceViewModel(IWebHelper webHelper, IHubMonoauthClient hubMonoauthClient, IMessageHelper messageHelper)
+        public AmazonCreateOrderSourceViewModel(IWebHelper webHelper, IHubMonoauthClient hubMonoauthClient, IMessageHelper messageHelper, Func<Type, ILog> logFactory)
         {
             this.webHelper = webHelper;
             this.hubMonoauthClient = hubMonoauthClient;
             this.messageHelper = messageHelper;
+            log = logFactory(typeof(AmazonCreateOrderSourceViewModel));
 
             GetOrderSourceId = new RelayCommand(async () => await GetOrderSourceIdCommand().ConfigureAwait(true));
         }
@@ -98,7 +101,7 @@ namespace ShipWorks.Stores.Platforms.Amazon
         {
             if (!Decode(EncodedOrderSource, store))
             {
-                Console.WriteLine("Failed to decode the encoded order source.");
+                log.Error("Failed to decode the encoded order source.");
             }
         }
 
@@ -115,7 +118,7 @@ namespace ShipWorks.Stores.Platforms.Amazon
         /// <summary>
         /// Decodes the provided value and if successful populates the store's data fields.
         /// </summary>
-        private static bool Decode(string encodedOrderSource, AmazonStoreEntity store)
+        private bool Decode(string encodedOrderSource, AmazonStoreEntity store)
         {
             try
             {
@@ -125,7 +128,7 @@ namespace ShipWorks.Stores.Platforms.Amazon
 
                 if (splitString.Length != 3)
                 {
-                    Console.WriteLine("The provided Base64 string did not have 3 sections separated by the '_' character.");
+                    log.Error("The provided Base64 string did not have 3 sections separated by the '_' character.");
                     return false;
                 }
 
@@ -137,7 +140,7 @@ namespace ShipWorks.Stores.Platforms.Amazon
             }
             catch (Exception e)
             {
-                Console.WriteLine(e);
+                log.Error(e);
                 return false;
             }
         }
