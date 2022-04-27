@@ -6,21 +6,20 @@ using System.Threading.Tasks;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Enums;
 using Interapptive.Shared.Utility;
-using ShipWorks.Shipping.Tracking;
+using ShipWorks.ApplicationCore.Licensing;
 using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Common.IO.Hardware.Printers;
 using ShipWorks.Data;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
+using ShipWorks.Editions;
 using ShipWorks.Shipping.Carriers.BestRate;
 using ShipWorks.Shipping.Editing;
 using ShipWorks.Shipping.Insurance;
 using ShipWorks.Shipping.Services;
 using ShipWorks.Shipping.Settings;
 using ShipWorks.Shipping.ShipEngine;
-using ShipEngine.CarrierApi.Client.Model;
-using ShipWorks.ApplicationCore.Licensing;
-using ShipWorks.Editions;
+using ShipWorks.Shipping.Tracking;
 using ShipWorks.Templates.Processing.TemplateXml.ElementOutlines;
 
 namespace ShipWorks.Shipping.Carriers.DhlEcommerce
@@ -267,7 +266,7 @@ namespace ShipWorks.Shipping.Carriers.DhlEcommerce
         public override IBestRateShippingBroker GetShippingBroker(ShipmentEntity shipment, IBestRateExcludedAccountRepository bestRateExcludedAccountRepository)
         {
             IEnumerable<long> excludedAccounts = bestRateExcludedAccountRepository.GetAll();
-            
+
             // TODO: DHLECommerce update for best rate
             //IEnumerable<IDhlEcommerceAccountEntity> nonExcludedAccounts = DhlEcommerceAccountManager.AccountsReadOnly.Where(a => !excludedAccounts.Contains(a.AccountId));
 
@@ -312,7 +311,7 @@ namespace ShipWorks.Shipping.Carriers.DhlEcommerce
             try
             {
                 string labelID = shipment.DhlEcommerce?.ShipEngineLabelID;
-                TrackingInformation trackingInfo;
+                ShipEngine.DTOs.TrackingInformation trackingInfo;
                 if (string.IsNullOrWhiteSpace(labelID))
                 {
                     trackingInfo = Task.Run(() =>

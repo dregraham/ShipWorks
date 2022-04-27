@@ -5,7 +5,7 @@ using Autofac.Extras.Moq;
 using Interapptive.Shared.Enums;
 using Interapptive.Shared.Utility;
 using Moq;
-using ShipEngine.CarrierApi.Client.Model;
+using ShipWorks.Shipping.ShipEngine.DTOs;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.Asendia;
 using ShipWorks.Shipping.Services;

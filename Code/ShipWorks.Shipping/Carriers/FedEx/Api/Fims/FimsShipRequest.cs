@@ -16,9 +16,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Fims
         /// </summary>
         public FimsShipRequest(ShipmentEntity shipment, string username, string password)
         {
-            this.Shipment = shipment;
-            this.Username = username;
-            this.Password = password;
+            Shipment = shipment;
+            Username = username;
+            Password = password;
         }
 
         /// <summary>

@@ -4,13 +4,13 @@ using System.Linq;
 using System.Threading.Tasks;
 using Autofac.Extras.Moq;
 using Moq;
-using ShipEngine.CarrierApi.Client.Model;
 using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.Dhl;
 using ShipWorks.Shipping.ShipEngine;
 using ShipWorks.Tests.Shared;
 using Xunit;
+using ShipWorks.Shipping.ShipEngine.DTOs;
 
 namespace ShipWorks.Shipping.Tests.Carriers.DhlExpress.API.ShipEngine
 {

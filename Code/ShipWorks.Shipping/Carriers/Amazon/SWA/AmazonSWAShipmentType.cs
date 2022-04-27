@@ -7,7 +7,6 @@ using Interapptive.Shared;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Utility;
 using SD.LLBLGen.Pro.ORMSupportClasses;
-using ShipEngine.CarrierApi.Client.Model;
 using ShipWorks.ApplicationCore.Licensing;
 using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Common.IO.Hardware.Printers;
@@ -350,7 +349,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon.SWA
         {
             try
             {
-                TrackingInformation trackingInfo = Task.Run(() =>
+                ShipEngine.DTOs.TrackingInformation trackingInfo = Task.Run(() =>
                 {
                     return shipEngineWebClient.Track(shipment.AmazonSWA.ShipEngineLabelID, ApiLogSource.AmazonSWA);
                 }).Result;

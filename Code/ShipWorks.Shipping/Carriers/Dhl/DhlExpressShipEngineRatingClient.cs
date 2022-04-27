@@ -9,7 +9,7 @@ using Interapptive.Shared.ComponentRegistration;
 using Autofac.Features.Indexed;
 using Interapptive.Shared.Utility;
 using System.Collections.Generic;
-using ShipEngine.CarrierApi.Client.Model;
+using ShipWorks.Shipping.ShipEngine.DTOs;
 
 namespace ShipWorks.Shipping.Carriers.Dhl
 {

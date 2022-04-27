@@ -107,7 +107,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon.SWA
         /// </summary>
         void ICheckForChangesNeeded.CheckForChangesNeeded()
         {
-            AmazonSWAAccountManager.CheckForChangesNeeded();
+            CheckForChangesNeeded();
         }
 
         /// <summary>
