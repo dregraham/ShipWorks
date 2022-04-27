@@ -2,6 +2,7 @@
 using System.Linq;
 using Interapptive.Shared.Utility;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Shipping.Insurance;
 using ShipWorks.Shipping.Services;
 using ShipWorks.Shipping.ShipEngine.DTOs;
 
@@ -64,6 +65,18 @@ namespace ShipWorks.Shipping.ShipEngine
                 request.Shipment.Customs = CreateCustoms(shipment);
             }
 
+            // TODO: DHL eCommerce - Set to "Thirdparty" if using ShipWorks insurance
+            if (shipment.Insurance &&
+                shipment.InsuranceProvider == (int) InsuranceProvider.Carrier)
+            {
+                request.Shipment.InsuranceProvider = Shipment.InsuranceProviderEnum.Carrier;
+            }
+
+            if (request.Shipment.Packages.Any())
+            {
+                request.Shipment.Packages.First().LabelMessages.Reference1 = shipment.DhlEcommerce.Reference1;
+            }
+
             return request;
         }
 
@@ -100,6 +113,18 @@ namespace ShipWorks.Shipping.ShipEngine
                 }
 
                 request.Shipment.Packages = shipmentElementFactory.CreatePackageForRating(packages, SetPackageInsurance);
+
+                // TODO: DHL eCommerce - Set to "Thirdparty" if using ShipWorks insurance
+                if (shipment.Insurance &&
+                    shipment.InsuranceProvider == (int) InsuranceProvider.Carrier)
+                {
+                    request.Shipment.InsuranceProvider = AddressValidatingShipment.InsuranceProviderEnum.Carrier;
+                }
+
+                if (request.Shipment.Packages.Any())
+                {
+                    request.Shipment.Packages.First().LabelMessages.Reference1 = shipment.DhlEcommerce.Reference1;
+                }
 
                 return request;
             }

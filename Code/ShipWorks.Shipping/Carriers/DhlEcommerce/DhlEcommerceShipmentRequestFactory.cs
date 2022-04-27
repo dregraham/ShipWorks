@@ -1,8 +1,11 @@
 ﻿using System.Collections.Generic;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Utility;
-using ShipEngine.CarrierApi.Client.Model;
+using ShipWorks.Shipping.ShipEngine.DTOs;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Shipping.Carriers.DhlEcommerce;
+using ShipWorks.Shipping.Insurance;
+using ShipWorks.Shipping.Services;
 using ShipWorks.Shipping.ShipEngine;
 
 namespace ShipWorks.Shipping.Carriers.DhlEcommerce
@@ -31,7 +34,7 @@ namespace ShipWorks.Shipping.Carriers.DhlEcommerce
         }
 
         /// <summary>
-        /// Ensures the DHL Ecommerce shipment is not null
+        /// Ensures the DHL eCommerce shipment is not null
         /// </summary>
         protected override void EnsureCarrierShipmentIsNotNull(ShipmentEntity shipment)
         {
@@ -68,6 +71,18 @@ namespace ShipWorks.Shipping.Carriers.DhlEcommerce
                 deliveredDutyPaid: shipment.DhlEcommerce.DeliveredDutyPaid,
                 nonMachinable: shipment.DhlEcommerce.NonMachinable,
                 saturdayDelivery: shipment.DhlEcommerce.SaturdayDelivery);
+        }
+
+        /// <summary>
+        /// Sets insurance on the package
+        /// </summary>
+        protected override void SetPackageInsurance(ShipmentPackage shipmentPackage, IPackageAdapter packageAdapter)
+        {
+            if (packageAdapter.InsuranceChoice.Insured &&
+                packageAdapter.InsuranceChoice.InsuranceProvider == InsuranceProvider.Carrier)
+            {
+                shipmentPackage.InsuredValue = new MoneyDTO(MoneyDTO.CurrencyEnum.USD, decimal.ToDouble(packageAdapter.InsuranceChoice.InsuranceValue));
+            }
         }
 
         /// <summary>

@@ -41,8 +41,6 @@ namespace ShipWorks.Shipping.Carriers.DhlEcommerce
 
             try
             {
-                IDhlEcommerceAccountEntity account = accountRepository.GetAccountReadOnly(shipment);
-
                 return shipEngineRatingClient.GetRates(shipment);
             }
             catch (Exception ex)

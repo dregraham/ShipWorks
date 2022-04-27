@@ -4,7 +4,6 @@ using System.Runtime.Serialization;
 namespace ShipWorks.Shipping.Carriers.DhlEcommerce
 {
     /// <summary>
-    /// Base exception for all exceptions thrown by the DHL eCommerce integration.
     /// </summary>
     [Serializable]
     public class DhlEcommerceException : Exception

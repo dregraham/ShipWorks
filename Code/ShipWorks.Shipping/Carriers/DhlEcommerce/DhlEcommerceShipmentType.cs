@@ -279,6 +279,12 @@ namespace ShipWorks.Shipping.Carriers.DhlEcommerce
         }
 
         /// <summary>
+        /// Get the dims weight from a shipment, if any
+        /// </summary>
+        protected override double GetDimsWeight(IShipmentEntity shipment) =>
+            shipment.DhlEcommerce?.DimsAddWeight == true ? shipment.DhlEcommerce.DimsWeight : 0;
+
+        /// <summary>
         /// Saves the requested label format to the child shipment
         /// </summary>
         public override void SaveRequestedLabelFormat(ThermalLanguage requestedLabelFormat, ShipmentEntity shipment)
