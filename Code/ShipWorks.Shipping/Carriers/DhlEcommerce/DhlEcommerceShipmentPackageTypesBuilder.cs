@@ -11,6 +11,9 @@ using ShipWorks.Shipping.Settings;
 
 namespace ShipWorks.Shipping.Carriers.DhlEcommerce
 {
+    /// <summary>
+    /// Tool to build collection with package type number and string based on shipments
+    /// </summary>
     [KeyedComponent(typeof(IShipmentPackageTypesBuilder), ShipmentTypeCode.DhlEcommerce, SingleInstance = true)]
     public class DhlEcommerceShipmentPackageTypesBuilder : IShipmentPackageTypesBuilder
     {
