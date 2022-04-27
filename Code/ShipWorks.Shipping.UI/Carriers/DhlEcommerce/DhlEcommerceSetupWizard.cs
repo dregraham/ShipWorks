@@ -18,7 +18,7 @@ using ShipWorks.Shipping.Profiles;
 using ShipWorks.Shipping.Settings;
 using ShipWorks.Shipping.Settings.WizardPages;
 using ShipWorks.Shipping.ShipEngine;
-using ShipWorks.Shipping.ShipEngine.DTOs.Registration;
+using ShipWorks.Shipping.ShipEngine.DTOs.CarrierAccount;
 using ShipWorks.UI.Wizard;
 
 namespace ShipWorks.Shipping.UI.Carriers.DhlEcommerce
@@ -170,12 +170,12 @@ namespace ShipWorks.Shipping.UI.Carriers.DhlEcommerce
                     account.CreatedDate = DateTime.Now;
                 }
 
-                var secureText = encryptionProviderFactory.CreateSecureTextEncryptionProvider(pickupNumber.Text);
+                var secureText = encryptionProviderFactory.CreateSecureTextEncryptionProvider(clientId.Text);
 
                 account.ShipEngineCarrierId = result.Value;
-                account.ClientId = pickupNumber.Text;
+                account.ClientId = clientId.Text;
                 account.ApiSecret = secureText.Encrypt(apiSecret.Text);
-                account.PickupNumber = clientId.Text;
+                account.PickupNumber = pickupNumber.Text;
                 account.DistributionCenter = distributionCenters.SelectedValue?.ToString() ?? distributionCenters.Text;
                 account.SoldTo = soldTo.Text;
                 account.Description = accountDescription.Text;

@@ -41,7 +41,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Fims
         {
             this.webClient = webClient;
             this.settingsRepository = settingsRepository;
-            this.log = getLog(GetType());
+            log = getLog(GetType());
             this.labelRepository = labelRepository;
         }
 

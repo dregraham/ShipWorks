@@ -19,7 +19,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.GlobalShipAddress.Response
         /// </summary>
         public FedExGlobalShipAddressResponse(SearchLocationsReply reply)
         {
-            this.nativeResponse = reply;
+            nativeResponse = reply;
         }
 
         /// <summary>

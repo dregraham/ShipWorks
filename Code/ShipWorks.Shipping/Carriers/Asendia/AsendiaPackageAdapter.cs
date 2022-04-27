@@ -26,7 +26,7 @@ namespace ShipWorks.Shipping.Carriers.Asendia
             MethodConditions.EnsureArgumentIsNotNull(shipment.Asendia, nameof(shipment.Asendia));
 
             this.shipment = shipment;
-            this.InsuranceChoice = new InsuranceChoice(shipment, shipment.Asendia, shipment.Asendia, null);
+            InsuranceChoice = new InsuranceChoice(shipment, shipment.Asendia, shipment.Asendia, null);
         }
 
         /// <summary>

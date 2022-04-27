@@ -1,5 +1,4 @@
-﻿using ShipEngine.CarrierApi.Client.Model;
-using ShipWorks.Data.Model.EntityClasses;
+﻿using ShipWorks.Data.Model.EntityClasses;
 
 namespace ShipWorks.Shipping.ShipEngine
 {
@@ -11,16 +10,16 @@ namespace ShipWorks.Shipping.ShipEngine
         /// <summary>
         /// Creates a RateShipmentRequest with carrier specific details from the given shipment
         /// </summary>
-        RateShipmentRequest CreateRateShipmentRequest(ShipmentEntity shipment);
+        DTOs.RateShipmentRequest CreateRateShipmentRequest(ShipmentEntity shipment);
 
         /// <summary>
         /// Create a PurchaseLabelWithoutShipmentRequest
         /// </summary>
-        PurchaseLabelWithoutShipmentRequest CreatePurchaseLabelWithoutShipmentRequest(ShipmentEntity shipment);
+        DTOs.PurchaseLabelWithoutShipmentRequest CreatePurchaseLabelWithoutShipmentRequest(ShipmentEntity shipment);
 
         /// <summary>
         /// Creates a PurchaseLabelRequest with carrier specific details from the given shipment
         /// </summary>
-        PurchaseLabelRequest CreatePurchaseLabelRequest(ShipmentEntity shipment);
+        DTOs.PurchaseLabelRequest CreatePurchaseLabelRequest(ShipmentEntity shipment);
     }
 }
