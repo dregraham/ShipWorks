@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Windows.Forms;
-using ShipWorks.Shipping.Editing;
 using Autofac;
+using ShipWorks.Shipping.Editing;
 
 namespace ShipWorks.Shipping
 {
@@ -38,7 +38,7 @@ namespace ShipWorks.Shipping
                 cacheKey == DefaultCustomsControlBaseCacheKey ?
                 new CustomsControlBase() :
                 shipmentType.CreateCustomsControl(lifetimeScope);
-            
+
             customsControl.Initialize();
             customsControl.Dock = DockStyle.Fill;
 
@@ -61,24 +61,23 @@ namespace ShipWorks.Shipping
             {
                 case ShipmentTypeCode.UpsOnLineTools:
                 case ShipmentTypeCode.UpsWorldShip:
-                    return (int)ShipmentTypeCode.UpsOnLineTools;
+                    return (int) ShipmentTypeCode.UpsOnLineTools;
 
                 case ShipmentTypeCode.Usps:
                 case ShipmentTypeCode.Endicia:
                 case ShipmentTypeCode.PostalWebTools:
                 case ShipmentTypeCode.Express1Endicia:
                 case ShipmentTypeCode.Express1Usps:
-                    return (int)ShipmentTypeCode.Usps;
+                    return (int) ShipmentTypeCode.Usps;
 
                 case ShipmentTypeCode.FedEx:
-                    return (int)ShipmentTypeCode.FedEx;
+                    return (int) ShipmentTypeCode.FedEx;
 
                 case ShipmentTypeCode.DhlExpress:
-                    return (int)ShipmentTypeCode.DhlExpress;
+                    return (int) ShipmentTypeCode.DhlExpress;
 
-                // TODO: DHLECommerce implement
-                //case ShipmentTypeCode.DhlEcommerce:
-                //    return (int) ShipmentTypeCode.DhlEcommerce;
+                case ShipmentTypeCode.DhlEcommerce:
+                    return (int) ShipmentTypeCode.DhlEcommerce;
 
                 case ShipmentTypeCode.Asendia:
                     return (int) ShipmentTypeCode.Asendia;

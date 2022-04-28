@@ -56,7 +56,10 @@
             this.sectionContents.ContentPanel.Controls.Add(this.groupSelectedContent);
             this.sectionContents.ContentPanel.Controls.Add(this.delete);
             this.sectionContents.ContentPanel.Controls.Add(this.add);
-            this.sectionContents.Location = new System.Drawing.Point(6, 232);
+            this.sectionContents.Location = new System.Drawing.Point(6, 210);
+            this.sectionContents.MinimumSize = new System.Drawing.Size(480, 362);
+            this.sectionContents.Size = new System.Drawing.Size(480, 362);
+            this.sectionContents.Load += new System.EventHandler(this.sectionContents_Load);
             // 
             // label1
             // 
@@ -87,23 +90,23 @@
             this.sectionGeneral.ContentPanel.Controls.Add(this.labelCustomsRecipientIssuingAuthority);
             this.sectionGeneral.ContentPanel.Controls.Add(this.customsRecipientIssuingAuthority);
             this.sectionGeneral.Location = new System.Drawing.Point(6, 5);
-            this.sectionGeneral.Size = new System.Drawing.Size(538, 200);
+            this.sectionGeneral.Size = new System.Drawing.Size(480, 200);
             // 
             // groupSelectedContent
             // 
-            this.groupSelectedContent.Size = new System.Drawing.Size(692, 190);
+            this.groupSelectedContent.Size = new System.Drawing.Size(643, 190);
             // 
             // add
             // 
-            this.add.Location = new System.Drawing.Point(641, 10);
+            this.add.Location = new System.Drawing.Point(407, 10);
             // 
             // delete
             // 
-            this.delete.Location = new System.Drawing.Point(641, 37);
+            this.delete.Location = new System.Drawing.Point(407, 37);
             // 
             // itemsGrid
             // 
-            this.itemsGrid.Size = new System.Drawing.Size(627, 116);
+            this.itemsGrid.Size = new System.Drawing.Size(393, 116);
             // 
             // contentType
             // 
@@ -207,8 +210,9 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.MinimumSize = new System.Drawing.Size(489, 525);
             this.Name = "AsendiaCustomsControl";
-            this.Size = new System.Drawing.Size(428, 525);
+            this.Size = new System.Drawing.Size(472, 525);
             ((System.ComponentModel.ISupportInitialize)(this.sectionContents.ContentPanel)).EndInit();
             this.sectionContents.ContentPanel.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.sectionContents)).EndInit();

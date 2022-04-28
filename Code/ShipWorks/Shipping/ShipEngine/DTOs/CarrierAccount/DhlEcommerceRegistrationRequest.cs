@@ -1,8 +1,11 @@
-﻿namespace ShipWorks.Shipping.ShipEngine.DTOs.Registration
+using System.Reflection;
+
+namespace ShipWorks.Shipping.ShipEngine.DTOs.CarrierAccount
 {
     /// <summary>
     /// Request DTO for registering 
     /// </summary>
+    [Obfuscation(Exclude = true)]
     public class DhlEcommerceRegistrationRequest
     {
         public string Nickname { get; set; }

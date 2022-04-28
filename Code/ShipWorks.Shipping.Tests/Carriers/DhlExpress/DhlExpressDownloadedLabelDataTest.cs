@@ -4,7 +4,7 @@ using Autofac;
 using Autofac.Extras.Moq;
 using Interapptive.Shared.Pdf;
 using Moq;
-using ShipEngine.CarrierApi.Client.Model;
+using ShipWorks.Shipping.ShipEngine.DTOs;
 using ShipWorks.Data;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.Dhl.API.ShipEngine;

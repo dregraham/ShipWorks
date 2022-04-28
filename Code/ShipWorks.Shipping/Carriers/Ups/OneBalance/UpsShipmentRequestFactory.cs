@@ -2,7 +2,7 @@
 using System.Linq;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Utility;
-using ShipEngine.CarrierApi.Client.Model;
+using ShipWorks.Shipping.ShipEngine.DTOs;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Shipping.Carriers.Ups.ShipEngine;
@@ -153,7 +153,7 @@ namespace ShipWorks.Shipping.Carriers.Ups.OneBalance
         protected override void SetPackageInsurance(ShipmentPackage shipmentPackage, IPackageAdapter packageAdapter)
         {
             if (packageAdapter.InsuranceChoice.Insured && 
-                packageAdapter.InsuranceChoice.InsuranceProvider == Insurance.InsuranceProvider.Carrier)
+                packageAdapter.InsuranceChoice.InsuranceProvider == InsuranceProvider.Carrier)
             {
                 shipmentPackage.InsuredValue = new MoneyDTO(MoneyDTO.CurrencyEnum.USD, decimal.ToDouble(packageAdapter.InsuranceChoice.InsuranceValue));
             }

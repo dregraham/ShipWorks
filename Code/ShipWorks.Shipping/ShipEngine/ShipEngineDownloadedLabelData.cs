@@ -2,11 +2,10 @@
 using System.IO;
 using Interapptive.Shared.Pdf;
 using Interapptive.Shared.Utility;
-using ShipEngine.CarrierApi.Client.Model;
 using ShipWorks.Common.IO.Hardware.Printers;
 using ShipWorks.Data;
 using ShipWorks.Data.Model.EntityClasses;
-using static ShipEngine.CarrierApi.Client.Model.Label;
+using ShipWorks.Shipping.ShipEngine.DTOs;
 
 namespace ShipWorks.Shipping.ShipEngine
 {
@@ -46,10 +45,10 @@ namespace ShipWorks.Shipping.ShipEngine
 
             switch (label.LabelFormat)
             {
-                case LabelFormatEnum.Pdf:
+                case Label.LabelFormatEnum.Pdf:
                     SavePdfLabel(labelResource);
                     break;
-                case LabelFormatEnum.Zpl:
+                case Label.LabelFormatEnum.Zpl:
                     shipment.ActualLabelFormat = (int) ThermalLanguage.ZPL;
                     SaveZplLabel(labelResource);
                     break;

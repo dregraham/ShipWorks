@@ -1,13 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
-using ShipWorks.Shipping.Editing;
-using Interapptive.Shared.Utility;
-using ShipWorks.UI.Controls;
-using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Shipping.ShipEngine;
-using Interapptive.Shared.Enums;
-using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Business.Geography;
+using Interapptive.Shared.ComponentRegistration;
+using Interapptive.Shared.Enums;
+using Interapptive.Shared.Utility;
+using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Shipping.Editing;
+using ShipWorks.Shipping.ShipEngine;
+using ShipWorks.UI.Controls;
 
 namespace ShipWorks.Shipping.UI.Carriers.Asendia
 {
@@ -59,6 +59,9 @@ namespace ShipWorks.Shipping.UI.Carriers.Asendia
 
             contentType.SelectedIndexChanged -= this.OnChangeOption;
             nonDeliveryType.SelectedIndexChanged -= this.OnChangeOption;
+            customsRecipientTIN.TextChanged -= this.OnChangeOption;
+            customsRecipientTINType.SelectedIndexChanged -= this.OnChangeOption;
+            customsRecipientIssuingAuthority.SelectedIndexChanged -= this.OnChangeOption;
 
             using (MultiValueScope scope = new MultiValueScope())
             {
@@ -81,6 +84,9 @@ namespace ShipWorks.Shipping.UI.Carriers.Asendia
 
             contentType.SelectedIndexChanged += OnChangeOption;
             nonDeliveryType.SelectedIndexChanged += OnChangeOption;
+            customsRecipientTIN.TextChanged += this.OnChangeOption;
+            customsRecipientTINType.SelectedIndexChanged += this.OnChangeOption;
+            customsRecipientIssuingAuthority.SelectedIndexChanged += this.OnChangeOption;
         }
 
         /// <summary>
@@ -91,7 +97,10 @@ namespace ShipWorks.Shipping.UI.Carriers.Asendia
             foreach (ShipmentEntity shipment in LoadedShipments)
             {
                 contentType.ReadMultiValue(v => shipment.Asendia.Contents = (int) (ShipEngineContentsType) v);
-                contentType.ReadMultiValue(v => shipment.Asendia.NonDelivery = (int) (ShipEngineNonDeliveryType) v);
+                nonDeliveryType.ReadMultiValue(v => shipment.Asendia.NonDelivery = (int) (ShipEngineNonDeliveryType) v);
+                customsRecipientTIN.ReadMultiText(t => shipment.Asendia.CustomsRecipientTin = t);
+                customsRecipientTINType.ReadMultiValue(v => shipment.Asendia.CustomsRecipientTinType = (int) (TaxIdType) v);
+                customsRecipientIssuingAuthority.ReadMultiText(v => shipment.Asendia.CustomsRecipientIssuingAuthority = Geography.GetCountryCode(v));
             }
 
         }
@@ -111,6 +120,11 @@ namespace ShipWorks.Shipping.UI.Carriers.Asendia
                 customsRecipientTINType.ReadMultiValue(v => shipment.Asendia.CustomsRecipientTinType = (int) (TaxIdType) v);
                 customsRecipientIssuingAuthority.ReadMultiText(v => shipment.Asendia.CustomsRecipientIssuingAuthority = Geography.GetCountryCode(v));
             }
+        }
+
+        private void sectionContents_Load(object sender, EventArgs e)
+        {
+
         }
     }
 }
