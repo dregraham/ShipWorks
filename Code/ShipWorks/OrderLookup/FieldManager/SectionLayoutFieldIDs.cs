@@ -63,6 +63,9 @@ namespace ShipWorks.OrderLookup.FieldManager
 
         /* UPS Reference Fields */
         UPSReferenceReferenceNumber,
-        UPSReferenceReferenceNumber2
+        UPSReferenceReferenceNumber2,
+
+        /* DHL Ecommerce Reference Fields */
+        DhlEcommerceReferenceNumber
     }
 }

@@ -20,6 +20,7 @@ namespace ShipWorks.OrderLookup.Controls.To
     [KeyedComponent(typeof(IToViewModel), ShipmentTypeCode.BestRate)]
     [KeyedComponent(typeof(IToViewModel), ShipmentTypeCode.AmazonSWA)]
     [KeyedComponent(typeof(IToViewModel), ShipmentTypeCode.Endicia)]
+    [KeyedComponent(typeof(IToViewModel), ShipmentTypeCode.DhlEcommerce)]
     [WpfView(typeof(GenericToControl))]
     public class GenericToViewModel : OrderLookupViewModelBase, IToViewModel
     {
