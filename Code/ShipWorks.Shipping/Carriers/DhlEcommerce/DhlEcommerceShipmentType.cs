@@ -261,6 +261,11 @@ namespace ShipWorks.Shipping.Carriers.DhlEcommerce
         protected override bool IsCustomsRequiredByShipment(IShipmentEntity shipment) => shipment.ShipCountryCode != shipment.OriginCountryCode;
 
         /// <summary>
+        /// DHl eCommerce uses residential status
+        /// </summary>
+        public override bool IsResidentialStatusRequired(IShipmentEntity shipment) => true;
+
+        /// <summary>
         /// Gets a ShippingBroker
         /// </summary>
         public override IBestRateShippingBroker GetShippingBroker(ShipmentEntity shipment, IBestRateExcludedAccountRepository bestRateExcludedAccountRepository)
