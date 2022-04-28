@@ -106,12 +106,6 @@
       <HintPath>..\..\packages\SD.LLBLGen.Pro.ORMSupportClasses.5.1.2\lib\net45\SD.LLBLGen.Pro.ORMSupportClasses.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="ShipEngine.ApiClient, Version=1.0.0.0, Culture=neutral, PublicKeyToken=372d6fd19cbc5d92, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\Signed.ShipEngine.ApiClient.1.1.3\lib\net46\ShipEngine.ApiClient.dll</HintPath>
-    </Reference>
-    <Reference Include="ShipEngine.CarrierApi.Client, Version=1.0.0.0, Culture=neutral, PublicKeyToken=c5149f357886d5cf, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\ShipEngine.CarrierApi.Client.1.2.1\lib\net46\ShipEngine.CarrierApi.Client.dll</HintPath>
-    </Reference>
     <Reference Include="Syncfusion.Compression.Base, Version=16.1460.0.26, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89, processorArchitecture=MSIL">
       <HintPath>..\..\packages\Syncfusion.Compression.Base46.16.1.0.26\lib\net46\Syncfusion.Compression.Base.dll</HintPath>
     </Reference>
@@ -229,17 +223,21 @@
     <Compile Include="Carriers\BestRate\Footnote\CounterRatesInvalidStoreAddressFootnoteViewModel.cs" />
     <Compile Include="Carriers\BestRate\Footnote\ShippingAccountRequiredForRatingFootnoteViewModel.cs" />
     <Compile Include="Carriers\DhlEcommerce\API\IDhlEcommerceLabelClient.cs" />
+    <Compile Include="Carriers\DhlEcommerce\DhlEcommerceAccountManager.cs" />
     <Compile Include="Carriers\DhlEcommerce\API\ShipEngine\DhlEcommerceShipEngineDownloadedLabelData.cs" />
     <Compile Include="Carriers\DhlEcommerce\API\ShipEngine\DhlEcommerceShipEngineLabelClient.cs" />
     <Compile Include="Carriers\DhlEcommerce\DhlEcommerceAccountRepository.cs" />
+    <Compile Include="Carriers\DhlEcommerce\DhlEcommerceServicesBuilder.cs" />
+    <Compile Include="Carriers\DhlEcommerce\DhlEcommerceShipmentPackageTypesBuilder.cs" />
     <Compile Include="Carriers\DhlEcommerce\DhlEcommerceShipmentType.cs" />
     <Compile Include="Carriers\DhlEcommerce\DhlEcommerceShippingProfileApplicationStrategy.cs" />
     <Compile Include="Carriers\DhlEcommerce\DhlEcommerceRateHashingService.cs" />
     <Compile Include="Carriers\DhlEcommerce\DhlEcommerceRatingService.cs" />
     <Compile Include="Carriers\DhlEcommerce\DhlEcommerceLabelService.cs" />
+    <Compile Include="Carriers\DhlEcommerce\Enums\DhlEcommerceDistributionCenters.cs" />
     <Compile Include="Carriers\DhlEcommerce\IDhlEcommerceShipmentAdapter.cs" />
     <Compile Include="Carriers\DhlEcommerce\IDhlEcommerceAccountRepository.cs" />
-    <Compile Include="Carriers\DhlEcommerce\DhlEcommerceDistributionCenters.cs" />
+    <Compile Include="Carriers\DhlEcommerce\Enums\DhlEcommerceAncillaryEndorsement.cs" />
     <Compile Include="Carriers\Dhl\API\DhlExpressLabelClientFactory.cs" />
     <Compile Include="Carriers\Dhl\API\IDhlExpressLabelClient.cs" />
     <Compile Include="Carriers\Dhl\API\IDhlExpressLabelClientFactory.cs" />
@@ -636,7 +634,7 @@
     <Compile Include="ShipEngine\DTOs\Registration\UpsRegistrationRequestFactory.cs" />
     <Compile Include="ShipEngine\DTOs\Registration\UpsRegistrationResponse.cs" />
     <Compile Include="ShipEngine\ICarrierShipmentRequestFactory.cs" />
-    <Compile Include="ShipEngine\IShipEngineApiFactory.cs" />
+    <Compile Include="ShipEngine\IProxiedShipEngineWebClient.cs" />
     <Compile Include="ShipEngine\IShipEngineApiKey.cs" />
     <Compile Include="ShipEngine\IShipEnginePartnerWebClient.cs" />
     <Compile Include="ShipEngine\IShipEngineRateGroupFactory.cs" />
@@ -644,10 +642,11 @@
     <Compile Include="ShipEngine\IShipEngineResourceDownloader.cs" />
     <Compile Include="ShipEngine\IShipEngineTrackingResultFactory.cs" />
     <Compile Include="ShipEngine\IUpsCredentials.cs" />
-    <Compile Include="ShipEngine\ShipEngineApiFactory.cs" />
+    <Compile Include="ShipEngine\ProxiedShipEngineWebClient.cs" />
     <Compile Include="ShipEngine\ShipEngineApiKey.cs" />
     <Compile Include="ShipEngine\ShipEngineContentsType.cs" />
     <Compile Include="ShipEngine\ShipEngineDownloadedLabelData.cs" />
+    <Compile Include="ShipEngine\ShipEngineEndpoints.cs" />
     <Compile Include="ShipEngine\ShipEngineException.cs" />
     <Compile Include="ShipEngine\ShipEngineLabelService.cs" />
     <Compile Include="ShipEngine\ShipEngineNonDeliveryType.cs" />

@@ -240,5 +240,11 @@ namespace ShipWorks.Editions
         /// </summary>
         [Description("Your ShipWorks account does not support using warehouse functionality.")]
         Warehouse,
+
+        /// <summary>
+        /// Controls if DHL eCommerce Max 
+        /// </summary>
+        [Description("Your ShipWorks account does not support shipping with DHL eCommerce Max.")]
+        DhlEcommerceMax,
     }
 }

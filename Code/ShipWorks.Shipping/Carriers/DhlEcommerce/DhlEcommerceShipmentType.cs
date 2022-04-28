@@ -1,29 +1,24 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Drawing.Imaging;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Enums;
 using Interapptive.Shared.Utility;
-using SD.LLBLGen.Pro.ORMSupportClasses;
-using ShipWorks.Shipping.Tracking;
+using ShipWorks.ApplicationCore.Licensing;
 using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Common.IO.Hardware.Printers;
 using ShipWorks.Data;
-using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
+using ShipWorks.Editions;
 using ShipWorks.Shipping.Carriers.BestRate;
 using ShipWorks.Shipping.Editing;
 using ShipWorks.Shipping.Insurance;
 using ShipWorks.Shipping.Services;
 using ShipWorks.Shipping.Settings;
-using ShipWorks.Shipping.Settings.Origin;
 using ShipWorks.Shipping.ShipEngine;
-using ShipEngine.CarrierApi.Client.Model;
 using ShipWorks.Shipping.Tracking;
 using ShipWorks.Templates.Processing.TemplateXml.ElementOutlines;
 
@@ -40,17 +35,20 @@ namespace ShipWorks.Shipping.Carriers.DhlEcommerce
         private readonly ICarrierAccountRepository<DhlEcommerceAccountEntity, IDhlEcommerceAccountEntity> accountRepository;
         private readonly IShipEngineWebClient shipEngineWebClient;
         private readonly IShipEngineTrackingResultFactory trackingResultFactory;
+        private readonly ILicenseService licenseService;
 
         /// <summary>
         /// Constructor
         /// </summary>
         public DhlEcommerceShipmentType(ICarrierAccountRepository<DhlEcommerceAccountEntity, IDhlEcommerceAccountEntity> accountRepository,
             IShipEngineWebClient shipEngineWebClient,
-            IShipEngineTrackingResultFactory trackingResultFactory)
+            IShipEngineTrackingResultFactory trackingResultFactory,
+            ILicenseService licenseService)
         {
             this.accountRepository = accountRepository;
             this.shipEngineWebClient = shipEngineWebClient;
             this.trackingResultFactory = trackingResultFactory;
+            this.licenseService = licenseService;
         }
 
         /// <summary>
@@ -268,7 +266,7 @@ namespace ShipWorks.Shipping.Carriers.DhlEcommerce
         public override IBestRateShippingBroker GetShippingBroker(ShipmentEntity shipment, IBestRateExcludedAccountRepository bestRateExcludedAccountRepository)
         {
             IEnumerable<long> excludedAccounts = bestRateExcludedAccountRepository.GetAll();
-            
+
             // TODO: DHLECommerce update for best rate
             //IEnumerable<IDhlEcommerceAccountEntity> nonExcludedAccounts = DhlEcommerceAccountManager.AccountsReadOnly.Where(a => !excludedAccounts.Contains(a.AccountId));
 
@@ -313,7 +311,7 @@ namespace ShipWorks.Shipping.Carriers.DhlEcommerce
             try
             {
                 string labelID = shipment.DhlEcommerce?.ShipEngineLabelID;
-                TrackingInformation trackingInfo;
+                ShipEngine.DTOs.TrackingInformation trackingInfo;
                 if (string.IsNullOrWhiteSpace(labelID))
                 {
                     trackingInfo = Task.Run(() =>
@@ -348,6 +346,49 @@ namespace ShipWorks.Shipping.Carriers.DhlEcommerce
                 .Select(x => x.Value)
                 .Cast<int>()
                 .Except(GetExcludedServiceTypes(repository));
+        }
+
+        /// <summary>
+        /// Gets the service types that have been excluded for this shipment type. The integer
+        /// values are intended to correspond to the appropriate enumeration values of the specific
+        /// shipment type (i.e. the integer values would correspond to PostalServiceType values
+        /// for a UspsShipmentType).
+        ///
+        /// Also removes DhlEcommerceMax if it is restricted.
+        /// </summary>
+        /// <param name="repository">The repository from which the service types are fetched.</param>
+        public override IEnumerable<int> GetExcludedServiceTypes(IExcludedServiceTypeRepository repository)
+        {
+            var baseExcludedTypes = base.GetExcludedServiceTypes(repository).ToList();
+
+            // If restricted from DHL eCommerce Max, remove it
+            if (licenseService.CheckRestriction(EditionFeature.DhlEcommerceMax, null) != EditionRestrictionLevel.None)
+            {
+                baseExcludedTypes.Remove((int) DhlEcommerceServiceType.US_DhlSMParcelExpeditedMax);
+            }
+
+            return baseExcludedTypes;
+        }
+
+        /// <summary>
+        /// Gets the AvailablePackageTypes for this shipment type and shipment along with their descriptions.
+        /// </summary>
+        public override Dictionary<int, string> BuildPackageTypeDictionary(List<ShipmentEntity> shipments, IExcludedPackageTypeRepository excludedServiceTypeRepository)
+        {
+            // Get valid packaging types
+            List<int> validPackageTypes = Enum.GetValues(typeof(DhlEcommercePackagingType)).Cast<int>().ToList();
+            IEnumerable<int> excludedPackageTypes = GetExcludedPackageTypes(excludedServiceTypeRepository);
+
+            // If there's an existing shipment with a package type that has been excluded, we need to re-add it here
+            if (shipments != null && shipments.Any())
+            {
+                IEnumerable<int> neededPackageTypes = shipments.Select(s => s.DhlEcommerce.PackagingType).Distinct().ToList();
+                excludedPackageTypes = excludedPackageTypes.Except(neededPackageTypes);
+                validPackageTypes.AddRange(neededPackageTypes);
+            }
+
+            return validPackageTypes.Except(excludedPackageTypes)
+                .ToDictionary(t => t, t => EnumHelper.GetDescription((DhlEcommercePackagingType) t));
         }
 
         /// <summary>

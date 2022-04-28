@@ -2,10 +2,10 @@
 using Autofac.Features.Indexed;
 using Interapptive.Shared.ComponentRegistration;
 using log4net;
-using ShipEngine.CarrierApi.Client.Model;
 using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.ShipEngine;
+using ShipWorks.Shipping.ShipEngine.DTOs;
 
 namespace ShipWorks.Shipping.Carriers.DhlEcommerce.API.ShipEngine
 {

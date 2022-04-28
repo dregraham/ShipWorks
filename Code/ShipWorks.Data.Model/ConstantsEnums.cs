@@ -2522,6 +2522,8 @@ namespace ShipWorks.Data.Model
 		PackagingType,
 		///<summary>Reference1. </summary>
 		Reference1,
+		///<summary>AncillaryEndorsement. </summary>
+		AncillaryEndorsement,
 		/// <summary></summary>
 		AmountOfFields
 	}
@@ -2604,6 +2606,8 @@ namespace ShipWorks.Data.Model
 		InsuranceValue,
 		///<summary>InsurancePennyOne. </summary>
 		InsurancePennyOne,
+		///<summary>AncillaryEndorsement. </summary>
+		AncillaryEndorsement,
 		/// <summary></summary>
 		AmountOfFields
 	}

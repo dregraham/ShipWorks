@@ -13,62 +13,62 @@ namespace ShipWorks.Shipping.Carriers.DhlEcommerce
         // International US
         [Description("DHL Globalmail Packet IPA")]
         [ApiValue("globalmail_packet_ipa")]
-
+        [InternationalService]
         US_DhlGlobalmailPacketIPA = 0,
 
         [Description("DHL Globalmail Packet ISAL")]
         [ApiValue("globalmail_packet_isal")]
-
+        [InternationalService]
         US_DhlGlobalmailPacketISAL = 1,
 
         [Description("DHL Globalmail Packet Standard")]
         [ApiValue("globalmail_packet_standard")]
-
+        [InternationalService]
         US_DhlGlobalmailPacketStandard = 2,
 
         [Description("DHL GlobalMail Business IPA")]
         [ApiValue("dhl_globalmail_business_ipa")]
-
+        [InternationalService]
         US_DhlGlobalMailBusinessIPA = 3,
 
         [Description("DHL Parcel International Expedited - DDP")]
         [ApiValue("globalmail_parcel_direct_express_ddp")]
-
+        [InternationalService]
         US_DhlParcelInternationalExpeditedDDP = 4,
 
         [Description("DHL Parcel International Expedited - DDU")]
         [ApiValue("globalmail_parcel_direct_express_ddu")]
-
+        [InternationalService]
         US_DhlParcelInternationalExpeditedDDU = 5,
 
         [Description("DHL Parcel International Priority")]
         [ApiValue("globalmail_parcel_priority")]
-
+        [InternationalService]
         US_DhlParcelInternationalPriority = 6,
 
         [Description("DHL Parcel International Direct - DDP")]
         [ApiValue("globalmail_parcel_direct_ddp")]
-
+        [InternationalService]
         US_DhlParcelInternationalDirectDDP = 7,
 
         [Description("DHL Parcel International Direct - DDU")]
         [ApiValue("globalmail_parcel_direct_ddu")]
-
+        [InternationalService]
         US_DhlParcelInternationalDirectDDU = 8,
 
         [Description("DHL Packet International")]
         [ApiValue("globalmail_packet_priority")]
-
+        [InternationalService]
         US_DhlPacketInternational = 9,
 
         [Description("DHL Packet Plus International")]
         [ApiValue("globalmail_packet_plus")]
-
+        [InternationalService]
         US_DhlPacketPlusInternational = 10,
 
         [Description("DHL Parcel International Standard")]
         [ApiValue("globalmail_parcel_standard")]
-
+        [InternationalService]
         US_DhlParcelInternationalStandard = 11,
 
         // Domestic US
@@ -113,17 +113,18 @@ namespace ShipWorks.Shipping.Carriers.DhlEcommerce
 
         US_DhlSMMarketingParcelGround = 19,
 
-        [Description("DHL SmartMail Parcel Return Light")]
-        [ApiValue("dhl_smartmail_parcel_return_light")]
-        US_DhlSmartMailParcelReturnLight = 20,
+        /* Currently platform doesn't support returns through DHL eCommerce
+         * [Description("DHL SmartMail Parcel Return Light")]
+         [ApiValue("dhl_smartmail_parcel_return_light")]
+         US_DhlSmartMailParcelReturnLight = 20,
 
-        [Description("DHL SmartMail Parcel Return Plus")]
-        [ApiValue("dhl_smartmail_parcel_return_plus")]
-        US_DhlSmartMailParcelReturnPlus = 21,
+         [Description("DHL SmartMail Parcel Return Plus")]
+         [ApiValue("dhl_smartmail_parcel_return_plus")]
+         US_DhlSmartMailParcelReturnPlus = 21,
 
-        [Description("DHL SmartMail Parcel Return Ground")]
-        [ApiValue("dhl_smartmail_parcel_return_ground")]
-        US_DhlSmartMailParcelReturnGround = 22,
+         [Description("DHL SmartMail Parcel Return Ground")]
+         [ApiValue("dhl_smartmail_parcel_return_ground")]
+         US_DhlSmartMailParcelReturnGround = 22,*/
 
         [Description("DHL SM Parcel Expedited Max")]
         [ApiValue("dhl_sm_parcel_expedited_max")]
@@ -133,11 +134,12 @@ namespace ShipWorks.Shipping.Carriers.DhlEcommerce
 
         [Description("DHL Parcel International Direct Priority")]
         [ApiValue("dhl_parcel_international_direct_priority")]
-
+        [InternationalService("CA")]
         CA_DhlParcelInternationalDirectPriority = 24,
 
         [Description("DHL Parcel International Direct Standard")]
         [ApiValue("dhl_parcel_international_direct_standard")]
+        [InternationalService("CA")]
         CA_DhlParcelInternationalDirectStandard = 25,
     }
 }

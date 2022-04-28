@@ -9,7 +9,6 @@ using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Enums;
 using Interapptive.Shared.Utility;
 using SD.LLBLGen.Pro.ORMSupportClasses;
-using ShipEngine.CarrierApi.Client.Model;
 using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Common.IO.Hardware.Printers;
 using ShipWorks.Data;
@@ -431,7 +430,7 @@ namespace ShipWorks.Shipping.Carriers.Dhl
             try
             {
                 string labelID = shipment.DhlExpress?.ShipEngineLabelID;
-                TrackingInformation trackingInfo;
+                ShipEngine.DTOs.TrackingInformation trackingInfo;
                 if (string.IsNullOrWhiteSpace(labelID))
                 {
                     trackingInfo = Task.Run(() =>

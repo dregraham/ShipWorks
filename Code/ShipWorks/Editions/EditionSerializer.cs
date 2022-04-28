@@ -103,6 +103,9 @@ namespace ShipWorks.Editions
                 bool endiciaDhlEnabled = (bool) xOptions.Element("EndiciaDhl");
                 edition.SharedOptions.EndiciaDhlEnabled = endiciaDhlEnabled;
 
+                bool dhlEcommerceSmParcelExpeditedMaxEnabled = (bool) xOptions.Element("DhlEcommerceSmParcelExpeditedMaxEnabled");
+                edition.SharedOptions.DhlEcommerceSmParcelExpeditedMaxEnabled = dhlEcommerceSmParcelExpeditedMaxEnabled;
+
                 bool endiciaInsuranceEnabled = (bool) xOptions.Element("EndiciaInsurance");
                 edition.SharedOptions.EndiciaInsuranceEnabled = endiciaInsuranceEnabled;
 
@@ -203,6 +206,7 @@ namespace ShipWorks.Editions
             elements.Add(new XElement("SharedOptions",
                 new XElement("StampsDhl", edition.SharedOptions.StampsDhlEnabled),
                 new XElement("EndiciaDhl", edition.SharedOptions.EndiciaDhlEnabled),
+                new XElement("DhlEcommerceMax", edition.SharedOptions.DhlEcommerceSmParcelExpeditedMaxEnabled),
                 new XElement("EndiciaInsurance", edition.SharedOptions.EndiciaInsuranceEnabled),
                 new XElement("UpsSurePost", edition.SharedOptions.UpsSurePostEnabled),
                 new XElement("EndiciaConsolidator", edition.SharedOptions.EndiciaConsolidatorEnabled),

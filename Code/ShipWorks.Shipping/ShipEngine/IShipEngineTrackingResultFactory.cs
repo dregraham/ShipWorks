@@ -1,5 +1,4 @@
-﻿using ShipEngine.CarrierApi.Client.Model;
-using ShipWorks.Shipping.Tracking;
+﻿using ShipWorks.Shipping.Tracking;
 
 namespace ShipWorks.Shipping.ShipEngine
 {
@@ -11,6 +10,6 @@ namespace ShipWorks.Shipping.ShipEngine
         /// <summary>
         /// Creates ShipWorks TrackingResult from the ShipEngine TrackingInformation
         /// </summary>
-        TrackingResult Create(TrackingInformation shipEngineTrackingInfo);
+        TrackingResult Create(DTOs.TrackingInformation shipEngineTrackingInfo);
     }
 }

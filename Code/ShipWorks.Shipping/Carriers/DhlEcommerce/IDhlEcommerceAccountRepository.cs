@@ -1,4 +1,4 @@
-﻿using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
 
 namespace ShipWorks.Shipping.Carriers.DhlEcommerce
@@ -8,5 +8,6 @@ namespace ShipWorks.Shipping.Carriers.DhlEcommerce
     /// </summary>
     public interface IDhlEcommerceAccountRepository : ICarrierAccountRepository<DhlEcommerceAccountEntity, IDhlEcommerceAccountEntity>
     {
+
     }
 }

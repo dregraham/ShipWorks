@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using ShipEngine.CarrierApi.Client.Model;
+using ShipWorks.Shipping.ShipEngine.DTOs;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Services;
 using Interapptive.Shared.ComponentRegistration;

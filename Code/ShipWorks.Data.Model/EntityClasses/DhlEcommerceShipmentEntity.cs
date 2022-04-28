@@ -443,6 +443,8 @@ namespace ShipWorks.Data.Model.EntityClasses
 			_fieldsCustomProperties.Add("InsuranceValue", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
 			_fieldsCustomProperties.Add("InsurancePennyOne", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+			_fieldsCustomProperties.Add("AncillaryEndorsement", fieldHashtable);
 		}
 		#endregion
 
@@ -859,34 +861,45 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <summary> The Insurance property of the Entity DhlEcommerceShipment<br/><br/></summary>
 		/// <remarks>Mapped on  table field: "DhlEcommerceShipment"."Insurance"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
-		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
 		[DataMember]
-		public virtual Nullable<System.Boolean> Insurance
+		public virtual System.Boolean Insurance
 		{
-			get { return (Nullable<System.Boolean>)GetValue((int)DhlEcommerceShipmentFieldIndex.Insurance, false); }
+			get { return (System.Boolean)GetValue((int)DhlEcommerceShipmentFieldIndex.Insurance, true); }
 			set	{ SetValue((int)DhlEcommerceShipmentFieldIndex.Insurance, value); }
 		}
 
 		/// <summary> The InsuranceValue property of the Entity DhlEcommerceShipment<br/><br/></summary>
 		/// <remarks>Mapped on  table field: "DhlEcommerceShipment"."InsuranceValue"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Money, 19, 4, 0<br/>
-		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
 		[DataMember]
-		public virtual Nullable<System.Decimal> InsuranceValue
+		public virtual System.Decimal InsuranceValue
 		{
-			get { return (Nullable<System.Decimal>)GetValue((int)DhlEcommerceShipmentFieldIndex.InsuranceValue, false); }
+			get { return (System.Decimal)GetValue((int)DhlEcommerceShipmentFieldIndex.InsuranceValue, true); }
 			set	{ SetValue((int)DhlEcommerceShipmentFieldIndex.InsuranceValue, value); }
 		}
 
 		/// <summary> The InsurancePennyOne property of the Entity DhlEcommerceShipment<br/><br/></summary>
 		/// <remarks>Mapped on  table field: "DhlEcommerceShipment"."InsurancePennyOne"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
-		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
 		[DataMember]
-		public virtual Nullable<System.Boolean> InsurancePennyOne
+		public virtual System.Boolean InsurancePennyOne
 		{
-			get { return (Nullable<System.Boolean>)GetValue((int)DhlEcommerceShipmentFieldIndex.InsurancePennyOne, false); }
+			get { return (System.Boolean)GetValue((int)DhlEcommerceShipmentFieldIndex.InsurancePennyOne, true); }
 			set	{ SetValue((int)DhlEcommerceShipmentFieldIndex.InsurancePennyOne, value); }
+		}
+
+		/// <summary> The AncillaryEndorsement property of the Entity DhlEcommerceShipment<br/><br/></summary>
+		/// <remarks>Mapped on  table field: "DhlEcommerceShipment"."AncillaryEndorsement"<br/>
+		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 50<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
+		public virtual System.String AncillaryEndorsement
+		{
+			get { return (System.String)GetValue((int)DhlEcommerceShipmentFieldIndex.AncillaryEndorsement, true); }
+			set	{ SetValue((int)DhlEcommerceShipmentFieldIndex.AncillaryEndorsement, value); }
 		}
 
 		/// <summary> Gets / sets related entity of type 'ScanFormBatchEntity' which has to be set using a fetch action earlier. If no related entity is set for this property, null is returned..<br/><br/></summary>
