@@ -1,5 +1,11 @@
 ﻿PRINT N'ALTERING [dbo].[DhlEcommerceShipment]'
 GO
+
+IF EXISTS(SELECT * FROM SYS.OBJECTS WHERE TYPE = 'D' AND NAME = 'DF_DhlEcommerceShipment_AncillaryEndorsement')
+	ALTER TABLE dbo.DhlEcommerceShipment
+		DROP CONSTRAINT DF_DhlEcommerceShipment_AncillaryEndorsement
+GO
+
 IF COL_LENGTH(N'[dbo].[DhlEcommerceShipment]', N'AncillaryEndorsement') IS NOT NULL
 	ALTER TABLE [dbo].[DhlEcommerceShipment] DROP COLUMN [AncillaryEndorsement]
 GO
