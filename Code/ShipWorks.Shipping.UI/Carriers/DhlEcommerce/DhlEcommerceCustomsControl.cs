@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Interapptive.Shared.Business.Geography;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Enums;
@@ -9,20 +10,30 @@ using ShipWorks.Shipping.Editing;
 using ShipWorks.Shipping.ShipEngine;
 using ShipWorks.UI.Controls;
 
-namespace ShipWorks.Shipping.UI.Carriers.Asendia
+namespace ShipWorks.Shipping.UI.Carriers.DhlEcommerce
 {
     /// <summary>
-    /// Asendia specific customs stuff
+    /// DHL eCommerce specific customs stuff
     /// </summary>
-    [KeyedComponent(typeof(CustomsControlBase), ShipmentTypeCode.Asendia)]
-    public partial class AsendiaCustomsControl : CustomsControlBase
+    [KeyedComponent(typeof(CustomsControlBase), ShipmentTypeCode.DhlEcommerce)]
+    public partial class DhlEcommerceCustomsControl : CustomsControlBase
     {
+        private readonly IShippingManager shippingManager;
+
+        /// <summary>
+        /// Constructor for Visual Studio Designer
+        /// </summary>
+        public DhlEcommerceCustomsControl()
+        {
+            InitializeComponent();
+        }
+
         /// <summary>
         /// Constructor
         /// </summary>
-        public AsendiaCustomsControl()
+        public DhlEcommerceCustomsControl(IShippingManager shippingManager) : this()
         {
-            InitializeComponent();
+            this.shippingManager = shippingManager;
         }
 
         /// <summary>
@@ -54,7 +65,9 @@ namespace ShipWorks.Shipping.UI.Carriers.Asendia
             // If the Issuing Authority hasn't been loaded yet do that now
             if (customsRecipientIssuingAuthority.DataSource == null)
             {
-                customsRecipientIssuingAuthority.DataSource = Geography.Countries;
+                customsRecipientIssuingAuthority.DisplayMember = "Key";
+                customsRecipientIssuingAuthority.ValueMember = "Value";
+                customsRecipientIssuingAuthority.DataSource = Geography.Countries.Select(n => new KeyValuePair<string, string>(n, Geography.GetCountryCode(n))).ToList();
             }
 
             contentType.SelectedIndexChanged -= this.OnChangeOption;
@@ -67,18 +80,18 @@ namespace ShipWorks.Shipping.UI.Carriers.Asendia
             {
                 foreach (ShipmentEntity shipment in shipments)
                 {
-                    if (shipment.Asendia == null)
+                    if (shipment.DhlEcommerce == null)
                     {
-                        ShippingManager.EnsureShipmentLoaded(shipment);
+                        shippingManager.EnsureShipmentLoaded(shipment);
                     }
 
-                    MethodConditions.EnsureArgumentIsNotNull(shipment.Asendia, "Asendia");
+                    MethodConditions.EnsureArgumentIsNotNull(shipment.DhlEcommerce, nameof(shipment.DhlEcommerce));
 
-                    contentType.ApplyMultiValue((ShipEngineContentsType) shipment.Asendia.Contents);
-                    nonDeliveryType.ApplyMultiValue((ShipEngineNonDeliveryType) shipment.Asendia.NonDelivery);
-                    customsRecipientTIN.ApplyMultiText(shipment.Asendia.CustomsRecipientTin);
-                    customsRecipientTINType.ApplyMultiValue((TaxIdType) shipment.Asendia.CustomsRecipientTinType);
-                    customsRecipientIssuingAuthority.ApplyMultiText(Geography.GetCountryName(shipment.Asendia.CustomsRecipientIssuingAuthority));
+                    contentType.ApplyMultiValue((ShipEngineContentsType) shipment.DhlEcommerce.Contents);
+                    nonDeliveryType.ApplyMultiValue((ShipEngineNonDeliveryType) shipment.DhlEcommerce.NonDelivery);
+                    customsRecipientTIN.ApplyMultiText(shipment.DhlEcommerce.CustomsRecipientTin);
+                    customsRecipientTINType.ApplyMultiValue((TaxIdType) shipment.DhlEcommerce.CustomsTaxIdType);
+                    customsRecipientIssuingAuthority.ApplyMultiValue(shipment.DhlEcommerce.CustomsTinIssuingAuthority);
                 }
             }
 
@@ -96,11 +109,11 @@ namespace ShipWorks.Shipping.UI.Carriers.Asendia
         {
             foreach (ShipmentEntity shipment in LoadedShipments)
             {
-                contentType.ReadMultiValue(v => shipment.Asendia.Contents = (int) (ShipEngineContentsType) v);
-                nonDeliveryType.ReadMultiValue(v => shipment.Asendia.NonDelivery = (int) (ShipEngineNonDeliveryType) v);
-                customsRecipientTIN.ReadMultiText(t => shipment.Asendia.CustomsRecipientTin = t);
-                customsRecipientTINType.ReadMultiValue(v => shipment.Asendia.CustomsRecipientTinType = (int) (TaxIdType) v);
-                customsRecipientIssuingAuthority.ReadMultiText(v => shipment.Asendia.CustomsRecipientIssuingAuthority = Geography.GetCountryCode(v));
+                contentType.ReadMultiValue(v => shipment.DhlEcommerce.Contents = (int) (ShipEngineContentsType) v);
+                nonDeliveryType.ReadMultiValue(v => shipment.DhlEcommerce.NonDelivery = (int) (ShipEngineNonDeliveryType) v);
+                customsRecipientTIN.ReadMultiText(t => shipment.DhlEcommerce.CustomsRecipientTin = t);
+                customsRecipientTINType.ReadMultiValue(v => shipment.DhlEcommerce.CustomsTaxIdType = (int) (TaxIdType) v);
+                customsRecipientIssuingAuthority.ReadMultiValue(v => shipment.DhlEcommerce.CustomsTinIssuingAuthority = (string) v);
             }
 
         }
@@ -114,17 +127,12 @@ namespace ShipWorks.Shipping.UI.Carriers.Asendia
 
             foreach (ShipmentEntity shipment in LoadedShipments)
             {
-                contentType.ReadMultiValue(v => shipment.Asendia.Contents = (int) (ShipEngineContentsType) v);
-                nonDeliveryType.ReadMultiValue(v => shipment.Asendia.NonDelivery = (int) (ShipEngineNonDeliveryType) v);
-                customsRecipientTIN.ReadMultiText(t => shipment.Asendia.CustomsRecipientTin = t);
-                customsRecipientTINType.ReadMultiValue(v => shipment.Asendia.CustomsRecipientTinType = (int) (TaxIdType) v);
-                customsRecipientIssuingAuthority.ReadMultiText(v => shipment.Asendia.CustomsRecipientIssuingAuthority = Geography.GetCountryCode(v));
+                contentType.ReadMultiValue(v => shipment.DhlEcommerce.Contents = (int) (ShipEngineContentsType) v);
+                nonDeliveryType.ReadMultiValue(v => shipment.DhlEcommerce.NonDelivery = (int) (ShipEngineNonDeliveryType) v);
+                customsRecipientTIN.ReadMultiText(t => shipment.DhlEcommerce.CustomsRecipientTin = t);
+                customsRecipientTINType.ReadMultiValue(v => shipment.DhlEcommerce.CustomsTaxIdType = (int) (TaxIdType) v);
+                customsRecipientIssuingAuthority.ReadMultiValue(v => shipment.DhlEcommerce.CustomsTinIssuingAuthority = (string) v);
             }
-        }
-
-        private void sectionContents_Load(object sender, EventArgs e)
-        {
-
         }
     }
 }
