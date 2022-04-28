@@ -8,6 +8,7 @@ using GalaSoft.MvvmLight.CommandWpf;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Net;
 using Interapptive.Shared.UI;
+using Interapptive.Shared.Utility;
 using log4net;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Platforms.Platform;
@@ -110,6 +111,11 @@ namespace ShipWorks.Stores.Platforms.Amazon
         /// </summary>
         private static string Encode(AmazonStoreEntity store)
         {
+            if (store.OrderSourceID.IsNullOrWhiteSpace())
+            {
+                return string.Empty;
+            }
+
             var plainText = $"{store.MerchantID}_{store.MarketplaceID}_{store.OrderSourceID}";
             var plainBytes = Encoding.UTF8.GetBytes(plainText);
             return Convert.ToBase64String(plainBytes);
