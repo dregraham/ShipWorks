@@ -21,7 +21,6 @@ namespace ShipWorks.Shipping.UI.Carriers.DhlEcommerce
     public partial class DhlEcommerceServiceControl : ServiceControlBase
     {
         private readonly IDhlEcommerceAccountRepository accountRepo;
-        private ResidentialDeterminationType? residentialDeterminationTypeCache = null;
 
         /// <summary>
         /// Constructor
@@ -242,6 +241,8 @@ namespace ShipWorks.Shipping.UI.Carriers.DhlEcommerce
                 shipDate.ReadMultiDate(v => shipment.ShipDate = v.Date.ToUniversalTime());
 
                 weight.ReadMultiWeight(v => shipment.ContentWeight = v);
+
+                shipment.ResidentialDetermination = (int) (residentialDelivery.Checked ? ResidentialDeterminationType.Residential : ResidentialDeterminationType.CommercialIfCompany);
             }
 
             ResumeShipSenseFieldChangeEvent();
@@ -302,44 +303,6 @@ namespace ShipWorks.Shipping.UI.Carriers.DhlEcommerce
         protected override bool ShouldIncludeLabelFormatInList(ThermalLanguage format)
         {
             return format != ThermalLanguage.EPL && format != ThermalLanguage.ZPL;
-        }
-
-        /// <summary>
-        /// When the Residential Delivery checkbox changes
-        /// </summary>
-        private void OnResidentialDeliveryChanged(object sender, EventArgs e)
-        {
-            residentialDetermination.SelectedIndexChanged -= OnResidentialDeterminationChanged;
-            if (residentialDelivery.Checked)
-            {
-                residentialDeterminationTypeCache = (ResidentialDeterminationType) residentialDetermination.SelectedValue;
-                residentialDetermination.SelectedValue = ResidentialDeterminationType.Residential;
-            }
-            else
-            {
-                if (residentialDeterminationTypeCache != null)
-                {
-                    residentialDetermination.SelectedValue = residentialDeterminationTypeCache;
-                }
-            }
-            residentialDetermination.SelectedIndexChanged += OnResidentialDeterminationChanged;
-        }
-
-        /// <summary>
-        /// When the Residential Determination is changed
-        /// </summary>
-        private void OnResidentialDeterminationChanged(object sender, EventArgs e)
-        {
-            residentialDelivery.CheckedChanged -= OnResidentialDeliveryChanged;
-            if ((ResidentialDeterminationType) residentialDetermination.SelectedValue == ResidentialDeterminationType.Residential)
-            {
-                residentialDelivery.Checked = true;
-            }
-            else
-            {
-                residentialDelivery.Checked = false;
-            }
-            residentialDelivery.CheckedChanged += OnResidentialDeliveryChanged;
         }
     }
 }
