@@ -102,7 +102,6 @@ namespace ShipWorks.Shipping.UI.Carriers.Asendia
                 customsRecipientTINType.ReadMultiValue(v => shipment.Asendia.CustomsRecipientTinType = (int) (TaxIdType) v);
                 customsRecipientIssuingAuthority.ReadMultiText(v => shipment.Asendia.CustomsRecipientIssuingAuthority = Geography.GetCountryCode(v));
             }
-
         }
 
         /// <summary>
@@ -120,11 +119,6 @@ namespace ShipWorks.Shipping.UI.Carriers.Asendia
                 customsRecipientTINType.ReadMultiValue(v => shipment.Asendia.CustomsRecipientTinType = (int) (TaxIdType) v);
                 customsRecipientIssuingAuthority.ReadMultiText(v => shipment.Asendia.CustomsRecipientIssuingAuthority = Geography.GetCountryCode(v));
             }
-        }
-
-        private void sectionContents_Load(object sender, EventArgs e)
-        {
-
         }
     }
 }
