@@ -59,7 +59,6 @@
             this.sectionContents.Location = new System.Drawing.Point(6, 210);
             this.sectionContents.MinimumSize = new System.Drawing.Size(480, 362);
             this.sectionContents.Size = new System.Drawing.Size(480, 362);
-            this.sectionContents.Load += new System.EventHandler(this.sectionContents_Load);
             // 
             // label1
             // 

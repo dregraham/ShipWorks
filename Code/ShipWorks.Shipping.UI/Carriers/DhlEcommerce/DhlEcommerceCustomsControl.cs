@@ -103,7 +103,7 @@ namespace ShipWorks.Shipping.UI.Carriers.DhlEcommerce
         }
 
         /// <summary>
-        /// Content type has changed
+        /// An option has changed
         /// </summary>
         void OnChangeOption(object sender, EventArgs e)
         {
@@ -115,7 +115,6 @@ namespace ShipWorks.Shipping.UI.Carriers.DhlEcommerce
                 customsRecipientTINType.ReadMultiValue(v => shipment.DhlEcommerce.CustomsTaxIdType = (int) (TaxIdType) v);
                 customsRecipientIssuingAuthority.ReadMultiValue(v => shipment.DhlEcommerce.CustomsTinIssuingAuthority = (string) v);
             }
-
         }
 
         /// <summary>

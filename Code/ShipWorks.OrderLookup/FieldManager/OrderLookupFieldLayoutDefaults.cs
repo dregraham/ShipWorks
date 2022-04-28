@@ -164,6 +164,16 @@ namespace ShipWorks.OrderLookup.FieldManager
                 SectionFields = new List<SectionFieldLayout>()
             });
 
+            sectionLayouts.Add(new SectionLayout()
+            {
+                Name = "DHL eCommerce - Reference",
+                Id = SectionLayoutIDs.DhlEcommerceReference,
+                SectionFields = new List<SectionFieldLayout>()
+                {
+                    new SectionFieldLayout() { Id = SectionLayoutFieldIDs.DhlEcommerceReferenceNumber, Name = "Reference Number",  },
+                }
+            });
+
             return sectionLayouts;
         }
     }

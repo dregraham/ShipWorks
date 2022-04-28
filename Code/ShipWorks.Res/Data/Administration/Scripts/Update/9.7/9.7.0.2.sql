@@ -1,7 +1,7 @@
 ﻿PRINT N'ALTERING [dbo].[DhlEcommerceShipment]'
 GO
 IF COL_LENGTH(N'[dbo].[DhlEcommerceShipment]', N'AncillaryEndorsement') IS NULL
-	ALTER TABLE [dbo].[DhlEcommerceShipment] ADD [AncillaryEndorsement] [nvarchar](50) NOT NULL DEFAULT ((''))
+	ALTER TABLE [dbo].[DhlEcommerceShipment] ADD [AncillaryEndorsement] [nvarchar](50) CONSTRAINT DF_DhlEcommerceShipment_AncillaryEndorsement DEFAULT (('')) NOT NULL 
 GO
 
 PRINT N'ALTERING [dbo].[DhlEcommerceProfile]'
