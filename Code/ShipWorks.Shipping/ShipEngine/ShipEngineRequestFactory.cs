@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using ShipWorks.Shipping.ShipEngine.DTOs;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Services;
@@ -26,7 +27,7 @@ namespace ShipWorks.Shipping.ShipEngine
                 {
                     ShipTo = CreateShipToAddress(shipment),
                     ShipFrom = CreateShipFromAddress(shipment),
-                    ShipDate = shipment.ShipDate
+                    ShipDate = shipment.ShipDate,
                 }
             };
             return request;
@@ -65,6 +66,12 @@ namespace ShipWorks.Shipping.ShipEngine
                     ServiceCode = serviceCode
                 }
             };
+
+            if (request.Shipment.Packages.Any())
+            {
+                request.Shipment.Packages.First().LabelMessages.Reference1 = shipment.DhlEcommerce.Reference1;
+            }
+
             return request;
         }
 
@@ -161,6 +168,8 @@ namespace ShipWorks.Shipping.ShipEngine
             List<ShipmentPackage> apiPackages = new List<ShipmentPackage>();
             foreach (IPackageAdapter package in packages)
             {
+                var weight = GetPackageTotalWeight(package);
+
                 ShipmentPackage apiPackage = new ShipmentPackage()
                 {
                     Dimensions = new Dimensions()
@@ -170,7 +179,7 @@ namespace ShipWorks.Shipping.ShipEngine
                         Height = package.DimsHeight,
                         Unit = Dimensions.UnitEnum.Inch
                     },
-                    Weight = new Weight(package.Weight, Weight.UnitEnum.Pound),
+                    Weight = new Weight(weight, Weight.UnitEnum.Pound),
                     PackageCode = getPackageCode?.Invoke(package),
                     LabelMessages = new LabelMessages()
                 };
@@ -180,6 +189,21 @@ namespace ShipWorks.Shipping.ShipEngine
             }
 
             return apiPackages;
+        }
+
+        /// <summary>
+        /// Get the total weight of the package including the dimensional weight
+        /// </summary>
+        public static double GetPackageTotalWeight(IPackageAdapter package)
+        {
+            double weight = package.Weight;
+
+            if (package.ApplyAdditionalWeight)
+            {
+                weight += package.AdditionalWeight;
+            }
+
+            return weight;
         }
 
         /// <summary>

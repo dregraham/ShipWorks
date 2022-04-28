@@ -12,7 +12,7 @@ namespace ShipWorks.Shipping.Carriers.DhlEcommerce.API.ShipEngine
     /// <summary>
     /// Dhl Ecommerce ShipEngine Label Client
     /// </summary>
-    [Component(RegistrationType.Self)]
+    [Component]
     public class DhlEcommerceShipEngineLabelClient : ShipEngineLabelService, IDhlEcommerceLabelClient
     {
         private readonly IDhlEcommerceAccountRepository accountRepository;
