@@ -43,11 +43,11 @@ namespace ShipWorks.Shipping.Carriers.DhlEcommerce
         }
 
         /// <summary>
-        /// Get rates from DHL Ecommerce via ShipEngine
+        /// Get rates from DHL eCommerce via ShipEngine
         /// </summary>
         public RateGroup GetRates(ShipmentEntity shipment)
         {
-            // We don't have any DHL Ecommerce accounts, so let the user know they need an account.
+            // We don't have any DHL eCommerce accounts, so let the user know they need an account.
             if (!accountRepository.AccountsReadOnly.Any())
             {
                 throw new ShippingException("An account is required to view DHL eCommerce rates.");

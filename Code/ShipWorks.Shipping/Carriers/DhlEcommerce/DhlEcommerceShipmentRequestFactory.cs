@@ -42,7 +42,7 @@ namespace ShipWorks.Shipping.Carriers.DhlEcommerce
         }
 
         /// <summary>
-        /// Gets the ShipEngine carrier ID from the DHL Ecommerce shipment
+        /// Gets the ShipEngine carrier ID from the DHL eCommerce shipment
         /// </summary>
         protected override string GetShipEngineCarrierID(ShipmentEntity shipment)
         {
@@ -57,13 +57,13 @@ namespace ShipWorks.Shipping.Carriers.DhlEcommerce
         }
 
         /// <summary>
-        /// Gets the api value for the DHL Ecommerce service
+        /// Gets the api value for the DHL eCommerce service
         /// </summary>
         protected override string GetServiceApiValue(ShipmentEntity shipment) =>
             EnumHelper.GetApiValue((DhlEcommerceServiceType) shipment.DhlEcommerce.Service);
 
         /// <summary>
-        /// Creates the DHL Ecommerce advanced options node
+        /// Creates the DHL eCommerce advanced options node
         /// </summary>
         protected override AdvancedOptions CreateAdvancedOptions(ShipmentEntity shipment)
         {
@@ -86,7 +86,7 @@ namespace ShipWorks.Shipping.Carriers.DhlEcommerce
         }
 
         /// <summary>
-        /// Creates the DHL Ecommerce customs node
+        /// Creates the DHL eCommerce customs node
         /// </summary>
         protected override InternationalOptions CreateCustoms(ShipmentEntity shipment)
         {

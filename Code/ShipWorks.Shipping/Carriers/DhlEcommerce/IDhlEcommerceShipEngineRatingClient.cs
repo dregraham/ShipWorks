@@ -9,7 +9,7 @@ namespace ShipWorks.Shipping.Carriers.DhlEcommerce
     public interface IDhlEcommerceShipEngineRatingClient
     {
         /// <summary>
-        /// Get rates from DHL Ecommerce via ShipEngine
+        /// Get rates from DHL eCommerce via ShipEngine
         /// </summary>
         RateGroup GetRates(ShipmentEntity shipment);
     }
