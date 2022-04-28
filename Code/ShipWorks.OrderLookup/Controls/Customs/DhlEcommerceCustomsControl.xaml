@@ -33,6 +33,9 @@
                 <RowDefinition Height="auto" />
                 <RowDefinition Height="auto" />
                 <RowDefinition Height="auto" />
+                <RowDefinition Height="auto" />
+                <RowDefinition Height="auto" />
+                <RowDefinition Height="auto" />
             </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="102" />
@@ -77,14 +80,59 @@
                 Grid.Row="2"
                 Grid.Column="0"                
                 Style="{StaticResource FieldLabel}"
-                Text="Content" />
+                Text="Contents" />
             <ComboBox
                 Grid.Row="2"
                 Grid.Column="1"
                 Margin="9 0 0 10"
                 DisplayMemberPath="Value"
                 ItemsSource="{Binding CustomsContentTypes}"
-                SelectedValue="{Binding ShipmentModel.ShipmentAdapter.Shipment.DhlEcommerce.CustomsContentType, UpdateSourceTrigger=PropertyChanged}"
+                SelectedValue="{Binding ShipmentModel.ShipmentAdapter.Shipment.DhlEcommerce.Contents, UpdateSourceTrigger=PropertyChanged}"
+                SelectedValuePath="Key"
+                Style="{StaticResource FormComboBox}" />
+
+            <TextBlock
+                Grid.Row="3"
+                Grid.Column="0"                
+                Style="{StaticResource FieldLabel}"
+                Text="Non Delivery" />
+            <ComboBox
+                Grid.Row="3"
+                Grid.Column="1"
+                Margin="9 0 0 10"
+                DisplayMemberPath="Value"
+                ItemsSource="{Binding NonDeliveryTypes}"
+                SelectedValue="{Binding ShipmentModel.ShipmentAdapter.Shipment.DhlEcommerce.NonDelivery, UpdateSourceTrigger=PropertyChanged}"
+                SelectedValuePath="Key"
+                Style="{StaticResource FormComboBox}" />
+
+            <TextBlock
+                Grid.Row="4"
+                Grid.Column="0"                
+                Style="{StaticResource FieldLabel}"
+                Text="TIN Type" />
+            <ComboBox
+                Grid.Row="4"
+                Grid.Column="1"
+                Margin="9 0 0 10"
+                DisplayMemberPath="Value"
+                ItemsSource="{Binding TaxIdTypes}"
+                SelectedValue="{Binding ShipmentModel.ShipmentAdapter.Shipment.DhlEcommerce.CustomsTaxIdType, UpdateSourceTrigger=PropertyChanged}"
+                SelectedValuePath="Key"
+                Style="{StaticResource FormComboBox}" />
+
+            <TextBlock
+                Grid.Row="5"
+                Grid.Column="0"                
+                Style="{StaticResource FieldLabel}"
+                Text="Issuing Authority" />
+            <ComboBox
+                Grid.Row="5"
+                Grid.Column="1"
+                Margin="9 0 0 10"
+                DisplayMemberPath="Value"
+                ItemsSource="{Binding IssuingAuthorityCountries}"
+                SelectedValue="{Binding ShipmentModel.ShipmentAdapter.Shipment.DhlEcommerce.CustomsTinIssuingAuthority, UpdateSourceTrigger=PropertyChanged}"
                 SelectedValuePath="Key"
                 Style="{StaticResource FormComboBox}" />
         </Grid>
