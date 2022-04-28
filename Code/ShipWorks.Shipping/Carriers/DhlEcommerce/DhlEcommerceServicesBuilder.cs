@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Interapptive.Shared.Collections;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Utility;
@@ -12,7 +10,7 @@ using ShipWorks.Shipping.Settings;
 namespace ShipWorks.Shipping.Carriers.DhlEcommerce
 {
     /// <summary>
-    /// Service type builder for DHL Ecommerce shipments
+    /// Service type builder for DHL eCommerce shipments
     /// </summary>
     [KeyedComponent(typeof(IShipmentServicesBuilder), ShipmentTypeCode.DhlEcommerce, SingleInstance = true)]
     public class DhlEcommerceShipmentServicesBuilder : IShipmentServicesBuilder
