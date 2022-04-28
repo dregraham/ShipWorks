@@ -22,6 +22,7 @@ namespace ShipWorks.OrderLookup.Controls.LabelOptions
     [KeyedComponent(typeof(ILabelOptionsViewModel), ShipmentTypeCode.UpsOnLineTools)]
     [KeyedComponent(typeof(ILabelOptionsViewModel), ShipmentTypeCode.AmazonSWA)]
     [KeyedComponent(typeof(ILabelOptionsViewModel), ShipmentTypeCode.FedEx)]
+    [KeyedComponent(typeof(ILabelOptionsViewModel), ShipmentTypeCode.DhlEcommerce)]
     [WpfView(typeof(GenericLabelOptionsControl))]
     public class GenericLabelOptionsViewModel : OrderLookupViewModelBase, ILabelOptionsViewModel, IDataErrorInfo
     {

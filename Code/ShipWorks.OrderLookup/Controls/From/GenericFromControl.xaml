@@ -27,7 +27,7 @@
 
     <Grid IsEnabled="{Binding ShipmentModel.ShipmentAllowEditing}" >
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="85" />
+            <ColumnDefinition Width="100" />
             <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
