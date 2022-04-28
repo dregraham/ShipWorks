@@ -33,8 +33,8 @@ namespace ShipWorks.ApplicationCore.Licensing.Warehouse
         private const string voidShipment = "api/orders/{0}/void";
         private const string rerouteOrderItems = "api/orders/{0}/rerouteItems";
         private const string getTrackingUpdates = "api/tracking/{0}";
-        private const string createOrderSourceInitiateUrl = "api/ordersource/{0}/auth?RedirectUrl={1}/callbacks/{0}monoauth/subscribe?ApiRegion={2}";
-        private const string updateOrderSourceInitiateUrl = "api/ordersource/{0}/auth?RedirectUrl={1}/callbacks/{0}monoauth/update&OrderSourceId={2}&ApiRegion={3}";
+        private const string createOrderSourceInitiateUrl = "api/ordersource/{0}/auth?RedirectUrl={1}callbacks/{0}monoauth/subscribe&ApiRegion={2}";
+        private const string updateOrderSourceInitiateUrl = "api/ordersource/{0}/auth?RedirectUrl={1}callbacks/{0}monoauth/update&OrderSourceId={2}&ApiRegion={3}";
 
         /// <summary>
         /// Create a link warehouse endpoint
