@@ -45,8 +45,6 @@ namespace ShipWorks.Shipping.UI.Carriers.DhlEcommerce
 
             LoadAccounts();
 
-            dimensionsControl.DimensionsChanged += (s, a) => RaiseShipSenseFieldChanged();
-            weight.WeightChanged += (s, a) => RaiseShipSenseFieldChanged();
             ShipSenseFieldChanged += (s, a) => SaveToShipments();
 
             weight.ConfigureTelemetryEntityCounts = telemetryEvent =>
@@ -56,6 +54,22 @@ namespace ShipWorks.Shipping.UI.Carriers.DhlEcommerce
             };
 
             cutoffDateDisplay.ShipmentType = ShipmentTypeCode;
+        }
+
+        /// <summary>
+        /// Some aspect of the shipment that affects ShipSense has changed
+        /// </summary>
+        private void OnShipSenseFieldChanged(object sender, EventArgs e)
+        {
+            RaiseShipSenseFieldChanged();
+        }
+
+        /// <summary>
+        /// Something affecting rate criteria has changed
+        /// </summary>
+        private void OnRateCriteriaChanged(object sender, EventArgs e)
+        {
+            RaiseRateCriteriaChanged();
         }
 
         /// <summary>
@@ -189,6 +203,8 @@ namespace ShipWorks.Shipping.UI.Carriers.DhlEcommerce
             }
 
             sectionFrom.ExtraText = text + ", " + originControl.OriginDescription;
+
+            RaiseRateCriteriaChanged();
         }
 
         /// <summary>
@@ -205,6 +221,8 @@ namespace ShipWorks.Shipping.UI.Carriers.DhlEcommerce
                 }
 
                 originControl.NotifySelectedAccountChanged();
+
+                RaiseRateCriteriaChanged();
             }
         }
 
@@ -263,6 +281,8 @@ namespace ShipWorks.Shipping.UI.Carriers.DhlEcommerce
         {
             SaveToShipments();
             LoadShipmentDetails();
+
+            RaiseRateCriteriaChanged();
         }
 
         /// <summary>
