@@ -41,14 +41,14 @@ namespace Interapptive.Shared.Security.SecureTextVersions
         {
             try
             {
-                log.Info("Decrypting with RC2");
+                log.Debug("Decrypting with RC2");
                 var decrypted = DecryptWithRC2(ciphertext, password);
-                log.Info("Decrypting with RC2 succeeded");
+                log.Debug("Decrypting with RC2 succeeded");
                 return decrypted;
             }
             catch (Exception ex) when (ex is CryptographicException || ex is FormatException)
             {
-                log.Info("Decrypting with RC2 failed. Trying AES-GCM");
+                log.Debug("Decrypting with RC2 failed. Trying AES-GCM");
 
                 var encryptedBytes = Convert.FromBase64String(ciphertext);
                 var encryptedKey = encryptedBytes.Take(EncryptedKeyLength).ToArray();
@@ -75,7 +75,7 @@ namespace Interapptive.Shared.Security.SecureTextVersions
 
                 var decryptedText = Encoding.UTF8.GetString(plaintext);
 
-                log.Info("Decrypting with AES-GCM succeeded");
+                log.Debug("Decrypting with AES-GCM succeeded");
 
                 return decryptedText;
             }
