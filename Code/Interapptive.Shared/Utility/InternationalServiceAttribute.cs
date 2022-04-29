@@ -1,14 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Interapptive.Shared.Utility
 {
     /// <summary>
     /// Attribute indicating if a service enum is valid for international shipments
     /// </summary>
+    [AttributeUsage(AttributeTargets.Enum | AttributeTargets.Field, AllowMultiple = false)]
     public class InternationalServiceAttribute : Attribute
     {
         /// <summary>
