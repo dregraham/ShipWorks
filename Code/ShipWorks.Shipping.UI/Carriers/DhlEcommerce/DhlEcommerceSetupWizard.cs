@@ -271,6 +271,11 @@ namespace ShipWorks.Shipping.UI.Carriers.DhlEcommerce
         /// </summary>
         private void ShowWizardError(string errorMessage, WizardStepEventArgs e)
         {
+            if (errorMessage.IsNullOrWhiteSpace())
+            {
+                errorMessage = "An unknown error occurred";
+            }
+
             messageHelper.ShowError(errorMessage);
             e.NextPage = CurrentPage;
         }
