@@ -5847,11 +5847,6 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(DhlEcommerceProfileFieldIndex.Reference1);}
 		}
-		/// <summary>Creates a new DhlEcommerceProfileEntity.AncillaryEndorsement field instance</summary>
-		public static EntityField2 AncillaryEndorsement
-		{
-			get { return (EntityField2)EntityFieldFactory.Create(DhlEcommerceProfileFieldIndex.AncillaryEndorsement);}
-		}
 	}
 
 	/// <summary>Field Creation Class for entity DhlEcommerceScanFormEntity</summary>
@@ -6036,11 +6031,6 @@ namespace ShipWorks.Data.Model.HelperClasses
 		public static EntityField2 InsurancePennyOne
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(DhlEcommerceShipmentFieldIndex.InsurancePennyOne);}
-		}
-		/// <summary>Creates a new DhlEcommerceShipmentEntity.AncillaryEndorsement field instance</summary>
-		public static EntityField2 AncillaryEndorsement
-		{
-			get { return (EntityField2)EntityFieldFactory.Create(DhlEcommerceShipmentFieldIndex.AncillaryEndorsement);}
 		}
 	}
 

@@ -210,6 +210,12 @@
     <Compile Include="Carriers\DhlEcommerce\DhlEcommerceOptionsControl.Designer.cs">
       <DependentUpon>DhlEcommerceOptionsControl.cs</DependentUpon>
     </Compile>
+    <Compile Include="Carriers\DhlEcommerce\DhlEcommerceProfileControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Carriers\DhlEcommerce\DhlEcommerceProfileControl.Designer.cs">
+      <DependentUpon>DhlEcommerceProfileControl.cs</DependentUpon>
+    </Compile>
     <Compile Include="Settings\BestRateAccount.cs" />
     <Compile Include="Settings\BestRateAccountSettingsControl.xaml.cs">
       <DependentUpon>BestRateAccountSettingsControl.xaml</DependentUpon>
@@ -723,6 +729,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Carriers\DhlEcommerce\DhlEcommerceOptionsControl.resx">
       <DependentUpon>DhlEcommerceOptionsControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Carriers\DhlEcommerce\DhlEcommerceProfileControl.resx">
+      <DependentUpon>DhlEcommerceProfileControl.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Carriers\Dhl\DhlExpressSettingsControl.resx">
       <DependentUpon>DhlExpressSettingsControl.cs</DependentUpon>

@@ -77,7 +77,7 @@ namespace ShipWorks.SqlServer.Filters.DirtyCounts
             tableBitCount[(int) FilterNodeColumnMaskTable.YahooOrderSearch] = 4;
             tableBitCount[(int) FilterNodeColumnMaskTable.GenericModuleOrder] = 6;
             tableBitCount[(int) FilterNodeColumnMaskTable.OverstockOrder] = 4;
-            tableBitCount[(int) FilterNodeColumnMaskTable.DhlEcommerceShipment] = 29;
+            tableBitCount[(int) FilterNodeColumnMaskTable.DhlEcommerceShipment] = 28;
 
             tableBitOffset = new int[Enum.GetValues(typeof(FilterNodeColumnMaskTable)).Length];
             tableBitOffset[0] = 0;
@@ -93,34 +93,22 @@ namespace ShipWorks.SqlServer.Filters.DirtyCounts
         /// <summary>
         /// Get the total number of bytes required to hold the given bitcount
         /// </summary>
-        private static int GetBytesRequired(int bits)
-        {
-            return ((bits - 1) / 8) + 1;
-        }
+        private static int GetBytesRequired(int bits) => ((bits - 1) / 8) + 1;
 
         /// <summary>
         /// Get the total number of bytes required by the column mask
         /// </summary>
-        public static int TotalBytes
-        {
-            get { return totalBytes; }
-        }
+        public static int TotalBytes => totalBytes;
 
         /// <summary>
         /// Get the total number of bits that we used to track columns for each table
         /// </summary>
-        public static int GetTableBitCount(FilterNodeColumnMaskTable table)
-        {
-            return tableBitCount[(int) table];
-        }
+        public static int GetTableBitCount(FilterNodeColumnMaskTable table) => tableBitCount[(int) table];
 
         /// <summary>
         /// Get the bit mask position to represent the given table and column
         /// </summary>
-        public static int GetBitPosition(FilterNodeColumnMaskTable table, int column)
-        {
-            return tableBitOffset[(int) table] + column;
-        }
+        public static int GetBitPosition(FilterNodeColumnMaskTable table, int column) => tableBitOffset[(int) table] + column;
 
         /// <summary>
         /// Convert the given BitArray to a byte[] bitmask that can be stored in sql server
@@ -165,8 +153,7 @@ namespace ShipWorks.SqlServer.Filters.DirtyCounts
             {
                 int bitNumber = GetBitPosition(table, i);
 
-                int byteBit;
-                int byteNumber = Math.DivRem(bitNumber, 8, out byteBit);
+                int byteNumber = Math.DivRem(bitNumber, 8, out var byteBit);
 
                 if (byteNumber >= mask.Length)
                 {

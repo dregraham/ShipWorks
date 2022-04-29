@@ -50,7 +50,6 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
             CustomsTinIssuingAuthority = source.CustomsTinIssuingAuthority;
             PackagingType = source.PackagingType;
             Reference1 = source.Reference1;
-            AncillaryEndorsement = source.AncillaryEndorsement;
             
             ShippingProfile = (IShippingProfileEntity) source.ShippingProfile?.AsReadOnly(objectMap);
             
@@ -144,12 +143,6 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
         /// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 300<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
         public System.String Reference1 { get; }
-        /// <summary> The AncillaryEndorsement property of the Entity DhlEcommerceProfile<br/><br/>
-        /// </summary>
-        /// <remarks>Mapped on table field: "DhlEcommerceProfile"."AncillaryEndorsement"<br/>
-        /// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 50<br/>
-        /// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
-        public System.String AncillaryEndorsement { get; }
         
         public IShippingProfileEntity ShippingProfile { get; }
         

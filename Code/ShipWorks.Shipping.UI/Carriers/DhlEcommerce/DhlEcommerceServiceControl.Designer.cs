@@ -94,14 +94,14 @@ namespace ShipWorks.Shipping.UI.Carriers.DhlEcommerce
             this.sectionRecipient.ContentPanel.Controls.Add(this.labelResidentialCommercial);
             this.sectionRecipient.ContentPanel.Controls.Add(this.personControl);
             this.sectionRecipient.Location = new System.Drawing.Point(3, 5);
-            this.sectionRecipient.Size = new System.Drawing.Size(297, 414);
+            this.sectionRecipient.Size = new System.Drawing.Size(280, 414);
             this.sectionRecipient.TabIndex = 1;
             // 
             // personControl
             // 
             this.personControl.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.personControl.Size = new System.Drawing.Size(287, 333);
+            this.personControl.Size = new System.Drawing.Size(270, 333);
             // 
             // labelResidentialCommercial
             // 
@@ -116,13 +116,12 @@ namespace ShipWorks.Shipping.UI.Carriers.DhlEcommerce
             this.residentialDetermination.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.residentialDetermination.Location = new System.Drawing.Point(79, 358);
-            this.residentialDetermination.Size = new System.Drawing.Size(197, 21);
-            this.residentialDetermination.SelectedIndexChanged += new System.EventHandler(this.OnResidentialDeterminationChanged);
+            this.residentialDetermination.Size = new System.Drawing.Size(180, 21);
             // 
             // sectionReturns
             // 
             this.sectionReturns.Location = new System.Drawing.Point(3, 707);
-            this.sectionReturns.Size = new System.Drawing.Size(297, 24);
+            this.sectionReturns.Size = new System.Drawing.Size(280, 24);
             // 
             // sectionShipment
             // 
@@ -144,7 +143,7 @@ namespace ShipWorks.Shipping.UI.Carriers.DhlEcommerce
             this.sectionShipment.Controls.Add(this.multiValueComboBox2);
             this.sectionShipment.Controls.Add(this.multiValueComboBox1);
             this.sectionShipment.Location = new System.Drawing.Point(3, 424);
-            this.sectionShipment.Size = new System.Drawing.Size(297, 278);
+            this.sectionShipment.Size = new System.Drawing.Size(280, 278);
             this.sectionShipment.TabIndex = 2;
             // 
             // sectionLabelOptions
@@ -154,7 +153,7 @@ namespace ShipWorks.Shipping.UI.Carriers.DhlEcommerce
             // 
             this.sectionLabelOptions.ContentPanel.Controls.Add(this.labelFormat);
             this.sectionLabelOptions.Location = new System.Drawing.Point(3, 736);
-            this.sectionLabelOptions.Size = new System.Drawing.Size(297, 24);
+            this.sectionLabelOptions.Size = new System.Drawing.Size(280, 24);
             // 
             // cutoffDateDisplay
             // 
@@ -186,7 +185,7 @@ namespace ShipWorks.Shipping.UI.Carriers.DhlEcommerce
             this.sectionFrom.Name = "sectionFrom";
             this.sectionFrom.SectionName = "From";
             this.sectionFrom.SettingsKey = "6306b47c-8029-44bc-8b97-9b9eb001a61a";
-            this.sectionFrom.Size = new System.Drawing.Size(297, 24);
+            this.sectionFrom.Size = new System.Drawing.Size(280, 24);
             this.sectionFrom.TabIndex = 0;
             // 
             // originControl
@@ -206,7 +205,7 @@ namespace ShipWorks.Shipping.UI.Carriers.DhlEcommerce
             this.originControl.Location = new System.Drawing.Point(1, 60);
             this.originControl.Margin = new System.Windows.Forms.Padding(3, 5, 3, 3);
             this.originControl.Name = "originControl";
-            this.originControl.Size = new System.Drawing.Size(289, 355);
+            this.originControl.Size = new System.Drawing.Size(272, 355);
             this.originControl.TabIndex = 9;
             this.originControl.OriginChanged += new System.EventHandler(this.OnOriginChanged);
             // 
@@ -230,7 +229,7 @@ namespace ShipWorks.Shipping.UI.Carriers.DhlEcommerce
             this.dhlEcommerceAccount.Location = new System.Drawing.Point(80, 32);
             this.dhlEcommerceAccount.Name = "dhlEcommerceAccount";
             this.dhlEcommerceAccount.PromptText = "(Multiple Values)";
-            this.dhlEcommerceAccount.Size = new System.Drawing.Size(196, 21);
+            this.dhlEcommerceAccount.Size = new System.Drawing.Size(179, 21);
             this.dhlEcommerceAccount.TabIndex = 4;
             this.dhlEcommerceAccount.SelectedIndexChanged += new System.EventHandler(this.OnChangeAccount);
             // 
@@ -324,7 +323,7 @@ namespace ShipWorks.Shipping.UI.Carriers.DhlEcommerce
             this.sectionOptions.Name = "sectionOptions";
             this.sectionOptions.SectionName = "Options";
             this.sectionOptions.SettingsKey = "{2740f860-1d14-453e-a511-8f62ad1e7dcc}";
-            this.sectionOptions.Size = new System.Drawing.Size(297, 165);
+            this.sectionOptions.Size = new System.Drawing.Size(280, 165);
             this.sectionOptions.TabIndex = 3;
             // 
             // labelSaturdayDelivery
@@ -399,7 +398,6 @@ namespace ShipWorks.Shipping.UI.Carriers.DhlEcommerce
             this.residentialDelivery.TabIndex = 8;
             this.residentialDelivery.Text = "Residential Delivery";
             this.residentialDelivery.UseVisualStyleBackColor = false;
-            this.residentialDelivery.CheckedChanged += new System.EventHandler(this.OnResidentialDeliveryChanged);
             // 
             // labelReference1
             // 
@@ -439,7 +437,7 @@ namespace ShipWorks.Shipping.UI.Carriers.DhlEcommerce
             this.insuranceControl.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.insuranceControl.Location = new System.Drawing.Point(3, 198);
             this.insuranceControl.Name = "insuranceControl";
-            this.insuranceControl.Size = new System.Drawing.Size(276, 50);
+            this.insuranceControl.Size = new System.Drawing.Size(171, 50);
             this.insuranceControl.TabIndex = 74;
             // 
             // dimensionsControl
@@ -514,13 +512,13 @@ namespace ShipWorks.Shipping.UI.Carriers.DhlEcommerce
             this.Controls.Add(this.sectionFrom);
             this.Controls.Add(this.sectionOptions);
             this.Name = "DhlEcommerceServiceControl";
-            this.Size = new System.Drawing.Size(303, 651);
-            this.Controls.SetChildIndex(this.sectionOptions, 0);
+            this.Size = new System.Drawing.Size(286, 651);
+            this.Controls.SetChildIndex(this.sectionOptions, 5);
             this.Controls.SetChildIndex(this.sectionFrom, 0);
-            this.Controls.SetChildIndex(this.sectionLabelOptions, 0);
-            this.Controls.SetChildIndex(this.sectionReturns, 0);
-            this.Controls.SetChildIndex(this.sectionShipment, 0);
-            this.Controls.SetChildIndex(this.sectionRecipient, 0);
+            this.Controls.SetChildIndex(this.sectionLabelOptions, 3);
+            this.Controls.SetChildIndex(this.sectionReturns, 4);
+            this.Controls.SetChildIndex(this.sectionShipment, 2);
+            this.Controls.SetChildIndex(this.sectionRecipient, 1);
             ((System.ComponentModel.ISupportInitialize)(this.sectionRecipient.ContentPanel)).EndInit();
             this.sectionRecipient.ContentPanel.ResumeLayout(false);
             this.sectionRecipient.ContentPanel.PerformLayout();
