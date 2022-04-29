@@ -1,4 +1,5 @@
 ﻿using ShipWorks.Shipping.Settings.Origin;
+using ShipWorks.UI.Controls;
 
 namespace ShipWorks.Shipping.UI.Carriers.DhlEcommerce
 {
@@ -282,6 +283,7 @@ namespace ShipWorks.Shipping.UI.Carriers.DhlEcommerce
             this.packageType.PromptText = "(Multiple Values)";
             this.packageType.Size = new System.Drawing.Size(175, 21);
             this.packageType.TabIndex = 65;
+            this.packageType.SelectedIndexChanged += new System.EventHandler(this.OnRateCriteriaChanged);
             // 
             // labelShipDate
             // 
@@ -449,6 +451,8 @@ namespace ShipWorks.Shipping.UI.Carriers.DhlEcommerce
             this.dimensionsControl.Name = "dimensionsControl";
             this.dimensionsControl.Size = new System.Drawing.Size(210, 74);
             this.dimensionsControl.TabIndex = 73;
+            this.dimensionsControl.DimensionsChanged += new System.EventHandler(this.OnRateCriteriaChanged);
+            this.dimensionsControl.DimensionsChanged += OnShipSenseFieldChanged;
             // 
             // dimensionsLabel
             // 
@@ -485,6 +489,8 @@ namespace ShipWorks.Shipping.UI.Carriers.DhlEcommerce
             this.weight.Size = new System.Drawing.Size(269, 24);
             this.weight.TabIndex = 71;
             this.weight.Weight = 0D;
+            this.weight.WeightChanged += new System.EventHandler<WeightChangedEventArgs>(this.OnRateCriteriaChanged);
+            this.weight.WeightChanged += OnShipSenseFieldChanged;
             // 
             // multiValueComboBox1
             // 
