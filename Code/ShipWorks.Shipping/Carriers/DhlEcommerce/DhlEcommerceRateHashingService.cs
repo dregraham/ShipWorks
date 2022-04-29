@@ -30,6 +30,15 @@ namespace ShipWorks.Shipping.Carriers.DhlEcommerce
                 ratingField.AddShipmentField(DhlEcommerceShipmentFields.Service);
                 ratingField.AddShipmentField(DhlEcommerceShipmentFields.ResidentialDelivery);
 
+                ratingField.AddShipmentField(DhlEcommerceShipmentFields.PackagingType);
+                ratingField.AddShipmentField(DhlEcommerceShipmentFields.InsuranceValue);
+
+                ratingField.AddShipmentField(DhlEcommerceShipmentFields.DimsAddWeight);
+                ratingField.AddShipmentField(DhlEcommerceShipmentFields.DimsWeight);
+                ratingField.AddShipmentField(DhlEcommerceShipmentFields.DimsLength);
+                ratingField.AddShipmentField(DhlEcommerceShipmentFields.DimsHeight);
+                ratingField.AddShipmentField(DhlEcommerceShipmentFields.DimsWidth);
+
                 return ratingField;
             }
         }

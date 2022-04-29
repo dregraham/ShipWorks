@@ -191,7 +191,6 @@ namespace ShipWorks.Shipping.ShipEngine
             return apiPackages;
         }
 
-
         /// <summary>
         /// Get the total weight of the package including the dimensional weight
         /// </summary>
