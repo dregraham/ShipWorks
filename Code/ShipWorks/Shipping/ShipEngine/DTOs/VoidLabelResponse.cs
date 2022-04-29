@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Reflection;
 using System.Runtime.Serialization;
 using System.Text;
 using Newtonsoft.Json;
@@ -11,6 +12,7 @@ namespace ShipWorks.Shipping.ShipEngine.DTOs
     /// VoidLabelResponse
     /// </summary>
     [DataContract]
+    [Obfuscation(Exclude = true, ApplyToMembers = true, StripAfterObfuscation = false)]
     public partial class VoidLabelResponse : BaseShipEngineResponse, IEquatable<VoidLabelResponse>, IValidatableObject
     {
         /// <summary>

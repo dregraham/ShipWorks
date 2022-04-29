@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
+using System.Reflection;
 using System.Runtime.Serialization;
 using System.Text;
 using Newtonsoft.Json;
@@ -12,6 +13,7 @@ namespace ShipWorks.Shipping.ShipEngine.DTOs
     /// TrackingInformation
     /// </summary>
     [DataContract]
+    [Obfuscation(Exclude = true, ApplyToMembers = true, StripAfterObfuscation = false)]
     public partial class TrackingInformation : BaseShipEngineResponse, IEquatable<TrackingInformation>, IValidatableObject
     {
         /// <summary>

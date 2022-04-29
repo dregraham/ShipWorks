@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Reflection;
 using Newtonsoft.Json;
 
 namespace ShipWorks.Shipping.ShipEngine.DTOs
@@ -6,6 +7,7 @@ namespace ShipWorks.Shipping.ShipEngine.DTOs
     /// <summary>
     /// The base class for responses from ShipEngine
     /// </summary>
+    [Obfuscation(Exclude = true, ApplyToMembers = true, StripAfterObfuscation = false)]
     public class BaseShipEngineResponse
     {
         [JsonProperty("request_id")]
