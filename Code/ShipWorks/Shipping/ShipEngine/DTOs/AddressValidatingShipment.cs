@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
+using System.Reflection;
 using System.Runtime.Serialization;
 using System.Text;
-using System.Threading.Tasks;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 
@@ -14,6 +14,7 @@ namespace ShipWorks.Shipping.ShipEngine.DTOs
     /// AddressValidatingShipment
     /// </summary>
     [DataContract]
+    [Obfuscation(Exclude = true, ApplyToMembers = true, StripAfterObfuscation = false)]
     public partial class AddressValidatingShipment : IEquatable<AddressValidatingShipment>, IValidatableObject
     {
         /// <summary>

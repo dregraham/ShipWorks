@@ -2,12 +2,11 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
+using System.Reflection;
 using System.Runtime.Serialization;
 using System.Text;
-using System.Threading.Tasks;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
-using ShipWorks.Shipping.ShipEngine.DTOs;
 
 namespace ShipWorks.Shipping.ShipEngine.DTOs
 {
@@ -15,6 +14,7 @@ namespace ShipWorks.Shipping.ShipEngine.DTOs
     /// Shipment
     /// </summary>
     [DataContract]
+    [Obfuscation(Exclude = true, ApplyToMembers = true, StripAfterObfuscation = false)]
     public partial class Shipment : IEquatable<Shipment>, IValidatableObject
     {
         /// <summary>

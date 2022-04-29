@@ -456,11 +456,11 @@ namespace ShipWorks.Shipping.ShipEngine
                     return responseObject;
                 }
 
-                return GenericResult.FromError<TResponse>(responseObject?.Errors?.FirstOrDefault()?.Message ?? response.ErrorMessage, responseObject);
+                return GenericResult.FromError<TResponse>(responseObject?.Errors?.FirstOrDefault()?.Message ?? response.ErrorMessage ?? "An error occurred communicating with ShipEngine.", responseObject);
             }
             catch (Exception ex)
             {
-                return GenericResult.FromError<TResponse>("An error occurred communicating with ShipEngine", ex);
+                return GenericResult.FromError<TResponse>("An error occurred communicating with ShipEngine.", ex);
             }
         }
     }

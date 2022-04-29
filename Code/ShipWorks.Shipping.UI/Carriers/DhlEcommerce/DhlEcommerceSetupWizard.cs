@@ -144,8 +144,11 @@ namespace ShipWorks.Shipping.UI.Carriers.DhlEcommerce
 
             try
             {
+                Application.UseWaitCursor = true;
                 Cursor.Current = Cursors.WaitCursor;
-                this.Enabled = false;
+                NextEnabled = false;
+                BackEnabled = false;
+                CanCancel = false;
 
                 var result = await shipEngineClient.ConnectDhlEcommerceAccount(new DhlEcommerceRegistrationRequest
                 {
@@ -191,7 +194,10 @@ namespace ShipWorks.Shipping.UI.Carriers.DhlEcommerce
             }
             finally
             {
-                this.Enabled = true;
+                NextEnabled = true;
+                BackEnabled = true;
+                CanCancel = true;
+                Application.UseWaitCursor = false;
                 Cursor.Current = Cursors.Default;
             }
         }
@@ -271,6 +277,11 @@ namespace ShipWorks.Shipping.UI.Carriers.DhlEcommerce
         /// </summary>
         private void ShowWizardError(string errorMessage, WizardStepEventArgs e)
         {
+            if (errorMessage.IsNullOrWhiteSpace())
+            {
+                errorMessage = "An unknown error occurred";
+            }
+
             messageHelper.ShowError(errorMessage);
             e.NextPage = CurrentPage;
         }
