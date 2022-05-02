@@ -240,6 +240,32 @@ namespace ShipWorks.Shipping.Tests.ShipEngine
         }
 
         [Fact]
+        public void CreatePurchaseLabelRequest_CreatesPackages_ForDhlEcommerce()
+        {
+            ShipmentEntity shipment = new ShipmentEntity()
+            {
+                RequestedLabelFormat = (int) ThermalLanguage.ZPL,
+                ShipmentTypeCode = ShipmentTypeCode.DhlEcommerce,
+                DhlEcommerce = new DhlEcommerceShipmentEntity()
+                {
+                    Reference1 = "Ref1"
+                }
+            };
+
+            var package1 = mock.CreateMock<IPackageAdapter>();
+            package1.SetupGet(p => p.DimsLength)
+                .Returns(10);
+
+            var packages = new List<IPackageAdapter> { package1.Object };
+
+            var request = testObject.CreatePurchaseLabelRequest(shipment, packages, string.Empty, (a) => string.Empty, (a, b) => { });
+
+            var package = request.Shipment.Packages.Single();
+            Assert.Equal(10, package.Dimensions.Length);
+            Assert.Equal(shipment.DhlEcommerce.Reference1, package.LabelMessages.Reference1);
+        }
+
+        [Fact]
         public void CreateCustomsItems_CreatesSingleCustomItems_WhenOneCustomItemInShipment()
         {
             ShipmentEntity shipment = new ShipmentEntity();
