@@ -55,8 +55,9 @@ namespace ShipWorks.Stores.Tests.Platforms.Amazon
 
             var store = new AmazonStoreEntity();
 
-            unitUnderTest.Save(store);
+            var result = unitUnderTest.Save(store);
 
+            Assert.True(result);
             Assert.Equal("ATVPDKIKX0DER", store.MarketplaceID);
             Assert.Equal("26824e643458", store.MerchantID);
             Assert.Equal("56d1cd01-b430-4ebc-8c8e-aeb39888e1cc", store.OrderSourceID);
@@ -66,12 +67,13 @@ namespace ShipWorks.Stores.Tests.Platforms.Amazon
         public void Save_Invalid()
         {
             var unitUnderTest = mock.Create<AmazonCreateOrderSourceViewModel>();
-            unitUnderTest.EncodedOrderSource = "adfuheiofuabiuea37848shfiuwhe38";
+            unitUnderTest.EncodedOrderSource = "asdfasdf";
 
             var store = new AmazonStoreEntity();
 
-            unitUnderTest.Save(store);
+            var result = unitUnderTest.Save(store);
 
+            Assert.False(result);
             Assert.Equal(null, store.MarketplaceID);
             Assert.Equal(null, store.MerchantID);
             Assert.Equal(null, store.OrderSourceID);

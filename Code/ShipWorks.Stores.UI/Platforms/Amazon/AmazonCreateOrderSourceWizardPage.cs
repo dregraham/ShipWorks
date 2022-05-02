@@ -41,7 +41,10 @@ namespace ShipWorks.Stores.UI.Platforms.Amazon
         /// </summary>
         private void OnStepNext(object sender, WizardStepEventArgs e)
         {
-            viewModel.Save(GetStore<AmazonStoreEntity>());
+            if (!viewModel.Save(GetStore<AmazonStoreEntity>()))
+            {
+                e.NextPage = this;
+            }
         }
     }
 }

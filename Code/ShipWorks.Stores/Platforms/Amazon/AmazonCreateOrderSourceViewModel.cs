@@ -98,12 +98,16 @@ namespace ShipWorks.Stores.Platforms.Amazon
         /// <summary>
         /// Save the order source
         /// </summary>
-        public void Save(AmazonStoreEntity store)
+        public bool Save(AmazonStoreEntity store)
         {
             if (!Decode(EncodedOrderSource, store))
             {
-                log.Error("Failed to decode the encoded order source.");
+                log.Error("Failed to decode the encoded order source token.");
+                messageHelper.ShowError("There is something wrong with the token. Please try to copy and paste it again.");
+                return false;
             }
+
+            return true;
         }
 
         /// <summary>
@@ -135,6 +139,12 @@ namespace ShipWorks.Stores.Platforms.Amazon
                 if (splitString.Length != 3)
                 {
                     log.Error("The provided Base64 string did not have 3 sections separated by the '_' character.");
+                    return false;
+                }
+
+                if(!GuidHelper.IsGuid(splitString[2]))
+                {
+                    log.Error("The provided token's third part was not a GUID");
                     return false;
                 }
 
