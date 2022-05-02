@@ -21,6 +21,7 @@ namespace ShipWorks.Shipping.ShipEngine.DTOs
         /// Defines Contents
         /// </summary>
         [JsonConverter(typeof(StringEnumConverter))]
+        [Obfuscation(Exclude = true, ApplyToMembers = true, StripAfterObfuscation = false)]
         public enum ContentsEnum
         {
 
@@ -64,6 +65,7 @@ namespace ShipWorks.Shipping.ShipEngine.DTOs
         /// Defines NonDelivery
         /// </summary>
         [JsonConverter(typeof(StringEnumConverter))]
+        [Obfuscation(Exclude = true, ApplyToMembers = true, StripAfterObfuscation = false)]
         public enum NonDeliveryEnum
         {
 

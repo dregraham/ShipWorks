@@ -20,6 +20,7 @@ namespace ShipWorks.Shipping.ShipEngine.DTOs
         /// Defines BillToParty
         /// </summary>
         [JsonConverter(typeof(StringEnumConverter))]
+        [Obfuscation(Exclude = true, ApplyToMembers = true, StripAfterObfuscation = false)]
         public enum BillToPartyEnum
         {
 

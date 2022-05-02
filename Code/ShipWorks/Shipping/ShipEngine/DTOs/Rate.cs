@@ -21,6 +21,7 @@ namespace ShipWorks.Shipping.ShipEngine.DTOs
         /// Defines RateType
         /// </summary>
         [JsonConverter(typeof(StringEnumConverter))]
+        [Obfuscation(Exclude = true, ApplyToMembers = true, StripAfterObfuscation = false)]
         public enum RateTypeEnum
         {
 
@@ -46,6 +47,7 @@ namespace ShipWorks.Shipping.ShipEngine.DTOs
         /// Defines ValidationStatus
         /// </summary>
         [JsonConverter(typeof(StringEnumConverter))]
+        [Obfuscation(Exclude = true, ApplyToMembers = true, StripAfterObfuscation = false)]
         public enum ValidationStatusEnum
         {
 

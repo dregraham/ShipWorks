@@ -40,7 +40,13 @@ namespace ShipWorks.Shipping.Tests.Carriers.DhlExpress
                 .Setup(f => f.CreateRateRequest(AnyShipment))
                 .Returns(new RateShipmentRequest() { Shipment = new AddressValidatingShipment() });
 
-            purchaseLabelRequest = new PurchaseLabelRequest() { Shipment = new Shipment() };
+            purchaseLabelRequest = new PurchaseLabelRequest()
+            {
+                Shipment = new Shipment()
+                {
+                    Packages = new List<ShipmentPackage>()
+                }
+            };
             shipmentElementFactory
                 .Setup(f => f.CreatePurchaseLabelRequest(AnyShipment, It.IsAny<List<IPackageAdapter>>(), AnyString, It.IsAny<Func<IPackageAdapter, string>>(), It.IsAny<Action<ShipmentPackage, IPackageAdapter>>()))
                 .Returns(purchaseLabelRequest);

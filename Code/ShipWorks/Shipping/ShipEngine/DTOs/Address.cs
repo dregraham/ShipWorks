@@ -20,6 +20,7 @@ namespace ShipWorks.Shipping.ShipEngine.DTOs
         /// Defines AddressResidentialIndicator
         /// </summary>
         [JsonConverter(typeof(StringEnumConverter))]
+        [Obfuscation(Exclude = true, ApplyToMembers = true, StripAfterObfuscation = false)]
         public enum AddressResidentialIndicatorEnum
         {
 

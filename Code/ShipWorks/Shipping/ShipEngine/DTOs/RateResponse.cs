@@ -21,6 +21,7 @@ namespace ShipWorks.Shipping.ShipEngine.DTOs
         /// Defines Status
         /// </summary>
         [JsonConverter(typeof(StringEnumConverter))]
+        [Obfuscation(Exclude = true, ApplyToMembers = true, StripAfterObfuscation = false)]
         public enum StatusEnum
         {
 
