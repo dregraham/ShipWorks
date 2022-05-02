@@ -24,6 +24,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.Amazon
         readonly CreateShipmentResponse response;
         readonly Mock<IAmazonMwsWebClientSettings> settings;
         private Uri proxy;
+        private readonly AmazonSFPShipmentEntity shipment;
 
         public AmazonSFPShippingWebClientTest()
         {
@@ -53,6 +54,11 @@ namespace ShipWorks.Shipping.Tests.Carriers.Amazon
                         }
                     }
                 }
+            };
+
+            shipment = new AmazonSFPShipmentEntity()
+            {
+                ShippingServiceID = "test"
             };
 
             var responseReader = mock.Mock<IHttpResponseReader>();
@@ -85,11 +91,6 @@ namespace ShipWorks.Shipping.Tests.Carriers.Amazon
             mock.Mock<IHttpResponseReader>()
                    .Setup(x => x.ReadResult()).Returns("<Foo></Foo>");
 
-            var shipment = new AmazonSFPShipmentEntity()
-            {
-                ShippingServiceID = "test"
-            };
-
             var testObject = mock.Create<AmazonSFPShippingWebClient>();
 
             Assert.Throws<AmazonSFPShippingException>(() => testObject.CreateShipment(request, shipment, telemetricResult));
@@ -100,11 +101,6 @@ namespace ShipWorks.Shipping.Tests.Carriers.Amazon
         {
             var testObject = mock.Create<AmazonSFPShippingWebClient>();
 
-            var shipment = new AmazonSFPShipmentEntity()
-            {
-                ShippingServiceID = "test"
-            };
-
             var result = testObject.CreateShipment(request, shipment, telemetricResult);
 
             Assert.NotNull(result);
@@ -114,11 +110,6 @@ namespace ShipWorks.Shipping.Tests.Carriers.Amazon
         public void CreateShipment_UsesProxy_WhenShipping()
         {
             var testObject = mock.Create<AmazonSFPShippingWebClient>();
-
-            var shipment = new AmazonSFPShipmentEntity()
-            {
-                ShippingServiceID = "test"
-            };
 
             testObject.CreateShipment(request, shipment, telemetricResult);
             
