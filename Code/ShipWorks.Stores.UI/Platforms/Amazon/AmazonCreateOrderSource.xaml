@@ -56,14 +56,14 @@
             </Hyperlink>
         </TextBlock>
         <StackPanel Grid.Row="1" Style="{StaticResource StepBlock}">
-            <TextBlock Style="{StaticResource StepHeader}">1: Create an Order Source ID</TextBlock>
+            <TextBlock Style="{StaticResource StepHeader}">1: Create an Amazon Token</TextBlock>
             <Grid Style="{StaticResource StepContents}">
                 <Button
                     Padding="8,4"
                     Command="{Binding GetOrderSourceId}"
                     Style="{StaticResource SmallSecondaryButton}"
                     IsEnabled="{Binding OpeningUrl, Converter={ui:InverseBooleanConverter}}">
-                    Get Order Source ID
+                    Create Amazon Token
                 </Button>
             </Grid>
         </StackPanel>
@@ -77,7 +77,7 @@
         </ui:WaitSpinner>
 
         <StackPanel Grid.Row="2" Style="{StaticResource StepBlock}">
-            <TextBlock Style="{StaticResource StepHeader}">2: Fill in the Order Source ID</TextBlock>
+            <TextBlock Style="{StaticResource StepHeader}">2: Fill in the Amazon Token</TextBlock>
             <Grid Style="{StaticResource StepContents}">
                 <TextBox
                     Width="250"

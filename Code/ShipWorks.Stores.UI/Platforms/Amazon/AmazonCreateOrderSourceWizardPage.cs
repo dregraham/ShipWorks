@@ -22,6 +22,9 @@ namespace ShipWorks.Stores.UI.Platforms.Amazon
         public AmazonCreateOrderSourceWizardPage(IAmazonCreateOrderSourceViewModel viewModel)
         {
             this.viewModel = viewModel;
+            Title = "Amazon Store Setup";
+            Description = "Allow ShipWorks to access your Amazon store.";
+            
             InitializeComponent();
         }
 

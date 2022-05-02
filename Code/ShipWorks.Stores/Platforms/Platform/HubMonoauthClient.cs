@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using Interapptive.Shared.ComponentRegistration;
 using RestSharp;
 using ShipWorks.ApplicationCore.Licensing.Warehouse;
@@ -37,7 +38,7 @@ namespace ShipWorks.Stores.Platforms.Platform
         public async Task<string> GetCreateOrderSourceInitiateUrl(string orderSourceName, string apiRegion)
         {
             var request = warehouseRequestFactory.Create(
-                WarehouseEndpoints.GetCreateOrderSourceInitiateUrl(orderSourceName, warehouseRequestClient.WarehouseUrl, apiRegion), Method.GET,
+                WarehouseEndpoints.GetCreateOrderSourceInitiateUrl(orderSourceName, UpdateLocalUrl(warehouseRequestClient.WarehouseUrl), apiRegion), Method.GET,
                 null);
 
             var result = await warehouseRequestClient.MakeRequest<GetMonauthInitiateUrlResponse>(request, GetMonoauthInitiateUrl)
@@ -56,7 +57,7 @@ namespace ShipWorks.Stores.Platforms.Platform
         public async Task<string> GetUpdateOrderSourceInitiateUrl(string orderSourceName, string orderSourceId, string apiRegion)
         {
             var request = warehouseRequestFactory.Create(
-                WarehouseEndpoints.GetUpdateOrderSourceInitiateUrl(orderSourceName, warehouseRequestClient.WarehouseUrl, orderSourceId, apiRegion), Method.GET,
+                WarehouseEndpoints.GetUpdateOrderSourceInitiateUrl(orderSourceName, UpdateLocalUrl(warehouseRequestClient.WarehouseUrl), orderSourceId, apiRegion), Method.GET,
                 null);
 
             var result = await warehouseRequestClient.MakeRequest<GetMonauthInitiateUrlResponse>(request, GetInitiateUpdateOrderSourceUrl)
@@ -64,5 +65,12 @@ namespace ShipWorks.Stores.Platforms.Platform
 
             return result.InitiateUrl;
         }
+
+        /// <summary>
+        /// Updates the port if pointing local
+        /// </summary>
+        private string UpdateLocalUrl(string warehouseUrl) =>        
+            warehouseUrl.Replace("http://localhost:4001", "http://localhost:3000");
+        
     }
 }
