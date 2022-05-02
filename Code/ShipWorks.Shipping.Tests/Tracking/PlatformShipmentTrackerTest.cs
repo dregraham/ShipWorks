@@ -56,6 +56,11 @@ namespace ShipWorks.Shipping.Tests.Tracking
                 })
                 .ReturnsAsync(new ShipmentEntity[] { });
 
+
+            mock.Mock<IPlatformShipmentTrackerClient>()
+                .Setup(c => c.SendShipment(AnyString, AnyString, AnyString))
+                .ReturnsAsync(GenericResult.FromSuccess(mock.Mock<IRestResponse>().Object));
+
             var testObject = mock.Create<PlatformShipmentTracker>();
             await testObject.TrackShipments(new CancellationToken()).ConfigureAwait(false);
             

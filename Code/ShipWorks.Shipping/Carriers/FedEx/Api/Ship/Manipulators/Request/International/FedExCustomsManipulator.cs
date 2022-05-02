@@ -502,6 +502,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Ship.Manipulators.Request.Intern
             request.Ensure(r => r.RequestedShipment)
                 .Ensure(rs => rs.Recipient);
             request.RequestedShipment.Ensure(x => x.CustomsClearanceDetail);
+            request.RequestedShipment.Ensure(x => x.ShippingChargesPayment);
+            request.RequestedShipment.ShippingChargesPayment.Ensure(x => x.Payor);
+            request.RequestedShipment.ShippingChargesPayment.Payor.Ensure(x => x.ResponsibleParty);
         }
 
         /// <summary>

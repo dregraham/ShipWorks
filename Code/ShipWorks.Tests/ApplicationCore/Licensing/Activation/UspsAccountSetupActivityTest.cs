@@ -254,7 +254,7 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing.Activation
                 UspsAccountSetupActivity testObject = mock.Create<UspsAccountSetupActivity>();
                 testObject.Execute(license.Object, password);
 
-                Assert.Equal(SecureText.Encrypt(password, createdAccount.Username), createdAccount.Password);
+                Assert.Equal(SecureText.Decrypt(createdAccount.Password, createdAccount.Username), password);
             }
         }
 
