@@ -39,9 +39,9 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Endicia.Account
             EndiciaAccountEntity endiciaAccountEntity = new EndiciaAccountEntity();
             testObject.PopulateAccountEntity(endiciaAccountEntity);
 
-            Assert.Equal(SecureText.Encrypt("webPassword", "Endicia"), endiciaAccountEntity.WebPassword);
-            Assert.Equal(SecureText.Encrypt("passPhrase_Initial", "Endicia"), endiciaAccountEntity.ApiInitialPassword);
-            Assert.Equal(SecureText.Encrypt("passPhrase", "Endicia"), endiciaAccountEntity.ApiUserPassword);
+            Assert.Equal(SecureText.Decrypt(endiciaAccountEntity.WebPassword, "Endicia"), "webPassword");
+            Assert.Equal(SecureText.Decrypt(endiciaAccountEntity.ApiInitialPassword, "Endicia"), "passPhrase_Initial");
+            Assert.Equal(SecureText.Decrypt(endiciaAccountEntity.ApiUserPassword, "Endicia"), "passPhrase");
         }
 
         [Fact]
