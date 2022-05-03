@@ -607,7 +607,7 @@ namespace ShipWorks.Stores.Platforms.Amazon.Mws
 
             if (shipment.ShipmentType == (int) ShipmentTypeCode.DhlEcommerce)
             {
-                return "UPS Mail Innovations";
+                return "DHL";
             }
 
             if (ShipmentTypeManager.ShipmentTypeCodeSupportsDhl((ShipmentTypeCode) shipment.ShipmentType))

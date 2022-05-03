@@ -167,10 +167,8 @@ namespace ShipWorks.Stores.Platforms.Platform.OnlineUpdating
                 case true when shipmentTypeCode == ShipmentTypeCode.DhlExpress:
                     return "dhl_express";
 
-
-                // TODO: DHLECommerce implement
-                //case true when shipmentTypeCode == ShipmentTypeCode.DhlEcommerce:
-                //    return "dhl_xxxxxxxxxxxxxxxxxxxxxxxxx";
+                case true when shipmentTypeCode == ShipmentTypeCode.DhlEcommerce:
+                    return "dhl_global_mail";
 
                 case true when shipmentTypeCode == ShipmentTypeCode.OnTrac:
                 case true when sfpName.Equals("ONTRAC", StringComparison.OrdinalIgnoreCase):

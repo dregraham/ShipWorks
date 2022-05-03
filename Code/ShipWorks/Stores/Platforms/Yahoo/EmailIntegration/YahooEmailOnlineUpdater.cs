@@ -297,6 +297,9 @@ namespace ShipWorks.Stores.Platforms.Yahoo.EmailIntegration
                 case ShipmentTypeCode.OnTrac:
                     return "OnTrac";
 
+                case ShipmentTypeCode.DhlEcommerce:
+                    return "DHL";
+
                 case ShipmentTypeCode.Other:
                     // As of June 2014, Yahoo only allows UPS, Fedex, DHL, and Usps as the carrier by default
                     // If someone ships with 'Other', we'll try to send the right one if we can

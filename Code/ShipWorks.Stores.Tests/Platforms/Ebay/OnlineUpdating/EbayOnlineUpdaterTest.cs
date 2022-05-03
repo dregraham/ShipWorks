@@ -166,6 +166,21 @@ namespace ShipWorks.Tests.Stores.eBay.OnlineUpdating
             CheckCarrierCodeAndTrackingNumber();
         }
 
+        [Fact]
+        public void GetCarrierCode_ReturnsDhlEcommerce()
+        {
+            shipmentEntity.ShipmentType = (int) ShipmentTypeCode.DhlEcommerce;
+            shipmentEntity.DhlEcommerce = new DhlEcommerceShipmentEntity();
+
+            string newCarrierCode = string.Empty;
+            string trackingNumber = string.Empty;
+
+            EbayOnlineUpdater.GetShippingCarrierAndTracking(shipmentEntity, out newCarrierCode, out trackingNumber);
+
+            Assert.Equal("DHL Global Mail", newCarrierCode);
+            Assert.Equal(shipmentEntity.TrackingNumber, trackingNumber);
+        }
+
         /// <summary>
         /// Common method used to compare the old ebay online updater with new version.
         /// </summary>
