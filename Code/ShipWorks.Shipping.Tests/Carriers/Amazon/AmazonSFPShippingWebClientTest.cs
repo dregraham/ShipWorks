@@ -24,6 +24,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.Amazon
         readonly CreateShipmentResponse response;
         readonly Mock<IAmazonMwsWebClientSettings> settings;
         private Uri proxy;
+        private readonly AmazonSFPShipmentEntity shipment;
 
         public AmazonSFPShippingWebClientTest()
         {
@@ -53,6 +54,11 @@ namespace ShipWorks.Shipping.Tests.Carriers.Amazon
                         }
                     }
                 }
+            };
+
+            shipment = new AmazonSFPShipmentEntity()
+            {
+                ShippingServiceID = "test"
             };
 
             var responseReader = mock.Mock<IHttpResponseReader>();
@@ -87,14 +93,15 @@ namespace ShipWorks.Shipping.Tests.Carriers.Amazon
 
             var testObject = mock.Create<AmazonSFPShippingWebClient>();
 
-            Assert.Throws<AmazonSFPShippingException>(() => testObject.CreateShipment(request, new AmazonSFPShipmentEntity(), telemetricResult));
+            Assert.Throws<AmazonSFPShippingException>(() => testObject.CreateShipment(request, shipment, telemetricResult));
         }
 
         [Fact]
         public void CreateShipment_ReturnsShipment_WhenResponseIsValid()
         {
             var testObject = mock.Create<AmazonSFPShippingWebClient>();
-            var result = testObject.CreateShipment(request, new AmazonSFPShipmentEntity(), telemetricResult);
+
+            var result = testObject.CreateShipment(request, shipment, telemetricResult);
 
             Assert.NotNull(result);
         }
@@ -104,7 +111,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.Amazon
         {
             var testObject = mock.Create<AmazonSFPShippingWebClient>();
 
-            testObject.CreateShipment(request, new AmazonSFPShipmentEntity(), telemetricResult);
+            testObject.CreateShipment(request, shipment, telemetricResult);
             
             mock.Mock<IHttpVariableRequestSubmitter>()
                 .VerifySet(r=>r.Uri=proxy);
