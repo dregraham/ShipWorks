@@ -110,5 +110,10 @@ namespace ShipWorks.Shipping.ShipEngine
         /// Create an Asendia Manifest for the given label IDs
         /// </summary>
         Task<Result> CreateAsendiaManifest(IEnumerable<string> labelIds);
+
+        /// <summary>
+        /// Create a manifest for the given label IDs, retrying if necessary
+        /// </summary>
+        Task<Result> CreateManifest(List<string> labelIDs);
     }
 }

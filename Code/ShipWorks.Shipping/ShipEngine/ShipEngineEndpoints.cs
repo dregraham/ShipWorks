@@ -32,5 +32,7 @@
         public static string TrackLabel(string labelId) => $"v1/labels/{labelId}/track";
 
         public static string Track => "v1/tracking";
+
+        public static string CreateManifest => "v1/manifests";
     }
 }
