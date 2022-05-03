@@ -45,6 +45,8 @@ namespace ShipWorks.Shipping.UI.Carriers.DhlEcommerce
 
             LoadAccounts();
 
+            EnumHelper.BindComboBox<DhlEcommercePackagingType>(packageType);
+
             ShipSenseFieldChanged += (s, a) => SaveToShipments();
 
             weight.ConfigureTelemetryEntityCounts = telemetryEvent =>
@@ -100,6 +102,7 @@ namespace ShipWorks.Shipping.UI.Carriers.DhlEcommerce
         /// </summary>
         public override void LoadShipments(IEnumerable<ShipmentEntity> shipments, bool enableEditing, bool enableShippingAddress)
         {
+            SuspendRateCriteriaChangeEvent();
             SuspendShipSenseFieldChangeEvent();
 
             RecipientDestinationChanged -= OnRecipientDestinationChanged;
@@ -113,6 +116,7 @@ namespace ShipWorks.Shipping.UI.Carriers.DhlEcommerce
             LoadShipmentDetails();
             UpdateInsuranceDisplay();
             ResumeShipSenseFieldChangeEvent();
+            ResumeRateCriteriaChangeEvent();
         }
 
         /// <summary>
@@ -127,8 +131,6 @@ namespace ShipWorks.Shipping.UI.Carriers.DhlEcommerce
 
             // Update the service types
             UpdateServiceTypes(LoadedShipments);
-
-            packageType.BindToEnumAndPreserveSelection<DhlEcommercePackagingType>(x => true);
 
             using (new MultiValueScope())
             {
@@ -232,6 +234,7 @@ namespace ShipWorks.Shipping.UI.Carriers.DhlEcommerce
         public override void SaveToShipments()
         {
             SuspendShipSenseFieldChangeEvent();
+            SuspendRateCriteriaChangeEvent();
 
             base.SaveToShipments();
 
@@ -264,6 +267,7 @@ namespace ShipWorks.Shipping.UI.Carriers.DhlEcommerce
             }
 
             ResumeShipSenseFieldChangeEvent();
+            ResumeRateCriteriaChangeEvent();
         }
 
         /// <summary>
