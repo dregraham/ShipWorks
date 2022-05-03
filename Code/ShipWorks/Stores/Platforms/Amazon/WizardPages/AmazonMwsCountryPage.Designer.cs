@@ -44,10 +44,10 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.Controls.Add(this.storeSettingsControl);
-            this.Description = "Enter the information about your Amazon MWS account.";
+            this.Description = "Enter the information about your Amazon account.";
             this.Name = "AmazonMwsCountryPage";
             this.Size = new System.Drawing.Size(293, 81);
-            this.Title = "Amazon MWS Credentials";
+            this.Title = "Amazon Store Setup";
             this.StepNext += new System.EventHandler<ShipWorks.UI.Wizard.WizardStepEventArgs>(this.OnStepNext);
             this.ResumeLayout(false);
 

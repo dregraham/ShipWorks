@@ -22,6 +22,9 @@ namespace ShipWorks.Stores.UI.Platforms.Amazon
         public AmazonCreateOrderSourceWizardPage(IAmazonCreateOrderSourceViewModel viewModel)
         {
             this.viewModel = viewModel;
+            Title = "Amazon Store Setup";
+            Description = "Allow ShipWorks to access your Amazon store.";
+            
             InitializeComponent();
         }
 
@@ -38,7 +41,10 @@ namespace ShipWorks.Stores.UI.Platforms.Amazon
         /// </summary>
         private void OnStepNext(object sender, WizardStepEventArgs e)
         {
-            viewModel.Save(GetStore<AmazonStoreEntity>());
+            if (!viewModel.Save(GetStore<AmazonStoreEntity>()))
+            {
+                e.NextPage = this;
+            }
         }
     }
 }

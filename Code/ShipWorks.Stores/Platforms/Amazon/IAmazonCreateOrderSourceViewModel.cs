@@ -15,6 +15,6 @@ namespace ShipWorks.Stores.Platforms.Amazon
         /// <summary>
         /// Save the store
         /// </summary>
-        void Save(AmazonStoreEntity store);
+        bool Save(AmazonStoreEntity store);
     }
 }

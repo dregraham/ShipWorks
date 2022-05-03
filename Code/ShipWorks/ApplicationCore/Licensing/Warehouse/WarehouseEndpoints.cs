@@ -33,8 +33,8 @@ namespace ShipWorks.ApplicationCore.Licensing.Warehouse
         private const string voidShipment = "api/orders/{0}/void";
         private const string rerouteOrderItems = "api/orders/{0}/rerouteItems";
         private const string getTrackingUpdates = "api/tracking/{0}";
-        private const string createOrderSourceInitiateUrl = "api/ordersource/{0}/auth?RedirectUrl={1}/callbacks/{0}monoauth/subscribe";
-        private const string updateOrderSourceInitiateUrl = "api/ordersource/{0}/auth?RedirectUrl={1}/callbacks/{0}monoauth/update&OrderSourceId={2}";
+        private const string createOrderSourceInitiateUrl = "api/ordersource/{0}/auth?RedirectUrl={1}callbacks/{0}monoauth/subscribe&ApiRegion={2}";
+        private const string updateOrderSourceInitiateUrl = "api/ordersource/{0}/auth?RedirectUrl={1}callbacks/{0}monoauth/update&OrderSourceId={2}&ApiRegion={3}";
 
         /// <summary>
         /// Create a link warehouse endpoint
@@ -110,13 +110,13 @@ namespace ShipWorks.ApplicationCore.Licensing.Warehouse
         /// <summary>
         /// Get the URL to get the InitiateMonoauthUrl for creating a new order source
         /// </summary>
-        public static string GetCreateOrderSourceInitiateUrl(string orderSourceName, string redirectUrl) =>
-            string.Format(createOrderSourceInitiateUrl, orderSourceName, redirectUrl);
+        public static string GetCreateOrderSourceInitiateUrl(string orderSourceName, string redirectUrl, string apiRegion) =>
+            string.Format(createOrderSourceInitiateUrl, orderSourceName, redirectUrl, apiRegion);
 
         /// <summary>
         /// Get the URL to get the InitiateMonoauthUrl for updating an order source
         /// </summary>
-        public static string GetUpdateOrderSourceInitiateUrl(string orderSourceName, string redirectUrl, string orderSourceId) =>
-            string.Format(updateOrderSourceInitiateUrl, orderSourceName, redirectUrl, orderSourceId);
+        public static string GetUpdateOrderSourceInitiateUrl(string orderSourceName, string redirectUrl, string orderSourceId, string apiRegion) =>
+            string.Format(updateOrderSourceInitiateUrl, orderSourceName, redirectUrl, orderSourceId, apiRegion);
     }
 }
