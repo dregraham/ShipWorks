@@ -503,6 +503,7 @@ namespace ShipWorks.Data.Model
 			this.AddElementFieldMapping("AmazonStoreEntity", "DomainName", "DomainName", false, "NVarChar", 50, 0, 0, false, "", null, typeof(System.String), 17);
 			this.AddElementFieldMapping("AmazonStoreEntity", "AmazonVATS", "AmazonVATS", false, "Bit", 0, 0, 0, false, "", null, typeof(System.Boolean), 18);
 			this.AddElementFieldMapping("AmazonStoreEntity", "MaxOrderDatePreMigration", "MaxOrderDatePreMigration", true, "DateTime", 0, 0, 0, false, "", null, typeof(System.DateTime), 19);
+			this.AddElementFieldMapping("AmazonStoreEntity", "ContinuationToken", "ContinuationToken", true, "NVarChar", 2048, 0, 0, false, "", null, typeof(System.String), 20);
 		}
 
 		/// <summary>Inits AmazonSWAAccountEntity's mappings</summary>

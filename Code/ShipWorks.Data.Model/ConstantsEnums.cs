@@ -678,6 +678,8 @@ namespace ShipWorks.Data.Model
 		AmazonVATS,
 		///<summary>MaxOrderDatePreMigration. </summary>
 		MaxOrderDatePreMigration,
+		///<summary>ContinuationToken. </summary>
+		ContinuationToken,
 		/// <summary></summary>
 		AmountOfFields
 	}

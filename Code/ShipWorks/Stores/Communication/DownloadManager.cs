@@ -26,6 +26,7 @@ using ShipWorks.Data.Model.Custom;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Data.Utility;
+using ShipWorks.Stores.Platforms.Amazon;
 using ShipWorks.Users;
 using ShipWorks.Users.Audit;
 using ShipWorks.Users.Security;
@@ -507,7 +508,16 @@ namespace ShipWorks.Stores.Communication
                                 downloadLog = CreateDownloadLog(store, initiatedBy);
 
                                 // Create the downloader
-                                downloader = lifetimeScope.ResolveKeyed<IStoreDownloader>(store.StoreTypeCode, TypedParameter.From(store));
+                                // TODO: Once all Amazon stores have moved onto the new provider this can be removed and resolved as before
+                                if (store.StoreTypeCode == StoreTypeCode.Amazon &&
+                                    !string.IsNullOrEmpty(store.OrderSourceID))
+                                {
+                                    downloader = lifetimeScope.Resolve<AmazonPlatformDownloader>(TypedParameter.From(store));
+                                }
+                                else
+                                {
+                                    downloader = lifetimeScope.ResolveKeyed<IStoreDownloader>(store.StoreTypeCode, TypedParameter.From(store));
+                                }
 
                                 // Verify the license
                                 progressItem.Detail = "Connecting...";

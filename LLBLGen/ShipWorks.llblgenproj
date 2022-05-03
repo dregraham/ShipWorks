@@ -344,6 +344,7 @@
           <Field Name="AmazonVATS" Type="bool" FieldIndex="17" />
           <Field Name="AuthToken" Type="string" MaxLength="100" FieldIndex="7" />
           <Field Name="Certificate" Type="byte[]" IsOptional="true" MaxLength="2048" FieldIndex="11" />
+          <Field Name="ContinuationToken" Type="string" IsOptional="true" MaxLength="2048" FieldIndex="19" />
           <Field Name="Cookie" Type="string" MaxLength="2147483647" FieldIndex="8" />
           <Field Name="CookieExpires" Type="datetime" FieldIndex="9" />
           <Field Name="CookieWaitUntil" Type="datetime" FieldIndex="10" />
@@ -4955,6 +4956,7 @@
                     <Field Name="DomainName" Ordinal="18" DbType="12" Length="50" />
                     <Field Name="AmazonVATS" Ordinal="19" DbType="2" />
                     <Field Name="MaxOrderDatePreMigration" Ordinal="20" IsOptional="true" DbType="4" />
+                    <Field Name="ContinuationToken" Ordinal="21" IsOptional="true" DbType="12" Length="2048" />
                   </Fields>
                 </Table>
                 <Table Name="AmazonSWAAccount">
@@ -11380,6 +11382,7 @@
             <FieldMapping FieldName="AmazonVATS" TargetFieldName="AmazonVATS" />
             <FieldMapping FieldName="AuthToken" TargetFieldName="AuthToken" />
             <FieldMapping FieldName="Certificate" TargetFieldName="Certificate" />
+            <FieldMapping FieldName="ContinuationToken" TargetFieldName="ContinuationToken" />
             <FieldMapping FieldName="Cookie" TargetFieldName="Cookie" />
             <FieldMapping FieldName="CookieExpires" TargetFieldName="CookieExpires" />
             <FieldMapping FieldName="CookieWaitUntil" TargetFieldName="CookieWaitUntil" />
