@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Drawing.Imaging;
 using System.Linq;
 using System.Threading.Tasks;
+using Interapptive.Shared.Collections;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Enums;
 using Interapptive.Shared.Utility;
@@ -314,6 +315,8 @@ namespace ShipWorks.Shipping.Carriers.DhlEcommerce
         /// </summary>
         public override TrackingResult TrackShipment(ShipmentEntity shipment)
         {
+            var failedOrNoResultsSummary = $"<a href='http://webtrack.dhlglobalmail.com/?trackingnumber={shipment.TrackingNumber}' style='color:blue; background-color:white'>Click here to view tracking information online</a>";
+
             try
             {
                 string labelID = shipment.DhlEcommerce?.ShipEngineLabelID;
@@ -329,11 +332,16 @@ namespace ShipWorks.Shipping.Carriers.DhlEcommerce
                         shipEngineWebClient.Track(labelID, ApiLogSource.DhlEcommerce)).Result;
                 }
 
+                if (trackingInfo.StatusCode == "UN" || trackingInfo.Events.None())
+                {
+                    return new TrackingResult { Summary = failedOrNoResultsSummary };
+                }
+
                 return trackingResultFactory.Create(trackingInfo);
             }
             catch (Exception)
             {
-                return new TrackingResult { Summary = $"<a href='http://www.dhl.com/en/Ecommerce/tracking.html?AWB={shipment.TrackingNumber}&brand=DHL' style='color:blue; background-color:white'>Click here to view tracking information online</a>" };
+                return new TrackingResult { Summary = failedOrNoResultsSummary };
             }
         }
 
@@ -341,7 +349,7 @@ namespace ShipWorks.Shipping.Carriers.DhlEcommerce
         /// Get DhlEcommerceShipment Tracking URL
         /// </summary>
         protected override string GetCarrierTrackingUrlInternal(ShipmentEntity shipment) =>
-            $"https://www.dhl.com/global-en/home/tracking/tracking-ecommerce.html?submit=1&tracking-id={shipment.TrackingNumber}";
+            $"http://webtrack.dhlglobalmail.com/?trackingnumber={shipment.TrackingNumber}";
 
         /// <summary>
         /// Gets the service types that are available for this shipment type (i.e have not been excluded).

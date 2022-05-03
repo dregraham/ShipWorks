@@ -280,7 +280,7 @@ namespace ShipWorks.Shipping.ShipEngine
         public async Task<TrackingInformation> Track(string labelId, ApiLogSource apiLogSource)
         {
             var response = await MakeRequest<TrackingInformation>(
-                ShipEngineEndpoints.TrackLabel(labelId), Method.GET, null, "RateShipment", null, apiLogSource);
+                ShipEngineEndpoints.TrackLabel(labelId), Method.GET, null, "TrackShipment", null, apiLogSource);
 
             if (response.Failure)
             {
@@ -296,7 +296,7 @@ namespace ShipWorks.Shipping.ShipEngine
         public async Task<TrackingInformation> Track(string carrier, string trackingNumber, ApiLogSource apiLogSource)
         {
             var response = await MakeRequest<TrackingInformation>(
-                ShipEngineEndpoints.Track, Method.GET, null, "RateShipment", null, apiLogSource);
+                ShipEngineEndpoints.Track, Method.GET, null, "TrackShipment", null, apiLogSource);
 
             if (response.Failure)
             {
