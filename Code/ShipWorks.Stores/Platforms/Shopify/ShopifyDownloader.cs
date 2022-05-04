@@ -496,7 +496,7 @@ namespace ShipWorks.Stores.Platforms.Shopify
             item.Name = lineItem.GetValue<string>("title", string.Empty);
             item.Code = lineItem.GetValue<string>("sku", string.Empty);
             item.SKU = item.Code;
-            item.Quantity = lineItem.GetValue<int>("quantity", 0);
+            item.Quantity = lineItem.GetValue<int>("fulfillable_quantity", lineItem.GetValue<int>("quantity", 0));
             item.UnitPrice = lineItem.GetValue<decimal>("price", 0.0m);
             item.Weight = GetLineItemWeight(lineItem);
 
