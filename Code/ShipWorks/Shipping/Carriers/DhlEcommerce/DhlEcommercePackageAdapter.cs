@@ -26,7 +26,7 @@ namespace ShipWorks.Shipping.Carriers.DhlEcommerce
             MethodConditions.EnsureArgumentIsNotNull(shipment.DhlEcommerce, nameof(shipment.DhlEcommerce));
 
             this.shipment = shipment;
-            this.insuranceChoice = new InsuranceChoice(shipment, shipment.DhlEcommerce, shipment.DhlEcommerce, shipment.DhlEcommerce);
+            this.insuranceChoice = new InsuranceChoice(shipment, shipment, shipment.DhlEcommerce, shipment.DhlEcommerce);
         }
 
         /// <summary>
@@ -161,7 +161,7 @@ namespace ShipWorks.Shipping.Carriers.DhlEcommerce
             //    shipment.DhlEcommerce.InsurancePennyOne = shippingSettings.DhlEcommerceInsurancePennyOne;
             //}
 
-            InsuranceChoice = new InsuranceChoice(shipment, shipment.DhlEcommerce, shipment.DhlEcommerce, shipment.DhlEcommerce);
+            InsuranceChoice = new InsuranceChoice(shipment, shipment, shipment.DhlEcommerce, shipment.DhlEcommerce);
         }
 
         /// <summary>

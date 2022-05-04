@@ -222,7 +222,7 @@ namespace ShipWorks.Shipping.Carriers.DhlEcommerce
             MethodConditions.EnsureArgumentIsNotNull(shipment, nameof(shipment));
 
             return new ShipmentParcel(shipment, null,
-                new InsuranceChoice(shipment, shipment.DhlEcommerce, shipment.DhlEcommerce, shipment.DhlEcommerce),
+                new InsuranceChoice(shipment, shipment, shipment.DhlEcommerce, shipment.DhlEcommerce),
                 new DimensionsAdapter(shipment.DhlEcommerce))
             {
                 TotalWeight = shipment.TotalWeight

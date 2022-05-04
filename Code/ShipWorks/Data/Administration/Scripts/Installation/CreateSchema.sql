@@ -3048,7 +3048,6 @@ CREATE TABLE [dbo].[DhlEcommerceShipment](
 	[CustomsTaxIdType] [int] NULL,
 	[CustomsTinIssuingAuthority] [nvarchar](2) NULL,
 	[ScanFormBatchID] [bigint] NULL,
-	[Insurance] [bit] NOT NULL CONSTRAINT [DF_DhlEcommerceShipment_Insurance] DEFAULT ((0)),
 	[InsuranceValue] [money] NOT NULL CONSTRAINT [DF_DhlEcommerceShipment_InsuranceValue] DEFAULT ((0)),
 	[InsurancePennyOne] [bit] NOT NULL CONSTRAINT [DF_DhlEcommerceShipment_InsurancePennyOne] DEFAULT ((0))
  CONSTRAINT [PK_DhlEcommerceShipment] PRIMARY KEY CLUSTERED 
