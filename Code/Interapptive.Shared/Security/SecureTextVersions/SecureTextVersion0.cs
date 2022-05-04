@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Linq;
 using System.Security.Cryptography;
@@ -83,6 +84,7 @@ namespace Interapptive.Shared.Security.SecureTextVersions
         /// <summary>
         /// Decrypt using our old RC2 implementation
         /// </summary>
+        [SuppressMessage("Security", "CA5351: Do not use a broken cryptographic algorithm (RC2)", Justification = "This is only used for decrypting old values")]
         private static string DecryptWithRC2(string cipher, string salt)
         {
             RC2CryptoServiceProvider crypto = new RC2CryptoServiceProvider();
