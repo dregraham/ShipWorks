@@ -37,9 +37,15 @@ namespace ShipWorks.ApplicationCore.Licensing.Warehouse
         /// <summary>
         /// Make an authenticated request
         /// </summary>
-        public async Task<GenericResult<IRestResponse>> MakeRequest(IRestRequest restRequest, string logName)
+        public Task<GenericResult<IRestResponse>> MakeRequest(IRestRequest restRequest, string logName)
+            => MakeRequest(restRequest, logName, ApiLogSource.ShipWorksWarehouse);
+
+        /// <summary>
+        /// Make an authenticated request
+        /// </summary>
+        public async Task<GenericResult<IRestResponse>> MakeRequest(IRestRequest restRequest, string logName, ApiLogSource apiLogSource)
         {
-            ApiLogEntry logEntry = new ApiLogEntry(ApiLogSource.ShipWorksWarehouse, logName);
+            ApiLogEntry logEntry = new ApiLogEntry(apiLogSource, logName);
             IRestResponse restResponse = null;
 
             try
