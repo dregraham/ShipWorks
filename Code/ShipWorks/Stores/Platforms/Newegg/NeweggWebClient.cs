@@ -330,6 +330,10 @@ namespace ShipWorks.Stores.Platforms.Newegg
                     carrierCode = "i-parcel";
                     break;
 
+                case ShipmentTypeCode.DhlEcommerce:
+                    carrierCode = "DHL eCommerce";
+                    break;
+                    
                 case ShipmentTypeCode.Other:
                     carrierCode = shipmentEntity.Other.Carrier;
                     break;

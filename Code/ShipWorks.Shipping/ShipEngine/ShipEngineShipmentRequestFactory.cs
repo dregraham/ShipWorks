@@ -72,7 +72,7 @@ namespace ShipWorks.Shipping.ShipEngine
                 request.Shipment.InsuranceProvider = Shipment.InsuranceProviderEnum.Carrier;
             }
 
-            if (request.Shipment.Packages.Any())
+            if (request.Shipment.Packages.Any() && shipment.ShipmentTypeCode == ShipmentTypeCode.DhlEcommerce)
             {
                 request.Shipment.Packages.First().LabelMessages.Reference1 = shipment.DhlEcommerce.Reference1;
             }

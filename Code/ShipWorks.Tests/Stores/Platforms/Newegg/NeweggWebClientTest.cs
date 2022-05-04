@@ -96,6 +96,14 @@ namespace ShipWorks.Tests.Stores.Newegg
         }
 
         [Fact]
+        public void GetCarrierCode_ReturnsDhleCommerce_WhenDhlEcommerce()
+        {
+            string carrierCode = RunCarrierCodeTest(ShipmentTypeCode.DhlEcommerce);
+
+            Assert.Equal("DHL eCommerce", carrierCode);
+        }
+
+        [Fact]
         public void GetCarrierCode_ReturnsUsps_WhenEndiciaAndFirstClass()
         {
             postalShipmentEntity.Endicia = endiciaShipmentEntity;

@@ -605,6 +605,11 @@ namespace ShipWorks.Stores.Platforms.Amazon.Mws
                 return shippingManager.GetOtherCarrierDescription(shipment).Name;
             }
 
+            if (shipment.ShipmentType == (int) ShipmentTypeCode.DhlEcommerce)
+            {
+                return "DHL";
+            }
+
             if (ShipmentTypeManager.ShipmentTypeCodeSupportsDhl((ShipmentTypeCode) shipment.ShipmentType))
             {
                 PostalServiceType service = (PostalServiceType) shipment.Postal.Service;

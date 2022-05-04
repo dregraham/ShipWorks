@@ -20,6 +20,7 @@ namespace ShipWorks.Shipping.ShipEngine.DTOs
         /// Defines ValidateAddress
         /// </summary>
         [JsonConverter(typeof(StringEnumConverter))]
+        [Obfuscation(Exclude = true, ApplyToMembers = true, StripAfterObfuscation = false)]
         public enum ValidateAddressEnum
         {
 
@@ -51,6 +52,7 @@ namespace ShipWorks.Shipping.ShipEngine.DTOs
         /// Defines LabelFormat
         /// </summary>
         [JsonConverter(typeof(StringEnumConverter))]
+        [Obfuscation(Exclude = true, ApplyToMembers = true, StripAfterObfuscation = false)]
         public enum LabelFormatEnum
         {
 
@@ -82,6 +84,7 @@ namespace ShipWorks.Shipping.ShipEngine.DTOs
         /// Defines LabelDownloadType
         /// </summary>
         [JsonConverter(typeof(StringEnumConverter))]
+        [Obfuscation(Exclude = true, ApplyToMembers = true, StripAfterObfuscation = false)]
         public enum LabelDownloadTypeEnum
         {
 

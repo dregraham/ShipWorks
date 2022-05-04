@@ -244,6 +244,16 @@ namespace ShipWorks.Tests.Stores.Platforms.ChannelAdvisor
         }
 
         [Fact]
+        public void GetShipmentClassCode_ReturnsDhlGlobalMail_WhenDhlEcommerce()
+        {
+            SetupShipmentDefaults(ShipmentTypeCode.DhlEcommerce);
+
+            string code = ChannelAdvisorOnlineUpdater.GetCarrierCode(shipmentEntity, storeEntity);
+
+            Assert.Equal("DHL", code);
+        }
+
+        [Fact]
         public void GetCarrierCode_ReturnsUsps_WhenUspsAndUspsServiceUsed()
         {
             SetupShipmentDefaults(ShipmentTypeCode.Usps);

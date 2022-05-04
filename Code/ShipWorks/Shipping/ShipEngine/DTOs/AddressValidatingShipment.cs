@@ -21,6 +21,7 @@ namespace ShipWorks.Shipping.ShipEngine.DTOs
         /// Defines ValidateAddress
         /// </summary>
         [JsonConverter(typeof(StringEnumConverter))]
+        [Obfuscation(Exclude = true, ApplyToMembers = true, StripAfterObfuscation = false)]
         public enum ValidateAddressEnum
         {
 
@@ -52,6 +53,7 @@ namespace ShipWorks.Shipping.ShipEngine.DTOs
         /// Defines ShipmentStatus
         /// </summary>
         [JsonConverter(typeof(StringEnumConverter))]
+        [Obfuscation(Exclude = true, ApplyToMembers = true, StripAfterObfuscation = false)]
         public enum ShipmentStatusEnum
         {
 
@@ -89,6 +91,7 @@ namespace ShipWorks.Shipping.ShipEngine.DTOs
         /// Defines Confirmation
         /// </summary>
         [JsonConverter(typeof(StringEnumConverter))]
+        [Obfuscation(Exclude = true, ApplyToMembers = true, StripAfterObfuscation = false)]
         public enum ConfirmationEnum
         {
 
@@ -132,6 +135,7 @@ namespace ShipWorks.Shipping.ShipEngine.DTOs
         /// Defines OrderSourceCode
         /// </summary>
         [JsonConverter(typeof(StringEnumConverter))]
+        [Obfuscation(Exclude = true, ApplyToMembers = true, StripAfterObfuscation = false)]
         public enum OrderSourceCodeEnum
         {
 
@@ -859,6 +863,7 @@ namespace ShipWorks.Shipping.ShipEngine.DTOs
         /// Defines InsuranceProvider
         /// </summary>
         [JsonConverter(typeof(StringEnumConverter))]
+        [Obfuscation(Exclude = true, ApplyToMembers = true, StripAfterObfuscation = false)]
         public enum InsuranceProviderEnum
         {
 

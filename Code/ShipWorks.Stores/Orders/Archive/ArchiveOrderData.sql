@@ -147,6 +147,7 @@ BEGIN
 	exec PurgeEntities 'AmazonSWAShipment', 'ShipmentID', 'ShipmentID'
 	exec PurgeEntities 'AsendiaShipment', 'ShipmentID', 'ShipmentID'
 	exec PurgeEntities 'BestRateShipment', 'ShipmentID', 'ShipmentID'
+	exec PurgeEntities 'DhlEcommerceShipment', 'ShipmentID', 'ShipmentID'
 	exec PurgeEntities 'DhlExpressShipment', 'ShipmentID', 'ShipmentID'
 	exec PurgeEntities 'DhlEcommerceShipment', 'ShipmentID', 'ShipmentID'
 	exec PurgeEntities 'FedExShipment', 'ShipmentID', 'ShipmentID'
