@@ -266,14 +266,12 @@ namespace ShipWorks.Shipping.Carriers.DhlEcommerce
         public override IBestRateShippingBroker GetShippingBroker(ShipmentEntity shipment, IBestRateExcludedAccountRepository bestRateExcludedAccountRepository)
         {
             IEnumerable<long> excludedAccounts = bestRateExcludedAccountRepository.GetAll();
+            IEnumerable<IDhlEcommerceAccountEntity> nonExcludedAccounts = DhlEcommerceAccountManager.AccountsReadOnly.Where(a => !excludedAccounts.Contains(a.AccountId));
 
-            // TODO: DHLECommerce update for best rate
-            //IEnumerable<IDhlEcommerceAccountEntity> nonExcludedAccounts = DhlEcommerceAccountManager.AccountsReadOnly.Where(a => !excludedAccounts.Contains(a.AccountId));
-
-            //if (nonExcludedAccounts.Any())
-            //{
-            //    return new DhlEcommerceBestRateBroker(this, new DhlEcommerceAccountRepository(), BestRateExcludedAccountRepository.Current);
-            //}
+            if (nonExcludedAccounts.Any())
+            {
+                return new DhlEcommerceBestRateBroker(this, new DhlEcommerceAccountRepository(), BestRateExcludedAccountRepository.Current);
+            }
 
             return new NullShippingBroker();
         }

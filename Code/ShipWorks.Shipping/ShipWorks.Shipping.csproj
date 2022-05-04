@@ -227,6 +227,7 @@
     <Compile Include="Carriers\DhlEcommerce\API\ShipEngine\DhlEcommerceShipEngineDownloadedLabelData.cs" />
     <Compile Include="Carriers\DhlEcommerce\API\ShipEngine\DhlEcommerceShipEngineLabelClient.cs" />
     <Compile Include="Carriers\DhlEcommerce\DhlEcommerceAccountRepository.cs" />
+    <Compile Include="Carriers\DhlEcommerce\DhlEcommerceBestRateBroker.cs" />
     <Compile Include="Carriers\DhlEcommerce\DhlEcommerceServicesBuilder.cs" />
     <Compile Include="Carriers\DhlEcommerce\DhlEcommerceShipmentPackageTypesBuilder.cs" />
     <Compile Include="Carriers\DhlEcommerce\DhlEcommerceShipmentType.cs" />
