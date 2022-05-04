@@ -18,6 +18,7 @@ using ShipWorks.Shipping.Editing;
 using ShipWorks.Shipping.Insurance;
 using ShipWorks.Shipping.Services;
 using ShipWorks.Shipping.Settings;
+using ShipWorks.Shipping.Settings.Origin;
 using ShipWorks.Shipping.ShipEngine;
 using ShipWorks.Shipping.Tracking;
 using ShipWorks.Templates.Processing.TemplateXml.ElementOutlines;
@@ -236,19 +237,21 @@ namespace ShipWorks.Shipping.Carriers.DhlEcommerce
 
             long shipperID = accountRepository.AccountsReadOnly.Select(x => x.DhlEcommerceAccountID).FirstOrDefault();
 
-            // TODO: DHLECommerce update profile stuff
-            //profile.DhlEcommerce.DhlEcommerceAccountID = shipperID;
-            //profile.OriginID = (int) ShipmentOriginSource.Account;
+            profile.DhlEcommerce.DhlEcommerceAccountID = shipperID;
+            profile.OriginID = (int) ShipmentOriginSource.Account;
 
-            //profile.DhlEcommerce.Service = (int) DhlEcommerceServiceType.EcommerceWorldWide;
-            //profile.DhlEcommerce.DeliveryDutyPaid = false;
-            //profile.DhlEcommerce.NonMachinable = false;
-            //profile.DhlEcommerce.SaturdayDelivery = false;
-            //profile.DhlEcommerce.Contents = (int) ShipEngineContentsType.Merchandise;
-            //profile.DhlEcommerce.NonDelivery = (int) ShipEngineNonDeliveryType.ReturnToSender;
-            //profile.DhlEcommerce.CustomsTaxIdType = (int) TaxIdType.Ioss;
-            //profile.DhlEcommerce.CustomsRecipientTin = string.Empty;
-            //profile.DhlEcommerce.CustomsTinIssuingAuthority = "US";
+            profile.DhlEcommerce.Service = (int) DhlEcommerceServiceType.US_DhlGlobalmailPacketStandard;
+            profile.DhlEcommerce.DeliveryDutyPaid = false;
+            profile.DhlEcommerce.NonMachinable = false;
+            profile.DhlEcommerce.SaturdayDelivery = false;
+            profile.DhlEcommerce.Contents = (int) ShipEngineContentsType.Merchandise;
+            profile.DhlEcommerce.NonDelivery = (int) ShipEngineNonDeliveryType.ReturnToSender;
+            profile.DhlEcommerce.CustomsTaxIdType = (int) TaxIdType.Ioss;
+            profile.DhlEcommerce.CustomsRecipientTin = string.Empty;
+            profile.DhlEcommerce.CustomsTinIssuingAuthority = "US";
+            profile.DhlEcommerce.ResidentialDelivery = false;
+            profile.DhlEcommerce.Reference1 = string.Empty;
+            profile.DhlEcommerce.PackagingType = (int) DhlEcommercePackagingType.IrregularParcel;
         }
 
         /// <summary>
