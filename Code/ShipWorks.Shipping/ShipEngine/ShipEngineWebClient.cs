@@ -401,8 +401,8 @@ namespace ShipWorks.Shipping.ShipEngine
 
             if (response.Failure)
             {
-                var alreadyManifestedIDs = response.Value.Errors
-                    .Where(x => x.Message.Equals("Label has been manifested.", StringComparison.OrdinalIgnoreCase))
+                var alreadyManifestedIDs = response.Value?.Errors?
+                    .Where(x => x.Message.Equals("Label has been manifested.", StringComparison.OrdinalIgnoreCase))?
                     .Select(x => x.LabelId);
 
                 if (alreadyManifestedIDs.Any())
@@ -411,7 +411,7 @@ namespace ShipWorks.Shipping.ShipEngine
                     if (newIDs.Any())
                     {
                         response = await MakeRequest<CreateManifestResponse>(ShipEngineEndpoints.CreateManifest, Method.POST,
-                        new CreateManifestRequest { LabelIds = newIDs }, "CreateManifest");
+                            new CreateManifestRequest { LabelIds = newIDs }, "CreateManifest");
                     }
                     else
                     {
