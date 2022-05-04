@@ -2,6 +2,7 @@
 using ShipWorks.Data.Model.EntityClasses;
 using Interapptive.Shared.ComponentRegistration;
 using System.Threading.Tasks;
+using Interapptive.Shared.Enums;
 using Interapptive.Shared.Utility;
 using ShipWorks.Shipping.Carriers.DhlEcommerce.API;
 
@@ -30,7 +31,14 @@ namespace ShipWorks.Shipping.Carriers.DhlEcommerce
         {
             try
             {
-                return await labelClient.Create(shipment).ConfigureAwait(false);
+                var result = await labelClient.Create(shipment).ConfigureAwait(false);
+
+                if (result.Value != null)
+                {
+                    shipment.TrackingStatus = TrackingStatus.Pending;
+                }
+
+                return result;
             }
             catch (Exception ex)
             {
