@@ -4,6 +4,7 @@ using RestSharp;
 using ShipWorks.ApplicationCore.Licensing.Warehouse;
 using ShipWorks.Stores.Platforms.ShipEngine.Apollo;
 using System.Threading.Tasks;
+using Interapptive.Shared.Utility;
 using Newtonsoft.Json;
 using ShipWorks.ApplicationCore.Logging;
 
@@ -40,6 +41,11 @@ namespace ShipWorks.Stores.Platforms.ShipEngine
 
             // There's an issue with the deserialization and casting to an interface so we're casting manually
             var result = await warehouseRequestClient.MakeRequest(request, "PlatformGetOrders", ApiLogSource.Amazon).ConfigureAwait(false);
+
+            // Check that the call returned valid information
+            if (result.Value?.Content?.IsNullOrWhiteSpace() ?? true)
+                return new PaginatedPlatformServiceResponseOfOrderSourceApiSalesOrder();
+
             var deserializedResult = JsonConvert.DeserializeObject<PaginatedPlatformServiceResponseOfOrderSourceApiSalesOrder>(result.Value.Content);
             return deserializedResult;
         }

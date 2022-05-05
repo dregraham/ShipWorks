@@ -100,7 +100,7 @@ namespace ShipWorks.Stores.Platforms.Amazon
 
                 // progress has to be indicated on each pass since we have 0 idea how many orders exists
                 Progress.PercentComplete = 0;
-                
+
                 // load each order in this result page
                 await LoadOrders(result.Data).ConfigureAwait(false);
 
@@ -113,7 +113,7 @@ namespace ShipWorks.Stores.Platforms.Amazon
                 Progress.PercentComplete = 100;
                 Progress.Detail = "Done.";
             }
-            catch (SqlForeignKeyException ex)
+            catch (Exception ex)
             {
                 throw new DownloadException(ex.Message, ex);
             }
