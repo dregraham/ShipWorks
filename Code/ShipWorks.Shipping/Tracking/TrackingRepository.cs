@@ -69,7 +69,6 @@ namespace ShipWorks.Shipping.Tracking
         /// </summary>
         public async Task<IEnumerable<ShipmentEntity>> FetchShipmentsToTrack()
         {
-            // TODO: DHLECommerce Should DhlEcommerce be here too?
             var query = new QueryFactory().Shipment
                 .Where(ShipmentFields.TrackingStatus == TrackingStatus.Pending)
                 .AndWhere(ShipmentFields.ShipmentType != ShipmentTypeCode.Other)
