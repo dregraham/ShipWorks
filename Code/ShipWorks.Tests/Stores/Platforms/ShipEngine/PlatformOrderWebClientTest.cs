@@ -25,6 +25,7 @@ namespace ShipWorks.Tests.Stores.Platforms.ShipEngine
         [Theory]
         [InlineData(null)]
         [InlineData("{}")]
+        [InlineData("{\"continuationToken\":null,\"data\":[],\"errors\":[]}")]
         public async Task GetOrders_EmptyValue(string content)
         {
             var warehouseRequestClient = mock.Mock<IWarehouseRequestClient>();
@@ -40,6 +41,9 @@ namespace ShipWorks.Tests.Stores.Platforms.ShipEngine
             var result = await platformOrderWebClient.GetOrders(string.Empty, string.Empty);
 
             Assert.NotNull(result);
+            Assert.NotNull(result.ContinuationToken);
+            Assert.NotNull(result.Data);
+            Assert.NotNull(result.Errors);
         }
     }
 }

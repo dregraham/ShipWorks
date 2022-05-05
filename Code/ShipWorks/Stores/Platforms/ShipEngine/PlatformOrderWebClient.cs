@@ -1,12 +1,13 @@
-﻿using Interapptive.Shared.ComponentRegistration;
-using Interapptive.Shared.Threading;
-using RestSharp;
-using ShipWorks.ApplicationCore.Licensing.Warehouse;
-using ShipWorks.Stores.Platforms.ShipEngine.Apollo;
+﻿using System;
 using System.Threading.Tasks;
+using Interapptive.Shared.ComponentRegistration;
+using Interapptive.Shared.Threading;
 using Interapptive.Shared.Utility;
 using Newtonsoft.Json;
+using RestSharp;
+using ShipWorks.ApplicationCore.Licensing.Warehouse;
 using ShipWorks.ApplicationCore.Logging;
+using ShipWorks.Stores.Platforms.ShipEngine.Apollo;
 
 namespace ShipWorks.Stores.Platforms.ShipEngine
 {
@@ -43,11 +44,31 @@ namespace ShipWorks.Stores.Platforms.ShipEngine
             var result = await warehouseRequestClient.MakeRequest(request, "PlatformGetOrders", ApiLogSource.Amazon).ConfigureAwait(false);
 
             // Check that the call returned valid information
+            PaginatedPlatformServiceResponseOfOrderSourceApiSalesOrder returnObject;
             if (result.Value?.Content?.IsNullOrWhiteSpace() ?? true)
-                return new PaginatedPlatformServiceResponseOfOrderSourceApiSalesOrder();
+            {
+                returnObject = new PaginatedPlatformServiceResponseOfOrderSourceApiSalesOrder();
+            }
+            else
+            {
+                returnObject = JsonConvert.DeserializeObject<PaginatedPlatformServiceResponseOfOrderSourceApiSalesOrder>(result.Value.Content);
+            }
 
-            var deserializedResult = JsonConvert.DeserializeObject<PaginatedPlatformServiceResponseOfOrderSourceApiSalesOrder>(result.Value.Content);
-            return deserializedResult;
+            // Make sure the return data isn't null values
+            if (returnObject.Data == null)
+            {
+                returnObject.Data = Array.Empty<OrderSourceApiSalesOrder>();
+            }
+            if (returnObject.Errors == null)
+            {
+                returnObject.Errors = Array.Empty<PlatformError>();
+            }
+            if (returnObject.ContinuationToken == null)
+            {
+                returnObject.ContinuationToken = string.Empty;
+            }
+
+            return returnObject;
         }
     }
 }
