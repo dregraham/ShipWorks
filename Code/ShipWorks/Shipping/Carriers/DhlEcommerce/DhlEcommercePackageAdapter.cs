@@ -150,16 +150,15 @@ namespace ShipWorks.Shipping.Carriers.DhlEcommerce
         /// </summary>
         public void UpdateInsuranceFields(ShippingSettingsEntity shippingSettings)
         {
-            // TODO: DHLECommerce Determine if DHL has its own insurance 
-            //if (shipment.InsuranceProvider != shippingSettings.DhlEcommerceInsuranceProvider)
-            //{
-            //    shipment.InsuranceProvider = shippingSettings.DhlEcommerceInsuranceProvider;
-            //}
+            if (shipment.InsuranceProvider != shippingSettings.DhlEcommerceInsuranceProvider)
+            {
+                shipment.InsuranceProvider = shippingSettings.DhlEcommerceInsuranceProvider;
+            }
 
-            //if (shipment.DhlEcommerce.InsurancePennyOne != shippingSettings.DhlEcommerceInsurancePennyOne)
-            //{
-            //    shipment.DhlEcommerce.InsurancePennyOne = shippingSettings.DhlEcommerceInsurancePennyOne;
-            //}
+            if (shipment.DhlEcommerce.InsurancePennyOne != shippingSettings.DhlEcommerceInsurancePennyOne)
+            {
+                shipment.DhlEcommerce.InsurancePennyOne = shippingSettings.DhlEcommerceInsurancePennyOne;
+            }
 
             InsuranceChoice = new InsuranceChoice(shipment, shipment, shipment.DhlEcommerce, shipment.DhlEcommerce);
         }

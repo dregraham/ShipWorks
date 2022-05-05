@@ -275,7 +275,10 @@ namespace ShipWorks.Shipping.UI.Carriers.DhlEcommerce
         /// </summary>
         public override void UpdateInsuranceDisplay()
         {
-            insuranceControl.LoadInsuranceChoices(LoadedShipments.Select(shipment => ShipmentTypeManager.GetType(shipment).GetParcelDetail(shipment, 0).Insurance));
+            var insuranceChoices = LoadedShipments.Select(shipment => 
+                ShipmentTypeManager.GetType(shipment).GetParcelDetail(shipment, 0).Insurance);
+
+            insuranceControl.LoadInsuranceChoices(insuranceChoices);
         }
 
         /// <summary>

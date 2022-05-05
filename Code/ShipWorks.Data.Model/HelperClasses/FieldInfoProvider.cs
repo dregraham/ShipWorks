@@ -999,7 +999,6 @@ namespace ShipWorks.Data.Model.HelperClasses
 			this.AddElementFieldInfo("DhlEcommerceShipmentEntity", "DimsWeight", typeof(System.Double), false, false, false, false,  (int)DhlEcommerceShipmentFieldIndex.DimsWeight, 0, 0, 38);
 			this.AddElementFieldInfo("DhlEcommerceShipmentEntity", "DimsAddWeight", typeof(System.Boolean), false, false, false, false,  (int)DhlEcommerceShipmentFieldIndex.DimsAddWeight, 0, 0, 0);
 			this.AddElementFieldInfo("DhlEcommerceShipmentEntity", "Reference1", typeof(System.String), false, false, false, false,  (int)DhlEcommerceShipmentFieldIndex.Reference1, 300, 0, 0);
-			this.AddElementFieldInfo("DhlEcommerceShipmentEntity", "Insurance", typeof(System.Boolean), false, false, false, false,  (int)DhlEcommerceShipmentFieldIndex.Insurance, 0, 0, 0);
 			this.AddElementFieldInfo("DhlEcommerceShipmentEntity", "InsuranceValue", typeof(System.Decimal), false, false, false, false,  (int)DhlEcommerceShipmentFieldIndex.InsuranceValue, 0, 4, 19);
 			this.AddElementFieldInfo("DhlEcommerceShipmentEntity", "InsurancePennyOne", typeof(System.Boolean), false, false, false, false,  (int)DhlEcommerceShipmentFieldIndex.InsurancePennyOne, 0, 0, 0);
 		}
@@ -3395,6 +3394,8 @@ namespace ShipWorks.Data.Model.HelperClasses
 			this.AddElementFieldInfo("ShippingSettingsEntity", "OrderLookupFieldLayout", typeof(System.String), false, false, false, false,  (int)ShippingSettingsFieldIndex.OrderLookupFieldLayout, 2147483647, 0, 0);
 			this.AddElementFieldInfo("ShippingSettingsEntity", "UpsAllowNoDims", typeof(System.Boolean), false, false, false, false,  (int)ShippingSettingsFieldIndex.UpsAllowNoDims, 0, 0, 0);
 			this.AddElementFieldInfo("ShippingSettingsEntity", "ShipEngineAccountID", typeof(System.String), false, false, false, false,  (int)ShippingSettingsFieldIndex.ShipEngineAccountID, 20, 0, 0);
+			this.AddElementFieldInfo("ShippingSettingsEntity", "DhlEcommerceInsuranceProvider", typeof(System.Int32), false, false, false, false,  (int)ShippingSettingsFieldIndex.DhlEcommerceInsuranceProvider, 0, 0, 10);
+			this.AddElementFieldInfo("ShippingSettingsEntity", "DhlEcommerceInsurancePennyOne", typeof(System.Boolean), false, false, false, false,  (int)ShippingSettingsFieldIndex.DhlEcommerceInsurancePennyOne, 0, 0, 0);
 		}
 		/// <summary>Inits ShipSenseKnowledgebaseEntity's FieldInfo objects</summary>
 		private void InitShipSenseKnowledgebaseEntityInfos()

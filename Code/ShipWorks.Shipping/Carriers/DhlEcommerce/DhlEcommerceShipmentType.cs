@@ -114,7 +114,6 @@ namespace ShipWorks.Shipping.Carriers.DhlEcommerce
             dhlEcommerceShipmentEntity.DimsWeight = 0;
             dhlEcommerceShipmentEntity.DimsWidth = 0;
             dhlEcommerceShipmentEntity.Reference1 = string.Empty;
-            dhlEcommerceShipmentEntity.Insurance = false;
             dhlEcommerceShipmentEntity.InsuranceValue = 0;
             dhlEcommerceShipmentEntity.InsurancePennyOne = false;
 
@@ -144,9 +143,17 @@ namespace ShipWorks.Shipping.Carriers.DhlEcommerce
         {
             base.UpdateDynamicShipmentData(shipment);
 
-            // TODO: DHLECommerce Check insurance stuff below.
-            //shipment.Insurance = shipment.DhlEcommerce
-            //shipment.InsuranceProvider = (int) InsuranceProvider.ShipWorks;
+            ShippingSettingsEntity settings = ShippingSettings.Fetch();
+
+            if (shipment.InsuranceProvider != settings.DhlEcommerceInsuranceProvider)
+            {
+                shipment.InsuranceProvider = settings.DhlEcommerceInsuranceProvider;
+            }
+
+            if (shipment.DhlEcommerce.InsurancePennyOne != settings.DhlEcommerceInsurancePennyOne)
+            {
+                shipment.DhlEcommerce.InsurancePennyOne = settings.DhlEcommerceInsurancePennyOne;
+            }
 
             shipment.RequestedLabelFormat = shipment.DhlEcommerce.RequestedLabelFormat;
         }
@@ -221,12 +228,14 @@ namespace ShipWorks.Shipping.Carriers.DhlEcommerce
         {
             MethodConditions.EnsureArgumentIsNotNull(shipment, nameof(shipment));
 
-            return new ShipmentParcel(shipment, null,
+            var shipmentParcel = new ShipmentParcel(shipment, null,
                 new InsuranceChoice(shipment, shipment, shipment.DhlEcommerce, shipment.DhlEcommerce),
                 new DimensionsAdapter(shipment.DhlEcommerce))
             {
                 TotalWeight = shipment.TotalWeight
             };
+
+            return shipmentParcel;
         }
 
         /// <summary>

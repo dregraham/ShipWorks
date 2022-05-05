@@ -5509,6 +5509,8 @@ CREATE TABLE [dbo].[ShippingSettings]
 [OrderLookupFieldLayout] [nvarchar] (max) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL CONSTRAINT [DF_ShippingSettings_OrderLookupFieldLayout] DEFAULT (''),
 [UpsAllowNoDims] [bit] NOT NULL CONSTRAINT [DF_ShippingSettings_UpsAllowNoDims] DEFAULT ((0)),
 [ShipEngineAccountID] [nvarchar] (20) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL CONSTRAINT [DF_ShippingSettings_ShipEngineAccountID] DEFAULT (''),
+[DhlEcommerceInsuranceProvider] [int] NOT NULL CONSTRAINT [DF_ShippingSettings_DhlEcommerceInsuranceProvider] DEFAULT ((2)),
+[DhlEcommerceInsurancePennyOne] [bit] NOT NULL CONSTRAINT [DF_ShippingSettings_DhlEcommerceInsurancePennyOne] DEFAULT ((0))
 )
 GO
 PRINT N'Creating primary key [PK_ShippingSettings] on [dbo].[ShippingSettings]'

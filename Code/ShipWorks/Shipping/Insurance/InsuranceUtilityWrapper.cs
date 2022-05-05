@@ -104,6 +104,10 @@ namespace ShipWorks.Shipping.Insurance
                     {
                         settings.EndiciaInsuranceProvider = (int) InsuranceProvider.ShipWorks;
                     }
+                    else if (shipment.ShipmentType == (int) ShipmentTypeCode.DhlEcommerce)
+                    {
+                        settings.DhlEcommerceInsuranceProvider = (int) InsuranceProvider.ShipWorks;
+                    }
                     else
                     {
                         throw new InvalidOperationException("Invalid ShipmentType unhandled in savings link: " + shipment.ShipmentType);
