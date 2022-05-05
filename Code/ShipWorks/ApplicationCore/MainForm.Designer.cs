@@ -232,6 +232,7 @@ namespace ShipWorks
             this.ribbonChunkShipping = new Divelements.SandRibbon.RibbonChunk();
             this.buttonFedExClose = new ShipWorks.UI.Controls.SandRibbon.RibbonButton();
             this.buttonAsendiaClose = new ShipWorks.UI.Controls.SandRibbon.RibbonButton();
+            this.buttonDhlEcommerceManifest = new ShipWorks.UI.Controls.SandRibbon.RibbonButton();
             this.popupFedExEndOfDay = new Divelements.SandRibbon.Popup();
             this.buttonEndiciaSCAN = new ShipWorks.UI.Controls.SandRibbon.RibbonButton();
             this.popupPostalScanForm = new Divelements.SandRibbon.Popup();
@@ -284,6 +285,7 @@ namespace ShipWorks
             this.popupOrderLookupViewSCANForm = new Divelements.SandRibbon.Popup();
             this.buttonOrderLookupViewFedExClose = new ShipWorks.UI.Controls.SandRibbon.RibbonButton();
             this.buttonOrderLookupViewAsendiaClose = new ShipWorks.UI.Controls.SandRibbon.RibbonButton();
+            this.buttonOrderLookupViewDhlEcommerceManifest = new ShipWorks.UI.Controls.SandRibbon.RibbonButton();
             this.popupOrderLookupViewFedExEndOfDay = new Divelements.SandRibbon.Popup();
             this.ribbonTabAdmin = new Divelements.SandRibbon.RibbonTab();
             this.ribbonChunkConfiguration = new Divelements.SandRibbon.RibbonChunk();
@@ -2389,6 +2391,7 @@ namespace ShipWorks
             this.buttonInsuranceClaim,
             this.buttonFedExClose,
             this.buttonAsendiaClose,
+            this.buttonDhlEcommerceManifest,
             this.buttonEndiciaSCAN});
             this.ribbonChunkShipping.Text = "Shipping";
             //
@@ -2417,6 +2420,15 @@ namespace ShipWorks
             this.buttonAsendiaClose.Activate += new System.EventHandler(this.OnAsendiaManifest);
             this.buttonAsendiaClose.Text = "Asendia Close";
             this.buttonAsendiaClose.TextContentRelation = Divelements.SandRibbon.TextContentRelation.Underneath;
+            //
+            // buttonDhlEcommerceManifest
+            //
+            this.buttonDhlEcommerceManifest.Guid = new System.Guid("F27BEBA4-B9D2-41CE-BDE9-F38828C1C654");
+            this.buttonDhlEcommerceManifest.Image = global::ShipWorks.Properties.Resources.element_into;
+            this.ribbonSecurityProvider.SetPermission(this.buttonDhlEcommerceManifest, ShipWorks.Users.Security.PermissionType.ShipmentsCreateEditProcess);
+            this.buttonDhlEcommerceManifest.Activate += new System.EventHandler(this.OnDhlEcommerceManifest);
+            this.buttonDhlEcommerceManifest.Text = "DHL eCommerce Manifest";
+            this.buttonDhlEcommerceManifest.TextContentRelation = Divelements.SandRibbon.TextContentRelation.Underneath;
             //
             // buttonEndiciaSCAN
             //
@@ -2771,7 +2783,8 @@ namespace ShipWorks
             this.buttonOrderLookupViewShipAgain,
             this.buttonOrderLookupViewSCANForm,
             this.buttonOrderLookupViewFedExClose,
-            this.buttonOrderLookupViewAsendiaClose});
+            this.buttonOrderLookupViewAsendiaClose,
+            this.buttonOrderLookupViewDhlEcommerceManifest});
             this.ribbonChunkOrderLookupViewActions.Text = "Actions";
             //
             // buttonOrderLookupViewVoid
@@ -2836,6 +2849,16 @@ namespace ShipWorks
             this.buttonOrderLookupViewAsendiaClose.Activate += new System.EventHandler(this.OnAsendiaManifest);
             this.buttonOrderLookupViewAsendiaClose.Text = "Asendia Close";
             this.buttonOrderLookupViewAsendiaClose.TextContentRelation = Divelements.SandRibbon.TextContentRelation.Underneath;
+            //
+            // buttonOrderLookupViewDhlEcommerceManifest
+            //
+            this.buttonOrderLookupViewDhlEcommerceManifest.Guid = new System.Guid("875EC51A-AF5D-42A3-9F4E-7AEEA1CB58EF");
+            this.buttonOrderLookupViewDhlEcommerceManifest.Image = global::ShipWorks.Properties.Resources.element_into;
+            this.buttonOrderLookupViewDhlEcommerceManifest.Padding = new Divelements.SandRibbon.WidgetEdges(3, 2, 4, 14);
+            this.ribbonSecurityProvider.SetPermission(this.buttonOrderLookupViewDhlEcommerceManifest, ShipWorks.Users.Security.PermissionType.ShipmentsCreateEditProcess);
+            this.buttonOrderLookupViewDhlEcommerceManifest.Activate += new System.EventHandler(this.OnDhlEcommerceManifest);
+            this.buttonOrderLookupViewDhlEcommerceManifest.Text = "DHL eCommerce Manifest";
+            this.buttonOrderLookupViewDhlEcommerceManifest.TextContentRelation = Divelements.SandRibbon.TextContentRelation.Underneath;
             //
             // popupOrderLookupViewFedExEndOfDay
             //
@@ -3415,6 +3438,7 @@ namespace ShipWorks
             buttonShippingProfiles.TelemetryEventName = "Shipping.Profiles";
             buttonFedExClose.TelemetryEventName = "FedExClose";
             buttonAsendiaClose.TelemetryEventName = "AsendiaClose";
+            buttonDhlEcommerceManifest.TelemetryEventName = "DhlEcommerceManifest";
             buttonEndiciaSCAN.TelemetryEventName = "EndiciaScan";
             buttonHelpForum.TelemetryEventName = "Help.Forum";
             buttonHelpRemote.TelemetryEventName = "Help.Remote";
@@ -3436,6 +3460,7 @@ namespace ShipWorks
             buttonOrderLookupViewSCANForm.TelemetryEventName = "OrderLookup.ScanForm";
             buttonOrderLookupViewFedExClose.TelemetryEventName = "OrderLookup.FedExClose";
             buttonOrderLookupViewAsendiaClose.TelemetryEventName = "OrderLookup.AsendiaClose";
+            buttonOrderLookupViewDhlEcommerceManifest.TelemetryEventName = "OrderLookup.DhlEcommerceManifest";
             buttonCreateLabel.TelemetryEventName = "CreateLabel";
             buttonOrderLookupViewFields.TelemetryEventName = "OrderLookup.Fields";
             buttonProductCatalogEditProduct.TelemetryEventName = "Product.Edit";
@@ -3682,6 +3707,7 @@ namespace ShipWorks
         private ShipWorks.UI.Controls.SandRibbon.RibbonButton buttonShippingProfiles;
         private ShipWorks.UI.Controls.SandRibbon.RibbonButton buttonFedExClose;
         private ShipWorks.UI.Controls.SandRibbon.RibbonButton buttonAsendiaClose;
+        private ShipWorks.UI.Controls.SandRibbon.RibbonButton buttonDhlEcommerceManifest;
         private Divelements.SandRibbon.Popup popupFedExEndOfDay;
         private Divelements.SandRibbon.MenuItem menuFedExEndDayClose;
         private Divelements.SandRibbon.MenuItem menuFedExEndDayPrint;
@@ -3752,6 +3778,7 @@ namespace ShipWorks
         private ShipWorks.UI.Controls.SandRibbon.RibbonButton buttonOrderLookupViewSCANForm;
         private ShipWorks.UI.Controls.SandRibbon.RibbonButton buttonOrderLookupViewFedExClose;
         private ShipWorks.UI.Controls.SandRibbon.RibbonButton buttonOrderLookupViewAsendiaClose;
+        private ShipWorks.UI.Controls.SandRibbon.RibbonButton buttonOrderLookupViewDhlEcommerceManifest;
         private Divelements.SandRibbon.Popup popupOrderLookupViewSCANForm;
         private Divelements.SandRibbon.Popup popupOrderLookupViewFedExEndOfDay;
         private ShipWorks.UI.Controls.SandRibbon.RibbonButton buttonCreateLabel;
