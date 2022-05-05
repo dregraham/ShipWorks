@@ -95,6 +95,11 @@ namespace ShipWorks.Shipping.Tracking
                 return "fedex";
             }
 
+            if (shipmentType == ShipmentTypeCode.DhlEcommerce)
+            {
+                return "dhl_global_mail";
+            }
+
             // Should never happen.
             Debug.Fail($"Unsupported shipment type {shipmentType}. Shouldn't have gotten this shipment.");
             log.Warn($"Unsupported shipment type {shipmentType} found in PlatformShipmentTracker.");
