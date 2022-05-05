@@ -25,9 +25,12 @@ namespace ShipWorks.Shipping.Carriers.DhlEcommerce
         }
 
         /// <summary>
-        /// Gets the insurance provider - DHL only supports Shipworks insurance
+        /// Gets the insurance provider.
         /// </summary>
-        public override InsuranceProvider GetInsuranceProvider(IShippingSettingsEntity settings) => InsuranceProvider.ShipWorks;
+        public override InsuranceProvider GetInsuranceProvider(IShippingSettingsEntity settings)
+        {
+            return (InsuranceProvider) settings.DhlEcommerceInsuranceProvider;
+        }
 
         /// <summary>
         /// Creates and attaches a new instance of a DhlEcommerceShipmentEntity to the specified shipment
