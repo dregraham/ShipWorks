@@ -392,6 +392,38 @@ namespace ShipWorks.Shipping.ShipEngine
             await proxiedShipEngineWebClient.CreateAsendiaManifest(labelIDs);
 
         /// <summary>
+        /// Create a manifest for the given label IDs, retrying if necessary
+        /// </summary>
+        public async Task<Result> CreateManifest(List<string> labelIDs)
+        {
+            var response = await MakeRequest<CreateManifestResponse>(ShipEngineEndpoints.CreateManifest, Method.POST,
+                new CreateManifestRequest { LabelIds = labelIDs }, "CreateManifest");
+
+            if (response.Failure)
+            {
+                var alreadyManifestedIDs = response.Value?.Errors?
+                    .Where(x => x.Message.Equals("Label has been manifested.", StringComparison.OrdinalIgnoreCase))?
+                    .Select(x => x.LabelId);
+
+                if (alreadyManifestedIDs.Any())
+                {
+                    var newIDs = labelIDs.Except(alreadyManifestedIDs).ToList();
+                    if (newIDs.Any())
+                    {
+                        response = await MakeRequest<CreateManifestResponse>(ShipEngineEndpoints.CreateManifest, Method.POST,
+                            new CreateManifestRequest { LabelIds = newIDs }, "CreateManifest");
+                    }
+                    else
+                    {
+                        return Result.FromError("All labels have already been added to a manifest.");
+                    }
+                }
+            }
+
+            return response;
+        }
+
+        /// <summary>
         /// Make a request with no body and a base response
         /// </summary>
         private async Task<GenericResult<BaseShipEngineResponse>> MakeRequest(string endpoint,
