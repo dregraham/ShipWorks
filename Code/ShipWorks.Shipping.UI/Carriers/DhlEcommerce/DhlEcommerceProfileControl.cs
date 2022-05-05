@@ -9,7 +9,9 @@ using ShipWorks.Common.IO.Hardware.Printers;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Shipping.Carriers.DhlEcommerce;
+using ShipWorks.Shipping.Insurance;
 using ShipWorks.Shipping.Profiles;
+using ShipWorks.Shipping.Settings;
 using ShipWorks.Shipping.ShipEngine;
 
 namespace ShipWorks.Shipping.UI.Carriers.DhlEcommerce
@@ -66,6 +68,12 @@ namespace ShipWorks.Shipping.UI.Carriers.DhlEcommerce
             customsTinIssuingAuthority.DisplayMember = "Key";
             customsTinIssuingAuthority.ValueMember = "Value";
             customsTinIssuingAuthority.DataSource = Geography.Countries.Select(n => new KeyValuePair<string, string>(n, Geography.GetCountryCode(n))).ToList();
+
+            if (ShippingSettings.Fetch().DhlEcommerceInsuranceProvider == (int) InsuranceProvider.Carrier)
+            {
+                insuranceControl.UseInsuranceBoxLabel = "DHL Declared Value";
+                insuranceControl.InsuredValueLabel = "Declared value:";
+            }
 
             // From
             AddValueMapping(dhlEcommerceProfile, DhlEcommerceProfileFields.DhlEcommerceAccountID, accountState, dhlEcommerceAccount, labelAccount);

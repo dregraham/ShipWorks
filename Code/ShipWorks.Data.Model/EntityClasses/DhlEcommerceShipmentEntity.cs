@@ -438,8 +438,6 @@ namespace ShipWorks.Data.Model.EntityClasses
 			fieldHashtable = new Dictionary<string, string>();
 			_fieldsCustomProperties.Add("Reference1", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
-			_fieldsCustomProperties.Add("Insurance", fieldHashtable);
-			fieldHashtable = new Dictionary<string, string>();
 			_fieldsCustomProperties.Add("InsuranceValue", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
 			_fieldsCustomProperties.Add("InsurancePennyOne", fieldHashtable);
@@ -854,17 +852,6 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			get { return (System.String)GetValue((int)DhlEcommerceShipmentFieldIndex.Reference1, true); }
 			set	{ SetValue((int)DhlEcommerceShipmentFieldIndex.Reference1, value); }
-		}
-
-		/// <summary> The Insurance property of the Entity DhlEcommerceShipment<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "DhlEcommerceShipment"."Insurance"<br/>
-		/// Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
-		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
-		[DataMember]
-		public virtual System.Boolean Insurance
-		{
-			get { return (System.Boolean)GetValue((int)DhlEcommerceShipmentFieldIndex.Insurance, true); }
-			set	{ SetValue((int)DhlEcommerceShipmentFieldIndex.Insurance, value); }
 		}
 
 		/// <summary> The InsuranceValue property of the Entity DhlEcommerceShipment<br/><br/></summary>

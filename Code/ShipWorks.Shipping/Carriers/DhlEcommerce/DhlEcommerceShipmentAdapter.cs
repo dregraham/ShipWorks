@@ -77,8 +77,17 @@ namespace ShipWorks.Shipping.Carriers.DhlEcommerce
         /// </summary>
         public override void UpdateInsuranceFields(ShippingSettingsEntity shippingSettings)
         {
-            // TODO: DHLECommerce Check insurance stuff below.
             Shipment.InsuranceProvider = (int) InsuranceProvider.ShipWorks;
+
+            if (Shipment.InsuranceProvider != shippingSettings.DhlEcommerceInsuranceProvider)
+            {
+                Shipment.InsuranceProvider = shippingSettings.DhlEcommerceInsuranceProvider;
+            }
+
+            if (Shipment.DhlEcommerce.InsurancePennyOne != shippingSettings.DhlEcommerceInsurancePennyOne)
+            {
+                Shipment.DhlEcommerce.InsurancePennyOne = shippingSettings.DhlEcommerceInsurancePennyOne;
+            }
         }
 
         /// <summary>

@@ -2598,8 +2598,6 @@ namespace ShipWorks.Data.Model
 		DimsAddWeight,
 		///<summary>Reference1. </summary>
 		Reference1,
-		///<summary>Insurance. </summary>
-		Insurance,
 		///<summary>InsuranceValue. </summary>
 		InsuranceValue,
 		///<summary>InsurancePennyOne. </summary>
@@ -12120,6 +12118,10 @@ namespace ShipWorks.Data.Model
 		UpsAllowNoDims,
 		///<summary>ShipEngineAccountID. </summary>
 		ShipEngineAccountID,
+		///<summary>DhlEcommerceInsuranceProvider. </summary>
+		DhlEcommerceInsuranceProvider,
+		///<summary>DhlEcommerceInsurancePennyOne. </summary>
+		DhlEcommerceInsurancePennyOne,
 		/// <summary></summary>
 		AmountOfFields
 	}

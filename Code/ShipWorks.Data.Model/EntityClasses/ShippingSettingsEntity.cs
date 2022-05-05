@@ -412,6 +412,10 @@ namespace ShipWorks.Data.Model.EntityClasses
 			_fieldsCustomProperties.Add("UpsAllowNoDims", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
 			_fieldsCustomProperties.Add("ShipEngineAccountID", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+			_fieldsCustomProperties.Add("DhlEcommerceInsuranceProvider", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+			_fieldsCustomProperties.Add("DhlEcommerceInsurancePennyOne", fieldHashtable);
 		}
 		#endregion
 
@@ -1106,6 +1110,28 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			get { return (System.String)GetValue((int)ShippingSettingsFieldIndex.ShipEngineAccountID, true); }
 			set	{ SetValue((int)ShippingSettingsFieldIndex.ShipEngineAccountID, value); }
+		}
+
+		/// <summary> The DhlEcommerceInsuranceProvider property of the Entity ShippingSettings<br/><br/></summary>
+		/// <remarks>Mapped on  table field: "ShippingSettings"."DhlEcommerceInsuranceProvider"<br/>
+		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
+		public virtual System.Int32 DhlEcommerceInsuranceProvider
+		{
+			get { return (System.Int32)GetValue((int)ShippingSettingsFieldIndex.DhlEcommerceInsuranceProvider, true); }
+			set	{ SetValue((int)ShippingSettingsFieldIndex.DhlEcommerceInsuranceProvider, value); }
+		}
+
+		/// <summary> The DhlEcommerceInsurancePennyOne property of the Entity ShippingSettings<br/><br/></summary>
+		/// <remarks>Mapped on  table field: "ShippingSettings"."DhlEcommerceInsurancePennyOne"<br/>
+		/// Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
+		public virtual System.Boolean DhlEcommerceInsurancePennyOne
+		{
+			get { return (System.Boolean)GetValue((int)ShippingSettingsFieldIndex.DhlEcommerceInsurancePennyOne, true); }
+			set	{ SetValue((int)ShippingSettingsFieldIndex.DhlEcommerceInsurancePennyOne, value); }
 		}
 	
 		/// <summary> Gets the type of the hierarchy this entity is in. </summary>

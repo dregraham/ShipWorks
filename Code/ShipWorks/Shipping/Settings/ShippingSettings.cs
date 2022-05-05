@@ -297,6 +297,9 @@ namespace ShipWorks.Shipping.Settings
             settings.ShipEngineApiKey = string.Empty;
             settings.ShipEngineAccountID = string.Empty;
 
+            settings.DhlEcommerceInsuranceProvider = (int) InsuranceProvider.ShipWorks;
+            settings.DhlEcommerceInsurancePennyOne = false;
+
             adapter.SaveAndRefetch(settings);
         }
     }

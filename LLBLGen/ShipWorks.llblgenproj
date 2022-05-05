@@ -806,9 +806,8 @@
           <Field Name="DimsProfileID" Type="long" Precision="19" FieldIndex="18" />
           <Field Name="DimsWeight" Type="double" Precision="38" FieldIndex="22" />
           <Field Name="DimsWidth" Type="double" Precision="38" FieldIndex="20" />
-          <Field Name="Insurance" Type="bool" FieldIndex="25" />
-          <Field Name="InsurancePennyOne" Type="bool" FieldIndex="27" />
-          <Field Name="InsuranceValue" Type="decimal" Precision="19" Scale="4" FieldIndex="26" />
+          <Field Name="InsurancePennyOne" Type="bool" FieldIndex="26" />
+          <Field Name="InsuranceValue" Type="decimal" Precision="19" Scale="4" FieldIndex="25" />
           <Field Name="IntegratorTransactionID" Type="guid" IsOptional="true" FieldIndex="10" />
           <Field Name="NonDelivery" Type="int" Precision="10" FieldIndex="8" />
           <Field Name="NonMachinable" Type="bool" FieldIndex="4" />
@@ -2974,6 +2973,8 @@
           <Field Name="BlankPhoneNumber" Type="string" MaxLength="16" FieldIndex="6" />
           <Field Name="BlankPhoneOption" Type="int" FieldIndex="5" />
           <Field Name="DefaultType" Type="int" FieldIndex="4" />
+          <Field Name="DhlEcommerceInsurancePennyOne" Type="bool" FieldIndex="59" />
+          <Field Name="DhlEcommerceInsuranceProvider" Type="int" Precision="10" FieldIndex="58" />
           <Field Name="EndiciaAutomaticExpress1" Type="bool" FieldIndex="23" />
           <Field Name="EndiciaAutomaticExpress1Account" Type="long" FieldIndex="24" />
           <Field Name="EndiciaCustomsCertify" Type="bool" FieldIndex="19" />
@@ -4837,7 +4838,7 @@
       <Catalogs>
         <Catalog Name="ShipWorksLocal">
           <Schemas>
-            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2022-04-22T16:37:31.9172785Z">
+            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2022-05-04T18:12:18.8788908Z">
               <Tables>
                 <Table Name="Action">
                   <PkConstraintName Name="PK_Action" />
@@ -5596,7 +5597,6 @@
                     <Field Name="CustomsTinIssuingAuthority" Ordinal="12" IsOptional="true" DbType="12" Length="2" />
                     <Field Name="PackagingType" Ordinal="13" IsOptional="true" DbType="8" Precision="10" />
                     <Field Name="Reference1" Ordinal="14" IsOptional="true" DbType="12" Length="300" />
-                    <Field Name="AncillaryEndorsement" Ordinal="15" IsOptional="true" DbType="12" Length="50" />
                   </Fields>
                 </Table>
                 <Table Name="DhlEcommerceScanForm">
@@ -5659,10 +5659,8 @@
                     <Field Name="CustomsTaxIdType" Ordinal="23" IsOptional="true" DbType="8" Precision="10" />
                     <Field Name="CustomsTinIssuingAuthority" Ordinal="24" IsOptional="true" DbType="12" Length="2" />
                     <Field Name="ScanFormBatchID" Ordinal="25" IsOptional="true" DbType="0" Precision="19" />
-                    <Field Name="Insurance" Ordinal="26" HasDefaultValue="true" DefaultValue="(0)" DbType="2" />
                     <Field Name="InsuranceValue" Ordinal="27" HasDefaultValue="true" DefaultValue="(0)" DbType="9" Precision="19" Scale="4" />
                     <Field Name="InsurancePennyOne" Ordinal="28" HasDefaultValue="true" DefaultValue="(0)" DbType="2" />
-                    <Field Name="AncillaryEndorsement" Ordinal="29" HasDefaultValue="true" DefaultValue="''" DbType="12" Length="50" />
                   </Fields>
                 </Table>
                 <Table Name="DhlExpressAccount">
@@ -9080,6 +9078,8 @@
                     <Field Name="OrderLookupFieldLayout" Ordinal="56" HasDefaultValue="true" DefaultValue="''" DbType="12" Length="2147483647" />
                     <Field Name="UpsAllowNoDims" Ordinal="57" HasDefaultValue="true" DefaultValue="(0)" DbType="2" />
                     <Field Name="ShipEngineAccountID" Ordinal="58" HasDefaultValue="true" DefaultValue="''" DbType="12" Length="20" />
+                    <Field Name="DhlEcommerceInsuranceProvider" Ordinal="59" HasDefaultValue="true" DefaultValue="(2)" DbType="8" Precision="10" />
+                    <Field Name="DhlEcommerceInsurancePennyOne" Ordinal="60" HasDefaultValue="true" DefaultValue="(0)" DbType="2" />
                   </Fields>
                 </Table>
                 <Table Name="ShipSenseKnowledgeBase">
@@ -12104,7 +12104,6 @@
             <FieldMapping FieldName="DimsProfileID" TargetFieldName="DimsProfileID" />
             <FieldMapping FieldName="DimsWeight" TargetFieldName="DimsWeight" />
             <FieldMapping FieldName="DimsWidth" TargetFieldName="DimsWidth" />
-            <FieldMapping FieldName="Insurance" TargetFieldName="Insurance" />
             <FieldMapping FieldName="InsurancePennyOne" TargetFieldName="InsurancePennyOne" />
             <FieldMapping FieldName="InsuranceValue" TargetFieldName="InsuranceValue" />
             <FieldMapping FieldName="IntegratorTransactionID" TargetFieldName="IntegratorTransactionID" />
@@ -14315,6 +14314,8 @@
             <FieldMapping FieldName="BlankPhoneNumber" TargetFieldName="BlankPhoneNumber" />
             <FieldMapping FieldName="BlankPhoneOption" TargetFieldName="BlankPhoneOption" />
             <FieldMapping FieldName="DefaultType" TargetFieldName="DefaultType" />
+            <FieldMapping FieldName="DhlEcommerceInsurancePennyOne" TargetFieldName="DhlEcommerceInsurancePennyOne" />
+            <FieldMapping FieldName="DhlEcommerceInsuranceProvider" TargetFieldName="DhlEcommerceInsuranceProvider" />
             <FieldMapping FieldName="EndiciaAutomaticExpress1" TargetFieldName="EndiciaAutomaticExpress1" />
             <FieldMapping FieldName="EndiciaAutomaticExpress1Account" TargetFieldName="EndiciaAutomaticExpress1Account" />
             <FieldMapping FieldName="EndiciaCustomsCertify" TargetFieldName="EndiciaCustomsCertify" />

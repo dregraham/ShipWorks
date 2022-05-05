@@ -61,7 +61,6 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
             DimsWeight = source.DimsWeight;
             DimsAddWeight = source.DimsAddWeight;
             Reference1 = source.Reference1;
-            Insurance = source.Insurance;
             InsuranceValue = source.InsuranceValue;
             InsurancePennyOne = source.InsurancePennyOne;
             
@@ -224,12 +223,6 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
         /// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 300<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
         public System.String Reference1 { get; }
-        /// <summary> The Insurance property of the Entity DhlEcommerceShipment<br/><br/>
-        /// </summary>
-        /// <remarks>Mapped on table field: "DhlEcommerceShipment"."Insurance"<br/>
-        /// Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
-        /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
-        public System.Boolean Insurance { get; }
         /// <summary> The InsuranceValue property of the Entity DhlEcommerceShipment<br/><br/>
         /// </summary>
         /// <remarks>Mapped on table field: "DhlEcommerceShipment"."InsuranceValue"<br/>

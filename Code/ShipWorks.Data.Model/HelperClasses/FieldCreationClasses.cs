@@ -6017,11 +6017,6 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(DhlEcommerceShipmentFieldIndex.Reference1);}
 		}
-		/// <summary>Creates a new DhlEcommerceShipmentEntity.Insurance field instance</summary>
-		public static EntityField2 Insurance
-		{
-			get { return (EntityField2)EntityFieldFactory.Create(DhlEcommerceShipmentFieldIndex.Insurance);}
-		}
 		/// <summary>Creates a new DhlEcommerceShipmentEntity.InsuranceValue field instance</summary>
 		public static EntityField2 InsuranceValue
 		{
@@ -28381,6 +28376,16 @@ namespace ShipWorks.Data.Model.HelperClasses
 		public static EntityField2 ShipEngineAccountID
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(ShippingSettingsFieldIndex.ShipEngineAccountID);}
+		}
+		/// <summary>Creates a new ShippingSettingsEntity.DhlEcommerceInsuranceProvider field instance</summary>
+		public static EntityField2 DhlEcommerceInsuranceProvider
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ShippingSettingsFieldIndex.DhlEcommerceInsuranceProvider);}
+		}
+		/// <summary>Creates a new ShippingSettingsEntity.DhlEcommerceInsurancePennyOne field instance</summary>
+		public static EntityField2 DhlEcommerceInsurancePennyOne
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ShippingSettingsFieldIndex.DhlEcommerceInsurancePennyOne);}
 		}
 	}
 

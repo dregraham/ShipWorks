@@ -111,7 +111,11 @@ namespace ShipWorks.Shipping.Insurance
 
                 if (insuranceProvider == InsuranceProvider.Carrier)
                 {
-                    if (InsuranceChoice.AllUpsShipments(choices) || InsuranceChoice.AllFedExShipments(choices) || InsuranceChoice.AllOnTracShipments(choices) || InsuranceChoice.AlliParcelShipments(choices))
+                    if (InsuranceChoice.AllUpsShipments(choices) || 
+                        InsuranceChoice.AllFedExShipments(choices) || 
+                        InsuranceChoice.AllOnTracShipments(choices) ||
+                        InsuranceChoice.AlliParcelShipments(choices) ||
+                        InsuranceChoice.AllDhlEcommerceShipments(choices))
                     {
                         // loadedInsurance will always have at least one value when insurance provider is not null
                         string carrierName = ShippingManager.GetCarrierName((ShipmentTypeCode) loadedInsurance.First().Shipment.ShipmentType);
@@ -343,6 +347,10 @@ namespace ShipWorks.Shipping.Insurance
             else if (shipmentType == ShipmentTypeCode.Endicia)
             {
                 settings.EndiciaInsuranceProvider = (int) InsuranceProvider.ShipWorks;
+            }
+            else if (shipmentType == ShipmentTypeCode.DhlEcommerce)
+            {
+                settings.DhlEcommerceInsuranceProvider = (int) InsuranceProvider.ShipWorks;
             }
             else
             {
