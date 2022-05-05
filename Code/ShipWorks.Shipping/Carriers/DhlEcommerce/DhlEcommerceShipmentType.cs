@@ -168,8 +168,7 @@ namespace ShipWorks.Shipping.Carriers.DhlEcommerce
             DhlEcommerceShipmentEntity dhlEcommerceShipmentEntity = shipment.DhlEcommerce;
             DhlEcommerceAccountEntity account = accountRepository.GetAccount(dhlEcommerceShipmentEntity.DhlEcommerceAccountID);
 
-            // TODO: DHLECommerce Check account number
-            //commonDetail.OriginAccount = (account == null) ? "" : account.xxxxxx.ToString();
+            commonDetail.OriginAccount = (account == null) ? "" : account.ShipEngineCarrierId.ToString();
             commonDetail.ServiceType = dhlEcommerceShipmentEntity.Service;
 
             commonDetail.PackagingType = (int) dhlEcommerceShipmentEntity.PackagingType;
