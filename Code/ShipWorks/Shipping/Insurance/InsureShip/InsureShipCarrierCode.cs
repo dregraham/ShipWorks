@@ -64,7 +64,7 @@ namespace ShipWorks.Shipping.Insurance.InsureShip
                     break;
 
                 case ShipmentTypeCode.DhlEcommerce:
-                    carrierCode = "DHL";
+                    carrierCode = "DHL eCommerce";
                     break;
 
                 case ShipmentTypeCode.Asendia:
