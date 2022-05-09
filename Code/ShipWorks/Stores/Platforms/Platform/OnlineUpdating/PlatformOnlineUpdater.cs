@@ -119,7 +119,7 @@ namespace ShipWorks.Stores.Platforms.Platform.OnlineUpdating
             {
                 if (storeSpecificOnlineUpdaterFactory.TryGetValue(store.StoreTypeCode, out var uploader))
                 {
-                    await uploader.UploadShipmentDetails(store, shipments);
+                    await uploader.UploadShipmentDetails(store, nonPlatformShipments.ToList());
                 }
                 else
                 {
