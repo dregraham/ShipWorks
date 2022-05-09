@@ -249,7 +249,8 @@ namespace ShipWorks.Shipping.Carriers.DhlEcommerce
             profile.DhlEcommerce.DhlEcommerceAccountID = shipperID;
             profile.OriginID = (int) ShipmentOriginSource.Account;
 
-            profile.DhlEcommerce.Service = (int) DhlEcommerceServiceType.US_DhlGlobalmailPacketStandard;
+            profile.DhlEcommerce.Service = (int) DhlEcommerceServiceType.US_DhlSmartMailParcelGround;
+            profile.DhlEcommerce.PackagingType = (int) DhlEcommercePackagingType.MachinableParcel;
             profile.DhlEcommerce.DeliveryDutyPaid = false;
             profile.DhlEcommerce.NonMachinable = false;
             profile.DhlEcommerce.SaturdayDelivery = false;
@@ -260,7 +261,6 @@ namespace ShipWorks.Shipping.Carriers.DhlEcommerce
             profile.DhlEcommerce.CustomsTinIssuingAuthority = "US";
             profile.DhlEcommerce.ResidentialDelivery = false;
             profile.DhlEcommerce.Reference1 = string.Empty;
-            profile.DhlEcommerce.PackagingType = (int) DhlEcommercePackagingType.IrregularParcel;
         }
 
         /// <summary>
