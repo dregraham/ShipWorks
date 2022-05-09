@@ -276,7 +276,6 @@
     <Compile Include="Platforms\Amazon\DTO\GetMonauthInitiateUrlResponse.cs" />
     <Compile Include="Platforms\Amazon\IAmazonAccountSettingsViewModel.cs" />
     <Compile Include="Platforms\Amazon\IAmazonCreateOrderSourceViewModel.cs" />
-    <Compile Include="Platforms\Amazon\OnlineUpdating\AmazonOnlineUpdateCommandCreator.cs" />
     <Compile Include="Platforms\Amazon\OnlineUpdating\AmazonOnlineUpdater.cs" />
     <Compile Include="Platforms\Amazon\OnlineUpdating\AmazonOrderSearchProvider.cs" />
     <Compile Include="Platforms\Amazon\Warehouse\AmazonWarehouseItem.cs" />

@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
+using ShipWorks.Data.Model.EntityClasses;
 
 namespace ShipWorks.Stores.Platforms.Platform.OnlineUpdating
 {
@@ -11,11 +12,11 @@ namespace ShipWorks.Stores.Platforms.Platform.OnlineUpdating
         /// <summary>
         /// Update the online status of the given order
         /// </summary>
-        Task UploadOrderShipmentDetails(IEnumerable<long> orderKeys);
+        Task UploadOrderShipmentDetails(StoreEntity store, IEnumerable<long> orderKeys);
 
         /// <summary>
         /// Uploads shipment details for a particular shipment
         /// </summary>
-        Task UploadShipmentDetails(IEnumerable<long> shipmentKeys);
+        Task UploadShipmentDetails(StoreEntity store, IEnumerable<long> shipmentKeys);
     }
 }

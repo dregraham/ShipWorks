@@ -82,8 +82,8 @@ namespace ShipWorks.Stores.Platforms.Platform.OnlineUpdating
                 {
                     progressDialog.ToUpdater($"Updating {orderKeys} orders...");
 
-                    await platformOnlineUpdater.UploadOrderShipmentDetails(orderKeys).ConfigureAwait(false);
- 
+                    await platformOnlineUpdater.UploadOrderShipmentDetails(store, orderKeys).ConfigureAwait(false);
+
                     return Result.FromSuccess();
                 }
             }
