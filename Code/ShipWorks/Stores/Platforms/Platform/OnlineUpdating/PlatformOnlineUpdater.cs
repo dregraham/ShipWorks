@@ -129,7 +129,7 @@ namespace ShipWorks.Stores.Platforms.Platform.OnlineUpdating
 
             var client = createWarehouseOrderClient();
 
-            foreach (var shipment in shipments)
+            foreach (var shipment in shipments.Where(x => !x.Order.ChannelOrderID.IsNullOrWhiteSpace()))
             {
                 await shippingManager.EnsureShipmentLoadedAsync(shipment).ConfigureAwait(false);
                 string carrier = GetCarrierName(shipment);
