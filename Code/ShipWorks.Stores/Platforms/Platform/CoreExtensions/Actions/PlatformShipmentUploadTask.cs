@@ -100,7 +100,7 @@ namespace ShipWorks.Stores.Platforms.Platform.CoreExtensions.Actions
         {
             try
             {
-                await onlineUpdater.UploadShipmentDetails(shipmentKeys).ConfigureAwait(false);
+                await onlineUpdater.UploadShipmentDetails(store, shipmentKeys).ConfigureAwait(false);
             }
             catch (PlatformStoreException ex)
             {

@@ -13,5 +13,12 @@ namespace ShipWorks.Stores.Platforms.Platform
         public PlatformStoreException(string message, Exception ex) : base(message, ex)
         {
         }
+
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        public PlatformStoreException(string message) : base(message)
+        {
+        }
     }
 }

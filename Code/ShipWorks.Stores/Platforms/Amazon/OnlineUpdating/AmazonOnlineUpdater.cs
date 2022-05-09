@@ -8,6 +8,7 @@ using SD.LLBLGen.Pro.QuerySpec;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping;
+using ShipWorks.Shipping.Carriers.Api;
 using ShipWorks.Stores.Content;
 using ShipWorks.Stores.Platforms.Amazon.Mws;
 
@@ -17,7 +18,8 @@ namespace ShipWorks.Stores.Platforms.Amazon.OnlineUpdating
     /// Uploads shipment details to Amazon
     /// </summary>
     [Component]
-    public class AmazonOnlineUpdater : IAmazonOnlineUpdater
+    [KeyedComponent(typeof(IOnlineUpdater), StoreTypeCode.Amazon)]
+    public class AmazonOnlineUpdater : IAmazonOnlineUpdater, IOnlineUpdater
     {
         // Logger
         static readonly ILog log = LogManager.GetLogger(typeof(AmazonOnlineUpdater));
@@ -146,5 +148,10 @@ namespace ShipWorks.Stores.Platforms.Amazon.OnlineUpdating
             var identifiers = await orderSearchProvider.GetOrderIdentifiers(order).ConfigureAwait(false);
             return identifiers.Select(x => new AmazonOrderUploadDetail(shipment, x));
         }
+
+        /// <summary>
+        /// Uploads shipment details for a particular shipment
+        /// </summary>
+        public Task UploadShipmentDetails(StoreEntity store, List<ShipmentEntity> shipments) => UploadShipmentDetails(store as AmazonStoreEntity, shipments);
     }
 }

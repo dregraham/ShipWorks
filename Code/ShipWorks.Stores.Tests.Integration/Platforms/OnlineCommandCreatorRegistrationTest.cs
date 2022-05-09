@@ -7,7 +7,6 @@ using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Startup;
 using ShipWorks.Stores.Content;
-using ShipWorks.Stores.Platforms.Amazon.OnlineUpdating;
 using ShipWorks.Stores.Platforms.AmeriCommerce.OnlineUpdating;
 using ShipWorks.Stores.Platforms.BigCommerce.OnlineUpdating;
 using ShipWorks.Stores.Platforms.BuyDotCom.OnlineUpdating;
@@ -105,7 +104,6 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms
 
         private readonly Dictionary<StoreTypeCode, Type> specificUploaders = new Dictionary<StoreTypeCode, Type>
         {
-            { StoreTypeCode.Amazon, typeof(AmazonOnlineUpdateCommandCreator) },
             { StoreTypeCode.AmeriCommerce, typeof(AmeriCommerceOnlineUpdateCommandCreator) },
             { StoreTypeCode.Amosoft, typeof(GenericModuleOnlineUpdateCommandCreator) },
             { StoreTypeCode.BigCommerce, typeof(BigCommerceOnlineUpdateCommandCreator) },
