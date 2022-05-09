@@ -132,7 +132,7 @@ namespace ShipWorks.Stores.Platforms.Amazon
 
         private async Task LoadOrder(OrderSourceApiSalesOrder salesOrder)
         {
-            var amazonOrderId = salesOrder.OrderId;
+            var amazonOrderId = salesOrder.OrderNumber;
 
             // get the order instance
             var result = await InstantiateOrder(new AmazonOrderIdentifier(amazonOrderId)).ConfigureAwait(false);
@@ -143,7 +143,11 @@ namespace ShipWorks.Stores.Platforms.Amazon
             }
 
             var order = (AmazonOrderEntity) result.Value;
-            
+            order.AmazonOrderID = amazonOrderId;
+            order.OrderNumberComplete = amazonOrderId;
+            order.OrderNumber = long.MinValue;
+            order.ChannelOrderID = salesOrder.OrderId;
+
             var orderStatus = salesOrder.Status.ToString();
 
             if (string.Compare(orderStatus, "Canceled", StringComparison.OrdinalIgnoreCase) == 0 && order.IsNew)
@@ -192,13 +196,9 @@ namespace ShipWorks.Stores.Platforms.Amazon
             order.OnlineCustomerID = null;
 
             // requested shipping
-            var shipCategory = string.Empty; // "amz:ShipmentServiceLevelCategory"
-            if (shipCategory.Length > 0)
-            {
-                shipCategory += ": ";
-            }
-            order.RequestedShipping = shipCategory + string.Empty; // "amz:ShipServiceLevel"
-            
+            order.RequestedShipping =
+                salesOrder.RequestedFulfillments.FirstOrDefault()?.ShippingPreferences.ShippingService ?? string.Empty;
+
             // Address
             LoadAddresses(order, salesOrder);
 
@@ -234,75 +234,52 @@ namespace ShipWorks.Stores.Platforms.Amazon
 
         private static void LoadAddresses(AmazonOrderEntity order, OrderSourceApiSalesOrder salesOrder)
         {
-            if (salesOrder.ShipFrom == null || !order.IsNew)
+            var shipTo = salesOrder.RequestedFulfillments.FirstOrDefault(x => x?.ShipTo != null)?.ShipTo;
+            if (shipTo == null || !order.IsNew)
             {
                 return;
             }
 
-            var shipFullName = PersonName.Parse(salesOrder.ShipFrom.Name ?? string.Empty);
+            var shipFullName = PersonName.Parse(shipTo.Name ?? string.Empty);
             order.ShipFirstName = shipFullName.First;
             order.ShipMiddleName = shipFullName.Middle;
             order.ShipLastName = shipFullName.LastWithSuffix;
             order.ShipNameParseStatus = (int) shipFullName.ParseStatus;
             order.ShipUnparsedName = shipFullName.UnparsedName;
-            order.ShipCompany = string.Empty;
-            order.ShipPhone = salesOrder.ShipFrom.Phone ?? string.Empty;
+            order.ShipCompany = shipTo.Company;
+            order.ShipPhone = shipTo.Phone ?? string.Empty;
 
-            var addressLines = new List<string>
-            {
-                salesOrder.ShipFrom.AddressLine1 ?? string.Empty,
-                salesOrder.ShipFrom.AddressLine2 ?? string.Empty,
-                salesOrder.ShipFrom.AddressLine3 ?? string.Empty
-            };
+            order.ShipStreet1 = shipTo.AddressLine1 ?? string.Empty;
+            order.ShipStreet2 = shipTo.AddressLine2 ?? string.Empty;
+            order.ShipStreet3 = shipTo.AddressLine3 ?? string.Empty;
 
-            SetStreetAddress(new PersonAdapter(order, "Ship"), addressLines);
+            order.ShipCity = shipTo.City ?? string.Empty;
+            order.ShipPostalCode = shipTo.PostalCode ?? string.Empty;
+            order.ShipCountryCode = Geography.GetCountryCode(shipTo.CountryCode ?? string.Empty);
+            order.ShipStateProvCode = Geography.GetStateProvCode(shipTo.StateProvince ?? string.Empty, order.ShipCountryCode);
+            
+            order.ShipEmail = order.BillEmail ?? string.Empty;
 
-            order.ShipCity = salesOrder.ShipFrom.City ?? string.Empty;
-            order.ShipPostalCode = salesOrder.ShipFrom.PostalCode ?? string.Empty;
-            order.ShipCountryCode = Geography.GetCountryCode(salesOrder.ShipFrom.CountryCode ?? string.Empty);
-            order.ShipStateProvCode = Geography.GetStateProvCode(salesOrder.ShipFrom.StateProvince ?? string.Empty, order.ShipCountryCode);
+            // Bill To
+            var billToFullName = PersonName.Parse(salesOrder.BillTo.Name ?? string.Empty);
+            order.BillFirstName = billToFullName.First;
+            order.BillMiddleName = billToFullName.Middle;
+            order.BillLastName = billToFullName.LastWithSuffix;
+            order.BillNameParseStatus = (int) billToFullName.ParseStatus;
+            order.BillUnparsedName = billToFullName.UnparsedName;
+            order.BillCompany = salesOrder.BillTo.Company;
+            order.BillPhone = salesOrder.BillTo.Phone ?? string.Empty;
 
-            if (!string.IsNullOrEmpty(salesOrder.Buyer.Name))
-            {
-                SetBuyerName(order, salesOrder.Buyer.Name);
-            }
-            else
-            {
-                // until Amazon provides some billing information, copy everything to billing from shipping
-                PersonAdapter.Copy(new PersonAdapter(order, "Ship"), new PersonAdapter(order, "Bill"));
-            }
+            order.BillStreet1 = salesOrder.BillTo.AddressLine1 ?? string.Empty;
+            order.BillStreet2 = salesOrder.BillTo.AddressLine2 ?? string.Empty;
+            order.BillStreet3 = salesOrder.BillTo.AddressLine3 ?? string.Empty;
 
-            // Amazon sends buyer email now, use it for billing and shipping
+            order.BillCity = salesOrder.BillTo.City ?? string.Empty;
+            order.BillPostalCode = salesOrder.BillTo.PostalCode ?? string.Empty;
+            order.BillCountryCode = Geography.GetCountryCode(salesOrder.BillTo.CountryCode ?? string.Empty);
+            order.BillStateProvCode = Geography.GetStateProvCode(salesOrder.BillTo.StateProvince ?? string.Empty, order.ShipCountryCode);
+
             order.BillEmail = salesOrder.Buyer.Email ?? string.Empty;
-            order.ShipEmail = order.BillEmail;
-        }
-
-        /// <summary>
-        /// Sets the XXXStreet1 - XXXStreet3 address lines
-        /// </summary>
-        private static void SetStreetAddress(PersonAdapter address, List<string> addressLines)
-        {
-            // first get rid of blanks
-            addressLines.RemoveAll(s => s.Length == 0);
-
-            var targetLine = 0;
-            foreach (var addressLine in addressLines)
-            {
-                targetLine++;
-
-                switch (targetLine)
-                {
-                    case 1:
-                        address.Street1 = addressLine;
-                        break;
-                    case 2:
-                        address.Street2 = addressLine;
-                        break;
-                    case 3:
-                        address.Street3 = addressLine;
-                        break;
-                }
-            }
         }
 
         /// <summary>
@@ -349,8 +326,8 @@ namespace ShipWorks.Stores.Platforms.Amazon
             item.Name = orderItem.Product.Name;
             item.Quantity = orderItem.Quantity;
             item.UnitPrice = orderItem.UnitPrice;
-            item.Code = orderItem.Product.Identifiers.FulfillmentSku;
-            item.SKU = item.Code;
+            item.SKU = orderItem.Product.Identifiers.Sku;
+            item.Code = item.SKU;
 
             item.Weight = (double)orderItem.Product.Weight.Value;
 
@@ -362,9 +339,9 @@ namespace ShipWorks.Stores.Platforms.Amazon
             item.Height = orderItem.Product.Dimensions?.Height ?? 0;
 
             // amazon-specific fields
-            item.AmazonOrderItemCode = orderItem.Product.ProductId;
+            item.AmazonOrderItemCode = orderItem.LineItemId;
             //TODO amz:ConditionNote
-            item.ASIN = orderItem.Product.Identifiers?.Asin;
+                        item.ASIN = orderItem.Product.Identifiers?.Asin;
 
             // see if we need to add any attributes
             SetOrderItemGiftDetails(orderItem, item);
