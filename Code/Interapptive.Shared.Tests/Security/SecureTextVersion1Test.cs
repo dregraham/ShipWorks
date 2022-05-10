@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using Interapptive.Shared.Security;
 using Interapptive.Shared.Security.SecureTextVersions;
 using log4net;
 using Moq;
@@ -30,7 +31,7 @@ namespace Interapptive.Shared.Tests.Security
             var encrypted1 = Convert.FromBase64String(testObject.Encrypt(plaintext, password).Split(':')[0]);
             var firstSalt = encrypted1.Skip(encrypted1.Length - 16).Take(16);
 
-            testObject.ClearCache();
+            SecureText.ClearCache();
 
             var encrypted2 = Convert.FromBase64String(testObject.Encrypt(plaintext, password).Split(':')[0]);
             var secondSalt = encrypted2.Skip(encrypted2.Length - 16).Take(16);

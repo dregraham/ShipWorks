@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Interapptive.Shared.Security;
 using Xunit;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.iParcel;
@@ -158,7 +159,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.iParcel
             testObject.SaveToEntity(account);
 
             // This should be the encrypted password
-            Assert.Equal("D4ljlev6Y5B+KN4tWMzYsw==", account.Password);
+            Assert.Equal("somePassword", SecureText.Decrypt(account.Password, "someUser"));
         }
     }
 }

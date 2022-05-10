@@ -66,7 +66,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Registration.Response
         {
             testObject.Process();
 
-            Assert.Equal(SecureText.Encrypt("password", "FedEx"), shippingSettings.FedExPassword);
+            Assert.Equal(SecureText.Decrypt(shippingSettings.FedExPassword, "FedEx"), "password");
         }
 
         [Fact]

@@ -62,7 +62,12 @@ namespace ShipWorks.Shipping.Tests.Carriers.Asendia
 
             shipment = new ShipmentEntity()
             {
-                Asendia = new AsendiaShipmentEntity(),
+                Asendia = new AsendiaShipmentEntity()
+                {
+                    CustomsRecipientTinType = -1,
+                    CustomsRecipientIssuingAuthority = "test CustomsRecipientIssuingAuthority",
+                    CustomsRecipientTin = "test CustomsRecipientTin"
+                },
                 ShipmentTypeCode = ShipmentTypeCode.Asendia
             };
 
@@ -165,10 +170,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.Asendia
         [InlineData(false)]
         public void CreatePurchaseLabelRequest_AdvancedOptionsAreSet(bool nonMachinable)
         {
-            shipment.Asendia = new AsendiaShipmentEntity()
-            {
-                NonMachinable = nonMachinable,
-            };
+            shipment.Asendia.NonMachinable = nonMachinable;
 
             var request = testObject.CreatePurchaseLabelRequest(shipment);
             
@@ -182,10 +184,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.Asendia
         [InlineData(ShipEngineContentsType.Sample, InternationalOptions.ContentsEnum.Sample)]
         public void CreatePurchaseLabelRequest_ContentsSet(ShipEngineContentsType contents, InternationalOptions.ContentsEnum apiContents)
         {
-            shipment.Asendia = new AsendiaShipmentEntity
-            {
-                Contents = (int) contents
-            };
+            shipment.Asendia.Contents = (int) contents;
 
             var request = testObject.CreatePurchaseLabelRequest(shipment);
 
@@ -197,10 +196,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.Asendia
         [InlineData(ShipEngineNonDeliveryType.TreatAsAbandoned, InternationalOptions.NonDeliveryEnum.Treatasabandoned)]
         public void CreatePurchaseLabelRequest_NonDeliverySet(ShipEngineNonDeliveryType nonDelivery, InternationalOptions.NonDeliveryEnum apiNonDelivery)
         {
-            shipment.Asendia = new AsendiaShipmentEntity
-            {
-                NonDelivery = (int) nonDelivery
-            };
+            shipment.Asendia.NonDelivery = (int) nonDelivery;
 
             var request = testObject.CreatePurchaseLabelRequest(shipment);
 
@@ -218,10 +214,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.Asendia
         [InlineData(AsendiaServiceType.AsendiaPriorityTracked)]
         public void CreatePurchaseLabelRequest_SetsServiceCorrectly(AsendiaServiceType serviceType)
         {
-            shipment.Asendia = new AsendiaShipmentEntity()
-            {
-                Service = serviceType
-            };
+            shipment.Asendia.Service = serviceType;
 
             testObject.CreatePurchaseLabelRequest(shipment);
 
