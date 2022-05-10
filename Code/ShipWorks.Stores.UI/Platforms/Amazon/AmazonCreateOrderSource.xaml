@@ -45,18 +45,15 @@
             Margin="0,0,0,20"
             Style="{StaticResource StandardText}"
             TextWrapping="Wrap">
-            Amazon requires you to authorize ShipWorks to connect
-            to your Amazon account. This is done by logging into
-            a special Amazon page, granting ShipWorks access, and
-            copying and pasting the code on the last page into the Order
-            Source ID field below. (FIX LINK!!!) For help,&#160;
             <Hyperlink ui:Link.OpenInBrowser="true"
-                       NavigateUri="https://shipworks.zendesk.com/hc/en-us/articles/360022466392">
-                click here.
+                       NavigateUri="https://support.shipworks.com/hc/en-us/articles/5493941886875">
+                Authorize ShipWorks to connect to your Amazon store.
             </Hyperlink>
+            Click the <Bold>Create Amazon Token</Bold> button, log in to Amazon, grant ShipWorks access,
+            then copy and paste the Amazon token into the <Bold>Enter the Amazon Token</Bold> field.      
         </TextBlock>
         <StackPanel Grid.Row="1" Style="{StaticResource StepBlock}">
-            <TextBlock Style="{StaticResource StepHeader}">1: Create an Amazon Token</TextBlock>
+            <TextBlock Style="{StaticResource StepHeader}">1: Get an API Token from Amazon</TextBlock>
             <Grid Style="{StaticResource StepContents}">
                 <Button
                     Padding="8,4"
@@ -77,7 +74,7 @@
         </ui:WaitSpinner>
 
         <StackPanel Grid.Row="2" Style="{StaticResource StepBlock}">
-            <TextBlock Style="{StaticResource StepHeader}">2: Fill in the Amazon Token</TextBlock>
+            <TextBlock Style="{StaticResource StepHeader}">2: Enter the Amazon Token</TextBlock>
             <Grid Style="{StaticResource StepContents}">
                 <TextBox
                     Width="250"

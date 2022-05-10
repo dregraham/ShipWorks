@@ -22,7 +22,7 @@ namespace ShipWorks.Stores.Platforms.Amazon
     public class AmazonCreateOrderSourceViewModel : ViewModelBase, IAmazonCreateOrderSourceViewModel
     {
         private const string orderSourceName = "amazon";
-        
+
         private readonly IWebHelper webHelper;
         private readonly IHubMonoauthClient hubMonoauthClient;
         private readonly IMessageHelper messageHelper;
@@ -103,7 +103,7 @@ namespace ShipWorks.Stores.Platforms.Amazon
             if (!Decode(EncodedOrderSource, store))
             {
                 log.Error("Failed to decode the encoded order source token.");
-                messageHelper.ShowError("There is something wrong with the token. Please try to copy and paste it again.");
+                messageHelper.ShowError("The token does not appear to be correct. Please copy and paste it again.");
                 return false;
             }
 
@@ -142,7 +142,7 @@ namespace ShipWorks.Stores.Platforms.Amazon
                     return false;
                 }
 
-                if(!GuidHelper.IsGuid(splitString[2]))
+                if (!GuidHelper.IsGuid(splitString[2]))
                 {
                     log.Error("The provided token's third part was not a GUID");
                     return false;
