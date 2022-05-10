@@ -384,10 +384,14 @@ namespace ShipWorks.Shipping.Carriers.DhlEcommerce
         {
             var baseExcludedTypes = base.GetExcludedServiceTypes(repository).ToList();
 
-            // If restricted from DHL eCommerce Max, remove it
-            if (licenseService.CheckRestriction(EditionFeature.DhlEcommerceMax, null) != EditionRestrictionLevel.None)
+            if (licenseService.CheckRestriction(EditionFeature.DhlEcommerceMax, null) == EditionRestrictionLevel.None)
             {
-                baseExcludedTypes.Remove((int) DhlEcommerceServiceType.US_DhlSMParcelExpeditedMax);
+                return baseExcludedTypes;
+            }
+
+            if (!baseExcludedTypes.Exists(x => x == (int) DhlEcommerceServiceType.US_DhlSMParcelExpeditedMax))
+            {
+                baseExcludedTypes.Add((int) DhlEcommerceServiceType.US_DhlSMParcelExpeditedMax);
             }
 
             return baseExcludedTypes;

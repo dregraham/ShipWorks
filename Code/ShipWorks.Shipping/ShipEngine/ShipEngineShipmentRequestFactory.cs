@@ -114,14 +114,14 @@ namespace ShipWorks.Shipping.ShipEngine
 
                 request.Shipment.Packages = shipmentElementFactory.CreatePackageForRating(packages, SetPackageInsurance);
 
-                // TODO: DHL eCommerce - Set to "Thirdparty" if using ShipWorks insurance
-                if (shipment.Insurance &&
-                    shipment.InsuranceProvider == (int) InsuranceProvider.Carrier)
+                if (shipment.Insurance)
                 {
-                    request.Shipment.InsuranceProvider = AddressValidatingShipment.InsuranceProviderEnum.Carrier;
+                    request.Shipment.InsuranceProvider = shipment.InsuranceProvider == (int) InsuranceProvider.Carrier ?
+                        AddressValidatingShipment.InsuranceProviderEnum.Carrier :
+                        AddressValidatingShipment.InsuranceProviderEnum.Thirdparty;
                 }
 
-                if (request.Shipment.Packages.Any())
+                if (request.Shipment.Packages.Any() && shipment.ShipmentTypeCode == ShipmentTypeCode.DhlEcommerce)
                 {
                     request.Shipment.Packages.First().LabelMessages.Reference1 = shipment.DhlEcommerce.Reference1;
                 }
