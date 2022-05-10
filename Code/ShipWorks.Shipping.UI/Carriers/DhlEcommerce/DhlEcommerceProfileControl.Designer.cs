@@ -390,9 +390,9 @@ namespace ShipWorks.Shipping.UI.Carriers.DhlEcommerce
             this.labelThermalNote.ForeColor = System.Drawing.SystemColors.GrayText;
             this.labelThermalNote.Location = new System.Drawing.Point(50, 48);
             this.labelThermalNote.Name = "labelThermalNote";
-            this.labelThermalNote.Size = new System.Drawing.Size(264, 13);
+            this.labelThermalNote.Size = new System.Drawing.Size(305, 13);
             this.labelThermalNote.TabIndex = 103;
-            this.labelThermalNote.Text = "Note: DHL eCommerce only supports Standard labels.";
+            this.labelThermalNote.Text = "Note: DHL eCommerce only supports Standard and ZPL labels.";
             this.labelThermalNote.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // requestedLabelFormat

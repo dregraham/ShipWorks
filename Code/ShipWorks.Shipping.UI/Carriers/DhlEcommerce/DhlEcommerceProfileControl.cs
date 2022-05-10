@@ -36,7 +36,7 @@ namespace ShipWorks.Shipping.UI.Carriers.DhlEcommerce
             ResizeGroupBoxes(tabPageSettings);
 
             // ShipEngine only support Standard for DHL eCommerce
-            requestedLabelFormat.ExcludeFormats(ThermalLanguage.EPL, ThermalLanguage.ZPL);
+            requestedLabelFormat.ExcludeFormats(ThermalLanguage.EPL);
         }
 
         /// <summary>

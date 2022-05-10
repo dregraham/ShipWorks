@@ -329,7 +329,7 @@ namespace ShipWorks.Shipping.UI.Carriers.DhlEcommerce
         /// </summary>
         protected override bool ShouldIncludeLabelFormatInList(ThermalLanguage format)
         {
-            return format != ThermalLanguage.EPL && format != ThermalLanguage.ZPL;
+            return format != ThermalLanguage.EPL;
         }
     }
 }
