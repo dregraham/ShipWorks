@@ -386,6 +386,10 @@ namespace ShipWorks.Shipping.Carriers.DhlEcommerce
 
             if (licenseService.CheckRestriction(EditionFeature.DhlEcommerceMax, null) == EditionRestrictionLevel.None)
             {
+                if (baseExcludedTypes.Exists(x => x == (int) DhlEcommerceServiceType.US_DhlSMParcelExpeditedMax))
+                {
+                    baseExcludedTypes.Remove((int) DhlEcommerceServiceType.US_DhlSMParcelExpeditedMax);
+                }
                 return baseExcludedTypes;
             }
 
