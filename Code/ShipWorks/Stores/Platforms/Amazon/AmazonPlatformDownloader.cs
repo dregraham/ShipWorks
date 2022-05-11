@@ -197,7 +197,7 @@ namespace ShipWorks.Stores.Platforms.Amazon
 
             // requested shipping
             order.RequestedShipping =
-                salesOrder.RequestedFulfillments.FirstOrDefault()?.ShippingPreferences.ShippingService ?? string.Empty;
+                salesOrder.RequestedFulfillments.FirstOrDefault()?.ShippingPreferences?.ShippingService ?? string.Empty;
 
             // Address
             LoadAddresses(order, salesOrder);
