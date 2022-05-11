@@ -232,6 +232,34 @@ namespace ShipWorks.Stores.Platforms.Amazon
             await retryAdapter.ExecuteWithRetryAsync(() => SaveDownloadedOrder(order)).ConfigureAwait(false);
         }
 
+        /// <summary>
+        /// Sets the XXXStreet1 - XXXStreet3 address lines
+        /// </summary>
+        private static void SetStreetAddress(PersonAdapter address, List<string> addressLines)
+        {
+            // first get rid of blanks
+            addressLines.RemoveAll(s => s.Length == 0);
+
+            var targetLine = 0;
+            foreach (var addressLine in addressLines)
+            {
+                targetLine++;
+
+                switch (targetLine)
+                {
+                    case 1:
+                        address.Street1 = addressLine;
+                        break;
+                    case 2:
+                        address.Street2 = addressLine;
+                        break;
+                    case 3:
+                        address.Street3 = addressLine;
+                        break;
+                }
+            }
+        }
+
         private static void LoadAddresses(AmazonOrderEntity order, OrderSourceApiSalesOrder salesOrder)
         {
             var shipTo = salesOrder.RequestedFulfillments.FirstOrDefault(x => x?.ShipTo != null)?.ShipTo;
@@ -249,9 +277,13 @@ namespace ShipWorks.Stores.Platforms.Amazon
             order.ShipCompany = shipTo.Company;
             order.ShipPhone = shipTo.Phone ?? string.Empty;
 
-            order.ShipStreet1 = shipTo.AddressLine1 ?? string.Empty;
-            order.ShipStreet2 = shipTo.AddressLine2 ?? string.Empty;
-            order.ShipStreet3 = shipTo.AddressLine3 ?? string.Empty;
+            var shipAddressLines = new List<string>
+            {
+                shipTo.AddressLine1 ?? string.Empty,
+                shipTo.AddressLine2 ?? string.Empty,
+                shipTo.AddressLine3 ?? string.Empty
+            };
+            SetStreetAddress(new PersonAdapter(order, "Ship"), shipAddressLines);
 
             order.ShipCity = shipTo.City ?? string.Empty;
             order.ShipPostalCode = shipTo.PostalCode ?? string.Empty;
@@ -270,9 +302,13 @@ namespace ShipWorks.Stores.Platforms.Amazon
             order.BillCompany = salesOrder.BillTo.Company;
             order.BillPhone = salesOrder.BillTo.Phone ?? string.Empty;
 
-            order.BillStreet1 = salesOrder.BillTo.AddressLine1 ?? string.Empty;
-            order.BillStreet2 = salesOrder.BillTo.AddressLine2 ?? string.Empty;
-            order.BillStreet3 = salesOrder.BillTo.AddressLine3 ?? string.Empty;
+            var billAddressLines = new List<string>
+            {
+                salesOrder.BillTo.AddressLine1 ?? string.Empty,
+                salesOrder.BillTo.AddressLine2 ?? string.Empty,
+                salesOrder.BillTo.AddressLine3 ?? string.Empty
+            };
+            SetStreetAddress(new PersonAdapter(order, "Bill"), billAddressLines);
 
             order.BillCity = salesOrder.BillTo.City ?? string.Empty;
             order.BillPostalCode = salesOrder.BillTo.PostalCode ?? string.Empty;
