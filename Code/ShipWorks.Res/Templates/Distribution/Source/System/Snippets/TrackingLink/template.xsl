@@ -17,11 +17,17 @@
         </a>
       </xsl:when>
 
-      <xsl:when test="contains(ServiceUsed, 'DHL SM')">
-        <a href="http://webtrack.dhlglobalmail.com/?mobile=&amp;trackingnumber={TrackingNumber}">
-            <xsl:value-of select="TrackingNumber"/>
-        </a>
-      </xsl:when>
+	  <xsl:when test="contains(ServiceUsed, 'DHL SM')">
+		  <a href="http://webtrack.dhlglobalmail.com/?mobile=&amp;trackingnumber={TrackingNumber}">
+			  <xsl:value-of select="TrackingNumber"/>
+		  </a>
+	  </xsl:when>
+
+	  <xsl:when test="ShipmentType = 'DHL eCommerce'">
+		  <a href="http://webtrack.dhlglobalmail.com/?trackingnumber={TrackingNumber}">
+			  <xsl:value-of select="TrackingNumber"/>
+		  </a>
+	  </xsl:when>
 
     <xsl:when test="contains(ServiceUsed, 'USPS')">
         <a href="https://tools.usps.com/go/TrackConfirmAction.action?tLabels={TrackingNumber}">

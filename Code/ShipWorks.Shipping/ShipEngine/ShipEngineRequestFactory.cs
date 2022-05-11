@@ -69,7 +69,8 @@ namespace ShipWorks.Shipping.ShipEngine
 
             if (request.Shipment.Packages.Any() && shipment.ShipmentTypeCode == ShipmentTypeCode.DhlEcommerce)
             {
-                request.Shipment.Packages.First().LabelMessages.Reference1 = shipment.DhlEcommerce.Reference1;
+                // Yes, set to Reference3 as per DHL
+                request.Shipment.Packages.First().LabelMessages.Reference3 = shipment.DhlEcommerce.Reference1;
             }
 
             return request;

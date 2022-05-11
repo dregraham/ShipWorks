@@ -262,7 +262,7 @@ namespace ShipWorks.Shipping.Tests.ShipEngine
 
             var package = request.Shipment.Packages.Single();
             Assert.Equal(10, package.Dimensions.Length);
-            Assert.Equal(shipment.DhlEcommerce.Reference1, package.LabelMessages.Reference1);
+            Assert.Equal(shipment.DhlEcommerce.Reference1, package.LabelMessages.Reference3);
         }
 
         [Fact]

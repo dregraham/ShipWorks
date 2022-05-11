@@ -116,6 +116,14 @@ namespace ShipWorks.Shipping.UI.Carriers.DhlEcommerce
         }
 
         /// <summary>
+        /// User clicked the link to open the support article for configuring a DHL eCommerce account
+        /// </summary>
+        private void OnLinkDhlECommerceConfigArticle(object sender, EventArgs e)
+        {
+            WebHelper.OpenUrl("https://support.shipworks.com/hc/en-us/articles/5895141486363", this);
+        }
+
+        /// <summary>
         /// User clicked the link to open the DHL website
         /// </summary>
         private void OnLinkDhlWebsite(object sender, EventArgs e)

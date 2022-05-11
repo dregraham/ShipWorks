@@ -32,8 +32,10 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(DhlEcommerceSetupWizard));
             this.wizardPageWelcome = new ShipWorks.UI.Wizard.WizardPage();
             this.linkDhlWebsite = new System.Windows.Forms.Label();
+            this.linkDhlECommerceConfigArticle = new System.Windows.Forms.Label();
             this.labelInfo2 = new System.Windows.Forms.Label();
-            this.labelInfo1 = new System.Windows.Forms.Label();
+            this.labelInfo1a = new System.Windows.Forms.Label();
+            this.labelInfo1b = new System.Windows.Forms.Label();
             this.wizardPageCredentials = new ShipWorks.UI.Wizard.WizardPage();
             this.accountDescription = new System.Windows.Forms.TextBox();
             this.labelDescription = new System.Windows.Forms.Label();
@@ -81,7 +83,7 @@
             // 
             // mainPanel
             // 
-            this.mainPanel.Controls.Add(this.wizardPageCredentials);
+            this.mainPanel.Controls.Add(this.wizardPageWelcome);
             this.mainPanel.Size = new System.Drawing.Size(567, 437);
             // 
             // etchBottom
@@ -103,8 +105,10 @@
             // wizardPageWelcome
             // 
             this.wizardPageWelcome.Controls.Add(this.linkDhlWebsite);
+            this.wizardPageWelcome.Controls.Add(this.linkDhlECommerceConfigArticle);
             this.wizardPageWelcome.Controls.Add(this.labelInfo2);
-            this.wizardPageWelcome.Controls.Add(this.labelInfo1);
+            this.wizardPageWelcome.Controls.Add(this.labelInfo1a);
+            this.wizardPageWelcome.Controls.Add(this.labelInfo1b);
             this.wizardPageWelcome.Description = "Setup ShipWorks to work with your DHL eCommerce account.";
             this.wizardPageWelcome.Dock = System.Windows.Forms.DockStyle.Fill;
             this.wizardPageWelcome.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -127,6 +131,19 @@
             this.linkDhlWebsite.Text = "www.dhl.com.";
             this.linkDhlWebsite.Click += new System.EventHandler(this.OnLinkDhlWebsite);
             // 
+            // linkDhlECommerceConfigArticle
+            // 
+            this.linkDhlECommerceConfigArticle.AutoSize = true;
+            this.linkDhlECommerceConfigArticle.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.linkDhlECommerceConfigArticle.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.linkDhlECommerceConfigArticle.ForeColor = System.Drawing.Color.Blue;
+            this.linkDhlECommerceConfigArticle.Location = new System.Drawing.Point(155, 9);
+            this.linkDhlECommerceConfigArticle.Name = "linkDhlECommerceConfigArticle";
+            this.linkDhlECommerceConfigArticle.Size = new System.Drawing.Size(207, 13);
+            this.linkDhlECommerceConfigArticle.TabIndex = 5;
+            this.linkDhlECommerceConfigArticle.Text = "configuring your DHL eCommerce account";
+            this.linkDhlECommerceConfigArticle.Click += new System.EventHandler(this.OnLinkDhlECommerceConfigArticle);
+            // 
             // labelInfo2
             // 
             this.labelInfo2.Location = new System.Drawing.Point(20, 67);
@@ -136,15 +153,22 @@
             this.labelInfo2.Text = "You must have a DHL eCommerce account before continuing. To get a DHL eCommerce a" +
     "ccount, please visit";
             // 
-            // labelInfo1
+            // labelInfo1a
             // 
-            this.labelInfo1.Location = new System.Drawing.Point(20, 9);
-            this.labelInfo1.Name = "labelInfo1";
-            this.labelInfo1.Size = new System.Drawing.Size(454, 47);
-            this.labelInfo1.TabIndex = 3;
-            this.labelInfo1.Text = "This wizard will assist you in configuring your DHL eCommerce account for use wit" +
-    "h ShipWorks. This enables you to begin shipping, tracking, and printing labels w" +
-    "ith your DHL eCommerce\r\n account.";
+            this.labelInfo1a.Location = new System.Drawing.Point(20, 9);
+            this.labelInfo1a.Name = "labelInfo1a";
+            this.labelInfo1a.Size = new System.Drawing.Size(140, 13);
+            this.labelInfo1a.TabIndex = 3;
+            this.labelInfo1a.Text = "This wizard will assist you in ";
+            // 
+            // labelInfo1b
+            // 
+            this.labelInfo1b.Location = new System.Drawing.Point(20, 22);
+            this.labelInfo1b.Name = "labelInfo1b";
+            this.labelInfo1b.Size = new System.Drawing.Size(374, 47);
+            this.labelInfo1b.TabIndex = 3;
+            this.labelInfo1b.Text = "for use with ShipWorks. This enables you to begin shipping, tracking, and printin" +
+    "g labels with your DHL eCommerce account.";
             // 
             // wizardPageCredentials
             // 
@@ -390,9 +414,11 @@
         #endregion
 
         private ShipWorks.UI.Wizard.WizardPage wizardPageWelcome;
+        private System.Windows.Forms.Label linkDhlECommerceConfigArticle;
         private System.Windows.Forms.Label linkDhlWebsite;
         private System.Windows.Forms.Label labelInfo2;
-        private System.Windows.Forms.Label labelInfo1;
+        private System.Windows.Forms.Label labelInfo1a;
+        private System.Windows.Forms.Label labelInfo1b;
         private ShipWorks.UI.Wizard.WizardPage wizardPageCredentials;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.TextBox apiSecret;
