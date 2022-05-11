@@ -71,7 +71,6 @@ namespace ShipWorks.Shipping.UI.Carriers.DhlEcommerce
             this.sectionShipment.ContentPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.sectionLabelOptions)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.sectionLabelOptions.ContentPanel)).BeginInit();
-            this.sectionLabelOptions.ContentPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.sectionFrom)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.sectionFrom.ContentPanel)).BeginInit();
             this.sectionFrom.ContentPanel.SuspendLayout();
@@ -138,7 +137,7 @@ namespace ShipWorks.Shipping.UI.Carriers.DhlEcommerce
             this.sectionShipment.ContentPanel.Controls.Add(this.labelShipDate);
             this.sectionShipment.ContentPanel.Controls.Add(this.shipDate);
             this.sectionShipment.ContentPanel.Controls.Add(this.cutoffDateDisplay);
-            this.sectionShipment.Location = new System.Drawing.Point(3, 528);
+            this.sectionShipment.Location = new System.Drawing.Point(3, 453);
             this.sectionShipment.Size = new System.Drawing.Size(377, 278);
             this.sectionShipment.TabIndex = 2;
             // 
@@ -149,7 +148,7 @@ namespace ShipWorks.Shipping.UI.Carriers.DhlEcommerce
             // sectionLabelOptions.ContentPanel
             // 
             this.sectionLabelOptions.ContentPanel.Controls.Add(this.labelFormat);
-            this.sectionLabelOptions.Location = new System.Drawing.Point(3, 453);
+            this.sectionLabelOptions.Location = new System.Drawing.Point(3, 736);
             this.sectionLabelOptions.Size = new System.Drawing.Size(377, 70);
             // 
             // cutoffDateDisplay
@@ -497,8 +496,8 @@ namespace ShipWorks.Shipping.UI.Carriers.DhlEcommerce
             this.Size = new System.Drawing.Size(383, 651);
             this.Controls.SetChildIndex(this.sectionOptions, 0);
             this.Controls.SetChildIndex(this.sectionReturns, 0);
-            this.Controls.SetChildIndex(this.sectionShipment, 0);
             this.Controls.SetChildIndex(this.sectionLabelOptions, 0);
+            this.Controls.SetChildIndex(this.sectionShipment, 0);
             this.Controls.SetChildIndex(this.sectionRecipient, 0);
             this.Controls.SetChildIndex(this.sectionFrom, 0);
             ((System.ComponentModel.ISupportInitialize)(this.sectionRecipient.ContentPanel)).EndInit();
