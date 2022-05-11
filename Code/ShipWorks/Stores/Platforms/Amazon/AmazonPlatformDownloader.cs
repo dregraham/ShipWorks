@@ -144,7 +144,6 @@ namespace ShipWorks.Stores.Platforms.Amazon
 
             var order = (AmazonOrderEntity) result.Value;
             order.AmazonOrderID = amazonOrderId;
-            order.OrderNumberComplete = amazonOrderId;
             order.OrderNumber = long.MinValue;
             order.ChannelOrderID = salesOrder.OrderId;
 
