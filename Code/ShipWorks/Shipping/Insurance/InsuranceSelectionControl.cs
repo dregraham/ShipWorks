@@ -415,6 +415,10 @@ namespace ShipWorks.Shipping.Insurance
             {
                 settings.IParcelInsurancePennyOne = true;
             }
+            else if (shipmentTypeCode == ShipmentTypeCode.DhlEcommerce)
+            {
+                settings.DhlEcommerceInsurancePennyOne = true;
+            }
             else
             {
                 throw new ArgumentOutOfRangeException("linkSavings.Tag", shipmentTypeCode, "Invalid ShipmentTypeCode for PennyOne Insurance");
