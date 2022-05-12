@@ -82,9 +82,9 @@ using ShipWorks.Products;
 using ShipWorks.Properties;
 using ShipWorks.Settings;
 using ShipWorks.Shipping;
+using ShipWorks.Shipping.Carriers;
 using ShipWorks.Shipping.Carriers.Asendia;
 using ShipWorks.Shipping.Carriers.DhlEcommerce;
-using ShipWorks.Shipping.Carriers.DhlEcommerce.Manifest;
 using ShipWorks.Shipping.Carriers.FedEx;
 using ShipWorks.Shipping.Carriers.FedEx.Api;
 using ShipWorks.Shipping.Carriers.UPS.OneBalance;
@@ -92,6 +92,7 @@ using ShipWorks.Shipping.Carriers.UPS.WorldShip;
 using ShipWorks.Shipping.Profiles;
 using ShipWorks.Shipping.ScanForms;
 using ShipWorks.Shipping.Settings;
+using ShipWorks.Shipping.ShipEngine.Manifest;
 using ShipWorks.Shipping.ShipSense.Population;
 using ShipWorks.Stores;
 using ShipWorks.Stores.Communication;
@@ -5506,22 +5507,43 @@ namespace ShipWorks
         }
 
         /// <summary>
-        /// The Create DHL eCommerce Manifest button is pushed
+        /// The DHL eCommerce manifest popup is opening, we need to dynamically repopulate the print menu
         /// </summary>
-        private async void OnDhlEcommerceManifest(object sender, EventArgs e)
+        private void OnDhlEcommerceManifestOpening(object sender, BeforePopupEventArgs e)
         {
-            using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
+            using (var scope = IoC.BeginLifetimeScope())
             {
-                var result = await lifetimeScope.Resolve<IDhlEcommerceManifestCreator>().CreateManifest().ConfigureAwait(true);
+                var accountRetriever = scope.ResolveKeyed<ICarrierAccountRetriever>(ShipmentTypeCode.DhlEcommerce);
 
-                if (result.Success)
-                {
-                    MessageHelper.ShowMessage(this, "DHL eCommerce manifest created.");
-                    return;
-                }
-                MessageHelper.ShowError(this, $"An error occurred creating the DHL eCommerce manifest:\n{result.Message}");
-                log.Error(result.Exception.Message);
+                PopulateShipEngineManifestMenu(menuItemCreateDhlEcommerceManifest, menuPrintDhlEcommerceManifest, accountRetriever, scope);
             }
+        }
+
+        /// <summary>
+        /// The DHL eCommerce manifest order lookup view popup is opening, we need to dynamically repopulate the print menu
+        /// </summary>
+        private void OnOrderLookupViewDhlEcommerceManifestOpening(object sender, BeforePopupEventArgs e)
+        {
+            using (var scope = IoC.BeginLifetimeScope())
+            {
+                var accountRetriever = scope.ResolveKeyed<ICarrierAccountRetriever>(ShipmentTypeCode.DhlEcommerce);
+
+                PopulateShipEngineManifestMenu(menuItemOrderLookupViewCreateDhlEcommerceManifest, menuOrderLookupViewPrintDhlEcommerceManifest, accountRetriever, scope);
+            }
+        }
+
+        /// <summary>
+        /// Populate a ShipEngine manifest menu
+        /// </summary>
+        private async void PopulateShipEngineManifestMenu(SandMenuItem createMenu,
+            Divelements.SandRibbon.Menu printMenu,
+            ICarrierAccountRetriever accountRetriever,
+            ILifetimeScope scope)
+        {
+            var manifestUtility = scope.Resolve<IShipEngineManifestUtility>();
+
+            manifestUtility.PopulateCreateManifestMenu(createMenu, accountRetriever);
+            manifestUtility.PopulatePrintManifestMenu(printMenu, accountRetriever);
         }
 
         /// <summary>

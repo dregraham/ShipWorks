@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Utility;
+using ShipWorks.Data.Model.Custom;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.ShipEngine.DTOs;
 
@@ -17,16 +18,17 @@ namespace ShipWorks.Shipping.ShipEngine.Manifest
         /// <summary>
         /// Save a ShipEngine Manifest to ShipWorks
         /// </summary>
-        public Task<Result> SaveManifest(CreateManifestResponse createManifestResponse)
+        public async Task<Result> SaveManifest(CreateManifestResponse createManifestResponse)
         {
             throw new NotImplementedException();
         }
 
         /// <summary>
-        /// Get ShipEngineManifestEntities for a shipment type
+        /// Get ShipEngineManifestEntities for a carrier account
         /// </summary>
-        public Task<List<ShipEngineManifestEntity>> GetManifests(ShipmentTypeCode shipmentTypeCode)
+        public async Task<List<ShipEngineManifestEntity>> GetManifests(ICarrierAccount account)
         {
+            return new List<ShipEngineManifestEntity>();
             throw new NotImplementedException();
         }
     }
