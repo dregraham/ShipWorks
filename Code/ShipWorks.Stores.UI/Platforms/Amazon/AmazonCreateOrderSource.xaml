@@ -49,8 +49,10 @@
                        NavigateUri="https://support.shipworks.com/hc/en-us/articles/5493941886875">
                 Authorize ShipWorks to connect to your Amazon store.
             </Hyperlink>
-            Click the <Bold>Create Amazon Token</Bold> button, log in to Amazon, grant ShipWorks access,
-            then copy and paste the Amazon token into the <Bold>Enter the Amazon Token</Bold> field.      
+            <LineBreak />1. Click the <Bold>Create Amazon Token</Bold> button
+            <LineBreak />2. Log in to Amazon
+            <LineBreak />3. Grant ShipWorks access
+            <LineBreak />4. Then copy and paste the Amazon token into the <Bold>Enter the Amazon Token</Bold> field      
         </TextBlock>
         <StackPanel Grid.Row="1" Style="{StaticResource StepBlock}">
             <TextBlock Style="{StaticResource StepHeader}">1: Get an API Token from Amazon</TextBlock>
