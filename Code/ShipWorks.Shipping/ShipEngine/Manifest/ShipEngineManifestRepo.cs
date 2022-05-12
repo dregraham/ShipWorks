@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Utility;
 using SD.LLBLGen.Pro.ORMSupportClasses;
+using SD.LLBLGen.Pro.QuerySpec;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.Custom;
 using ShipWorks.Data.Model.EntityClasses;
@@ -22,6 +23,9 @@ namespace ShipWorks.Shipping.ShipEngine.Manifest
     {
         private readonly ISqlAdapterFactory sqlAdapterFactory;
 
+        /// <summary>
+        /// Constructor
+        /// </summary>
         public ShipEngineManifestRepo(ISqlAdapterFactory sqlAdapterFactory)
         {
             this.sqlAdapterFactory = sqlAdapterFactory;
@@ -30,9 +34,46 @@ namespace ShipWorks.Shipping.ShipEngine.Manifest
         /// <summary>
         /// Save a ShipEngine Manifest to ShipWorks
         /// </summary>
-        public async Task<Result> SaveManifest(CreateManifestResponse createManifestResponse)
+        public async Task<Result> SaveManifest(CreateManifestResponse createManifestResponse, ICarrierAccount account)
         {
-            throw new NotImplementedException();
+            var failedManifests = new List<string>();
+
+            foreach (var manifestResponse in createManifestResponse.Manifests)
+            {
+                try
+                {
+                    var manifest = new ShipEngineManifestEntity
+                    {
+                        CarrierAccountID = account.AccountId,
+                        CreatedAt = manifestResponse.CreatedAt,
+                        CarrierID = manifestResponse.CarrierId,
+                        FormID = manifestResponse.FormId,
+                        ManifestID = manifestResponse.ManifestId,
+                        ManifestUrl = manifestResponse.ManifestDownload.Href,
+                        PlatformWarehouseID = manifestResponse.PlatformWarehouseId ?? string.Empty,
+                        ShipDate = manifestResponse.ShipDate,
+                        ShipmentCount = manifestResponse.ShipmentCount,
+                        ShipmentTypeCode = (int) account.ShipmentType,
+                        SubmissionID = manifestResponse.SubmissionId,
+                    };
+
+                    using (var sqlAdapter = sqlAdapterFactory.Create())
+                    {
+                        await sqlAdapter.SaveEntityAsync(manifest);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    failedManifests.Add($"{manifestResponse.ManifestId}: {ex.Message}");
+                }
+            }
+
+            if (failedManifests.Any())
+            {
+                return Result.FromError($"Errors occurred saving the following manifests:\n{string.Join("\n", failedManifests)}");
+            }
+
+            return Result.FromSuccess();
         }
 
         /// <summary>
@@ -44,16 +85,18 @@ namespace ShipWorks.Shipping.ShipEngine.Manifest
             var collection = new ShipEngineManifestCollection();
 
             var queryParams = new QueryParameters
-                {
-                    CollectionToFetch = collection,
-                    FilterToUse = ShipEngineManifestFields.CarrierAccountID == account.AccountId,
-                    SorterToUse = new SortExpression(ShipEngineManifestFields.CreatedAt | SortOperator.Descending)
-                };
+            {
+                CollectionToFetch = collection,
+                FilterToUse = ShipEngineManifestFields.CarrierAccountID == account.AccountId,
+                SorterToUse = new SortExpression(ShipEngineManifestFields.CreatedAt | SortOperator.Descending)
+            };
 
-            var sqlAdapter = sqlAdapterFactory.Create();
-            await sqlAdapter.FetchEntityCollectionAsync(queryParams, CancellationToken.None).ConfigureAwait(false);
+            using (var sqlAdapter = sqlAdapterFactory.Create())
+            {
+                await sqlAdapter.FetchEntityCollectionAsync(queryParams, CancellationToken.None).ConfigureAwait(false);
 
-            return collection.Any() ? collection.ToList() : new List<ShipEngineManifestEntity>();
+                return collection.Any() ? collection.ToList() : new List<ShipEngineManifestEntity>();
+            }
         }
     }
 }

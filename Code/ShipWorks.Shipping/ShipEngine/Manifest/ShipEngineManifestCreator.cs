@@ -3,6 +3,7 @@ using System.Data;
 using System.Threading.Tasks;
 using Interapptive.Shared.Collections;
 using Interapptive.Shared.ComponentRegistration;
+using Interapptive.Shared.Threading;
 using Interapptive.Shared.Utility;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Data.Connection;
@@ -37,8 +38,11 @@ namespace ShipWorks.Shipping.ShipEngine.Manifest
         /// <summary>
         /// Create a DHL eCommerce Manifest from today's shipments
         /// </summary>
-        public async Task<GenericResult<CreateManifestResponse>> CreateManifest(ShipmentTypeCode shipmentTypeCode)
+        public async Task<GenericResult<CreateManifestResponse>> CreateManifest(ShipmentTypeCode shipmentTypeCode, IProgressReporter progress)
         {
+            progress.Starting();
+            progress.PercentComplete = 33;
+
             var currentTime = dateTimeProvider.GetUtcNow();
             ResultsetFields resultFields = new ResultsetFields(2);
 
@@ -68,15 +72,18 @@ namespace ShipWorks.Shipping.ShipEngine.Manifest
             // Do the fetch
             using (IDataReader reader = adapterFactory.Create().FetchDataReader(resultFields, bucket, CommandBehavior.CloseConnection, 0, false))
             {
+                var index = 1;
+
                 while (reader.Read())
                 {
+                    progress.Detail = $"Loading Shipments: {index}";
+
                     string labelID = reader.GetString(0);
                     long accountID = reader.GetInt64(1);
-                    List<string> accountLabels;
 
                     if (!string.IsNullOrWhiteSpace(labelID))
                     {
-                        if (!results.TryGetValue(accountID, out accountLabels))
+                        if (!results.TryGetValue(accountID, out var accountLabels))
                         {
                             // If this is the first label for this account, new up a list for it
                             accountLabels = new List<string>();
@@ -85,6 +92,8 @@ namespace ShipWorks.Shipping.ShipEngine.Manifest
 
                         accountLabels.Add(labelID);
                     }
+
+                    index++;
                 }
             }
 
@@ -92,6 +101,9 @@ namespace ShipWorks.Shipping.ShipEngine.Manifest
             {
                 return GenericResult.FromError<CreateManifestResponse>("Could not find any shipments for manifest.");
             }
+
+            progress.Detail = "Creating Manifest";
+            progress.PercentComplete = 66;
 
             return await CreateManifest(results).ConfigureAwait(false);
         }

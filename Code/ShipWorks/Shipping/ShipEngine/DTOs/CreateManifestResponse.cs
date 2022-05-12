@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Reflection;
 using Newtonsoft.Json;
 
@@ -32,6 +33,24 @@ namespace ShipWorks.Shipping.ShipEngine.DTOs
 
         [JsonProperty("form_id")]
         public string FormId { get; set; }
+
+        [JsonProperty("created_at")]
+        public DateTime CreatedAt { get; set; }
+
+        [JsonProperty("ship_date")]
+        public DateTime ShipDate { get; set; }
+
+        [JsonProperty("shipments")]
+        public int ShipmentCount { get; set; }
+
+        [JsonProperty("warehouse_id")]
+        public string PlatformWarehouseId { get; set; }
+
+        [JsonProperty("submission_id")]
+        public string SubmissionId { get; set; }
+
+        [JsonProperty("carrier_id")]
+        public string CarrierId { get; set; }
 
         [JsonProperty("manifest_download")]
         public CreateManifestManifestDownload ManifestDownload { get; set; }

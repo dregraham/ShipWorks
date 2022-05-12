@@ -1,10 +1,13 @@
 ﻿using System;
 using System.Linq;
+using System.Threading.Tasks;
 using Divelements.SandRibbon;
 using Interapptive.Shared.ComponentRegistration;
+using Interapptive.Shared.Threading;
 using Interapptive.Shared.UI;
 using Interapptive.Shared.Utility;
 using log4net;
+using ShipWorks.Common.Threading;
 using ShipWorks.Data.Model.Custom;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers;
@@ -130,15 +133,47 @@ namespace ShipWorks.Shipping.ShipEngine.Manifest
             var carrierAccount = (ICarrierAccount) menuItem.Tag;
             var owner = DisplayHelper.GetActiveForm();
 
-            var result = await manifestCreator.CreateManifest(carrierAccount.ShipmentType).ConfigureAwait(true);
-
-            if (result.Success)
+            ProgressProvider progressProvider = new ProgressProvider();
+            IProgressReporter manifestProgress = progressProvider.AddItem("Create Manifest");
+            manifestProgress.CanCancel = false;
+            using (ProgressDlg progressDialog = new ProgressDlg(progressProvider))
             {
-                MessageHelper.ShowMessage(owner, $"{EnumHelper.GetDescription(carrierAccount.ShipmentType)} manifest created.");
-                return;
+                progressDialog.Title = $"Creating {EnumHelper.GetDescription(carrierAccount.ShipmentType)} Manifest";
+                progressDialog.AllowCloseWhenRunning = false;
+                progressDialog.AutoCloseWhenComplete = true;
+
+                Task.Run(async () =>
+                {
+                    var result = await manifestCreator.CreateManifest(carrierAccount.ShipmentType, manifestProgress).ConfigureAwait(true);
+
+                    if (result.Success)
+                    {
+                        manifestProgress.Detail = "Saving Manifest";
+                        manifestProgress.PercentComplete = 100;
+                        var saveResult = await manifestRepo.SaveManifest(result.Value, carrierAccount);
+
+                        manifestProgress.Completed();
+
+                        if (saveResult.Success)
+                        {
+                            MessageHelper.ShowMessage(owner, $"{EnumHelper.GetDescription(carrierAccount.ShipmentType)} manifest created.");
+                        }
+                        else
+                        {
+                            MessageHelper.ShowMessage(owner, saveResult.Message);
+                        }
+
+                        return;
+                    }
+
+                    manifestProgress.Completed();
+
+                    MessageHelper.ShowError(owner, $"An error occurred creating the {EnumHelper.GetDescription(carrierAccount.ShipmentType)} manifest:\n{result.Message}");
+                    log.Error(result.Exception.Message);
+                });
+
+                progressDialog.ShowDialog(owner);
             }
-            MessageHelper.ShowError(owner, $"An error occurred creating the {EnumHelper.GetDescription(carrierAccount.ShipmentType)} manifest:\n{result.Message}");
-            log.Error(result.Exception.Message);
         }
 
         /// <summary>
