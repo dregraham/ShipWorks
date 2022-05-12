@@ -144,6 +144,7 @@ namespace ShipWorks.Stores.Platforms.Amazon
 
             var order = (AmazonOrderEntity) result.Value;
             order.AmazonOrderID = amazonOrderId;
+            order.ChangeOrderNumber(amazonOrderId);
             order.OrderNumber = long.MinValue;
             order.ChannelOrderID = salesOrder.OrderId;
 
@@ -204,8 +205,6 @@ namespace ShipWorks.Stores.Platforms.Amazon
             // only load order items on new orders
             if (order.IsNew)
             {
-                order.OrderNumber = await GetNextOrderNumberAsync().ConfigureAwait(false);
-                
                 foreach (var fulfillment in salesOrder.RequestedFulfillments)
                 {
                     LoadOrderItems(fulfillment, order);
