@@ -17,7 +17,7 @@ namespace ShipWorks.Shipping.ShipEngine.Manifest
     /// <summary>
     /// Class to manage ShipEngine manifests
     /// </summary>
-    [Component]
+    [Component(SingleInstance = true)]
     public class ShipEngineManifestUtility : IShipEngineManifestUtility
     {
         private readonly IShipEngineManifestCreator manifestCreator;
@@ -70,7 +70,7 @@ namespace ShipWorks.Shipping.ShipEngine.Manifest
                 {
                     SandMenuItem menuItem = new SandMenuItem(account.AccountDescription);
                     menuItem.Tag = account;
-                    menu.Activate += OnCreateManifest;
+                    menuItem.Activate += OnCreateManifest;
 
                     childMenu.Items.Add(menuItem);
                 }
