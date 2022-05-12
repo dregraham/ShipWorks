@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 using Divelements.SandRibbon;
 using Interapptive.Shared.ComponentRegistration;
@@ -12,6 +14,7 @@ using ShipWorks.Data.Model.Custom;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers;
 using ShipWorks.UI;
+using static System.String;
 using SandMenu = Divelements.SandRibbon.Menu;
 using SandMenuItem = Divelements.SandRibbon.MenuItem;
 
@@ -127,7 +130,7 @@ namespace ShipWorks.Shipping.ShipEngine.Manifest
         /// <summary>
         /// The Create Manifest button is pushed
         /// </summary>
-        private async void OnCreateManifest(object sender, EventArgs e)
+        private void OnCreateManifest(object sender, EventArgs e)
         {
             SandMenuItem menuItem = (SandMenuItem) sender;
             var carrierAccount = (ICarrierAccount) menuItem.Tag;
@@ -143,50 +146,84 @@ namespace ShipWorks.Shipping.ShipEngine.Manifest
                 progressDialog.AllowCloseWhenRunning = false;
                 progressDialog.AutoCloseWhenComplete = true;
 
-                var message = string.Empty;
-                var success = false;
+                var errorMessages = new List<string>();
+                var successMessages = new List<string>();
 
                 Task.Run(async () =>
-                {
-                    var result = await manifestCreator.CreateManifest(carrierAccount.ShipmentType, manifestProgress).ConfigureAwait(true);
-
-                    if (result.Success)
-                    {
-                        manifestProgress.Detail = "Saving Manifest";
-                        manifestProgress.PercentComplete = 100;
-                        var saveResult = await manifestRepo.SaveManifest(result.Value, carrierAccount);
-
-                        manifestProgress.Completed();
-
-                        if (saveResult.Success)
-                        {
-                            message = $"{EnumHelper.GetDescription(carrierAccount.ShipmentType)} manifest created.";
-                            success = true;
-                        }
-                        else
-                        {
-                            message = saveResult.Message;
-                        }
-
-                        return;
-                    }
-
-                    manifestProgress.Completed();
-
-                    message = $"An error occurred creating the {EnumHelper.GetDescription(carrierAccount.ShipmentType)} manifest:\n{result.Message}";
-                });
+                    CreateManifestTask(carrierAccount, manifestProgress, successMessages, errorMessages)
+                        .ConfigureAwait(true)).ConfigureAwait(true);
 
                 progressDialog.ShowDialog(owner);
 
-                if (success)
+                if (errorMessages.Any())
                 {
-                    MessageHelper.ShowMessage(owner, message);
+                    MessageHelper.ShowError(owner, Join(Environment.NewLine, errorMessages));
+                }
+
+                if (successMessages.Any())
+                {
+                    MessageHelper.ShowMessage(owner, Join(Environment.NewLine, successMessages));
+                }
+            }
+        }
+
+        /// <summary>
+        /// Create the manifests
+        /// </summary>
+        private async Task CreateManifestTask(ICarrierAccount carrierAccount, 
+            IProgressReporter manifestProgress,
+            List<string> successMessages, 
+            List<string> errorMessages)
+        {
+            var results = await manifestCreator.CreateManifest(carrierAccount.ShipmentType, manifestProgress)
+                .ConfigureAwait(true);
+
+            manifestProgress.Detail = "Saving Manifest";
+            manifestProgress.PercentComplete = 100;
+
+            foreach (var result in results)
+            {
+                if (result.Success)
+                {
+                    var saveResult = await manifestRepo.SaveManifest(result.Value, carrierAccount);
+
+                    if (saveResult.Success)
+                    {
+                        var msg = $"{EnumHelper.GetDescription(carrierAccount.ShipmentType)} manifest created.";
+                        if (!successMessages.Contains(msg))
+                        {
+                            successMessages.Add(msg);
+                        }
+                    }
+                    else
+                    {
+                        var msg = saveResult.Message;
+                        if (!errorMessages.Contains(msg))
+                        {
+                            errorMessages.Add(msg);
+                        }
+                    }
                 }
                 else
                 {
-                    MessageHelper.ShowError(owner, message);
-                    log.Error(message);
+                    var msg = result.Message;
+                    if (!errorMessages.Contains(msg))
+                    {
+                        errorMessages.Add(msg);
+                    }
                 }
+            }
+
+            manifestProgress.Completed();
+
+            if (errorMessages.Any())
+            {
+                log.Error(errorMessages);
+            }
+
+            if (successMessages.Any())
+            {
+                log.Info(successMessages);
             }
         }
 
@@ -201,7 +238,7 @@ namespace ShipWorks.Shipping.ShipEngine.Manifest
             {
                 try
                 {
-                    string manifestName = string.Format("{0:MM/dd/yy h:mm tt} ({1} shipments)", manifest.CreatedAt.ToLocalTime(), manifest.ShipmentCount);
+                    string manifestName = Format("{0:MM/dd/yy h:mm tt} ({1} shipments)", manifest.CreatedAt.ToLocalTime(), manifest.ShipmentCount);
 
                     SandMenuItem formMenuItem = new SandMenuItem(manifestName);
                     formMenuItem.Tag = manifest;
@@ -212,7 +249,7 @@ namespace ShipWorks.Shipping.ShipEngine.Manifest
                 catch (ShippingException ex)
                 {
                     // This could occur if the batch was deleted. We just want to move on and not show this item in the menu
-                    string message = string.Format("An exception was encountered while populating the manifest menu for account {0}. " +
+                    string message = Format("An exception was encountered while populating the manifest menu for account {0}. " +
                                                    "Skipping this manifest and continuing to load the menu.", account.AccountDescription);
 
                     log.Error(message, ex);

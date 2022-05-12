@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using Interapptive.Shared.Business;
 using Interapptive.Shared.Utility;
+using log4net;
 using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Shipping.ShipEngine.DTOs;
@@ -115,6 +116,6 @@ namespace ShipWorks.Shipping.ShipEngine
         /// <summary>
         /// Create a manifest for the given label IDs, retrying if necessary
         /// </summary>
-        Task<GenericResult<CreateManifestResponse>> CreateManifest(List<string> labelIDs);
+        Task<GenericResult<CreateManifestResponse>> CreateManifest(List<string> labelIDs, ILog log);
     }
 }

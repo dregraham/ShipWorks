@@ -1,10 +1,13 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Data;
+using System.Linq;
 using System.Threading.Tasks;
 using Interapptive.Shared.Collections;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Threading;
 using Interapptive.Shared.Utility;
+using log4net;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
@@ -22,23 +25,27 @@ namespace ShipWorks.Shipping.ShipEngine.Manifest
         private readonly IDateTimeProvider dateTimeProvider;
         private readonly IShipEngineWebClient webClient;
         private readonly ISqlAdapterFactory adapterFactory;
+        private const int MaxLabelIdsToSend = 2000;
+        private readonly ILog log;
 
         /// <summary>
         /// Constructor
         /// </summary>
         public ShipEngineManifestCreator(IDateTimeProvider dateTimeProvider,
             IShipEngineWebClient webClient,
-            ISqlAdapterFactory adapterFactory)
+            ISqlAdapterFactory adapterFactory,
+            Func<Type, ILog> logFactory)
         {
             this.dateTimeProvider = dateTimeProvider;
             this.webClient = webClient;
             this.adapterFactory = adapterFactory;
+            log = logFactory(typeof(ShipEngineManifestCreator));
         }
 
         /// <summary>
         /// Create a DHL eCommerce Manifest from today's shipments
         /// </summary>
-        public async Task<GenericResult<CreateManifestResponse>> CreateManifest(ShipmentTypeCode shipmentTypeCode, IProgressReporter progress)
+        public async Task<List<GenericResult<CreateManifestResponse>>> CreateManifest(ShipmentTypeCode shipmentTypeCode, IProgressReporter progress)
         {
             progress.Starting();
             progress.PercentComplete = 33;
@@ -99,7 +106,9 @@ namespace ShipWorks.Shipping.ShipEngine.Manifest
 
             if (results.None())
             {
-                return GenericResult.FromError<CreateManifestResponse>("Could not find any shipments for manifest.");
+                //return GenericResult.FromError("Could not find any shipments for manifest.");
+                // TODO: DHLEcom fix this.
+                return null;
             }
 
             progress.Detail = "Creating Manifest";
@@ -111,16 +120,20 @@ namespace ShipWorks.Shipping.ShipEngine.Manifest
         /// <summary>
         /// Create manifests for each account
         /// </summary>
-        private async Task<GenericResult<CreateManifestResponse>> CreateManifest(Dictionary<long, List<string>> labels)
+        private async Task<List<GenericResult<CreateManifestResponse>>> CreateManifest(Dictionary<long, List<string>> labels)
         {
-            GenericResult<CreateManifestResponse> lastResult = GenericResult.FromError<CreateManifestResponse>(string.Empty);
+            var results = new List<GenericResult<CreateManifestResponse>>();
 
-            foreach (List<string> keys in labels.Values)
+            foreach (List<string> labelIds in labels.Values)
             {
-                lastResult = await webClient.CreateManifest(keys).ConfigureAwait(false);
+                foreach (var chunk in labelIds.SplitIntoChunksOf(MaxLabelIdsToSend))
+                {
+                    var result = await webClient.CreateManifest(chunk.ToList(), log).ConfigureAwait(false);
+                    results.Add(result);
+                }
             }
 
-            return lastResult;
+            return results;
         }
     }
 }

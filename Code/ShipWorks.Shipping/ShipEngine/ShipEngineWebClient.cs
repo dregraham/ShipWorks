@@ -9,6 +9,7 @@ using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Extensions;
 using Interapptive.Shared.Net.RestSharp;
 using Interapptive.Shared.Utility;
+using log4net;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 using RestSharp;
@@ -394,24 +395,33 @@ namespace ShipWorks.Shipping.ShipEngine
         /// <summary>
         /// Create a manifest for the given label IDs, retrying if necessary
         /// </summary>
-        public async Task<GenericResult<CreateManifestResponse>> CreateManifest(List<string> labelIDs)
+        public async Task<GenericResult<CreateManifestResponse>> CreateManifest(List<string> labelIDs, ILog log)
         {
-            var response = await MakeRequest<CreateManifestResponse>(ShipEngineEndpoints.CreateManifest, Method.POST,
-                new CreateManifestRequest { LabelIds = labelIDs }, "CreateManifest");
+            GenericResult<CreateManifestResponse> response;
+            using (new LoggedStopwatch(log, $"DHL eCommerce call to create manifest, initial try.  LabelID count: {labelIDs.Count}"))
+            {
+                response = await MakeRequest<CreateManifestResponse>(ShipEngineEndpoints.CreateManifest, Method.POST,
+                    new CreateManifestRequest { LabelIds = labelIDs }, "CreateManifest");
+            }
 
             if (response.Failure)
             {
                 var alreadyManifestedIDs = response.Value?.Errors?
                     .Where(x => x.Message.Equals("Label has been manifested.", StringComparison.OrdinalIgnoreCase))?
-                    .Select(x => x.LabelId);
+                    .Select(x => x.LabelId)
+                    .ToList();
 
                 if (alreadyManifestedIDs.Any())
                 {
                     var newIDs = labelIDs.Except(alreadyManifestedIDs).ToList();
                     if (newIDs.Any())
                     {
-                        response = await MakeRequest<CreateManifestResponse>(ShipEngineEndpoints.CreateManifest, Method.POST,
-                            new CreateManifestRequest { LabelIds = newIDs }, "CreateManifest");
+                        using (new LoggedStopwatch(log, $"DHL eCommerce call to create manifest, second try.  LabelID count: {newIDs.Count}"))
+                        {
+                            response = await MakeRequest<CreateManifestResponse>(ShipEngineEndpoints.CreateManifest,
+                                Method.POST,
+                                new CreateManifestRequest { LabelIds = newIDs }, "CreateManifest");
+                        }
                     }
                     else
                     {
