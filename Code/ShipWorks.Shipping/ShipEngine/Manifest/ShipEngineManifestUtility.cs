@@ -24,6 +24,7 @@ namespace ShipWorks.Shipping.ShipEngine.Manifest
         private readonly IShipEngineManifestRepo manifestRepo;
         private readonly IMessageHelper messageHelper;
         private readonly ILog log;
+        private const int MaxManifestsToFetch = 14;
 
         /// <summary>
         /// Constructor
@@ -145,7 +146,7 @@ namespace ShipWorks.Shipping.ShipEngine.Manifest
         /// </summary>
         private async void FillManifestMenuForAccount(SandMenu menu, ICarrierAccount account)
         {
-            var manifests = await manifestRepo.GetManifests(account);
+            var manifests = await manifestRepo.GetManifests(account, MaxManifestsToFetch);
 
             foreach (var manifest in manifests)
             {

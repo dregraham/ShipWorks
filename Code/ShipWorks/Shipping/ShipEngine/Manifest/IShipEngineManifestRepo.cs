@@ -20,6 +20,6 @@ namespace ShipWorks.Shipping.ShipEngine.Manifest
         /// <summary>
         /// Get ShipEngineManifestEntities for a carrier account
         /// </summary>
-        Task<List<ShipEngineManifestEntity>> GetManifests(ICarrierAccount account);
+        Task<List<ShipEngineManifestEntity>> GetManifests(ICarrierAccount account, int maxToReturn);
     }
 }
