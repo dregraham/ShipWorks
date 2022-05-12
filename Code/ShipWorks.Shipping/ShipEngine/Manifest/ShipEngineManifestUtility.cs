@@ -138,9 +138,13 @@ namespace ShipWorks.Shipping.ShipEngine.Manifest
             manifestProgress.CanCancel = false;
             using (ProgressDlg progressDialog = new ProgressDlg(progressProvider))
             {
-                progressDialog.Title = $"Creating {EnumHelper.GetDescription(carrierAccount.ShipmentType)} Manifest";
+                progressDialog.Title = "Create Manifest";
+                progressDialog.Description = $"Create a manifest for {EnumHelper.GetDescription(carrierAccount.ShipmentType)}";
                 progressDialog.AllowCloseWhenRunning = false;
                 progressDialog.AutoCloseWhenComplete = true;
+
+                var message = string.Empty;
+                var success = false;
 
                 Task.Run(async () =>
                 {
@@ -156,11 +160,12 @@ namespace ShipWorks.Shipping.ShipEngine.Manifest
 
                         if (saveResult.Success)
                         {
-                            MessageHelper.ShowMessage(owner, $"{EnumHelper.GetDescription(carrierAccount.ShipmentType)} manifest created.");
+                            message = $"{EnumHelper.GetDescription(carrierAccount.ShipmentType)} manifest created.";
+                            success = true;
                         }
                         else
                         {
-                            MessageHelper.ShowMessage(owner, saveResult.Message);
+                            message = saveResult.Message;
                         }
 
                         return;
@@ -168,11 +173,20 @@ namespace ShipWorks.Shipping.ShipEngine.Manifest
 
                     manifestProgress.Completed();
 
-                    MessageHelper.ShowError(owner, $"An error occurred creating the {EnumHelper.GetDescription(carrierAccount.ShipmentType)} manifest:\n{result.Message}");
-                    log.Error(result.Exception.Message);
+                    message = $"An error occurred creating the {EnumHelper.GetDescription(carrierAccount.ShipmentType)} manifest:\n{result.Message}";
                 });
 
                 progressDialog.ShowDialog(owner);
+
+                if (success)
+                {
+                    MessageHelper.ShowMessage(owner, message);
+                }
+                else
+                {
+                    MessageHelper.ShowError(owner, message);
+                    log.Error(message);
+                }
             }
         }
 
@@ -187,7 +201,7 @@ namespace ShipWorks.Shipping.ShipEngine.Manifest
             {
                 try
                 {
-                    string manifestName = string.Format("{0:MM/dd/yy h:mm tt} ({1} shipments)", manifest.ShipDate.ToLocalTime(), manifest.ShipmentCount);
+                    string manifestName = string.Format("{0:MM/dd/yy h:mm tt} ({1} shipments)", manifest.CreatedAt.ToLocalTime(), manifest.ShipmentCount);
 
                     SandMenuItem formMenuItem = new SandMenuItem(manifestName);
                     formMenuItem.Tag = manifest;
