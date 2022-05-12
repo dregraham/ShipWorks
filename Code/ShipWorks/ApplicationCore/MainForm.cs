@@ -84,6 +84,7 @@ using ShipWorks.Settings;
 using ShipWorks.Shipping;
 using ShipWorks.Shipping.Carriers.Asendia;
 using ShipWorks.Shipping.Carriers.DhlEcommerce;
+using ShipWorks.Shipping.Carriers.DhlEcommerce.Manifest;
 using ShipWorks.Shipping.Carriers.FedEx;
 using ShipWorks.Shipping.Carriers.FedEx.Api;
 using ShipWorks.Shipping.Carriers.UPS.OneBalance;

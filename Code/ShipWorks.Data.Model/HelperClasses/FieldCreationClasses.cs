@@ -5849,46 +5849,6 @@ namespace ShipWorks.Data.Model.HelperClasses
 		}
 	}
 
-	/// <summary>Field Creation Class for entity DhlEcommerceScanFormEntity</summary>
-	public partial class DhlEcommerceScanFormFields
-	{
-		/// <summary>Creates a new DhlEcommerceScanFormEntity.DhlEcommerceScanFormID field instance</summary>
-		public static EntityField2 DhlEcommerceScanFormID
-		{
-			get { return (EntityField2)EntityFieldFactory.Create(DhlEcommerceScanFormFieldIndex.DhlEcommerceScanFormID);}
-		}
-		/// <summary>Creates a new DhlEcommerceScanFormEntity.DhlEcommerceAccountID field instance</summary>
-		public static EntityField2 DhlEcommerceAccountID
-		{
-			get { return (EntityField2)EntityFieldFactory.Create(DhlEcommerceScanFormFieldIndex.DhlEcommerceAccountID);}
-		}
-		/// <summary>Creates a new DhlEcommerceScanFormEntity.ScanFormTransactionID field instance</summary>
-		public static EntityField2 ScanFormTransactionID
-		{
-			get { return (EntityField2)EntityFieldFactory.Create(DhlEcommerceScanFormFieldIndex.ScanFormTransactionID);}
-		}
-		/// <summary>Creates a new DhlEcommerceScanFormEntity.ScanFormUrl field instance</summary>
-		public static EntityField2 ScanFormUrl
-		{
-			get { return (EntityField2)EntityFieldFactory.Create(DhlEcommerceScanFormFieldIndex.ScanFormUrl);}
-		}
-		/// <summary>Creates a new DhlEcommerceScanFormEntity.CreatedDate field instance</summary>
-		public static EntityField2 CreatedDate
-		{
-			get { return (EntityField2)EntityFieldFactory.Create(DhlEcommerceScanFormFieldIndex.CreatedDate);}
-		}
-		/// <summary>Creates a new DhlEcommerceScanFormEntity.ScanFormBatchID field instance</summary>
-		public static EntityField2 ScanFormBatchID
-		{
-			get { return (EntityField2)EntityFieldFactory.Create(DhlEcommerceScanFormFieldIndex.ScanFormBatchID);}
-		}
-		/// <summary>Creates a new DhlEcommerceScanFormEntity.Description field instance</summary>
-		public static EntityField2 Description
-		{
-			get { return (EntityField2)EntityFieldFactory.Create(DhlEcommerceScanFormFieldIndex.Description);}
-		}
-	}
-
 	/// <summary>Field Creation Class for entity DhlEcommerceShipmentEntity</summary>
 	public partial class DhlEcommerceShipmentFields
 	{
@@ -5947,11 +5907,6 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(DhlEcommerceShipmentFieldIndex.IntegratorTransactionID);}
 		}
-		/// <summary>Creates a new DhlEcommerceShipmentEntity.StampsTransactionID field instance</summary>
-		public static EntityField2 StampsTransactionID
-		{
-			get { return (EntityField2)EntityFieldFactory.Create(DhlEcommerceShipmentFieldIndex.StampsTransactionID);}
-		}
 		/// <summary>Creates a new DhlEcommerceShipmentEntity.ResidentialDelivery field instance</summary>
 		public static EntityField2 ResidentialDelivery
 		{
@@ -5971,11 +5926,6 @@ namespace ShipWorks.Data.Model.HelperClasses
 		public static EntityField2 CustomsTinIssuingAuthority
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(DhlEcommerceShipmentFieldIndex.CustomsTinIssuingAuthority);}
-		}
-		/// <summary>Creates a new DhlEcommerceShipmentEntity.ScanFormBatchID field instance</summary>
-		public static EntityField2 ScanFormBatchID
-		{
-			get { return (EntityField2)EntityFieldFactory.Create(DhlEcommerceShipmentFieldIndex.ScanFormBatchID);}
 		}
 		/// <summary>Creates a new DhlEcommerceShipmentEntity.PackagingType field instance</summary>
 		public static EntityField2 PackagingType
@@ -27266,6 +27216,71 @@ namespace ShipWorks.Data.Model.HelperClasses
 		public static EntityField2 ServiceDisplayName
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(ServiceStatusFieldIndex.ServiceDisplayName);}
+		}
+	}
+
+	/// <summary>Field Creation Class for entity ShipEngineManifestEntity</summary>
+	public partial class ShipEngineManifestFields
+	{
+		/// <summary>Creates a new ShipEngineManifestEntity.ShipEngineManifestID field instance</summary>
+		public static EntityField2 ShipEngineManifestID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ShipEngineManifestFieldIndex.ShipEngineManifestID);}
+		}
+		/// <summary>Creates a new ShipEngineManifestEntity.CarrierAccountID field instance</summary>
+		public static EntityField2 CarrierAccountID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ShipEngineManifestFieldIndex.CarrierAccountID);}
+		}
+		/// <summary>Creates a new ShipEngineManifestEntity.ShipmentTypeCode field instance</summary>
+		public static EntityField2 ShipmentTypeCode
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ShipEngineManifestFieldIndex.ShipmentTypeCode);}
+		}
+		/// <summary>Creates a new ShipEngineManifestEntity.ManifestID field instance</summary>
+		public static EntityField2 ManifestID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ShipEngineManifestFieldIndex.ManifestID);}
+		}
+		/// <summary>Creates a new ShipEngineManifestEntity.FormID field instance</summary>
+		public static EntityField2 FormID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ShipEngineManifestFieldIndex.FormID);}
+		}
+		/// <summary>Creates a new ShipEngineManifestEntity.CreatedAt field instance</summary>
+		public static EntityField2 CreatedAt
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ShipEngineManifestFieldIndex.CreatedAt);}
+		}
+		/// <summary>Creates a new ShipEngineManifestEntity.ShipDate field instance</summary>
+		public static EntityField2 ShipDate
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ShipEngineManifestFieldIndex.ShipDate);}
+		}
+		/// <summary>Creates a new ShipEngineManifestEntity.ShipmentCount field instance</summary>
+		public static EntityField2 ShipmentCount
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ShipEngineManifestFieldIndex.ShipmentCount);}
+		}
+		/// <summary>Creates a new ShipEngineManifestEntity.PlatformWarehouseID field instance</summary>
+		public static EntityField2 PlatformWarehouseID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ShipEngineManifestFieldIndex.PlatformWarehouseID);}
+		}
+		/// <summary>Creates a new ShipEngineManifestEntity.SubmissionID field instance</summary>
+		public static EntityField2 SubmissionID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ShipEngineManifestFieldIndex.SubmissionID);}
+		}
+		/// <summary>Creates a new ShipEngineManifestEntity.CarrierID field instance</summary>
+		public static EntityField2 CarrierID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ShipEngineManifestFieldIndex.CarrierID);}
+		}
+		/// <summary>Creates a new ShipEngineManifestEntity.ManifestUrl field instance</summary>
+		public static EntityField2 ManifestUrl
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ShipEngineManifestFieldIndex.ManifestUrl);}
 		}
 	}
 

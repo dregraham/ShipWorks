@@ -8,17 +8,15 @@ using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.HelperClasses;
-using ShipWorks.Shipping.Carriers.DhlEcommerce.Manifest;
-using ShipWorks.Shipping.ShipEngine;
 using ShipWorks.Shipping.ShipEngine.DTOs;
 
-namespace ShipWorks.Shipping.Carriers.DhlEcommerce
+namespace ShipWorks.Shipping.ShipEngine.Manifest
 {
     /// <summary>
-    /// Creates a DHL eCommerce Manifest
+    /// Creates a ShipEngine Manifest
     /// </summary>
     [Component]
-    public class DhlEcommerceManifestCreator : IDhlEcommerceManifestCreator
+    public class ShipEngineManifestCreator : IShipEngineManifestCreator
     {
         private readonly IDateTimeProvider dateTimeProvider;
         private readonly IShipEngineWebClient webClient;
@@ -27,7 +25,7 @@ namespace ShipWorks.Shipping.Carriers.DhlEcommerce
         /// <summary>
         /// Constructor
         /// </summary>
-        public DhlEcommerceManifestCreator(IDateTimeProvider dateTimeProvider,
+        public ShipEngineManifestCreator(IDateTimeProvider dateTimeProvider,
             IShipEngineWebClient webClient,
             ISqlAdapterFactory adapterFactory)
         {
@@ -39,9 +37,10 @@ namespace ShipWorks.Shipping.Carriers.DhlEcommerce
         /// <summary>
         /// Create a DHL eCommerce Manifest from today's shipments
         /// </summary>
-        public async Task<GenericResult<CreateManifestResponse>> CreateManifest()
+        public async Task<GenericResult<CreateManifestResponse>> CreateManifest(ShipmentTypeCode shipmentTypeCode)
         {
             var currentTime = dateTimeProvider.GetUtcNow();
+            ResultsetFields resultFields = new ResultsetFields(2);
 
             // Create the predicate for the query to determine which shipments are eligible
             RelationPredicateBucket bucket = new RelationPredicateBucket
@@ -50,15 +49,19 @@ namespace ShipWorks.Shipping.Carriers.DhlEcommerce
                 ShipmentFields.ProcessedDate >= currentTime.Date &
                 ShipmentFields.ProcessedDate < currentTime.AddDays(1).Date &
                 ShipmentFields.ReturnShipment == false &
-                ShipmentFields.ShipmentType == (int) ShipmentTypeCode.DhlEcommerce
+                ShipmentFields.ShipmentType == (int) shipmentTypeCode
             );
 
-            bucket.Relations.Add(ShipmentEntity.Relations.DhlEcommerceShipmentEntityUsingShipmentID);
-
-            // We just need ShipEngineLabelID
-            ResultsetFields resultFields = new ResultsetFields(2);
-            resultFields.DefineField(DhlEcommerceShipmentFields.ShipEngineLabelID, 0, "ShipEngineLabelID", "");
-            resultFields.DefineField(DhlEcommerceShipmentFields.DhlEcommerceAccountID, 1, "DhlEcommerceAccountID", "");
+            if (shipmentTypeCode == ShipmentTypeCode.DhlEcommerce)
+            {
+                bucket.Relations.Add(ShipmentEntity.Relations.DhlEcommerceShipmentEntityUsingShipmentID);
+                resultFields.DefineField(DhlEcommerceShipmentFields.ShipEngineLabelID, 0, "ShipEngineLabelID", "");
+                resultFields.DefineField(DhlEcommerceShipmentFields.DhlEcommerceAccountID, 1, "ShipEngineAccountID", "");
+            }
+            else
+            {
+                throw new ShipEngineException($"Shipment Type {EnumHelper.GetDescription(shipmentTypeCode)} does not currently support generating manifests in ShipWorks.");
+            }
 
             Dictionary<long, List<string>> results = new Dictionary<long, List<string>>();
 

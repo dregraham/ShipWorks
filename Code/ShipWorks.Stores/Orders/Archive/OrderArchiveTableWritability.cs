@@ -50,7 +50,6 @@ namespace ShipWorks.Stores.Orders.Archive
                 "'Customer'",
                 "'DhlEcommerceAccount'",
                 "'DhlEcommerceProfile'",
-                "'DhlEcommerceScanForm'",
                 "'DhlEcommerceShipment'",
                 "'DhlExpressAccount'",
                 "'DhlExpressPackage'",

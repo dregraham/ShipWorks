@@ -394,7 +394,7 @@ namespace ShipWorks.Shipping.ShipEngine
         /// <summary>
         /// Create a manifest for the given label IDs, retrying if necessary
         /// </summary>
-        public async Task<Result> CreateManifest(List<string> labelIDs)
+        public async Task<GenericResult<CreateManifestResponse>> CreateManifest(List<string> labelIDs)
         {
             var response = await MakeRequest<CreateManifestResponse>(ShipEngineEndpoints.CreateManifest, Method.POST,
                 new CreateManifestRequest { LabelIds = labelIDs }, "CreateManifest");
@@ -415,7 +415,7 @@ namespace ShipWorks.Shipping.ShipEngine
                     }
                     else
                     {
-                        return Result.FromError("All labels have already been added to a manifest.");
+                        return GenericResult.FromError<CreateManifestResponse>("All labels have already been added to a manifest.");
                     }
                 }
             }

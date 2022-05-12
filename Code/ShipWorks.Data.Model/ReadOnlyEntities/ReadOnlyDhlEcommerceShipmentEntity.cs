@@ -47,12 +47,10 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
             NonDelivery = source.NonDelivery;
             ShipEngineLabelID = source.ShipEngineLabelID;
             IntegratorTransactionID = source.IntegratorTransactionID;
-            StampsTransactionID = source.StampsTransactionID;
             ResidentialDelivery = source.ResidentialDelivery;
             CustomsRecipientTin = source.CustomsRecipientTin;
             CustomsTaxIdType = source.CustomsTaxIdType;
             CustomsTinIssuingAuthority = source.CustomsTinIssuingAuthority;
-            ScanFormBatchID = source.ScanFormBatchID;
             PackagingType = source.PackagingType;
             DimsProfileID = source.DimsProfileID;
             DimsLength = source.DimsLength;
@@ -66,7 +64,6 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
             
             Shipment = (IShipmentEntity) source.Shipment?.AsReadOnly(objectMap);
             
-            ScanFormBatch = (IScanFormBatchEntity) source.ScanFormBatch?.AsReadOnly(objectMap);
             
 
             CopyCustomDhlEcommerceShipmentData(source);
@@ -139,12 +136,6 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
         /// Table field type characteristics (type, precision, scale, length): UniqueIdentifier, 0, 0, 0<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
         public Nullable<System.Guid> IntegratorTransactionID { get; }
-        /// <summary> The StampsTransactionID property of the Entity DhlEcommerceShipment<br/><br/>
-        /// </summary>
-        /// <remarks>Mapped on table field: "DhlEcommerceShipment"."StampsTransactionID"<br/>
-        /// Table field type characteristics (type, precision, scale, length): UniqueIdentifier, 0, 0, 0<br/>
-        /// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
-        public Nullable<System.Guid> StampsTransactionID { get; }
         /// <summary> The ResidentialDelivery property of the Entity DhlEcommerceShipment<br/><br/>
         /// </summary>
         /// <remarks>Mapped on table field: "DhlEcommerceShipment"."ResidentialDelivery"<br/>
@@ -169,12 +160,6 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
         /// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 2<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
         public System.String CustomsTinIssuingAuthority { get; }
-        /// <summary> The ScanFormBatchID property of the Entity DhlEcommerceShipment<br/><br/>
-        /// </summary>
-        /// <remarks>Mapped on table field: "DhlEcommerceShipment"."ScanFormBatchID"<br/>
-        /// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
-        /// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
-        public Nullable<System.Int64> ScanFormBatchID { get; }
         /// <summary> The PackagingType property of the Entity DhlEcommerceShipment<br/><br/>
         /// </summary>
         /// <remarks>Mapped on table field: "DhlEcommerceShipment"."PackagingType"<br/>
@@ -238,8 +223,6 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
         
         public IShipmentEntity Shipment { get; }
         
-        
-        public IScanFormBatchEntity ScanFormBatch { get; }
         
         
         /// <summary>

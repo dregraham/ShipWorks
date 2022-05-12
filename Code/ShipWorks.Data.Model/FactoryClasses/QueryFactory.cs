@@ -376,12 +376,6 @@ namespace ShipWorks.Data.Model.FactoryClasses
 			get { return Create<DhlEcommerceProfileEntity>(); }
 		}
 
-		/// <summary>Creates and returns a new EntityQuery for the DhlEcommerceScanForm entity</summary>
-		public EntityQuery<DhlEcommerceScanFormEntity> DhlEcommerceScanForm
-		{
-			get { return Create<DhlEcommerceScanFormEntity>(); }
-		}
-
 		/// <summary>Creates and returns a new EntityQuery for the DhlEcommerceShipment entity</summary>
 		public EntityQuery<DhlEcommerceShipmentEntity> DhlEcommerceShipment
 		{
@@ -1190,6 +1184,12 @@ namespace ShipWorks.Data.Model.FactoryClasses
 		public EntityQuery<ServiceStatusEntity> ServiceStatus
 		{
 			get { return Create<ServiceStatusEntity>(); }
+		}
+
+		/// <summary>Creates and returns a new EntityQuery for the ShipEngineManifest entity</summary>
+		public EntityQuery<ShipEngineManifestEntity> ShipEngineManifest
+		{
+			get { return Create<ShipEngineManifestEntity>(); }
 		}
 
 		/// <summary>Creates and returns a new EntityQuery for the Shipment entity</summary>

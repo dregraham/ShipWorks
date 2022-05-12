@@ -633,7 +633,6 @@
     <Compile Include="Settings\ConfigurationShipmentTypeSetupWizard.cs" />
     <Compile Include="Settings\ShipmentTypeSetupWizardFactory.cs" />
     <Compile Include="ShipEngine\DTOs\CreateManifestRequest.cs" />
-    <Compile Include="ShipEngine\DTOs\CreateManifestResponse.cs" />
     <Compile Include="ShipEngine\DTOs\CreateShipEngineAccount.cs" />
     <Compile Include="ShipEngine\DTOs\Registration\Address.cs" />
     <Compile Include="ShipEngine\DTOs\Registration\IUpsRegistrationRequestFactory.cs" />
@@ -649,6 +648,8 @@
     <Compile Include="ShipEngine\IShipEngineResourceDownloader.cs" />
     <Compile Include="ShipEngine\IShipEngineTrackingResultFactory.cs" />
     <Compile Include="ShipEngine\IUpsCredentials.cs" />
+    <Compile Include="ShipEngine\Manifest\ShipEngineManifestCreator.cs" />
+    <Compile Include="ShipEngine\Manifest\ShipEngineManifestRepo.cs" />
     <Compile Include="ShipEngine\ProxiedShipEngineWebClient.cs" />
     <Compile Include="ShipEngine\ShipEngineApiKey.cs" />
     <Compile Include="ShipEngine\ShipEngineContentsType.cs" />

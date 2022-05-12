@@ -95,7 +95,6 @@ namespace ShipWorks.Data.Model.HelperClasses
 			InitDeviceEntityInfos();
 			InitDhlEcommerceAccountEntityInfos();
 			InitDhlEcommerceProfileEntityInfos();
-			InitDhlEcommerceScanFormEntityInfos();
 			InitDhlEcommerceShipmentEntityInfos();
 			InitDhlExpressAccountEntityInfos();
 			InitDhlExpressPackageEntityInfos();
@@ -231,6 +230,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 			InitServerMessageEntityInfos();
 			InitServerMessageSignoffEntityInfos();
 			InitServiceStatusEntityInfos();
+			InitShipEngineManifestEntityInfos();
 			InitShipmentEntityInfos();
 			InitShipmentCustomsItemEntityInfos();
 			InitShipmentReturnItemEntityInfos();
@@ -958,18 +958,6 @@ namespace ShipWorks.Data.Model.HelperClasses
 			this.AddElementFieldInfo("DhlEcommerceProfileEntity", "PackagingType", typeof(Nullable<System.Int32>), false, false, false, true,  (int)DhlEcommerceProfileFieldIndex.PackagingType, 0, 0, 10);
 			this.AddElementFieldInfo("DhlEcommerceProfileEntity", "Reference1", typeof(System.String), false, false, false, true,  (int)DhlEcommerceProfileFieldIndex.Reference1, 300, 0, 0);
 		}
-		/// <summary>Inits DhlEcommerceScanFormEntity's FieldInfo objects</summary>
-		private void InitDhlEcommerceScanFormEntityInfos()
-		{
-			this.AddFieldIndexEnumForElementName(typeof(DhlEcommerceScanFormFieldIndex), "DhlEcommerceScanFormEntity");
-			this.AddElementFieldInfo("DhlEcommerceScanFormEntity", "DhlEcommerceScanFormID", typeof(System.Int64), true, false, true, false,  (int)DhlEcommerceScanFormFieldIndex.DhlEcommerceScanFormID, 0, 0, 19);
-			this.AddElementFieldInfo("DhlEcommerceScanFormEntity", "DhlEcommerceAccountID", typeof(System.Int64), false, false, false, false,  (int)DhlEcommerceScanFormFieldIndex.DhlEcommerceAccountID, 0, 0, 19);
-			this.AddElementFieldInfo("DhlEcommerceScanFormEntity", "ScanFormTransactionID", typeof(System.String), false, false, false, false,  (int)DhlEcommerceScanFormFieldIndex.ScanFormTransactionID, 100, 0, 0);
-			this.AddElementFieldInfo("DhlEcommerceScanFormEntity", "ScanFormUrl", typeof(System.String), false, false, false, false,  (int)DhlEcommerceScanFormFieldIndex.ScanFormUrl, 2048, 0, 0);
-			this.AddElementFieldInfo("DhlEcommerceScanFormEntity", "CreatedDate", typeof(System.DateTime), false, false, false, false,  (int)DhlEcommerceScanFormFieldIndex.CreatedDate, 0, 0, 0);
-			this.AddElementFieldInfo("DhlEcommerceScanFormEntity", "ScanFormBatchID", typeof(System.Int64), false, true, false, false,  (int)DhlEcommerceScanFormFieldIndex.ScanFormBatchID, 0, 0, 19);
-			this.AddElementFieldInfo("DhlEcommerceScanFormEntity", "Description", typeof(System.String), false, false, false, false,  (int)DhlEcommerceScanFormFieldIndex.Description, 100, 0, 0);
-		}
 		/// <summary>Inits DhlEcommerceShipmentEntity's FieldInfo objects</summary>
 		private void InitDhlEcommerceShipmentEntityInfos()
 		{
@@ -985,12 +973,10 @@ namespace ShipWorks.Data.Model.HelperClasses
 			this.AddElementFieldInfo("DhlEcommerceShipmentEntity", "NonDelivery", typeof(System.Int32), false, false, false, false,  (int)DhlEcommerceShipmentFieldIndex.NonDelivery, 0, 0, 10);
 			this.AddElementFieldInfo("DhlEcommerceShipmentEntity", "ShipEngineLabelID", typeof(System.String), false, false, false, true,  (int)DhlEcommerceShipmentFieldIndex.ShipEngineLabelID, 50, 0, 0);
 			this.AddElementFieldInfo("DhlEcommerceShipmentEntity", "IntegratorTransactionID", typeof(Nullable<System.Guid>), false, false, false, true,  (int)DhlEcommerceShipmentFieldIndex.IntegratorTransactionID, 0, 0, 0);
-			this.AddElementFieldInfo("DhlEcommerceShipmentEntity", "StampsTransactionID", typeof(Nullable<System.Guid>), false, false, false, true,  (int)DhlEcommerceShipmentFieldIndex.StampsTransactionID, 0, 0, 0);
 			this.AddElementFieldInfo("DhlEcommerceShipmentEntity", "ResidentialDelivery", typeof(System.Boolean), false, false, false, false,  (int)DhlEcommerceShipmentFieldIndex.ResidentialDelivery, 0, 0, 0);
 			this.AddElementFieldInfo("DhlEcommerceShipmentEntity", "CustomsRecipientTin", typeof(System.String), false, false, false, true,  (int)DhlEcommerceShipmentFieldIndex.CustomsRecipientTin, 25, 0, 0);
 			this.AddElementFieldInfo("DhlEcommerceShipmentEntity", "CustomsTaxIdType", typeof(Nullable<System.Int32>), false, false, false, true,  (int)DhlEcommerceShipmentFieldIndex.CustomsTaxIdType, 0, 0, 10);
 			this.AddElementFieldInfo("DhlEcommerceShipmentEntity", "CustomsTinIssuingAuthority", typeof(System.String), false, false, false, true,  (int)DhlEcommerceShipmentFieldIndex.CustomsTinIssuingAuthority, 2, 0, 0);
-			this.AddElementFieldInfo("DhlEcommerceShipmentEntity", "ScanFormBatchID", typeof(Nullable<System.Int64>), false, true, false, true,  (int)DhlEcommerceShipmentFieldIndex.ScanFormBatchID, 0, 0, 19);
 			this.AddElementFieldInfo("DhlEcommerceShipmentEntity", "PackagingType", typeof(System.Int32), false, false, false, false,  (int)DhlEcommerceShipmentFieldIndex.PackagingType, 0, 0, 10);
 			this.AddElementFieldInfo("DhlEcommerceShipmentEntity", "DimsProfileID", typeof(System.Int64), false, false, false, false,  (int)DhlEcommerceShipmentFieldIndex.DimsProfileID, 0, 0, 19);
 			this.AddElementFieldInfo("DhlEcommerceShipmentEntity", "DimsLength", typeof(System.Double), false, false, false, false,  (int)DhlEcommerceShipmentFieldIndex.DimsLength, 0, 0, 38);
@@ -3132,6 +3118,23 @@ namespace ShipWorks.Data.Model.HelperClasses
 			this.AddElementFieldInfo("ServiceStatusEntity", "LastCheckInDateTime", typeof(Nullable<System.DateTime>), false, false, false, true,  (int)ServiceStatusFieldIndex.LastCheckInDateTime, 0, 0, 0);
 			this.AddElementFieldInfo("ServiceStatusEntity", "ServiceFullName", typeof(System.String), false, false, false, false,  (int)ServiceStatusFieldIndex.ServiceFullName, 256, 0, 0);
 			this.AddElementFieldInfo("ServiceStatusEntity", "ServiceDisplayName", typeof(System.String), false, false, false, false,  (int)ServiceStatusFieldIndex.ServiceDisplayName, 256, 0, 0);
+		}
+		/// <summary>Inits ShipEngineManifestEntity's FieldInfo objects</summary>
+		private void InitShipEngineManifestEntityInfos()
+		{
+			this.AddFieldIndexEnumForElementName(typeof(ShipEngineManifestFieldIndex), "ShipEngineManifestEntity");
+			this.AddElementFieldInfo("ShipEngineManifestEntity", "ShipEngineManifestID", typeof(System.Int64), true, false, true, false,  (int)ShipEngineManifestFieldIndex.ShipEngineManifestID, 0, 0, 19);
+			this.AddElementFieldInfo("ShipEngineManifestEntity", "CarrierAccountID", typeof(System.Int64), false, false, false, false,  (int)ShipEngineManifestFieldIndex.CarrierAccountID, 0, 0, 19);
+			this.AddElementFieldInfo("ShipEngineManifestEntity", "ShipmentTypeCode", typeof(System.Int32), false, false, false, false,  (int)ShipEngineManifestFieldIndex.ShipmentTypeCode, 0, 0, 10);
+			this.AddElementFieldInfo("ShipEngineManifestEntity", "ManifestID", typeof(System.String), false, false, false, false,  (int)ShipEngineManifestFieldIndex.ManifestID, 50, 0, 0);
+			this.AddElementFieldInfo("ShipEngineManifestEntity", "FormID", typeof(System.String), false, false, false, false,  (int)ShipEngineManifestFieldIndex.FormID, 50, 0, 0);
+			this.AddElementFieldInfo("ShipEngineManifestEntity", "CreatedAt", typeof(System.DateTime), false, false, false, false,  (int)ShipEngineManifestFieldIndex.CreatedAt, 0, 0, 0);
+			this.AddElementFieldInfo("ShipEngineManifestEntity", "ShipDate", typeof(System.DateTime), false, false, false, false,  (int)ShipEngineManifestFieldIndex.ShipDate, 0, 0, 0);
+			this.AddElementFieldInfo("ShipEngineManifestEntity", "ShipmentCount", typeof(System.Int32), false, false, false, false,  (int)ShipEngineManifestFieldIndex.ShipmentCount, 0, 0, 10);
+			this.AddElementFieldInfo("ShipEngineManifestEntity", "PlatformWarehouseID", typeof(System.String), false, false, false, false,  (int)ShipEngineManifestFieldIndex.PlatformWarehouseID, 50, 0, 0);
+			this.AddElementFieldInfo("ShipEngineManifestEntity", "SubmissionID", typeof(System.String), false, false, false, false,  (int)ShipEngineManifestFieldIndex.SubmissionID, 255, 0, 0);
+			this.AddElementFieldInfo("ShipEngineManifestEntity", "CarrierID", typeof(System.String), false, false, false, false,  (int)ShipEngineManifestFieldIndex.CarrierID, 50, 0, 0);
+			this.AddElementFieldInfo("ShipEngineManifestEntity", "ManifestUrl", typeof(System.String), false, false, false, false,  (int)ShipEngineManifestFieldIndex.ManifestUrl, 2048, 0, 0);
 		}
 		/// <summary>Inits ShipmentEntity's FieldInfo objects</summary>
 		private void InitShipmentEntityInfos()

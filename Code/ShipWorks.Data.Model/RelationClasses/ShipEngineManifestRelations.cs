@@ -17,20 +17,19 @@ using SD.LLBLGen.Pro.ORMSupportClasses;
 
 namespace ShipWorks.Data.Model.RelationClasses
 {
-	/// <summary>Implements the relations factory for the entity: DhlEcommerceScanForm. </summary>
-	public partial class DhlEcommerceScanFormRelations
+	/// <summary>Implements the relations factory for the entity: ShipEngineManifest. </summary>
+	public partial class ShipEngineManifestRelations
 	{
 		/// <summary>CTor</summary>
-		public DhlEcommerceScanFormRelations()
+		public ShipEngineManifestRelations()
 		{
 		}
 
-		/// <summary>Gets all relations of the DhlEcommerceScanFormEntity as a list of IEntityRelation objects.</summary>
+		/// <summary>Gets all relations of the ShipEngineManifestEntity as a list of IEntityRelation objects.</summary>
 		/// <returns>a list of IEntityRelation objects</returns>
 		public virtual List<IEntityRelation> GetAllRelations()
 		{
 			List<IEntityRelation> toReturn = new List<IEntityRelation>();
-			toReturn.Add(this.ScanFormBatchEntityUsingScanFormBatchID);
 			return toReturn;
 		}
 
@@ -38,20 +37,6 @@ namespace ShipWorks.Data.Model.RelationClasses
 
 
 
-		/// <summary>Returns a new IEntityRelation object, between DhlEcommerceScanFormEntity and ScanFormBatchEntity over the m:1 relation they have, using the relation between the fields:
-		/// DhlEcommerceScanForm.ScanFormBatchID - ScanFormBatch.ScanFormBatchID
-		/// </summary>
-		public virtual IEntityRelation ScanFormBatchEntityUsingScanFormBatchID
-		{
-			get
-			{
-				IEntityRelation relation = new EntityRelation(SD.LLBLGen.Pro.ORMSupportClasses.RelationType.ManyToOne, "ScanFormBatch", false);
-				relation.AddEntityFieldPair(ScanFormBatchFields.ScanFormBatchID, DhlEcommerceScanFormFields.ScanFormBatchID);
-				relation.InheritanceInfoPkSideEntity = InheritanceInfoProviderSingleton.GetInstance().GetInheritanceInfo("ScanFormBatchEntity", false);
-				relation.InheritanceInfoFkSideEntity = InheritanceInfoProviderSingleton.GetInstance().GetInheritanceInfo("DhlEcommerceScanFormEntity", true);
-				return relation;
-			}
-		}
 		/// <summary>stub, not used in this entity, only for TargetPerEntity entities.</summary>
 		public virtual IEntityRelation GetSubTypeRelation(string subTypeEntityName) { return null; }
 		/// <summary>stub, not used in this entity, only for TargetPerEntity entities.</summary>
@@ -64,12 +49,11 @@ namespace ShipWorks.Data.Model.RelationClasses
 	}
 	
 	/// <summary>Static class which is used for providing relationship instances which are re-used internally for syncing</summary>
-	internal static class StaticDhlEcommerceScanFormRelations
+	internal static class StaticShipEngineManifestRelations
 	{
-		internal static readonly IEntityRelation ScanFormBatchEntityUsingScanFormBatchIDStatic = new DhlEcommerceScanFormRelations().ScanFormBatchEntityUsingScanFormBatchID;
 
 		/// <summary>CTor</summary>
-		static StaticDhlEcommerceScanFormRelations()
+		static StaticShipEngineManifestRelations()
 		{
 		}
 	}

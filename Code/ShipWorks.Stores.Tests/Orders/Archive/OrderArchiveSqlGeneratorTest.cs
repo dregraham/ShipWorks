@@ -247,7 +247,6 @@ namespace ShipWorks.Stores.Tests.Orders.Archive
                     typeof(DhlExpressProfileEntity),
                     typeof(DhlEcommerceAccountEntity),
                     typeof(DhlEcommerceProfileEntity),
-                    typeof(DhlEcommerceScanFormEntity),
                     typeof(DimensionsProfileEntity),
                     typeof(DownloadEntity),
                     typeof(EbayStoreEntity),

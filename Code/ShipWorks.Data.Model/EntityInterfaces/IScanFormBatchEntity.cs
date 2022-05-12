@@ -48,8 +48,6 @@ namespace ShipWorks.Data.Model.EntityInterfaces
         
         
         
-        IEnumerable<IDhlEcommerceScanFormEntity> DhlEcommerceScanForm { get; }
-        IEnumerable<IDhlEcommerceShipmentEntity> DhlEcommerceShipment { get; }
         IEnumerable<IEndiciaScanFormEntity> EndiciaScanForms { get; }
         IEnumerable<IEndiciaShipmentEntity> EndiciaShipment { get; }
         IEnumerable<IUspsScanFormEntity> UspsScanForms { get; }
@@ -82,8 +80,6 @@ namespace ShipWorks.Data.Model.EntityClasses
     {
         
         
-        IEnumerable<IDhlEcommerceScanFormEntity> IScanFormBatchEntity.DhlEcommerceScanForm => DhlEcommerceScanForm;
-        IEnumerable<IDhlEcommerceShipmentEntity> IScanFormBatchEntity.DhlEcommerceShipment => DhlEcommerceShipment;
         IEnumerable<IEndiciaScanFormEntity> IScanFormBatchEntity.EndiciaScanForms => EndiciaScanForms;
         IEnumerable<IEndiciaShipmentEntity> IScanFormBatchEntity.EndiciaShipment => EndiciaShipment;
         IEnumerable<IUspsScanFormEntity> IScanFormBatchEntity.UspsScanForms => UspsScanForms;

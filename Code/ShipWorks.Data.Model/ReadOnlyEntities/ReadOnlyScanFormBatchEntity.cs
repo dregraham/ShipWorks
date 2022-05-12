@@ -43,10 +43,6 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
             
             
             
-            DhlEcommerceScanForm = source.DhlEcommerceScanForm?.Select(x => x.AsReadOnly(objectMap)).OfType<IDhlEcommerceScanFormEntity>().ToReadOnly() ??
-                Enumerable.Empty<IDhlEcommerceScanFormEntity>();
-            DhlEcommerceShipment = source.DhlEcommerceShipment?.Select(x => x.AsReadOnly(objectMap)).OfType<IDhlEcommerceShipmentEntity>().ToReadOnly() ??
-                Enumerable.Empty<IDhlEcommerceShipmentEntity>();
             EndiciaScanForms = source.EndiciaScanForms?.Select(x => x.AsReadOnly(objectMap)).OfType<IEndiciaScanFormEntity>().ToReadOnly() ??
                 Enumerable.Empty<IEndiciaScanFormEntity>();
             EndiciaShipment = source.EndiciaShipment?.Select(x => x.AsReadOnly(objectMap)).OfType<IEndiciaShipmentEntity>().ToReadOnly() ??
@@ -86,10 +82,6 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
         public System.Int32 ShipmentCount { get; }
         
         
-        
-        public IEnumerable<IDhlEcommerceScanFormEntity> DhlEcommerceScanForm { get; }
-        
-        public IEnumerable<IDhlEcommerceShipmentEntity> DhlEcommerceShipment { get; }
         
         public IEnumerable<IEndiciaScanFormEntity> EndiciaScanForms { get; }
         
