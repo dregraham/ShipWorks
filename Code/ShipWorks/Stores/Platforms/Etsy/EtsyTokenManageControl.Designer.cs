@@ -16,10 +16,12 @@
         private void InitializeComponent()
         {
             this.tokenButton = new System.Windows.Forms.Button();
+            this.tokenInputLabel = new System.Windows.Forms.Label();
+            this.tokenInput = new System.Windows.Forms.TextBox();
             this.statusText = new System.Windows.Forms.Label();
             this.statusPicture = new System.Windows.Forms.PictureBox();
             this.panelStatus = new System.Windows.Forms.Panel();
-            ((System.ComponentModel.ISupportInitialize) (this.statusPicture)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.statusPicture)).BeginInit();
             this.panelStatus.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -33,11 +35,26 @@
             this.tokenButton.UseVisualStyleBackColor = true;
             this.tokenButton.Click += new System.EventHandler(this.OnAuthorizeShipWorks);
             // 
+            // tokenInputLabel
+            // 
+            this.tokenInputLabel.Location = new System.Drawing.Point(3, 39);
+            this.tokenInputLabel.Name = "tokenInputLabel";
+            this.tokenInputLabel.Size = new System.Drawing.Size(64, 21);
+            this.tokenInputLabel.TabIndex = 20;
+            this.tokenInputLabel.Text = "Etsy Token";
+            // 
+            // tokenInput
+            // 
+            this.tokenInput.Location = new System.Drawing.Point(68, 36);
+            this.tokenInput.Name = "tokenInput";
+            this.tokenInput.Size = new System.Drawing.Size(250, 21);
+            this.tokenInput.TabIndex = 2;
+            // 
             // statusText
             // 
             this.statusText.AutoSize = true;
             this.statusText.ForeColor = System.Drawing.Color.DimGray;
-            this.statusText.Location = new System.Drawing.Point(20, 6);
+            this.statusText.Location = new System.Drawing.Point(25, 7);
             this.statusText.Name = "statusText";
             this.statusText.Size = new System.Drawing.Size(286, 13);
             this.statusText.TabIndex = 18;
@@ -68,19 +85,24 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.Controls.Add(this.panelStatus);
             this.Controls.Add(this.tokenButton);
-            this.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (0)));
+            this.Controls.Add(this.tokenInputLabel);
+            this.Controls.Add(this.tokenInput);
+            this.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.Name = "EtsyTokenManageControl";
-            this.Size = new System.Drawing.Size(504, 33);
-            ((System.ComponentModel.ISupportInitialize) (this.statusPicture)).EndInit();
+            this.Size = new System.Drawing.Size(504, 76);
+            ((System.ComponentModel.ISupportInitialize)(this.statusPicture)).EndInit();
             this.panelStatus.ResumeLayout(false);
             this.panelStatus.PerformLayout();
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 
         #endregion
 
         private System.Windows.Forms.Button tokenButton;
+        private System.Windows.Forms.Label tokenInputLabel;
+        private System.Windows.Forms.TextBox tokenInput;
         private System.Windows.Forms.Label statusText;
         private System.Windows.Forms.PictureBox statusPicture;
         private System.Windows.Forms.Panel panelStatus;

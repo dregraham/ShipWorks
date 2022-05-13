@@ -78,5 +78,20 @@ namespace ShipWorks.Stores.Platforms.Etsy
         {
             tokenControl.ExportToken();
         }
+
+        /// <summary>
+        /// Save the settings to the store
+        /// </summary>
+        public override bool SaveToEntity(StoreEntity store)
+        {
+            if (!tokenControl.HasUserUpdatedToken)
+            {
+                //User didn't enter a new token just return true so they can exit
+                return true;
+            }
+
+            tokenControl.VerifyToken();
+            return tokenControl.IsTokenValid;
+        }
     }
 }

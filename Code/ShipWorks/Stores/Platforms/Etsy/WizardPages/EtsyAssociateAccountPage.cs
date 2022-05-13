@@ -45,6 +45,7 @@ namespace ShipWorks.Stores.Platforms.Etsy.WizardPages
         private void OnStepNextEtsyAssociateAccountPage(object sender, WizardStepEventArgs e)
         {
             EtsyStoreEntity store = GetStore<EtsyStoreEntity>();
+            etsyManageToken.VerifyToken();
 
             if (!etsyManageToken.IsTokenValid)
             {
