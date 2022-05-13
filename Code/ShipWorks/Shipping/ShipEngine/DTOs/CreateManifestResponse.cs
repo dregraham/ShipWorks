@@ -12,7 +12,7 @@ namespace ShipWorks.Shipping.ShipEngine.DTOs
     public class CreateManifestResponse : BaseShipEngineResponse
     {
         [JsonProperty("errors")]
-        public List<CreateManifestError> Errors { get; set; }
+        public new List<CreateManifestError> Errors { get; set; }
 
         [JsonProperty("manifests")]
         public List<CreateManifestManifest> Manifests { get; set; }

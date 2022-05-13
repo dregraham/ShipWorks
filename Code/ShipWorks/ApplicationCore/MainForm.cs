@@ -5535,7 +5535,7 @@ namespace ShipWorks
         /// <summary>
         /// Populate a ShipEngine manifest menu
         /// </summary>
-        private async void PopulateShipEngineManifestMenu(SandMenuItem createMenu,
+        private void PopulateShipEngineManifestMenu(SandMenuItem createMenu,
             Divelements.SandRibbon.Menu printMenu,
             ICarrierAccountRetriever accountRetriever,
             ILifetimeScope scope)
