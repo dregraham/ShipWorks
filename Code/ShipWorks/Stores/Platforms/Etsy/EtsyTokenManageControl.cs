@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Web;
 using System.Windows.Forms;
 using Autofac;
+using Interapptive.Shared.Net;
 using Interapptive.Shared.UI;
 using log4net;
 using ShipWorks.ApplicationCore;
@@ -121,12 +122,8 @@ namespace ShipWorks.Stores.Platforms.Etsy
                 
                 var callbackURL = new Uri(warehouseUrl, "callbacks/etsy/auth");
                 var authLink = webClient.GetRequestTokenURL(callbackURL);
-                var psi = new System.Diagnostics.ProcessStartInfo
-                {
-                    UseShellExecute = true,
-                    FileName = authLink.ToString()
-                };
-                System.Diagnostics.Process.Start(psi);
+
+                WebHelper.OpenUrl(authLink, this);
             }    
         }
 
