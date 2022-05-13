@@ -107,7 +107,7 @@ namespace ShipWorks.Shipping.UI.Carriers.DhlEcommerce
             dhlEcommerceAccount.DisplayMember = "Key";
             dhlEcommerceAccount.ValueMember = "Value";
 
-            if (accountRepo.Accounts.Count() > 0)
+            if (accountRepo.Accounts.Any())
             {
                 dhlEcommerceAccount.DataSource = accountRepo.Accounts.Select(s => new KeyValuePair<string, long>(s.Description, s.DhlEcommerceAccountID)).ToList();
                 dhlEcommerceAccount.Enabled = true;

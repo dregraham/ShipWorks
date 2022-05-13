@@ -110,7 +110,9 @@ namespace ShipWorks.Shipping.ShipEngine.Manifest
 
             if (accounts.Count() == 1)
             {
+#pragma warning disable CS4014
                 FillManifestMenuForAccount(menu, accounts.First());
+#pragma warning restore CS4014
             }
             else if (accounts.Count() > 1)
             {
@@ -122,7 +124,9 @@ namespace ShipWorks.Shipping.ShipEngine.Manifest
                     SandMenu accountMenu = new SandMenu();
                     accountMenuItem.Items.Add(accountMenu);
 
+#pragma warning disable CS4014
                     FillManifestMenuForAccount(accountMenu, account);
+#pragma warning restore CS4014
                 }
             }
             else
@@ -153,7 +157,7 @@ namespace ShipWorks.Shipping.ShipEngine.Manifest
                 var errorMessages = new List<string>();
                 var successMessages = new List<string>();
 
-                Task.Run(async () =>
+                Task.Run(() =>
                     CreateManifestTask(carrierAccount, manifestProgress, successMessages, errorMessages)
                         .ConfigureAwait(true)).ConfigureAwait(true);
 
@@ -234,7 +238,7 @@ namespace ShipWorks.Shipping.ShipEngine.Manifest
         /// <summary>
         /// Fill the given menu with the scan forms that have been created for the account.  We list up to the last 7 days
         /// </summary>
-        private async void FillManifestMenuForAccount(SandMenu menu, ICarrierAccount account)
+        private async Task FillManifestMenuForAccount(SandMenu menu, ICarrierAccount account)
         {
             var manifests = await manifestRepo.GetManifests(account, MaxManifestsToFetch);
 
