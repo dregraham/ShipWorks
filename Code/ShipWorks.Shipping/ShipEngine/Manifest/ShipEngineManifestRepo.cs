@@ -126,7 +126,7 @@ namespace ShipWorks.Shipping.ShipEngine.Manifest
             {
                 await sqlAdapter.FetchEntityCollectionAsync(queryParams, CancellationToken.None).ConfigureAwait(false);
 
-                return collection.Any() ? collection.ToList() : new List<ShipEngineManifestEntity>();
+                return collection.ToList();
             }
         }
     }

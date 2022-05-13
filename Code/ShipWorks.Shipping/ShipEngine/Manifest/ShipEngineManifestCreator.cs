@@ -106,9 +106,10 @@ namespace ShipWorks.Shipping.ShipEngine.Manifest
 
             if (results.None())
             {
-                //return GenericResult.FromError("Could not find any shipments for manifest.");
-                // TODO: DHLEcom fix this.
-                return null;
+                var errorResult = new List<GenericResult<CreateManifestResponse>>();
+                var genRes = GenericResult.FromError<CreateManifestResponse>("Could not find any shipments for manifest.");
+                errorResult.Add(genRes);
+                return errorResult;
             }
 
             progress.Detail = "Creating Manifest";

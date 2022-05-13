@@ -85,17 +85,8 @@ namespace ShipWorks.Shipping.UI.Carriers.DhlEcommerce
             int oldIndex = service.SelectedIndex;
 
             bool isDhlEcommerceServiceType = false;
-            DhlEcommerceServiceType serviceType = DhlEcommerceServiceType.CA_DhlParcelInternationalDirectPriority;
-
-            try
-            {
-                serviceType = EnumHelper.GetEnumByApiValue<DhlEcommerceServiceType>(e.Rate.OriginalTag.ToString());
-                isDhlEcommerceServiceType = true;
-            }
-            catch
-            {
-                // Just testing to verify the original tag is a DhlEcommerceServiceType
-            }
+            DhlEcommerceServiceType? serviceType = DhlEcommerceServiceType.CA_DhlParcelInternationalDirectPriority;
+            isDhlEcommerceServiceType = EnumHelper.TryGetEnumByApiValue<DhlEcommerceServiceType>(e.Rate.OriginalTag.ToString(), out serviceType);
 
             if (isDhlEcommerceServiceType)
             {
