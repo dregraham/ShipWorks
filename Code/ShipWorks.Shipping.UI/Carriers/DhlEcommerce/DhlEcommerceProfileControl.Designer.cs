@@ -63,6 +63,9 @@ namespace ShipWorks.Shipping.UI.Carriers.DhlEcommerce
             this.labelReference1 = new System.Windows.Forms.Label();
             this.reference1State = new System.Windows.Forms.CheckBox();
             this.reference1 = new ShipWorks.UI.Controls.MultiValueTextBox();
+            this.labelAncillaryEndorsement = new System.Windows.Forms.Label();
+            this.ancillaryEndorsementState = new System.Windows.Forms.CheckBox();
+            this.ancillaryEndorsement = new ShipWorks.UI.Controls.MultiValueComboBox();
             this.resDeliveryState = new System.Windows.Forms.CheckBox();
             this.resDelivery = new System.Windows.Forms.CheckBox();
             this.labelResDelivery = new System.Windows.Forms.Label();
@@ -194,7 +197,7 @@ namespace ShipWorks.Shipping.UI.Carriers.DhlEcommerce
             this.groupCustoms.Controls.Add(this.customsTinIssuingAuthorityState);
             this.groupCustoms.Controls.Add(this.labelCustomsTinIssuingAuthority);
             this.groupCustoms.Controls.Add(this.customsTinIssuingAuthority);
-            this.groupCustoms.Location = new System.Drawing.Point(6, 587);
+            this.groupCustoms.Location = new System.Drawing.Point(6, 617);
             this.groupCustoms.Name = "groupCustoms";
             this.groupCustoms.Size = new System.Drawing.Size(405, 165);
             this.groupCustoms.TabIndex = 5;
@@ -431,6 +434,9 @@ namespace ShipWorks.Shipping.UI.Carriers.DhlEcommerce
             this.groupOptions.Controls.Add(this.labelReference1);
             this.groupOptions.Controls.Add(this.reference1State);
             this.groupOptions.Controls.Add(this.reference1);
+            this.groupOptions.Controls.Add(this.labelAncillaryEndorsement);
+            this.groupOptions.Controls.Add(this.ancillaryEndorsementState);
+            this.groupOptions.Controls.Add(this.ancillaryEndorsement);
             this.groupOptions.Controls.Add(this.resDeliveryState);
             this.groupOptions.Controls.Add(this.resDelivery);
             this.groupOptions.Controls.Add(this.labelResDelivery);
@@ -446,7 +452,7 @@ namespace ShipWorks.Shipping.UI.Carriers.DhlEcommerce
             this.groupOptions.Controls.Add(this.dividerOptions);
             this.groupOptions.Location = new System.Drawing.Point(6, 416);
             this.groupOptions.Name = "groupOptions";
-            this.groupOptions.Size = new System.Drawing.Size(405, 165);
+            this.groupOptions.Size = new System.Drawing.Size(405, 195);
             this.groupOptions.TabIndex = 4;
             this.groupOptions.TabStop = false;
             this.groupOptions.Text = "Options";
@@ -455,7 +461,7 @@ namespace ShipWorks.Shipping.UI.Carriers.DhlEcommerce
             // 
             this.labelReference1.AutoSize = true;
             this.labelReference1.BackColor = System.Drawing.Color.Transparent;
-            this.labelReference1.Location = new System.Drawing.Point(70, 135);
+            this.labelReference1.Location = new System.Drawing.Point(82, 135);
             this.labelReference1.Name = "labelReference1";
             this.labelReference1.Size = new System.Drawing.Size(70, 13);
             this.labelReference1.TabIndex = 93;
@@ -475,10 +481,55 @@ namespace ShipWorks.Shipping.UI.Carriers.DhlEcommerce
             // 
             // reference1
             // 
-            this.reference1.Location = new System.Drawing.Point(146, 132);
+            this.reference1.Location = new System.Drawing.Point(158, 132);
             this.reference1.Name = "reference1";
             this.reference1.Size = new System.Drawing.Size(206, 21);
             this.reference1.TabIndex = 90;
+
+
+
+
+
+
+            // 
+            // labelAncillaryEndorsement
+            // 
+            this.labelAncillaryEndorsement.AutoSize = true;
+            this.labelAncillaryEndorsement.BackColor = System.Drawing.Color.Transparent;
+            this.labelAncillaryEndorsement.Location = new System.Drawing.Point(35, 165);
+            this.labelAncillaryEndorsement.Name = "labelAncillaryEndorsement";
+            this.labelAncillaryEndorsement.Size = new System.Drawing.Size(70, 13);
+            this.labelAncillaryEndorsement.TabIndex = 93;
+            this.labelAncillaryEndorsement.Text = "Ancillary Endorsement:";
+            // 
+            // ancillaryEndorsementState
+            // 
+            this.ancillaryEndorsementState.AutoSize = true;
+            this.ancillaryEndorsementState.Checked = true;
+            this.ancillaryEndorsementState.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.ancillaryEndorsementState.Location = new System.Drawing.Point(9, 165);
+            this.ancillaryEndorsementState.Name = "ancillaryEndorsementState";
+            this.ancillaryEndorsementState.Size = new System.Drawing.Size(15, 14);
+            this.ancillaryEndorsementState.TabIndex = 92;
+            this.ancillaryEndorsementState.Tag = "";
+            this.ancillaryEndorsementState.UseVisualStyleBackColor = true;
+            // 
+            // ancillaryEndorsement
+            // 
+            this.ancillaryEndorsement.Location = new System.Drawing.Point(158, 163);
+            this.ancillaryEndorsement.Name = "ancillaryEndorsement";
+            this.ancillaryEndorsement.Size = new System.Drawing.Size(206, 21);
+            this.ancillaryEndorsement.TabIndex = 90;
+
+
+
+
+
+
+
+
+
+
             // 
             // resDeliveryState
             // 
@@ -495,7 +546,7 @@ namespace ShipWorks.Shipping.UI.Carriers.DhlEcommerce
             // resDelivery
             // 
             this.resDelivery.AutoSize = true;
-            this.resDelivery.Location = new System.Drawing.Point(146, 107);
+            this.resDelivery.Location = new System.Drawing.Point(158, 107);
             this.resDelivery.Name = "resDelivery";
             this.resDelivery.Size = new System.Drawing.Size(120, 17);
             this.resDelivery.TabIndex = 86;
@@ -506,7 +557,7 @@ namespace ShipWorks.Shipping.UI.Carriers.DhlEcommerce
             // 
             this.labelResDelivery.AutoSize = true;
             this.labelResDelivery.BackColor = System.Drawing.Color.Transparent;
-            this.labelResDelivery.Location = new System.Drawing.Point(35, 107);
+            this.labelResDelivery.Location = new System.Drawing.Point(47, 107);
             this.labelResDelivery.Name = "labelResDelivery";
             this.labelResDelivery.Size = new System.Drawing.Size(105, 13);
             this.labelResDelivery.TabIndex = 87;
@@ -515,7 +566,7 @@ namespace ShipWorks.Shipping.UI.Carriers.DhlEcommerce
             // nonMachinable
             // 
             this.nonMachinable.AutoSize = true;
-            this.nonMachinable.Location = new System.Drawing.Point(146, 79);
+            this.nonMachinable.Location = new System.Drawing.Point(158, 79);
             this.nonMachinable.Name = "nonMachinable";
             this.nonMachinable.Size = new System.Drawing.Size(102, 17);
             this.nonMachinable.TabIndex = 5;
@@ -538,7 +589,7 @@ namespace ShipWorks.Shipping.UI.Carriers.DhlEcommerce
             // 
             this.labelDuty.AutoSize = true;
             this.labelDuty.BackColor = System.Drawing.Color.Transparent;
-            this.labelDuty.Location = new System.Drawing.Point(106, 51);
+            this.labelDuty.Location = new System.Drawing.Point(120, 51);
             this.labelDuty.Name = "labelDuty";
             this.labelDuty.Size = new System.Drawing.Size(34, 13);
             this.labelDuty.TabIndex = 84;
@@ -548,7 +599,7 @@ namespace ShipWorks.Shipping.UI.Carriers.DhlEcommerce
             // 
             this.labelNonMachinable.AutoSize = true;
             this.labelNonMachinable.BackColor = System.Drawing.Color.Transparent;
-            this.labelNonMachinable.Location = new System.Drawing.Point(53, 79);
+            this.labelNonMachinable.Location = new System.Drawing.Point(66, 79);
             this.labelNonMachinable.Name = "labelNonMachinable";
             this.labelNonMachinable.Size = new System.Drawing.Size(87, 13);
             this.labelNonMachinable.TabIndex = 77;
@@ -558,7 +609,7 @@ namespace ShipWorks.Shipping.UI.Carriers.DhlEcommerce
             // 
             this.labelSaturday.AutoSize = true;
             this.labelSaturday.BackColor = System.Drawing.Color.Transparent;
-            this.labelSaturday.Location = new System.Drawing.Point(85, 23);
+            this.labelSaturday.Location = new System.Drawing.Point(99, 23);
             this.labelSaturday.Name = "labelSaturday";
             this.labelSaturday.Size = new System.Drawing.Size(55, 13);
             this.labelSaturday.TabIndex = 79;
@@ -567,7 +618,7 @@ namespace ShipWorks.Shipping.UI.Carriers.DhlEcommerce
             // dutyDeliveryPaid
             // 
             this.dutyDeliveryPaid.AutoSize = true;
-            this.dutyDeliveryPaid.Location = new System.Drawing.Point(146, 51);
+            this.dutyDeliveryPaid.Location = new System.Drawing.Point(158, 51);
             this.dutyDeliveryPaid.Name = "dutyDeliveryPaid";
             this.dutyDeliveryPaid.Size = new System.Drawing.Size(114, 17);
             this.dutyDeliveryPaid.TabIndex = 3;
@@ -589,7 +640,7 @@ namespace ShipWorks.Shipping.UI.Carriers.DhlEcommerce
             // saturdayDelivery
             // 
             this.saturdayDelivery.AutoSize = true;
-            this.saturdayDelivery.Location = new System.Drawing.Point(146, 23);
+            this.saturdayDelivery.Location = new System.Drawing.Point(158, 23);
             this.saturdayDelivery.Name = "saturdayDelivery";
             this.saturdayDelivery.Size = new System.Drawing.Size(112, 17);
             this.saturdayDelivery.TabIndex = 1;
@@ -616,7 +667,7 @@ namespace ShipWorks.Shipping.UI.Carriers.DhlEcommerce
             this.dividerOptions.BorderStyle = ComponentFactory.Krypton.Toolkit.PaletteBorderStyle.GridDataCellSheet;
             this.dividerOptions.Location = new System.Drawing.Point(29, 17);
             this.dividerOptions.Name = "kryptonBorderEdge2";
-            this.dividerOptions.Size = new System.Drawing.Size(1, 140);
+            this.dividerOptions.Size = new System.Drawing.Size(1, 170);
             this.dividerOptions.Text = "kryptonBorderEdge1";
             // 
             // groupShipment
@@ -925,6 +976,11 @@ namespace ShipWorks.Shipping.UI.Carriers.DhlEcommerce
         private MultiValueTextBox reference1;
         private Label labelReference1;
         private CheckBox reference1State;
+
+        private MultiValueComboBox ancillaryEndorsement;
+        private Label labelAncillaryEndorsement;
+        private CheckBox ancillaryEndorsementState;
+
         private Label labelPackageType;
         private CheckBox packageTypeState;
         private MultiValueComboBox packageType;

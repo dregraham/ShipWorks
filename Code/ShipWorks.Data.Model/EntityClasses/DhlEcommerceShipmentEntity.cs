@@ -399,6 +399,8 @@ namespace ShipWorks.Data.Model.EntityClasses
 			_fieldsCustomProperties.Add("InsuranceValue", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
 			_fieldsCustomProperties.Add("InsurancePennyOne", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+			_fieldsCustomProperties.Add("AncillaryEndorsement", fieldHashtable);
 		}
 		#endregion
 
@@ -770,6 +772,17 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			get { return (System.Boolean)GetValue((int)DhlEcommerceShipmentFieldIndex.InsurancePennyOne, true); }
 			set	{ SetValue((int)DhlEcommerceShipmentFieldIndex.InsurancePennyOne, value); }
+		}
+
+		/// <summary> The AncillaryEndorsement property of the Entity DhlEcommerceShipment<br/><br/></summary>
+		/// <remarks>Mapped on  table field: "DhlEcommerceShipment"."AncillaryEndorsement"<br/>
+		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
+		public virtual System.Int32 AncillaryEndorsement
+		{
+			get { return (System.Int32)GetValue((int)DhlEcommerceShipmentFieldIndex.AncillaryEndorsement, true); }
+			set	{ SetValue((int)DhlEcommerceShipmentFieldIndex.AncillaryEndorsement, value); }
 		}
 
 		/// <summary> Gets / sets related entity of type 'ShipmentEntity' which has to be set using a fetch action earlier. If no related entity is set for this property, null is returned.<br/><br/>

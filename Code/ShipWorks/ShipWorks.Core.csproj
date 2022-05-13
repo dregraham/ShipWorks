@@ -1266,6 +1266,7 @@
     <Compile Include="Shipping\ShipEngine\DTOs\ConnectAccountResponseDTO.cs" />
     <Compile Include="Shipping\ShipEngine\DTOs\CreateManifestResponse.cs" />
     <Compile Include="Shipping\ShipEngine\DTOs\CustomsItem.cs" />
+    <Compile Include="Shipping\ShipEngine\DTOs\AncillaryEndorsement.cs" />
     <Compile Include="Shipping\ShipEngine\DTOs\DHLExpressAccountInformationDTO.cs" />
     <Compile Include="Shipping\ShipEngine\DTOs\Dimensions.cs" />
     <Compile Include="Shipping\ShipEngine\DTOs\InternationalOptions.cs" />

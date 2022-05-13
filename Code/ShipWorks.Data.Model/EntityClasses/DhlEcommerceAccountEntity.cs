@@ -342,6 +342,8 @@ namespace ShipWorks.Data.Model.EntityClasses
 			_fieldsCustomProperties.Add("Street2", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
 			_fieldsCustomProperties.Add("Street3", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+			_fieldsCustomProperties.Add("AncillaryEndorsement", fieldHashtable);
 		}
 		#endregion
 
@@ -651,6 +653,17 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			get { return (System.String)GetValue((int)DhlEcommerceAccountFieldIndex.Street3, true); }
 			set	{ SetValue((int)DhlEcommerceAccountFieldIndex.Street3, value); }
+		}
+
+		/// <summary> The AncillaryEndorsement property of the Entity DhlEcommerceAccount<br/><br/></summary>
+		/// <remarks>Mapped on  table field: "DhlEcommerceAccount"."AncillaryEndorsement"<br/>
+		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
+		public virtual System.Int32 AncillaryEndorsement
+		{
+			get { return (System.Int32)GetValue((int)DhlEcommerceAccountFieldIndex.AncillaryEndorsement, true); }
+			set	{ SetValue((int)DhlEcommerceAccountFieldIndex.AncillaryEndorsement, value); }
 		}
 	
 		/// <summary> Gets the type of the hierarchy this entity is in. </summary>

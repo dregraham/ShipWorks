@@ -13,6 +13,7 @@ using ShipWorks.Shipping.Insurance;
 using ShipWorks.Shipping.Profiles;
 using ShipWorks.Shipping.Settings;
 using ShipWorks.Shipping.ShipEngine;
+using ShipWorks.Shipping.ShipEngine.DTOs;
 
 namespace ShipWorks.Shipping.UI.Carriers.DhlEcommerce
 {
@@ -63,6 +64,7 @@ namespace ShipWorks.Shipping.UI.Carriers.DhlEcommerce
             EnumHelper.BindComboBox<DhlEcommercePackagingType>(packageType);
             EnumHelper.BindComboBox<ShipEngineContentsType>(contents);
             EnumHelper.BindComboBox<ShipEngineNonDeliveryType>(nonDelivery);
+            EnumHelper.BindComboBox<AncillaryEndorsement>(ancillaryEndorsement);
             EnumHelper.BindComboBox<TaxIdType>(taxIdType);
 
             customsTinIssuingAuthority.DisplayMember = "Key";
@@ -96,6 +98,7 @@ namespace ShipWorks.Shipping.UI.Carriers.DhlEcommerce
             AddValueMapping(dhlEcommerceProfile, DhlEcommerceProfileFields.NonMachinable, nonMachinableState, nonMachinable, labelNonMachinable);
             AddValueMapping(dhlEcommerceProfile, DhlEcommerceProfileFields.ResidentialDelivery, resDeliveryState, resDelivery, labelResDelivery);
             AddValueMapping(dhlEcommerceProfile, DhlEcommerceProfileFields.Reference1, reference1State, reference1, labelReference1);
+            AddValueMapping(dhlEcommerceProfile, DhlEcommerceProfileFields.AncillaryEndorsement, ancillaryEndorsementState, ancillaryEndorsement, labelAncillaryEndorsement);
 
             // Customs
             AddValueMapping(dhlEcommerceProfile, DhlEcommerceProfileFields.Contents, contentsState, contents, labelContents);

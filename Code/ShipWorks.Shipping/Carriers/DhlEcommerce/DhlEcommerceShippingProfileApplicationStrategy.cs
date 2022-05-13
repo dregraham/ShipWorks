@@ -81,6 +81,7 @@ namespace ShipWorks.Shipping.Carriers.DhlEcommerce
             ApplyProfileValue(source.NonMachinable, dhlShipment, DhlEcommerceShipmentFields.NonMachinable);
             ApplyProfileValue(source.ResidentialDelivery, dhlShipment, DhlEcommerceShipmentFields.ResidentialDelivery);
             ApplyProfileValue(source.Reference1, dhlShipment, DhlEcommerceShipmentFields.Reference1);
+            ApplyProfileValue(source.AncillaryEndorsement, dhlShipment, DhlEcommerceShipmentFields.AncillaryEndorsement);
 
             // Customs
             ApplyProfileValue(source.Contents, dhlShipment, DhlEcommerceShipmentFields.Contents);

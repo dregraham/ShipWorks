@@ -5772,6 +5772,11 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(DhlEcommerceAccountFieldIndex.Street3);}
 		}
+		/// <summary>Creates a new DhlEcommerceAccountEntity.AncillaryEndorsement field instance</summary>
+		public static EntityField2 AncillaryEndorsement
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(DhlEcommerceAccountFieldIndex.AncillaryEndorsement);}
+		}
 	}
 
 	/// <summary>Field Creation Class for entity DhlEcommerceProfileEntity</summary>
@@ -5846,6 +5851,11 @@ namespace ShipWorks.Data.Model.HelperClasses
 		public static EntityField2 Reference1
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(DhlEcommerceProfileFieldIndex.Reference1);}
+		}
+		/// <summary>Creates a new DhlEcommerceProfileEntity.AncillaryEndorsement field instance</summary>
+		public static EntityField2 AncillaryEndorsement
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(DhlEcommerceProfileFieldIndex.AncillaryEndorsement);}
 		}
 	}
 
@@ -5976,6 +5986,11 @@ namespace ShipWorks.Data.Model.HelperClasses
 		public static EntityField2 InsurancePennyOne
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(DhlEcommerceShipmentFieldIndex.InsurancePennyOne);}
+		}
+		/// <summary>Creates a new DhlEcommerceShipmentEntity.AncillaryEndorsement field instance</summary>
+		public static EntityField2 AncillaryEndorsement
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(DhlEcommerceShipmentFieldIndex.AncillaryEndorsement);}
 		}
 	}
 

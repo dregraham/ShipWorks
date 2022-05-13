@@ -240,7 +240,6 @@
     <Compile Include="Carriers\DhlEcommerce\DhlEcommerceException.cs" />
     <Compile Include="Carriers\DhlEcommerce\Enums\DhlEcommerceDistributionCenters.cs" />
     <Compile Include="Carriers\DhlEcommerce\DhlEcommerceShipmentAdapter.cs" />
-    <Compile Include="Carriers\DhlEcommerce\Enums\DhlEcommerceAncillaryEndorsement.cs" />
     <Compile Include="Carriers\DhlEcommerce\IDhlEcommerceShipEngineRatingClient.cs" />
     <Compile Include="Carriers\Dhl\API\DhlExpressLabelClientFactory.cs" />
     <Compile Include="Carriers\Dhl\API\IDhlExpressLabelClient.cs" />

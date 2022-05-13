@@ -15,12 +15,14 @@ using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Editions;
 using ShipWorks.Shipping.Carriers.BestRate;
+using ShipWorks.Shipping.Carriers.DhlEcommerce.Enums;
 using ShipWorks.Shipping.Editing;
 using ShipWorks.Shipping.Insurance;
 using ShipWorks.Shipping.Services;
 using ShipWorks.Shipping.Settings;
 using ShipWorks.Shipping.Settings.Origin;
 using ShipWorks.Shipping.ShipEngine;
+using ShipWorks.Shipping.ShipEngine.DTOs;
 using ShipWorks.Shipping.Tracking;
 using ShipWorks.Templates.Processing.TemplateXml.ElementOutlines;
 
@@ -116,6 +118,7 @@ namespace ShipWorks.Shipping.Carriers.DhlEcommerce
             dhlEcommerceShipmentEntity.Reference1 = string.Empty;
             dhlEcommerceShipmentEntity.InsuranceValue = 0;
             dhlEcommerceShipmentEntity.InsurancePennyOne = false;
+            dhlEcommerceShipmentEntity.AncillaryEndorsement = (int) AncillaryEndorsement.None;
 
             base.ConfigureNewShipment(shipment);
         }
@@ -261,6 +264,7 @@ namespace ShipWorks.Shipping.Carriers.DhlEcommerce
             profile.DhlEcommerce.CustomsTinIssuingAuthority = "US";
             profile.DhlEcommerce.ResidentialDelivery = false;
             profile.DhlEcommerce.Reference1 = string.Empty;
+            profile.DhlEcommerce.AncillaryEndorsement = (int) AncillaryEndorsement.None;
         }
 
         /// <summary>

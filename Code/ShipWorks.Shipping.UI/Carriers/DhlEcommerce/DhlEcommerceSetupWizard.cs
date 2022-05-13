@@ -18,6 +18,7 @@ using ShipWorks.Shipping.Profiles;
 using ShipWorks.Shipping.Settings;
 using ShipWorks.Shipping.Settings.WizardPages;
 using ShipWorks.Shipping.ShipEngine;
+using ShipWorks.Shipping.ShipEngine.DTOs;
 using ShipWorks.Shipping.ShipEngine.DTOs.CarrierAccount;
 using ShipWorks.UI.Wizard;
 
@@ -96,7 +97,7 @@ namespace ShipWorks.Shipping.UI.Carriers.DhlEcommerce
             shippingWizardPageFinish.SteppingInto += OnSteppingIntoFinish;
 
             LoadComboBox<DhlEcommerceDistributionCenters>(distributionCenters);
-            LoadComboBox<DhlEcommerceAncillaryEndorsement>(ancillaryEndorsement);
+            LoadComboBox<AncillaryEndorsement>(ancillaryEndorsement);
         }
 
         /// <summary>
@@ -190,6 +191,9 @@ namespace ShipWorks.Shipping.UI.Carriers.DhlEcommerce
                 account.DistributionCenter = distributionCenters.SelectedValue?.ToString() ?? distributionCenters.Text;
                 account.SoldTo = soldTo.Text;
                 account.Description = accountDescription.Text;
+
+                EnumHelper.TryGetEnumByApiValue(ancillaryEndorsement.SelectedValue.ToString(), out AncillaryEndorsement? selectedAncillaryEndorsement);
+                account.AncillaryEndorsement = (int) selectedAncillaryEndorsement.Value;
 
                 var shipmentType = shipmentTypeManager.Get(ShipmentTypeCode.DhlEcommerce);
                 var defaultProfile = shippingProfileManager.GetOrCreatePrimaryProfile(shipmentType);

@@ -938,6 +938,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 			this.AddElementFieldInfo("DhlEcommerceAccountEntity", "CreatedDate", typeof(System.DateTime), false, false, false, false,  (int)DhlEcommerceAccountFieldIndex.CreatedDate, 0, 0, 0);
 			this.AddElementFieldInfo("DhlEcommerceAccountEntity", "Street2", typeof(System.String), false, false, false, false,  (int)DhlEcommerceAccountFieldIndex.Street2, 60, 0, 0);
 			this.AddElementFieldInfo("DhlEcommerceAccountEntity", "Street3", typeof(System.String), false, false, false, false,  (int)DhlEcommerceAccountFieldIndex.Street3, 60, 0, 0);
+			this.AddElementFieldInfo("DhlEcommerceAccountEntity", "AncillaryEndorsement", typeof(System.Int32), false, false, false, false,  (int)DhlEcommerceAccountFieldIndex.AncillaryEndorsement, 0, 0, 10);
 		}
 		/// <summary>Inits DhlEcommerceProfileEntity's FieldInfo objects</summary>
 		private void InitDhlEcommerceProfileEntityInfos()
@@ -957,6 +958,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 			this.AddElementFieldInfo("DhlEcommerceProfileEntity", "CustomsTinIssuingAuthority", typeof(System.String), false, false, false, true,  (int)DhlEcommerceProfileFieldIndex.CustomsTinIssuingAuthority, 2, 0, 0);
 			this.AddElementFieldInfo("DhlEcommerceProfileEntity", "PackagingType", typeof(Nullable<System.Int32>), false, false, false, true,  (int)DhlEcommerceProfileFieldIndex.PackagingType, 0, 0, 10);
 			this.AddElementFieldInfo("DhlEcommerceProfileEntity", "Reference1", typeof(System.String), false, false, false, true,  (int)DhlEcommerceProfileFieldIndex.Reference1, 300, 0, 0);
+			this.AddElementFieldInfo("DhlEcommerceProfileEntity", "AncillaryEndorsement", typeof(Nullable<System.Int32>), false, false, false, true,  (int)DhlEcommerceProfileFieldIndex.AncillaryEndorsement, 0, 0, 10);
 		}
 		/// <summary>Inits DhlEcommerceShipmentEntity's FieldInfo objects</summary>
 		private void InitDhlEcommerceShipmentEntityInfos()
@@ -987,6 +989,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 			this.AddElementFieldInfo("DhlEcommerceShipmentEntity", "Reference1", typeof(System.String), false, false, false, false,  (int)DhlEcommerceShipmentFieldIndex.Reference1, 300, 0, 0);
 			this.AddElementFieldInfo("DhlEcommerceShipmentEntity", "InsuranceValue", typeof(System.Decimal), false, false, false, false,  (int)DhlEcommerceShipmentFieldIndex.InsuranceValue, 0, 4, 19);
 			this.AddElementFieldInfo("DhlEcommerceShipmentEntity", "InsurancePennyOne", typeof(System.Boolean), false, false, false, false,  (int)DhlEcommerceShipmentFieldIndex.InsurancePennyOne, 0, 0, 0);
+			this.AddElementFieldInfo("DhlEcommerceShipmentEntity", "AncillaryEndorsement", typeof(System.Int32), false, false, false, false,  (int)DhlEcommerceShipmentFieldIndex.AncillaryEndorsement, 0, 0, 10);
 		}
 		/// <summary>Inits DhlExpressAccountEntity's FieldInfo objects</summary>
 		private void InitDhlExpressAccountEntityInfos()
