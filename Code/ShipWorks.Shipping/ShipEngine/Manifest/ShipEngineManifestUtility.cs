@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -9,7 +11,9 @@ using Interapptive.Shared.Threading;
 using Interapptive.Shared.UI;
 using Interapptive.Shared.Utility;
 using log4net;
+using ShipWorks.Common.IO.Hardware.Printers;
 using ShipWorks.Common.Threading;
+using ShipWorks.Data;
 using ShipWorks.Data.Model.Custom;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers;
@@ -274,7 +278,7 @@ namespace ShipWorks.Shipping.ShipEngine.Manifest
 
             try
             {
-                Print(manifest.ManifestID);
+                Print(manifest.ShipEngineManifestID);
             }
             catch (Exception ex)
             {
@@ -287,9 +291,27 @@ namespace ShipWorks.Shipping.ShipEngine.Manifest
         /// <summary>
         /// Print a manifest
         /// </summary>
-        private void Print(string manifestId)
+        private void Print(long shipEngineManifestId)
         {
-            throw new NotImplementedException();
+            List<Image> images = new List<Image>();
+
+
+            foreach (DataResourceReference resource in DataResourceManager.LoadConsumerResourceReferences(shipEngineManifestId))
+            {
+                try
+                {
+                    string fileName = resource.GetCachedFilename();
+                    log.Info($"About to print resource for DHL eCommerce manifest {shipEngineManifestId}.  Filename: {fileName}");
+
+                    images.Add(Image.FromFile(fileName));
+                }
+                catch (Exception ex) when (ex is OutOfMemoryException || ex is FileNotFoundException || ex is ArgumentException)
+                {
+                    throw new ShippingException($"One of the images is invalid for manifest '{shipEngineManifestId}'.");
+                }
+            }
+
+            PrintUtility.PrintImages(null, "ShipWorks - DHL eCommerce Manifest", images, true, true);
         }
     }
 }

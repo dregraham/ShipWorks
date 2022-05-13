@@ -1,12 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
 using Interapptive.Shared.ComponentRegistration;
+using Interapptive.Shared.IO.Zip;
+using Interapptive.Shared.Pdf;
 using Interapptive.Shared.Utility;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using SD.LLBLGen.Pro.QuerySpec;
+using ShipWorks.Data;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.Custom;
 using ShipWorks.Data.Model.EntityClasses;
@@ -22,13 +27,19 @@ namespace ShipWorks.Shipping.ShipEngine.Manifest
     public class ShipEngineManifestRepo : IShipEngineManifestRepo
     {
         private readonly ISqlAdapterFactory sqlAdapterFactory;
+        private readonly IObjectReferenceManager objectReferenceManager;
+        private readonly IDataResourceManager resourceManager;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public ShipEngineManifestRepo(ISqlAdapterFactory sqlAdapterFactory)
+        public ShipEngineManifestRepo(ISqlAdapterFactory sqlAdapterFactory,
+        IObjectReferenceManager objectReferenceManager,
+            IDataResourceManager resourceManager)
         {
             this.sqlAdapterFactory = sqlAdapterFactory;
+            this.objectReferenceManager = objectReferenceManager;
+            this.resourceManager = resourceManager;
         }
 
         /// <summary>
@@ -59,7 +70,8 @@ namespace ShipWorks.Shipping.ShipEngine.Manifest
 
                     using (var sqlAdapter = sqlAdapterFactory.Create())
                     {
-                        await sqlAdapter.SaveEntityAsync(manifest);
+                        await sqlAdapter.SaveAndRefetchAsync(manifest);
+                        SaveManifestPdf(manifest.ShipEngineManifestID, manifest.ManifestUrl);
                     }
                 }
                 catch (Exception ex)
@@ -74,6 +86,25 @@ namespace ShipWorks.Shipping.ShipEngine.Manifest
             }
 
             return Result.FromSuccess();
+        }
+
+        /// <summary>
+        /// Save the PDF data to the database
+        /// </summary>
+        /// <returns></returns>
+        private void SaveManifestPdf(long shipEngineManifestId, string url)
+        {
+            WebClient client = new WebClient();
+            var data = client.DownloadData(new Uri(url));
+
+            using (MemoryStream pdfBytes = new MemoryStream(data))
+            {
+                resourceManager.CreateFromPdf(PdfDocumentType.Color, 
+                    pdfBytes, 
+                    shipEngineManifestId,
+                    "DHLeCommerceManifest", 
+                    true);
+            }
         }
 
         /// <summary>
