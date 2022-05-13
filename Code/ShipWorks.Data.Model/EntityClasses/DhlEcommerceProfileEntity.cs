@@ -377,6 +377,8 @@ namespace ShipWorks.Data.Model.EntityClasses
 			_fieldsCustomProperties.Add("PackagingType", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
 			_fieldsCustomProperties.Add("Reference1", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+			_fieldsCustomProperties.Add("AncillaryEndorsement", fieldHashtable);
 		}
 		#endregion
 
@@ -627,6 +629,17 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			get { return (System.String)GetValue((int)DhlEcommerceProfileFieldIndex.Reference1, true); }
 			set	{ SetValue((int)DhlEcommerceProfileFieldIndex.Reference1, value); }
+		}
+
+		/// <summary> The AncillaryEndorsement property of the Entity DhlEcommerceProfile<br/><br/></summary>
+		/// <remarks>Mapped on  table field: "DhlEcommerceProfile"."AncillaryEndorsement"<br/>
+		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		[DataMember]
+		public virtual Nullable<System.Int32> AncillaryEndorsement
+		{
+			get { return (Nullable<System.Int32>)GetValue((int)DhlEcommerceProfileFieldIndex.AncillaryEndorsement, false); }
+			set	{ SetValue((int)DhlEcommerceProfileFieldIndex.AncillaryEndorsement, value); }
 		}
 
 		/// <summary> Gets / sets related entity of type 'ShippingProfileEntity' which has to be set using a fetch action earlier. If no related entity is set for this property, null is returned.<br/><br/>

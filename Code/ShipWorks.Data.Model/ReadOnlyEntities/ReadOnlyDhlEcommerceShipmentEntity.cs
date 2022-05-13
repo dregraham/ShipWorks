@@ -61,6 +61,7 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
             Reference1 = source.Reference1;
             InsuranceValue = source.InsuranceValue;
             InsurancePennyOne = source.InsurancePennyOne;
+            AncillaryEndorsement = source.AncillaryEndorsement;
             
             Shipment = (IShipmentEntity) source.Shipment?.AsReadOnly(objectMap);
             
@@ -220,6 +221,12 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
         /// Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
         public System.Boolean InsurancePennyOne { get; }
+        /// <summary> The AncillaryEndorsement property of the Entity DhlEcommerceShipment<br/><br/>
+        /// </summary>
+        /// <remarks>Mapped on table field: "DhlEcommerceShipment"."AncillaryEndorsement"<br/>
+        /// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
+        /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+        public System.Int32 AncillaryEndorsement { get; }
         
         public IShipmentEntity Shipment { get; }
         

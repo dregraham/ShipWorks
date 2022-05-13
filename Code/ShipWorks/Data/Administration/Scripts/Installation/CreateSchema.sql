@@ -3007,7 +3007,8 @@ CREATE TABLE [dbo].[DhlEcommerceAccount](
 	[CountryCode] [nvarchar](50) NOT NULL DEFAULT(('')),
 	[Phone] [nvarchar](26) NOT NULL DEFAULT(('')),
 	[Email] [nvarchar](100) NOT NULL DEFAULT(('')),
-	[CreatedDate] [datetime] NOT NULL
+	[CreatedDate] [datetime] NOT NULL,
+	[AncillaryEndorsement] [int] NOT NULL CONSTRAINT [DF_DhlEcommerceAccount_AncillaryEndorsement] DEFAULT ((0))
  CONSTRAINT [PK_PostalDhlEcommerceAccount] PRIMARY KEY CLUSTERED 
 (
 	[DhlEcommerceAccountID] ASC
@@ -3034,7 +3035,6 @@ CREATE TABLE [dbo].[DhlEcommerceShipment](
 	[NonDelivery] [int] NOT NULL,
 	[ShipEngineLabelID] [nvarchar](50) NULL,
 	[IntegratorTransactionID] [uniqueidentifier] NULL,
-	[StampsTransactionID] [uniqueidentifier] NULL,
 	[ResidentialDelivery] [bit] NOT NULL,
 	[PackagingType] [int] NOT NULL,
 	[DimsProfileID] [bigint] NOT NULL,
@@ -3047,21 +3047,14 @@ CREATE TABLE [dbo].[DhlEcommerceShipment](
 	[CustomsRecipientTin] [nvarchar](25) NULL,
 	[CustomsTaxIdType] [int] NULL,
 	[CustomsTinIssuingAuthority] [nvarchar](2) NULL,
-	[ScanFormBatchID] [bigint] NULL,
 	[InsuranceValue] [money] NOT NULL CONSTRAINT [DF_DhlEcommerceShipment_InsuranceValue] DEFAULT ((0)),
-	[InsurancePennyOne] [bit] NOT NULL CONSTRAINT [DF_DhlEcommerceShipment_InsurancePennyOne] DEFAULT ((0))
+	[InsurancePennyOne] [bit] NOT NULL CONSTRAINT [DF_DhlEcommerceShipment_InsurancePennyOne] DEFAULT ((0)),
+	[AncillaryEndorsement] [int] NOT NULL CONSTRAINT [DF_DhlEcommerceShipment_AncillaryEndorsement] DEFAULT ((0))
  CONSTRAINT [PK_DhlEcommerceShipment] PRIMARY KEY CLUSTERED 
 (
 	[ShipmentID] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
-GO
-
-ALTER TABLE [dbo].[DhlEcommerceShipment]  WITH CHECK ADD  CONSTRAINT [FK_DhlEcommerceShipment_ScanFormBatch] FOREIGN KEY([ScanFormBatchID])
-REFERENCES [dbo].[ScanFormBatch] ([ScanFormBatchID])
-GO
-
-ALTER TABLE [dbo].[DhlEcommerceShipment] CHECK CONSTRAINT [FK_DhlEcommerceShipment_ScanFormBatch]
 GO
 
 ALTER TABLE [dbo].[DhlEcommerceShipment]  WITH CHECK ADD  CONSTRAINT [FK_DhlEcommerceShipment_Shipment] FOREIGN KEY([ShipmentID])
@@ -3084,7 +3077,8 @@ CREATE TABLE [dbo].[DhlEcommerceProfile](
 	[CustomsTaxIdType] [int] NULL,
 	[CustomsTinIssuingAuthority] [nvarchar](2) NULL,
 	[PackagingType] [int] NULL,
-	[Reference1] [nvarchar](300) NULL
+	[Reference1] [nvarchar](300) NULL,
+	[AncillaryEndorsement] [int] NULL 
  CONSTRAINT [PK_DhlEcommerceProfile] PRIMARY KEY CLUSTERED 
 (
 	[ShippingProfileID] ASC
