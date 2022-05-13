@@ -191,6 +191,9 @@ namespace ShipWorks.Shipping.UI.Carriers.DhlEcommerce
                 account.SoldTo = soldTo.Text;
                 account.Description = accountDescription.Text;
 
+                EnumHelper.TryGetEnumByApiValue(ancillaryEndorsement.SelectedValue.ToString(), out DhlEcommerceAncillaryEndorsement? selectedAncillaryEndorsement);
+                account.AncillaryEndorsement = (int) selectedAncillaryEndorsement.Value;
+
                 var shipmentType = shipmentTypeManager.Get(ShipmentTypeCode.DhlEcommerce);
                 var defaultProfile = shippingProfileManager.GetOrCreatePrimaryProfile(shipmentType);
 
