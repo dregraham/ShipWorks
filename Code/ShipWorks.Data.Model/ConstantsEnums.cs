@@ -2525,26 +2525,6 @@ namespace ShipWorks.Data.Model
 		/// <summary></summary>
 		AmountOfFields
 	}
-	/// <summary>Index enum to fast-access EntityFields in the IEntityFields collection for the entity: DhlEcommerceScanForm.</summary>
-	public enum DhlEcommerceScanFormFieldIndex
-	{
-		///<summary>DhlEcommerceScanFormID. </summary>
-		DhlEcommerceScanFormID,
-		///<summary>DhlEcommerceAccountID. </summary>
-		DhlEcommerceAccountID,
-		///<summary>ScanFormTransactionID. </summary>
-		ScanFormTransactionID,
-		///<summary>ScanFormUrl. </summary>
-		ScanFormUrl,
-		///<summary>CreatedDate. </summary>
-		CreatedDate,
-		///<summary>ScanFormBatchID. </summary>
-		ScanFormBatchID,
-		///<summary>Description. </summary>
-		Description,
-		/// <summary></summary>
-		AmountOfFields
-	}
 	/// <summary>Index enum to fast-access EntityFields in the IEntityFields collection for the entity: DhlEcommerceShipment.</summary>
 	public enum DhlEcommerceShipmentFieldIndex
 	{
@@ -2570,8 +2550,6 @@ namespace ShipWorks.Data.Model
 		ShipEngineLabelID,
 		///<summary>IntegratorTransactionID. </summary>
 		IntegratorTransactionID,
-		///<summary>StampsTransactionID. </summary>
-		StampsTransactionID,
 		///<summary>ResidentialDelivery. </summary>
 		ResidentialDelivery,
 		///<summary>CustomsRecipientTin. </summary>
@@ -2580,8 +2558,6 @@ namespace ShipWorks.Data.Model
 		CustomsTaxIdType,
 		///<summary>CustomsTinIssuingAuthority. </summary>
 		CustomsTinIssuingAuthority,
-		///<summary>ScanFormBatchID. </summary>
-		ScanFormBatchID,
 		///<summary>PackagingType. </summary>
 		PackagingType,
 		///<summary>DimsProfileID. </summary>
@@ -11637,6 +11613,36 @@ namespace ShipWorks.Data.Model
 		/// <summary></summary>
 		AmountOfFields
 	}
+	/// <summary>Index enum to fast-access EntityFields in the IEntityFields collection for the entity: ShipEngineManifest.</summary>
+	public enum ShipEngineManifestFieldIndex
+	{
+		///<summary>ShipEngineManifestID. </summary>
+		ShipEngineManifestID,
+		///<summary>CarrierAccountID. </summary>
+		CarrierAccountID,
+		///<summary>ShipmentTypeCode. </summary>
+		ShipmentTypeCode,
+		///<summary>ManifestID. </summary>
+		ManifestID,
+		///<summary>FormID. </summary>
+		FormID,
+		///<summary>CreatedAt. </summary>
+		CreatedAt,
+		///<summary>ShipDate. </summary>
+		ShipDate,
+		///<summary>ShipmentCount. </summary>
+		ShipmentCount,
+		///<summary>PlatformWarehouseID. </summary>
+		PlatformWarehouseID,
+		///<summary>SubmissionID. </summary>
+		SubmissionID,
+		///<summary>CarrierID. </summary>
+		CarrierID,
+		///<summary>ManifestUrl. </summary>
+		ManifestUrl,
+		/// <summary></summary>
+		AmountOfFields
+	}
 	/// <summary>Index enum to fast-access EntityFields in the IEntityFields collection for the entity: Shipment.</summary>
 	public enum ShipmentFieldIndex
 	{
@@ -15427,8 +15433,6 @@ namespace ShipWorks.Data.Model
 		DhlEcommerceAccountEntity,
 		///<summary>DhlEcommerceProfile</summary>
 		DhlEcommerceProfileEntity,
-		///<summary>DhlEcommerceScanForm</summary>
-		DhlEcommerceScanFormEntity,
 		///<summary>DhlEcommerceShipment</summary>
 		DhlEcommerceShipmentEntity,
 		///<summary>DhlExpressAccount</summary>
@@ -15699,6 +15703,8 @@ namespace ShipWorks.Data.Model
 		ServerMessageSignoffEntity,
 		///<summary>ServiceStatus</summary>
 		ServiceStatusEntity,
+		///<summary>ShipEngineManifest</summary>
+		ShipEngineManifestEntity,
 		///<summary>Shipment</summary>
 		ShipmentEntity,
 		///<summary>ShipmentCustomsItem</summary>

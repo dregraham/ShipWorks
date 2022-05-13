@@ -781,46 +781,33 @@
           <Field Name="ShippingProfileID" Type="long" IsPrimaryKey="true" FieldIndex="0" />
         </Fields>
       </EntityDefinition>
-      <EntityDefinition Name="DhlEcommerceScanForm" ObjectID="7ce16aa6-2db3-42d9-a0dd-3c80c5014fcf">
-        <Fields>
-          <Field Name="CreatedDate" Type="datetime" FieldIndex="4" />
-          <Field Name="Description" Type="string" MaxLength="100" FieldIndex="6" />
-          <Field Name="DhlEcommerceAccountID" Type="long" Precision="19" FieldIndex="1" />
-          <Field Name="DhlEcommerceScanFormID" Type="long" IsReadOnly="true" Precision="19" IsPrimaryKey="true" FieldIndex="0" />
-          <Field Name="ScanFormBatchID" Type="long" FieldIndex="5" />
-          <Field Name="ScanFormTransactionID" Type="string" MaxLength="100" FieldIndex="2" />
-          <Field Name="ScanFormUrl" Type="string" MaxLength="2048" FieldIndex="3" />
-        </Fields>
-      </EntityDefinition>
       <EntityDefinition Name="DhlEcommerceShipment" ObjectID="91e3778a-90d7-4e71-9382-adf1709f228c">
         <Fields>
           <Field Name="Contents" Type="int" Precision="10" FieldIndex="7" />
-          <Field Name="CustomsRecipientTin" Type="string" IsOptional="true" MaxLength="25" FieldIndex="13" />
-          <Field Name="CustomsTaxIdType" Type="int" IsOptional="true" Precision="10" FieldIndex="14" />
-          <Field Name="CustomsTinIssuingAuthority" Type="string" IsOptional="true" MaxLength="2" FieldIndex="15" />
+          <Field Name="CustomsRecipientTin" Type="string" IsOptional="true" MaxLength="25" FieldIndex="12" />
+          <Field Name="CustomsTaxIdType" Type="int" IsOptional="true" Precision="10" FieldIndex="13" />
+          <Field Name="CustomsTinIssuingAuthority" Type="string" IsOptional="true" MaxLength="2" FieldIndex="14" />
           <Field Name="DeliveredDutyPaid" Type="bool" FieldIndex="3" />
           <Field Name="DhlEcommerceAccountID" Type="long" Precision="19" FieldIndex="1" />
-          <Field Name="DimsAddWeight" Type="bool" FieldIndex="23" />
-          <Field Name="DimsHeight" Type="double" Precision="38" FieldIndex="21" />
-          <Field Name="DimsLength" Type="double" Precision="38" FieldIndex="19" />
-          <Field Name="DimsProfileID" Type="long" Precision="19" FieldIndex="18" />
-          <Field Name="DimsWeight" Type="double" Precision="38" FieldIndex="22" />
-          <Field Name="DimsWidth" Type="double" Precision="38" FieldIndex="20" />
-          <Field Name="InsurancePennyOne" Type="bool" FieldIndex="26" />
-          <Field Name="InsuranceValue" Type="decimal" Precision="19" Scale="4" FieldIndex="25" />
+          <Field Name="DimsAddWeight" Type="bool" FieldIndex="21" />
+          <Field Name="DimsHeight" Type="double" Precision="38" FieldIndex="19" />
+          <Field Name="DimsLength" Type="double" Precision="38" FieldIndex="17" />
+          <Field Name="DimsProfileID" Type="long" Precision="19" FieldIndex="16" />
+          <Field Name="DimsWeight" Type="double" Precision="38" FieldIndex="20" />
+          <Field Name="DimsWidth" Type="double" Precision="38" FieldIndex="18" />
+          <Field Name="InsurancePennyOne" Type="bool" FieldIndex="24" />
+          <Field Name="InsuranceValue" Type="decimal" Precision="19" Scale="4" FieldIndex="23" />
           <Field Name="IntegratorTransactionID" Type="guid" IsOptional="true" FieldIndex="10" />
           <Field Name="NonDelivery" Type="int" Precision="10" FieldIndex="8" />
           <Field Name="NonMachinable" Type="bool" FieldIndex="4" />
-          <Field Name="PackagingType" Type="int" Precision="10" FieldIndex="17" />
-          <Field Name="Reference1" Type="string" MaxLength="300" FieldIndex="24" />
+          <Field Name="PackagingType" Type="int" Precision="10" FieldIndex="15" />
+          <Field Name="Reference1" Type="string" MaxLength="300" FieldIndex="22" />
           <Field Name="RequestedLabelFormat" Type="int" Precision="10" FieldIndex="6" />
-          <Field Name="ResidentialDelivery" Type="bool" FieldIndex="12" />
+          <Field Name="ResidentialDelivery" Type="bool" FieldIndex="11" />
           <Field Name="SaturdayDelivery" Type="bool" FieldIndex="5" />
-          <Field Name="ScanFormBatchID" Type="long" IsOptional="true" FieldIndex="16" />
           <Field Name="Service" Type="int" Precision="10" FieldIndex="2" />
           <Field Name="ShipEngineLabelID" Type="string" IsOptional="true" MaxLength="50" FieldIndex="9" />
           <Field Name="ShipmentID" Type="long" IsPrimaryKey="true" FieldIndex="0" />
-          <Field Name="StampsTransactionID" Type="guid" IsOptional="true" FieldIndex="11" />
         </Fields>
       </EntityDefinition>
       <EntityDefinition Name="DhlExpressAccount" ObjectID="37d7aa88-e504-4c62-9bf1-890724dd2ec7">
@@ -2777,6 +2764,22 @@
           </UniqueConstraint>
         </UniqueConstraints>
       </EntityDefinition>
+      <EntityDefinition Name="ShipEngineManifest" ObjectID="63006227-585b-4b7b-aaf2-f9d05d678ecf">
+        <Fields>
+          <Field Name="CarrierAccountID" Type="long" Precision="19" FieldIndex="1" />
+          <Field Name="CarrierID" Type="string" MaxLength="50" FieldIndex="10" />
+          <Field Name="CreatedAt" Type="datetime" FieldIndex="5" />
+          <Field Name="FormID" Type="string" MaxLength="50" FieldIndex="4" />
+          <Field Name="ManifestID" Type="string" MaxLength="50" FieldIndex="3" />
+          <Field Name="ManifestUrl" Type="string" MaxLength="2048" FieldIndex="11" />
+          <Field Name="PlatformWarehouseID" Type="string" MaxLength="50" FieldIndex="8" />
+          <Field Name="ShipDate" Type="datetime" FieldIndex="6" />
+          <Field Name="ShipEngineManifestID" Type="long" IsReadOnly="true" Precision="19" IsPrimaryKey="true" FieldIndex="0" />
+          <Field Name="ShipmentCount" Type="int" Precision="10" FieldIndex="7" />
+          <Field Name="ShipmentTypeCode" Type="int" Precision="10" FieldIndex="2" />
+          <Field Name="SubmissionID" Type="string" MaxLength="255" FieldIndex="9" />
+        </Fields>
+      </EntityDefinition>
       <EntityDefinition Name="Shipment" ObjectID="a808842d-a47d-471e-9481-6db39275513e">
         <Fields>
           <Field Name="ActualDeliveryDate" Type="datetime" IsOptional="true" Precision="3" FieldIndex="83" />
@@ -4016,16 +4019,6 @@
           <FieldFieldRelationship FkField="ShippingProfileID" PkField="ShippingProfileID" />
         </FieldRelationships>
       </NormalRelationship>
-      <NormalRelationship Name="DhlEcommerceScanForm.ScanFormBatch-ScanFormBatch.DhlEcommerceScanForm" Start=":DhlEcommerceScanForm" End=":ScanFormBatch" StartNavigator="ScanFormBatch" EndNavigator="DhlEcommerceScanForm" Type="4">
-        <FieldRelationships>
-          <FieldFieldRelationship FkField="ScanFormBatchID" PkField="ScanFormBatchID" />
-        </FieldRelationships>
-      </NormalRelationship>
-      <NormalRelationship Name="DhlEcommerceShipment.ScanFormBatch-ScanFormBatch.DhlEcommerceShipment" Start=":DhlEcommerceShipment" End=":ScanFormBatch" StartNavigator="ScanFormBatch" EndNavigator="DhlEcommerceShipment" Type="4" EndIsOptional="true">
-        <FieldRelationships>
-          <FieldFieldRelationship FkField="ScanFormBatchID" PkField="ScanFormBatchID" />
-        </FieldRelationships>
-      </NormalRelationship>
       <NormalRelationship Name="DhlEcommerceShipment.Shipment-Shipment.DhlEcommerce" Start=":DhlEcommerceShipment" End=":Shipment" StartNavigator="Shipment" EndNavigator="DhlEcommerce" Type="1" StartIsOptional="true" DeleteRuleAction="1">
         <FieldRelationships>
           <FieldFieldRelationship FkField="ShipmentID" PkField="ShipmentID" />
@@ -4838,7 +4831,7 @@
       <Catalogs>
         <Catalog Name="ShipWorksLocal">
           <Schemas>
-            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2022-05-04T18:12:18.8788908Z">
+            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2022-05-12T15:33:37.4792493Z">
               <Tables>
                 <Table Name="Action">
                   <PkConstraintName Name="PK_Action" />
@@ -5599,18 +5592,6 @@
                     <Field Name="Reference1" Ordinal="14" IsOptional="true" DbType="12" Length="300" />
                   </Fields>
                 </Table>
-                <Table Name="DhlEcommerceScanForm">
-                  <PkConstraintName Name="PK_DhlEcommerceScanForm" />
-                  <Fields>
-                    <Field Name="DhlEcommerceScanFormID" Ordinal="1" IsIdentity="true" IsPrimaryKey="true" DbType="0" Precision="19" />
-                    <Field Name="DhlEcommerceAccountID" Ordinal="2" DbType="0" Precision="19" />
-                    <Field Name="ScanFormTransactionID" Ordinal="3" HasDefaultValue="true" DefaultValue="''" DbType="24" Length="100" />
-                    <Field Name="ScanFormUrl" Ordinal="4" HasDefaultValue="true" DefaultValue="''" DbType="24" Length="2048" />
-                    <Field Name="CreatedDate" Ordinal="5" DbType="4" />
-                    <Field Name="ScanFormBatchID" Ordinal="6" DbType="0" Precision="19" />
-                    <Field Name="Description" Ordinal="7" HasDefaultValue="true" DefaultValue="''" DbType="12" Length="100" />
-                  </Fields>
-                </Table>
                 <Table Name="DhlEcommerceShipment">
                   <PkConstraintName Name="PK_DhlEcommerceShipment" />
                   <Fields>
@@ -5658,9 +5639,8 @@
                     <Field Name="CustomsRecipientTin" Ordinal="22" IsOptional="true" DbType="12" Length="25" />
                     <Field Name="CustomsTaxIdType" Ordinal="23" IsOptional="true" DbType="8" Precision="10" />
                     <Field Name="CustomsTinIssuingAuthority" Ordinal="24" IsOptional="true" DbType="12" Length="2" />
-                    <Field Name="ScanFormBatchID" Ordinal="25" IsOptional="true" DbType="0" Precision="19" />
-                    <Field Name="InsuranceValue" Ordinal="27" HasDefaultValue="true" DefaultValue="(0)" DbType="9" Precision="19" Scale="4" />
-                    <Field Name="InsurancePennyOne" Ordinal="28" HasDefaultValue="true" DefaultValue="(0)" DbType="2" />
+                    <Field Name="InsuranceValue" Ordinal="25" HasDefaultValue="true" DefaultValue="(0)" DbType="9" Precision="19" Scale="4" />
+                    <Field Name="InsurancePennyOne" Ordinal="26" HasDefaultValue="true" DefaultValue="(0)" DbType="2" />
                   </Fields>
                 </Table>
                 <Table Name="DhlExpressAccount">
@@ -8744,6 +8724,23 @@
                     </UniqueConstraint>
                   </UniqueConstraints>
                 </Table>
+                <Table Name="ShipEngineManifest">
+                  <PkConstraintName Name="PK_ShipEngineManifest" />
+                  <Fields>
+                    <Field Name="ShipEngineManifestID" Ordinal="1" IsIdentity="true" IsPrimaryKey="true" DbType="0" Precision="19" />
+                    <Field Name="CarrierAccountID" Ordinal="2" DbType="0" Precision="19" />
+                    <Field Name="ShipmentTypeCode" Ordinal="3" DbType="8" Precision="10" />
+                    <Field Name="ManifestID" Ordinal="4" DbType="24" Length="50" />
+                    <Field Name="FormID" Ordinal="5" DbType="24" Length="50" />
+                    <Field Name="CreatedAt" Ordinal="6" DbType="4" />
+                    <Field Name="ShipDate" Ordinal="7" DbType="4" />
+                    <Field Name="ShipmentCount" Ordinal="8" DbType="8" Precision="10" />
+                    <Field Name="PlatformWarehouseID" Ordinal="9" DbType="24" Length="50" />
+                    <Field Name="SubmissionID" Ordinal="10" DbType="24" Length="255" />
+                    <Field Name="CarrierID" Ordinal="11" DbType="24" Length="50" />
+                    <Field Name="ManifestUrl" Ordinal="12" DbType="24" Length="2048" />
+                  </Fields>
+                </Table>
                 <Table Name="Shipment">
                   <PkConstraintName Name="PK_Shipment" />
                   <Fields>
@@ -10502,16 +10499,6 @@
                 <FieldPair PkField="dbo:ShippingProfile:ShippingProfileID" FkField="dbo:DhlEcommerceProfile:ShippingProfileID" />
               </FieldPairs>
             </ForeignKeyConstraint>
-            <ForeignKeyConstraint Name="dbo:DhlEcommerceScanForm:FK_DhlEcommerceScanForm_ScanFormBatch">
-              <FieldPairs>
-                <FieldPair PkField="dbo:ScanFormBatch:ScanFormBatchID" FkField="dbo:DhlEcommerceScanForm:ScanFormBatchID" />
-              </FieldPairs>
-            </ForeignKeyConstraint>
-            <ForeignKeyConstraint Name="dbo:DhlEcommerceShipment:FK_DhlEcommerceShipment_ScanFormBatch">
-              <FieldPairs>
-                <FieldPair PkField="dbo:ScanFormBatch:ScanFormBatchID" FkField="dbo:DhlEcommerceShipment:ScanFormBatchID" />
-              </FieldPairs>
-            </ForeignKeyConstraint>
             <ForeignKeyConstraint Name="dbo:DhlEcommerceShipment:FK_DhlEcommerceShipment_Shipment" DeleteRuleAction="1">
               <FieldPairs>
                 <FieldPair PkField="dbo:Shipment:ShipmentID" FkField="dbo:DhlEcommerceShipment:ShipmentID" />
@@ -12079,17 +12066,6 @@
             <FieldMapping FieldName="ShippingProfileID" TargetFieldName="ShippingProfileID" />
           </FieldMappings>
         </EntityMapping>
-        <EntityMapping EntityName=":DhlEcommerceScanForm" TargetName="ShipWorksLocal:dbo:DhlEcommerceScanForm">
-          <FieldMappings>
-            <FieldMapping FieldName="CreatedDate" TargetFieldName="CreatedDate" />
-            <FieldMapping FieldName="Description" TargetFieldName="Description" />
-            <FieldMapping FieldName="DhlEcommerceAccountID" TargetFieldName="DhlEcommerceAccountID" />
-            <FieldMapping FieldName="DhlEcommerceScanFormID" TargetFieldName="DhlEcommerceScanFormID" SequenceToUse="SCOPE_IDENTITY()" />
-            <FieldMapping FieldName="ScanFormBatchID" TargetFieldName="ScanFormBatchID" />
-            <FieldMapping FieldName="ScanFormTransactionID" TargetFieldName="ScanFormTransactionID" />
-            <FieldMapping FieldName="ScanFormUrl" TargetFieldName="ScanFormUrl" />
-          </FieldMappings>
-        </EntityMapping>
         <EntityMapping EntityName=":DhlEcommerceShipment" TargetName="ShipWorksLocal:dbo:DhlEcommerceShipment">
           <FieldMappings>
             <FieldMapping FieldName="Contents" TargetFieldName="Contents" />
@@ -12114,11 +12090,9 @@
             <FieldMapping FieldName="RequestedLabelFormat" TargetFieldName="RequestedLabelFormat" />
             <FieldMapping FieldName="ResidentialDelivery" TargetFieldName="ResidentialDelivery" />
             <FieldMapping FieldName="SaturdayDelivery" TargetFieldName="SaturdayDelivery" />
-            <FieldMapping FieldName="ScanFormBatchID" TargetFieldName="ScanFormBatchID" />
             <FieldMapping FieldName="Service" TargetFieldName="Service" />
             <FieldMapping FieldName="ShipEngineLabelID" TargetFieldName="ShipEngineLabelID" />
             <FieldMapping FieldName="ShipmentID" TargetFieldName="ShipmentID" />
-            <FieldMapping FieldName="StampsTransactionID" TargetFieldName="StampsTransactionID" />
           </FieldMappings>
         </EntityMapping>
         <EntityMapping EntityName=":DhlExpressAccount" TargetName="ShipWorksLocal:dbo:DhlExpressAccount">
@@ -14116,6 +14090,22 @@
             <FieldMapping FieldName="ServiceFullName" TargetFieldName="ServiceFullName" />
             <FieldMapping FieldName="ServiceStatusID" TargetFieldName="ServiceStatusID" SequenceToUse="SCOPE_IDENTITY()" />
             <FieldMapping FieldName="ServiceType" TargetFieldName="ServiceType" />
+          </FieldMappings>
+        </EntityMapping>
+        <EntityMapping EntityName=":ShipEngineManifest" TargetName="ShipWorksLocal:dbo:ShipEngineManifest">
+          <FieldMappings>
+            <FieldMapping FieldName="CarrierAccountID" TargetFieldName="CarrierAccountID" />
+            <FieldMapping FieldName="CarrierID" TargetFieldName="CarrierID" />
+            <FieldMapping FieldName="CreatedAt" TargetFieldName="CreatedAt" />
+            <FieldMapping FieldName="FormID" TargetFieldName="FormID" />
+            <FieldMapping FieldName="ManifestID" TargetFieldName="ManifestID" />
+            <FieldMapping FieldName="ManifestUrl" TargetFieldName="ManifestUrl" />
+            <FieldMapping FieldName="PlatformWarehouseID" TargetFieldName="PlatformWarehouseID" />
+            <FieldMapping FieldName="ShipDate" TargetFieldName="ShipDate" />
+            <FieldMapping FieldName="ShipEngineManifestID" TargetFieldName="ShipEngineManifestID" SequenceToUse="SCOPE_IDENTITY()" />
+            <FieldMapping FieldName="ShipmentCount" TargetFieldName="ShipmentCount" />
+            <FieldMapping FieldName="ShipmentTypeCode" TargetFieldName="ShipmentTypeCode" />
+            <FieldMapping FieldName="SubmissionID" TargetFieldName="SubmissionID" />
           </FieldMappings>
         </EntityMapping>
         <EntityMapping EntityName=":Shipment" TargetName="ShipWorksLocal:dbo:Shipment">

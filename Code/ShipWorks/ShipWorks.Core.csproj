@@ -1250,7 +1250,6 @@
     <Compile Include="Shipping\Carriers\DhlEcommerce\DhlEcommerceServiceType.cs" />
     <Compile Include="Shipping\Carriers\DhlEcommerce\DhlEcommercePackageAdapter.cs" />
     <Compile Include="Shipping\Carriers\DhlEcommerce\IDhlEcommerceAccountRepository.cs" />
-    <Compile Include="Shipping\Carriers\DhlEcommerce\IDhlEcommerceManifestCreator.cs" />
     <Compile Include="Shipping\Carriers\FedEx\Enums\FedexTINType.cs" />
     <Compile Include="Shipping\Carriers\UPS\Enums\UpsCustomsRecipientTINType.cs" />
     <Compile Include="Shipping\ShipEngine\DTOs\Address.cs" />
@@ -1265,6 +1264,7 @@
     <Compile Include="Shipping\ShipEngine\DTOs\CarrierAdvancedOption.cs" />
     <Compile Include="Shipping\ShipEngine\DTOs\CarrierListResponse.cs" />
     <Compile Include="Shipping\ShipEngine\DTOs\ConnectAccountResponseDTO.cs" />
+    <Compile Include="Shipping\ShipEngine\DTOs\CreateManifestResponse.cs" />
     <Compile Include="Shipping\ShipEngine\DTOs\CustomsItem.cs" />
     <Compile Include="Shipping\ShipEngine\DTOs\DHLExpressAccountInformationDTO.cs" />
     <Compile Include="Shipping\ShipEngine\DTOs\Dimensions.cs" />
@@ -1295,6 +1295,9 @@
     <Compile Include="Shipping\ShipEngine\DTOs\TrackingInformation.cs" />
     <Compile Include="Shipping\ShipEngine\DTOs\VoidLabelResponse.cs" />
     <Compile Include="Shipping\ShipEngine\DTOs\Weight.cs" />
+    <Compile Include="Shipping\ShipEngine\Manifest\IShipEngineManifestUtility.cs" />
+    <Compile Include="Shipping\ShipEngine\Manifest\IShipEngineManifestRepo.cs" />
+    <Compile Include="Shipping\ShipEngine\Manifest\IShipEngineManifestCreator.cs" />
     <Compile Include="Stores\ILegacyStoreTrialKeyConverter.cs" />
     <Compile Include="Stores\Platforms\Platform\OnlineUpdating\IPlatformOnlineUpdater.cs" />
     <Compile Include="Stores\Platforms\Platform\OnlineUpdating\PlatformOnlineUpdater.cs" />

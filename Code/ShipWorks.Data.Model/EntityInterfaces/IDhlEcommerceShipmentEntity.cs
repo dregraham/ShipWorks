@@ -87,12 +87,6 @@ namespace ShipWorks.Data.Model.EntityInterfaces
         /// Table field type characteristics (type, precision, scale, length): UniqueIdentifier, 0, 0, 0<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
         Nullable<System.Guid> IntegratorTransactionID { get; }
-        /// <summary> The StampsTransactionID property of the Entity DhlEcommerceShipment<br/><br/>
-        /// </summary>
-        /// <remarks>Mapped on table field: "DhlEcommerceShipment"."StampsTransactionID"<br/>
-        /// Table field type characteristics (type, precision, scale, length): UniqueIdentifier, 0, 0, 0<br/>
-        /// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
-        Nullable<System.Guid> StampsTransactionID { get; }
         /// <summary> The ResidentialDelivery property of the Entity DhlEcommerceShipment<br/><br/>
         /// </summary>
         /// <remarks>Mapped on table field: "DhlEcommerceShipment"."ResidentialDelivery"<br/>
@@ -117,12 +111,6 @@ namespace ShipWorks.Data.Model.EntityInterfaces
         /// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 2<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
         System.String CustomsTinIssuingAuthority { get; }
-        /// <summary> The ScanFormBatchID property of the Entity DhlEcommerceShipment<br/><br/>
-        /// </summary>
-        /// <remarks>Mapped on table field: "DhlEcommerceShipment"."ScanFormBatchID"<br/>
-        /// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
-        /// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
-        Nullable<System.Int64> ScanFormBatchID { get; }
         /// <summary> The PackagingType property of the Entity DhlEcommerceShipment<br/><br/>
         /// </summary>
         /// <remarks>Mapped on table field: "DhlEcommerceShipment"."PackagingType"<br/>
@@ -186,7 +174,6 @@ namespace ShipWorks.Data.Model.EntityInterfaces
         
         IShipmentEntity Shipment { get; }
         
-        IScanFormBatchEntity ScanFormBatch { get; }
         
 
         
@@ -216,7 +203,6 @@ namespace ShipWorks.Data.Model.EntityClasses
     {
         IShipmentEntity IDhlEcommerceShipmentEntity.Shipment => Shipment;
         
-        IScanFormBatchEntity IDhlEcommerceShipmentEntity.ScanFormBatch => ScanFormBatch;
         
 
         /// <summary>

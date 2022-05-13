@@ -75,6 +75,27 @@ namespace ShipWorks.Shipping.UI.Carriers.DhlEcommerce
         }
 
         /// <summary>
+        /// A rate has been selected
+        /// </summary>
+        public override void OnRateSelected(object sender, RateSelectedEventArgs e)
+        {
+            int oldIndex = service.SelectedIndex;
+
+            bool isDhlEcommerceServiceType = false;
+            DhlEcommerceServiceType? serviceType = DhlEcommerceServiceType.CA_DhlParcelInternationalDirectPriority;
+            isDhlEcommerceServiceType = EnumHelper.TryGetEnumByApiValue<DhlEcommerceServiceType>(e.Rate.OriginalTag.ToString(), out serviceType);
+
+            if (isDhlEcommerceServiceType)
+            {
+                service.SelectedValue = serviceType;
+                if (service.SelectedIndex == -1 && oldIndex != -1)
+                {
+                    service.SelectedIndex = oldIndex;
+                }
+            }
+        }
+
+        /// <summary>
         /// Load the list of DHL eCommerce accounts
         /// </summary>
         public override void LoadAccounts()

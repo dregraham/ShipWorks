@@ -197,9 +197,6 @@ namespace ShipWorks.Data.Model.Linq
 				case ShipWorks.Data.Model.EntityType.DhlEcommerceProfileEntity:
 					toReturn = this.DhlEcommerceProfile;
 					break;
-				case ShipWorks.Data.Model.EntityType.DhlEcommerceScanFormEntity:
-					toReturn = this.DhlEcommerceScanForm;
-					break;
 				case ShipWorks.Data.Model.EntityType.DhlEcommerceShipmentEntity:
 					toReturn = this.DhlEcommerceShipment;
 					break;
@@ -604,6 +601,9 @@ namespace ShipWorks.Data.Model.Linq
 					break;
 				case ShipWorks.Data.Model.EntityType.ServiceStatusEntity:
 					toReturn = this.ServiceStatus;
+					break;
+				case ShipWorks.Data.Model.EntityType.ShipEngineManifestEntity:
+					toReturn = this.ShipEngineManifest;
 					break;
 				case ShipWorks.Data.Model.EntityType.ShipmentEntity:
 					toReturn = this.Shipment;
@@ -1087,12 +1087,6 @@ namespace ShipWorks.Data.Model.Linq
 		public DataSource2<DhlEcommerceProfileEntity> DhlEcommerceProfile
 		{
 			get { return new DataSource2<DhlEcommerceProfileEntity>(_adapterToUse, new ElementCreator(), _customFunctionMappings, _contextToUse); }
-		}
-		
-		/// <summary>returns the datasource to use in a Linq query when targeting DhlEcommerceScanFormEntity instances in the database.</summary>
-		public DataSource2<DhlEcommerceScanFormEntity> DhlEcommerceScanForm
-		{
-			get { return new DataSource2<DhlEcommerceScanFormEntity>(_adapterToUse, new ElementCreator(), _customFunctionMappings, _contextToUse); }
 		}
 		
 		/// <summary>returns the datasource to use in a Linq query when targeting DhlEcommerceShipmentEntity instances in the database.</summary>
@@ -1903,6 +1897,12 @@ namespace ShipWorks.Data.Model.Linq
 		public DataSource2<ServiceStatusEntity> ServiceStatus
 		{
 			get { return new DataSource2<ServiceStatusEntity>(_adapterToUse, new ElementCreator(), _customFunctionMappings, _contextToUse); }
+		}
+		
+		/// <summary>returns the datasource to use in a Linq query when targeting ShipEngineManifestEntity instances in the database.</summary>
+		public DataSource2<ShipEngineManifestEntity> ShipEngineManifest
+		{
+			get { return new DataSource2<ShipEngineManifestEntity>(_adapterToUse, new ElementCreator(), _customFunctionMappings, _contextToUse); }
 		}
 		
 		/// <summary>returns the datasource to use in a Linq query when targeting ShipmentEntity instances in the database.</summary>

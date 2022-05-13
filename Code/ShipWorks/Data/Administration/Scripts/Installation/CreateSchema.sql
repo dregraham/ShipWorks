@@ -3068,29 +3068,6 @@ ALTER TABLE [dbo].[DhlEcommerceShipment]  WITH CHECK ADD  CONSTRAINT [FK_DhlEcom
 REFERENCES [dbo].[Shipment] ([ShipmentID])
 ON DELETE CASCADE
 GO
-
-PRINT N'Creating [dbo].[DhlEcommerceScanForm]'
-GO
-CREATE TABLE [dbo].[DhlEcommerceScanForm](
-	[DhlEcommerceScanFormID] [bigint] IDENTITY(1107,1000) NOT NULL,
-	[DhlEcommerceAccountID] [bigint] NOT NULL,
-	[ScanFormTransactionID] [varchar](100) NOT NULL DEFAULT(('')),
-	[ScanFormUrl] [varchar](2048) NOT NULL DEFAULT(('')),
-	[CreatedDate] [datetime] NOT NULL,
-	[ScanFormBatchID] [bigint] NOT NULL,
-	[Description] [nvarchar](100) NOT NULL DEFAULT(('')),
- CONSTRAINT [PK_DhlEcommerceScanForm] PRIMARY KEY CLUSTERED 
-(
-	[DhlEcommerceScanFormID] ASC
-)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
-) ON [PRIMARY]
-GO
-ALTER TABLE [dbo].[DhlEcommerceScanForm]  WITH CHECK ADD  CONSTRAINT [FK_DhlEcommerceScanForm_ScanFormBatch] FOREIGN KEY([ScanFormBatchID])
-REFERENCES [dbo].[ScanFormBatch] ([ScanFormBatchID])
-GO
-ALTER TABLE [dbo].[DhlEcommerceScanForm] CHECK CONSTRAINT [FK_DhlEcommerceScanForm_ScanFormBatch]
-GO
-
 PRINT N'Creating [dbo].[DhlEcommerceProfile]'
 GO
 CREATE TABLE [dbo].[DhlEcommerceProfile](
@@ -3111,6 +3088,28 @@ CREATE TABLE [dbo].[DhlEcommerceProfile](
  CONSTRAINT [PK_DhlEcommerceProfile] PRIMARY KEY CLUSTERED 
 (
 	[ShippingProfileID] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+
+PRINT N'Creating [dbo].[ShipEngineManifest]'
+GO
+CREATE TABLE [dbo].[ShipEngineManifest](
+	[ShipEngineManifestID] [bigint] IDENTITY(1107,1000) NOT NULL,
+	[CarrierAccountID] [bigint] NOT NULL,
+	[ShipmentTypeCode] [int] NOT NULL,
+	[ManifestID] [varchar](50) NOT NULL,
+	[FormID] [varchar](50) NOT NULL,
+	[CreatedAt] [datetime] NOT NULL,
+	[ShipDate] [datetime] NOT NULL,
+	[ShipmentCount] [int] NOT NULL,
+	[PlatformWarehouseID] [varchar](50) NOT NULL,
+	[SubmissionID] [varchar](255) NOT NULL,
+	[CarrierID] [varchar](50) NOT NULL,
+	[ManifestUrl] [varchar](2048) NOT NULL
+ CONSTRAINT [PK_ShipEngineManifest] PRIMARY KEY CLUSTERED 
+(
+	[ShipEngineManifestID] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
 GO

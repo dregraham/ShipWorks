@@ -32,7 +32,6 @@ namespace ShipWorks.Data.Model.EntityClasses
 		// __LLBLGENPRO_USER_CODE_REGION_END	
 	{
 		#region Class Member Declarations
-		private ScanFormBatchEntity _scanFormBatch;
 		private ShipmentEntity _shipment;
 
 		// __LLBLGENPRO_USER_CODE_REGION_START PrivateMembers
@@ -46,8 +45,6 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <summary>All names of fields mapped onto a relation. Usable for in-memory filtering</summary>
 		public static partial class MemberNames
 		{
-			/// <summary>Member name ScanFormBatch</summary>
-			public static readonly string ScanFormBatch = "ScanFormBatch";
 			/// <summary>Member name Shipment</summary>
 			public static readonly string Shipment = "Shipment";
 		}
@@ -107,11 +104,6 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			if(SerializationHelper.Optimization != SerializationOptimization.Fast) 
 			{
-				_scanFormBatch = (ScanFormBatchEntity)info.GetValue("_scanFormBatch", typeof(ScanFormBatchEntity));
-				if(_scanFormBatch!=null)
-				{
-					_scanFormBatch.AfterSave+=new EventHandler(OnEntityAfterSave);
-				}
 				_shipment = (ShipmentEntity)info.GetValue("_shipment", typeof(ShipmentEntity));
 				if(_shipment!=null)
 				{
@@ -133,9 +125,6 @@ namespace ShipWorks.Data.Model.EntityClasses
 				case DhlEcommerceShipmentFieldIndex.ShipmentID:
 					DesetupSyncShipment(true, false);
 					break;
-				case DhlEcommerceShipmentFieldIndex.ScanFormBatchID:
-					DesetupSyncScanFormBatch(true, false);
-					break;
 				default:
 					base.PerformDesyncSetupFKFieldChange(fieldIndex);
 					break;
@@ -150,9 +139,6 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			switch(propertyName)
 			{
-				case "ScanFormBatch":
-					this.ScanFormBatch = (ScanFormBatchEntity)entity;
-					break;
 				case "Shipment":
 					this.Shipment = (ShipmentEntity)entity;
 					break;
@@ -178,9 +164,6 @@ namespace ShipWorks.Data.Model.EntityClasses
 			RelationCollection toReturn = new RelationCollection();
 			switch(fieldName)
 			{
-				case "ScanFormBatch":
-					toReturn.Add(Relations.ScanFormBatchEntityUsingScanFormBatchID);
-					break;
 				case "Shipment":
 					toReturn.Add(Relations.ShipmentEntityUsingShipmentID);
 					break;
@@ -212,9 +195,6 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			switch(fieldName)
 			{
-				case "ScanFormBatch":
-					SetupSyncScanFormBatch(relatedEntity);
-					break;
 				case "Shipment":
 					SetupSyncShipment(relatedEntity);
 					break;
@@ -231,9 +211,6 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			switch(fieldName)
 			{
-				case "ScanFormBatch":
-					DesetupSyncScanFormBatch(false, true);
-					break;
 				case "Shipment":
 					DesetupSyncShipment(false, true);
 					break;
@@ -258,10 +235,6 @@ namespace ShipWorks.Data.Model.EntityClasses
 		protected override List<IEntity2> GetDependentRelatedEntities()
 		{
 			List<IEntity2> toReturn = new List<IEntity2>();
-			if(_scanFormBatch!=null)
-			{
-				toReturn.Add(_scanFormBatch);
-			}
 			if(_shipment!=null)
 			{
 				toReturn.Add(_shipment);
@@ -286,7 +259,6 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			if (SerializationHelper.Optimization != SerializationOptimization.Fast) 
 			{
-				info.AddValue("_scanFormBatch", (!this.MarkedForDeletion?_scanFormBatch:null));
 				info.AddValue("_shipment", (!this.MarkedForDeletion?_shipment:null));
 			}
 			// __LLBLGENPRO_USER_CODE_REGION_START GetObjectInfo
@@ -301,15 +273,6 @@ namespace ShipWorks.Data.Model.EntityClasses
 		protected override List<IEntityRelation> GetAllRelations()
 		{
 			return new DhlEcommerceShipmentRelations().GetAllRelations();
-		}
-
-		/// <summary> Creates a new IRelationPredicateBucket object which contains the predicate expression and relation collection to fetch the related entity of type 'ScanFormBatch' to this entity.</summary>
-		/// <returns></returns>
-		public virtual IRelationPredicateBucket GetRelationInfoScanFormBatch()
-		{
-			IRelationPredicateBucket bucket = new RelationPredicateBucket();
-			bucket.PredicateExpression.Add(new FieldCompareValuePredicate(ScanFormBatchFields.ScanFormBatchID, null, ComparisonOperator.Equal, this.ScanFormBatchID));
-			return bucket;
 		}
 
 		/// <summary> Creates a new IRelationPredicateBucket object which contains the predicate expression and relation collection to fetch the related entity of type 'Shipment' to this entity.</summary>
@@ -364,7 +327,6 @@ namespace ShipWorks.Data.Model.EntityClasses
 		protected override Dictionary<string, object> GetRelatedData()
 		{
 			Dictionary<string, object> toReturn = new Dictionary<string, object>();
-			toReturn.Add("ScanFormBatch", _scanFormBatch);
 			toReturn.Add("Shipment", _shipment);
 			return toReturn;
 		}
@@ -410,8 +372,6 @@ namespace ShipWorks.Data.Model.EntityClasses
 			fieldHashtable = new Dictionary<string, string>();
 			_fieldsCustomProperties.Add("IntegratorTransactionID", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
-			_fieldsCustomProperties.Add("StampsTransactionID", fieldHashtable);
-			fieldHashtable = new Dictionary<string, string>();
 			_fieldsCustomProperties.Add("ResidentialDelivery", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
 			_fieldsCustomProperties.Add("CustomsRecipientTin", fieldHashtable);
@@ -419,8 +379,6 @@ namespace ShipWorks.Data.Model.EntityClasses
 			_fieldsCustomProperties.Add("CustomsTaxIdType", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
 			_fieldsCustomProperties.Add("CustomsTinIssuingAuthority", fieldHashtable);
-			fieldHashtable = new Dictionary<string, string>();
-			_fieldsCustomProperties.Add("ScanFormBatchID", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
 			_fieldsCustomProperties.Add("PackagingType", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
@@ -443,39 +401,6 @@ namespace ShipWorks.Data.Model.EntityClasses
 			_fieldsCustomProperties.Add("InsurancePennyOne", fieldHashtable);
 		}
 		#endregion
-
-		/// <summary> Removes the sync logic for member _scanFormBatch</summary>
-		/// <param name="signalRelatedEntity">If set to true, it will call the related entity's UnsetRelatedEntity method</param>
-		/// <param name="resetFKFields">if set to true it will also reset the FK fields pointing to the related entity</param>
-		private void DesetupSyncScanFormBatch(bool signalRelatedEntity, bool resetFKFields)
-		{
-			this.PerformDesetupSyncRelatedEntity( _scanFormBatch, new PropertyChangedEventHandler( OnScanFormBatchPropertyChanged ), "ScanFormBatch", ShipWorks.Data.Model.RelationClasses.StaticDhlEcommerceShipmentRelations.ScanFormBatchEntityUsingScanFormBatchIDStatic, true, signalRelatedEntity, "DhlEcommerceShipment", resetFKFields, new int[] { (int)DhlEcommerceShipmentFieldIndex.ScanFormBatchID } );
-			_scanFormBatch = null;
-		}
-
-		/// <summary> setups the sync logic for member _scanFormBatch</summary>
-		/// <param name="relatedEntity">Instance to set as the related entity of type entityType</param>
-		private void SetupSyncScanFormBatch(IEntityCore relatedEntity)
-		{
-			if(_scanFormBatch!=relatedEntity)
-			{
-				DesetupSyncScanFormBatch(true, true);
-				_scanFormBatch = (ScanFormBatchEntity)relatedEntity;
-				this.PerformSetupSyncRelatedEntity( _scanFormBatch, new PropertyChangedEventHandler( OnScanFormBatchPropertyChanged ), "ScanFormBatch", ShipWorks.Data.Model.RelationClasses.StaticDhlEcommerceShipmentRelations.ScanFormBatchEntityUsingScanFormBatchIDStatic, true, new string[] {  } );
-			}
-		}
-		
-		/// <summary>Handles property change events of properties in a related entity.</summary>
-		/// <param name="sender"></param>
-		/// <param name="e"></param>
-		private void OnScanFormBatchPropertyChanged( object sender, PropertyChangedEventArgs e )
-		{
-			switch( e.PropertyName )
-			{
-				default:
-					break;
-			}
-		}
 
 		/// <summary> Removes the sync logic for member _shipment</summary>
 		/// <param name="signalRelatedEntity">If set to true, it will call the related entity's UnsetRelatedEntity method</param>
@@ -539,13 +464,6 @@ namespace ShipWorks.Data.Model.EntityClasses
 		public  static Dictionary<string, string> CustomProperties
 		{
 			get { return _customProperties;}
-		}
-
-		/// <summary> Creates a new PrefetchPathElement2 object which contains all the information to prefetch the related entities of type 'ScanFormBatch' for this entity.</summary>
-		/// <returns>Ready to use IPrefetchPathElement2 implementation.</returns>
-		public static IPrefetchPathElement2 PrefetchPathScanFormBatch
-		{
-			get	{ return new PrefetchPathElement2(new EntityCollection(EntityFactoryCache2.GetEntityFactory(typeof(ScanFormBatchEntityFactory))),	(IEntityRelation)GetRelationsForField("ScanFormBatch")[0], (int)ShipWorks.Data.Model.EntityType.DhlEcommerceShipmentEntity, (int)ShipWorks.Data.Model.EntityType.ScanFormBatchEntity, 0, null, null, null, null, "ScanFormBatch", SD.LLBLGen.Pro.ORMSupportClasses.RelationType.ManyToOne); }
 		}
 
 		/// <summary> Creates a new PrefetchPathElement2 object which contains all the information to prefetch the related entities of type 'Shipment' for this entity.</summary>
@@ -700,17 +618,6 @@ namespace ShipWorks.Data.Model.EntityClasses
 			set	{ SetValue((int)DhlEcommerceShipmentFieldIndex.IntegratorTransactionID, value); }
 		}
 
-		/// <summary> The StampsTransactionID property of the Entity DhlEcommerceShipment<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "DhlEcommerceShipment"."StampsTransactionID"<br/>
-		/// Table field type characteristics (type, precision, scale, length): UniqueIdentifier, 0, 0, 0<br/>
-		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
-		[DataMember]
-		public virtual Nullable<System.Guid> StampsTransactionID
-		{
-			get { return (Nullable<System.Guid>)GetValue((int)DhlEcommerceShipmentFieldIndex.StampsTransactionID, false); }
-			set	{ SetValue((int)DhlEcommerceShipmentFieldIndex.StampsTransactionID, value); }
-		}
-
 		/// <summary> The ResidentialDelivery property of the Entity DhlEcommerceShipment<br/><br/></summary>
 		/// <remarks>Mapped on  table field: "DhlEcommerceShipment"."ResidentialDelivery"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
@@ -753,17 +660,6 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			get { return (System.String)GetValue((int)DhlEcommerceShipmentFieldIndex.CustomsTinIssuingAuthority, true); }
 			set	{ SetValue((int)DhlEcommerceShipmentFieldIndex.CustomsTinIssuingAuthority, value); }
-		}
-
-		/// <summary> The ScanFormBatchID property of the Entity DhlEcommerceShipment<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "DhlEcommerceShipment"."ScanFormBatchID"<br/>
-		/// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
-		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
-		[DataMember]
-		public virtual Nullable<System.Int64> ScanFormBatchID
-		{
-			get { return (Nullable<System.Int64>)GetValue((int)DhlEcommerceShipmentFieldIndex.ScanFormBatchID, false); }
-			set	{ SetValue((int)DhlEcommerceShipmentFieldIndex.ScanFormBatchID, value); }
 		}
 
 		/// <summary> The PackagingType property of the Entity DhlEcommerceShipment<br/><br/></summary>
@@ -874,25 +770,6 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			get { return (System.Boolean)GetValue((int)DhlEcommerceShipmentFieldIndex.InsurancePennyOne, true); }
 			set	{ SetValue((int)DhlEcommerceShipmentFieldIndex.InsurancePennyOne, value); }
-		}
-
-		/// <summary> Gets / sets related entity of type 'ScanFormBatchEntity' which has to be set using a fetch action earlier. If no related entity is set for this property, null is returned..<br/><br/></summary>
-		[Browsable(true)]
-		[DataMember]
-		public virtual ScanFormBatchEntity ScanFormBatch
-		{
-			get	{ return _scanFormBatch; }
-			set
-			{
-				if(this.IsDeserializing)
-				{
-					SetupSyncScanFormBatch(value);
-				}
-				else
-				{
-					SetSingleRelatedEntityNavigator(value, "DhlEcommerceShipment", "ScanFormBatch", _scanFormBatch, true); 
-				}
-			}
 		}
 
 		/// <summary> Gets / sets related entity of type 'ShipmentEntity' which has to be set using a fetch action earlier. If no related entity is set for this property, null is returned.<br/><br/>

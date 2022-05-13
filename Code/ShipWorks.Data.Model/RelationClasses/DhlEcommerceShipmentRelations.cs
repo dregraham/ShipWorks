@@ -31,7 +31,6 @@ namespace ShipWorks.Data.Model.RelationClasses
 		{
 			List<IEntityRelation> toReturn = new List<IEntityRelation>();
 			toReturn.Add(this.ShipmentEntityUsingShipmentID);
-			toReturn.Add(this.ScanFormBatchEntityUsingScanFormBatchID);
 			return toReturn;
 		}
 
@@ -57,20 +56,6 @@ namespace ShipWorks.Data.Model.RelationClasses
 			}
 		}
 
-		/// <summary>Returns a new IEntityRelation object, between DhlEcommerceShipmentEntity and ScanFormBatchEntity over the m:1 relation they have, using the relation between the fields:
-		/// DhlEcommerceShipment.ScanFormBatchID - ScanFormBatch.ScanFormBatchID
-		/// </summary>
-		public virtual IEntityRelation ScanFormBatchEntityUsingScanFormBatchID
-		{
-			get
-			{
-				IEntityRelation relation = new EntityRelation(SD.LLBLGen.Pro.ORMSupportClasses.RelationType.ManyToOne, "ScanFormBatch", false);
-				relation.AddEntityFieldPair(ScanFormBatchFields.ScanFormBatchID, DhlEcommerceShipmentFields.ScanFormBatchID);
-				relation.InheritanceInfoPkSideEntity = InheritanceInfoProviderSingleton.GetInstance().GetInheritanceInfo("ScanFormBatchEntity", false);
-				relation.InheritanceInfoFkSideEntity = InheritanceInfoProviderSingleton.GetInstance().GetInheritanceInfo("DhlEcommerceShipmentEntity", true);
-				return relation;
-			}
-		}
 		/// <summary>stub, not used in this entity, only for TargetPerEntity entities.</summary>
 		public virtual IEntityRelation GetSubTypeRelation(string subTypeEntityName) { return null; }
 		/// <summary>stub, not used in this entity, only for TargetPerEntity entities.</summary>
@@ -86,7 +71,6 @@ namespace ShipWorks.Data.Model.RelationClasses
 	internal static class StaticDhlEcommerceShipmentRelations
 	{
 		internal static readonly IEntityRelation ShipmentEntityUsingShipmentIDStatic = new DhlEcommerceShipmentRelations().ShipmentEntityUsingShipmentID;
-		internal static readonly IEntityRelation ScanFormBatchEntityUsingScanFormBatchIDStatic = new DhlEcommerceShipmentRelations().ScanFormBatchEntityUsingScanFormBatchID;
 
 		/// <summary>CTor</summary>
 		static StaticDhlEcommerceShipmentRelations()

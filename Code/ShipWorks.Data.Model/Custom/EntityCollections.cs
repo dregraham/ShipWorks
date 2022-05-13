@@ -2571,63 +2571,6 @@ namespace ShipWorks.Data.Model.Custom
 
 	
 	/// <summary>
-	/// Strongly typed collection of DhlEcommerceScanFormEntity
-	/// </summary>
-	public class DhlEcommerceScanFormCollection : EntityCollection<DhlEcommerceScanFormEntity>
-	{
-        /// <summary>
-        /// Gets the count of all DhlEcommerceScanFormEntity rows
-        /// </summary>
-        public static int GetCount(IDataAccessAdapter adapter)
-        {
-            return GetCount(adapter, null);
-        }
-
-        /// <summary>
-        /// Gets the count of all DhlEcommerceScanFormEntity rows filtered by the given predicate
-        /// </summary>
-        public static int GetCount(IDataAccessAdapter adapter, IPredicate filter)
-        {
-            RelationPredicateBucket bucket = null;
-
-            if (filter != null)
-            {
-                bucket = new RelationPredicateBucket(filter);
-            }
-
-            return adapter.GetDbCount(new DhlEcommerceScanFormEntityFactory().CreateFields(), bucket);
-        }
-
-        /// <summary>
-        /// Fetch a new collection object that matches the specified filter.
-        /// </summary>
-        public static DhlEcommerceScanFormCollection Fetch(IDataAccessAdapter adapter, IPredicate filter)
-        {
-			return Fetch(adapter, filter, null);
-        }
-
-		/// <summary>
-        /// Fetch a new collection object that matches the specified filter and uses the given prefetch.
-        /// </summary>
-        public static DhlEcommerceScanFormCollection Fetch(IDataAccessAdapter adapter, IPredicate filter, IPrefetchPath2 prefetchPath)
-        {
-            DhlEcommerceScanFormCollection collection = new DhlEcommerceScanFormCollection();
-
-            RelationPredicateBucket bucket = null;
-
-            if (filter != null)
-            {
-                bucket = new RelationPredicateBucket(filter);
-            }
-
-            adapter.FetchEntityCollection(collection, bucket, prefetchPath);
-
-            return collection;
-        }
-	}
-
-	
-	/// <summary>
 	/// Strongly typed collection of DhlEcommerceShipmentEntity
 	/// </summary>
 	public class DhlEcommerceShipmentCollection : EntityCollection<DhlEcommerceShipmentEntity>
@@ -10307,6 +10250,63 @@ namespace ShipWorks.Data.Model.Custom
         public static ServiceStatusCollection Fetch(IDataAccessAdapter adapter, IPredicate filter, IPrefetchPath2 prefetchPath)
         {
             ServiceStatusCollection collection = new ServiceStatusCollection();
+
+            RelationPredicateBucket bucket = null;
+
+            if (filter != null)
+            {
+                bucket = new RelationPredicateBucket(filter);
+            }
+
+            adapter.FetchEntityCollection(collection, bucket, prefetchPath);
+
+            return collection;
+        }
+	}
+
+	
+	/// <summary>
+	/// Strongly typed collection of ShipEngineManifestEntity
+	/// </summary>
+	public class ShipEngineManifestCollection : EntityCollection<ShipEngineManifestEntity>
+	{
+        /// <summary>
+        /// Gets the count of all ShipEngineManifestEntity rows
+        /// </summary>
+        public static int GetCount(IDataAccessAdapter adapter)
+        {
+            return GetCount(adapter, null);
+        }
+
+        /// <summary>
+        /// Gets the count of all ShipEngineManifestEntity rows filtered by the given predicate
+        /// </summary>
+        public static int GetCount(IDataAccessAdapter adapter, IPredicate filter)
+        {
+            RelationPredicateBucket bucket = null;
+
+            if (filter != null)
+            {
+                bucket = new RelationPredicateBucket(filter);
+            }
+
+            return adapter.GetDbCount(new ShipEngineManifestEntityFactory().CreateFields(), bucket);
+        }
+
+        /// <summary>
+        /// Fetch a new collection object that matches the specified filter.
+        /// </summary>
+        public static ShipEngineManifestCollection Fetch(IDataAccessAdapter adapter, IPredicate filter)
+        {
+			return Fetch(adapter, filter, null);
+        }
+
+		/// <summary>
+        /// Fetch a new collection object that matches the specified filter and uses the given prefetch.
+        /// </summary>
+        public static ShipEngineManifestCollection Fetch(IDataAccessAdapter adapter, IPredicate filter, IPrefetchPath2 prefetchPath)
+        {
+            ShipEngineManifestCollection collection = new ShipEngineManifestCollection();
 
             RelationPredicateBucket bucket = null;
 

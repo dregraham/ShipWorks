@@ -25,14 +25,13 @@ namespace ShipWorks.Data.Model.EntityClasses
 {
 	// __LLBLGENPRO_USER_CODE_REGION_START AdditionalNamespaces
 	// __LLBLGENPRO_USER_CODE_REGION_END
-	/// <summary>Entity class which represents the entity 'DhlEcommerceScanForm'.<br/><br/></summary>
+	/// <summary>Entity class which represents the entity 'ShipEngineManifest'.<br/><br/></summary>
 	[Serializable]
-	public partial class DhlEcommerceScanFormEntity : CommonEntityBase
+	public partial class ShipEngineManifestEntity : CommonEntityBase
 		// __LLBLGENPRO_USER_CODE_REGION_START AdditionalInterfaces
 		// __LLBLGENPRO_USER_CODE_REGION_END	
 	{
 		#region Class Member Declarations
-		private ScanFormBatchEntity _scanFormBatch;
 
 		// __LLBLGENPRO_USER_CODE_REGION_START PrivateMembers
 		// __LLBLGENPRO_USER_CODE_REGION_END
@@ -45,19 +44,17 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <summary>All names of fields mapped onto a relation. Usable for in-memory filtering</summary>
 		public static partial class MemberNames
 		{
-			/// <summary>Member name ScanFormBatch</summary>
-			public static readonly string ScanFormBatch = "ScanFormBatch";
 		}
 		#endregion
 		
 		/// <summary> Static CTor for setting up custom property hashtables. Is executed before the first instance of this entity class or derived classes is constructed. </summary>
-		static DhlEcommerceScanFormEntity()
+		static ShipEngineManifestEntity()
 		{
 			SetupCustomPropertyHashtables();
 		}
 		
 		/// <summary> CTor</summary>
-		public DhlEcommerceScanFormEntity():base("DhlEcommerceScanFormEntity")
+		public ShipEngineManifestEntity():base("ShipEngineManifestEntity")
 		{
 			InitClassEmpty(null, null);
 		}
@@ -65,71 +62,51 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <summary> CTor</summary>
 		/// <remarks>For framework usage.</remarks>
 		/// <param name="fields">Fields object to set as the fields for this entity.</param>
-		public DhlEcommerceScanFormEntity(IEntityFields2 fields):base("DhlEcommerceScanFormEntity")
+		public ShipEngineManifestEntity(IEntityFields2 fields):base("ShipEngineManifestEntity")
 		{
 			InitClassEmpty(null, fields);
 		}
 
 		/// <summary> CTor</summary>
-		/// <param name="validator">The custom validator object for this DhlEcommerceScanFormEntity</param>
-		public DhlEcommerceScanFormEntity(IValidator validator):base("DhlEcommerceScanFormEntity")
+		/// <param name="validator">The custom validator object for this ShipEngineManifestEntity</param>
+		public ShipEngineManifestEntity(IValidator validator):base("ShipEngineManifestEntity")
 		{
 			InitClassEmpty(validator, null);
 		}
 				
 		/// <summary> CTor</summary>
-		/// <param name="dhlEcommerceScanFormID">PK value for DhlEcommerceScanForm which data should be fetched into this DhlEcommerceScanForm object</param>
+		/// <param name="shipEngineManifestID">PK value for ShipEngineManifest which data should be fetched into this ShipEngineManifest object</param>
 		/// <remarks>The entity is not fetched by this constructor. Use a DataAccessAdapter for that.</remarks>
-		public DhlEcommerceScanFormEntity(System.Int64 dhlEcommerceScanFormID):base("DhlEcommerceScanFormEntity")
+		public ShipEngineManifestEntity(System.Int64 shipEngineManifestID):base("ShipEngineManifestEntity")
 		{
 			InitClassEmpty(null, null);
-			this.DhlEcommerceScanFormID = dhlEcommerceScanFormID;
+			this.ShipEngineManifestID = shipEngineManifestID;
 		}
 
 		/// <summary> CTor</summary>
-		/// <param name="dhlEcommerceScanFormID">PK value for DhlEcommerceScanForm which data should be fetched into this DhlEcommerceScanForm object</param>
-		/// <param name="validator">The custom validator object for this DhlEcommerceScanFormEntity</param>
+		/// <param name="shipEngineManifestID">PK value for ShipEngineManifest which data should be fetched into this ShipEngineManifest object</param>
+		/// <param name="validator">The custom validator object for this ShipEngineManifestEntity</param>
 		/// <remarks>The entity is not fetched by this constructor. Use a DataAccessAdapter for that.</remarks>
-		public DhlEcommerceScanFormEntity(System.Int64 dhlEcommerceScanFormID, IValidator validator):base("DhlEcommerceScanFormEntity")
+		public ShipEngineManifestEntity(System.Int64 shipEngineManifestID, IValidator validator):base("ShipEngineManifestEntity")
 		{
 			InitClassEmpty(validator, null);
-			this.DhlEcommerceScanFormID = dhlEcommerceScanFormID;
+			this.ShipEngineManifestID = shipEngineManifestID;
 		}
 
 		/// <summary> Protected CTor for deserialization</summary>
 		/// <param name="info"></param>
 		/// <param name="context"></param>
 		[EditorBrowsable(EditorBrowsableState.Never)]
-		protected DhlEcommerceScanFormEntity(SerializationInfo info, StreamingContext context) : base(info, context)
+		protected ShipEngineManifestEntity(SerializationInfo info, StreamingContext context) : base(info, context)
 		{
 			if(SerializationHelper.Optimization != SerializationOptimization.Fast) 
 			{
-				_scanFormBatch = (ScanFormBatchEntity)info.GetValue("_scanFormBatch", typeof(ScanFormBatchEntity));
-				if(_scanFormBatch!=null)
-				{
-					_scanFormBatch.AfterSave+=new EventHandler(OnEntityAfterSave);
-				}
 				this.FixupDeserialization(FieldInfoProviderSingleton.GetInstance());
 			}
 			// __LLBLGENPRO_USER_CODE_REGION_START DeserializationConstructor
 			// __LLBLGENPRO_USER_CODE_REGION_END
 		}
 
-		
-		/// <summary>Performs the desync setup when an FK field has been changed. The entity referenced based on the FK field will be dereferenced and sync info will be removed.</summary>
-		/// <param name="fieldIndex">The fieldindex.</param>
-		protected override void PerformDesyncSetupFKFieldChange(int fieldIndex)
-		{
-			switch((DhlEcommerceScanFormFieldIndex)fieldIndex)
-			{
-				case DhlEcommerceScanFormFieldIndex.ScanFormBatchID:
-					DesetupSyncScanFormBatch(true, false);
-					break;
-				default:
-					base.PerformDesyncSetupFKFieldChange(fieldIndex);
-					break;
-			}
-		}
 
 		/// <summary> Sets the related entity property to the entity specified. If the property is a collection, it will add the entity specified to that collection.</summary>
 		/// <param name="propertyName">Name of the property.</param>
@@ -139,9 +116,6 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			switch(propertyName)
 			{
-				case "ScanFormBatch":
-					this.ScanFormBatch = (ScanFormBatchEntity)entity;
-					break;
 				default:
 					this.OnSetRelatedEntityProperty(propertyName, entity);
 					break;
@@ -164,9 +138,6 @@ namespace ShipWorks.Data.Model.EntityClasses
 			RelationCollection toReturn = new RelationCollection();
 			switch(fieldName)
 			{
-				case "ScanFormBatch":
-					toReturn.Add(Relations.ScanFormBatchEntityUsingScanFormBatchID);
-					break;
 				default:
 					break;				
 			}
@@ -195,9 +166,6 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			switch(fieldName)
 			{
-				case "ScanFormBatch":
-					SetupSyncScanFormBatch(relatedEntity);
-					break;
 				default:
 					break;
 			}
@@ -211,9 +179,6 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			switch(fieldName)
 			{
-				case "ScanFormBatch":
-					DesetupSyncScanFormBatch(false, true);
-					break;
 				default:
 					break;
 			}
@@ -233,10 +198,6 @@ namespace ShipWorks.Data.Model.EntityClasses
 		protected override List<IEntity2> GetDependentRelatedEntities()
 		{
 			List<IEntity2> toReturn = new List<IEntity2>();
-			if(_scanFormBatch!=null)
-			{
-				toReturn.Add(_scanFormBatch);
-			}
 			return toReturn;
 		}
 		
@@ -256,7 +217,6 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			if (SerializationHelper.Optimization != SerializationOptimization.Fast) 
 			{
-				info.AddValue("_scanFormBatch", (!this.MarkedForDeletion?_scanFormBatch:null));
 			}
 			// __LLBLGENPRO_USER_CODE_REGION_START GetObjectInfo
 			// __LLBLGENPRO_USER_CODE_REGION_END
@@ -269,23 +229,14 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <returns>A list of all the EntityRelation objects the type of this instance has. Hierarchy relations are excluded.</returns>
 		protected override List<IEntityRelation> GetAllRelations()
 		{
-			return new DhlEcommerceScanFormRelations().GetAllRelations();
-		}
-
-		/// <summary> Creates a new IRelationPredicateBucket object which contains the predicate expression and relation collection to fetch the related entity of type 'ScanFormBatch' to this entity.</summary>
-		/// <returns></returns>
-		public virtual IRelationPredicateBucket GetRelationInfoScanFormBatch()
-		{
-			IRelationPredicateBucket bucket = new RelationPredicateBucket();
-			bucket.PredicateExpression.Add(new FieldCompareValuePredicate(ScanFormBatchFields.ScanFormBatchID, null, ComparisonOperator.Equal, this.ScanFormBatchID));
-			return bucket;
+			return new ShipEngineManifestRelations().GetAllRelations();
 		}
 		
 
 		/// <summary>Creates a new instance of the factory related to this entity</summary>
 		protected override IEntityFactory2 CreateEntityFactory()
 		{
-			return EntityFactoryCache2.GetEntityFactory(typeof(DhlEcommerceScanFormEntityFactory));
+			return EntityFactoryCache2.GetEntityFactory(typeof(ShipEngineManifestEntityFactory));
 		}
 #if !CF
 		/// <summary>Adds the member collections to the collections queue (base first)</summary>
@@ -324,7 +275,6 @@ namespace ShipWorks.Data.Model.EntityClasses
 		protected override Dictionary<string, object> GetRelatedData()
 		{
 			Dictionary<string, object> toReturn = new Dictionary<string, object>();
-			toReturn.Add("ScanFormBatch", _scanFormBatch);
 			return toReturn;
 		}
 
@@ -347,57 +297,34 @@ namespace ShipWorks.Data.Model.EntityClasses
 			_fieldsCustomProperties = new Dictionary<string, Dictionary<string, string>>();
 			Dictionary<string, string> fieldHashtable;
 			fieldHashtable = new Dictionary<string, string>();
-			_fieldsCustomProperties.Add("DhlEcommerceScanFormID", fieldHashtable);
+			_fieldsCustomProperties.Add("ShipEngineManifestID", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
-			_fieldsCustomProperties.Add("DhlEcommerceAccountID", fieldHashtable);
+			_fieldsCustomProperties.Add("CarrierAccountID", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
-			_fieldsCustomProperties.Add("ScanFormTransactionID", fieldHashtable);
+			_fieldsCustomProperties.Add("ShipmentTypeCode", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
-			_fieldsCustomProperties.Add("ScanFormUrl", fieldHashtable);
+			_fieldsCustomProperties.Add("ManifestID", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
-			_fieldsCustomProperties.Add("CreatedDate", fieldHashtable);
+			_fieldsCustomProperties.Add("FormID", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
-			_fieldsCustomProperties.Add("ScanFormBatchID", fieldHashtable);
+			_fieldsCustomProperties.Add("CreatedAt", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
-			_fieldsCustomProperties.Add("Description", fieldHashtable);
+			_fieldsCustomProperties.Add("ShipDate", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+			_fieldsCustomProperties.Add("ShipmentCount", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+			_fieldsCustomProperties.Add("PlatformWarehouseID", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+			_fieldsCustomProperties.Add("SubmissionID", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+			_fieldsCustomProperties.Add("CarrierID", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+			_fieldsCustomProperties.Add("ManifestUrl", fieldHashtable);
 		}
 		#endregion
 
-		/// <summary> Removes the sync logic for member _scanFormBatch</summary>
-		/// <param name="signalRelatedEntity">If set to true, it will call the related entity's UnsetRelatedEntity method</param>
-		/// <param name="resetFKFields">if set to true it will also reset the FK fields pointing to the related entity</param>
-		private void DesetupSyncScanFormBatch(bool signalRelatedEntity, bool resetFKFields)
-		{
-			this.PerformDesetupSyncRelatedEntity( _scanFormBatch, new PropertyChangedEventHandler( OnScanFormBatchPropertyChanged ), "ScanFormBatch", ShipWorks.Data.Model.RelationClasses.StaticDhlEcommerceScanFormRelations.ScanFormBatchEntityUsingScanFormBatchIDStatic, true, signalRelatedEntity, "DhlEcommerceScanForm", resetFKFields, new int[] { (int)DhlEcommerceScanFormFieldIndex.ScanFormBatchID } );
-			_scanFormBatch = null;
-		}
-
-		/// <summary> setups the sync logic for member _scanFormBatch</summary>
-		/// <param name="relatedEntity">Instance to set as the related entity of type entityType</param>
-		private void SetupSyncScanFormBatch(IEntityCore relatedEntity)
-		{
-			if(_scanFormBatch!=relatedEntity)
-			{
-				DesetupSyncScanFormBatch(true, true);
-				_scanFormBatch = (ScanFormBatchEntity)relatedEntity;
-				this.PerformSetupSyncRelatedEntity( _scanFormBatch, new PropertyChangedEventHandler( OnScanFormBatchPropertyChanged ), "ScanFormBatch", ShipWorks.Data.Model.RelationClasses.StaticDhlEcommerceScanFormRelations.ScanFormBatchEntityUsingScanFormBatchIDStatic, true, new string[] {  } );
-			}
-		}
-		
-		/// <summary>Handles property change events of properties in a related entity.</summary>
-		/// <param name="sender"></param>
-		/// <param name="e"></param>
-		private void OnScanFormBatchPropertyChanged( object sender, PropertyChangedEventArgs e )
-		{
-			switch( e.PropertyName )
-			{
-				default:
-					break;
-			}
-		}
-
 		/// <summary> Initializes the class with empty data, as if it is a new Entity.</summary>
-		/// <param name="validator">The validator object for this DhlEcommerceScanFormEntity</param>
+		/// <param name="validator">The validator object for this ShipEngineManifestEntity</param>
 		/// <param name="fields">Fields of this entity</param>
 		private void InitClassEmpty(IValidator validator, IEntityFields2 fields)
 		{
@@ -415,9 +342,9 @@ namespace ShipWorks.Data.Model.EntityClasses
 
 		#region Class Property Declarations
 		/// <summary> The relations object holding all relations of this entity with other entity classes.</summary>
-		public  static DhlEcommerceScanFormRelations Relations
+		public  static ShipEngineManifestRelations Relations
 		{
-			get	{ return new DhlEcommerceScanFormRelations(); }
+			get	{ return new ShipEngineManifestRelations(); }
 		}
 		
 		/// <summary> The custom properties for this entity type.</summary>
@@ -425,13 +352,6 @@ namespace ShipWorks.Data.Model.EntityClasses
 		public  static Dictionary<string, string> CustomProperties
 		{
 			get { return _customProperties;}
-		}
-
-		/// <summary> Creates a new PrefetchPathElement2 object which contains all the information to prefetch the related entities of type 'ScanFormBatch' for this entity.</summary>
-		/// <returns>Ready to use IPrefetchPathElement2 implementation.</returns>
-		public static IPrefetchPathElement2 PrefetchPathScanFormBatch
-		{
-			get	{ return new PrefetchPathElement2(new EntityCollection(EntityFactoryCache2.GetEntityFactory(typeof(ScanFormBatchEntityFactory))),	(IEntityRelation)GetRelationsForField("ScanFormBatch")[0], (int)ShipWorks.Data.Model.EntityType.DhlEcommerceScanFormEntity, (int)ShipWorks.Data.Model.EntityType.ScanFormBatchEntity, 0, null, null, null, null, "ScanFormBatch", SD.LLBLGen.Pro.ORMSupportClasses.RelationType.ManyToOne); }
 		}
 
 
@@ -458,100 +378,136 @@ namespace ShipWorks.Data.Model.EntityClasses
 			get { return FieldsCustomProperties;}
 		}
 
-		/// <summary> The DhlEcommerceScanFormID property of the Entity DhlEcommerceScanForm<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "DhlEcommerceScanForm"."DhlEcommerceScanFormID"<br/>
+		/// <summary> The ShipEngineManifestID property of the Entity ShipEngineManifest<br/><br/></summary>
+		/// <remarks>Mapped on  table field: "ShipEngineManifest"."ShipEngineManifestID"<br/>
 		/// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, true, true</remarks>
 		[DataMember]
-		public virtual System.Int64 DhlEcommerceScanFormID
+		public virtual System.Int64 ShipEngineManifestID
 		{
-			get { return (System.Int64)GetValue((int)DhlEcommerceScanFormFieldIndex.DhlEcommerceScanFormID, true); }
-			set	{ SetValue((int)DhlEcommerceScanFormFieldIndex.DhlEcommerceScanFormID, value); }
+			get { return (System.Int64)GetValue((int)ShipEngineManifestFieldIndex.ShipEngineManifestID, true); }
+			set	{ SetValue((int)ShipEngineManifestFieldIndex.ShipEngineManifestID, value); }
 		}
 
-		/// <summary> The DhlEcommerceAccountID property of the Entity DhlEcommerceScanForm<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "DhlEcommerceScanForm"."DhlEcommerceAccountID"<br/>
+		/// <summary> The CarrierAccountID property of the Entity ShipEngineManifest<br/><br/></summary>
+		/// <remarks>Mapped on  table field: "ShipEngineManifest"."CarrierAccountID"<br/>
 		/// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
 		[DataMember]
-		public virtual System.Int64 DhlEcommerceAccountID
+		public virtual System.Int64 CarrierAccountID
 		{
-			get { return (System.Int64)GetValue((int)DhlEcommerceScanFormFieldIndex.DhlEcommerceAccountID, true); }
-			set	{ SetValue((int)DhlEcommerceScanFormFieldIndex.DhlEcommerceAccountID, value); }
+			get { return (System.Int64)GetValue((int)ShipEngineManifestFieldIndex.CarrierAccountID, true); }
+			set	{ SetValue((int)ShipEngineManifestFieldIndex.CarrierAccountID, value); }
 		}
 
-		/// <summary> The ScanFormTransactionID property of the Entity DhlEcommerceScanForm<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "DhlEcommerceScanForm"."ScanFormTransactionID"<br/>
-		/// Table field type characteristics (type, precision, scale, length): VarChar, 0, 0, 100<br/>
+		/// <summary> The ShipmentTypeCode property of the Entity ShipEngineManifest<br/><br/></summary>
+		/// <remarks>Mapped on  table field: "ShipEngineManifest"."ShipmentTypeCode"<br/>
+		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
 		[DataMember]
-		public virtual System.String ScanFormTransactionID
+		public virtual System.Int32 ShipmentTypeCode
 		{
-			get { return (System.String)GetValue((int)DhlEcommerceScanFormFieldIndex.ScanFormTransactionID, true); }
-			set	{ SetValue((int)DhlEcommerceScanFormFieldIndex.ScanFormTransactionID, value); }
+			get { return (System.Int32)GetValue((int)ShipEngineManifestFieldIndex.ShipmentTypeCode, true); }
+			set	{ SetValue((int)ShipEngineManifestFieldIndex.ShipmentTypeCode, value); }
 		}
 
-		/// <summary> The ScanFormUrl property of the Entity DhlEcommerceScanForm<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "DhlEcommerceScanForm"."ScanFormUrl"<br/>
-		/// Table field type characteristics (type, precision, scale, length): VarChar, 0, 0, 2048<br/>
+		/// <summary> The ManifestID property of the Entity ShipEngineManifest<br/><br/></summary>
+		/// <remarks>Mapped on  table field: "ShipEngineManifest"."ManifestID"<br/>
+		/// Table field type characteristics (type, precision, scale, length): VarChar, 0, 0, 50<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
 		[DataMember]
-		public virtual System.String ScanFormUrl
+		public virtual System.String ManifestID
 		{
-			get { return (System.String)GetValue((int)DhlEcommerceScanFormFieldIndex.ScanFormUrl, true); }
-			set	{ SetValue((int)DhlEcommerceScanFormFieldIndex.ScanFormUrl, value); }
+			get { return (System.String)GetValue((int)ShipEngineManifestFieldIndex.ManifestID, true); }
+			set	{ SetValue((int)ShipEngineManifestFieldIndex.ManifestID, value); }
 		}
 
-		/// <summary> The CreatedDate property of the Entity DhlEcommerceScanForm<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "DhlEcommerceScanForm"."CreatedDate"<br/>
+		/// <summary> The FormID property of the Entity ShipEngineManifest<br/><br/></summary>
+		/// <remarks>Mapped on  table field: "ShipEngineManifest"."FormID"<br/>
+		/// Table field type characteristics (type, precision, scale, length): VarChar, 0, 0, 50<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
+		public virtual System.String FormID
+		{
+			get { return (System.String)GetValue((int)ShipEngineManifestFieldIndex.FormID, true); }
+			set	{ SetValue((int)ShipEngineManifestFieldIndex.FormID, value); }
+		}
+
+		/// <summary> The CreatedAt property of the Entity ShipEngineManifest<br/><br/></summary>
+		/// <remarks>Mapped on  table field: "ShipEngineManifest"."CreatedAt"<br/>
 		/// Table field type characteristics (type, precision, scale, length): DateTime, 0, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
 		[DataMember]
-		public virtual System.DateTime CreatedDate
+		public virtual System.DateTime CreatedAt
 		{
-			get { return (System.DateTime)GetValue((int)DhlEcommerceScanFormFieldIndex.CreatedDate, true); }
-			set	{ SetValue((int)DhlEcommerceScanFormFieldIndex.CreatedDate, value); }
+			get { return (System.DateTime)GetValue((int)ShipEngineManifestFieldIndex.CreatedAt, true); }
+			set	{ SetValue((int)ShipEngineManifestFieldIndex.CreatedAt, value); }
 		}
 
-		/// <summary> The ScanFormBatchID property of the Entity DhlEcommerceScanForm<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "DhlEcommerceScanForm"."ScanFormBatchID"<br/>
-		/// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
+		/// <summary> The ShipDate property of the Entity ShipEngineManifest<br/><br/></summary>
+		/// <remarks>Mapped on  table field: "ShipEngineManifest"."ShipDate"<br/>
+		/// Table field type characteristics (type, precision, scale, length): DateTime, 0, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
 		[DataMember]
-		public virtual System.Int64 ScanFormBatchID
+		public virtual System.DateTime ShipDate
 		{
-			get { return (System.Int64)GetValue((int)DhlEcommerceScanFormFieldIndex.ScanFormBatchID, true); }
-			set	{ SetValue((int)DhlEcommerceScanFormFieldIndex.ScanFormBatchID, value); }
+			get { return (System.DateTime)GetValue((int)ShipEngineManifestFieldIndex.ShipDate, true); }
+			set	{ SetValue((int)ShipEngineManifestFieldIndex.ShipDate, value); }
 		}
 
-		/// <summary> The Description property of the Entity DhlEcommerceScanForm<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "DhlEcommerceScanForm"."Description"<br/>
-		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 100<br/>
+		/// <summary> The ShipmentCount property of the Entity ShipEngineManifest<br/><br/></summary>
+		/// <remarks>Mapped on  table field: "ShipEngineManifest"."ShipmentCount"<br/>
+		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
 		[DataMember]
-		public virtual System.String Description
+		public virtual System.Int32 ShipmentCount
 		{
-			get { return (System.String)GetValue((int)DhlEcommerceScanFormFieldIndex.Description, true); }
-			set	{ SetValue((int)DhlEcommerceScanFormFieldIndex.Description, value); }
+			get { return (System.Int32)GetValue((int)ShipEngineManifestFieldIndex.ShipmentCount, true); }
+			set	{ SetValue((int)ShipEngineManifestFieldIndex.ShipmentCount, value); }
 		}
 
-		/// <summary> Gets / sets related entity of type 'ScanFormBatchEntity' which has to be set using a fetch action earlier. If no related entity is set for this property, null is returned..<br/><br/></summary>
-		[Browsable(true)]
+		/// <summary> The PlatformWarehouseID property of the Entity ShipEngineManifest<br/><br/></summary>
+		/// <remarks>Mapped on  table field: "ShipEngineManifest"."PlatformWarehouseID"<br/>
+		/// Table field type characteristics (type, precision, scale, length): VarChar, 0, 0, 50<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
 		[DataMember]
-		public virtual ScanFormBatchEntity ScanFormBatch
+		public virtual System.String PlatformWarehouseID
 		{
-			get	{ return _scanFormBatch; }
-			set
-			{
-				if(this.IsDeserializing)
-				{
-					SetupSyncScanFormBatch(value);
-				}
-				else
-				{
-					SetSingleRelatedEntityNavigator(value, "DhlEcommerceScanForm", "ScanFormBatch", _scanFormBatch, true); 
-				}
-			}
+			get { return (System.String)GetValue((int)ShipEngineManifestFieldIndex.PlatformWarehouseID, true); }
+			set	{ SetValue((int)ShipEngineManifestFieldIndex.PlatformWarehouseID, value); }
+		}
+
+		/// <summary> The SubmissionID property of the Entity ShipEngineManifest<br/><br/></summary>
+		/// <remarks>Mapped on  table field: "ShipEngineManifest"."SubmissionID"<br/>
+		/// Table field type characteristics (type, precision, scale, length): VarChar, 0, 0, 255<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
+		public virtual System.String SubmissionID
+		{
+			get { return (System.String)GetValue((int)ShipEngineManifestFieldIndex.SubmissionID, true); }
+			set	{ SetValue((int)ShipEngineManifestFieldIndex.SubmissionID, value); }
+		}
+
+		/// <summary> The CarrierID property of the Entity ShipEngineManifest<br/><br/></summary>
+		/// <remarks>Mapped on  table field: "ShipEngineManifest"."CarrierID"<br/>
+		/// Table field type characteristics (type, precision, scale, length): VarChar, 0, 0, 50<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
+		public virtual System.String CarrierID
+		{
+			get { return (System.String)GetValue((int)ShipEngineManifestFieldIndex.CarrierID, true); }
+			set	{ SetValue((int)ShipEngineManifestFieldIndex.CarrierID, value); }
+		}
+
+		/// <summary> The ManifestUrl property of the Entity ShipEngineManifest<br/><br/></summary>
+		/// <remarks>Mapped on  table field: "ShipEngineManifest"."ManifestUrl"<br/>
+		/// Table field type characteristics (type, precision, scale, length): VarChar, 0, 0, 2048<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
+		public virtual System.String ManifestUrl
+		{
+			get { return (System.String)GetValue((int)ShipEngineManifestFieldIndex.ManifestUrl, true); }
+			set	{ SetValue((int)ShipEngineManifestFieldIndex.ManifestUrl, value); }
 		}
 	
 		/// <summary> Gets the type of the hierarchy this entity is in. </summary>
@@ -570,7 +526,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		[Browsable(false), XmlIgnore]
 		protected override int LLBLGenProEntityTypeValue 
 		{ 
-			get { return (int)ShipWorks.Data.Model.EntityType.DhlEcommerceScanFormEntity; }
+			get { return (int)ShipWorks.Data.Model.EntityType.ShipEngineManifestEntity; }
 		}
 
 		#endregion

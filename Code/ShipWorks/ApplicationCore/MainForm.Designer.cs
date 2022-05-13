@@ -233,6 +233,18 @@ namespace ShipWorks
             this.buttonFedExClose = new ShipWorks.UI.Controls.SandRibbon.RibbonButton();
             this.buttonAsendiaClose = new ShipWorks.UI.Controls.SandRibbon.RibbonButton();
             this.buttonDhlEcommerceManifest = new ShipWorks.UI.Controls.SandRibbon.RibbonButton();
+            this.popupDhlEcommerceManifest = new Divelements.SandRibbon.Popup();
+            this.popupOrderLookupViewDhlEcommerceManifest = new Divelements.SandRibbon.Popup();
+            this.menuDhlEcommerceManifest = new Divelements.SandRibbon.Menu();
+            this.menuOrderLookupViewDhlEcommerceManifest = new Divelements.SandRibbon.Menu();
+            this.menuItemCreateDhlEcommerceManifest = new Divelements.SandRibbon.MenuItem();
+            this.menuItemOrderLookupViewCreateDhlEcommerceManifest = new Divelements.SandRibbon.MenuItem();
+            this.menuItemPrintDhlEcommerceManifest = new Divelements.SandRibbon.MenuItem();
+            this.menuItemOrderLookupViewPrintDhlEcommerceManifest = new Divelements.SandRibbon.MenuItem();
+            this.menuPrintDhlEcommerceManifest = new Divelements.SandRibbon.Menu();
+            this.menuOrderLookupViewPrintDhlEcommerceManifest = new Divelements.SandRibbon.Menu();
+            this.menuItemDhlEcommerceManifestNone = new Divelements.SandRibbon.MenuItem();
+            this.menuItemOrderLookupViewDhlEcommerceManifestNone = new Divelements.SandRibbon.MenuItem();
             this.popupFedExEndOfDay = new Divelements.SandRibbon.Popup();
             this.buttonEndiciaSCAN = new ShipWorks.UI.Controls.SandRibbon.RibbonButton();
             this.popupPostalScanForm = new Divelements.SandRibbon.Popup();
@@ -2426,9 +2438,46 @@ namespace ShipWorks
             this.buttonDhlEcommerceManifest.Guid = new System.Guid("F27BEBA4-B9D2-41CE-BDE9-F38828C1C654");
             this.buttonDhlEcommerceManifest.Image = global::ShipWorks.Properties.Resources.element_into;
             this.ribbonSecurityProvider.SetPermission(this.buttonDhlEcommerceManifest, ShipWorks.Users.Security.PermissionType.ShipmentsCreateEditProcess);
-            this.buttonDhlEcommerceManifest.Activate += new System.EventHandler(this.OnDhlEcommerceManifest);
             this.buttonDhlEcommerceManifest.Text = "DHL eCommerce Manifest";
             this.buttonDhlEcommerceManifest.TextContentRelation = Divelements.SandRibbon.TextContentRelation.Underneath;
+            this.buttonDhlEcommerceManifest.DropDownStyle = Divelements.SandRibbon.DropDownStyle.Integral;
+            this.buttonDhlEcommerceManifest.PopupWidget = this.popupDhlEcommerceManifest;
+            //
+            // popupDhlEcommerceManifest
+            //
+            this.popupDhlEcommerceManifest.Items.AddRange(new Divelements.SandRibbon.WidgetBase[] {
+            this.menuDhlEcommerceManifest});
+            this.popupDhlEcommerceManifest.BeforePopup += new Divelements.SandRibbon.BeforePopupEventHandler(this.OnDhlEcommerceManifestOpening);
+            //
+            // menuDhlEcommerceManifest
+            //
+            this.menuDhlEcommerceManifest.Items.AddRange(new Divelements.SandRibbon.WidgetBase[] {
+            this.menuItemCreateDhlEcommerceManifest,
+            this.menuItemPrintDhlEcommerceManifest});
+            //
+            // menuItemCreateDhlEcommerceManifest
+            //
+            this.menuItemCreateDhlEcommerceManifest.Guid = new System.Guid("D47353F7-44C7-4E5F-808F-7DA37C30D6D7");
+            this.menuItemCreateDhlEcommerceManifest.Text = "Create Manifest...";
+            //
+            // menuItemPrintDhlEcommerceManifest
+            //
+            this.menuItemPrintDhlEcommerceManifest.GroupName = "Reprint";
+            this.menuItemPrintDhlEcommerceManifest.Guid = new System.Guid("38041BB9-EDA3-4360-ADF3-92287F8BF233");
+            this.menuItemPrintDhlEcommerceManifest.Items.AddRange(new Divelements.SandRibbon.WidgetBase[] {
+            this.menuPrintDhlEcommerceManifest});
+            this.menuItemPrintDhlEcommerceManifest.Text = "Print";
+            //
+            // menuPrintDhlEcommerceManifest
+            //
+            this.menuPrintDhlEcommerceManifest.Items.AddRange(new Divelements.SandRibbon.WidgetBase[] {
+            this.menuItemDhlEcommerceManifestNone});
+            //
+            // menuItemDhlEcommerceManifestNone
+            //
+            this.menuItemDhlEcommerceManifestNone.Enabled = false;
+            this.menuItemDhlEcommerceManifestNone.Guid = new System.Guid("C9A440C3-2135-40EA-BC1A-38594A24A873");
+            this.menuItemDhlEcommerceManifestNone.Text = "(none)";
             //
             // buttonEndiciaSCAN
             //
@@ -2856,9 +2905,46 @@ namespace ShipWorks
             this.buttonOrderLookupViewDhlEcommerceManifest.Image = global::ShipWorks.Properties.Resources.element_into;
             this.buttonOrderLookupViewDhlEcommerceManifest.Padding = new Divelements.SandRibbon.WidgetEdges(3, 2, 4, 14);
             this.ribbonSecurityProvider.SetPermission(this.buttonOrderLookupViewDhlEcommerceManifest, ShipWorks.Users.Security.PermissionType.ShipmentsCreateEditProcess);
-            this.buttonOrderLookupViewDhlEcommerceManifest.Activate += new System.EventHandler(this.OnDhlEcommerceManifest);
             this.buttonOrderLookupViewDhlEcommerceManifest.Text = "DHL eCommerce Manifest";
             this.buttonOrderLookupViewDhlEcommerceManifest.TextContentRelation = Divelements.SandRibbon.TextContentRelation.Underneath;
+            this.buttonOrderLookupViewDhlEcommerceManifest.DropDownStyle = Divelements.SandRibbon.DropDownStyle.Integral;
+            this.buttonOrderLookupViewDhlEcommerceManifest.PopupWidget = this.popupOrderLookupViewDhlEcommerceManifest;
+            //
+            // popupOrderLookupViewDhlEcommerceManifest
+            //
+            this.popupOrderLookupViewDhlEcommerceManifest.Items.AddRange(new Divelements.SandRibbon.WidgetBase[] {
+            this.menuOrderLookupViewDhlEcommerceManifest});
+            this.popupOrderLookupViewDhlEcommerceManifest.BeforePopup += new Divelements.SandRibbon.BeforePopupEventHandler(this.OnOrderLookupViewDhlEcommerceManifestOpening);
+            //
+            // menuOrderLookupViewDhlEcommerceManifest
+            //
+            this.menuOrderLookupViewDhlEcommerceManifest.Items.AddRange(new Divelements.SandRibbon.WidgetBase[] {
+            this.menuItemOrderLookupViewCreateDhlEcommerceManifest,
+            this.menuItemOrderLookupViewPrintDhlEcommerceManifest});
+            //
+            // menuItemOrderLookupViewCreateDhlEcommerceManifest
+            //
+            this.menuItemOrderLookupViewCreateDhlEcommerceManifest.Guid = new System.Guid("0566D42F-5FCB-4555-8503-4D9FF5B2C12A");
+            this.menuItemOrderLookupViewCreateDhlEcommerceManifest.Text = "Create Manifest...";
+            //
+            // menuItemOrderLookupViewPrintDhlEcommerceManifest
+            //
+            this.menuItemOrderLookupViewPrintDhlEcommerceManifest.GroupName = "Reprint";
+            this.menuItemOrderLookupViewPrintDhlEcommerceManifest.Guid = new System.Guid("41691AE0-A7BB-4311-AEC1-9C1640C33310");
+            this.menuItemOrderLookupViewPrintDhlEcommerceManifest.Items.AddRange(new Divelements.SandRibbon.WidgetBase[] {
+            this.menuOrderLookupViewPrintDhlEcommerceManifest});
+            this.menuItemOrderLookupViewPrintDhlEcommerceManifest.Text = "Print";
+            //
+            // menuOrderLookupViewPrintDhlEcommerceManifest
+            //
+            this.menuOrderLookupViewPrintDhlEcommerceManifest.Items.AddRange(new Divelements.SandRibbon.WidgetBase[] {
+            this.menuItemOrderLookupViewDhlEcommerceManifestNone});
+            //
+            // menuItemOrderLookupViewDhlEcommerceManifestNone
+            //
+            this.menuItemOrderLookupViewDhlEcommerceManifestNone.Enabled = false;
+            this.menuItemOrderLookupViewDhlEcommerceManifestNone.Guid = new System.Guid("DA8ECFF6-5F4B-4DB4-932D-64517449948F");
+            this.menuItemOrderLookupViewDhlEcommerceManifestNone.Text = "(none)";
             //
             // popupOrderLookupViewFedExEndOfDay
             //
@@ -3708,6 +3794,18 @@ namespace ShipWorks
         private ShipWorks.UI.Controls.SandRibbon.RibbonButton buttonFedExClose;
         private ShipWorks.UI.Controls.SandRibbon.RibbonButton buttonAsendiaClose;
         private ShipWorks.UI.Controls.SandRibbon.RibbonButton buttonDhlEcommerceManifest;
+        private Divelements.SandRibbon.Popup popupDhlEcommerceManifest;
+        private Divelements.SandRibbon.Popup popupOrderLookupViewDhlEcommerceManifest;
+        private Divelements.SandRibbon.Menu menuDhlEcommerceManifest;
+        private Divelements.SandRibbon.Menu menuOrderLookupViewDhlEcommerceManifest;
+        private Divelements.SandRibbon.MenuItem menuItemCreateDhlEcommerceManifest;
+        private Divelements.SandRibbon.MenuItem menuItemOrderLookupViewCreateDhlEcommerceManifest;
+        private Divelements.SandRibbon.MenuItem menuItemPrintDhlEcommerceManifest;
+        private Divelements.SandRibbon.MenuItem menuItemOrderLookupViewPrintDhlEcommerceManifest;
+        private Divelements.SandRibbon.Menu menuPrintDhlEcommerceManifest;
+        private Divelements.SandRibbon.Menu menuOrderLookupViewPrintDhlEcommerceManifest;
+        private Divelements.SandRibbon.MenuItem menuItemDhlEcommerceManifestNone;
+        private Divelements.SandRibbon.MenuItem menuItemOrderLookupViewDhlEcommerceManifestNone;
         private Divelements.SandRibbon.Popup popupFedExEndOfDay;
         private Divelements.SandRibbon.MenuItem menuFedExEndDayClose;
         private Divelements.SandRibbon.MenuItem menuFedExEndDayPrint;

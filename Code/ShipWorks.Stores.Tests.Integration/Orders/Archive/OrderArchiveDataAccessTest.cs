@@ -137,7 +137,6 @@ namespace ShipWorks.Stores.Tests.Integration.Orders.Archive
                 "CommerceInterfaceOrderSearch",
                 "Customer",
                 "DhlEcommerceAccount",
-                "DhlEcommerceScanForm",
                 "DhlEcommerceProfile",
                 "DhlEcommerceShipment",
                 "DhlExpressAccount",
