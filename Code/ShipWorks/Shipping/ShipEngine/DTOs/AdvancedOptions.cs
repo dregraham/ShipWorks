@@ -60,7 +60,10 @@ namespace ShipWorks.Shipping.ShipEngine.DTOs
         /// <param name="customField1">customField1.</param>
         /// <param name="customField2">customField2.</param>
         /// <param name="customField3">customField3.</param>
-        public AdvancedOptions(string billToAccount = default(string), string billToCountryCode = default(string), BillToPartyEnum? billToParty = default(BillToPartyEnum?), string billToPostalCode = default(string), bool? containsAlcohol = default(bool?), bool? deliveredDutyPaid = default(bool?), bool? nonMachinable = default(bool?), bool? saturdayDelivery = default(bool?), bool? dryIce = default(bool?), Weight dryIceWeight = default(Weight), bool? useUpsGroundFreightPricing = default(bool?), string freightClass = default(string), string customField1 = default(string), string customField2 = default(string), string customField3 = default(string))
+        /// <param name="ancillaryEndorsement">ancillaryEndorsement.</param>
+        public AdvancedOptions(string billToAccount = default(string), string billToCountryCode = default(string), BillToPartyEnum? billToParty = default(BillToPartyEnum?), string billToPostalCode = default(string), bool? containsAlcohol = default(bool?), bool? deliveredDutyPaid = default(bool?), bool? nonMachinable = default(bool?), bool? saturdayDelivery = default(bool?), bool? dryIce = default(bool?), Weight dryIceWeight = default(Weight), bool? useUpsGroundFreightPricing = default(bool?), string freightClass = default(string), 
+            string customField1 = default(string), string customField2 = default(string), string customField3 = default(string),
+            string ancillaryEndorsement = default(string))
         {
             this.BillToAccount = billToAccount;
             this.BillToCountryCode = billToCountryCode;
@@ -77,6 +80,7 @@ namespace ShipWorks.Shipping.ShipEngine.DTOs
             this.CustomField1 = customField1;
             this.CustomField2 = customField2;
             this.CustomField3 = customField3;
+            this.AncillaryEndorsement = ancillaryEndorsement;
         }
 
         /// <summary>
@@ -165,6 +169,12 @@ namespace ShipWorks.Shipping.ShipEngine.DTOs
         public string CustomField3 { get; set; }
 
         /// <summary>
+        /// Gets or Sets AncillaryEndorsement
+        /// </summary>
+        [DataMember(Name = "ancillary_endorsements_option", EmitDefaultValue = false)]
+        public string AncillaryEndorsement { get; set; }
+
+        /// <summary>
         /// Returns the string presentation of the object
         /// </summary>
         /// <returns>String presentation of the object</returns>
@@ -187,6 +197,7 @@ namespace ShipWorks.Shipping.ShipEngine.DTOs
             sb.Append("  CustomField1: ").Append(CustomField1).Append("\n");
             sb.Append("  CustomField2: ").Append(CustomField2).Append("\n");
             sb.Append("  CustomField3: ").Append(CustomField3).Append("\n");
+            sb.Append("  AncillaryEndorsement: ").Append(AncillaryEndorsement).Append("\n");
             sb.Append("}\n");
             return sb.ToString();
         }
@@ -294,7 +305,12 @@ namespace ShipWorks.Shipping.ShipEngine.DTOs
                 (
                     this.CustomField3 == input.CustomField3 ||
                     (this.CustomField3 != null &&
-                    this.CustomField3.Equals(input.CustomField3))
+                     this.CustomField3.Equals(input.CustomField3))
+                ) &&
+                (
+                    this.AncillaryEndorsement == input.AncillaryEndorsement ||
+                    (this.AncillaryEndorsement != null &&
+                     this.AncillaryEndorsement.Equals(input.AncillaryEndorsement))
                 );
         }
 
@@ -337,6 +353,8 @@ namespace ShipWorks.Shipping.ShipEngine.DTOs
                     hashCode = hashCode * 59 + this.CustomField2.GetHashCode();
                 if (this.CustomField3 != null)
                     hashCode = hashCode * 59 + this.CustomField3.GetHashCode();
+                if (this.AncillaryEndorsement != null)
+                    hashCode = hashCode * 59 + this.AncillaryEndorsement.GetHashCode();
                 return hashCode;
             }
         }

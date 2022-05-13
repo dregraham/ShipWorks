@@ -67,10 +67,13 @@ namespace ShipWorks.Shipping.Carriers.DhlEcommerce
         /// </summary>
         protected override AdvancedOptions CreateAdvancedOptions(ShipmentEntity shipment)
         {
+            var ancillaryEndorsement = (AncillaryEndorsement) shipment.DhlEcommerce.AncillaryEndorsement;
+            
             return new AdvancedOptions(
                 deliveredDutyPaid: shipment.DhlEcommerce.DeliveredDutyPaid,
                 nonMachinable: shipment.DhlEcommerce.NonMachinable,
-                saturdayDelivery: shipment.DhlEcommerce.SaturdayDelivery);
+                saturdayDelivery: shipment.DhlEcommerce.SaturdayDelivery,
+                ancillaryEndorsement: EnumHelper.GetApiValue(ancillaryEndorsement));
         }
 
         /// <summary>

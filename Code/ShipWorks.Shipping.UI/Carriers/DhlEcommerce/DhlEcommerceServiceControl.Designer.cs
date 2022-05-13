@@ -40,7 +40,9 @@ namespace ShipWorks.Shipping.UI.Carriers.DhlEcommerce
             this.accountLabel = new System.Windows.Forms.Label();
             this.fieldLengthProvider = new ShipWorks.Data.Utility.EntityFieldLengthProvider(this.components);
             this.labelService = new System.Windows.Forms.Label();
+            this.labelAncillaryEndorsement = new System.Windows.Forms.Label();
             this.service = new ShipWorks.UI.Controls.MultiValueComboBox();
+            this.ancillaryEndorsement = new ShipWorks.UI.Controls.MultiValueComboBox();
             this.labelPackageType = new System.Windows.Forms.Label();
             this.packageType = new ShipWorks.UI.Controls.MultiValueComboBox();
             this.labelShipDate = new System.Windows.Forms.Label();
@@ -131,14 +133,16 @@ namespace ShipWorks.Shipping.UI.Carriers.DhlEcommerce
             this.sectionShipment.ContentPanel.Controls.Add(this.labelWeight);
             this.sectionShipment.ContentPanel.Controls.Add(this.weight);
             this.sectionShipment.ContentPanel.Controls.Add(this.labelService);
+            this.sectionShipment.ContentPanel.Controls.Add(this.labelAncillaryEndorsement);
             this.sectionShipment.ContentPanel.Controls.Add(this.service);
+            this.sectionShipment.ContentPanel.Controls.Add(this.ancillaryEndorsement);
             this.sectionShipment.ContentPanel.Controls.Add(this.labelPackageType);
             this.sectionShipment.ContentPanel.Controls.Add(this.packageType);
             this.sectionShipment.ContentPanel.Controls.Add(this.labelShipDate);
             this.sectionShipment.ContentPanel.Controls.Add(this.shipDate);
             this.sectionShipment.ContentPanel.Controls.Add(this.cutoffDateDisplay);
             this.sectionShipment.Location = new System.Drawing.Point(3, 453);
-            this.sectionShipment.Size = new System.Drawing.Size(377, 278);
+            this.sectionShipment.Size = new System.Drawing.Size(377, 310);
             this.sectionShipment.TabIndex = 2;
             // 
             // sectionLabelOptions
@@ -256,8 +260,28 @@ namespace ShipWorks.Shipping.UI.Carriers.DhlEcommerce
             this.service.Location = new System.Drawing.Point(90, 12);
             this.service.Name = "service";
             this.service.PromptText = "(Multiple Values)";
-            this.service.Size = new System.Drawing.Size(175, 21);
+            this.service.Size = new System.Drawing.Size(250, 21);
             this.service.TabIndex = 65;
+            // 
+            // labelAncillaryEndorsement
+            // 
+            this.labelAncillaryEndorsement.AutoSize = true;
+            this.labelAncillaryEndorsement.BackColor = System.Drawing.Color.Transparent;
+            this.labelAncillaryEndorsement.Location = new System.Drawing.Point(5, 252);
+            this.labelAncillaryEndorsement.Name = "labelAncillaryEndorsement";
+            this.labelAncillaryEndorsement.Size = new System.Drawing.Size(117, 13);
+            this.labelAncillaryEndorsement.TabIndex = 68;
+            this.labelAncillaryEndorsement.Text = "Ancillary Endorsement:";
+            // 
+            // ancillaryEndorsement
+            // 
+            this.ancillaryEndorsement.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.ancillaryEndorsement.FormattingEnabled = true;
+            this.ancillaryEndorsement.Location = new System.Drawing.Point(125, 250);
+            this.ancillaryEndorsement.Name = "ancillaryEndorsement";
+            this.ancillaryEndorsement.PromptText = "(Multiple Values)";
+            this.ancillaryEndorsement.Size = new System.Drawing.Size(210, 21);
+            this.ancillaryEndorsement.TabIndex = 65;
             // 
             // labelPackageType
             // 
@@ -276,7 +300,7 @@ namespace ShipWorks.Shipping.UI.Carriers.DhlEcommerce
             this.packageType.Location = new System.Drawing.Point(90, 39);
             this.packageType.Name = "packageType";
             this.packageType.PromptText = "(Multiple Values)";
-            this.packageType.Size = new System.Drawing.Size(175, 21);
+            this.packageType.Size = new System.Drawing.Size(250, 21);
             this.packageType.TabIndex = 65;
             this.packageType.SelectedIndexChanged += new System.EventHandler(this.OnRateCriteriaChanged);
             // 
@@ -536,7 +560,9 @@ namespace ShipWorks.Shipping.UI.Carriers.DhlEcommerce
         private ShipmentOriginControl originControl;
         private Data.Utility.EntityFieldLengthProvider fieldLengthProvider;
         private System.Windows.Forms.Label labelService;
+        private System.Windows.Forms.Label labelAncillaryEndorsement;
         private ShipWorks.UI.Controls.MultiValueComboBox service;
+        private ShipWorks.UI.Controls.MultiValueComboBox ancillaryEndorsement;
         private System.Windows.Forms.Label labelPackageType;
         private ShipWorks.UI.Controls.MultiValueComboBox packageType;
         private ShipWorks.UI.Controls.CollapsibleGroupControl sectionOptions;

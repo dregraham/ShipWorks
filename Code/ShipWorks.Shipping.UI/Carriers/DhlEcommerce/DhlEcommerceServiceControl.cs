@@ -8,8 +8,10 @@ using ShipWorks.ApplicationCore;
 using ShipWorks.Common.IO.Hardware.Printers;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.DhlEcommerce;
+using ShipWorks.Shipping.Carriers.DhlEcommerce.Enums;
 using ShipWorks.Shipping.Editing;
 using ShipWorks.Shipping.Editing.Rating;
+using ShipWorks.Shipping.ShipEngine.DTOs;
 using ShipWorks.UI.Controls;
 
 namespace ShipWorks.Shipping.UI.Carriers.DhlEcommerce
@@ -46,6 +48,7 @@ namespace ShipWorks.Shipping.UI.Carriers.DhlEcommerce
             LoadAccounts();
 
             EnumHelper.BindComboBox<DhlEcommercePackagingType>(packageType);
+            EnumHelper.BindComboBox<AncillaryEndorsement>(ancillaryEndorsement);
 
             ShipSenseFieldChanged += (s, a) => SaveToShipments();
 
@@ -185,6 +188,7 @@ namespace ShipWorks.Shipping.UI.Carriers.DhlEcommerce
                     reference1.ApplyMultiText(shipment.DhlEcommerce.Reference1);
                     shipDate.ApplyMultiDate(shipment.ShipDate.ToLocalTime());
                     dimensions.Add(new DimensionsAdapter(shipment.DhlEcommerce));
+                    ancillaryEndorsement.ApplyMultiValue((AncillaryEndorsement) shipment.DhlEcommerce.AncillaryEndorsement);
                 }
             }
 
@@ -290,6 +294,7 @@ namespace ShipWorks.Shipping.UI.Carriers.DhlEcommerce
                 residentialDelivery.ReadMultiCheck(c => shipment.DhlEcommerce.ResidentialDelivery = c);
                 reference1.ReadMultiText(t => shipment.DhlEcommerce.Reference1 = t);
                 shipDate.ReadMultiDate(v => shipment.ShipDate = v.Date.ToUniversalTime());
+                ancillaryEndorsement.ReadMultiValue(v => shipment.DhlEcommerce.AncillaryEndorsement = (int) v);
 
                 weight.ReadMultiWeight(v => shipment.ContentWeight = v);
 

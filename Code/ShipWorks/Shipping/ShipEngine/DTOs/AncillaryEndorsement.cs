@@ -2,31 +2,31 @@
 using System.Reflection;
 using Interapptive.Shared.Utility;
 
-namespace ShipWorks.Shipping.Carriers.DhlEcommerce.Enums
+namespace ShipWorks.Shipping.ShipEngine.DTOs
 {
     /// <summary>
-    /// Ancillary endorsement setting for DHL eCommerce accounts
+    /// Ancillary endorsement setting for ShipEngine
     /// </summary>
     [Obfuscation(ApplyToMembers = true, Exclude = true, StripAfterObfuscation = false)]
-    public enum DhlEcommerceAncillaryEndorsement
+    public enum AncillaryEndorsement
     {
-        [ApiValue("none")]
+        [ApiValue("")]
         [Description("None")]
         None = 0,
 
-        [ApiValue("address_service_requested")]
+        [ApiValue("AddressServiceRequested")]
         [Description("Address Service Requested")]
         AddressServiceRequested = 1,
 
-        [ApiValue("forwarding_service_requested")]
+        [ApiValue("ForwardingServiceRequested")]
         [Description("Forwarding Service Requested")]
         ForwardingServiceRequested = 2,
 
-        [ApiValue("change_service_requested")]
+        [ApiValue("ChangeServiceRequested")]
         [Description("Change Service Requested")]
         ChangeServiceRequested = 3,
 
-        [ApiValue("return_service_requested")]
+        [ApiValue("ReturnServiceRequested")]
         [Description("Return Service Requested")]
         ReturnServiceRequested = 4,
     }
