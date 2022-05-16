@@ -143,8 +143,7 @@ IF OBJECT_ID(N'[dbo].[DhlEcommerceAccount]', 'U') IS NULL
     [CountryCode] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL CONSTRAINT [DF__DhlEcomme__Count__3BFFE745] DEFAULT (''),
     [Phone] [nvarchar] (26) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL CONSTRAINT [DF__DhlEcomme__Phone__3CF40B7E] DEFAULT (''),
     [Email] [nvarchar] (100) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL CONSTRAINT [DF__DhlEcomme__Email__3DE82FB7] DEFAULT (''),
-    [CreatedDate] [datetime] NOT NULL,
-    [AncillaryEndorsement] [int] NOT NULL CONSTRAINT [DF_DhlEcommerceAccount_AncillaryEndorsement] DEFAULT ((0))
+    [CreatedDate] [datetime] NOT NULL
     )
 GO
 
