@@ -39,30 +39,48 @@
             <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
-        <TextBlock
-            Grid.Row="0"
-            Margin="0,0,0,20"
-            Style="{StaticResource StandardText}"
-            TextWrapping="Wrap">
-            Amazon requires you to authorize ShipWorks to connect
-            to your Amazon account. This is done by logging into
-            a special Amazon page, granting ShipWorks access, and
-            copying and pasting the code on the last page into the Order
-            Source ID field below. (FIX LINK!!!) For help,&#160;
-            <Hyperlink ui:Link.OpenInBrowser="true"
-                       NavigateUri="https://shipworks.zendesk.com/hc/en-us/articles/360022466392">
-                click here.
-            </Hyperlink>
-        </TextBlock>
+        <StackPanel Grid.Row="0" Margin="0,0,0,20" Style="{StaticResource StepBlock}">
+            <TextBlock
+                Style="{StaticResource StepContents}"
+                TextWrapping="Wrap">
+                <Hyperlink ui:Link.OpenInBrowser="true"
+                           NavigateUri="https://support.shipworks.com/hc/en-us/articles/5493941886875">
+                    Update your Amazon store credentials.
+                </Hyperlink>
+            </TextBlock>
+            <BulletDecorator Margin="32,0,0,0">
+                <BulletDecorator.Bullet>
+                    <TextBlock>1.</TextBlock>
+                </BulletDecorator.Bullet>
+                <TextBlock Margin="10,0,0,0">Click the <Bold>Update Store Credentials</Bold> button</TextBlock>
+            </BulletDecorator>
+            <BulletDecorator Margin="32,0,0,0">
+                <BulletDecorator.Bullet>
+                    <TextBlock>2.</TextBlock>
+                </BulletDecorator.Bullet>
+                <TextBlock Margin="10,0,0,0">Log in to Amazon</TextBlock>
+            </BulletDecorator>
+            <BulletDecorator Margin="32,0,0,0">
+                <BulletDecorator.Bullet>
+                    <TextBlock>3.</TextBlock>
+                </BulletDecorator.Bullet>
+                <TextBlock Margin="10,0,0,0">Grant ShipWorks access</TextBlock>
+            </BulletDecorator>
+            <BulletDecorator Margin="32,0,0,0">
+                <BulletDecorator.Bullet>
+                    <TextBlock>4.</TextBlock>
+                </BulletDecorator.Bullet>
+                <TextBlock Margin="10,0,0,0">ShipWorks will automatically update your store credentials</TextBlock>
+            </BulletDecorator>
+        </StackPanel>
         <StackPanel Grid.Row="1" Style="{StaticResource StepBlock}">
-            <TextBlock Style="{StaticResource StepHeader}">Update Store Permissions</TextBlock>
             <Grid Style="{StaticResource StepContents}">
                 <Button
                     Padding="8,4"
                     Command="{Binding UpdateOrderSource}"
                     Style="{StaticResource SmallSecondaryButton}"
                     IsEnabled="{Binding OpeningUrl, Converter={ui:InverseBooleanConverter}}">
-                    Update Order Source
+                    Update Store Credentials
                 </Button>
             </Grid>
         </StackPanel>
