@@ -18,7 +18,7 @@ namespace ShipWorks.Shipping.UI.Carriers.DhlEcommerce
         {
             InitializeComponent();
 
-            requestedLabelFormat.ExcludeFormats(new[] { ThermalLanguage.ZPL, ThermalLanguage.EPL });
+            requestedLabelFormat.ExcludeFormats(new[] { ThermalLanguage.EPL });
         }
 
         /// <summary>
