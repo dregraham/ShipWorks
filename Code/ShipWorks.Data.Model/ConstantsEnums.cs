@@ -2488,8 +2488,6 @@ namespace ShipWorks.Data.Model
 		Street2,
 		///<summary>Street3. </summary>
 		Street3,
-		///<summary>AncillaryEndorsement. </summary>
-		AncillaryEndorsement,
 		/// <summary></summary>
 		AmountOfFields
 	}

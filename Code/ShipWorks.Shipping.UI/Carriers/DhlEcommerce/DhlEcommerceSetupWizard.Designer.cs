@@ -39,8 +39,6 @@
             this.wizardPageCredentials = new ShipWorks.UI.Wizard.WizardPage();
             this.accountDescription = new System.Windows.Forms.TextBox();
             this.labelDescription = new System.Windows.Forms.Label();
-            this.ancillaryEndorsement = new System.Windows.Forms.ComboBox();
-            this.labelAncillaryEndorsement = new System.Windows.Forms.Label();
             this.soldTo = new ShipWorks.UI.Controls.NumericTextBox();
             this.labelSoldTo = new System.Windows.Forms.Label();
             this.labelDistributionCenter = new System.Windows.Forms.Label();
@@ -174,8 +172,6 @@
             // 
             this.wizardPageCredentials.Controls.Add(this.accountDescription);
             this.wizardPageCredentials.Controls.Add(this.labelDescription);
-            this.wizardPageCredentials.Controls.Add(this.ancillaryEndorsement);
-            this.wizardPageCredentials.Controls.Add(this.labelAncillaryEndorsement);
             this.wizardPageCredentials.Controls.Add(this.soldTo);
             this.wizardPageCredentials.Controls.Add(this.labelSoldTo);
             this.wizardPageCredentials.Controls.Add(this.labelDistributionCenter);
@@ -198,7 +194,7 @@
             // 
             // accountDescription
             // 
-            this.accountDescription.Location = new System.Drawing.Point(156, 195);
+            this.accountDescription.Location = new System.Drawing.Point(156, 168);
             this.accountDescription.MaxLength = 50;
             this.accountDescription.Name = "accountDescription";
             this.accountDescription.Size = new System.Drawing.Size(162, 21);
@@ -207,28 +203,11 @@
             // labelDescription
             // 
             this.labelDescription.AutoSize = true;
-            this.labelDescription.Location = new System.Drawing.Point(86, 198);
+            this.labelDescription.Location = new System.Drawing.Point(86, 171);
             this.labelDescription.Name = "labelDescription";
             this.labelDescription.Size = new System.Drawing.Size(64, 13);
             this.labelDescription.TabIndex = 13;
             this.labelDescription.Text = "Description:";
-            // 
-            // ancillaryEndorsement
-            // 
-            this.ancillaryEndorsement.FormattingEnabled = true;
-            this.ancillaryEndorsement.Location = new System.Drawing.Point(156, 141);
-            this.ancillaryEndorsement.Name = "ancillaryEndorsement";
-            this.ancillaryEndorsement.Size = new System.Drawing.Size(162, 21);
-            this.ancillaryEndorsement.TabIndex = 10;
-            // 
-            // labelAncillaryEndorsement
-            // 
-            this.labelAncillaryEndorsement.AutoSize = true;
-            this.labelAncillaryEndorsement.Location = new System.Drawing.Point(33, 144);
-            this.labelAncillaryEndorsement.Name = "labelAncillaryEndorsement";
-            this.labelAncillaryEndorsement.Size = new System.Drawing.Size(117, 13);
-            this.labelAncillaryEndorsement.TabIndex = 9;
-            this.labelAncillaryEndorsement.Text = "Ancillary Endorsement:";
             // 
             // soldTo
             // 
@@ -249,7 +228,7 @@
             // labelDistributionCenter
             // 
             this.labelDistributionCenter.AutoSize = true;
-            this.labelDistributionCenter.Location = new System.Drawing.Point(49, 171);
+            this.labelDistributionCenter.Location = new System.Drawing.Point(49, 144);
             this.labelDistributionCenter.Name = "labelDistributionCenter";
             this.labelDistributionCenter.Size = new System.Drawing.Size(101, 13);
             this.labelDistributionCenter.TabIndex = 11;
@@ -258,7 +237,7 @@
             // distributionCenters
             // 
             this.distributionCenters.FormattingEnabled = true;
-            this.distributionCenters.Location = new System.Drawing.Point(156, 168);
+            this.distributionCenters.Location = new System.Drawing.Point(156, 141);
             this.distributionCenters.Name = "distributionCenters";
             this.distributionCenters.Size = new System.Drawing.Size(162, 21);
             this.distributionCenters.TabIndex = 12;
@@ -371,11 +350,13 @@
             this.contactInformation.Location = new System.Drawing.Point(23, 10);
             this.contactInformation.MaxStreetLines = 1;
             this.contactInformation.Name = "contactInformation";
-            this.contactInformation.RequiredFields = ((ShipWorks.Data.Controls.PersonFields)((((((ShipWorks.Data.Controls.PersonFields.Name | ShipWorks.Data.Controls.PersonFields.Company) 
-            | ShipWorks.Data.Controls.PersonFields.Street) 
-            | ShipWorks.Data.Controls.PersonFields.City) 
-            | ShipWorks.Data.Controls.PersonFields.State) 
-            | ShipWorks.Data.Controls.PersonFields.Postal)));
+            this.contactInformation.RequiredFields = (ShipWorks.Data.Controls.PersonFields) ShipWorks.Data.Controls.PersonFields.Name 
+                | ShipWorks.Data.Controls.PersonFields.Company
+                | ShipWorks.Data.Controls.PersonFields.Street
+                | ShipWorks.Data.Controls.PersonFields.City 
+                | ShipWorks.Data.Controls.PersonFields.State
+                | ShipWorks.Data.Controls.PersonFields.Postal
+                | ShipWorks.Data.Controls.PersonFields.Phone;
             this.contactInformation.Size = new System.Drawing.Size(355, 381);
             this.contactInformation.TabIndex = 0;
             // 
@@ -436,8 +417,6 @@
         private System.Windows.Forms.ComboBox distributionCenters;
         private ShipWorks.UI.Controls.NumericTextBox soldTo;
         private System.Windows.Forms.Label labelSoldTo;
-        private System.Windows.Forms.ComboBox ancillaryEndorsement;
-        private System.Windows.Forms.Label labelAncillaryEndorsement;
         private System.Windows.Forms.TextBox accountDescription;
         private System.Windows.Forms.Label labelDescription;
     }

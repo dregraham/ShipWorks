@@ -10,6 +10,7 @@ using Interapptive.Shared.Utility;
 using log4net;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Data.Connection;
+using ShipWorks.Data.Model.Custom;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Shipping.ShipEngine.DTOs;
@@ -45,7 +46,7 @@ namespace ShipWorks.Shipping.ShipEngine.Manifest
         /// <summary>
         /// Create a DHL eCommerce Manifest from today's shipments
         /// </summary>
-        public async Task<List<GenericResult<CreateManifestResponse>>> CreateManifest(ShipmentTypeCode shipmentTypeCode, IProgressReporter progress)
+        public async Task<List<GenericResult<CreateManifestResponse>>> CreateManifest(ICarrierAccount carrierAccount, IProgressReporter progress)
         {
             progress.Starting();
             progress.PercentComplete = 33;
@@ -56,22 +57,24 @@ namespace ShipWorks.Shipping.ShipEngine.Manifest
             // Create the predicate for the query to determine which shipments are eligible
             RelationPredicateBucket bucket = new RelationPredicateBucket
             (
+                ShipmentFields.Voided == false &
                 ShipmentFields.Processed == true &
                 ShipmentFields.ProcessedDate >= currentTime.Date &
                 ShipmentFields.ProcessedDate < currentTime.AddDays(1).Date &
                 ShipmentFields.ReturnShipment == false &
-                ShipmentFields.ShipmentType == (int) shipmentTypeCode
+                ShipmentFields.ShipmentType == (int) carrierAccount.ShipmentType
             );
 
-            if (shipmentTypeCode == ShipmentTypeCode.DhlEcommerce)
+            if (carrierAccount.ShipmentType == ShipmentTypeCode.DhlEcommerce)
             {
                 bucket.Relations.Add(ShipmentEntity.Relations.DhlEcommerceShipmentEntityUsingShipmentID);
+                bucket.PredicateExpression.AddWithAnd(DhlEcommerceShipmentFields.DhlEcommerceAccountID == carrierAccount.AccountId);
                 resultFields.DefineField(DhlEcommerceShipmentFields.ShipEngineLabelID, 0, "ShipEngineLabelID", "");
                 resultFields.DefineField(DhlEcommerceShipmentFields.DhlEcommerceAccountID, 1, "ShipEngineAccountID", "");
             }
             else
             {
-                throw new ShipEngineException($"Shipment Type {EnumHelper.GetDescription(shipmentTypeCode)} does not currently support generating manifests in ShipWorks.");
+                throw new ShipEngineException($"Shipment Type {EnumHelper.GetDescription(carrierAccount.ShipmentType)} does not currently support generating manifests in ShipWorks.");
             }
 
             Dictionary<long, List<string>> results = new Dictionary<long, List<string>>();

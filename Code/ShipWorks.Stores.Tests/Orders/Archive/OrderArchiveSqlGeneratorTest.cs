@@ -317,6 +317,7 @@ namespace ShipWorks.Stores.Tests.Orders.Archive
                     typeof(ServerMessageEntity),
                     typeof(ServerMessageSignoffEntity),
                     typeof(ServiceStatusEntity),
+                    typeof(ShipEngineManifestEntity),
                     typeof(ShippingDefaultsRuleEntity),
                     typeof(ShippingOriginEntity),
                     typeof(ShippingPrintOutputEntity),

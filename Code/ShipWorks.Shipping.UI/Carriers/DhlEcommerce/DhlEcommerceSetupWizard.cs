@@ -97,7 +97,6 @@ namespace ShipWorks.Shipping.UI.Carriers.DhlEcommerce
             shippingWizardPageFinish.SteppingInto += OnSteppingIntoFinish;
 
             LoadComboBox<DhlEcommerceDistributionCenters>(distributionCenters);
-            LoadComboBox<AncillaryEndorsement>(ancillaryEndorsement);
         }
 
         /// <summary>
@@ -166,8 +165,8 @@ namespace ShipWorks.Shipping.UI.Carriers.DhlEcommerce
                     PickupNumber = pickupNumber.Text,
                     DistributionCenter = distributionCenters.SelectedValue?.ToString() ?? distributionCenters.Text,
                     SoldTo = soldTo.Text,
-                    AncillaryEndorsement = ancillaryEndorsement.SelectedValue?.ToString() ?? ancillaryEndorsement.Text,
                     Nickname = accountDescription.Text,
+                    AncillaryEndorsement = EnumHelper.GetApiValue(AncillaryEndorsement.None),
                 });
 
                 if (result.Failure)
@@ -191,9 +190,6 @@ namespace ShipWorks.Shipping.UI.Carriers.DhlEcommerce
                 account.DistributionCenter = distributionCenters.SelectedValue?.ToString() ?? distributionCenters.Text;
                 account.SoldTo = soldTo.Text;
                 account.Description = accountDescription.Text;
-
-                EnumHelper.TryGetEnumByApiValue(ancillaryEndorsement.SelectedValue.ToString(), out AncillaryEndorsement? selectedAncillaryEndorsement);
-                account.AncillaryEndorsement = (int) selectedAncillaryEndorsement.Value;
 
                 var shipmentType = shipmentTypeManager.Get(ShipmentTypeCode.DhlEcommerce);
                 var defaultProfile = shippingProfileManager.GetOrCreatePrimaryProfile(shipmentType);

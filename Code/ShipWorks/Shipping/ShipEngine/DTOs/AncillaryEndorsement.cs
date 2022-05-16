@@ -10,7 +10,7 @@ namespace ShipWorks.Shipping.ShipEngine.DTOs
     [Obfuscation(ApplyToMembers = true, Exclude = true, StripAfterObfuscation = false)]
     public enum AncillaryEndorsement
     {
-        [ApiValue("")]
+        [ApiValue("None")]
         [Description("None")]
         None = 0,
 
