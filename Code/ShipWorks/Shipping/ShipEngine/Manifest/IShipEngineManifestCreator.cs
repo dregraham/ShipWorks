@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using Interapptive.Shared.Threading;
 using Interapptive.Shared.Utility;
+using ShipWorks.Data.Model.Custom;
 using ShipWorks.Shipping.ShipEngine.DTOs;
 
 namespace ShipWorks.Shipping.ShipEngine.Manifest
@@ -14,6 +15,6 @@ namespace ShipWorks.Shipping.ShipEngine.Manifest
         /// <summary>
         /// Create a ShipEngine Manifest from today's shipments
         /// </summary>
-        Task<List<GenericResult<CreateManifestResponse>>> CreateManifest(ShipmentTypeCode shipmentTypeCode, IProgressReporter progress);
+        Task<List<GenericResult<CreateManifestResponse>>> CreateManifest(ICarrierAccount carrierAccount, IProgressReporter progress);
     }
 }

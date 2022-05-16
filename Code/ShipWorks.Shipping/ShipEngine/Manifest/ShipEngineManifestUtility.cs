@@ -183,7 +183,7 @@ namespace ShipWorks.Shipping.ShipEngine.Manifest
             List<string> successMessages, 
             List<string> errorMessages)
         {
-            var results = await manifestCreator.CreateManifest(carrierAccount.ShipmentType, manifestProgress)
+            var results = await manifestCreator.CreateManifest(carrierAccount, manifestProgress)
                 .ConfigureAwait(true);
 
             manifestProgress.Detail = "Saving Manifest";
