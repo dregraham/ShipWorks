@@ -156,8 +156,8 @@ namespace ShipWorks.Stores.Platforms.Amazon
                 return;
             }
 
-            var orderDate = salesOrder.CreatedDateTime?.DateTime ?? DateTime.MinValue;
-            var modifiedDate = salesOrder.ModifiedDateTime?.DateTime ?? DateTime.MinValue;
+            var orderDate = salesOrder.CreatedDateTime?.DateTime ?? DateTime.UtcNow;
+            var modifiedDate = salesOrder.ModifiedDateTime?.DateTime ?? DateTime.UtcNow;
 
             //Basic properties
             order.OrderDate = orderDate;
