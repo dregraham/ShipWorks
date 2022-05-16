@@ -166,6 +166,7 @@ namespace ShipWorks.Shipping.UI.Carriers.DhlEcommerce
                     DistributionCenter = distributionCenters.SelectedValue?.ToString() ?? distributionCenters.Text,
                     SoldTo = soldTo.Text,
                     Nickname = accountDescription.Text,
+                    AncillaryEndorsement = EnumHelper.GetApiValue(AncillaryEndorsement.None),
                 });
 
                 if (result.Failure)
