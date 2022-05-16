@@ -156,9 +156,12 @@ namespace ShipWorks.Stores.Platforms.Amazon
                 return;
             }
 
-            // basic properties
-            order.OrderDate = salesOrder.PaidDate?.UtcDateTime ?? DateTime.UtcNow;
-            order.OnlineLastModified = salesOrder.ModifiedDateTime?.UtcDateTime ?? DateTime.UtcNow;
+            var orderDate = salesOrder.CreatedDateTime?.DateTime ?? DateTime.MinValue;
+            var modifiedDate = salesOrder.ModifiedDateTime?.DateTime ?? DateTime.MinValue;
+
+            //Basic properties
+            order.OrderDate = orderDate;
+            order.OnlineLastModified = modifiedDate >= orderDate ? modifiedDate : orderDate;
 
             // TODO: Don't appear to be provided
             order.EarliestExpectedDeliveryDate = null;
