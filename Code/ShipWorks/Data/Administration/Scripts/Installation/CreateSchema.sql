@@ -3007,8 +3007,7 @@ CREATE TABLE [dbo].[DhlEcommerceAccount](
 	[CountryCode] [nvarchar](50) NOT NULL DEFAULT(('')),
 	[Phone] [nvarchar](26) NOT NULL DEFAULT(('')),
 	[Email] [nvarchar](100) NOT NULL DEFAULT(('')),
-	[CreatedDate] [datetime] NOT NULL,
-	[AncillaryEndorsement] [int] NOT NULL CONSTRAINT [DF_DhlEcommerceAccount_AncillaryEndorsement] DEFAULT ((0))
+	[CreatedDate] [datetime] NOT NULL
  CONSTRAINT [PK_PostalDhlEcommerceAccount] PRIMARY KEY CLUSTERED 
 (
 	[DhlEcommerceAccountID] ASC

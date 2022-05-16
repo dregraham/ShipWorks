@@ -738,7 +738,6 @@
       </EntityDefinition>
       <EntityDefinition Name="DhlEcommerceAccount" ObjectID="9661828e-f639-4515-a323-3ff6b47e657d">
         <Fields>
-          <Field Name="AncillaryEndorsement" Type="int" Precision="10" FieldIndex="23" />
           <Field Name="ApiSecret" Type="string" MaxLength="400" FieldIndex="4" />
           <Field Name="City" Type="string" MaxLength="50" FieldIndex="14" />
           <Field Name="ClientId" Type="string" MaxLength="60" FieldIndex="3" />
@@ -4834,7 +4833,7 @@
       <Catalogs>
         <Catalog Name="ShipWorksLocal">
           <Schemas>
-            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2022-05-13T13:54:26.0415438Z">
+            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2022-05-16T17:36:27.9413375Z">
               <Tables>
                 <Table Name="Action">
                   <PkConstraintName Name="PK_Action" />
@@ -5574,7 +5573,6 @@
                     <Field Name="Phone" Ordinal="21" HasDefaultValue="true" DefaultValue="''" DbType="12" Length="26" />
                     <Field Name="Email" Ordinal="22" HasDefaultValue="true" DefaultValue="''" DbType="12" Length="100" />
                     <Field Name="CreatedDate" Ordinal="23" DbType="4" />
-                    <Field Name="AncillaryEndorsement" Ordinal="24" HasDefaultValue="true" DefaultValue="(0)" DbType="8" Precision="10" />
                   </Fields>
                 </Table>
                 <Table Name="DhlEcommerceProfile">
@@ -12028,7 +12026,6 @@
         </EntityMapping>
         <EntityMapping EntityName=":DhlEcommerceAccount" TargetName="ShipWorksLocal:dbo:DhlEcommerceAccount">
           <FieldMappings>
-            <FieldMapping FieldName="AncillaryEndorsement" TargetFieldName="AncillaryEndorsement" />
             <FieldMapping FieldName="ApiSecret" TargetFieldName="ApiSecret" />
             <FieldMapping FieldName="City" TargetFieldName="City" />
             <FieldMapping FieldName="ClientId" TargetFieldName="ClientId" />

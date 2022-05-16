@@ -5772,11 +5772,6 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(DhlEcommerceAccountFieldIndex.Street3);}
 		}
-		/// <summary>Creates a new DhlEcommerceAccountEntity.AncillaryEndorsement field instance</summary>
-		public static EntityField2 AncillaryEndorsement
-		{
-			get { return (EntityField2)EntityFieldFactory.Create(DhlEcommerceAccountFieldIndex.AncillaryEndorsement);}
-		}
 	}
 
 	/// <summary>Field Creation Class for entity DhlEcommerceProfileEntity</summary>

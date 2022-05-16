@@ -938,7 +938,6 @@ namespace ShipWorks.Data.Model.HelperClasses
 			this.AddElementFieldInfo("DhlEcommerceAccountEntity", "CreatedDate", typeof(System.DateTime), false, false, false, false,  (int)DhlEcommerceAccountFieldIndex.CreatedDate, 0, 0, 0);
 			this.AddElementFieldInfo("DhlEcommerceAccountEntity", "Street2", typeof(System.String), false, false, false, false,  (int)DhlEcommerceAccountFieldIndex.Street2, 60, 0, 0);
 			this.AddElementFieldInfo("DhlEcommerceAccountEntity", "Street3", typeof(System.String), false, false, false, false,  (int)DhlEcommerceAccountFieldIndex.Street3, 60, 0, 0);
-			this.AddElementFieldInfo("DhlEcommerceAccountEntity", "AncillaryEndorsement", typeof(System.Int32), false, false, false, false,  (int)DhlEcommerceAccountFieldIndex.AncillaryEndorsement, 0, 0, 10);
 		}
 		/// <summary>Inits DhlEcommerceProfileEntity's FieldInfo objects</summary>
 		private void InitDhlEcommerceProfileEntityInfos()
