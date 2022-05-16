@@ -63,6 +63,8 @@ namespace ShipWorks.Stores.Warehouse
                 store.PlatformAccountId = license?.CustomerID.HasValue() == true ?
                     license.CustomerID : 
                     tangoWebClient.GetTangoCustomerId();
+
+                store.ContinuationToken = storeEntity.ContinuationToken;
             }
 
             return store;

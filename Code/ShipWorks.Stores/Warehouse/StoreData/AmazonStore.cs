@@ -59,5 +59,11 @@ namespace ShipWorks.Stores.Warehouse.StoreData
         /// The platform account id (Account Service AccountId)
         /// </summary>
         public string PlatformAccountId { get; set; }
+
+        /// <summary>
+        /// The platform continuation token
+        /// </summary>
+        [JsonProperty("continuationToken")]
+        public string ContinuationToken { get; set; }
     }
 }
