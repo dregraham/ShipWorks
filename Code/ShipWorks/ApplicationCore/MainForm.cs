@@ -97,6 +97,7 @@ using ShipWorks.Stores.Content;
 using ShipWorks.Stores.Management;
 using ShipWorks.Stores.Orders.Archive;
 using ShipWorks.Stores.Orders.Split;
+using ShipWorks.Stores.Services;
 using ShipWorks.Templates;
 using ShipWorks.Templates.Controls;
 using ShipWorks.Templates.Controls.DefaultPickListTemplate;
@@ -150,7 +151,7 @@ namespace ShipWorks
         private readonly Lazy<DockControl> shipmentDock;
         private ILifetimeScope menuCommandLifetimeScope;
         private IArchiveNotificationManager archiveNotificationManager;
-        private ICurrentUserSettings currentUserSettings;
+        private readonly ICurrentUserSettings currentUserSettings;
         private ILifetimeScope orderLookupLifetimeScope;
         private ILifetimeScope productsLifetimeScope;
         private IOrderLookup orderLookupControl;
@@ -879,7 +880,9 @@ namespace ShipWorks
             MigrateSqlConfigToHub();
 
             ConvertLegacyTrialStores();
-            
+
+            ConvertAmazonStoresToSP();
+
             // Update the custom actions UI.  Has to come before applying the layout, so the QAT can pickup the buttons
             UpdateCustomButtonsActionsUI();
 
@@ -2198,7 +2201,7 @@ namespace ShipWorks
 
             // Update the dashboard for new/removed trials
             DashboardManager.UpdateTrialItems();
-            
+
             // Update store type specific dashboard items
             DashboardManager.UpdateStoreTypeDependentItems();
 
@@ -5573,6 +5576,19 @@ namespace ShipWorks
                 var legacyTrialStoreConverter = lifetimeScope.Resolve<ILegacyStoreTrialKeyConverter>();
 
                 legacyTrialStoreConverter.ConvertTrials();
+            }
+        }
+
+        /// <summary>
+        /// Convert MWS Amazon stores to SP
+        /// </summary>
+        private void ConvertAmazonStoresToSP()
+        {
+            using (var lifetimeScope = IoC.BeginLifetimeScope())
+            {
+                var amazonConverter = lifetimeScope.Resolve<IAmazonMwsToSpConverter>();
+
+                amazonConverter.ConvertStores(this);
             }
         }
 

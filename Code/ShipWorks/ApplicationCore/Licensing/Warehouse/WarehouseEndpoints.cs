@@ -24,6 +24,7 @@ namespace ShipWorks.ApplicationCore.Licensing.Warehouse
         public const string GetConfig = "api/config";
         public const string GetSmsVerificationNumber = "api/config/smsVerificationNumber";
         public const string Tracking = "api/tracking";
+        public const string MigrateAmazonStore = "api/ordersource/migrate";
 
         private const string notifyShipped = "api/customer/notifyShipped/{0}";
         private const string linkWarehouse = "api/warehouses/{0}/link";
