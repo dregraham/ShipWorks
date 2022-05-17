@@ -206,7 +206,7 @@ namespace ShipWorks.Editions
             elements.Add(new XElement("SharedOptions",
                 new XElement("StampsDhl", edition.SharedOptions.StampsDhlEnabled),
                 new XElement("EndiciaDhl", edition.SharedOptions.EndiciaDhlEnabled),
-                new XElement("DhlEcommerceMax", edition.SharedOptions.DhlEcommerceSmParcelExpeditedMaxEnabled),
+                new XElement("DhlEcommerceSmParcelExpeditedMaxEnabled", edition.SharedOptions.DhlEcommerceSmParcelExpeditedMaxEnabled),
                 new XElement("EndiciaInsurance", edition.SharedOptions.EndiciaInsuranceEnabled),
                 new XElement("UpsSurePost", edition.SharedOptions.UpsSurePostEnabled),
                 new XElement("EndiciaConsolidator", edition.SharedOptions.EndiciaConsolidatorEnabled),
