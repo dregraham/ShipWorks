@@ -1542,11 +1542,6 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(AmazonStoreFieldIndex.AmazonVATS);}
 		}
-		/// <summary>Creates a new AmazonStoreEntity.MaxOrderDatePreMigration field instance</summary>
-		public static EntityField2 MaxOrderDatePreMigration
-		{
-			get { return (EntityField2)EntityFieldFactory.Create(AmazonStoreFieldIndex.MaxOrderDatePreMigration);}
-		}
 		/// <summary>Creates a new AmazonStoreEntity.ContinuationToken field instance</summary>
 		public static EntityField2 ContinuationToken
 		{

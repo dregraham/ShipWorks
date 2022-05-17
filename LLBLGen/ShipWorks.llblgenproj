@@ -344,14 +344,13 @@
           <Field Name="AmazonVATS" Type="bool" FieldIndex="17" />
           <Field Name="AuthToken" Type="string" MaxLength="100" FieldIndex="7" />
           <Field Name="Certificate" Type="byte[]" IsOptional="true" MaxLength="2048" FieldIndex="11" />
-          <Field Name="ContinuationToken" Type="string" IsOptional="true" MaxLength="2048" FieldIndex="19" />
+          <Field Name="ContinuationToken" Type="string" IsOptional="true" MaxLength="2048" FieldIndex="18" />
           <Field Name="Cookie" Type="string" MaxLength="2147483647" FieldIndex="8" />
           <Field Name="CookieExpires" Type="datetime" FieldIndex="9" />
           <Field Name="CookieWaitUntil" Type="datetime" FieldIndex="10" />
           <Field Name="DomainName" Type="string" MaxLength="50" FieldIndex="16" />
           <Field Name="ExcludeFBA" Type="bool" FieldIndex="15" />
           <Field Name="MarketplaceID" Type="string" MaxLength="50" FieldIndex="14" />
-          <Field Name="MaxOrderDatePreMigration" Type="datetime" IsOptional="true" FieldIndex="18" />
           <Field Name="MerchantID" Type="string" MaxLength="50" FieldIndex="13" />
           <Field Name="MerchantName" Type="string" MaxLength="64" FieldIndex="4" />
           <Field Name="MerchantToken" Type="string" MaxLength="32" FieldIndex="5" />
@@ -4726,7 +4725,7 @@
       <Catalogs>
         <Catalog Name="ShipWorksLocal">
           <Schemas>
-            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2022-04-15T13:18:52.851182Z">
+            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2022-05-17T20:22:58.9005951Z">
               <Tables>
                 <Table Name="Action">
                   <PkConstraintName Name="PK_Action" />
@@ -4955,8 +4954,7 @@
                     <Field Name="ExcludeFBA" Ordinal="17" DbType="2" />
                     <Field Name="DomainName" Ordinal="18" DbType="12" Length="50" />
                     <Field Name="AmazonVATS" Ordinal="19" DbType="2" />
-                    <Field Name="MaxOrderDatePreMigration" Ordinal="20" IsOptional="true" DbType="4" />
-                    <Field Name="ContinuationToken" Ordinal="21" IsOptional="true" DbType="12" Length="2048" />
+                    <Field Name="ContinuationToken" Ordinal="20" IsOptional="true" DbType="12" Length="2048" />
                   </Fields>
                 </Table>
                 <Table Name="AmazonSWAAccount">
@@ -5054,8 +5052,8 @@
                     <Field Name="NonMachinable" Ordinal="4" IsOptional="true" DbType="2" />
                     <Field Name="Contents" Ordinal="5" IsOptional="true" DbType="8" Precision="10" />
                     <Field Name="NonDelivery" Ordinal="6" IsOptional="true" DbType="8" Precision="10" />
-                    <Field Name="CustomsRecipientTinType" Ordinal="7" IsOptional="true" DbType="8" Precision="10" />
-                    <Field Name="CustomsRecipientTin" Ordinal="8" IsOptional="true" DbType="12" Length="24" />
+                    <Field Name="CustomsRecipientTin" Ordinal="7" IsOptional="true" DbType="12" Length="24" />
+                    <Field Name="CustomsRecipientTinType" Ordinal="8" IsOptional="true" DbType="8" Precision="10" />
                     <Field Name="CustomsRecipientEntityType" Ordinal="9" IsOptional="true" DbType="8" Precision="10" />
                     <Field Name="CustomsRecipientIssuingAuthority" Ordinal="10" IsOptional="true" DbType="12" Length="2" />
                   </Fields>
@@ -5087,8 +5085,8 @@
                     <Field Name="DimsWeight" Ordinal="14" DbType="6" Precision="38" />
                     <Field Name="InsuranceValue" Ordinal="15" DbType="9" Precision="19" Scale="4" />
                     <Field Name="Insurance" Ordinal="16" DbType="2" />
-                    <Field Name="CustomsRecipientTinType" Ordinal="17" IsOptional="true" DbType="8" Precision="10" />
-                    <Field Name="CustomsRecipientTin" Ordinal="18" IsOptional="true" DbType="12" Length="24" />
+                    <Field Name="CustomsRecipientTin" Ordinal="17" IsOptional="true" DbType="12" Length="24" />
+                    <Field Name="CustomsRecipientTinType" Ordinal="18" IsOptional="true" DbType="8" Precision="10" />
                     <Field Name="CustomsRecipientEntityType" Ordinal="19" IsOptional="true" DbType="8" Precision="10" />
                     <Field Name="CustomsRecipientIssuingAuthority" Ordinal="20" IsOptional="true" DbType="12" Length="2" />
                   </Fields>
@@ -6960,7 +6958,7 @@
                   <Fields>
                     <Field Name="FilterNodeContentID" Ordinal="1" DbType="0" Precision="19" />
                     <Field Name="FilterTarget" Ordinal="2" DbType="8" Precision="10" />
-                    <Field Name="ColumnMask" Ordinal="3" IsOptional="true" DbType="23" Length="150" />
+                    <Field Name="ColumnMask" Ordinal="3" DbType="23" Length="150" />
                     <Field Name="JoinMask" Ordinal="4" DbType="8" Precision="10" />
                     <Field Name="Position" Ordinal="5" DbType="8" Precision="10" />
                   </Fields>
@@ -11389,7 +11387,6 @@
             <FieldMapping FieldName="DomainName" TargetFieldName="DomainName" />
             <FieldMapping FieldName="ExcludeFBA" TargetFieldName="ExcludeFBA" />
             <FieldMapping FieldName="MarketplaceID" TargetFieldName="MarketplaceID" />
-            <FieldMapping FieldName="MaxOrderDatePreMigration" TargetFieldName="MaxOrderDatePreMigration" />
             <FieldMapping FieldName="MerchantID" TargetFieldName="MerchantID" />
             <FieldMapping FieldName="MerchantName" TargetFieldName="MerchantName" />
             <FieldMapping FieldName="MerchantToken" TargetFieldName="MerchantToken" />

@@ -19,22 +19,3 @@ BEGIN
 	DROP TABLE [dbo].[PlatformStore];
 END
 GO
-
-PRINT N'Altering [dbo].[AmazonStore]';
-GO
-
-IF COL_LENGTH(N'[dbo].[AmazonStore]', N'MaxOrderDatePreMigration') IS NULL
-	ALTER TABLE [dbo].[AmazonStore] ADD [MaxOrderDatePreMigration] [datetime] NULL;
-GO
-
-PRINT N'Setting MaxOrderDatePreMigration on [dbo].[AmazonStore]';
-UPDATE [dbo].[AmazonStore] 
-SET [dbo].[AmazonStore].[MaxOrderDatePreMigration] = [MaxOrderDate]
-FROM [dbo].[AmazonStore]
-INNER JOIN 
-( 
-	SELECT [StoreID], MAX([OrderDate]) AS [MaxOrderDate]
-	FROM [dbo].[Order]
-	GROUP BY [StoreID]
-) [MaxOrderDates] ON [dbo].[AmazonStore].[StoreID] = [MaxOrderDates].[StoreID]
-WHERE [dbo].[AmazonStore].[MaxOrderDatePreMigration] IS NULL;
