@@ -3042,7 +3042,7 @@ CREATE TABLE [dbo].[DhlEcommerceShipment](
 	[DimsHeight] [float] NOT NULL,
 	[DimsWeight] [float] NOT NULL,
 	[DimsAddWeight] [bit] NOT NULL,
-	[Reference1] [nvarchar](300) NOT NULL DEFAULT(('')),
+	[Reference1] [nvarchar](300) NOT NULL CONSTRAINT [DF_DhlEcommerceShipment_Reference1] DEFAULT(('')),
 	[CustomsRecipientTin] [nvarchar](25) NULL,
 	[CustomsTaxIdType] [int] NULL,
 	[CustomsTinIssuingAuthority] [nvarchar](2) NULL,

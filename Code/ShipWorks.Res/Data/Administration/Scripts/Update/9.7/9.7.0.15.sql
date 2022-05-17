@@ -23,7 +23,7 @@ IF OBJECT_ID(N'[dbo].[DhlEcommerceShipment]', 'U') IS NULL
     [DimsHeight] [float] NOT NULL,
     [DimsWeight] [float] NOT NULL,
     [DimsAddWeight] [bit] NOT NULL,
-    [Reference1] [nvarchar] (300) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL CONSTRAINT [DF__DhlEcomme__Refer__42ACE4D4] DEFAULT (''),
+    [Reference1] [nvarchar] (300) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL CONSTRAINT [DF_DhlEcommerceShipment_Reference1] DEFAULT (''),
     [CustomsRecipientTin] [nvarchar] (25) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
     [CustomsTaxIdType] [int] NULL,
     [CustomsTinIssuingAuthority] [nvarchar] (2) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
