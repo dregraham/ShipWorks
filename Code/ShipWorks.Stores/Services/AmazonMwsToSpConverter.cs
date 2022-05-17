@@ -56,9 +56,7 @@ namespace ShipWorks.Stores.Services
                 x.WarehouseStoreID == null)
                 .Cast<AmazonStoreEntity>();
 
-            var totalStores = storesToMigrate.Count();
-
-            if (totalStores > 0)
+            if (storesToMigrate.Any())
             {
                 ProgressProvider progressProvider = new ProgressProvider();
                 IProgressReporter storeProgress = progressProvider.AddItem("Migrating Amazon Stores");
@@ -71,7 +69,7 @@ namespace ShipWorks.Stores.Services
 
                     Task.Run(async () =>
                     {
-                        await MigrateStores(storeProgress, storesToMigrate, totalStores).ConfigureAwait(false);
+                        await MigrateStores(storeProgress, storesToMigrate).ConfigureAwait(false);
                     });
 
                     progressDialog.ShowDialog(owner);
@@ -82,11 +80,12 @@ namespace ShipWorks.Stores.Services
         /// <summary>
         /// Perform the store migration
         /// </summary>
-        private async Task MigrateStores(IProgressReporter storeProgress, IEnumerable<AmazonStoreEntity> storesToMigrate, int totalStores)
+        private async Task MigrateStores(IProgressReporter storeProgress, IEnumerable<AmazonStoreEntity> storesToMigrate)
         {
             storeProgress.Starting();
             storeProgress.PercentComplete = 0;
 
+            var totalStores = storesToMigrate.Count();
             var storesFailed = false;
 
             try
