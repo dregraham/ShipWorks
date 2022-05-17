@@ -4,9 +4,11 @@ using System.ComponentModel;
 using System.Web;
 using System.Windows.Forms;
 using Autofac;
+using Interapptive.Shared.Net;
 using Interapptive.Shared.UI;
 using log4net;
 using ShipWorks.ApplicationCore;
+using ShipWorks.ApplicationCore.Licensing.WebClientEnvironments;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Properties;
 using ShipWorks.UI.Controls.Html;
@@ -105,53 +107,49 @@ namespace ShipWorks.Stores.Platforms.Etsy
         }
 
         /// <summary>
+        /// Used to determine if a new token has been entered
+        /// </summary>
+        public bool HasUserUpdatedToken => !string.IsNullOrEmpty(tokenInput.Text);
+
+        /// <summary>
         /// Prompts user to get a new token, retrieves it and authorizes it.
         /// </summary>
         private void OnAuthorizeShipWorks(object sender, EventArgs e)
         {
-            Cursor.Current = Cursors.WaitCursor;
-
-            using (HttpRedirectInterceptorDlg authenticateDlg = new HttpRedirectInterceptorDlg())
+            using (ILifetimeScope scope = IoC.BeginLifetimeScope())
             {
-                authenticateDlg.Text = "Authorize ShipWorks to Connect to Etsy";
+                var warehouseUrl = new Uri(scope.Resolve<WebClientEnvironmentFactory>().SelectedEnvironment.WarehouseUrl);
+                
+                var callbackURL = new Uri(warehouseUrl, "callbacks/etsy/auth");
+                var authLink = webClient.GetRequestTokenURL(callbackURL);
 
-                Uri callbackURL = authenticateDlg.StartListening();
-
-                try
-                {
-                    authenticateDlg.InitialURL = webClient.GetRequestTokenURL(callbackURL);
-
-                    if (authenticateDlg.ShowDialog(this) == DialogResult.OK)
-                    {
-                        ProcessListenerUrl(authenticateDlg.ResultURL);
-                    }
-                }
-                catch (EtsyException ex)
-                {
-                    MessageHelper.ShowError(this, ex.Message);
-                }
-            }
+                WebHelper.OpenUrl(authLink, this);
+            }    
         }
 
         /// <summary>
-        /// Process the URL handed back by Etsy after authentication and finalize  the authorizaion
+        /// Verify the verification token with Etsy and get the actual OAuthToken
         /// </summary>
-        private void ProcessListenerUrl(Uri url)
+        public void VerifyToken()
         {
-            Cursor.Current = Cursors.WaitCursor;
-
             try
             {
-                NameValueCollection queryStringCollection = HttpUtility.ParseQueryString(url.Query);
+                if(tokenInput.Text.Length == 0)
+                {
+                    return;
+                }
 
-                string token = queryStringCollection["oauth_token"];
-                string verifier = queryStringCollection["oauth_verifier"];
-
+                var parts = tokenInput.Text.Split('-');
+                if (parts.Length != 2)
+                {
+                    MessageHelper.ShowError(this, "Token was incorrectly formatted. Please attempt to fetch another token from Etsy.");
+                    return;
+                }
+                var token = parts[0];
+                var verifier = parts[1];
                 webClient.AuthorizeToken(token, verifier);
-
-                OnTokenImported();
             }
-            catch (EtsyException ex)
+            catch (Exception ex)
             {
                 log.Error(ex.Message, ex);
                 MessageHelper.ShowError(this, ex.Message);
