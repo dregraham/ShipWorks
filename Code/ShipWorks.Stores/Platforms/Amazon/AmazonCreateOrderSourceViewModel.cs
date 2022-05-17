@@ -54,6 +54,11 @@ namespace ShipWorks.Stores.Platforms.Amazon
                 var url = await hubMonoauthClient.GetCreateOrderSourceInitiateUrl(orderSourceName, store.AmazonApiRegion).ConfigureAwait(true);
                 webHelper.OpenUrl(url);
             }
+            catch(ObjectDisposedException ex)
+            {
+                //User cancelled the dialog before we could open the browser
+                //Do nothing
+            }
             catch (Exception ex)
             {
                 messageHelper.ShowError(ex.GetBaseException().Message);
