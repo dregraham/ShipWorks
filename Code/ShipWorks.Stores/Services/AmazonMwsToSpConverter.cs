@@ -91,7 +91,8 @@ namespace ShipWorks.Stores.Services
             try
             {
                 var index = 1;
-                foreach (var store in storesToMigrate)
+
+                var tasks = storesToMigrate.AsParallel().Select(async store =>
                 {
                     storeProgress.Detail = $"Migrating store {index} of {totalStores}";
                     storeProgress.PercentComplete = Math.Min((index * 100) / totalStores, 100);
@@ -119,7 +120,9 @@ namespace ShipWorks.Stores.Services
                     }
 
                     index++;
-                }
+                });
+
+                await Task.WhenAll(tasks);
 
                 storeProgress.Detail = "Done";
 
