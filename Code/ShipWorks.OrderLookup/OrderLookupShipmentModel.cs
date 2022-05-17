@@ -52,6 +52,7 @@ namespace ShipWorks.OrderLookup
                 RegisterEventEntity(x => x?.Shipment?.Asendia, x => x == ShipmentTypeCode.Asendia),
                 RegisterEventEntity(x => x?.Shipment?.BestRate, x => x == ShipmentTypeCode.BestRate),
                 RegisterEventEntity(x => x?.Shipment?.DhlExpress, x => x == ShipmentTypeCode.DhlExpress),
+                RegisterEventEntity(x => x?.Shipment?.DhlEcommerce, x => x == ShipmentTypeCode.DhlEcommerce),
                 RegisterEventEntity(x => x?.Shipment?.FedEx, x => x == ShipmentTypeCode.FedEx),
                 RegisterEventEntities(x => x?.Shipment?.FedEx?.Packages, x => x == ShipmentTypeCode.FedEx),
                 RegisterEventEntity(x => x?.Shipment?.IParcel, x => x == ShipmentTypeCode.iParcel),

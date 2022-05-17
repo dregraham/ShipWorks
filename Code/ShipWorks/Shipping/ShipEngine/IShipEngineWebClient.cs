@@ -2,9 +2,11 @@
 using System.Threading.Tasks;
 using Interapptive.Shared.Business;
 using Interapptive.Shared.Utility;
-using ShipEngine.CarrierApi.Client.Model;
+using log4net;
 using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Data.Model.EntityInterfaces;
+using ShipWorks.Shipping.ShipEngine.DTOs;
+using ShipWorks.Shipping.ShipEngine.DTOs.CarrierAccount;
 
 namespace ShipWorks.Shipping.ShipEngine
 {
@@ -18,6 +20,11 @@ namespace ShipWorks.Shipping.ShipEngine
         /// </summary>
         /// <returns>The CarrierId</returns>
         Task<GenericResult<string>> ConnectDhlAccount(string accountNumber);
+
+        /// <summary>
+        /// Connect the given DHL eCommerce account to ShipEngine
+        /// </summary>
+        Task<GenericResult<string>> ConnectDhlEcommerceAccount(DhlEcommerceRegistrationRequest dhlRequest);
 
         /// <summary>
         /// Connects the given Asendia account to the users ShipEngine account
@@ -52,33 +59,33 @@ namespace ShipWorks.Shipping.ShipEngine
         /// </summary>
         /// <param name="request">The rate shipment request</param>
         /// <returns>The rate shipment response</returns>
-        Task<RateShipmentResponse> RateShipment(RateShipmentRequest request, ApiLogSource apiLogSource);
+        Task<ShipWorks.Shipping.ShipEngine.DTOs.RateShipmentResponse> RateShipment(ShipWorks.Shipping.ShipEngine.DTOs.RateShipmentRequest request, ApiLogSource apiLogSource);
 
         /// <summary>
         /// purchase a label from ShipEngine using the given rateid
         /// </summary>
-        Task<Label> PurchaseLabelWithRate(string rateId, PurchaseLabelWithoutShipmentRequest request, ApiLogSource apiLogSource);
+        Task<ShipWorks.Shipping.ShipEngine.DTOs.Label> PurchaseLabelWithRate(string rateId, ShipWorks.Shipping.ShipEngine.DTOs.PurchaseLabelWithoutShipmentRequest request, ApiLogSource apiLogSource);
 
         /// <summary>
         /// Purchases a label from ShipEngine using the given request
         /// </summary>
-        Task<Label> PurchaseLabel(PurchaseLabelRequest request, ApiLogSource apiLogSource, TelemetricResult<IDownloadedLabelData> telemetricResult);
+        Task<ShipWorks.Shipping.ShipEngine.DTOs.Label> PurchaseLabel(ShipWorks.Shipping.ShipEngine.DTOs.PurchaseLabelRequest request, ApiLogSource apiLogSource, TelemetricResult<IDownloadedLabelData> telemetricResult);
 
         /// <summary>
         /// Void a shipment label
         /// </summary>
-        Task<VoidLabelResponse> VoidLabel(string labelId, ApiLogSource apiLogSource);
+        Task<ShipWorks.Shipping.ShipEngine.DTOs.VoidLabelResponse> VoidLabel(string labelId, ApiLogSource apiLogSource);
 
         /// <summary>
         /// Track a shipment using the label ID
         /// </summary>
-        Task<TrackingInformation> Track(string labelId, ApiLogSource apiLogSource);
+        Task<ShipWorks.Shipping.ShipEngine.DTOs.TrackingInformation> Track(string labelId, ApiLogSource apiLogSource);
 
         /// <summary>
         /// Track a shipment using the carrier code and tracking number
         /// </summary>
         /// <returns></returns>
-        Task<TrackingInformation> Track(string carrier, string trackingNumber, ApiLogSource apiLogSource);
+        Task<ShipWorks.Shipping.ShipEngine.DTOs.TrackingInformation> Track(string carrier, string trackingNumber, ApiLogSource apiLogSource);
 
         /// <summary>
         /// Connects the given stamps.com account to the users ShipEngine account
@@ -105,5 +112,10 @@ namespace ShipWorks.Shipping.ShipEngine
         /// Create an Asendia Manifest for the given label IDs
         /// </summary>
         Task<Result> CreateAsendiaManifest(IEnumerable<string> labelIds);
+
+        /// <summary>
+        /// Create a manifest for the given label IDs, retrying if necessary
+        /// </summary>
+        Task<GenericResult<CreateManifestResponse>> CreateManifest(List<string> labelIDs, ILog log);
     }
 }

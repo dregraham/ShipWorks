@@ -92,7 +92,12 @@ namespace ShipWorks.Tests.Core
 
                         if (!descriptionAttributes.Any())
                         {
-                            missingObfuscationAttribute += string.Format("{0}.{1} is missing the DescriptionAttribute.{2}", type.FullName, enumValueName, Environment.NewLine);
+                            var enumMemberAttributes = memberInfos.SelectMany(x => x.GetCustomAttributes(typeof(System.Runtime.Serialization.EnumMemberAttribute), false));
+
+                            if (!enumMemberAttributes.Any())
+                            {
+                                missingObfuscationAttribute += string.Format("{0}.{1} is missing the DescriptionAttribute.{2}, or EnumMemberAttribute", type.FullName, enumValueName, Environment.NewLine);
+                            }
                         }
                     }
                 }

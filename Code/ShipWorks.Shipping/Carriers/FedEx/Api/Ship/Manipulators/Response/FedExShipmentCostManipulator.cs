@@ -19,7 +19,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Response.Manipulators
         /// </summary>
         public FedExShipmentCostManipulator(Func<Type, ILog> createLog)
         {
-            this.log = createLog(GetType());
+            log = createLog(GetType());
         }
 
         /// <summary>

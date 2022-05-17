@@ -1,6 +1,5 @@
 ﻿using Autofac.Extras.Moq;
 using Moq;
-using ShipEngine.CarrierApi.Client.Model;
 using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.Dhl;
@@ -212,7 +211,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.DhlExpress
                 }
             };
 
-            var trackingInformation = new TrackingInformation();
+            var trackingInformation = new ShipWorks.Shipping.ShipEngine.DTOs.TrackingInformation();
 
             mock.Mock<IShipEngineWebClient>()
                 .Setup(c => c.Track(AnyString, ApiLogSource.DHLExpress))
@@ -239,7 +238,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.DhlExpress
             TrackingResult trackingResult = new TrackingResult();
 
             mock.Mock<IShipEngineTrackingResultFactory>()
-                .Setup(c => c.Create(It.IsAny<TrackingInformation>()))
+                .Setup(c => c.Create(It.IsAny<ShipWorks.Shipping.ShipEngine.DTOs.TrackingInformation>()))
                 .Returns(trackingResult);
 
             var testResult = testObject.TrackShipment(shipment);

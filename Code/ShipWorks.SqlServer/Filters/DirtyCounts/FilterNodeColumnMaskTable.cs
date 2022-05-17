@@ -66,6 +66,7 @@ namespace ShipWorks.SqlServer.Filters.DirtyCounts
         YahooOrderSearch = 53,
         OrderSearch = 54,
         GenericModuleOrder = 55,
-        OverstockOrder = 56
+        OverstockOrder = 56,
+        DhlEcommerceShipment = 57
     }
 }

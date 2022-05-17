@@ -57,6 +57,16 @@ namespace ShipWorks.Tests.Stores.Yahoo
         }
 
         [Fact]
+        public void GetCarrierCode_ReturnsDhl_WhenDhlEcommerce()
+        {
+            shipmentEntity.ShipmentType = (int) ShipmentTypeCode.DhlEcommerce;
+
+            string carrierCode = YahooEmailOnlineUpdater.GetShipperString(shipmentEntity);
+
+            Assert.Equal("DHL", carrierCode);
+        }
+
+        [Fact]
         public void GetCarrierCode_ReturnsConsolidator_WhenEndiciaAndConsolidatorServiceUsed()
         {
             postalShipmentEntity.Service = (int)PostalServiceType.ConsolidatorDomestic;

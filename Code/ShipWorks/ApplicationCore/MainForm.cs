@@ -82,7 +82,9 @@ using ShipWorks.Products;
 using ShipWorks.Properties;
 using ShipWorks.Settings;
 using ShipWorks.Shipping;
+using ShipWorks.Shipping.Carriers;
 using ShipWorks.Shipping.Carriers.Asendia;
+using ShipWorks.Shipping.Carriers.DhlEcommerce;
 using ShipWorks.Shipping.Carriers.FedEx;
 using ShipWorks.Shipping.Carriers.FedEx.Api;
 using ShipWorks.Shipping.Carriers.UPS.OneBalance;
@@ -90,6 +92,7 @@ using ShipWorks.Shipping.Carriers.UPS.WorldShip;
 using ShipWorks.Shipping.Profiles;
 using ShipWorks.Shipping.ScanForms;
 using ShipWorks.Shipping.Settings;
+using ShipWorks.Shipping.ShipEngine.Manifest;
 using ShipWorks.Shipping.ShipSense.Population;
 using ShipWorks.Stores;
 using ShipWorks.Stores.Communication;
@@ -150,7 +153,7 @@ namespace ShipWorks
         private readonly Lazy<DockControl> shipmentDock;
         private ILifetimeScope menuCommandLifetimeScope;
         private IArchiveNotificationManager archiveNotificationManager;
-        private ICurrentUserSettings currentUserSettings;
+        private readonly ICurrentUserSettings currentUserSettings;
         private ILifetimeScope orderLookupLifetimeScope;
         private ILifetimeScope productsLifetimeScope;
         private IOrderLookup orderLookupControl;
@@ -400,6 +403,8 @@ namespace ShipWorks
             ribbonSecurityProvider.AddAdditionalCondition(buttonOrderLookupViewFedExClose, () => FedExAccountManager.Accounts.Count > 0);
             ribbonSecurityProvider.AddAdditionalCondition(buttonAsendiaClose, AreThereAnyAsendiaAccounts);
             ribbonSecurityProvider.AddAdditionalCondition(buttonOrderLookupViewAsendiaClose, AreThereAnyAsendiaAccounts);
+            ribbonSecurityProvider.AddAdditionalCondition(buttonDhlEcommerceManifest, AreThereAnyDhlEcommerceAccounts);
+            ribbonSecurityProvider.AddAdditionalCondition(buttonOrderLookupViewDhlEcommerceManifest, AreThereAnyDhlEcommerceAccounts);
             ribbonSecurityProvider.AddAdditionalCondition(buttonEndiciaSCAN, AreThereAnyPostalAccounts);
             ribbonSecurityProvider.AddAdditionalCondition(buttonOrderLookupViewSCANForm, AreThereAnyPostalAccounts);
             ribbonSecurityProvider.AddAdditionalCondition(buttonFirewall, () => SqlSession.IsConfigured && !SqlSession.Current.Configuration.IsLocalDb());
@@ -442,6 +447,13 @@ namespace ShipWorks
         private static bool AreThereAnyAsendiaAccounts() =>
             Using(IoC.BeginLifetimeScope(),
                 scope => scope.Resolve<IAsendiaAccountRepository>().AccountsReadOnly.Any());
+
+        /// <summary>
+        /// Checks whether we have a DHL eCommerce account
+        /// </summary>
+        private static bool AreThereAnyDhlEcommerceAccounts() =>
+            Using(IoC.BeginLifetimeScope(),
+                scope => scope.Resolve<IDhlEcommerceAccountRepository>().AccountsReadOnly.Any());
 
         /// <summary>
         /// Checks whether we have any postal accounts
@@ -879,7 +891,7 @@ namespace ShipWorks
             MigrateSqlConfigToHub();
 
             ConvertLegacyTrialStores();
-            
+
             // Update the custom actions UI.  Has to come before applying the layout, so the QAT can pickup the buttons
             UpdateCustomButtonsActionsUI();
 
@@ -2198,7 +2210,7 @@ namespace ShipWorks
 
             // Update the dashboard for new/removed trials
             DashboardManager.UpdateTrialItems();
-            
+
             // Update store type specific dashboard items
             DashboardManager.UpdateStoreTypeDependentItems();
 
@@ -5492,6 +5504,46 @@ namespace ShipWorks
                 MessageHelper.ShowError(this, "An error occurred creating the Asendia manifest");
                 log.Error(result.Exception.Message);
             }
+        }
+
+        /// <summary>
+        /// The DHL eCommerce manifest popup is opening, we need to dynamically repopulate the print menu
+        /// </summary>
+        private void OnDhlEcommerceManifestOpening(object sender, BeforePopupEventArgs e)
+        {
+            using (var scope = IoC.BeginLifetimeScope())
+            {
+                var accountRetriever = scope.ResolveKeyed<ICarrierAccountRetriever>(ShipmentTypeCode.DhlEcommerce);
+
+                PopulateShipEngineManifestMenu(menuItemCreateDhlEcommerceManifest, menuPrintDhlEcommerceManifest, accountRetriever, scope);
+            }
+        }
+
+        /// <summary>
+        /// The DHL eCommerce manifest order lookup view popup is opening, we need to dynamically repopulate the print menu
+        /// </summary>
+        private void OnOrderLookupViewDhlEcommerceManifestOpening(object sender, BeforePopupEventArgs e)
+        {
+            using (var scope = IoC.BeginLifetimeScope())
+            {
+                var accountRetriever = scope.ResolveKeyed<ICarrierAccountRetriever>(ShipmentTypeCode.DhlEcommerce);
+
+                PopulateShipEngineManifestMenu(menuItemOrderLookupViewCreateDhlEcommerceManifest, menuOrderLookupViewPrintDhlEcommerceManifest, accountRetriever, scope);
+            }
+        }
+
+        /// <summary>
+        /// Populate a ShipEngine manifest menu
+        /// </summary>
+        private void PopulateShipEngineManifestMenu(SandMenuItem createMenu,
+            Divelements.SandRibbon.Menu printMenu,
+            ICarrierAccountRetriever accountRetriever,
+            ILifetimeScope scope)
+        {
+            var manifestUtility = scope.Resolve<IShipEngineManifestUtility>();
+
+            manifestUtility.PopulateCreateManifestMenu(createMenu, accountRetriever);
+            manifestUtility.PopulatePrintManifestMenu(printMenu, accountRetriever);
         }
 
         /// <summary>

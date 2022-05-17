@@ -11,7 +11,7 @@ using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Enums;
 using Interapptive.Shared.Pdf;
 using Interapptive.Shared.Utility;
-using ShipEngine.CarrierApi.Client.Model;
+using ShipWorks.Shipping.ShipEngine.DTOs;
 using ShipWorks.Common.IO.Hardware.Printers;
 using ShipWorks.Data;
 using ShipWorks.Data.Connection;

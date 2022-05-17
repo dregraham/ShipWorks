@@ -26,6 +26,7 @@ namespace ShipWorks.OrderLookup.Controls.Rating
     [KeyedComponent(typeof(IRatingViewModel), ShipmentTypeCode.FedEx)]
     [KeyedComponent(typeof(IRatingViewModel), ShipmentTypeCode.UpsOnLineTools)]
     [KeyedComponent(typeof(IRatingViewModel), ShipmentTypeCode.Usps)]
+    [KeyedComponent(typeof(IRatingViewModel), ShipmentTypeCode.DhlEcommerce)]
     [WpfView(typeof(GenericRatingControl))]
     public class GenericRatingViewModel : RatingPanelViewModel, IRatingViewModel, IOrderLookupViewModel
     {

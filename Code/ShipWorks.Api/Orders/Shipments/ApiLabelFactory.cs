@@ -28,11 +28,8 @@ namespace ShipWorks.Api.Orders.Shipments
         /// Gets labels for ID
         /// </summary>
         /// <param name="consumerID">Either a shipment or package ID</param>
-        public IEnumerable<LabelData> GetLabels(long consumerID)
-        {
-            return dataResourceManager.GetConsumerResourceReferences(consumerID)
+        public IEnumerable<LabelData> GetLabels(long consumerID) => dataResourceManager.GetConsumerResourceReferences(consumerID)
                 .Select(r => new LabelData(r.Label, Convert.ToBase64String(r.ReadAllBytes())));
-        }
 
         /// <summary>
         /// Get labels for the given carrierShipmentAdapter
@@ -50,7 +47,7 @@ namespace ShipWorks.Api.Orders.Shipments
 
             return result;
         }
-            
+
 
         /// <summary>
         /// Get the label ConsumerIds for the given adapter

@@ -97,6 +97,7 @@ namespace ShipWorks.Filters.Content.SqlGeneration
             columnMaskTableMap[EntityType.YahooOrderSearchEntity] = FilterNodeColumnMaskTable.YahooOrderSearch;
             columnMaskTableMap[EntityType.GenericModuleOrderEntity] = FilterNodeColumnMaskTable.GenericModuleOrder;
             columnMaskTableMap[EntityType.OverstockOrderEntity] = FilterNodeColumnMaskTable.OverstockOrder;
+            columnMaskTableMap[EntityType.DhlEcommerceShipmentEntity] = FilterNodeColumnMaskTable.DhlEcommerceShipment;
 
             // Make sure we've mapped each table
             if (columnMaskTableMap.Keys.Count != Enum.GetValues(typeof(FilterNodeColumnMaskTable)).Length)
@@ -111,20 +112,20 @@ namespace ShipWorks.Filters.Content.SqlGeneration
 
                 // For derived types (like AmazonOrder / Order)... all the fields for AmazonOrder and Order are in the enity... we want to make sure we only
                 // count the ones relative to the entity we care about.
-                int fieldCount = GeneralEntityFactory.Create(entityType).Fields.OfType<EntityField2>().Count(field => field.ContainingObjectName == entityName);
+                int actualFieldCount = GeneralEntityFactory.Create(entityType).Fields.OfType<EntityField2>().Count(field => field.ContainingObjectName == entityName);
 
                 // OrderItem has TotalWeight, which is a computed field, which isn't in the entity
                 if (entityType == EntityType.OrderItemEntity)
                 {
-                    fieldCount++;
+                    actualFieldCount++;
                 }
 
-                var actualFIeldCount = FilterNodeColumnMaskUtility.GetTableBitCount(columnMaskTableMap[entityType]);
+                var fieldCount = FilterNodeColumnMaskUtility.GetTableBitCount(columnMaskTableMap[entityType]);
 
-                if (fieldCount != actualFIeldCount)
+                if (fieldCount != actualFieldCount)
                 {
                     // FilterNodeColumnMaskUtility Constructor
-                    throw new InvalidOperationException($"Looks like we need to update the bitcount we use to track table to: {actualFIeldCount} for {entityType}");
+                    throw new InvalidOperationException($"Looks like we need to update the bitcount we use to track table to: {actualFieldCount} for {entityType}");
                 }
             }
 

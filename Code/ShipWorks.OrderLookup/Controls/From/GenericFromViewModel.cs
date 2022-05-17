@@ -25,6 +25,7 @@ namespace ShipWorks.OrderLookup.Controls.From
     /// </summary>
     [KeyedComponent(typeof(IFromViewModel), ShipmentTypeCode.BestRate)]
     [KeyedComponent(typeof(IFromViewModel), ShipmentTypeCode.AmazonSWA)]
+    [KeyedComponent(typeof(IFromViewModel), ShipmentTypeCode.DhlEcommerce)]
     [WpfView(typeof(GenericFromControl))]
     public class GenericFromViewModel : OrderLookupViewModelBase, IFromViewModel
     {

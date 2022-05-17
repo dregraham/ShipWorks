@@ -16,6 +16,11 @@ namespace ShipWorks.ApplicationCore.Licensing
         bool EndiciaDhl { get; set; }
 
         /// <summary>
+        /// Controls if DHL eCommerce Max is enabled
+        /// </summary>
+        bool DhlEcommerceMax { get; set; }
+
+        /// <summary>
         /// Controls if using Endicia insurance is enabled for Endicia users
         /// </summary>
         bool EndiciaInsurance { get; set; }

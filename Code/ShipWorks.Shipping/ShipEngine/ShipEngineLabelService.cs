@@ -3,7 +3,6 @@ using System.Threading.Tasks;
 using Autofac.Features.Indexed;
 using Interapptive.Shared.Utility;
 using log4net;
-using ShipEngine.CarrierApi.Client.Model;
 using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Data.Model.EntityClasses;
 
@@ -15,7 +14,7 @@ namespace ShipWorks.Shipping.ShipEngine
     public abstract class ShipEngineLabelService : ILabelService
     {
         protected readonly IShipEngineWebClient shipEngineWebClient;
-        private readonly Func<ShipmentEntity, Label, IDownloadedLabelData> createDownloadedLabelData;
+        private readonly Func<ShipmentEntity, DTOs.Label, IDownloadedLabelData> createDownloadedLabelData;
         protected ICarrierShipmentRequestFactory shipmentRequestFactory;
         protected ILog log;
 
@@ -25,7 +24,7 @@ namespace ShipWorks.Shipping.ShipEngine
         protected ShipEngineLabelService(
             IShipEngineWebClient shipEngineWebClient,
             IIndex<ShipmentTypeCode, ICarrierShipmentRequestFactory> shipmentRequestFactory,
-            Func<ShipmentEntity, Label, IDownloadedLabelData> createDownloadedLabelData,
+            Func<ShipmentEntity, DTOs.Label, IDownloadedLabelData> createDownloadedLabelData,
             Func<Type, ILog> createLog)
         {
             this.shipEngineWebClient = shipEngineWebClient;
@@ -59,12 +58,12 @@ namespace ShipWorks.Shipping.ShipEngine
         /// <summary>
         /// Create the label
         /// </summary>
-        protected async Task<TelemetricResult<IDownloadedLabelData>> CreateLabelInternal(ShipmentEntity shipment, Func<Task<Label>> labelRetrievalFunc, 
+        protected async Task<TelemetricResult<IDownloadedLabelData>> CreateLabelInternal(ShipmentEntity shipment, Func<Task<DTOs.Label>> labelRetrievalFunc, 
             TelemetricResult<IDownloadedLabelData> telemetricResult)
         {
             try
             {
-                Label label = await labelRetrievalFunc().ConfigureAwait(false);
+                var label = await labelRetrievalFunc().ConfigureAwait(false);
 
                 telemetricResult.SetValue(createDownloadedLabelData(shipment, label));
 
@@ -81,7 +80,7 @@ namespace ShipWorks.Shipping.ShipEngine
         /// </summary>
         public void Void(ShipmentEntity shipment)
         {
-            VoidLabelResponse response;
+            DTOs.VoidLabelResponse response;
             try
             {
                 response = Task.Run(async () =>

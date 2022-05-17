@@ -18,7 +18,7 @@ namespace Interapptive.Shared.Security
         /// </summary>
         public static string Decrypt(string ciphertext, string password)
         {
-            log.Info("Beginning decryption");
+            log.Debug("Beginning decryption");
 
             if (ciphertext == null)
             {
@@ -45,12 +45,12 @@ namespace Interapptive.Shared.Security
                 if (encryptedVersion.Length == 1)
                 {
                     // If there is no version, use version 0
-                    log.Info("Decrypting with SecureText version 0");
+                    log.Debug("Decrypting with SecureText version 0");
                     return new SecureTextVersion0(log).Decrypt(ciphertext, password);
                 }
 
                 // When new versions are created, this should become a switch statement based on encryptedVersion[1]
-                log.Info("Decrypting with SecureText version 1");
+                log.Debug("Decrypting with SecureText version 1");
                 return new SecureTextVersion1(log).Decrypt(encryptedVersion[0], password);
             }
             // OverflowException is thrown when the encrypted text is too short
@@ -66,7 +66,7 @@ namespace Interapptive.Shared.Security
         /// </summary>
         public static string Encrypt(string plaintext, string password)
         {
-            log.Info("Beginning encryption");
+            log.Debug("Beginning encryption");
 
             if (plaintext == null)
             {

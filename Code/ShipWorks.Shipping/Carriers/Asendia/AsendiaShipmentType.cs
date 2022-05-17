@@ -7,7 +7,6 @@ using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Enums;
 using Interapptive.Shared.Utility;
 using SD.LLBLGen.Pro.ORMSupportClasses;
-using ShipEngine.CarrierApi.Client.Model;
 using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Common.IO.Hardware.Printers;
 using ShipWorks.Data;
@@ -326,7 +325,7 @@ namespace ShipWorks.Shipping.Carriers.Asendia
         {
             try
             {
-                TrackingInformation trackingInfo = Task.Run(() =>
+                ShipEngine.DTOs.TrackingInformation trackingInfo = Task.Run(() =>
                 {
                     return shipEngineWebClient.Track(shipment.Asendia.ShipEngineLabelID, ApiLogSource.Asendia);
                 }).Result;

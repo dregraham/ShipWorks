@@ -107,7 +107,7 @@ namespace ShipWorks.Shipping.Carriers.Asendia
         /// </summary>
         void ICheckForChangesNeeded.CheckForChangesNeeded()
         {
-            AsendiaAccountManager.CheckForChangesNeeded();
+            CheckForChangesNeeded();
         }
 
         /// <summary>
