@@ -92,11 +92,10 @@ namespace ShipWorks.Stores.Services
             {
                 var index = 1;
 
+                storeProgress.Detail = $"Migrating store {index} of {totalStores}";
+
                 var tasks = storesToMigrate.AsParallel().Select(async store =>
                 {
-                    storeProgress.Detail = $"Migrating store {index} of {totalStores}";
-                    storeProgress.PercentComplete = Math.Min((index * 100) / totalStores, 100);
-
                     var body = new MigrateMwsToSpRequest
                     {
                         CountryCode = store.AmazonApiRegion,
@@ -120,6 +119,8 @@ namespace ShipWorks.Stores.Services
                     }
 
                     index++;
+                    storeProgress.Detail = $"Migrating store {index} of {totalStores}";
+                    storeProgress.PercentComplete = Math.Min((index * 100) / totalStores, 100);
                 });
 
                 await Task.WhenAll(tasks);
