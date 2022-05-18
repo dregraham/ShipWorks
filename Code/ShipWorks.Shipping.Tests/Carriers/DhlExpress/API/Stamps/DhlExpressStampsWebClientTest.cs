@@ -15,51 +15,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.DhlExpress.API.Stamps
     public class DhlExpressStampsWebClientTest
     {
         [Theory]
-        [InlineData("US", "13102", "US", "63102", false)]
-        [InlineData("US", "13102", "US", "63102", true)]
-        public async Task CreateInitialRate_SetsToZip_WhenDomestic(
-            string fromCountryCode, string fromZipPostalCode, 
-            string toCountryCode, string toZipPostalCode,
-            bool isReturn)
-        {
-            var shipment = new ShipmentEntity()
-            {
-                RequestedLabelFormat = (int) ThermalLanguage.ZPL,
-                DhlExpress = new DhlExpressShipmentEntity()
-                {
-                    Packages = { new DhlExpressPackageEntity() }
-                },
-                ShipCountryCode = toCountryCode,
-                ShipPostalCode = toZipPostalCode,
-                OriginCountryCode = fromCountryCode,
-                OriginPostalCode = fromZipPostalCode,
-                ReturnShipment = isReturn
-            };
-
-            var account = new UspsAccountEntity()
-            {
-                MailingPostalCode = fromZipPostalCode
-            };
-
-            var rate = DhlExpressStampsWebClient.CreateInitialRate(shipment, account);
-
-            if (isReturn)
-            {
-                (toCountryCode, fromCountryCode) = (fromCountryCode, toCountryCode);
-                (toZipPostalCode, fromZipPostalCode) = (fromZipPostalCode, toZipPostalCode);
-            }
-
-            Assert.Equal(toCountryCode, rate.To.Country);
-            Assert.Equal(toZipPostalCode, rate.To.ZIPCode);
-            Assert.Null(rate.To.PostalCode);
-            Assert.Equal(fromCountryCode, rate.From.Country);
-            Assert.Equal(fromZipPostalCode, rate.From.ZIPCode);
-            Assert.Null(rate.From.PostalCode);
-        }
-
-        [Theory]
         [InlineData("US", "13102", "GB", "M38 9WL", false)]
-        [InlineData("US", "13102", "GB", "M38 9WL", true)]
         public async Task CreateInitialRate_SetsToPostal_WhenNotDomestic(
             string fromCountryCode, string fromZipPostalCode,
             string toCountryCode, string toZipPostalCode,

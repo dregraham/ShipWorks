@@ -332,43 +332,19 @@ namespace ShipWorks.Shipping.Carriers.Dhl.API.Stamps
             string toCountry = shipment.AdjustedShipCountryCode();
             string fromCountry = shipment.AdjustedOriginCountryCode();
 
-            bool isDomestic = shipment.ShipPerson.IsDomesticCountry();
-
-            RateV40 rate = new RateV40();
-
-            // Swap the to/from for return shipments.
-            if (shipment.ReturnShipment)
+            RateV40 rate = new RateV40
             {
-                (toZipCode, fromZipCode) = (fromZipCode, toZipCode);
-                (toCountry, fromCountry) = (fromCountry, toCountry);
-            }
-
-            if (isDomestic)
-            {
-                rate.From = new Address()
-                {
-                    ZIPCode = fromZipCode,
-                    Country = fromCountry
-                };
-                rate.To = new Address()
-                {
-                    ZIPCode = toZipCode,
-                    Country = toCountry,
-                };
-            }
-            else
-            {
-                rate.From = new Address()
+                From = new Address()
                 {
                     PostalCode = fromZipCode,
                     Country = fromCountry
-                };
-                rate.To = new Address()
+                },
+                To = new Address()
                 {
                     PostalCode = toZipCode,
                     Country = toCountry,
-                };
-            }
+                }
+            };
 
             return rate;
         }
