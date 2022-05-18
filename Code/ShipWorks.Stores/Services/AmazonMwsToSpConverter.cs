@@ -69,7 +69,7 @@ namespace ShipWorks.Stores.Services
 
                     Task.Run(async () =>
                     {
-                        await MigrateStores(storeProgress, storesToMigrate).ConfigureAwait(false);
+                        await MigrateStores(storeProgress, storesToMigrate).ConfigureAwait(true);
                     });
 
                     progressDialog.ShowDialog(owner);
@@ -108,9 +108,9 @@ namespace ShipWorks.Stores.Services
 
                     try
                     {
-                        var response = await warehouseClient.MakeRequest<MigrateMwsToSpResponse>(request, "MigrateAmazonStore");
+                        var response = await warehouseClient.MakeRequest<MigrateMwsToSpResponse>(request, "MigrateAmazonStore").ConfigureAwait(true);
                         store.OrderSourceID = response.OrderSourceId;
-                        await storeManager.SaveStoreAsync(store);
+                        await storeManager.SaveStoreAsync(store).ConfigureAwait(true);
                     }
                     catch (Exception ex)
                     {
