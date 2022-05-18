@@ -14,7 +14,7 @@ namespace ShipWorks.Stores.Platforms.Platform
         /// Note that the orderSourceName will be used in both the URL used to communicate with the hub and the
         /// redirectUrl the hub will send on to monoauth
         /// </remarks>
-        Task<string> GetCreateOrderSourceInitiateUrl(string orderSourceName, string apiRegion);
+        Task<string> GetCreateOrderSourceInitiateUrl(string orderSourceName, string apiRegion, int? daysBack);
 
         /// <summary>
         /// Get the Monoauth URL to initiate an order source credential change

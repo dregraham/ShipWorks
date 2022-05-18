@@ -33,7 +33,7 @@ namespace ShipWorks.ApplicationCore.Licensing.Warehouse
         private const string voidShipment = "api/orders/{0}/void";
         private const string rerouteOrderItems = "api/orders/{0}/rerouteItems";
         private const string getTrackingUpdates = "api/tracking/{0}";
-        private const string createOrderSourceInitiateUrl = "api/ordersource/{0}/auth?RedirectUrl={1}callbacks/{0}monoauth/subscribe&ApiRegion={2}";
+        private const string createOrderSourceInitiateUrl = "api/ordersource/{0}/auth?RedirectUrl={1}callbacks/{0}monoauth/subscribe&ApiRegion={2}&DaysBack={3}";
         private const string updateOrderSourceInitiateUrl = "api/ordersource/{0}/auth?RedirectUrl={1}callbacks/{0}monoauth/update&OrderSourceId={2}&ApiRegion={3}";
 
         /// <summary>
@@ -110,8 +110,8 @@ namespace ShipWorks.ApplicationCore.Licensing.Warehouse
         /// <summary>
         /// Get the URL to get the InitiateMonoauthUrl for creating a new order source
         /// </summary>
-        public static string GetCreateOrderSourceInitiateUrl(string orderSourceName, string redirectUrl, string apiRegion) =>
-            string.Format(createOrderSourceInitiateUrl, orderSourceName, redirectUrl, apiRegion);
+        public static string GetCreateOrderSourceInitiateUrl(string orderSourceName, string redirectUrl, string apiRegion, int daysBack) =>
+            string.Format(createOrderSourceInitiateUrl, orderSourceName, redirectUrl, apiRegion, daysBack);
 
         /// <summary>
         /// Get the URL to get the InitiateMonoauthUrl for updating an order source

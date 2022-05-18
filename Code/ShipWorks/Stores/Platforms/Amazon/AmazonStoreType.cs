@@ -377,12 +377,6 @@ namespace ShipWorks.Stores.Platforms.Amazon
         }
 
         /// <summary>
-        /// Get the initial download policy of amazon
-        /// </summary>
-        public override InitialDownloadPolicy InitialDownloadPolicy =>
-            new InitialDownloadPolicy(InitialDownloadRestrictionType.DaysBack) { DefaultDaysBack = 14, MaxDaysBack = 30 };
-
-        /// <summary>
         /// Creates the custom OrderItem entity.
         /// </summary>
         public override OrderItemEntity CreateOrderItemInstance() =>
