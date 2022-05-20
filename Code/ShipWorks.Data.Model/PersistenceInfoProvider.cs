@@ -486,7 +486,7 @@ namespace ShipWorks.Data.Model
 		/// <summary>Inits AmazonStoreEntity's mappings</summary>
 		private void InitAmazonStoreEntityMappings()
 		{
-			this.AddElementMapping("AmazonStoreEntity", @"ShipWorksLocal", @"dbo", "AmazonStore", 20, 0);
+			this.AddElementMapping("AmazonStoreEntity", @"ShipWorksLocal", @"dbo", "AmazonStore", 21, 0);
 			this.AddElementFieldMapping("AmazonStoreEntity", "StoreID", "StoreID", false, "BigInt", 0, 19, 0, false, "", null, typeof(System.Int64), 0);
 			this.AddElementFieldMapping("AmazonStoreEntity", "AmazonApi", "AmazonApi", false, "Int", 0, 10, 0, false, "", null, typeof(System.Int32), 1);
 			this.AddElementFieldMapping("AmazonStoreEntity", "AmazonApiRegion", "AmazonApiRegion", false, "Char", 2, 0, 0, false, "", null, typeof(System.String), 2);
