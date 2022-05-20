@@ -191,6 +191,15 @@ namespace ShipWorks.Data.Model.Linq
 				case ShipWorks.Data.Model.EntityType.DeviceEntity:
 					toReturn = this.Device;
 					break;
+				case ShipWorks.Data.Model.EntityType.DhlEcommerceAccountEntity:
+					toReturn = this.DhlEcommerceAccount;
+					break;
+				case ShipWorks.Data.Model.EntityType.DhlEcommerceProfileEntity:
+					toReturn = this.DhlEcommerceProfile;
+					break;
+				case ShipWorks.Data.Model.EntityType.DhlEcommerceShipmentEntity:
+					toReturn = this.DhlEcommerceShipment;
+					break;
 				case ShipWorks.Data.Model.EntityType.DhlExpressAccountEntity:
 					toReturn = this.DhlExpressAccount;
 					break;
@@ -589,6 +598,9 @@ namespace ShipWorks.Data.Model.Linq
 					break;
 				case ShipWorks.Data.Model.EntityType.ServiceStatusEntity:
 					toReturn = this.ServiceStatus;
+					break;
+				case ShipWorks.Data.Model.EntityType.ShipEngineManifestEntity:
+					toReturn = this.ShipEngineManifest;
 					break;
 				case ShipWorks.Data.Model.EntityType.ShipmentEntity:
 					toReturn = this.Shipment;
@@ -1060,6 +1072,24 @@ namespace ShipWorks.Data.Model.Linq
 		public DataSource2<DeviceEntity> Device
 		{
 			get { return new DataSource2<DeviceEntity>(_adapterToUse, new ElementCreator(), _customFunctionMappings, _contextToUse); }
+		}
+		
+		/// <summary>returns the datasource to use in a Linq query when targeting DhlEcommerceAccountEntity instances in the database.</summary>
+		public DataSource2<DhlEcommerceAccountEntity> DhlEcommerceAccount
+		{
+			get { return new DataSource2<DhlEcommerceAccountEntity>(_adapterToUse, new ElementCreator(), _customFunctionMappings, _contextToUse); }
+		}
+		
+		/// <summary>returns the datasource to use in a Linq query when targeting DhlEcommerceProfileEntity instances in the database.</summary>
+		public DataSource2<DhlEcommerceProfileEntity> DhlEcommerceProfile
+		{
+			get { return new DataSource2<DhlEcommerceProfileEntity>(_adapterToUse, new ElementCreator(), _customFunctionMappings, _contextToUse); }
+		}
+		
+		/// <summary>returns the datasource to use in a Linq query when targeting DhlEcommerceShipmentEntity instances in the database.</summary>
+		public DataSource2<DhlEcommerceShipmentEntity> DhlEcommerceShipment
+		{
+			get { return new DataSource2<DhlEcommerceShipmentEntity>(_adapterToUse, new ElementCreator(), _customFunctionMappings, _contextToUse); }
 		}
 		
 		/// <summary>returns the datasource to use in a Linq query when targeting DhlExpressAccountEntity instances in the database.</summary>
@@ -1858,6 +1888,12 @@ namespace ShipWorks.Data.Model.Linq
 		public DataSource2<ServiceStatusEntity> ServiceStatus
 		{
 			get { return new DataSource2<ServiceStatusEntity>(_adapterToUse, new ElementCreator(), _customFunctionMappings, _contextToUse); }
+		}
+		
+		/// <summary>returns the datasource to use in a Linq query when targeting ShipEngineManifestEntity instances in the database.</summary>
+		public DataSource2<ShipEngineManifestEntity> ShipEngineManifest
+		{
+			get { return new DataSource2<ShipEngineManifestEntity>(_adapterToUse, new ElementCreator(), _customFunctionMappings, _contextToUse); }
 		}
 		
 		/// <summary>returns the datasource to use in a Linq query when targeting ShipmentEntity instances in the database.</summary>

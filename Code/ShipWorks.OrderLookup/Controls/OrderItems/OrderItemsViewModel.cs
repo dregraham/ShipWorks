@@ -17,6 +17,7 @@ namespace ShipWorks.OrderLookup.Controls.OrderItems
     [KeyedComponent(typeof(IOrderItemsViewModel), ShipmentTypeCode.FedEx)]
     [KeyedComponent(typeof(IOrderItemsViewModel), ShipmentTypeCode.UpsOnLineTools)]
     [KeyedComponent(typeof(IOrderItemsViewModel), ShipmentTypeCode.Usps)]
+    [KeyedComponent(typeof(IOrderItemsViewModel), ShipmentTypeCode.DhlEcommerce)]
     [WpfView(typeof(OrderItemsControl))]
     public class OrderItemsViewModel : OrderLookupViewModelBase, IOrderItemsViewModel
     {

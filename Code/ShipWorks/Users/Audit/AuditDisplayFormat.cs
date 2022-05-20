@@ -26,6 +26,7 @@ using ShipWorks.UI.Controls;
 using ShipWorks.Shipping.Carriers.Dhl;
 using ShipWorks.Shipping.Carriers.Asendia;
 using ShipWorks.Shipping.Carriers.Amazon.SWA;
+using ShipWorks.Shipping.Carriers.DhlEcommerce;
 
 namespace ShipWorks.Users.Audit
 {
@@ -88,6 +89,7 @@ namespace ShipWorks.Users.Audit
             enumMapping[130] = typeof(DhlExpressServiceType);
             enumMapping[131] = typeof(AsendiaServiceType);
             enumMapping[132] = typeof(AmazonSWAServiceType);
+            enumMapping[133] = typeof(DhlEcommerceServiceType);
         }
 
         /// <summary>

@@ -193,6 +193,7 @@ namespace ShipWorks.Shipping.Services.ShipmentProcessorSteps
             ClearOtherShipmentData(adapter, shipment, typeof(OtherShipmentEntity), OtherShipmentFields.ShipmentID, ShipmentTypeCode.Other);
             ClearOtherShipmentData(adapter, shipment, typeof(BestRateShipmentEntity), BestRateShipmentFields.ShipmentID, ShipmentTypeCode.BestRate);
             ClearOtherShipmentData(adapter, shipment, typeof(DhlExpressShipmentEntity), DhlExpressShipmentFields.ShipmentID, ShipmentTypeCode.DhlExpress);
+            ClearOtherShipmentData(adapter, shipment, typeof(DhlEcommerceShipmentEntity), DhlEcommerceShipmentFields.ShipmentID, ShipmentTypeCode.DhlEcommerce);
             ClearOtherShipmentData(adapter, shipment, typeof(AmazonSFPShipmentEntity), AmazonSFPShipmentFields.ShipmentID, ShipmentTypeCode.AmazonSFP);
             ClearOtherShipmentData(adapter, shipment, typeof(AsendiaShipmentEntity), AsendiaShipmentFields.ShipmentID, ShipmentTypeCode.Asendia);
         }

@@ -96,6 +96,12 @@ public partial class Triggers
         AuditService.AuditExecutingTrigger("DhlExpressShipment");
     }
 
+    [SqlTrigger(Target = "DhlEcommerceShipment", Event = "FOR INSERT, UPDATE, DELETE")]
+    public static void DhlEcommerceShipmentAuditTrigger()
+    {
+        AuditService.AuditExecutingTrigger("DhlEcommerceShipment");
+    }
+
     [SqlTrigger(Target = "EbayOrder", Event = "FOR INSERT, UPDATE, DELETE")]
     public static void EbayOrderAuditTrigger()
     {

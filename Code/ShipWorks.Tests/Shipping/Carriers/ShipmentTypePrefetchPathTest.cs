@@ -93,6 +93,12 @@ namespace ShipWorks.Tests.Shipping.Carriers
                 ShipmentEntity.PrefetchPathDhlExpress.ToContainer();
         }
 
+        public class TestDhlEcommerceProvider : IShipmentTypePrefetchProvider
+        {
+            public PrefetchPathContainer GetPath() =>
+                ShipmentEntity.PrefetchPathDhlEcommerce.ToContainer();
+        }
+
         public class CircularPath : IShipmentTypePrefetchProvider
         {
             public PrefetchPathContainer GetPath() =>

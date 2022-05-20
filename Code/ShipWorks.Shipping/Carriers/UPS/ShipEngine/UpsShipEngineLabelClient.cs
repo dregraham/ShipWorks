@@ -8,7 +8,7 @@ using Interapptive.Shared.Utility;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Shipping.ShipEngine;
-using ShipEngine.CarrierApi.Client.Model;
+using ShipWorks.Shipping.ShipEngine.DTOs;
 using ShipWorks.ApplicationCore.Logging;
 using Interapptive.Shared.ComponentRegistration;
 using log4net;
@@ -57,7 +57,7 @@ namespace ShipWorks.Shipping.Carriers.Ups.ShipEngine
         /// Void the given shipment
         /// </summary>
         public void VoidLabel(ShipmentEntity shipment) =>
-            base.Void(shipment);
+            Void(shipment);
 
         /// <summary>
         /// Get the ShipEngine carrier id

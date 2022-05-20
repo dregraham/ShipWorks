@@ -227,7 +227,7 @@ namespace ShipWorks.Shipping.Settings
             settings.ConfiguredTypes = Enumerable.Empty<ShipmentTypeCode>();
 
             // Only want to show the single USPS provider by default
-            settings.ExcludedTypes = new[] { ShipmentTypeCode.Endicia, ShipmentTypeCode.Express1Endicia, ShipmentTypeCode.Express1Usps, ShipmentTypeCode.PostalWebTools, ShipmentTypeCode.iParcel, ShipmentTypeCode.OnTrac };
+            settings.ExcludedTypes = new[] { ShipmentTypeCode.Endicia, ShipmentTypeCode.Express1Endicia, ShipmentTypeCode.Express1Usps, ShipmentTypeCode.PostalWebTools, ShipmentTypeCode.iParcel, ShipmentTypeCode.OnTrac, ShipmentTypeCode.DhlEcommerce };
             settings.DefaultType = (int) ShipmentTypeCode.None;
 
             settings.BlankPhoneOption = (int) ShipmentBlankPhoneOption.ShipperPhone;
@@ -296,6 +296,9 @@ namespace ShipWorks.Shipping.Settings
 
             settings.ShipEngineApiKey = string.Empty;
             settings.ShipEngineAccountID = string.Empty;
+
+            settings.DhlEcommerceInsuranceProvider = (int) InsuranceProvider.ShipWorks;
+            settings.DhlEcommerceInsurancePennyOne = false;
 
             adapter.SaveAndRefetch(settings);
         }

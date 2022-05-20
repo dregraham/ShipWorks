@@ -93,6 +93,7 @@ namespace ShipWorks.Data
             entitySeedValues[EntityType.ProductVariantAliasEntity] = 103;
             entitySeedValues[EntityType.ProductAttributeEntity] = 104;
             entitySeedValues[EntityType.ProductVariantAttributeValueEntity] = 105;
+            entitySeedValues[EntityType.DhlEcommerceAccountEntity] = 106;
         }
 
         /// <summary>

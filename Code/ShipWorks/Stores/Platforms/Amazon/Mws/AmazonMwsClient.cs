@@ -18,7 +18,6 @@ using Interapptive.Shared.Security;
 using Interapptive.Shared.Threading;
 using Interapptive.Shared.Utility;
 using log4net;
-using ShipEngine.CarrierApi.Client.Model;
 using ShipWorks.ApplicationCore.Licensing.WebClientEnvironments;
 using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Data.Connection;
@@ -604,6 +603,11 @@ namespace ShipWorks.Stores.Platforms.Amazon.Mws
             if (shipment.ShipmentType == (int) ShipmentTypeCode.Other)
             {
                 return shippingManager.GetOtherCarrierDescription(shipment).Name;
+            }
+
+            if (shipment.ShipmentType == (int) ShipmentTypeCode.DhlEcommerce)
+            {
+                return "DHL";
             }
 
             if (ShipmentTypeManager.ShipmentTypeCodeSupportsDhl((ShipmentTypeCode) shipment.ShipmentType))

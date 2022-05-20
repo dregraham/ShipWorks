@@ -265,6 +265,7 @@
     <Compile Include="ApplicationCore\Licensing\CustomerLicenseTest.cs" />
     <Compile Include="ApplicationCore\Licensing\DisabledLicenseTest.cs" />
     <Compile Include="ApplicationCore\Licensing\FeatureRestrictions\EndiciaConsolidatorRestrictionTest.cs" />
+    <Compile Include="ApplicationCore\Licensing\FeatureRestrictions\DhlEcommerceMaxRestrictionTest.cs" />
     <Compile Include="ApplicationCore\Licensing\FeatureRestrictions\EndiciaDhlRestrictionTest.cs" />
     <Compile Include="ApplicationCore\Licensing\FeatureRestrictions\EndiciaInsuranceRestrictionTest.cs" />
     <Compile Include="ApplicationCore\Licensing\FeatureRestrictions\EndiciaScanBasedReturnsRestrictionTest.cs" />

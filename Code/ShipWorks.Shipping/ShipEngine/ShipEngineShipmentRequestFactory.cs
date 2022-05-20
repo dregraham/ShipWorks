@@ -1,9 +1,10 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using Interapptive.Shared.Utility;
-using ShipEngine.CarrierApi.Client.Model;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Shipping.Insurance;
 using ShipWorks.Shipping.Services;
+using ShipWorks.Shipping.ShipEngine.DTOs;
 
 namespace ShipWorks.Shipping.ShipEngine
 {
@@ -44,7 +45,7 @@ namespace ShipWorks.Shipping.ShipEngine
             string serviceApiValue = GetServiceApiValue(shipment);
             List<IPackageAdapter> packages = GetPackages(shipment);
 
-            PurchaseLabelRequest request = shipmentElementFactory.CreatePurchaseLabelRequest(shipment, packages, serviceApiValue, GetPackagingCode, SetPackageInsurance);
+            var request = shipmentElementFactory.CreatePurchaseLabelRequest(shipment, packages, serviceApiValue, GetPackagingCode, SetPackageInsurance);
             request.Shipment.CarrierId = GetShipEngineCarrierID(shipment);
             request.Shipment.AdvancedOptions = CreateAdvancedOptions(shipment);
             request.ValidateAddress = PurchaseLabelRequest.ValidateAddressEnum.NoValidation;
@@ -64,6 +65,19 @@ namespace ShipWorks.Shipping.ShipEngine
                 request.Shipment.Customs = CreateCustoms(shipment);
             }
 
+            if (shipment.Insurance)
+            {
+                request.Shipment.InsuranceProvider = shipment.InsuranceProvider == (int) Shipment.InsuranceProviderEnum.Carrier ?
+                    Shipment.InsuranceProviderEnum.Carrier :
+                    Shipment.InsuranceProviderEnum.Thirdparty;
+            }
+
+            if (request.Shipment.Packages.Any() && shipment.ShipmentTypeCode == ShipmentTypeCode.DhlEcommerce)
+            {
+                // Yes, set to Reference3 as per DHL
+                request.Shipment.Packages.First().LabelMessages.Reference3 = shipment.DhlEcommerce.Reference1;
+            }
+
             return request;
         }
 
@@ -78,7 +92,7 @@ namespace ShipWorks.Shipping.ShipEngine
             ShipmentType shipmentType = shipmentTypeManager.Get(shipment.ShipmentTypeCode);
             if (shipmentType.SupportsGetRates)
             {
-                RateShipmentRequest request = shipmentElementFactory.CreateRateRequest(shipment);
+                var request = shipmentElementFactory.CreateRateRequest(shipment);
                 List<IPackageAdapter> packages = GetPackages(shipment);
 
                 request.RateOptions = new RateRequest()
@@ -100,6 +114,19 @@ namespace ShipWorks.Shipping.ShipEngine
                 }
 
                 request.Shipment.Packages = shipmentElementFactory.CreatePackageForRating(packages, SetPackageInsurance);
+
+                if (shipment.Insurance)
+                {
+                    request.Shipment.InsuranceProvider = shipment.InsuranceProvider == (int) InsuranceProvider.Carrier ?
+                        AddressValidatingShipment.InsuranceProviderEnum.Carrier :
+                        AddressValidatingShipment.InsuranceProviderEnum.Thirdparty;
+                }
+
+                if (request.Shipment.Packages.Any() && shipment.ShipmentTypeCode == ShipmentTypeCode.DhlEcommerce)
+                {
+                    // Yes, set to Reference3 as per DHL
+                    request.Shipment.Packages.First().LabelMessages.Reference3 = shipment.DhlEcommerce.Reference1;
+                }
 
                 return request;
             }

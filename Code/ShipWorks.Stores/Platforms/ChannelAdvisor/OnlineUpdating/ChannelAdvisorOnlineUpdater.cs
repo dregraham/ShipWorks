@@ -568,6 +568,9 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor.OnlineUpdating
                 case ShipmentTypeCode.DhlExpress:
                     return "DHL EXPRESS";
 
+                case ShipmentTypeCode.DhlEcommerce:
+                    return "DHL";
+
                 case ShipmentTypeCode.Other:
                     return shipment.Other.Carrier;
 

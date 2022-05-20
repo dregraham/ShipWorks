@@ -311,6 +311,10 @@ namespace ShipWorks.Stores.Platforms.Etsy.OnlineUpdating
                     return "ontrac";
                 case ShipmentTypeCode.iParcel:
                     return "iparcel";
+
+                case ShipmentTypeCode.DhlEcommerce:
+                    return "dhl-global-mail";
+
                 case ShipmentTypeCode.None:
                     return "none";
                 default:

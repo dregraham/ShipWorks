@@ -72,6 +72,12 @@ namespace ShipWorks.ApplicationCore.Licensing
         }
 
         #region Properties
+
+        /// <summary>
+        /// Controls if DHL eCommerce Max is enabled
+        /// </summary>
+        public bool DhlEcommerceMax { get; set; }
+
         /// <summary>
         /// Controls if DHL is enabled for Endicia users
         /// </summary>
@@ -572,6 +578,7 @@ namespace ShipWorks.ApplicationCore.Licensing
             EndiciaInsurance = XPathUtility.Evaluate(xpath, "//EndiciaInsuranceEnabled/@status", 0) == 1;
             EndiciaConsolidator = XPathUtility.Evaluate(xpath, "//EndiciaConsolidator/@status", 0) == 1;
             EndiciaScanBasedReturns = XPathUtility.Evaluate(xpath, "//EndiciaScanBasedReturns/@status", 0) == 1;
+            DhlEcommerceMax = XPathUtility.Evaluate(xpath, "//DhlEcommerceSmParcelExpeditedMaxEnabled/@status", 0) == 1;
         }
 
         /// <summary>

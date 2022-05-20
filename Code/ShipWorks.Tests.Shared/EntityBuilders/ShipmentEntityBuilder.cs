@@ -166,7 +166,18 @@ namespace ShipWorks.Tests.Shared.EntityBuilders
         /// </summary>
         public ShipmentEntityBuilder AsDhlExpress(Action<DhlExpressShipmentEntityBuilder> builderConfiguration) =>
             SetShipmentType(builderConfiguration, ShipmentTypeCode.DhlExpress, x => x.DhlExpress);
+        
+        /// <summary>
+        /// Make the shipment an DhlEcommerce shipment
+        /// </summary>
+        public ShipmentEntityBuilder AsDhlEcommerce() => AsDhlEcommerce(null);
 
+        /// <summary>
+        /// Make the shipment an DhlEcommerce shipment
+        /// </summary>
+        public ShipmentEntityBuilder AsDhlEcommerce(Action<DhlEcommerceShipmentEntityBuilder> builderConfiguration) =>
+            SetShipmentType(builderConfiguration, ShipmentTypeCode.DhlEcommerce, x => x.DhlEcommerce);
+        
         /// <summary>
         /// Make the shipment an Asendia shipment
         /// </summary>

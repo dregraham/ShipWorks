@@ -328,12 +328,6 @@
       <HintPath>..\..\packages\SD.Tools.OrmProfiler.Interceptor.1.5.20150715\lib\net35\SD.Tools.OrmProfiler.Shared.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="ShipEngine.ApiClient, Version=1.0.0.0, Culture=neutral, PublicKeyToken=372d6fd19cbc5d92, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\Signed.ShipEngine.ApiClient.1.1.3\lib\net46\ShipEngine.ApiClient.dll</HintPath>
-    </Reference>
-    <Reference Include="ShipEngine.CarrierApi.Client, Version=1.0.0.0, Culture=neutral, PublicKeyToken=c5149f357886d5cf, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\ShipEngine.CarrierApi.Client.1.2.1\lib\net46\ShipEngine.CarrierApi.Client.dll</HintPath>
-    </Reference>
     <Reference Include="SpreadsheetGear, Version=6.0.3.189, Culture=neutral, PublicKeyToken=39c186f5904944ec, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\Components\SpreadsheetGear.dll</HintPath>
@@ -808,6 +802,7 @@
     <Compile Include="ApplicationCore\Dashboard\Content\DashboardAccountTrialItem.cs" />
     <Compile Include="ApplicationCore\Dashboard\Content\DashboardTrialItem.cs" />
     <Compile Include="ApplicationCore\Licensing\CustomerLicenseKeyType.cs" />
+    <Compile Include="ApplicationCore\Licensing\FeatureRestrictions\DhlEcommerce\DhlEcommerceMaxRestriction.cs" />
     <Compile Include="ApplicationCore\Licensing\TrialDetails.cs" />
     <Compile Include="ApplicationCore\Licensing\Warehouse\DTO\SqlConfigChangedDto.cs" />
     <Compile Include="ApplicationCore\ReoccurringAppLockedTask.cs" />
@@ -1249,9 +1244,62 @@
     <Compile Include="Products\Import\FailedProductImportException.cs" />
     <Compile Include="Products\Import\IImportProductsResult.cs" />
     <Compile Include="Products\ProductSelectionChangedEventArgs.cs" />
+    <Compile Include="Shipping\Carriers\DhlEcommerce\CoreExtensions\Filters\DhlEcommercePackagingTypeCondition.cs" />
+    <Compile Include="Shipping\Carriers\DhlEcommerce\CoreExtensions\Filters\DhlEcommerceServiceTypeCondition.cs" />
+    <Compile Include="Shipping\Carriers\DhlEcommerce\DhlEcommercePackagingType.cs" />
+    <Compile Include="Shipping\Carriers\DhlEcommerce\DhlEcommerceServiceType.cs" />
+    <Compile Include="Shipping\Carriers\DhlEcommerce\DhlEcommercePackageAdapter.cs" />
     <Compile Include="Shipping\Api\IOnlineUpdater.cs" />
+    <Compile Include="Shipping\Carriers\DhlEcommerce\IDhlEcommerceAccountRepository.cs" />
     <Compile Include="Shipping\Carriers\FedEx\Enums\FedexTINType.cs" />
     <Compile Include="Shipping\Carriers\UPS\Enums\UpsCustomsRecipientTINType.cs" />
+    <Compile Include="Shipping\ShipEngine\DTOs\Address.cs" />
+    <Compile Include="Shipping\ShipEngine\DTOs\AddressValidatingShipment.cs" />
+    <Compile Include="Shipping\ShipEngine\DTOs\AdvancedOptions.cs" />
+    <Compile Include="Shipping\ShipEngine\DTOs\AmazonShippingUsAccountInformationRequest.cs" />
+    <Compile Include="Shipping\ShipEngine\DTOs\AmazonShippingUsAccountSettingsDTO.cs" />
+    <Compile Include="Shipping\ShipEngine\DTOs\AsendiaAccountInformationDTO.cs" />
+    <Compile Include="Shipping\ShipEngine\DTOs\BaseShipEngineResponse.cs" />
+    <Compile Include="Shipping\ShipEngine\DTOs\Carrier.cs" />
+    <Compile Include="Shipping\ShipEngine\DTOs\CarrierAccount\DhlEcommerceRegistrationRequest.cs" />
+    <Compile Include="Shipping\ShipEngine\DTOs\CarrierAdvancedOption.cs" />
+    <Compile Include="Shipping\ShipEngine\DTOs\CarrierListResponse.cs" />
+    <Compile Include="Shipping\ShipEngine\DTOs\ConnectAccountResponseDTO.cs" />
+    <Compile Include="Shipping\ShipEngine\DTOs\CreateManifestResponse.cs" />
+    <Compile Include="Shipping\ShipEngine\DTOs\CustomsItem.cs" />
+    <Compile Include="Shipping\ShipEngine\DTOs\AncillaryEndorsement.cs" />
+    <Compile Include="Shipping\ShipEngine\DTOs\DHLExpressAccountInformationDTO.cs" />
+    <Compile Include="Shipping\ShipEngine\DTOs\Dimensions.cs" />
+    <Compile Include="Shipping\ShipEngine\DTOs\InternationalOptions.cs" />
+    <Compile Include="Shipping\ShipEngine\DTOs\Label.cs" />
+    <Compile Include="Shipping\ShipEngine\DTOs\LabelMessages.cs" />
+    <Compile Include="Shipping\ShipEngine\DTOs\LabelPackage.cs" />
+    <Compile Include="Shipping\ShipEngine\DTOs\LinkDTO.cs" />
+    <Compile Include="Shipping\ShipEngine\DTOs\MoneyDTO.cs" />
+    <Compile Include="Shipping\ShipEngine\DTOs\MultiFormatDownloadLinkDTO.cs" />
+    <Compile Include="Shipping\ShipEngine\DTOs\Package.cs" />
+    <Compile Include="Shipping\ShipEngine\DTOs\ProviderError.cs" />
+    <Compile Include="Shipping\ShipEngine\DTOs\PurchaseLabelRequest.cs" />
+    <Compile Include="Shipping\ShipEngine\DTOs\PurchaseLabelWithoutShipmentRequest.cs" />
+    <Compile Include="Shipping\ShipEngine\DTOs\Rate.cs" />
+    <Compile Include="Shipping\ShipEngine\DTOs\RateRequest.cs" />
+    <Compile Include="Shipping\ShipEngine\DTOs\RateResponse.cs" />
+    <Compile Include="Shipping\ShipEngine\DTOs\RateShipmentRequest.cs" />
+    <Compile Include="Shipping\ShipEngine\DTOs\RateShipmentResponse.cs" />
+    <Compile Include="Shipping\ShipEngine\DTOs\Service.cs" />
+    <Compile Include="Shipping\ShipEngine\DTOs\Shipment.cs" />
+    <Compile Include="Shipping\ShipEngine\DTOs\ShipmentItem.cs" />
+    <Compile Include="Shipping\ShipEngine\DTOs\ShipmentPackage.cs" />
+    <Compile Include="Shipping\ShipEngine\DTOs\StampsAccountInformationDTO.cs" />
+    <Compile Include="Shipping\ShipEngine\DTOs\TagResponse.cs" />
+    <Compile Include="Shipping\ShipEngine\DTOs\TaxIdentifier.cs" />
+    <Compile Include="Shipping\ShipEngine\DTOs\TrackEvent.cs" />
+    <Compile Include="Shipping\ShipEngine\DTOs\TrackingInformation.cs" />
+    <Compile Include="Shipping\ShipEngine\DTOs\VoidLabelResponse.cs" />
+    <Compile Include="Shipping\ShipEngine\DTOs\Weight.cs" />
+    <Compile Include="Shipping\ShipEngine\Manifest\IShipEngineManifestUtility.cs" />
+    <Compile Include="Shipping\ShipEngine\Manifest\IShipEngineManifestRepo.cs" />
+    <Compile Include="Shipping\ShipEngine\Manifest\IShipEngineManifestCreator.cs" />
     <Compile Include="Stores\ILegacyStoreTrialKeyConverter.cs" />
     <Compile Include="Stores\Platforms\Amazon\AmazonPlatformDownloader.cs" />
     <Compile Include="Stores\Platforms\Platform\OnlineUpdating\IPlatformOnlineUpdater.cs" />
