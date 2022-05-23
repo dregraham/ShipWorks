@@ -103,7 +103,8 @@ namespace ShipWorks.Editions
                 bool endiciaDhlEnabled = (bool) xOptions.Element("EndiciaDhl");
                 edition.SharedOptions.EndiciaDhlEnabled = endiciaDhlEnabled;
 
-                bool dhlEcommerceSmParcelExpeditedMaxEnabled = (bool) xOptions.Element("DhlEcommerceSmParcelExpeditedMaxEnabled");
+                var tmpElement = xOptions.Element("DhlEcommerceSmParcelExpeditedMaxEnabled");
+                bool dhlEcommerceSmParcelExpeditedMaxEnabled = tmpElement == null ? false : (bool) tmpElement;
                 edition.SharedOptions.DhlEcommerceSmParcelExpeditedMaxEnabled = dhlEcommerceSmParcelExpeditedMaxEnabled;
 
                 bool endiciaInsuranceEnabled = (bool) xOptions.Element("EndiciaInsurance");

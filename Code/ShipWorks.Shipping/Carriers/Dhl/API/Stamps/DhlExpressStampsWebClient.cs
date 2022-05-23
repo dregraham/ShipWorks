@@ -281,37 +281,7 @@ namespace ShipWorks.Shipping.Carriers.Dhl.API.Stamps
         /// </summary>
         protected override RateV40 CreateRateForRating(ShipmentEntity shipment, UspsAccountEntity account)
         {
-            RateV40 rate = new RateV40();
-
-            string fromZipCode = !string.IsNullOrEmpty(account.MailingPostalCode) ? account.MailingPostalCode : shipment.OriginPostalCode;
-            string toZipCode = shipment.ShipPostalCode;
-            string toCountry = shipment.AdjustedShipCountryCode();
-
-            // Swap the to/from for return shipments.
-            if (shipment.ReturnShipment)
-            {
-                rate.From = new Address()
-                {
-                    ZIPCode = toZipCode,
-                };
-                rate.To = new Address()
-                {
-                    ZIPCode = fromZipCode,
-                    Country = shipment.AdjustedOriginCountryCode(),
-                };
-            }
-            else
-            {
-                rate.From = new Address()
-                {
-                    ZIPCode = fromZipCode,
-                };
-                rate.To = new Address()
-                {
-                    ZIPCode = toZipCode,
-                    Country = toCountry,
-                };
-            }
+            var rate = CreateInitialRate(shipment, account);
 
             // Default the weight to 14oz for best rate if it is 0, so we can get a rate without needing the user to provide a value.  We do 14oz so it kicks it into a Priority shipment, which
             // is the category that most of our users will be in.
@@ -346,6 +316,35 @@ namespace ShipWorks.Shipping.Carriers.Dhl.API.Stamps
                     }
                 };
             }
+
+            return rate;
+        }
+
+        /// <summary>
+        /// Create a RateV40 with addresses set
+        /// </summary>
+        public static RateV40 CreateInitialRate(ShipmentEntity shipment, UspsAccountEntity account)
+        {
+            string fromZipCode = !string.IsNullOrEmpty(account.MailingPostalCode)
+                ? account.MailingPostalCode
+                : shipment.OriginPostalCode;
+            string toZipCode = shipment.ShipPostalCode;
+            string toCountry = shipment.AdjustedShipCountryCode();
+            string fromCountry = shipment.AdjustedOriginCountryCode();
+
+            RateV40 rate = new RateV40
+            {
+                From = new Address()
+                {
+                    PostalCode = fromZipCode,
+                    Country = fromCountry
+                },
+                To = new Address()
+                {
+                    PostalCode = toZipCode,
+                    Country = toCountry,
+                }
+            };
 
             return rate;
         }
