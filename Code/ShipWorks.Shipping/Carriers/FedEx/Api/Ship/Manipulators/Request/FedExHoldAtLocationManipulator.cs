@@ -119,16 +119,16 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Ship.Manipulators.Request
         /// <summary>
         /// Get the location type API value from ShipWorks location type
         /// </summary>
-        private static GenericResult<WebServices.Ship.FedExLocationType> GetLocationType(Enums.FedExLocationType holdLocationType)
+        private static GenericResult<FedExLocationType> GetLocationType(Enums.FedExLocationType holdLocationType)
         {
             switch (holdLocationType)
             {
-                case Enums.FedExLocationType.FedExExpressStation: return WebServices.Ship.FedExLocationType.FEDEX_EXPRESS_STATION;
-                case Enums.FedExLocationType.FedExFreightServiceCenter: return WebServices.Ship.FedExLocationType.FEDEX_FREIGHT_SERVICE_CENTER;
-                case Enums.FedExLocationType.FedExGroundTerminal: return WebServices.Ship.FedExLocationType.FEDEX_GROUND_TERMINAL;
-                case Enums.FedExLocationType.FedExHomeDeliveryStation: return WebServices.Ship.FedExLocationType.FEDEX_HOME_DELIVERY_STATION;
-                case Enums.FedExLocationType.FedExOffice: return WebServices.Ship.FedExLocationType.FEDEX_OFFICE;
-                case Enums.FedExLocationType.FedExSmartPostHub: return WebServices.Ship.FedExLocationType.FEDEX_SMART_POST_HUB;
+                case Enums.FedExLocationType.FedExExpressStation: return FedExLocationType.FEDEX_EXPRESS_STATION;
+                case Enums.FedExLocationType.FedExFreightServiceCenter: return FedExLocationType.FEDEX_FREIGHT_SERVICE_CENTER;
+                case Enums.FedExLocationType.FedExGroundTerminal: return FedExLocationType.FEDEX_GROUND_TERMINAL;
+                case Enums.FedExLocationType.FedExHomeDeliveryStation: return FedExLocationType.FEDEX_HOME_DELIVERY_STATION;
+                case Enums.FedExLocationType.FedExOffice: return FedExLocationType.FEDEX_OFFICE;
+                case Enums.FedExLocationType.FedExSmartPostHub: return FedExLocationType.FEDEX_SMART_POST_HUB;
                 default:
                     return new FedExException($"Invalid FedExLocationType: {holdLocationType}");
             }

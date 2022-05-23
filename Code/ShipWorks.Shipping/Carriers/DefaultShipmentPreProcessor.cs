@@ -23,6 +23,7 @@ namespace ShipWorks.Shipping.Carriers
     [KeyedComponent(typeof(IShipmentPreProcessor), ShipmentTypeCode.AmazonSFP)]
     [KeyedComponent(typeof(IShipmentPreProcessor), ShipmentTypeCode.Asendia)]
     [KeyedComponent(typeof(IShipmentPreProcessor), ShipmentTypeCode.DhlExpress)]
+    [KeyedComponent(typeof(IShipmentPreProcessor), ShipmentTypeCode.DhlEcommerce)]
     [KeyedComponent(typeof(IShipmentPreProcessor), ShipmentTypeCode.Endicia)]
     [KeyedComponent(typeof(IShipmentPreProcessor), ShipmentTypeCode.Express1Endicia)]
     [KeyedComponent(typeof(IShipmentPreProcessor), ShipmentTypeCode.Express1Usps)]

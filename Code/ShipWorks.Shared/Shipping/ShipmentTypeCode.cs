@@ -1,5 +1,5 @@
-﻿using System.Reflection;
-using System.ComponentModel;
+﻿using System.ComponentModel;
+using System.Reflection;
 using Interapptive.Shared.Utility;
 
 namespace ShipWorks.Shipping
@@ -86,6 +86,11 @@ namespace ShipWorks.Shipping
         [ShipmentTypeIcon("amazonswa")]
         [WpfImageSource("/ShipWorks.UI;component/Resources/amazon.png")]
         AmazonSWA = 19,
+
+        [Description("DHL eCommerce")]
+        [ShipmentTypeIcon("dhl")]
+        [WpfImageSource("/ShipWorks.UI;component/Resources/dhl.png")]
+        DhlEcommerce = 20,
 
         [Description("None")]
         None = 99

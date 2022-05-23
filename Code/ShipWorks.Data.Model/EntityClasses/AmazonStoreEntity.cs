@@ -632,7 +632,6 @@ namespace ShipWorks.Data.Model.EntityClasses
 			get { return (Nullable<System.DateTime>)GetValue((int)AmazonStoreFieldIndex.MaxOrderDatePreMigration, false); }
 			set	{ SetValue((int)AmazonStoreFieldIndex.MaxOrderDatePreMigration, value); }
 		}
-	
 
 		/// <summary> The ContinuationToken property of the Entity AmazonStore<br/><br/></summary>
 		/// <remarks>Mapped on  table field: "AmazonStore"."ContinuationToken"<br/>

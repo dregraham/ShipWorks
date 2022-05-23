@@ -149,6 +149,9 @@ namespace ShipWorks.ApplicationCore.Logging
 
         Rakuten,
 
-        ShipWorksAPI
+        ShipWorksAPI,
+
+        [ApiPrivateLogSource]
+        DhlEcommerce,
     }
 }

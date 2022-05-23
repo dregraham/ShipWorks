@@ -67,6 +67,7 @@ namespace ShipWorks.Data.Administration
                 "ShippingProviderRule",
                 "Shortcut",
                 "DhlExpressAccount",
+                "DhlEcommerceAccount",
                 "AsendiaAccount"
             };
         }

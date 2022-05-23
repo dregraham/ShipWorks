@@ -171,6 +171,51 @@
     <Reference Include="WindowsFormsIntegration" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Carriers\DhlEcommerce\DhlEcommerceCustomsControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Carriers\DhlEcommerce\DhlEcommerceCustomsControl.Designer.cs">
+      <DependentUpon>DhlEcommerceCustomsControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Carriers\DhlEcommerce\DhlEcommerceServiceControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Carriers\DhlEcommerce\DhlEcommerceServiceControl.Designer.cs">
+      <DependentUpon>DhlEcommerceServiceControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Carriers\DhlEcommerce\DhlEcommerceAccountEditorDlg.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Carriers\DhlEcommerce\DhlEcommerceAccountEditorDlg.Designer.cs">
+      <DependentUpon>DhlEcommerceAccountEditorDlg.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Carriers\DhlEcommerce\DhlEcommerceServicePickerControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Carriers\DhlEcommerce\DhlEcommerceSettingsControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Carriers\DhlEcommerce\DhlEcommerceSettingsControl.Designer.cs">
+      <DependentUpon>DhlEcommerceSettingsControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Carriers\DhlEcommerce\DhlEcommerceSetupWizard.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Carriers\DhlEcommerce\DhlEcommerceSetupWizard.Designer.cs">
+      <DependentUpon>DhlEcommerceSetupWizard.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Carriers\DhlEcommerce\DhlEcommerceOptionsControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Carriers\DhlEcommerce\DhlEcommerceOptionsControl.Designer.cs">
+      <DependentUpon>DhlEcommerceOptionsControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Carriers\DhlEcommerce\DhlEcommerceProfileControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Carriers\DhlEcommerce\DhlEcommerceProfileControl.Designer.cs">
+      <DependentUpon>DhlEcommerceProfileControl.cs</DependentUpon>
+    </Compile>
     <Compile Include="Settings\BestRateAccount.cs" />
     <Compile Include="Settings\BestRateAccountSettingsControl.xaml.cs">
       <DependentUpon>BestRateAccountSettingsControl.xaml</DependentUpon>
@@ -665,6 +710,28 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Carriers\Asendia\AsendiaProfileControl.resx">
       <DependentUpon>AsendiaProfileControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Carriers\DhlEcommerce\DhlEcommerceCustomsControl.resx">
+      <DependentUpon>DhlEcommerceCustomsControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Carriers\DhlEcommerce\DhlEcommerceServiceControl.resx">
+      <DependentUpon>DhlEcommerceServiceControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Carriers\DhlEcommerce\DhlEcommerceAccountEditorDlg.resx">
+      <DependentUpon>DhlEcommerceAccountEditorDlg.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Carriers\DhlEcommerce\DhlEcommerceSettingsControl.resx">
+      <DependentUpon>DhlEcommerceSettingsControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Carriers\DhlEcommerce\DhlEcommerceSetupWizard.resx">
+      <DependentUpon>DhlEcommerceSetupWizard.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Carriers\DhlEcommerce\DhlEcommerceOptionsControl.resx">
+      <DependentUpon>DhlEcommerceOptionsControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Carriers\DhlEcommerce\DhlEcommerceProfileControl.resx">
+      <DependentUpon>DhlEcommerceProfileControl.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Carriers\Dhl\DhlExpressSettingsControl.resx">
       <DependentUpon>DhlExpressSettingsControl.cs</DependentUpon>

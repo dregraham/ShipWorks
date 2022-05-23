@@ -1,8 +1,8 @@
 ﻿using ShipWorks.Data.Model.EntityClasses;
-using ShipEngine.CarrierApi.Client.Model;
 using Interapptive.Shared.ComponentRegistration;
 using ShipWorks.Data;
 using ShipWorks.Shipping.ShipEngine;
+using ShipWorks.Shipping.ShipEngine.DTOs;
 
 namespace ShipWorks.Shipping.Carriers.Amazon.SWA
 {

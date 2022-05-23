@@ -220,9 +220,6 @@
       <HintPath>..\..\packages\SD.Tools.OrmProfiler.Interceptor.1.5.20150715\lib\net35\SD.Tools.OrmProfiler.Shared.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="ShipEngine.CarrierApi.Client, Version=1.0.0.0, Culture=neutral, PublicKeyToken=c5149f357886d5cf, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\ShipEngine.CarrierApi.Client.1.2.1\lib\net46\ShipEngine.CarrierApi.Client.dll</HintPath>
-    </Reference>
     <Reference Include="SpreadsheetGear, Version=6.0.3.189, Culture=neutral, PublicKeyToken=39c186f5904944ec, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\Components\SpreadsheetGear.dll</HintPath>

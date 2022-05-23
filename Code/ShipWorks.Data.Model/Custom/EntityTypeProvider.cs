@@ -63,6 +63,9 @@ namespace ShipWorks.Data.Model.Custom
 				case "ConfigurationEntity": return EntityType.ConfigurationEntity;
 				case "CustomerEntity": return EntityType.CustomerEntity;
 				case "DeviceEntity": return EntityType.DeviceEntity;
+				case "DhlEcommerceAccountEntity": return EntityType.DhlEcommerceAccountEntity;
+				case "DhlEcommerceProfileEntity": return EntityType.DhlEcommerceProfileEntity;
+				case "DhlEcommerceShipmentEntity": return EntityType.DhlEcommerceShipmentEntity;
 				case "DhlExpressAccountEntity": return EntityType.DhlExpressAccountEntity;
 				case "DhlExpressPackageEntity": return EntityType.DhlExpressPackageEntity;
 				case "DhlExpressProfileEntity": return EntityType.DhlExpressProfileEntity;
@@ -196,6 +199,7 @@ namespace ShipWorks.Data.Model.Custom
 				case "ServerMessageEntity": return EntityType.ServerMessageEntity;
 				case "ServerMessageSignoffEntity": return EntityType.ServerMessageSignoffEntity;
 				case "ServiceStatusEntity": return EntityType.ServiceStatusEntity;
+				case "ShipEngineManifestEntity": return EntityType.ShipEngineManifestEntity;
 				case "ShipmentEntity": return EntityType.ShipmentEntity;
 				case "ShipmentCustomsItemEntity": return EntityType.ShipmentCustomsItemEntity;
 				case "ShipmentReturnItemEntity": return EntityType.ShipmentReturnItemEntity;

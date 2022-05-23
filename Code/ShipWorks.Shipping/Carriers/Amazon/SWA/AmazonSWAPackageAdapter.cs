@@ -26,7 +26,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon.SWA
             MethodConditions.EnsureArgumentIsNotNull(shipment.AmazonSWA, nameof(shipment.AmazonSWA));
 
             this.shipment = shipment;
-            this.InsuranceChoice = null;
+            InsuranceChoice = null;
         }
 
         /// <summary>

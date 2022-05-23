@@ -155,6 +155,7 @@
     <Compile Include="AssemblyProvider.cs" />
     <Compile Include="AutoMockExtensions.cs" />
     <Compile Include="Database\DbUtils.cs" />
+    <Compile Include="EntityBuilders\DhlEcommerceShipmentEntityBuilder.cs" />
     <Compile Include="TestCollections.cs" />
     <Compile Include="Database\BulkOrderCreator.cs" />
     <Compile Include="Carriers\FedEx\BuildFedExShipmentEntity.cs" />

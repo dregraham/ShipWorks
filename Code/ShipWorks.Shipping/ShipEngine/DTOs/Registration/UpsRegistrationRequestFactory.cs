@@ -39,7 +39,7 @@ namespace ShipWorks.Shipping.ShipEngine.DTOs.Registration
                 AccessLicense = upsCredentials.AccessKey,
                 DeveloperKey = upsCredentials.DeveloperKey,
                 Email = person.Email,
-                Address = new DTOs.Registration.Address
+                Address = new Address
                 {
                     Name = person.UnparsedName,
                     Phone = person.Phone,

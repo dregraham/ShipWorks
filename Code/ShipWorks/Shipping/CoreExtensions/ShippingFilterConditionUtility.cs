@@ -46,5 +46,15 @@ namespace ShipWorks.Shipping.CoreExtensions
                 (int) ShipmentTypeCode.UpsOnLineTools,
                 (int) ShipmentTypeCode.UpsWorldShip);
         }
+
+        /// <summary>
+        /// Get a SQL block that restricts to a dhl ecommerce shipment type
+        /// </summary>
+        public static string GetDhlEcommerceTypeCondition(SqlGenerationContext context)
+        {
+            return string.Format("{0} = {1}",
+                context.GetColumnReference(ShipmentFields.ShipmentType),
+                (int) ShipmentTypeCode.DhlEcommerce);
+        }
     }
 }

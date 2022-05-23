@@ -10,6 +10,7 @@ using ShipWorks.Data.Connection;
 using ShipWorks.Shipping;
 using ShipWorks.Shipping.Carriers.Amazon.SWA;
 using ShipWorks.Shipping.Carriers.Dhl;
+using ShipWorks.Shipping.Carriers.DhlEcommerce;
 using ShipWorks.Shipping.Carriers.FedEx.Enums;
 using ShipWorks.Shipping.Carriers.iParcel.Enums;
 using ShipWorks.Shipping.Carriers.OnTrac.Enums;
@@ -69,6 +70,7 @@ namespace ShipWorks.Data.Administration
             serviceTypes.AddRange(GetValues<PostalServiceType>((int) ShipmentTypeCode.Express1Usps));
             serviceTypes.AddRange(GetValues<PostalServiceType>((int) ShipmentTypeCode.Usps));
             serviceTypes.AddRange(GetValues<DhlExpressServiceType>((int) ShipmentTypeCode.DhlExpress));
+            serviceTypes.AddRange(GetValues<DhlEcommerceServiceType>((int) ShipmentTypeCode.DhlEcommerce));
             serviceTypes.AddRange(GetValues<AsendiaServiceType>((int) ShipmentTypeCode.Asendia));
             serviceTypes.AddRange(GetValues<AmazonSWAServiceType>((int) ShipmentTypeCode.AmazonSWA));
             return serviceTypes;

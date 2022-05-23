@@ -1,4 +1,4 @@
-﻿using ShipEngine.CarrierApi.Client.Model;
+﻿using ShipWorks.Shipping.ShipEngine.DTOs;
 using ShipWorks.Shipping.Editing.Rating;
 using System.Collections.Generic;
 

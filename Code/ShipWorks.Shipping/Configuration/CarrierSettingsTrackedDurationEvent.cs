@@ -19,7 +19,7 @@ namespace ShipWorks.Shipping.Configuration
         /// </summary>
         public CarrierSettingsTrackedDurationEvent() : base(string.Empty)
         {
-            this.formattedName = "Carrier.{0}.Setup";
+            formattedName = "Carrier.{0}.Setup";
         }
 
         /// <summary>

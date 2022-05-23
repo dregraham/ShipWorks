@@ -492,6 +492,10 @@ namespace ShipWorks.Stores.Platforms.Ebay.OnlineUpdating
                     carrierType = ShippingCarrierCodeType.ONTRACK;
                     break;
 
+                case ShipmentTypeCode.DhlEcommerce:
+                    carrierType = ShippingCarrierCodeType.DHLGlobalMail;
+                    break;
+
                 case ShipmentTypeCode.Other:
                     CarrierDescription description = ShippingManager.GetOtherCarrierDescription(shipment);
 
@@ -519,7 +523,7 @@ namespace ShipWorks.Stores.Platforms.Ebay.OnlineUpdating
             {
                 carrierCode = "UPS-MI";
             }
-            else if (carrierType == ShippingCarrierCodeType.DHL)
+            else if (carrierType == ShippingCarrierCodeType.DHL || carrierType == ShippingCarrierCodeType.DHLGlobalMail)
             {
                 carrierCode = "DHL Global Mail";
             }
