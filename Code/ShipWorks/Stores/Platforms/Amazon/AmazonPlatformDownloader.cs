@@ -82,9 +82,9 @@ namespace ShipWorks.Stores.Platforms.Amazon
                 var result =
                     await client.GetOrders(Store.OrderSourceID, AmazonStore.ContinuationToken).ConfigureAwait(false);
 
-                if (result.Errors.Count > 0)
+                if (result.Orders.Errors.Count > 0)
                 {
-                    foreach (var platformError in result.Errors)
+                    foreach (var platformError in result.Orders.Errors)
                     {
                         log.Error(platformError);
                     }
@@ -102,16 +102,24 @@ namespace ShipWorks.Stores.Platforms.Amazon
                 Progress.PercentComplete = 0;
 
                 // load each order in this result page
-                await LoadOrders(result.Data).ConfigureAwait(false);
+                await LoadOrders(result.Orders.Data).ConfigureAwait(false);
 
                 // Save the continuation token to the store
-                AmazonStore.ContinuationToken = result.ContinuationToken;
+                AmazonStore.ContinuationToken = result.Orders.ContinuationToken;
                 await storeManager.SaveStoreAsync(AmazonStore);
 
                 trackedDurationEvent.AddMetric("Amazon.Fba.Order.Count", FbaOrdersDownloaded);
 
                 Progress.PercentComplete = 100;
                 Progress.Detail = "Done.";
+
+                // There's an error within the refresh
+                if (result.Error)
+                {
+                    // We only throw at the end to give the import a chance to process any orders that were provided.
+                    throw new Exception(
+                        "Connection to Amazon failed. Please try again. If it continues to fail, update your credentials in store settings or contact ShipWorks support.");
+                }
             }
             catch (Exception ex)
             {

@@ -9,7 +9,7 @@ namespace ShipWorks.Stores.Platforms.ShipEngine
         /// <summary>
         /// Executes a request for more orders
         /// </summary>
-        Task<PaginatedPlatformServiceResponseOfOrderSourceApiSalesOrder> GetOrders(string orderSourceId, string continuationToken);
+        Task<GetOrdersDTO> GetOrders(string orderSourceId, string continuationToken);
 
         /// <summary>
         /// Progress reporter that will be used for requests
