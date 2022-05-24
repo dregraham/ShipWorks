@@ -163,10 +163,13 @@ namespace ShipWorks.Stores.Platforms.Platform.OnlineUpdating
                 case true when otherDesc?.IsUPS ?? false:
                 case true when sfpName.Equals("UPS", StringComparison.OrdinalIgnoreCase):
                     return "ups";
-                    
+
                 case true when shipmentTypeCode == ShipmentTypeCode.DhlExpress:
                     return "dhl_express";
-                    
+
+                case true when shipmentTypeCode == ShipmentTypeCode.DhlEcommerce:
+                    return "dhl_global_mail";
+
                 case true when shipmentTypeCode == ShipmentTypeCode.OnTrac:
                 case true when sfpName.Equals("ONTRAC", StringComparison.OrdinalIgnoreCase):
                     return "ontrac";

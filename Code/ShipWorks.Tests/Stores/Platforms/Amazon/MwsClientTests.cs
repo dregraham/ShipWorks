@@ -130,6 +130,19 @@ namespace ShipWorks.Tests.Stores.Amazon
             Assert.Equal("Some other carrier", carrierName);
         }
 
+        [Fact]
+        public void GetCarrierName_Returns_WhenDhlEcommerce()
+        {
+            var testObject = mock.Create<AmazonMwsClient>(TypedParameter.From(store));
+
+            shipmentEntity.ShipmentType = (int) ShipmentTypeCode.DhlEcommerce;
+            shipmentEntity.DhlEcommerce = new DhlEcommerceShipmentEntity();
+
+            string carrierName = testObject.GetCarrierName(shipmentEntity, ShipmentTypeCode.DhlEcommerce);
+
+            Assert.Equal("DHL", carrierName);
+        }
+
         public void Dispose() => mock.Dispose();
     }
 }

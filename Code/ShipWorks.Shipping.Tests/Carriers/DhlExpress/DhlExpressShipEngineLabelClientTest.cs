@@ -2,7 +2,6 @@
 using Autofac.Extras.Moq;
 using log4net;
 using Moq;
-using ShipEngine.CarrierApi.Client.Model;
 using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.Dhl;
@@ -23,16 +22,16 @@ namespace ShipWorks.Shipping.Tests.Carriers.DhlExpress
         private readonly AutoMock mock;
         private readonly ShipmentEntity shipment;
         private readonly Mock<ICarrierShipmentRequestFactory> shipmentRequestFactory;
-        private readonly PurchaseLabelRequest request;
-        private readonly Label label;
+        private readonly ShipWorks.Shipping.ShipEngine.DTOs.PurchaseLabelRequest request;
+        private readonly ShipWorks.Shipping.ShipEngine.DTOs.Label label;
         private TelemetricResult<IDownloadedLabelData> telemetricResult;
 
         public DhlExpressShipEngineLabelClientTest()
         {
             mock = AutoMockExtensions.GetLooseThatReturnsMocks();
             shipment = new ShipmentEntity() { DhlExpress = new DhlExpressShipmentEntity() };
-            request = new PurchaseLabelRequest();
-            label = new Label();
+            request = new ShipWorks.Shipping.ShipEngine.DTOs.PurchaseLabelRequest();
+            label = new ShipWorks.Shipping.ShipEngine.DTOs.Label();
 
             shipmentRequestFactory = mock.CreateKeyedMockOf<ICarrierShipmentRequestFactory>().For(ShipmentTypeCode.DhlExpress);
             shipmentRequestFactory.Setup(f => f.CreatePurchaseLabelRequest(AnyShipment)).Returns(request);
@@ -70,7 +69,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.DhlExpress
         [Fact]
         public async Task Create_ThrowsShippingException_WhenPurchaseLabelFails()
         {
-            mock.Mock<IShipEngineWebClient>().Setup(w => w.PurchaseLabel(It.IsAny<PurchaseLabelRequest>(), ApiLogSource.DHLExpress, It.IsAny<TelemetricResult<IDownloadedLabelData>>()))
+            mock.Mock<IShipEngineWebClient>().Setup(w => w.PurchaseLabel(It.IsAny<ShipWorks.Shipping.ShipEngine.DTOs.PurchaseLabelRequest>(), ApiLogSource.DHLExpress, It.IsAny<TelemetricResult<IDownloadedLabelData>>()))
                 .Throws(new Exception("Something broke"));
 
             var testObject = mock.Create<DhlExpressShipEngineLabelClient>();
@@ -84,7 +83,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.DhlExpress
         {
             mock.Mock<IDhlExpressAccountRepository>().Setup(r => r.GetAccount(shipment)).Returns(new DhlExpressAccountEntity() { ShipEngineCarrierId = "se-182974" });
 
-            mock.Mock<IShipEngineWebClient>().Setup(w => w.PurchaseLabel(It.IsAny<PurchaseLabelRequest>(), ApiLogSource.DHLExpress, It.IsAny<TelemetricResult<IDownloadedLabelData>>()))
+            mock.Mock<IShipEngineWebClient>().Setup(w => w.PurchaseLabel(It.IsAny<ShipWorks.Shipping.ShipEngine.DTOs.PurchaseLabelRequest>(), ApiLogSource.DHLExpress, It.IsAny<TelemetricResult<IDownloadedLabelData>>()))
                 .Throws(new Exception("A shipping carrier reported an error when processing your request. Carrier ID: se-182974, Carrier: DHL Express. One or more errors occurred."));
 
             var testObject = mock.Create<DhlExpressShipEngineLabelClient>();
@@ -98,7 +97,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.DhlExpress
         {
             mock.Mock<IDhlExpressAccountRepository>().Setup(r => r.GetAccount(shipment)).Returns(new DhlExpressAccountEntity() { ShipEngineCarrierId = "se-182974" });
 
-            mock.Mock<IShipEngineWebClient>().Setup(w => w.PurchaseLabel(It.IsAny<PurchaseLabelRequest>(), ApiLogSource.DHLExpress, It.IsAny<TelemetricResult<IDownloadedLabelData>>()))
+            mock.Mock<IShipEngineWebClient>().Setup(w => w.PurchaseLabel(It.IsAny<ShipWorks.Shipping.ShipEngine.DTOs.PurchaseLabelRequest>(), ApiLogSource.DHLExpress, It.IsAny<TelemetricResult<IDownloadedLabelData>>()))
                 .Throws(new Exception("A shipping carrier reported an error when processing your request. Carrier ID: se-182974, Carrier: DHL Express. SOMETHING WENT WRONG OMG"));
 
             var testObject = mock.Create<DhlExpressShipEngineLabelClient>();
@@ -112,7 +111,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.DhlExpress
         {
             mock.Mock<IDhlExpressAccountRepository>().Setup(r => r.GetAccount(shipment)).Returns(new DhlExpressAccountEntity() { ShipEngineCarrierId = "se-182974" });
 
-            mock.Mock<IShipEngineWebClient>().Setup(w => w.PurchaseLabel(It.IsAny<PurchaseLabelRequest>(), ApiLogSource.DHLExpress, It.IsAny<TelemetricResult<IDownloadedLabelData>>()))
+            mock.Mock<IShipEngineWebClient>().Setup(w => w.PurchaseLabel(It.IsAny<ShipWorks.Shipping.ShipEngine.DTOs.PurchaseLabelRequest>(), ApiLogSource.DHLExpress, It.IsAny<TelemetricResult<IDownloadedLabelData>>()))
                 .Throws(new Exception("Unable to create label. Order ID: se-164205986. \"K1A 0G9\" is an invalid postal code for the country \"US\"."));
 
             var testObject = mock.Create<DhlExpressShipEngineLabelClient>();
@@ -124,11 +123,11 @@ namespace ShipWorks.Shipping.Tests.Carriers.DhlExpress
         [Fact]
         public async Task Create_CreatesDownloadedLabelData_WithShipmentAndLabel()
         {
-            var telemetricLabel = new TelemetricResult<Label>("API.Milliseconds");
+            var telemetricLabel = new TelemetricResult<ShipWorks.Shipping.ShipEngine.DTOs.Label>("API.Milliseconds");
             telemetricLabel.SetValue(label);
             var labelData = mock.Create<DhlExpressShipEngineDownloadedLabelData>(TypedParameter.From(shipment));
-            var labelDataFactory = mock.MockRepository.Create<Func<ShipmentEntity, Label, DhlExpressShipEngineDownloadedLabelData>>();
-            labelDataFactory.Setup(f => f(AnyShipment, It.IsAny<Label>())).Returns(labelData);
+            var labelDataFactory = mock.MockRepository.Create<Func<ShipmentEntity, ShipWorks.Shipping.ShipEngine.DTOs.Label, DhlExpressShipEngineDownloadedLabelData>>();
+            labelDataFactory.Setup(f => f(AnyShipment, It.IsAny<ShipWorks.Shipping.ShipEngine.DTOs.Label>())).Returns(labelData);
             mock.Provide(labelDataFactory.Object);
             mock.Mock<IShipEngineWebClient>().Setup(c => c.PurchaseLabel(request, ApiLogSource.DHLExpress, It.IsAny<TelemetricResult<IDownloadedLabelData>>())).Returns(Task.FromResult(telemetricLabel.Value));
 
@@ -145,7 +144,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.DhlExpress
             var webClient = mock.Mock<IShipEngineWebClient>();
             webClient
                 .Setup(c => c.VoidLabel(AnyString, ApiLogSource.DHLExpress))
-                .Returns(Task.FromResult(new VoidLabelResponse(true)));
+                .Returns(Task.FromResult(new ShipWorks.Shipping.ShipEngine.DTOs.VoidLabelResponse(true)));
 
             var testObject = mock.Create<DhlExpressShipEngineLabelClient>();
 

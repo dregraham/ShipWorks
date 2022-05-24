@@ -1,16 +1,16 @@
 ﻿using System.Collections.Generic;
 using System.Data;
 using System.Linq;
+using Interapptive.Shared.Business.Geography;
+using Interapptive.Shared.ComponentRegistration;
+using Interapptive.Shared.Enums;
 using Interapptive.Shared.Utility;
 using ShipWorks.Common.IO.Hardware.Printers;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.HelperClasses;
-using ShipWorks.Shipping.Profiles;
-using Interapptive.Shared.ComponentRegistration;
-using ShipWorks.Shipping.ShipEngine;
-using Interapptive.Shared.Enums;
 using ShipWorks.Shipping.Carriers.Asendia;
-using Interapptive.Shared.Business.Geography;
+using ShipWorks.Shipping.Profiles;
+using ShipWorks.Shipping.ShipEngine;
 
 namespace ShipWorks.Shipping.UI.Carriers.Asendia
 {
@@ -45,7 +45,7 @@ namespace ShipWorks.Shipping.UI.Carriers.Asendia
 
             AsendiaProfileEntity asendiaProfile = profile.Asendia;
             PackageProfileEntity packageProfile = profile.Packages.Single();
-            
+
             LoadAsendiaAccounts();
 
             EnumHelper.BindComboBox<AsendiaServiceType>(service);
@@ -72,7 +72,7 @@ namespace ShipWorks.Shipping.UI.Carriers.Asendia
 
             // Insurance
             AddValueMapping(profile, ShippingProfileFields.Insurance, insuranceState, insuranceControl);
-            
+
             //Options
             AddValueMapping(asendiaProfile, AsendiaProfileFields.NonMachinable, nonMachinableState, nonMachinable, labelNonMachinable);
 
@@ -116,6 +116,6 @@ namespace ShipWorks.Shipping.UI.Carriers.Asendia
             {
                 dimensionsControl.SaveToEntities();
             }
-        }                
+        }
     }
 }

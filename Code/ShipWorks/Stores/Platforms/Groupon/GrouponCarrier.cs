@@ -37,6 +37,10 @@ namespace ShipWorks.Stores.Platforms.Groupon
                     carrierCode = UpsUtility.IsUpsMiService((UpsServiceType) shipmentEntity.Ups.Service) ? "upsmi" : "ups";
                     break;
 
+                case ShipmentTypeCode.DhlEcommerce:
+                    carrierCode = "dhl";
+                    break;
+
                 case ShipmentTypeCode.Other:
                     carrierCode = shipmentEntity.Other.Carrier;
                     break;

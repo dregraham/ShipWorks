@@ -1,4 +1,5 @@
-﻿SET NUMERIC_ROUNDABORT OFF
+﻿
+SET NUMERIC_ROUNDABORT OFF
 GO
 SET ANSI_PADDING, ANSI_WARNINGS, CONCAT_NULL_YIELDS_NULL, ARITHABORT, QUOTED_IDENTIFIER, ANSI_NULLS ON
 GO
@@ -39,6 +40,7 @@ WITH ProcessedShipments AS
                               when s.ShipmentType IN (11  ) THEN (SELECT c.[Service] FROM OnTracShipment c WHERE c.ShipmentID = s.ShipmentID)
                               when s.ShipmentType IN (12  ) THEN (SELECT c.[Service] FROM iParcelShipment c WHERE c.ShipmentID = s.ShipmentID)
                               when s.ShipmentType IN (17  ) THEN (SELECT c.[Service] FROM DhlExpressShipment c WHERE c.ShipmentID = s.ShipmentID)
+                              when s.ShipmentType IN (20  ) THEN (SELECT c.[Service] FROM DhlEcommerceShipment c WHERE c.ShipmentID = s.ShipmentID)
                               when s.ShipmentType IN (18  ) THEN (SELECT c.[Service] FROM AsendiaShipment c WHERE c.ShipmentID = s.ShipmentID)
                               END AS [Service]
                   ) AS carrierService

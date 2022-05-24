@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Linq;
 using System.Security.Cryptography;
@@ -40,14 +41,14 @@ namespace Interapptive.Shared.Security.SecureTextVersions
         {
             try
             {
-                log.Info("Decrypting with RC2");
+                log.Debug("Decrypting with RC2");
                 var decrypted = DecryptWithRC2(ciphertext, password);
-                log.Info("Decrypting with RC2 succeeded");
+                log.Debug("Decrypting with RC2 succeeded");
                 return decrypted;
             }
             catch (Exception ex) when (ex is CryptographicException || ex is FormatException)
             {
-                log.Info("Decrypting with RC2 failed. Trying AES-GCM");
+                log.Debug("Decrypting with RC2 failed. Trying AES-GCM");
 
                 var encryptedBytes = Convert.FromBase64String(ciphertext);
                 var encryptedKey = encryptedBytes.Take(EncryptedKeyLength).ToArray();
@@ -74,7 +75,7 @@ namespace Interapptive.Shared.Security.SecureTextVersions
 
                 var decryptedText = Encoding.UTF8.GetString(plaintext);
 
-                log.Info("Decrypting with AES-GCM succeeded");
+                log.Debug("Decrypting with AES-GCM succeeded");
 
                 return decryptedText;
             }
@@ -83,6 +84,7 @@ namespace Interapptive.Shared.Security.SecureTextVersions
         /// <summary>
         /// Decrypt using our old RC2 implementation
         /// </summary>
+        [SuppressMessage("Security", "CA5351: Do not use a broken cryptographic algorithm (RC2)", Justification = "This is only used for decrypting old values")]
         private static string DecryptWithRC2(string cipher, string salt)
         {
             RC2CryptoServiceProvider crypto = new RC2CryptoServiceProvider();
@@ -100,7 +102,7 @@ namespace Interapptive.Shared.Security.SecureTextVersions
             crypto.Key = new PasswordDeriveBytes(salt, new byte[0]).CryptDeriveKey("RC2", "MD5", 56, crypto.IV);
 
             byte[] encryptedBytes = Convert.FromBase64String(cipher);
-            byte[] plainBytes = new Byte[1];
+            byte[] plainBytes = new byte[1];
 
             MemoryStream plain = new MemoryStream();
             using (CryptoStream decoder = new CryptoStream(

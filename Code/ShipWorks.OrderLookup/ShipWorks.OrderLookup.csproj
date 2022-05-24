@@ -144,6 +144,10 @@
     <Reference Include="WindowsFormsIntegration" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Controls\Customs\DhlEcommerceCustomsControl.xaml.cs">
+      <DependentUpon>DhlEcommerceCustomsControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\Customs\DhlEcommerceCustomsViewModel.cs" />
     <Compile Include="Controls\Customs\FedExCustomsControl.xaml.cs">
       <DependentUpon>FedExCustomsControl.xaml</DependentUpon>
     </Compile>
@@ -232,6 +236,10 @@
       <DependentUpon>AmazonReferenceControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="Controls\Reference\AmazonReferenceViewModel.cs" />
+    <Compile Include="Controls\Reference\DhlEcommerceReferenceControl.xaml.cs">
+      <DependentUpon>DhlEcommerceReferenceControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\Reference\DhlEcommerceReferenceViewModel.cs" />
     <Compile Include="Controls\Reference\FedExReferenceControl.xaml.cs">
       <DependentUpon>FedExReferenceControl.xaml</DependentUpon>
     </Compile>
@@ -248,6 +256,10 @@
     <Compile Include="Controls\ShipmentDetails\AmazonSFPShipmentDetailsControl.xaml.cs">
       <DependentUpon>AmazonSFPShipmentDetailsControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Controls\ShipmentDetails\DhlEcommerceShipmentDetailsControl.xaml.cs">
+      <DependentUpon>DhlEcommerceShipmentDetailsControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\ShipmentDetails\DhlEcommerceShipmentDetailsViewModel.cs" />
     <Compile Include="Controls\ShipmentDetails\FedExShipmentDetailsControl.xaml.cs">
       <DependentUpon>FedExShipmentDetailsControl.xaml</DependentUpon>
     </Compile>
@@ -474,6 +486,10 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Page Include="Controls\Customs\DhlEcommerceCustomsControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Controls\Customs\FedExCustomsControl.xaml" />
     <Page Include="Controls\Customs\FedExCustomsItemsControl.xaml">
       <SubType>Designer</SubType>
@@ -538,6 +554,10 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+    <Page Include="Controls\Reference\DhlEcommerceReferenceControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Controls\Reference\EndiciaReferenceControl.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -555,6 +575,10 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="Controls\ShipmentDetails\AmazonSFPShipmentDetailsControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\ShipmentDetails\DhlEcommerceShipmentDetailsControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

@@ -1,6 +1,5 @@
 ﻿using Autofac.Extras.Moq;
 using Moq;
-using ShipEngine.CarrierApi.Client.Model;
 using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.Asendia;
@@ -22,16 +21,16 @@ namespace ShipWorks.Shipping.Tests.Carriers.Asendia
         private readonly AutoMock mock;
         private readonly ShipmentEntity shipment;
         private readonly Mock<ICarrierShipmentRequestFactory> shipmentRequestFactory;
-        private readonly PurchaseLabelRequest request;
-        private readonly Label label;
+        private readonly ShipWorks.Shipping.ShipEngine.DTOs.PurchaseLabelRequest request;
+        private readonly ShipWorks.Shipping.ShipEngine.DTOs.Label label;
         private TelemetricResult<IDownloadedLabelData> telemetricResult;
 
         public AsendiaLabelServiceTest()
         {
             mock = AutoMockExtensions.GetLooseThatReturnsMocks();
             shipment = new ShipmentEntity() { Asendia = new AsendiaShipmentEntity() };
-            request = new PurchaseLabelRequest();
-            label = new Label();
+            request = new ShipWorks.Shipping.ShipEngine.DTOs.PurchaseLabelRequest();
+            label = new ShipWorks.Shipping.ShipEngine.DTOs.Label();
 
             shipmentRequestFactory = mock.CreateKeyedMockOf<ICarrierShipmentRequestFactory>().For(ShipmentTypeCode.Asendia);
             shipmentRequestFactory.Setup(f => f.CreatePurchaseLabelRequest(AnyShipment)).Returns(request);
@@ -44,7 +43,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.Asendia
         {
             mock.Mock<IAsendiaAccountRepository>().Setup(r => r.GetAccount(shipment)).Returns(new AsendiaAccountEntity() { ShipEngineCarrierId = "se-182974" });
 
-            mock.Mock<IShipEngineWebClient>().Setup(w => w.PurchaseLabel(It.IsAny<PurchaseLabelRequest>(), ApiLogSource.Asendia, It.IsAny<TelemetricResult<IDownloadedLabelData>>()))
+            mock.Mock<IShipEngineWebClient>().Setup(w => w.PurchaseLabel(It.IsAny<ShipWorks.Shipping.ShipEngine.DTOs.PurchaseLabelRequest>(), ApiLogSource.Asendia, It.IsAny<TelemetricResult<IDownloadedLabelData>>()))
                 .Throws(new Exception("Unable to create label. Order ID: se-164205986. \"K1A 0G9\" is an invalid postal code for the country \"US\"."));
 
             AsendiaLabelService testObject = mock.Create<AsendiaLabelService>();
@@ -58,7 +57,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.Asendia
         {
             mock.Mock<IAsendiaAccountRepository>().Setup(r => r.GetAccount(shipment)).Returns(new AsendiaAccountEntity() { ShipEngineCarrierId = "se-182974" });
 
-            mock.Mock<IShipEngineWebClient>().Setup(w => w.PurchaseLabel(It.IsAny<PurchaseLabelRequest>(), ApiLogSource.Asendia, It.IsAny<TelemetricResult<IDownloadedLabelData>>()))
+            mock.Mock<IShipEngineWebClient>().Setup(w => w.PurchaseLabel(It.IsAny<ShipWorks.Shipping.ShipEngine.DTOs.PurchaseLabelRequest>(), ApiLogSource.Asendia, It.IsAny<TelemetricResult<IDownloadedLabelData>>()))
                 .Throws(new Exception("Unable to create label. Order ID: se-164554936. Asendia requires a value for all customs items."));
 
             AsendiaLabelService testObject = mock.Create<AsendiaLabelService>();

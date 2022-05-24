@@ -65,7 +65,7 @@ namespace Interapptive.Shared.Security.SecureTextVersions
 
             var decryptedText = Encoding.UTF8.GetString(plaintext);
 
-            log.Info("Finished decrypting");
+            log.Debug("Finished decrypting");
 
             return decryptedText;
         }
@@ -118,7 +118,7 @@ namespace Interapptive.Shared.Security.SecureTextVersions
             // Add the version to the encrypted string
             fullyEncrypted += ":1";
 
-            log.Info("Finished encrypting");
+            log.Debug("Finished encrypting");
 
             return fullyEncrypted;
         }

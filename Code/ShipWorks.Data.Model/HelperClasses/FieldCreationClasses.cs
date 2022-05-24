@@ -5654,6 +5654,341 @@ namespace ShipWorks.Data.Model.HelperClasses
 		}
 	}
 
+	/// <summary>Field Creation Class for entity DhlEcommerceAccountEntity</summary>
+	public partial class DhlEcommerceAccountFields
+	{
+		/// <summary>Creates a new DhlEcommerceAccountEntity.DhlEcommerceAccountID field instance</summary>
+		public static EntityField2 DhlEcommerceAccountID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(DhlEcommerceAccountFieldIndex.DhlEcommerceAccountID);}
+		}
+		/// <summary>Creates a new DhlEcommerceAccountEntity.RowVersion field instance</summary>
+		public static EntityField2 RowVersion
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(DhlEcommerceAccountFieldIndex.RowVersion);}
+		}
+		/// <summary>Creates a new DhlEcommerceAccountEntity.ShipEngineCarrierId field instance</summary>
+		public static EntityField2 ShipEngineCarrierId
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(DhlEcommerceAccountFieldIndex.ShipEngineCarrierId);}
+		}
+		/// <summary>Creates a new DhlEcommerceAccountEntity.ClientId field instance</summary>
+		public static EntityField2 ClientId
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(DhlEcommerceAccountFieldIndex.ClientId);}
+		}
+		/// <summary>Creates a new DhlEcommerceAccountEntity.ApiSecret field instance</summary>
+		public static EntityField2 ApiSecret
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(DhlEcommerceAccountFieldIndex.ApiSecret);}
+		}
+		/// <summary>Creates a new DhlEcommerceAccountEntity.PickupNumber field instance</summary>
+		public static EntityField2 PickupNumber
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(DhlEcommerceAccountFieldIndex.PickupNumber);}
+		}
+		/// <summary>Creates a new DhlEcommerceAccountEntity.DistributionCenter field instance</summary>
+		public static EntityField2 DistributionCenter
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(DhlEcommerceAccountFieldIndex.DistributionCenter);}
+		}
+		/// <summary>Creates a new DhlEcommerceAccountEntity.SoldTo field instance</summary>
+		public static EntityField2 SoldTo
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(DhlEcommerceAccountFieldIndex.SoldTo);}
+		}
+		/// <summary>Creates a new DhlEcommerceAccountEntity.Description field instance</summary>
+		public static EntityField2 Description
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(DhlEcommerceAccountFieldIndex.Description);}
+		}
+		/// <summary>Creates a new DhlEcommerceAccountEntity.FirstName field instance</summary>
+		public static EntityField2 FirstName
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(DhlEcommerceAccountFieldIndex.FirstName);}
+		}
+		/// <summary>Creates a new DhlEcommerceAccountEntity.MiddleName field instance</summary>
+		public static EntityField2 MiddleName
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(DhlEcommerceAccountFieldIndex.MiddleName);}
+		}
+		/// <summary>Creates a new DhlEcommerceAccountEntity.LastName field instance</summary>
+		public static EntityField2 LastName
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(DhlEcommerceAccountFieldIndex.LastName);}
+		}
+		/// <summary>Creates a new DhlEcommerceAccountEntity.Company field instance</summary>
+		public static EntityField2 Company
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(DhlEcommerceAccountFieldIndex.Company);}
+		}
+		/// <summary>Creates a new DhlEcommerceAccountEntity.Street1 field instance</summary>
+		public static EntityField2 Street1
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(DhlEcommerceAccountFieldIndex.Street1);}
+		}
+		/// <summary>Creates a new DhlEcommerceAccountEntity.City field instance</summary>
+		public static EntityField2 City
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(DhlEcommerceAccountFieldIndex.City);}
+		}
+		/// <summary>Creates a new DhlEcommerceAccountEntity.StateProvCode field instance</summary>
+		public static EntityField2 StateProvCode
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(DhlEcommerceAccountFieldIndex.StateProvCode);}
+		}
+		/// <summary>Creates a new DhlEcommerceAccountEntity.PostalCode field instance</summary>
+		public static EntityField2 PostalCode
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(DhlEcommerceAccountFieldIndex.PostalCode);}
+		}
+		/// <summary>Creates a new DhlEcommerceAccountEntity.CountryCode field instance</summary>
+		public static EntityField2 CountryCode
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(DhlEcommerceAccountFieldIndex.CountryCode);}
+		}
+		/// <summary>Creates a new DhlEcommerceAccountEntity.Phone field instance</summary>
+		public static EntityField2 Phone
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(DhlEcommerceAccountFieldIndex.Phone);}
+		}
+		/// <summary>Creates a new DhlEcommerceAccountEntity.Email field instance</summary>
+		public static EntityField2 Email
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(DhlEcommerceAccountFieldIndex.Email);}
+		}
+		/// <summary>Creates a new DhlEcommerceAccountEntity.CreatedDate field instance</summary>
+		public static EntityField2 CreatedDate
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(DhlEcommerceAccountFieldIndex.CreatedDate);}
+		}
+		/// <summary>Creates a new DhlEcommerceAccountEntity.Street2 field instance</summary>
+		public static EntityField2 Street2
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(DhlEcommerceAccountFieldIndex.Street2);}
+		}
+		/// <summary>Creates a new DhlEcommerceAccountEntity.Street3 field instance</summary>
+		public static EntityField2 Street3
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(DhlEcommerceAccountFieldIndex.Street3);}
+		}
+	}
+
+	/// <summary>Field Creation Class for entity DhlEcommerceProfileEntity</summary>
+	public partial class DhlEcommerceProfileFields
+	{
+		/// <summary>Creates a new DhlEcommerceProfileEntity.ShippingProfileID field instance</summary>
+		public static EntityField2 ShippingProfileID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(DhlEcommerceProfileFieldIndex.ShippingProfileID);}
+		}
+		/// <summary>Creates a new DhlEcommerceProfileEntity.DhlEcommerceAccountID field instance</summary>
+		public static EntityField2 DhlEcommerceAccountID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(DhlEcommerceProfileFieldIndex.DhlEcommerceAccountID);}
+		}
+		/// <summary>Creates a new DhlEcommerceProfileEntity.Service field instance</summary>
+		public static EntityField2 Service
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(DhlEcommerceProfileFieldIndex.Service);}
+		}
+		/// <summary>Creates a new DhlEcommerceProfileEntity.DeliveryDutyPaid field instance</summary>
+		public static EntityField2 DeliveryDutyPaid
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(DhlEcommerceProfileFieldIndex.DeliveryDutyPaid);}
+		}
+		/// <summary>Creates a new DhlEcommerceProfileEntity.NonMachinable field instance</summary>
+		public static EntityField2 NonMachinable
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(DhlEcommerceProfileFieldIndex.NonMachinable);}
+		}
+		/// <summary>Creates a new DhlEcommerceProfileEntity.SaturdayDelivery field instance</summary>
+		public static EntityField2 SaturdayDelivery
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(DhlEcommerceProfileFieldIndex.SaturdayDelivery);}
+		}
+		/// <summary>Creates a new DhlEcommerceProfileEntity.Contents field instance</summary>
+		public static EntityField2 Contents
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(DhlEcommerceProfileFieldIndex.Contents);}
+		}
+		/// <summary>Creates a new DhlEcommerceProfileEntity.NonDelivery field instance</summary>
+		public static EntityField2 NonDelivery
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(DhlEcommerceProfileFieldIndex.NonDelivery);}
+		}
+		/// <summary>Creates a new DhlEcommerceProfileEntity.ResidentialDelivery field instance</summary>
+		public static EntityField2 ResidentialDelivery
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(DhlEcommerceProfileFieldIndex.ResidentialDelivery);}
+		}
+		/// <summary>Creates a new DhlEcommerceProfileEntity.CustomsRecipientTin field instance</summary>
+		public static EntityField2 CustomsRecipientTin
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(DhlEcommerceProfileFieldIndex.CustomsRecipientTin);}
+		}
+		/// <summary>Creates a new DhlEcommerceProfileEntity.CustomsTaxIdType field instance</summary>
+		public static EntityField2 CustomsTaxIdType
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(DhlEcommerceProfileFieldIndex.CustomsTaxIdType);}
+		}
+		/// <summary>Creates a new DhlEcommerceProfileEntity.CustomsTinIssuingAuthority field instance</summary>
+		public static EntityField2 CustomsTinIssuingAuthority
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(DhlEcommerceProfileFieldIndex.CustomsTinIssuingAuthority);}
+		}
+		/// <summary>Creates a new DhlEcommerceProfileEntity.PackagingType field instance</summary>
+		public static EntityField2 PackagingType
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(DhlEcommerceProfileFieldIndex.PackagingType);}
+		}
+		/// <summary>Creates a new DhlEcommerceProfileEntity.Reference1 field instance</summary>
+		public static EntityField2 Reference1
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(DhlEcommerceProfileFieldIndex.Reference1);}
+		}
+		/// <summary>Creates a new DhlEcommerceProfileEntity.AncillaryEndorsement field instance</summary>
+		public static EntityField2 AncillaryEndorsement
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(DhlEcommerceProfileFieldIndex.AncillaryEndorsement);}
+		}
+	}
+
+	/// <summary>Field Creation Class for entity DhlEcommerceShipmentEntity</summary>
+	public partial class DhlEcommerceShipmentFields
+	{
+		/// <summary>Creates a new DhlEcommerceShipmentEntity.ShipmentID field instance</summary>
+		public static EntityField2 ShipmentID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(DhlEcommerceShipmentFieldIndex.ShipmentID);}
+		}
+		/// <summary>Creates a new DhlEcommerceShipmentEntity.DhlEcommerceAccountID field instance</summary>
+		public static EntityField2 DhlEcommerceAccountID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(DhlEcommerceShipmentFieldIndex.DhlEcommerceAccountID);}
+		}
+		/// <summary>Creates a new DhlEcommerceShipmentEntity.Service field instance</summary>
+		public static EntityField2 Service
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(DhlEcommerceShipmentFieldIndex.Service);}
+		}
+		/// <summary>Creates a new DhlEcommerceShipmentEntity.DeliveredDutyPaid field instance</summary>
+		public static EntityField2 DeliveredDutyPaid
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(DhlEcommerceShipmentFieldIndex.DeliveredDutyPaid);}
+		}
+		/// <summary>Creates a new DhlEcommerceShipmentEntity.NonMachinable field instance</summary>
+		public static EntityField2 NonMachinable
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(DhlEcommerceShipmentFieldIndex.NonMachinable);}
+		}
+		/// <summary>Creates a new DhlEcommerceShipmentEntity.SaturdayDelivery field instance</summary>
+		public static EntityField2 SaturdayDelivery
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(DhlEcommerceShipmentFieldIndex.SaturdayDelivery);}
+		}
+		/// <summary>Creates a new DhlEcommerceShipmentEntity.RequestedLabelFormat field instance</summary>
+		public static EntityField2 RequestedLabelFormat
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(DhlEcommerceShipmentFieldIndex.RequestedLabelFormat);}
+		}
+		/// <summary>Creates a new DhlEcommerceShipmentEntity.Contents field instance</summary>
+		public static EntityField2 Contents
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(DhlEcommerceShipmentFieldIndex.Contents);}
+		}
+		/// <summary>Creates a new DhlEcommerceShipmentEntity.NonDelivery field instance</summary>
+		public static EntityField2 NonDelivery
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(DhlEcommerceShipmentFieldIndex.NonDelivery);}
+		}
+		/// <summary>Creates a new DhlEcommerceShipmentEntity.ShipEngineLabelID field instance</summary>
+		public static EntityField2 ShipEngineLabelID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(DhlEcommerceShipmentFieldIndex.ShipEngineLabelID);}
+		}
+		/// <summary>Creates a new DhlEcommerceShipmentEntity.IntegratorTransactionID field instance</summary>
+		public static EntityField2 IntegratorTransactionID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(DhlEcommerceShipmentFieldIndex.IntegratorTransactionID);}
+		}
+		/// <summary>Creates a new DhlEcommerceShipmentEntity.ResidentialDelivery field instance</summary>
+		public static EntityField2 ResidentialDelivery
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(DhlEcommerceShipmentFieldIndex.ResidentialDelivery);}
+		}
+		/// <summary>Creates a new DhlEcommerceShipmentEntity.CustomsRecipientTin field instance</summary>
+		public static EntityField2 CustomsRecipientTin
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(DhlEcommerceShipmentFieldIndex.CustomsRecipientTin);}
+		}
+		/// <summary>Creates a new DhlEcommerceShipmentEntity.CustomsTaxIdType field instance</summary>
+		public static EntityField2 CustomsTaxIdType
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(DhlEcommerceShipmentFieldIndex.CustomsTaxIdType);}
+		}
+		/// <summary>Creates a new DhlEcommerceShipmentEntity.CustomsTinIssuingAuthority field instance</summary>
+		public static EntityField2 CustomsTinIssuingAuthority
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(DhlEcommerceShipmentFieldIndex.CustomsTinIssuingAuthority);}
+		}
+		/// <summary>Creates a new DhlEcommerceShipmentEntity.PackagingType field instance</summary>
+		public static EntityField2 PackagingType
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(DhlEcommerceShipmentFieldIndex.PackagingType);}
+		}
+		/// <summary>Creates a new DhlEcommerceShipmentEntity.DimsProfileID field instance</summary>
+		public static EntityField2 DimsProfileID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(DhlEcommerceShipmentFieldIndex.DimsProfileID);}
+		}
+		/// <summary>Creates a new DhlEcommerceShipmentEntity.DimsLength field instance</summary>
+		public static EntityField2 DimsLength
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(DhlEcommerceShipmentFieldIndex.DimsLength);}
+		}
+		/// <summary>Creates a new DhlEcommerceShipmentEntity.DimsWidth field instance</summary>
+		public static EntityField2 DimsWidth
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(DhlEcommerceShipmentFieldIndex.DimsWidth);}
+		}
+		/// <summary>Creates a new DhlEcommerceShipmentEntity.DimsHeight field instance</summary>
+		public static EntityField2 DimsHeight
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(DhlEcommerceShipmentFieldIndex.DimsHeight);}
+		}
+		/// <summary>Creates a new DhlEcommerceShipmentEntity.DimsWeight field instance</summary>
+		public static EntityField2 DimsWeight
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(DhlEcommerceShipmentFieldIndex.DimsWeight);}
+		}
+		/// <summary>Creates a new DhlEcommerceShipmentEntity.DimsAddWeight field instance</summary>
+		public static EntityField2 DimsAddWeight
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(DhlEcommerceShipmentFieldIndex.DimsAddWeight);}
+		}
+		/// <summary>Creates a new DhlEcommerceShipmentEntity.Reference1 field instance</summary>
+		public static EntityField2 Reference1
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(DhlEcommerceShipmentFieldIndex.Reference1);}
+		}
+		/// <summary>Creates a new DhlEcommerceShipmentEntity.InsuranceValue field instance</summary>
+		public static EntityField2 InsuranceValue
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(DhlEcommerceShipmentFieldIndex.InsuranceValue);}
+		}
+		/// <summary>Creates a new DhlEcommerceShipmentEntity.InsurancePennyOne field instance</summary>
+		public static EntityField2 InsurancePennyOne
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(DhlEcommerceShipmentFieldIndex.InsurancePennyOne);}
+		}
+		/// <summary>Creates a new DhlEcommerceShipmentEntity.AncillaryEndorsement field instance</summary>
+		public static EntityField2 AncillaryEndorsement
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(DhlEcommerceShipmentFieldIndex.AncillaryEndorsement);}
+		}
+	}
+
 	/// <summary>Field Creation Class for entity DhlExpressAccountEntity</summary>
 	public partial class DhlExpressAccountFields
 	{
@@ -26894,6 +27229,71 @@ namespace ShipWorks.Data.Model.HelperClasses
 		}
 	}
 
+	/// <summary>Field Creation Class for entity ShipEngineManifestEntity</summary>
+	public partial class ShipEngineManifestFields
+	{
+		/// <summary>Creates a new ShipEngineManifestEntity.ShipEngineManifestID field instance</summary>
+		public static EntityField2 ShipEngineManifestID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ShipEngineManifestFieldIndex.ShipEngineManifestID);}
+		}
+		/// <summary>Creates a new ShipEngineManifestEntity.CarrierAccountID field instance</summary>
+		public static EntityField2 CarrierAccountID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ShipEngineManifestFieldIndex.CarrierAccountID);}
+		}
+		/// <summary>Creates a new ShipEngineManifestEntity.ShipmentTypeCode field instance</summary>
+		public static EntityField2 ShipmentTypeCode
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ShipEngineManifestFieldIndex.ShipmentTypeCode);}
+		}
+		/// <summary>Creates a new ShipEngineManifestEntity.ManifestID field instance</summary>
+		public static EntityField2 ManifestID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ShipEngineManifestFieldIndex.ManifestID);}
+		}
+		/// <summary>Creates a new ShipEngineManifestEntity.FormID field instance</summary>
+		public static EntityField2 FormID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ShipEngineManifestFieldIndex.FormID);}
+		}
+		/// <summary>Creates a new ShipEngineManifestEntity.CreatedAt field instance</summary>
+		public static EntityField2 CreatedAt
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ShipEngineManifestFieldIndex.CreatedAt);}
+		}
+		/// <summary>Creates a new ShipEngineManifestEntity.ShipDate field instance</summary>
+		public static EntityField2 ShipDate
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ShipEngineManifestFieldIndex.ShipDate);}
+		}
+		/// <summary>Creates a new ShipEngineManifestEntity.ShipmentCount field instance</summary>
+		public static EntityField2 ShipmentCount
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ShipEngineManifestFieldIndex.ShipmentCount);}
+		}
+		/// <summary>Creates a new ShipEngineManifestEntity.PlatformWarehouseID field instance</summary>
+		public static EntityField2 PlatformWarehouseID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ShipEngineManifestFieldIndex.PlatformWarehouseID);}
+		}
+		/// <summary>Creates a new ShipEngineManifestEntity.SubmissionID field instance</summary>
+		public static EntityField2 SubmissionID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ShipEngineManifestFieldIndex.SubmissionID);}
+		}
+		/// <summary>Creates a new ShipEngineManifestEntity.CarrierID field instance</summary>
+		public static EntityField2 CarrierID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ShipEngineManifestFieldIndex.CarrierID);}
+		}
+		/// <summary>Creates a new ShipEngineManifestEntity.ManifestUrl field instance</summary>
+		public static EntityField2 ManifestUrl
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ShipEngineManifestFieldIndex.ManifestUrl);}
+		}
+	}
+
 	/// <summary>Field Creation Class for entity ShipmentEntity</summary>
 	public partial class ShipmentFields
 	{
@@ -28001,6 +28401,16 @@ namespace ShipWorks.Data.Model.HelperClasses
 		public static EntityField2 ShipEngineAccountID
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(ShippingSettingsFieldIndex.ShipEngineAccountID);}
+		}
+		/// <summary>Creates a new ShippingSettingsEntity.DhlEcommerceInsuranceProvider field instance</summary>
+		public static EntityField2 DhlEcommerceInsuranceProvider
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ShippingSettingsFieldIndex.DhlEcommerceInsuranceProvider);}
+		}
+		/// <summary>Creates a new ShippingSettingsEntity.DhlEcommerceInsurancePennyOne field instance</summary>
+		public static EntityField2 DhlEcommerceInsurancePennyOne
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ShippingSettingsFieldIndex.DhlEcommerceInsurancePennyOne);}
 		}
 	}
 

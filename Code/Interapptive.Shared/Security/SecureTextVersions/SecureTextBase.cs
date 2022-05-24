@@ -72,14 +72,14 @@ namespace Interapptive.Shared.Security.SecureTextVersions
 
             if (keyCache.TryGetValue(cacheIndex, out cachedKey))
             {
-                log.Info("Found key in cache");
+                log.Debug("Found key in cache");
                 return cachedKey;
             }
 
             // Derive a key from the salt and password that will be used to encrypt the aesKey
-            log.Info("Deriving key");
+            log.Debug("Deriving key");
             var derivedKey = SCrypt.Generate(Encoding.UTF8.GetBytes(password), salt, iterations, blockSize, parallelismFactor, keyLength);
-            log.Info("Finished deriving key");
+            log.Debug("Finished deriving key");
 
             keyCache.Add(cacheIndex, (derivedKey, salt));
 

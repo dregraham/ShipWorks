@@ -176,7 +176,15 @@ namespace ShipWorks.Shipping.Insurance
         /// </summary>
         public static bool AllUspsShipments(IEnumerable<IInsuranceChoice> choices)
         {
-            return choices.All(c => ((ShipmentTypeCode)c.Shipment.ShipmentType) == ShipmentTypeCode.Usps);
+            return choices.All(c => ((ShipmentTypeCode) c.Shipment.ShipmentType) == ShipmentTypeCode.Usps);
+        }
+
+        /// <summary>
+        /// Are all the insurance shipments Dhl eCommerce?
+        /// </summary>
+        public static bool AllDhlEcommerceShipments(IEnumerable<IInsuranceChoice> choices)
+        {
+            return choices.All(c => ((ShipmentTypeCode) c.Shipment.ShipmentType) == ShipmentTypeCode.DhlEcommerce);
         }
 
         #region IDataErrorInfo

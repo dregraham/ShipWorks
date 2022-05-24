@@ -33,6 +33,8 @@ namespace ShipWorks.Tests.Editions
         private EditionRestriction stampsIbcRestricted2;
         private EditionRestriction stampsRrDonnelleyRestricted1;
         private EditionRestriction stampsRrDonnelleyRestricted2;
+        private EditionRestriction dhlEcommerceDhlMaxRestricted1;
+        private EditionRestriction dhlEcommerceDhlMaxRestricted2;
 
         private StoreEntity enabledStore1;
         private StoreEntity enabledStore2;
@@ -66,6 +68,9 @@ namespace ShipWorks.Tests.Editions
             stampsIbcRestricted2 = new EditionRestriction(new Edition(enabledStore2), EditionFeature.StampsIbcConsolidator, EditionRestrictionLevel.Hidden);
             stampsRrDonnelleyRestricted1 = new EditionRestriction(new Edition(enabledStore1), EditionFeature.StampsRrDonnelleyConsolidator, EditionRestrictionLevel.Hidden);
             stampsRrDonnelleyRestricted2 = new EditionRestriction(new Edition(enabledStore2), EditionFeature.StampsRrDonnelleyConsolidator, EditionRestrictionLevel.Hidden);
+
+            dhlEcommerceDhlMaxRestricted1 = new EditionRestriction(new Edition(enabledStore1), EditionFeature.DhlEcommerceMax, EditionRestrictionLevel.Hidden);
+            dhlEcommerceDhlMaxRestricted2 = new EditionRestriction(new Edition(enabledStore2), EditionFeature.DhlEcommerceMax, EditionRestrictionLevel.Hidden);
         }
 
         [Fact]
@@ -696,6 +701,111 @@ namespace ShipWorks.Tests.Editions
             List<EditionRestriction> effectiveEditionRestrictions = EditionManager.RemoveRestrictionIfNeeded(EditionFeature.StampsRrDonnelleyConsolidator, null, restrictions, stores);
 
             Assert.True(effectiveEditionRestrictions.Any(r => r.Feature == EditionFeature.StampsRrDonnelleyConsolidator));
+        }
+        
+        [Fact]
+        public void NoDhlEcommerceDhlRestriction_WhenTrialStoreIsOnlyRestriction()
+        {
+            dhlEcommerceDhlMaxRestricted1 = new EditionRestriction(new Edition(trialStore), EditionFeature.DhlEcommerceMax, EditionRestrictionLevel.Hidden);
+            restrictions = new List<EditionRestriction>()
+            {
+                dhlEcommerceDhlMaxRestricted1
+            };
+
+            stores = new List<StoreEntity>()
+            {
+                enabledStore1,
+                enabledStore2,
+                disabledStore1,
+                disabledStore2,
+                trialStore
+            };
+
+            List<EditionRestriction> effectiveEditionRestrictions = EditionManager.RemoveRestrictionIfNeeded(EditionFeature.DhlEcommerceMax, null, restrictions, stores);
+
+            Assert.False(effectiveEditionRestrictions.Any(r => r.Feature == EditionFeature.DhlEcommerceMax));
+        }
+
+        [Fact]
+        public void NoDhlEcommerceDhlRestriction_WhenHalfOfTheStoresAreRestricted()
+        {
+            restrictions = new List<EditionRestriction>()
+            {
+                dhlEcommerceDhlMaxRestricted1
+            };
+
+            stores = new List<StoreEntity>()
+            {
+                enabledStore1,
+                enabledStore2,
+                disabledStore1,
+                disabledStore2
+            };
+
+            List<EditionRestriction> effectiveEditionRestrictions = EditionManager.RemoveRestrictionIfNeeded(EditionFeature.DhlEcommerceMax, null, restrictions, stores);
+
+            Assert.False(effectiveEditionRestrictions.Any(r => r.Feature == EditionFeature.DhlEcommerceMax));
+        }
+
+        [Fact]
+        public void DhlEcommerceDhlRestriction_WhenTrialStoreIsTheOnlyStore()
+        {
+            dhlEcommerceDhlMaxRestricted1 = new EditionRestriction(new Edition(trialStore), EditionFeature.DhlEcommerceMax, null, EditionRestrictionLevel.Hidden);
+            restrictions = new List<EditionRestriction>()
+            {
+                dhlEcommerceDhlMaxRestricted1
+            };
+
+            stores = new List<StoreEntity>()
+            {
+                trialStore
+            };
+
+            List<EditionRestriction> effectiveEditionRestrictions = EditionManager.RemoveRestrictionIfNeeded(EditionFeature.DhlEcommerceMax, null, restrictions, stores);
+
+            Assert.True(effectiveEditionRestrictions.Any(r => r.Feature == EditionFeature.DhlEcommerceMax));
+        }
+
+        [Fact]
+        public void DhlEcommerceDhlRestriction_WhenAllStoresRestricted()
+        {
+            restrictions = new List<EditionRestriction>()
+            {
+                dhlEcommerceDhlMaxRestricted1,
+                dhlEcommerceDhlMaxRestricted2
+            };
+
+            stores = new List<StoreEntity>()
+            {
+                enabledStore1,
+                enabledStore2
+            };
+
+            List<EditionRestriction> effectiveEditionRestrictions = EditionManager.RemoveRestrictionIfNeeded(EditionFeature.DhlEcommerceMax, null, restrictions, stores);
+
+            Assert.True(effectiveEditionRestrictions.Any(r => r.Feature == EditionFeature.DhlEcommerceMax));
+        }
+
+        [Fact]
+        public void DhlEcommerceDhlRestriction_WhenEnabledStoresAreRestricted_AndDisabledStoresAreNot()
+        {
+            restrictions = new List<EditionRestriction>()
+            {
+                dhlEcommerceDhlMaxRestricted1,
+                dhlEcommerceDhlMaxRestricted2
+            };
+
+            stores = new List<StoreEntity>()
+            {
+                enabledStore1,
+                enabledStore2,
+                disabledStore1,
+                disabledStore2
+            };
+
+            List<EditionRestriction> effectiveEditionRestrictions = EditionManager.RemoveRestrictionIfNeeded(EditionFeature.DhlEcommerceMax, null, restrictions, stores);
+
+            Assert.True(effectiveEditionRestrictions.Any(r => r.Feature == EditionFeature.DhlEcommerceMax));
         }
     }
 }

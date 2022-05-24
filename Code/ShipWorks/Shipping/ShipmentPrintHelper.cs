@@ -104,7 +104,7 @@ namespace ShipWorks.Shipping
         /// </summary>
         private static bool GroupMissing(List<ShippingPrintOutputEntity> existingGroups, string groupName)
         {
-            return (existingGroups.Count(o => String.Compare(o.Name, groupName, StringComparison.OrdinalIgnoreCase) == 0) == 0);
+            return (existingGroups.Count(o => string.Compare(o.Name, groupName, StringComparison.OrdinalIgnoreCase) == 0) == 0);
         }
 
         /// <summary>
@@ -183,7 +183,7 @@ namespace ShipWorks.Shipping
                 ShipmentTypeCode.FedEx,
                 ShipmentTypeCode.UpsOnLineTools,
                 ShipmentTypeCode.DhlExpress,
-                ShipmentTypeCode.Asendia
+                ShipmentTypeCode.Asendia,
             };
 
             return shipmentTypesWithCommercialInvoices.Contains(shipmentTypeCode);

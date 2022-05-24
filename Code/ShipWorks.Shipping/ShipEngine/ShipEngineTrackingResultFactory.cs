@@ -1,5 +1,4 @@
 ﻿using Interapptive.Shared.ComponentRegistration;
-using ShipEngine.CarrierApi.Client.Model;
 using ShipWorks.Shipping.Tracking;
 using System.Linq;
 
@@ -14,14 +13,14 @@ namespace ShipWorks.Shipping.ShipEngine
         /// <summary>
         /// Creates ShipWorks TrackingResult from the ShipEngine TrackingInformation
         /// </summary>
-        public TrackingResult Create(TrackingInformation shipEngineTrackingInfo)
+        public TrackingResult Create(DTOs.TrackingInformation shipEngineTrackingInfo)
         {
             TrackingResult trackingResult = new TrackingResult();
             trackingResult.Summary = shipEngineTrackingInfo.StatusDescription;
 
             if (shipEngineTrackingInfo.Events != null)
             {
-                foreach (TrackEvent trackEvent in shipEngineTrackingInfo.Events)
+                foreach (DTOs.TrackEvent trackEvent in shipEngineTrackingInfo.Events)
                 {
                     TrackingResultDetail trackingResultDetail = new TrackingResultDetail();
                     trackingResultDetail.Date = trackEvent.OccurredAt?.ToString("M/dd/yyy") ?? "";
@@ -39,7 +38,7 @@ namespace ShipWorks.Shipping.ShipEngine
         /// <summary>
         /// Create a tracking location string from the track event location members
         /// </summary>
-        private string CreateTrackingLocation(TrackEvent trackEvent)
+        private string CreateTrackingLocation(DTOs.TrackEvent trackEvent)
         {
             string[] locationMembers = 
             {

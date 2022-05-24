@@ -2457,6 +2457,177 @@ namespace ShipWorks.Data.Model.Custom
 
 	
 	/// <summary>
+	/// Strongly typed collection of DhlEcommerceAccountEntity
+	/// </summary>
+	public class DhlEcommerceAccountCollection : EntityCollection<DhlEcommerceAccountEntity>
+	{
+        /// <summary>
+        /// Gets the count of all DhlEcommerceAccountEntity rows
+        /// </summary>
+        public static int GetCount(IDataAccessAdapter adapter)
+        {
+            return GetCount(adapter, null);
+        }
+
+        /// <summary>
+        /// Gets the count of all DhlEcommerceAccountEntity rows filtered by the given predicate
+        /// </summary>
+        public static int GetCount(IDataAccessAdapter adapter, IPredicate filter)
+        {
+            RelationPredicateBucket bucket = null;
+
+            if (filter != null)
+            {
+                bucket = new RelationPredicateBucket(filter);
+            }
+
+            return adapter.GetDbCount(new DhlEcommerceAccountEntityFactory().CreateFields(), bucket);
+        }
+
+        /// <summary>
+        /// Fetch a new collection object that matches the specified filter.
+        /// </summary>
+        public static DhlEcommerceAccountCollection Fetch(IDataAccessAdapter adapter, IPredicate filter)
+        {
+			return Fetch(adapter, filter, null);
+        }
+
+		/// <summary>
+        /// Fetch a new collection object that matches the specified filter and uses the given prefetch.
+        /// </summary>
+        public static DhlEcommerceAccountCollection Fetch(IDataAccessAdapter adapter, IPredicate filter, IPrefetchPath2 prefetchPath)
+        {
+            DhlEcommerceAccountCollection collection = new DhlEcommerceAccountCollection();
+
+            RelationPredicateBucket bucket = null;
+
+            if (filter != null)
+            {
+                bucket = new RelationPredicateBucket(filter);
+            }
+
+            adapter.FetchEntityCollection(collection, bucket, prefetchPath);
+
+            return collection;
+        }
+	}
+
+	
+	/// <summary>
+	/// Strongly typed collection of DhlEcommerceProfileEntity
+	/// </summary>
+	public class DhlEcommerceProfileCollection : EntityCollection<DhlEcommerceProfileEntity>
+	{
+        /// <summary>
+        /// Gets the count of all DhlEcommerceProfileEntity rows
+        /// </summary>
+        public static int GetCount(IDataAccessAdapter adapter)
+        {
+            return GetCount(adapter, null);
+        }
+
+        /// <summary>
+        /// Gets the count of all DhlEcommerceProfileEntity rows filtered by the given predicate
+        /// </summary>
+        public static int GetCount(IDataAccessAdapter adapter, IPredicate filter)
+        {
+            RelationPredicateBucket bucket = null;
+
+            if (filter != null)
+            {
+                bucket = new RelationPredicateBucket(filter);
+            }
+
+            return adapter.GetDbCount(new DhlEcommerceProfileEntityFactory().CreateFields(), bucket);
+        }
+
+        /// <summary>
+        /// Fetch a new collection object that matches the specified filter.
+        /// </summary>
+        public static DhlEcommerceProfileCollection Fetch(IDataAccessAdapter adapter, IPredicate filter)
+        {
+			return Fetch(adapter, filter, null);
+        }
+
+		/// <summary>
+        /// Fetch a new collection object that matches the specified filter and uses the given prefetch.
+        /// </summary>
+        public static DhlEcommerceProfileCollection Fetch(IDataAccessAdapter adapter, IPredicate filter, IPrefetchPath2 prefetchPath)
+        {
+            DhlEcommerceProfileCollection collection = new DhlEcommerceProfileCollection();
+
+            RelationPredicateBucket bucket = null;
+
+            if (filter != null)
+            {
+                bucket = new RelationPredicateBucket(filter);
+            }
+
+            adapter.FetchEntityCollection(collection, bucket, prefetchPath);
+
+            return collection;
+        }
+	}
+
+	
+	/// <summary>
+	/// Strongly typed collection of DhlEcommerceShipmentEntity
+	/// </summary>
+	public class DhlEcommerceShipmentCollection : EntityCollection<DhlEcommerceShipmentEntity>
+	{
+        /// <summary>
+        /// Gets the count of all DhlEcommerceShipmentEntity rows
+        /// </summary>
+        public static int GetCount(IDataAccessAdapter adapter)
+        {
+            return GetCount(adapter, null);
+        }
+
+        /// <summary>
+        /// Gets the count of all DhlEcommerceShipmentEntity rows filtered by the given predicate
+        /// </summary>
+        public static int GetCount(IDataAccessAdapter adapter, IPredicate filter)
+        {
+            RelationPredicateBucket bucket = null;
+
+            if (filter != null)
+            {
+                bucket = new RelationPredicateBucket(filter);
+            }
+
+            return adapter.GetDbCount(new DhlEcommerceShipmentEntityFactory().CreateFields(), bucket);
+        }
+
+        /// <summary>
+        /// Fetch a new collection object that matches the specified filter.
+        /// </summary>
+        public static DhlEcommerceShipmentCollection Fetch(IDataAccessAdapter adapter, IPredicate filter)
+        {
+			return Fetch(adapter, filter, null);
+        }
+
+		/// <summary>
+        /// Fetch a new collection object that matches the specified filter and uses the given prefetch.
+        /// </summary>
+        public static DhlEcommerceShipmentCollection Fetch(IDataAccessAdapter adapter, IPredicate filter, IPrefetchPath2 prefetchPath)
+        {
+            DhlEcommerceShipmentCollection collection = new DhlEcommerceShipmentCollection();
+
+            RelationPredicateBucket bucket = null;
+
+            if (filter != null)
+            {
+                bucket = new RelationPredicateBucket(filter);
+            }
+
+            adapter.FetchEntityCollection(collection, bucket, prefetchPath);
+
+            return collection;
+        }
+	}
+
+	
+	/// <summary>
 	/// Strongly typed collection of DhlExpressAccountEntity
 	/// </summary>
 	public class DhlExpressAccountCollection : EntityCollection<DhlExpressAccountEntity>
@@ -10079,6 +10250,63 @@ namespace ShipWorks.Data.Model.Custom
         public static ServiceStatusCollection Fetch(IDataAccessAdapter adapter, IPredicate filter, IPrefetchPath2 prefetchPath)
         {
             ServiceStatusCollection collection = new ServiceStatusCollection();
+
+            RelationPredicateBucket bucket = null;
+
+            if (filter != null)
+            {
+                bucket = new RelationPredicateBucket(filter);
+            }
+
+            adapter.FetchEntityCollection(collection, bucket, prefetchPath);
+
+            return collection;
+        }
+	}
+
+	
+	/// <summary>
+	/// Strongly typed collection of ShipEngineManifestEntity
+	/// </summary>
+	public class ShipEngineManifestCollection : EntityCollection<ShipEngineManifestEntity>
+	{
+        /// <summary>
+        /// Gets the count of all ShipEngineManifestEntity rows
+        /// </summary>
+        public static int GetCount(IDataAccessAdapter adapter)
+        {
+            return GetCount(adapter, null);
+        }
+
+        /// <summary>
+        /// Gets the count of all ShipEngineManifestEntity rows filtered by the given predicate
+        /// </summary>
+        public static int GetCount(IDataAccessAdapter adapter, IPredicate filter)
+        {
+            RelationPredicateBucket bucket = null;
+
+            if (filter != null)
+            {
+                bucket = new RelationPredicateBucket(filter);
+            }
+
+            return adapter.GetDbCount(new ShipEngineManifestEntityFactory().CreateFields(), bucket);
+        }
+
+        /// <summary>
+        /// Fetch a new collection object that matches the specified filter.
+        /// </summary>
+        public static ShipEngineManifestCollection Fetch(IDataAccessAdapter adapter, IPredicate filter)
+        {
+			return Fetch(adapter, filter, null);
+        }
+
+		/// <summary>
+        /// Fetch a new collection object that matches the specified filter and uses the given prefetch.
+        /// </summary>
+        public static ShipEngineManifestCollection Fetch(IDataAccessAdapter adapter, IPredicate filter, IPrefetchPath2 prefetchPath)
+        {
+            ShipEngineManifestCollection collection = new ShipEngineManifestCollection();
 
             RelationPredicateBucket bucket = null;
 

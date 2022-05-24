@@ -314,6 +314,7 @@ namespace ShipWorks.Shipping.Insurance
                 case ShipmentTypeCode.UpsWorldShip:
                 case ShipmentTypeCode.UpsOnLineTools:
                 case ShipmentTypeCode.FedEx:
+                case ShipmentTypeCode.DhlEcommerce:
                 case ShipmentTypeCode.OnTrac:
                 case ShipmentTypeCode.iParcel:
                 {

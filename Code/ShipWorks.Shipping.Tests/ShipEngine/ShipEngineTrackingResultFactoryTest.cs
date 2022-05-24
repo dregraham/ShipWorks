@@ -1,5 +1,5 @@
 ﻿using Autofac.Extras.Moq;
-using ShipEngine.CarrierApi.Client.Model;
+using ShipWorks.Shipping.ShipEngine.DTOs;
 using ShipWorks.Shipping.ShipEngine;
 using ShipWorks.Shipping.Tracking;
 using ShipWorks.Tests.Shared;

@@ -80,5 +80,15 @@ namespace ShipWorks.Tests.Stores.Etsy
 
             Assert.Equal("other", carrierCode);
         }
+
+        [Fact]
+        public void GetEtsyCarrierCode_ReturnsDhlGlobalMail_WhenDhlEcommerce()
+        {
+            shipmentEntity.ShipmentType = (int) ShipmentTypeCode.DhlEcommerce;
+
+            string carrierCode = EtsyOnlineUpdater.GetEtsyCarrierCode(shipmentEntity);
+
+            Assert.Equal("dhl-global-mail", carrierCode);
+        }
     }
 }

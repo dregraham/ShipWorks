@@ -2439,6 +2439,152 @@ namespace ShipWorks.Data.Model
 		/// <summary></summary>
 		AmountOfFields
 	}
+	/// <summary>Index enum to fast-access EntityFields in the IEntityFields collection for the entity: DhlEcommerceAccount.</summary>
+	public enum DhlEcommerceAccountFieldIndex
+	{
+		///<summary>DhlEcommerceAccountID. </summary>
+		DhlEcommerceAccountID,
+		///<summary>RowVersion. </summary>
+		RowVersion,
+		///<summary>ShipEngineCarrierId. </summary>
+		ShipEngineCarrierId,
+		///<summary>ClientId. </summary>
+		ClientId,
+		///<summary>ApiSecret. </summary>
+		ApiSecret,
+		///<summary>PickupNumber. </summary>
+		PickupNumber,
+		///<summary>DistributionCenter. </summary>
+		DistributionCenter,
+		///<summary>SoldTo. </summary>
+		SoldTo,
+		///<summary>Description. </summary>
+		Description,
+		///<summary>FirstName. </summary>
+		FirstName,
+		///<summary>MiddleName. </summary>
+		MiddleName,
+		///<summary>LastName. </summary>
+		LastName,
+		///<summary>Company. </summary>
+		Company,
+		///<summary>Street1. </summary>
+		Street1,
+		///<summary>City. </summary>
+		City,
+		///<summary>StateProvCode. </summary>
+		StateProvCode,
+		///<summary>PostalCode. </summary>
+		PostalCode,
+		///<summary>CountryCode. </summary>
+		CountryCode,
+		///<summary>Phone. </summary>
+		Phone,
+		///<summary>Email. </summary>
+		Email,
+		///<summary>CreatedDate. </summary>
+		CreatedDate,
+		///<summary>Street2. </summary>
+		Street2,
+		///<summary>Street3. </summary>
+		Street3,
+		/// <summary></summary>
+		AmountOfFields
+	}
+	/// <summary>Index enum to fast-access EntityFields in the IEntityFields collection for the entity: DhlEcommerceProfile.</summary>
+	public enum DhlEcommerceProfileFieldIndex
+	{
+		///<summary>ShippingProfileID. </summary>
+		ShippingProfileID,
+		///<summary>DhlEcommerceAccountID. </summary>
+		DhlEcommerceAccountID,
+		///<summary>Service. </summary>
+		Service,
+		///<summary>DeliveryDutyPaid. </summary>
+		DeliveryDutyPaid,
+		///<summary>NonMachinable. </summary>
+		NonMachinable,
+		///<summary>SaturdayDelivery. </summary>
+		SaturdayDelivery,
+		///<summary>Contents. </summary>
+		Contents,
+		///<summary>NonDelivery. </summary>
+		NonDelivery,
+		///<summary>ResidentialDelivery. </summary>
+		ResidentialDelivery,
+		///<summary>CustomsRecipientTin. </summary>
+		CustomsRecipientTin,
+		///<summary>CustomsTaxIdType. </summary>
+		CustomsTaxIdType,
+		///<summary>CustomsTinIssuingAuthority. </summary>
+		CustomsTinIssuingAuthority,
+		///<summary>PackagingType. </summary>
+		PackagingType,
+		///<summary>Reference1. </summary>
+		Reference1,
+		///<summary>AncillaryEndorsement. </summary>
+		AncillaryEndorsement,
+		/// <summary></summary>
+		AmountOfFields
+	}
+	/// <summary>Index enum to fast-access EntityFields in the IEntityFields collection for the entity: DhlEcommerceShipment.</summary>
+	public enum DhlEcommerceShipmentFieldIndex
+	{
+		///<summary>ShipmentID. </summary>
+		ShipmentID,
+		///<summary>DhlEcommerceAccountID. </summary>
+		DhlEcommerceAccountID,
+		///<summary>Service. </summary>
+		Service,
+		///<summary>DeliveredDutyPaid. </summary>
+		DeliveredDutyPaid,
+		///<summary>NonMachinable. </summary>
+		NonMachinable,
+		///<summary>SaturdayDelivery. </summary>
+		SaturdayDelivery,
+		///<summary>RequestedLabelFormat. </summary>
+		RequestedLabelFormat,
+		///<summary>Contents. </summary>
+		Contents,
+		///<summary>NonDelivery. </summary>
+		NonDelivery,
+		///<summary>ShipEngineLabelID. </summary>
+		ShipEngineLabelID,
+		///<summary>IntegratorTransactionID. </summary>
+		IntegratorTransactionID,
+		///<summary>ResidentialDelivery. </summary>
+		ResidentialDelivery,
+		///<summary>CustomsRecipientTin. </summary>
+		CustomsRecipientTin,
+		///<summary>CustomsTaxIdType. </summary>
+		CustomsTaxIdType,
+		///<summary>CustomsTinIssuingAuthority. </summary>
+		CustomsTinIssuingAuthority,
+		///<summary>PackagingType. </summary>
+		PackagingType,
+		///<summary>DimsProfileID. </summary>
+		DimsProfileID,
+		///<summary>DimsLength. </summary>
+		DimsLength,
+		///<summary>DimsWidth. </summary>
+		DimsWidth,
+		///<summary>DimsHeight. </summary>
+		DimsHeight,
+		///<summary>DimsWeight. </summary>
+		DimsWeight,
+		///<summary>DimsAddWeight. </summary>
+		DimsAddWeight,
+		///<summary>Reference1. </summary>
+		Reference1,
+		///<summary>InsuranceValue. </summary>
+		InsuranceValue,
+		///<summary>InsurancePennyOne. </summary>
+		InsurancePennyOne,
+		///<summary>AncillaryEndorsement. </summary>
+		AncillaryEndorsement,
+		/// <summary></summary>
+		AmountOfFields
+	}
 	/// <summary>Index enum to fast-access EntityFields in the IEntityFields collection for the entity: DhlExpressAccount.</summary>
 	public enum DhlExpressAccountFieldIndex
 	{
@@ -11471,6 +11617,36 @@ namespace ShipWorks.Data.Model
 		/// <summary></summary>
 		AmountOfFields
 	}
+	/// <summary>Index enum to fast-access EntityFields in the IEntityFields collection for the entity: ShipEngineManifest.</summary>
+	public enum ShipEngineManifestFieldIndex
+	{
+		///<summary>ShipEngineManifestID. </summary>
+		ShipEngineManifestID,
+		///<summary>CarrierAccountID. </summary>
+		CarrierAccountID,
+		///<summary>ShipmentTypeCode. </summary>
+		ShipmentTypeCode,
+		///<summary>ManifestID. </summary>
+		ManifestID,
+		///<summary>FormID. </summary>
+		FormID,
+		///<summary>CreatedAt. </summary>
+		CreatedAt,
+		///<summary>ShipDate. </summary>
+		ShipDate,
+		///<summary>ShipmentCount. </summary>
+		ShipmentCount,
+		///<summary>PlatformWarehouseID. </summary>
+		PlatformWarehouseID,
+		///<summary>SubmissionID. </summary>
+		SubmissionID,
+		///<summary>CarrierID. </summary>
+		CarrierID,
+		///<summary>ManifestUrl. </summary>
+		ManifestUrl,
+		/// <summary></summary>
+		AmountOfFields
+	}
 	/// <summary>Index enum to fast-access EntityFields in the IEntityFields collection for the entity: Shipment.</summary>
 	public enum ShipmentFieldIndex
 	{
@@ -11952,6 +12128,10 @@ namespace ShipWorks.Data.Model
 		UpsAllowNoDims,
 		///<summary>ShipEngineAccountID. </summary>
 		ShipEngineAccountID,
+		///<summary>DhlEcommerceInsuranceProvider. </summary>
+		DhlEcommerceInsuranceProvider,
+		///<summary>DhlEcommerceInsurancePennyOne. </summary>
+		DhlEcommerceInsurancePennyOne,
 		/// <summary></summary>
 		AmountOfFields
 	}
@@ -15253,6 +15433,12 @@ namespace ShipWorks.Data.Model
 		CustomerEntity,
 		///<summary>Device</summary>
 		DeviceEntity,
+		///<summary>DhlEcommerceAccount</summary>
+		DhlEcommerceAccountEntity,
+		///<summary>DhlEcommerceProfile</summary>
+		DhlEcommerceProfileEntity,
+		///<summary>DhlEcommerceShipment</summary>
+		DhlEcommerceShipmentEntity,
 		///<summary>DhlExpressAccount</summary>
 		DhlExpressAccountEntity,
 		///<summary>DhlExpressPackage</summary>
@@ -15521,6 +15707,8 @@ namespace ShipWorks.Data.Model
 		ServerMessageSignoffEntity,
 		///<summary>ServiceStatus</summary>
 		ServiceStatusEntity,
+		///<summary>ShipEngineManifest</summary>
+		ShipEngineManifestEntity,
 		///<summary>Shipment</summary>
 		ShipmentEntity,
 		///<summary>ShipmentCustomsItem</summary>

@@ -116,6 +116,12 @@ namespace ShipWorks.Editions
                 AddRestriction(EditionFeature.StampsDhl, EditionRestrictionLevel.Hidden);
             }
 
+            // DHL eCommerceMax
+            if (!sharedOptions.DhlEcommerceSmParcelExpeditedMaxEnabled)
+            {
+                AddRestriction(EditionFeature.DhlEcommerceMax, EditionRestrictionLevel.Hidden);
+            }
+
             // Endicia DHL
             if (!sharedOptions.EndiciaDhlEnabled)
             {
