@@ -2,9 +2,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Autofac;
 using Interapptive.Shared.Business;
-using SD.LLBLGen.Pro.ORMSupportClasses;
 using Interapptive.Shared.ComponentRegistration;
+using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Profiles;
@@ -12,8 +13,6 @@ using ShipWorks.Shipping.Settings;
 using ShipWorks.Shipping.Settings.WizardPages;
 using ShipWorks.Stores;
 using ShipWorks.UI.Wizard;
-using Autofac;
-using ShipWorks.Shipping.Carriers.Amazon.SFP;
 
 namespace ShipWorks.Shipping.Carriers.Amazon.SFP
 {

@@ -1,9 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
+﻿using System.ComponentModel;
 using System.Reflection;
-using System.Text;
 
 namespace ShipWorks.Shipping
 {
@@ -40,7 +36,7 @@ namespace ShipWorks.Shipping
         /// <summary>
         /// The shipment is to be printed from Amazons carriers
         /// </summary>
-        [Description("Amazon Seller Fulfilled Prime")]
+        [Description("Amazon Buy Shipping API")]
         AmazonSfp = 4,
     }
 }
