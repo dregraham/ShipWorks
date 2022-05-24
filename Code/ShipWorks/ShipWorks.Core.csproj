@@ -1301,6 +1301,12 @@
     <Compile Include="Shipping\ShipEngine\Manifest\IShipEngineManifestRepo.cs" />
     <Compile Include="Shipping\ShipEngine\Manifest\IShipEngineManifestCreator.cs" />
     <Compile Include="Stores\ILegacyStoreTrialKeyConverter.cs" />
+    <Compile Include="Stores\Platforms\Amazon\AmazonInitialDownloadDaysControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Stores\Platforms\Amazon\AmazonInitialDownloadDaysControl.Designer.cs">
+      <DependentUpon>AmazonInitialDownloadDaysControl.cs</DependentUpon>
+    </Compile>
     <Compile Include="Stores\Platforms\Amazon\AmazonPlatformDownloader.cs" />
     <Compile Include="Stores\Platforms\Platform\OnlineUpdating\IPlatformOnlineUpdater.cs" />
     <Compile Include="Stores\Platforms\Platform\OnlineUpdating\PlatformOnlineUpdater.cs" />
@@ -4055,11 +4061,11 @@
     <Compile Include="Stores\Platforms\Amazon\AmazonMwsAccountSettingsControl.Designer.cs">
       <DependentUpon>AmazonMwsAccountSettingsControl.cs</DependentUpon>
     </Compile>
-    <Compile Include="Stores\Platforms\Amazon\AmazonMwsCountryControl.cs">
+    <Compile Include="Stores\Platforms\Amazon\AmazonCountryControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Stores\Platforms\Amazon\AmazonMwsCountryControl.Designer.cs">
-      <DependentUpon>AmazonMwsCountryControl.cs</DependentUpon>
+    <Compile Include="Stores\Platforms\Amazon\AmazonCountryControl.Designer.cs">
+      <DependentUpon>AmazonCountryControl.cs</DependentUpon>
     </Compile>
     <Compile Include="Stores\Platforms\Amazon\AmazonMwsDownloader.cs" />
     <Compile Include="Stores\Platforms\Amazon\CoreExtensions\Filters\AmazonFulfillmentChannelCondition.cs" />
@@ -4089,11 +4095,11 @@
     <Compile Include="Stores\Platforms\Amazon\Mws\AmazonProductDetailRepository.cs" />
     <Compile Include="Stores\Platforms\Amazon\Mws\RequestSignature.cs" />
     <Compile Include="Stores\Platforms\Amazon\Mws\SigningAlgorithm.cs" />
-    <Compile Include="Stores\Platforms\Amazon\WizardPages\AmazonMwsCountryPage.cs">
+    <Compile Include="Stores\Platforms\Amazon\WizardPages\AmazonInitialSettingsPage.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Stores\Platforms\Amazon\WizardPages\AmazonMwsCountryPage.Designer.cs">
-      <DependentUpon>AmazonMwsCountryPage.cs</DependentUpon>
+    <Compile Include="Stores\Platforms\Amazon\WizardPages\AmazonInitialSettingsPage.Designer.cs">
+      <DependentUpon>AmazonInitialSettingsPage.cs</DependentUpon>
     </Compile>
     <Compile Include="Stores\Platforms\Amazon\WizardPages\AmazonMwsPage.cs">
       <SubType>UserControl</SubType>
@@ -8749,6 +8755,9 @@
     <EmbeddedResource Include="Shipping\Carriers\Amazon\SFP\AmazonSFPShippingSettingsControl.resx">
       <DependentUpon>AmazonSFPShippingSettingsControl.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Stores\Platforms\Amazon\AmazonInitialDownloadDaysControl.resx">
+      <DependentUpon>AmazonInitialDownloadDaysControl.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Stores\Platforms\ChannelAdvisor\ChannelAdvisorConsolidatorSettingsControl.resx">
       <DependentUpon>ChannelAdvisorConsolidatorSettingsControl.cs</DependentUpon>
     </EmbeddedResource>
@@ -8821,8 +8830,8 @@
     <EmbeddedResource Include="Stores\Platforms\Amazon\AmazonMwsAccountSettingsControl.resx">
       <DependentUpon>AmazonMwsAccountSettingsControl.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Stores\Platforms\Amazon\AmazonMwsCountryControl.resx">
-      <DependentUpon>AmazonMwsCountryControl.cs</DependentUpon>
+    <EmbeddedResource Include="Stores\Platforms\Amazon\AmazonCountryControl.resx">
+      <DependentUpon>AmazonCountryControl.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Stores\Platforms\Amazon\Mws\AmazonMwsMarketplaceSelectionDlg.resx">
       <DependentUpon>AmazonMwsMarketplaceSelectionDlg.cs</DependentUpon>
@@ -8830,8 +8839,8 @@
     <EmbeddedResource Include="Stores\Platforms\Amazon\Mws\AmazonMwsStoreSettingsControl.resx">
       <DependentUpon>AmazonMwsStoreSettingsControl.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Stores\Platforms\Amazon\WizardPages\AmazonMwsCountryPage.resx">
-      <DependentUpon>AmazonMwsCountryPage.cs</DependentUpon>
+    <EmbeddedResource Include="Stores\Platforms\Amazon\WizardPages\AmazonInitialSettingsPage.resx">
+      <DependentUpon>AmazonInitialSettingsPage.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Stores\Platforms\Amazon\WizardPages\AmazonMwsPage.resx">
       <DependentUpon>AmazonMwsPage.cs</DependentUpon>

@@ -51,7 +51,7 @@ namespace ShipWorks.Stores.Platforms.Amazon
             OpeningUrl = true;
             try
             {
-                var url = await hubMonoauthClient.GetCreateOrderSourceInitiateUrl(orderSourceName, store.AmazonApiRegion).ConfigureAwait(true);
+                var url = await hubMonoauthClient.GetCreateOrderSourceInitiateUrl(orderSourceName, store.AmazonApiRegion, store.InitialDownloadDays).ConfigureAwait(true);
                 webHelper.OpenUrl(url);
             }
             catch(ObjectDisposedException ex)

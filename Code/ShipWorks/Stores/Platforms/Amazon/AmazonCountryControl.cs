@@ -10,14 +10,14 @@ namespace ShipWorks.Stores.Platforms.Amazon
     /// Allow the user to select the country that their Amazon store is in
     /// </summary>
     [ToolboxItem(true)]
-    public partial class AmazonMwsCountryControl : AccountSettingsControlBase
+    public partial class AmazonCountryControl : AccountSettingsControlBase
     {
         private AmazonStoreEntity amazonStore;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public AmazonMwsCountryControl()
+        public AmazonCountryControl()
         {
             InitializeComponent();
 
