@@ -12,7 +12,6 @@ namespace ShipWorks.Stores.Platforms.Amazon
     [ToolboxItem(true)]
     public partial class AmazonInitialDownloadDaysControl : AccountSettingsControlBase
     {
-        private AmazonStoreEntity amazonStore;
         private InitialDownloadPolicy policy;
 
         /// <summary>
@@ -34,7 +33,7 @@ namespace ShipWorks.Stores.Platforms.Amazon
         public override void LoadStore(StoreEntity store)
         {
             // validate we get an AmazonStoreEntity
-            this.amazonStore = store as AmazonStoreEntity;
+            var amazonStore = store as AmazonStoreEntity;
             if (amazonStore == null)
             {
                 throw new ArgumentException("AmazonStoreEntity expected.", nameof(store));
@@ -50,7 +49,9 @@ namespace ShipWorks.Stores.Platforms.Amazon
         /// </summary>
         public override bool SaveToEntity(StoreEntity store)
         {
-            if (!(store is AmazonStoreEntity))
+            // validate we get an AmazonStoreEntity
+            var amazonStore = store as AmazonStoreEntity;
+            if (amazonStore == null)
             {
                 throw new ArgumentException("AmazonStoreEntity expected.", nameof(store));
             }
