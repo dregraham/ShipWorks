@@ -32,7 +32,7 @@ namespace ShipWorks.Shipping.Services.ShipmentProcessorSteps.LabelRetrieval
             var license = licenseService.GetLicense(shipment.Order.Store);
 
             return license.TrialDetails.IsInTrial ?
-                Result.FromError("Amazon SFP shipments are not available during the ShipWorks trial period. Please go to https://hub.shipworks.com/account to add a credit card to your account.") :
+                Result.FromError("Amazon Buy Shipping API shipments are not available during the ShipWorks trial period. Please go to https://hub.shipworks.com/account to add a credit card to your account.") :
                 Result.FromSuccess();
         }
     }
