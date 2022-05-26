@@ -29,7 +29,7 @@ namespace ShipWorks.Shipping.Policies
         /// <summary>
         /// A policy type to indicate whether Amazon Seller Fulfilled Prim should be allowed as a carrier.
         /// </summary>
-        [Description("Defines whether Amazon Seller Fulfilled Prime should be allowed as a carrier")]
+        [Description("Defines whether Amazon Buy Shipping API should be allowed as a carrier")]
         [ApiValue("AmazonSFPShipmentRestriction")]
         AmazonSFPShipmentRestriction,
 
@@ -50,7 +50,7 @@ namespace ShipWorks.Shipping.Policies
         /// when calling tango.GetStatus, if you activate a legacy store on a brand new database we call
         /// tango.Activate before calling tango.GetStatus so there is a chance the old value will get returned
         /// </remarks>
-        [Description("Defines whether Amazon Seller Fulfilled Prime should be allowed as a carrier")]
+        [Description("Defines whether Amazon Buy Shipping API should be allowed as a carrier")]
         [ApiValue("AmazonShipmentRestriction")]
         AmazonShipmentRestriction
     }

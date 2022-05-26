@@ -91,7 +91,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon.SFP.Api
             {
                 throw new ShippingException("ShipWorks couldn't find any eligible shipping services for the given shipment." +
                     "\r\nYou may need to adjust your available services in:" +
-                    "\r\n Manage > Shipping Settings > Amazon Seller Fulfilled Prime > Available Services"
+                    "\r\n Manage > Shipping Settings > Amazon Buy Shipping API > Available Services"
                 );
             }
             // Add the service
