@@ -67,7 +67,7 @@ namespace ShipWorks.Shipping
         [WpfImageSource("/ShipWorks.UI;component/Resources/usps.png")]
         Usps = 15,
 
-        [Description("Amazon Seller Fulfilled Prime")]
+        [Description("Amazon Buy Shipping API")]
         [ShipmentTypeIcon("amazon")]
         [WpfImageSource("/ShipWorks.UI;component/Resources/amazon.png")]
         AmazonSFP = 16,
