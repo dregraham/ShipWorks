@@ -3,7 +3,7 @@
 namespace ShipWorks.Stores.Platforms.ShipEngine.Apollo
 {
     /// <summary>
-    /// The 
+    /// The return object of the GetOrders call
     /// </summary>
     [Obfuscation(Exclude = true, ApplyToMembers = true)]
     public class GetOrdersDTO
