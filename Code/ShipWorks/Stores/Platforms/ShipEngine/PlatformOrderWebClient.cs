@@ -35,7 +35,7 @@ namespace ShipWorks.Stores.Platforms.ShipEngine
         /// <summary>
         /// Get a page of orders from a platform order source
         /// </summary>
-        public async Task<PaginatedPlatformServiceResponseOfOrderSourceApiSalesOrder> GetOrders(string orderSourceId, string continuationToken)
+        public async Task<GetOrdersDTO> GetOrders(string orderSourceId, string continuationToken)
         {
             var request = new RestRequest($"api/ordersource/{orderSourceId}", Method.GET);
             request.AddQueryParameter("ContinuationToken", continuationToken);
@@ -44,28 +44,32 @@ namespace ShipWorks.Stores.Platforms.ShipEngine
             var result = await warehouseRequestClient.MakeRequest(request, "PlatformGetOrders", ApiLogSource.Amazon).ConfigureAwait(false);
 
             // Check that the call returned valid information
-            PaginatedPlatformServiceResponseOfOrderSourceApiSalesOrder returnObject;
+            GetOrdersDTO returnObject;
             if (result.Value?.Content?.IsNullOrWhiteSpace() ?? true)
             {
-                returnObject = new PaginatedPlatformServiceResponseOfOrderSourceApiSalesOrder();
+                returnObject = new GetOrdersDTO();
             }
             else
             {
-                returnObject = JsonConvert.DeserializeObject<PaginatedPlatformServiceResponseOfOrderSourceApiSalesOrder>(result.Value.Content);
+                returnObject = JsonConvert.DeserializeObject<GetOrdersDTO>(result.Value.Content);
             }
 
             // Make sure the return data isn't null values
-            if (returnObject.Data == null)
+            if (returnObject.Orders == null)
             {
-                returnObject.Data = Array.Empty<OrderSourceApiSalesOrder>();
+                returnObject.Orders = new PaginatedPlatformServiceResponseOfOrderSourceApiSalesOrder();
             }
-            if (returnObject.Errors == null)
+            if (returnObject.Orders.Data == null)
             {
-                returnObject.Errors = Array.Empty<PlatformError>();
+                returnObject.Orders.Data = Array.Empty<OrderSourceApiSalesOrder>();
             }
-            if (returnObject.ContinuationToken == null)
+            if (returnObject.Orders.Errors == null)
             {
-                returnObject.ContinuationToken = string.Empty;
+                returnObject.Orders.Errors = Array.Empty<PlatformError>();
+            }
+            if (returnObject.Orders.ContinuationToken == null)
+            {
+                returnObject.Orders.ContinuationToken = string.Empty;
             }
 
             return returnObject;
