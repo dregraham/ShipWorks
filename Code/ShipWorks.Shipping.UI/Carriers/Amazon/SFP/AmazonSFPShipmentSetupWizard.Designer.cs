@@ -73,8 +73,8 @@
             // pictureBox
             // 
             this.pictureBox.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox.Image")));
-            this.pictureBox.Location = new System.Drawing.Point(444, 3);
-            this.pictureBox.Size = new System.Drawing.Size(165, 50);
+            this.pictureBox.Location = new System.Drawing.Point(461, 3);
+            this.pictureBox.Size = new System.Drawing.Size(148, 50);
             this.pictureBox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             // 
             // topPanel

@@ -47,16 +47,6 @@ namespace ShipWorks.Tests.Shipping.Carriers.Amazon.Api
             Assert.Equal(0, result.Rates.Count);
         }
 
-        [Theory]
-        [InlineData(AmazonIsPrime.No)]
-        [InlineData(AmazonIsPrime.Unknown)]
-        public void GetRates_ReturnsAmazonShippingException_WhenNotPrimeOrder(AmazonIsPrime isPrime)
-        {
-            AmazonSFPRatingService testObject = mock.Create<AmazonSFPRatingService>();
-
-            Assert.Throws<AmazonSFPShippingException>(() => testObject.GetRates(SampleShipmentAmazonOrder(isPrime)));
-        }
-
         [Fact]
         public void GetRates_ReturnsAmazonShippingException_WhenOrderIsNotIAmazonOrder()
         {
