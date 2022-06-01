@@ -207,13 +207,5 @@ namespace ShipWorks.Shipping.Carriers.Amazon.SFP
         /// Gets the wizard without any wrapping wizards
         /// </summary>
         public IShipmentTypeSetupWizard GetUnwrappedWizard() => this;
-
-        private void next_Click(object sender, WizardStepEventArgs e)
-        {
-            if (!chkTermsAndConditions.Checked)
-            {
-                e.NextPage = CurrentPage;
-            }
-        }
     }
 }
