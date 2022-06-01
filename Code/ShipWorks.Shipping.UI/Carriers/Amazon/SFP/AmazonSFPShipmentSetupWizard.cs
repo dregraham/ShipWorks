@@ -12,8 +12,6 @@ using ShipWorks.Shipping.Settings;
 using ShipWorks.Shipping.Settings.WizardPages;
 using ShipWorks.Stores;
 using ShipWorks.UI.Wizard;
-using Autofac;
-using ShipWorks.Shipping.Carriers.Amazon.SFP;
 using System.Net;
 using System.IO;
 using Interapptive.Shared.UI;
