@@ -41,6 +41,9 @@
             this.wizardPageWelcome = new ShipWorks.UI.Wizard.WizardPage();
             this.wizardPageContactInfo = new ShipWorks.UI.Wizard.WizardPage();
             this.contactInformation = new ShipWorks.Data.Controls.AutofillPersonControl();
+            this.txtTermsAndConditions = new System.Windows.Forms.RichTextBox();
+            this.labelTermsAndConditions = new System.Windows.Forms.Label();
+            this.chkTermsAndConditions = new System.Windows.Forms.CheckBox();
             this.mainPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox)).BeginInit();
             this.topPanel.SuspendLayout();
@@ -94,6 +97,9 @@
             // 
             // wizardPageWelcome
             // 
+            this.wizardPageWelcome.Controls.Add(this.chkTermsAndConditions);
+            this.wizardPageWelcome.Controls.Add(this.labelTermsAndConditions);
+            this.wizardPageWelcome.Controls.Add(this.txtTermsAndConditions);
             this.wizardPageWelcome.Controls.Add(this.Instructions);
             this.wizardPageWelcome.Description = "Setup ShipWorks to work with your Amazon account.";
             this.wizardPageWelcome.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -103,6 +109,7 @@
             this.wizardPageWelcome.Size = new System.Drawing.Size(612, 437);
             this.wizardPageWelcome.TabIndex = 0;
             this.wizardPageWelcome.Title = "Setup Amazon Shipping";
+            this.wizardPageWelcome.StepNext += new System.EventHandler<ShipWorks.UI.Wizard.WizardStepEventArgs>(this.OnStepNextWelcome);
             // 
             // wizardPageContactInfo
             // 
@@ -143,6 +150,34 @@
             this.contactInformation.Size = new System.Drawing.Size(355, 381);
             this.contactInformation.TabIndex = 1;
             // 
+            // txtTermsAndConditions
+            // 
+            this.txtTermsAndConditions.Location = new System.Drawing.Point(60, 77);
+            this.txtTermsAndConditions.Name = "txtTermsAndConditions";
+            this.txtTermsAndConditions.Size = new System.Drawing.Size(474, 297);
+            this.txtTermsAndConditions.TabIndex = 1;
+            this.txtTermsAndConditions.Text = "";
+            // 
+            // labelTermsAndConditions
+            // 
+            this.labelTermsAndConditions.AutoSize = true;
+            this.labelTermsAndConditions.Location = new System.Drawing.Point(20, 48);
+            this.labelTermsAndConditions.Name = "labelTermsAndConditions";
+            this.labelTermsAndConditions.Size = new System.Drawing.Size(440, 13);
+            this.labelTermsAndConditions.TabIndex = 2;
+            this.labelTermsAndConditions.Text = "Please review the Terms and Conditions below and select the checkbox below to con" +
+    "tinue.";
+            // 
+            // chkTermsAndConditions
+            // 
+            this.chkTermsAndConditions.AutoSize = true;
+            this.chkTermsAndConditions.Location = new System.Drawing.Point(60, 389);
+            this.chkTermsAndConditions.Name = "chkTermsAndConditions";
+            this.chkTermsAndConditions.Size = new System.Drawing.Size(223, 17);
+            this.chkTermsAndConditions.TabIndex = 3;
+            this.chkTermsAndConditions.Text = "I accept the above Terms and Conditions";
+            this.chkTermsAndConditions.UseVisualStyleBackColor = true;
+            // 
             // AmazonSFPShipmentSetupWizard
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -172,5 +207,8 @@
         private ShipWorks.UI.Wizard.WizardPage wizardPageContactInfo;
         private Data.Controls.AutofillPersonControl contactInformation;
         private System.Windows.Forms.Label Instructions;
+        private System.Windows.Forms.RichTextBox txtTermsAndConditions;
+        private System.Windows.Forms.Label labelTermsAndConditions;
+        private System.Windows.Forms.CheckBox chkTermsAndConditions;
     }
 }
