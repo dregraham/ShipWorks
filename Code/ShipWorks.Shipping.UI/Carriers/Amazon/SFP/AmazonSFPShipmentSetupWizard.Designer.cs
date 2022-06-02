@@ -133,9 +133,9 @@
             // 
             // txtTermsAndConditions
             // 
-            this.txtTermsAndConditions.Enabled = false;
             this.txtTermsAndConditions.Location = new System.Drawing.Point(60, 77);
             this.txtTermsAndConditions.Name = "txtTermsAndConditions";
+            this.txtTermsAndConditions.ReadOnly = true;
             this.txtTermsAndConditions.Size = new System.Drawing.Size(474, 297);
             this.txtTermsAndConditions.TabIndex = 1;
             this.txtTermsAndConditions.Text = "";
