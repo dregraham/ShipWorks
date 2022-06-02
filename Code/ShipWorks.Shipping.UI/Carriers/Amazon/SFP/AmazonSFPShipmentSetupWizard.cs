@@ -2,10 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using Autofac;
 using Interapptive.Shared.Business;
-using Interapptive.Shared.ComponentRegistration;
 using SD.LLBLGen.Pro.ORMSupportClasses;
+using Interapptive.Shared.ComponentRegistration;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Profiles;
@@ -13,6 +12,11 @@ using ShipWorks.Shipping.Settings;
 using ShipWorks.Shipping.Settings.WizardPages;
 using ShipWorks.Stores;
 using ShipWorks.UI.Wizard;
+using System.Net;
+using System.IO;
+using Interapptive.Shared.UI;
+using Interapptive.Shared.Utility;
+using log4net;
 
 namespace ShipWorks.Shipping.Carriers.Amazon.SFP
 {
@@ -27,6 +31,8 @@ namespace ShipWorks.Shipping.Carriers.Amazon.SFP
         private readonly IStoreManager storeManager;
         private readonly IShippingProfileManager shippingProfileManager;
         private ShippingWizardPageFinish shippingWizardPageFinish;
+        private static readonly ILog log = LogManager.GetLogger(typeof(AmazonSFPShipmentSetupWizard));
+        private string termsAndConditions = string.Empty;
 
         /// <summary>
         /// Constructor to be used by Visual Studio designer
@@ -60,6 +66,29 @@ namespace ShipWorks.Shipping.Carriers.Amazon.SFP
             Pages.Add(new ShippingWizardPagePrinting(shipmentType));
             Pages.Add(new ShippingWizardPageAutomation(shipmentType));
             Pages.Add(CreateFinishPage());
+
+            UpdateTermsAndConditionsText();
+        }
+
+        /// <summary>
+        /// Download T&C and display it
+        /// </summary>
+        private void UpdateTermsAndConditionsText()
+        {
+            WebClient webClient = new WebClient();
+            termsAndConditions = webClient.DownloadString("https://downloads.hub.shipworks.com/AmazonBuyShippingTermsAndConditions.rtf");
+
+            if (termsAndConditions.IsNullOrWhiteSpace())
+            {
+                MessageHelper.ShowError(this, "Unable to download Terms and Conditions.");
+                log.Error("Unable to download Amazon Terms and Conditions");
+                return;
+            }
+
+            using (MemoryStream stream = new MemoryStream(ASCIIEncoding.Default.GetBytes(termsAndConditions)))
+            {
+                txtTermsAndConditions.LoadFile(stream, System.Windows.Forms.RichTextBoxStreamType.RichText);
+            }
         }
 
         /// <summary>
@@ -80,6 +109,18 @@ namespace ShipWorks.Shipping.Carriers.Amazon.SFP
             if (!contactInformation.ValidateRequiredFields())
             {
                 e.NextPage = CurrentPage;
+            }
+        }
+
+        /// <summary>
+        /// Next pressed on welcome screen
+        /// </summary>
+        private void OnStepNextWelcome(object sender, WizardStepEventArgs e)
+        {
+            if (!chkTermsAndConditions.Checked || termsAndConditions.IsNullOrWhiteSpace())
+            {
+                e.NextPage = CurrentPage;
+                MessageHelper.ShowMessage(this, "You must accept the Terms and Conditions to continue.");
             }
         }
 
