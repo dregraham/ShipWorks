@@ -448,7 +448,6 @@ CREATE TABLE [dbo].[AmazonStore]
 [ExcludeFBA] [bit] NOT NULL,
 [DomainName] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [AmazonVATS] [bit] NOT NULL,
-[MaxOrderDatePreMigration] [datetime] NULL,
 [ContinuationToken] [nvarchar] (2048) NULL
 )
 GO

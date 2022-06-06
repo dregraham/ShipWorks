@@ -344,14 +344,13 @@
           <Field Name="AmazonVATS" Type="bool" FieldIndex="17" />
           <Field Name="AuthToken" Type="string" MaxLength="100" FieldIndex="7" />
           <Field Name="Certificate" Type="byte[]" IsOptional="true" MaxLength="2048" FieldIndex="11" />
-          <Field Name="ContinuationToken" Type="string" IsOptional="true" MaxLength="2048" FieldIndex="19" />
+          <Field Name="ContinuationToken" Type="string" IsOptional="true" MaxLength="2048" FieldIndex="18" />
           <Field Name="Cookie" Type="string" MaxLength="2147483647" FieldIndex="8" />
           <Field Name="CookieExpires" Type="datetime" FieldIndex="9" />
           <Field Name="CookieWaitUntil" Type="datetime" FieldIndex="10" />
           <Field Name="DomainName" Type="string" MaxLength="50" FieldIndex="16" />
           <Field Name="ExcludeFBA" Type="bool" FieldIndex="15" />
           <Field Name="MarketplaceID" Type="string" MaxLength="50" FieldIndex="14" />
-          <Field Name="MaxOrderDatePreMigration" Type="datetime" IsOptional="true" FieldIndex="18" />
           <Field Name="MerchantID" Type="string" MaxLength="50" FieldIndex="13" />
           <Field Name="MerchantName" Type="string" MaxLength="64" FieldIndex="4" />
           <Field Name="MerchantToken" Type="string" MaxLength="32" FieldIndex="5" />
@@ -4830,7 +4829,7 @@
       <Catalogs>
         <Catalog Name="ShipWorksLocal">
           <Schemas>
-            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2022-01-31T15:48:32.9091116Z">
+            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2022-05-17T20:22:58.9005951Z">
               <Tables>
                 <Table Name="Action">
                   <PkConstraintName Name="PK_Action" />
@@ -5059,8 +5058,7 @@
                     <Field Name="ExcludeFBA" Ordinal="17" DbType="2" />
                     <Field Name="DomainName" Ordinal="18" DbType="12" Length="50" />
                     <Field Name="AmazonVATS" Ordinal="19" DbType="2" />
-                    <Field Name="MaxOrderDatePreMigration" Ordinal="20" IsOptional="true" DbType="4" />
-                    <Field Name="ContinuationToken" Ordinal="21" IsOptional="true" DbType="12" Length="2048" />
+                    <Field Name="ContinuationToken" Ordinal="20" IsOptional="true" DbType="12" Length="2048" />
                   </Fields>
                 </Table>
                 <Table Name="AmazonSWAAccount">
@@ -11621,7 +11619,6 @@
             <FieldMapping FieldName="DomainName" TargetFieldName="DomainName" />
             <FieldMapping FieldName="ExcludeFBA" TargetFieldName="ExcludeFBA" />
             <FieldMapping FieldName="MarketplaceID" TargetFieldName="MarketplaceID" />
-            <FieldMapping FieldName="MaxOrderDatePreMigration" TargetFieldName="MaxOrderDatePreMigration" />
             <FieldMapping FieldName="MerchantID" TargetFieldName="MerchantID" />
             <FieldMapping FieldName="MerchantName" TargetFieldName="MerchantName" />
             <FieldMapping FieldName="MerchantToken" TargetFieldName="MerchantToken" />

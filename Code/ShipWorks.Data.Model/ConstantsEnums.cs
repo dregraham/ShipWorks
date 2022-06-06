@@ -676,8 +676,6 @@ namespace ShipWorks.Data.Model
 		DomainName,
 		///<summary>AmazonVATS. </summary>
 		AmazonVATS,
-		///<summary>MaxOrderDatePreMigration. </summary>
-		MaxOrderDatePreMigration,
 		///<summary>ContinuationToken. </summary>
 		ContinuationToken,
 		/// <summary></summary>

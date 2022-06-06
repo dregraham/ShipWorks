@@ -274,6 +274,8 @@
     <Compile Include="Platforms\Amazon\Content\AmazonQuickSearchSql.cs" />
     <Compile Include="Platforms\Amazon\Content\AmazonSplitOrderAction.cs" />
     <Compile Include="Platforms\Amazon\DTO\GetMonauthInitiateUrlResponse.cs" />
+    <Compile Include="Platforms\Amazon\DTO\MigrateMwsToSpRequest.cs" />
+    <Compile Include="Platforms\Amazon\DTO\MigrateMwsToSpResponse.cs" />
     <Compile Include="Platforms\Amazon\IAmazonAccountSettingsViewModel.cs" />
     <Compile Include="Platforms\Amazon\IAmazonCreateOrderSourceViewModel.cs" />
     <Compile Include="Platforms\Amazon\OnlineUpdating\AmazonOnlineUpdater.cs" />
@@ -373,6 +375,7 @@
     <Compile Include="Platforms\Odbc\Warehouse\IOdbcStoreClient.cs" />
     <Compile Include="Platforms\Odbc\Warehouse\OdbcStoreClient.cs" />
     <Compile Include="Platforms\Odbc\Warehouse\OdbcStoreDtoFactory.cs" />
+    <Compile Include="Services\AmazonMwsToSpConverter.cs" />
     <Compile Include="Services\LegacyStoreTrialKeyConverter.cs" />
     <Compile Include="Warehouse\Configuration\Stores\ActionTaskConfigurator.cs" />
     <Compile Include="Warehouse\IStoreDtoHelpers.cs" />
