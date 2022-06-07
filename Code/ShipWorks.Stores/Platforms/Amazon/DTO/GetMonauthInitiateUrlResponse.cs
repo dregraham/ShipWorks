@@ -3,11 +3,10 @@ using Newtonsoft.Json;
 
 namespace ShipWorks.Stores.Platforms.Amazon.DTO
 {
-    [Obfuscation(Exclude = true)]
+    [Obfuscation]
     public class GetMonauthInitiateUrlResponse
     {
         [JsonProperty("initiateUrl")]
-        [Obfuscation(Exclude = true)]
         public string InitiateUrl { get; set; }
     }
 }
