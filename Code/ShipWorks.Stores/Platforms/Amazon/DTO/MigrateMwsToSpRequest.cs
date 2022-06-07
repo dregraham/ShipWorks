@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Reflection;
 using Newtonsoft.Json;
 
 namespace ShipWorks.Stores.Platforms.Amazon.DTO
@@ -6,6 +7,7 @@ namespace ShipWorks.Stores.Platforms.Amazon.DTO
     /// <summary>
     /// DTO for migrating an MWS store to an SP store
     /// </summary>
+    [Obfuscation]
     public class MigrateMwsToSpRequest
     {
         [JsonProperty("countryCode")]
