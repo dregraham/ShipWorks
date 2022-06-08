@@ -53,7 +53,8 @@ namespace ShipWorks.Stores.Services
 
             var storesToMigrate = storeManager.GetAllStores().Where(x => x.StoreTypeCode == StoreTypeCode.Amazon &&
                 x.OrderSourceID.IsNullOrWhiteSpace() &&
-                x.WarehouseStoreID == null)
+                x.WarehouseStoreID == null &&
+                x.Enabled)
                 .Cast<AmazonStoreEntity>();
 
             if (storesToMigrate.Any())
