@@ -72,6 +72,7 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
             WarehouseStoreID = source.WarehouseStoreID;
             ManagedInHub = source.ManagedInHub;
             OrderSourceID = source.OrderSourceID;
+            PlatformAmazonCarrierID = source.PlatformAmazonCarrierID;
             
             
             
@@ -298,6 +299,12 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
         /// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 50<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
         public System.String OrderSourceID { get; }
+        /// <summary> The PlatformAmazonCarrierID property of the Entity Store<br/><br/>
+        /// </summary>
+        /// <remarks>Mapped on table field: "Store"."PlatformAmazonCarrierID"<br/>
+        /// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 100<br/>
+        /// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+        public System.String PlatformAmazonCarrierID { get; }
         
         
         

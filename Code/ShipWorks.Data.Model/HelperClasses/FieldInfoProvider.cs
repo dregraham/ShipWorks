@@ -3532,6 +3532,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 			this.AddElementFieldInfo("StoreEntity", "WarehouseStoreID", typeof(Nullable<System.Guid>), false, false, false, true,  (int)StoreFieldIndex.WarehouseStoreID, 0, 0, 0);
 			this.AddElementFieldInfo("StoreEntity", "ManagedInHub", typeof(System.Boolean), false, false, false, false,  (int)StoreFieldIndex.ManagedInHub, 0, 0, 0);
 			this.AddElementFieldInfo("StoreEntity", "OrderSourceID", typeof(System.String), false, false, false, true,  (int)StoreFieldIndex.OrderSourceID, 50, 0, 0);
+			this.AddElementFieldInfo("StoreEntity", "PlatformAmazonCarrierID", typeof(System.String), false, false, false, true,  (int)StoreFieldIndex.PlatformAmazonCarrierID, 100, 0, 0);
 		}
 		/// <summary>Inits SystemDataEntity's FieldInfo objects</summary>
 		private void InitSystemDataEntityInfos()

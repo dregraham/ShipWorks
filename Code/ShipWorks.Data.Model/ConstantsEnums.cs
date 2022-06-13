@@ -638,6 +638,8 @@ namespace ShipWorks.Data.Model
 		ManagedInHub,
 		///<summary>OrderSourceID. Inherited from Store</summary>
 		OrderSourceID,
+		///<summary>PlatformAmazonCarrierID. Inherited from Store</summary>
+		PlatformAmazonCarrierID,
 		///<summary>StoreID. </summary>
 		StoreID,
 		///<summary>AmazonApi. </summary>
@@ -836,6 +838,8 @@ namespace ShipWorks.Data.Model
 		ManagedInHub,
 		///<summary>OrderSourceID. Inherited from Store</summary>
 		OrderSourceID,
+		///<summary>PlatformAmazonCarrierID. Inherited from Store</summary>
+		PlatformAmazonCarrierID,
 		///<summary>StoreID. </summary>
 		StoreID,
 		///<summary>Username. </summary>
@@ -1242,6 +1246,8 @@ namespace ShipWorks.Data.Model
 		ManagedInHub,
 		///<summary>OrderSourceID. Inherited from Store</summary>
 		OrderSourceID,
+		///<summary>PlatformAmazonCarrierID. Inherited from Store</summary>
+		PlatformAmazonCarrierID,
 		///<summary>StoreID. </summary>
 		StoreID,
 		///<summary>ApiUrl. </summary>
@@ -1434,6 +1440,8 @@ namespace ShipWorks.Data.Model
 		ManagedInHub,
 		///<summary>OrderSourceID. Inherited from Store</summary>
 		OrderSourceID,
+		///<summary>PlatformAmazonCarrierID. Inherited from Store</summary>
+		PlatformAmazonCarrierID,
 		///<summary>StoreID. </summary>
 		StoreID,
 		///<summary>FtpUsername. </summary>
@@ -1844,6 +1852,8 @@ namespace ShipWorks.Data.Model
 		ManagedInHub,
 		///<summary>OrderSourceID. Inherited from Store</summary>
 		OrderSourceID,
+		///<summary>PlatformAmazonCarrierID. Inherited from Store</summary>
+		PlatformAmazonCarrierID,
 		///<summary>StoreID. </summary>
 		StoreID,
 		///<summary>AccountKey. </summary>
@@ -3284,6 +3294,8 @@ namespace ShipWorks.Data.Model
 		ManagedInHub,
 		///<summary>OrderSourceID. Inherited from Store</summary>
 		OrderSourceID,
+		///<summary>PlatformAmazonCarrierID. Inherited from Store</summary>
+		PlatformAmazonCarrierID,
 		///<summary>StoreID. </summary>
 		StoreID,
 		///<summary>EBayUserID. </summary>
@@ -3942,6 +3954,8 @@ namespace ShipWorks.Data.Model
 		ManagedInHub,
 		///<summary>OrderSourceID. Inherited from Store</summary>
 		OrderSourceID,
+		///<summary>PlatformAmazonCarrierID. Inherited from Store</summary>
+		PlatformAmazonCarrierID,
 		///<summary>StoreID. </summary>
 		StoreID,
 		///<summary>EtsyShopID. </summary>
@@ -4882,6 +4896,8 @@ namespace ShipWorks.Data.Model
 		ManagedInHub,
 		///<summary>OrderSourceID. Inherited from Store</summary>
 		OrderSourceID,
+		///<summary>PlatformAmazonCarrierID. Inherited from Store</summary>
+		PlatformAmazonCarrierID,
 		///<summary>StoreID. </summary>
 		StoreID,
 		///<summary>FileFormat. </summary>
@@ -5286,6 +5302,8 @@ namespace ShipWorks.Data.Model
 		ManagedInHub,
 		///<summary>OrderSourceID. Inherited from Store</summary>
 		OrderSourceID,
+		///<summary>PlatformAmazonCarrierID. Inherited from Store</summary>
+		PlatformAmazonCarrierID,
 		///<summary>StoreID. </summary>
 		StoreID,
 		///<summary>ModuleUsername. </summary>
@@ -5770,6 +5788,8 @@ namespace ShipWorks.Data.Model
 		ManagedInHub,
 		///<summary>OrderSourceID. Inherited from Store</summary>
 		OrderSourceID,
+		///<summary>PlatformAmazonCarrierID. Inherited from Store</summary>
+		PlatformAmazonCarrierID,
 		///<summary>StoreID. </summary>
 		StoreID,
 		///<summary>SupplierID. </summary>
@@ -5940,6 +5960,8 @@ namespace ShipWorks.Data.Model
 		ManagedInHub,
 		///<summary>OrderSourceID. Inherited from Store</summary>
 		OrderSourceID,
+		///<summary>PlatformAmazonCarrierID. Inherited from Store</summary>
+		PlatformAmazonCarrierID,
 		///<summary>StoreID. </summary>
 		StoreID,
 		///<summary>ApiToken. </summary>
@@ -6472,6 +6494,8 @@ namespace ShipWorks.Data.Model
 		ManagedInHub,
 		///<summary>OrderSourceID. Inherited from Store</summary>
 		OrderSourceID,
+		///<summary>PlatformAmazonCarrierID. Inherited from Store</summary>
+		PlatformAmazonCarrierID,
 		///<summary>StoreID. </summary>
 		StoreID,
 		///<summary>ApiUser. </summary>
@@ -6884,6 +6908,8 @@ namespace ShipWorks.Data.Model
 		ManagedInHub,
 		///<summary>OrderSourceID. Inherited from Store</summary>
 		OrderSourceID,
+		///<summary>PlatformAmazonCarrierID. Inherited from Store</summary>
+		PlatformAmazonCarrierID,
 		///<summary>StoreID. </summary>
 		StoreID,
 		///<summary>Token. </summary>
@@ -7192,6 +7218,8 @@ namespace ShipWorks.Data.Model
 		ManagedInHub,
 		///<summary>OrderSourceID. Inherited from Store</summary>
 		OrderSourceID,
+		///<summary>PlatformAmazonCarrierID. Inherited from Store</summary>
+		PlatformAmazonCarrierID,
 		///<summary>StoreID. Inherited from GenericModuleStore</summary>
 		StoreID_GenericModuleStore,
 		///<summary>ModuleUsername. Inherited from GenericModuleStore</summary>
@@ -7544,6 +7572,8 @@ namespace ShipWorks.Data.Model
 		ManagedInHub,
 		///<summary>OrderSourceID. Inherited from Store</summary>
 		OrderSourceID,
+		///<summary>PlatformAmazonCarrierID. Inherited from Store</summary>
+		PlatformAmazonCarrierID,
 		///<summary>StoreID. </summary>
 		StoreID,
 		///<summary>Username. </summary>
@@ -7660,6 +7690,8 @@ namespace ShipWorks.Data.Model
 		ManagedInHub,
 		///<summary>OrderSourceID. Inherited from Store</summary>
 		OrderSourceID,
+		///<summary>PlatformAmazonCarrierID. Inherited from Store</summary>
+		PlatformAmazonCarrierID,
 		///<summary>StoreID. Inherited from GenericModuleStore</summary>
 		StoreID_GenericModuleStore,
 		///<summary>ModuleUsername. Inherited from GenericModuleStore</summary>
@@ -8010,6 +8042,8 @@ namespace ShipWorks.Data.Model
 		ManagedInHub,
 		///<summary>OrderSourceID. Inherited from Store</summary>
 		OrderSourceID,
+		///<summary>PlatformAmazonCarrierID. Inherited from Store</summary>
+		PlatformAmazonCarrierID,
 		///<summary>StoreID. </summary>
 		StoreID,
 		///<summary>UserToken. </summary>
@@ -8390,6 +8424,8 @@ namespace ShipWorks.Data.Model
 		ManagedInHub,
 		///<summary>OrderSourceID. Inherited from Store</summary>
 		OrderSourceID,
+		///<summary>PlatformAmazonCarrierID. Inherited from Store</summary>
+		PlatformAmazonCarrierID,
 		///<summary>StoreID. </summary>
 		StoreID,
 		///<summary>SellerID. </summary>
@@ -8534,6 +8570,8 @@ namespace ShipWorks.Data.Model
 		ManagedInHub,
 		///<summary>OrderSourceID. Inherited from Store</summary>
 		OrderSourceID,
+		///<summary>PlatformAmazonCarrierID. Inherited from Store</summary>
+		PlatformAmazonCarrierID,
 		///<summary>StoreID. </summary>
 		StoreID,
 		///<summary>ImportConnectionString. </summary>
@@ -9282,6 +9320,8 @@ namespace ShipWorks.Data.Model
 		ManagedInHub,
 		///<summary>OrderSourceID. Inherited from Store</summary>
 		OrderSourceID,
+		///<summary>PlatformAmazonCarrierID. Inherited from Store</summary>
+		PlatformAmazonCarrierID,
 		///<summary>StoreID. </summary>
 		StoreID,
 		///<summary>OrderMotionEmailAccountID. </summary>
@@ -9728,6 +9768,8 @@ namespace ShipWorks.Data.Model
 		ManagedInHub,
 		///<summary>OrderSourceID. Inherited from Store</summary>
 		OrderSourceID,
+		///<summary>PlatformAmazonCarrierID. Inherited from Store</summary>
+		PlatformAmazonCarrierID,
 		///<summary>StoreID. </summary>
 		StoreID,
 		///<summary>Username. </summary>
@@ -10052,6 +10094,8 @@ namespace ShipWorks.Data.Model
 		ManagedInHub,
 		///<summary>OrderSourceID. Inherited from Store</summary>
 		OrderSourceID,
+		///<summary>PlatformAmazonCarrierID. Inherited from Store</summary>
+		PlatformAmazonCarrierID,
 		///<summary>StoreID. </summary>
 		StoreID,
 		///<summary>ApiCredentialType. </summary>
@@ -10732,6 +10776,8 @@ namespace ShipWorks.Data.Model
 		ManagedInHub,
 		///<summary>OrderSourceID. Inherited from Store</summary>
 		OrderSourceID,
+		///<summary>PlatformAmazonCarrierID. Inherited from Store</summary>
+		PlatformAmazonCarrierID,
 		///<summary>StoreID. </summary>
 		StoreID,
 		///<summary>ShortName. </summary>
@@ -11054,6 +11100,8 @@ namespace ShipWorks.Data.Model
 		ManagedInHub,
 		///<summary>OrderSourceID. Inherited from Store</summary>
 		OrderSourceID,
+		///<summary>PlatformAmazonCarrierID. Inherited from Store</summary>
+		PlatformAmazonCarrierID,
 		///<summary>StoreID. </summary>
 		StoreID,
 		///<summary>AuthKey. </summary>
@@ -11496,6 +11544,8 @@ namespace ShipWorks.Data.Model
 		ManagedInHub,
 		///<summary>OrderSourceID. Inherited from Store</summary>
 		OrderSourceID,
+		///<summary>PlatformAmazonCarrierID. Inherited from Store</summary>
+		PlatformAmazonCarrierID,
 		///<summary>StoreID. </summary>
 		StoreID,
 		///<summary>SearsEmail. </summary>
@@ -12492,6 +12542,8 @@ namespace ShipWorks.Data.Model
 		ManagedInHub,
 		///<summary>OrderSourceID. Inherited from Store</summary>
 		OrderSourceID,
+		///<summary>PlatformAmazonCarrierID. Inherited from Store</summary>
+		PlatformAmazonCarrierID,
 		///<summary>StoreID. </summary>
 		StoreID,
 		///<summary>ShopifyShopUrlName. </summary>
@@ -12588,6 +12640,8 @@ namespace ShipWorks.Data.Model
 		ManagedInHub,
 		///<summary>OrderSourceID. Inherited from Store</summary>
 		OrderSourceID,
+		///<summary>PlatformAmazonCarrierID. Inherited from Store</summary>
+		PlatformAmazonCarrierID,
 		///<summary>StoreID. </summary>
 		StoreID,
 		///<summary>Username. </summary>
@@ -12710,6 +12764,8 @@ namespace ShipWorks.Data.Model
 		ManagedInHub,
 		///<summary>OrderSourceID. Inherited from Store</summary>
 		OrderSourceID,
+		///<summary>PlatformAmazonCarrierID. Inherited from Store</summary>
+		PlatformAmazonCarrierID,
 		///<summary>StoreID. </summary>
 		StoreID,
 		///<summary>Token. </summary>
@@ -12814,6 +12870,8 @@ namespace ShipWorks.Data.Model
 		ManagedInHub,
 		///<summary>OrderSourceID. </summary>
 		OrderSourceID,
+		///<summary>PlatformAmazonCarrierID. </summary>
+		PlatformAmazonCarrierID,
 		/// <summary></summary>
 		AmountOfFields
 	}
@@ -13326,6 +13384,8 @@ namespace ShipWorks.Data.Model
 		ManagedInHub,
 		///<summary>OrderSourceID. Inherited from Store</summary>
 		OrderSourceID,
+		///<summary>PlatformAmazonCarrierID. Inherited from Store</summary>
+		PlatformAmazonCarrierID,
 		///<summary>StoreID. </summary>
 		StoreID,
 		///<summary>StoreUrl. </summary>
@@ -14174,6 +14234,8 @@ namespace ShipWorks.Data.Model
 		ManagedInHub,
 		///<summary>OrderSourceID. Inherited from Store</summary>
 		OrderSourceID,
+		///<summary>PlatformAmazonCarrierID. Inherited from Store</summary>
+		PlatformAmazonCarrierID,
 		///<summary>StoreID. </summary>
 		StoreID,
 		///<summary>StoreUrl. </summary>
@@ -14576,6 +14638,8 @@ namespace ShipWorks.Data.Model
 		ManagedInHub,
 		///<summary>OrderSourceID. Inherited from Store</summary>
 		OrderSourceID,
+		///<summary>PlatformAmazonCarrierID. Inherited from Store</summary>
+		PlatformAmazonCarrierID,
 		///<summary>StoreID. </summary>
 		StoreID,
 		///<summary>ConsumerID. </summary>
@@ -15274,6 +15338,8 @@ namespace ShipWorks.Data.Model
 		ManagedInHub,
 		///<summary>OrderSourceID. Inherited from Store</summary>
 		OrderSourceID,
+		///<summary>PlatformAmazonCarrierID. Inherited from Store</summary>
+		PlatformAmazonCarrierID,
 		///<summary>StoreID. </summary>
 		StoreID,
 		///<summary>YahooEmailAccountID. </summary>

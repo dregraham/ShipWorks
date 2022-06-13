@@ -3690,7 +3690,7 @@ namespace ShipWorks.Data.Model
 		/// <summary>Inits StoreEntity's mappings</summary>
 		private void InitStoreEntityMappings()
 		{
-			this.AddElementMapping("StoreEntity", @"ShipWorksLocal", @"dbo", "Store", 36, 0);
+			this.AddElementMapping("StoreEntity", @"ShipWorksLocal", @"dbo", "Store", 37, 0);
 			this.AddElementFieldMapping("StoreEntity", "StoreID", "StoreID", false, "BigInt", 0, 19, 0, true, "SCOPE_IDENTITY()", null, typeof(System.Int64), 0);
 			this.AddElementFieldMapping("StoreEntity", "RowVersion", "RowVersion", false, "Timestamp", 2147483647, 0, 0, false, "", null, typeof(System.Byte[]), 1);
 			this.AddElementFieldMapping("StoreEntity", "License", "License", false, "NVarChar", 150, 0, 0, false, "", null, typeof(System.String), 2);
@@ -3727,6 +3727,7 @@ namespace ShipWorks.Data.Model
 			this.AddElementFieldMapping("StoreEntity", "WarehouseStoreID", "WarehouseStoreID", true, "UniqueIdentifier", 0, 0, 0, false, "", null, typeof(System.Guid), 33);
 			this.AddElementFieldMapping("StoreEntity", "ManagedInHub", "ManagedInHub", false, "Bit", 0, 0, 0, false, "", null, typeof(System.Boolean), 34);
 			this.AddElementFieldMapping("StoreEntity", "OrderSourceID", "OrderSourceID", true, "NVarChar", 50, 0, 0, false, "", null, typeof(System.String), 35);
+			this.AddElementFieldMapping("StoreEntity", "PlatformAmazonCarrierID", "PlatformAmazonCarrierID", true, "NVarChar", 100, 0, 0, false, "", null, typeof(System.String), 36);
 		}
 
 		/// <summary>Inits SystemDataEntity's mappings</summary>

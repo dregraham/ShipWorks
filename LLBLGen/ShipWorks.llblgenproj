@@ -3141,6 +3141,7 @@
           <Field Name="ManualOrderPrefix" Type="string" MaxLength="10" FieldIndex="27" />
           <Field Name="OrderSourceID" Type="string" IsOptional="true" MaxLength="50" FieldIndex="35" />
           <Field Name="Phone" Type="string" MaxLength="35" FieldIndex="16" />
+          <Field Name="PlatformAmazonCarrierID" Type="string" IsOptional="true" MaxLength="100" FieldIndex="36" />
           <Field Name="PostalCode" Type="string" MaxLength="20" FieldIndex="14" />
           <Field Name="RowVersion" Type="byte[]" IsReadOnly="true" FieldIndex="1" />
           <Field Name="SetupComplete" Type="bool" FieldIndex="6" />
@@ -4829,7 +4830,7 @@
       <Catalogs>
         <Catalog Name="ShipWorksLocal">
           <Schemas>
-            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2022-05-17T20:22:58.9005951Z">
+            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2022-06-13T18:58:26.3467245Z">
               <Tables>
                 <Table Name="Action">
                   <PkConstraintName Name="PK_Action" />
@@ -9228,6 +9229,7 @@
                     <Field Name="WarehouseStoreID" Ordinal="34" IsOptional="true" DbType="25" />
                     <Field Name="ManagedInHub" Ordinal="35" HasDefaultValue="true" DefaultValue="(0)" DbType="2" />
                     <Field Name="OrderSourceID" Ordinal="36" IsOptional="true" DbType="12" Length="50" />
+                    <Field Name="PlatformAmazonCarrierID" Ordinal="37" IsOptional="true" DbType="12" Length="100" />
                   </Fields>
                 </Table>
                 <Table Name="SystemData">
@@ -14462,6 +14464,7 @@
             <FieldMapping FieldName="ManualOrderPrefix" TargetFieldName="ManualOrderPrefix" />
             <FieldMapping FieldName="OrderSourceID" TargetFieldName="OrderSourceID" />
             <FieldMapping FieldName="Phone" TargetFieldName="Phone" />
+            <FieldMapping FieldName="PlatformAmazonCarrierID" TargetFieldName="PlatformAmazonCarrierID" />
             <FieldMapping FieldName="PostalCode" TargetFieldName="PostalCode" />
             <FieldMapping FieldName="RowVersion" TargetFieldName="RowVersion" />
             <FieldMapping FieldName="SetupComplete" TargetFieldName="SetupComplete" />
