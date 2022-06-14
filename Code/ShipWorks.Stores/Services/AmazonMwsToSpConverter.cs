@@ -97,6 +97,14 @@ namespace ShipWorks.Stores.Services
 
                 var tasks = storesToMigrate.AsParallel().Select(async store =>
                 {
+                    var lastMonth = DateTime.UtcNow.AddDays(-30);
+                    
+                    var lastModifiedDate = await downloadStartingPoint.OnlineLastModified(store) ?? lastMonth;
+                    if (lastModifiedDate <= lastMonth)
+                    {
+                        lastModifiedDate = lastMonth;
+                    }
+                    
                     var body = new MigrateMwsToSpRequest
                     {
                         CountryCode = store.AmazonApiRegion,
