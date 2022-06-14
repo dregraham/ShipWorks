@@ -1172,6 +1172,11 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(AmazonSFPServiceTypeFieldIndex.Description);}
 		}
+		/// <summary>Creates a new AmazonSFPServiceTypeEntity.PlatformApiCode field instance</summary>
+		public static EntityField2 PlatformApiCode
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(AmazonSFPServiceTypeFieldIndex.PlatformApiCode);}
+		}
 	}
 
 	/// <summary>Field Creation Class for entity AmazonSFPShipmentEntity</summary>

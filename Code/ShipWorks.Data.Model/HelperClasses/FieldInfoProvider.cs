@@ -451,6 +451,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 			this.AddElementFieldInfo("AmazonSFPServiceTypeEntity", "AmazonSFPServiceTypeID", typeof(System.Int32), true, false, true, false,  (int)AmazonSFPServiceTypeFieldIndex.AmazonSFPServiceTypeID, 0, 0, 10);
 			this.AddElementFieldInfo("AmazonSFPServiceTypeEntity", "ApiValue", typeof(System.String), false, false, false, false,  (int)AmazonSFPServiceTypeFieldIndex.ApiValue, 50, 0, 0);
 			this.AddElementFieldInfo("AmazonSFPServiceTypeEntity", "Description", typeof(System.String), false, false, false, false,  (int)AmazonSFPServiceTypeFieldIndex.Description, 100, 0, 0);
+			this.AddElementFieldInfo("AmazonSFPServiceTypeEntity", "PlatformApiCode", typeof(System.String), false, false, false, true,  (int)AmazonSFPServiceTypeFieldIndex.PlatformApiCode, 100, 0, 0);
 		}
 		/// <summary>Inits AmazonSFPShipmentEntity's FieldInfo objects</summary>
 		private void InitAmazonSFPShipmentEntityInfos()

@@ -28,7 +28,8 @@ CREATE TABLE [dbo].[AmazonSFPServiceType]
 (
 [AmazonSFPServiceTypeID] [int] NOT NULL IDENTITY(1, 1),
 [ApiValue] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
-[Description] [nvarchar] (100) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL
+[Description] [nvarchar] (100) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+[PlatformApiCode] [nvarchar] (100) COLLATE SQL_Latin1_General_CP1_CI_AS NULL
 )
 GO
 PRINT N'Creating primary key [PK_AmazonSFPServiceTypeID] on [dbo].[AmazonSFPServiceType]'

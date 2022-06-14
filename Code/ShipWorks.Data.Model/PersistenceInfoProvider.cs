@@ -454,10 +454,11 @@ namespace ShipWorks.Data.Model
 		/// <summary>Inits AmazonSFPServiceTypeEntity's mappings</summary>
 		private void InitAmazonSFPServiceTypeEntityMappings()
 		{
-			this.AddElementMapping("AmazonSFPServiceTypeEntity", @"ShipWorksLocal", @"dbo", "AmazonSFPServiceType", 3, 0);
+			this.AddElementMapping("AmazonSFPServiceTypeEntity", @"ShipWorksLocal", @"dbo", "AmazonSFPServiceType", 4, 0);
 			this.AddElementFieldMapping("AmazonSFPServiceTypeEntity", "AmazonSFPServiceTypeID", "AmazonSFPServiceTypeID", false, "Int", 0, 10, 0, true, "SCOPE_IDENTITY()", null, typeof(System.Int32), 0);
 			this.AddElementFieldMapping("AmazonSFPServiceTypeEntity", "ApiValue", "ApiValue", false, "NVarChar", 50, 0, 0, false, "", null, typeof(System.String), 1);
 			this.AddElementFieldMapping("AmazonSFPServiceTypeEntity", "Description", "Description", false, "NVarChar", 100, 0, 0, false, "", null, typeof(System.String), 2);
+			this.AddElementFieldMapping("AmazonSFPServiceTypeEntity", "PlatformApiCode", "PlatformApiCode", true, "NVarChar", 100, 0, 0, false, "", null, typeof(System.String), 3);
 		}
 
 		/// <summary>Inits AmazonSFPShipmentEntity's mappings</summary>

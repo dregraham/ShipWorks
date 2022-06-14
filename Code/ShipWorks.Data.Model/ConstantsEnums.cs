@@ -520,6 +520,8 @@ namespace ShipWorks.Data.Model
 		ApiValue,
 		///<summary>Description. </summary>
 		Description,
+		///<summary>PlatformApiCode. </summary>
+		PlatformApiCode,
 		/// <summary></summary>
 		AmountOfFields
 	}
