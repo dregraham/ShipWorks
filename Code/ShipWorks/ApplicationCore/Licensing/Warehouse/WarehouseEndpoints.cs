@@ -36,6 +36,7 @@ namespace ShipWorks.ApplicationCore.Licensing.Warehouse
         private const string getTrackingUpdates = "api/tracking/{0}";
         private const string createOrderSourceInitiateUrl = "api/ordersource/{0}/auth?RedirectUrl={1}callbacks/{0}monoauth/subscribe&ApiRegion={2}&DaysBack={3}";
         private const string updateOrderSourceInitiateUrl = "api/ordersource/{0}/auth?RedirectUrl={1}callbacks/{0}monoauth/update&OrderSourceId={2}&ApiRegion={3}";
+        private const string orderSourceCarriersAmazon = "api/ordersource/carriers/amazon";
 
         /// <summary>
         /// Create a link warehouse endpoint
@@ -119,5 +120,10 @@ namespace ShipWorks.ApplicationCore.Licensing.Warehouse
         /// </summary>
         public static string GetUpdateOrderSourceInitiateUrl(string orderSourceName, string redirectUrl, string orderSourceId, string apiRegion) =>
             string.Format(updateOrderSourceInitiateUrl, orderSourceName, redirectUrl, orderSourceId, apiRegion);
+
+        /// <summary>
+        /// Get the URL to get the order source url for Amazon Carrier
+        /// </summary>
+        public static string GetOrderSourceAmazonCarrierUrl() => orderSourceCarriersAmazon;
     }
 }

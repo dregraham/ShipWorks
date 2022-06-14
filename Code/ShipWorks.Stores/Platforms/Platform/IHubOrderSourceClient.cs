@@ -24,5 +24,11 @@ namespace ShipWorks.Stores.Platforms.Platform
         /// redirectUrl the hub will send on to monoauth
         /// </remarks>
         Task<string> GetUpdateOrderSourceInitiateUrl(string orderSourceName, string orderSourceId, string apiRegion);
+
+        /// <summary>
+        /// Call Hub to get a Platform Amazon carrier Id for Buy Shipping
+        /// </summary>
+        /// <returns></returns>
+        Task<string> GetPlatformAmazonCarrierId(string uniqueIdentifier);
     }
 }

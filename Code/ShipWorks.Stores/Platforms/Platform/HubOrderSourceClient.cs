@@ -19,7 +19,7 @@ namespace ShipWorks.Stores.Platforms.Platform
         private const int DefaultDaysBack = 30;
         private const string GetMonoauthInitiateUrl = "GetMonoauthInitiateUrl";
         private const string GetInitiateUpdateOrderSourceUrl = "GetInitiateUpdateOrderSourceUrl";
-    
+
         /// <summary>
         /// Constructor
         /// </summary>
@@ -65,6 +65,23 @@ namespace ShipWorks.Stores.Platforms.Platform
                 .ConfigureAwait(false);
 
             return result.InitiateUrl;
+        }
+
+        /// <summary>
+        /// Call Hub to get a Platform Amazon carrier Id for Buy Shipping
+        /// </summary>
+        /// <returns></returns>
+        public async Task<string> GetPlatformAmazonCarrierId(string uniqueIdentifier)
+        {
+            var request = warehouseRequestFactory.Create(
+                WarehouseEndpoints.GetOrderSourceAmazonCarrierUrl(), 
+                Method.POST,
+                new { uniqueIdentifier = uniqueIdentifier});
+
+            var result = await warehouseRequestClient.MakeRequest<GetPlatformAmazonCarrierIdResponse>(request, nameof(WarehouseEndpoints.GetOrderSourceAmazonCarrierUrl))
+                .ConfigureAwait(false);
+
+            return result.CarrierId;
         }
 
         /// <summary>

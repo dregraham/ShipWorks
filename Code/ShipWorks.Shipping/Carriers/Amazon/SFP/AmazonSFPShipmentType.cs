@@ -3,8 +3,9 @@ using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Drawing.Imaging;
 using System.Linq;
-using Interapptive.Shared.Collections;
+using System.Threading.Tasks;
 using Interapptive.Shared.Utility;
+using log4net;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.ApplicationCore.Licensing;
 using ShipWorks.Common.IO.Hardware.Printers;
@@ -24,6 +25,7 @@ using ShipWorks.Shipping.Tracking;
 using ShipWorks.Stores;
 using ShipWorks.Stores.Content;
 using ShipWorks.Stores.Platforms.Amazon;
+using ShipWorks.Stores.Platforms.Platform;
 using ShipWorks.Templates.Processing.TemplateXml.ElementOutlines;
 
 namespace ShipWorks.Shipping.Carriers.Amazon.SFP
@@ -38,18 +40,22 @@ namespace ShipWorks.Shipping.Carriers.Amazon.SFP
         private readonly ILicenseService licenseService;
         private readonly IAmazonSFPServiceTypeRepository serviceTypeRepository;
         private readonly IOrderManager orderManager;
+        private readonly IHubOrderSourceClient hubOrderSourceClient;
+        private static readonly ILog log = LogManager.GetLogger(typeof(AmazonSFPShipmentType));
 
         /// <summary>
         /// Constructor
         /// </summary>
         public AmazonSFPShipmentType(IStoreManager storeManager, IShippingManager shippingManager, ILicenseService licenseService,
-            IAmazonSFPServiceTypeRepository serviceTypeRepository, IOrderManager orderManager)
+            IAmazonSFPServiceTypeRepository serviceTypeRepository, IOrderManager orderManager,
+            IHubOrderSourceClient hubOrderSourceClient)
         {
             this.storeManager = storeManager;
             this.shippingManager = shippingManager;
             this.licenseService = licenseService;
             this.serviceTypeRepository = serviceTypeRepository;
             this.orderManager = orderManager;
+            this.hubOrderSourceClient = hubOrderSourceClient;
         }
 
         /// <summary>
@@ -79,6 +85,9 @@ namespace ShipWorks.Shipping.Carriers.Amazon.SFP
         protected override void LoadShipmentDataInternal(ShipmentEntity shipment, bool refreshIfPresent)
         {
             ShipmentTypeDataService.LoadShipmentData(this, shipment, shipment, "AmazonSFP", typeof(AmazonSFPShipmentEntity), refreshIfPresent);
+
+            AmazonStoreEntity amazonStore = (AmazonStoreEntity) (shipment.Order?.Store ?? storeManager.GetStore(shipment.Order.StoreID));
+            SetupPlatformCarrierIdIfNeeded(amazonStore);
         }
 
         /// <summary>
@@ -168,6 +177,37 @@ namespace ShipWorks.Shipping.Carriers.Amazon.SFP
             amazonShipment.RequestedLabelFormat = (int) ThermalLanguage.None;
 
             base.ConfigureNewShipment(shipment);
+        }
+
+        /// <summary>
+        /// Check to see if the Amazon store has its PlatformAmazonCarrierID set
+        /// If not, try to get it.
+        /// </summary>
+        public void SetupPlatformCarrierIdIfNeeded(AmazonStoreEntity amazonStore)
+        {
+            if (string.IsNullOrWhiteSpace(amazonStore.PlatformAmazonCarrierID) && 
+                !string.IsNullOrWhiteSpace(amazonStore.MarketplaceID) &&
+                !string.IsNullOrWhiteSpace(amazonStore.MerchantID))
+            {
+                try
+                {
+                    var amazonStoreType = StoreTypeManager.GetType(amazonStore);
+                    var platformAmazonCarrierId = string.Empty;
+
+                    var execTask = Task.Run(async () => platformAmazonCarrierId = await hubOrderSourceClient
+                        .GetPlatformAmazonCarrierId(amazonStoreType.LicenseIdentifier.ToUpper()).ConfigureAwait(false));
+                    Task.WaitAll(execTask);
+
+                    amazonStore.PlatformAmazonCarrierID = platformAmazonCarrierId;
+
+                    storeManager.SaveStore(amazonStore);
+                }
+                catch (Exception ex)
+                {
+                    log.Error(ex);
+                    throw new ShippingException("Unable to get Platform Amazon Carrier ID", ex);
+                }
+            }
         }
 
         /// <summary>

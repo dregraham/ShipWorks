@@ -127,6 +127,12 @@ namespace ShipWorks.Shipping.Carriers.Amazon.SFP
                 s.TypeCode == (int) StoreTypeCode.Amazon || s.TypeCode == (int) StoreTypeCode.ChannelAdvisor))
             {
                 storeManager.CreateStoreStatusFilters(this, store);
+
+                if (store.StoreTypeCode == StoreTypeCode.Amazon)
+                {
+                    var amazonBuyShippingShipmentType = (AmazonSFPShipmentType) ShipmentTypeManager.GetType(ShipmentTypeCode.AmazonSFP);
+                    amazonBuyShippingShipmentType.SetupPlatformCarrierIdIfNeeded((AmazonStoreEntity) store);
+                }
             }
         }
 

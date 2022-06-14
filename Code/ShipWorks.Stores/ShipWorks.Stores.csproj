@@ -273,6 +273,7 @@
     <Compile Include="Platforms\Amazon\AmazonCreateOrderSourceViewModel.cs" />
     <Compile Include="Platforms\Amazon\Content\AmazonQuickSearchSql.cs" />
     <Compile Include="Platforms\Amazon\Content\AmazonSplitOrderAction.cs" />
+    <Compile Include="Platforms\Amazon\DTO\GetPlatformAmazonCarrierIdResponse.cs" />
     <Compile Include="Platforms\Amazon\DTO\GetMonauthInitiateUrlResponse.cs" />
     <Compile Include="Platforms\Amazon\DTO\MigrateMwsToSpRequest.cs" />
     <Compile Include="Platforms\Amazon\DTO\MigrateMwsToSpResponse.cs" />
