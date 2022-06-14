@@ -5,7 +5,7 @@ namespace ShipWorks.Stores.Platforms.Platform
     /// <summary>
     /// Client to communicate with SP (Via Platform)
     /// </summary>
-    public interface IHubMonoauthClient
+    public interface IHubOrderSourceClient
     {
         /// <summary>
         /// Get the monoauth URL to initiate an order source creation

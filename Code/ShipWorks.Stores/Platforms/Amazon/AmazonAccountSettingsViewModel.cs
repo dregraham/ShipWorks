@@ -26,16 +26,16 @@ namespace ShipWorks.Stores.Platforms.Amazon
         private IAmazonStoreEntity store;
         private bool openingUrl;
         private readonly IWebHelper webHelper;
-        private readonly IHubMonoauthClient hubMonoauthClient;
+        private readonly IHubOrderSourceClient hubOrderSourceClient;
         private readonly IMessageHelper messageHelper;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public AmazonAccountSettingsViewModel(IWebHelper webHelper, IHubMonoauthClient hubMonoauthClient, IMessageHelper messageHelper)
+        public AmazonAccountSettingsViewModel(IWebHelper webHelper, IHubOrderSourceClient hubOrderSourceClient, IMessageHelper messageHelper)
         {
             this.webHelper = webHelper;
-            this.hubMonoauthClient = hubMonoauthClient;
+            this.hubOrderSourceClient = hubOrderSourceClient;
             this.messageHelper = messageHelper;
 
             UpdateOrderSource = new RelayCommand(async () => await UpdateOrderSourceCommand().ConfigureAwait(true));
@@ -63,7 +63,7 @@ namespace ShipWorks.Stores.Platforms.Amazon
             OpeningUrl = true;
             try
             {
-                var url = await hubMonoauthClient.GetUpdateOrderSourceInitiateUrl(orderSourceName, store.OrderSourceID, store.AmazonApiRegion).ConfigureAwait(true);
+                var url = await hubOrderSourceClient.GetUpdateOrderSourceInitiateUrl(orderSourceName, store.OrderSourceID, store.AmazonApiRegion).ConfigureAwait(true);
                 webHelper.OpenUrl(url);
             }
             catch (Exception ex)

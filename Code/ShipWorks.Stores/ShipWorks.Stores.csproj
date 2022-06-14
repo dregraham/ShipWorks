@@ -304,8 +304,8 @@
     <Compile Include="Platforms\Odbc\Mapping\OdbcStoreRepository.cs" />
     <Compile Include="Platforms\Odbc\Mapping\RefreshingOdbcStore.cs" />
     <Compile Include="Platforms\Platform\CoreExtensions\Actions\PlatformShipmentUploadTask.cs" />
-    <Compile Include="Platforms\Platform\HubMonoauthClient.cs" />
-    <Compile Include="Platforms\Platform\IHubMonoauthClient.cs" />
+    <Compile Include="Platforms\Platform\HubOrderSourceClient.cs" />
+    <Compile Include="Platforms\Platform\IHubOrderSourceClient.cs" />
     <Compile Include="Platforms\Platform\OnlineUpdating\PlatformOnlineUpdateCommandCreator.cs" />
     <Compile Include="Platforms\Platform\PlatformStoreDownloader.cs" />
     <Compile Include="Platforms\Platform\PlatformStoreSetup.cs" />

@@ -24,7 +24,7 @@ namespace ShipWorks.Stores.Platforms.Amazon
         private const string orderSourceName = "amazon";
 
         private readonly IWebHelper webHelper;
-        private readonly IHubMonoauthClient hubMonoauthClient;
+        private readonly IHubOrderSourceClient hubOrderSourceClient;
         private readonly IMessageHelper messageHelper;
         private readonly ILog log;
         private bool openingUrl;
@@ -33,10 +33,10 @@ namespace ShipWorks.Stores.Platforms.Amazon
         /// <summary>
         /// Constructor
         /// </summary>
-        public AmazonCreateOrderSourceViewModel(IWebHelper webHelper, IHubMonoauthClient hubMonoauthClient, IMessageHelper messageHelper, Func<Type, ILog> logFactory)
+        public AmazonCreateOrderSourceViewModel(IWebHelper webHelper, IHubOrderSourceClient hubOrderSourceClient, IMessageHelper messageHelper, Func<Type, ILog> logFactory)
         {
             this.webHelper = webHelper;
-            this.hubMonoauthClient = hubMonoauthClient;
+            this.hubOrderSourceClient = hubOrderSourceClient;
             this.messageHelper = messageHelper;
             log = logFactory(typeof(AmazonCreateOrderSourceViewModel));
 
@@ -51,7 +51,7 @@ namespace ShipWorks.Stores.Platforms.Amazon
             OpeningUrl = true;
             try
             {
-                var url = await hubMonoauthClient.GetCreateOrderSourceInitiateUrl(orderSourceName, store.AmazonApiRegion, store.InitialDownloadDays).ConfigureAwait(true);
+                var url = await hubOrderSourceClient.GetCreateOrderSourceInitiateUrl(orderSourceName, store.AmazonApiRegion, store.InitialDownloadDays).ConfigureAwait(true);
                 webHelper.OpenUrl(url);
             }
             catch(ObjectDisposedException ex)

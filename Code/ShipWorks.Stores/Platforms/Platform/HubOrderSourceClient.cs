@@ -11,7 +11,7 @@ namespace ShipWorks.Stores.Platforms.Platform
     /// Client to communicate with SP (Via Platform)
     /// </summary>
     [Component]
-    public class HubMonoauthClient : IHubMonoauthClient
+    public class HubOrderSourceClient : IHubOrderSourceClient
     {
         private readonly IWarehouseRequestFactory warehouseRequestFactory;
         private readonly IWarehouseRequestClient warehouseRequestClient;
@@ -23,7 +23,7 @@ namespace ShipWorks.Stores.Platforms.Platform
         /// <summary>
         /// Constructor
         /// </summary>
-        public HubMonoauthClient(IWarehouseRequestFactory warehouseRequestFactory, IWarehouseRequestClient warehouseRequestClient)
+        public HubOrderSourceClient(IWarehouseRequestFactory warehouseRequestFactory, IWarehouseRequestClient warehouseRequestClient)
         {
             this.warehouseRequestFactory = warehouseRequestFactory;
             this.warehouseRequestClient = warehouseRequestClient;
