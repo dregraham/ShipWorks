@@ -8,6 +8,7 @@ using ShipWorks.Actions.Tasks.Common;
 using ShipWorks.Actions.Tasks.Common.Editors;
 using ShipWorks.Data.Model;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Stores.Platforms.Platform.OnlineUpdating;
 
 namespace ShipWorks.Stores.Platforms.Amazon.CoreExtensions.Actions
 {
@@ -20,12 +21,12 @@ namespace ShipWorks.Stores.Platforms.Amazon.CoreExtensions.Actions
         static readonly ILog log = LogManager.GetLogger(typeof(AmazonShipmentUploadTask));
 
         const long maxBatchSize = 1000;
-        private readonly IAmazonOnlineUpdater onlineUpdater;
+        private readonly IPlatformOnlineUpdater onlineUpdater;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public AmazonShipmentUploadTask(IAmazonOnlineUpdater onlineUpdater)
+        public AmazonShipmentUploadTask(IPlatformOnlineUpdater onlineUpdater)
         {
             this.onlineUpdater = onlineUpdater;
         }
