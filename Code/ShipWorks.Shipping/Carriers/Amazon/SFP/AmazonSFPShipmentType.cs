@@ -204,8 +204,9 @@ namespace ShipWorks.Shipping.Carriers.Amazon.SFP
                 }
                 catch (Exception ex)
                 {
+                    // Just catch and log.  We'll have to investigate the error to get the customer working.
+                    // But no reason to crash the app
                     log.Error(ex);
-                    throw new ShippingException("Unable to get Platform Amazon Carrier ID", ex);
                 }
             }
         }
