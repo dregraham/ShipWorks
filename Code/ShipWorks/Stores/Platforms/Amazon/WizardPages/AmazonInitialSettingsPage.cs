@@ -28,12 +28,7 @@ namespace ShipWorks.Stores.Platforms.Amazon.WizardPages
         {
             var amazonStore = GetStore<AmazonStoreEntity>();
 
-            if (!storeCountryControl.SaveToEntity(amazonStore))
-            {
-                e.NextPage = this;
-            }
-
-            if (!storeInitialDownloadDaysControl.SaveToEntity(amazonStore))
+            if (!storeCountryControl.SaveToEntity(amazonStore) || !storeInitialDownloadDaysControl.SaveToEntity(amazonStore))
             {
                 e.NextPage = this;
             }
