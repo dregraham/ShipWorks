@@ -42,5 +42,10 @@ namespace Interapptive.Shared.UI
         /// Document envelope customs change
         /// </summary>
         GlobalPostAdvantageChange = 7,
+
+        /// <summary>
+        /// User acceptance of Amazon terms and conditions
+        /// </summary>
+        AmazonTermsAndConditions = 8,
     }
 }

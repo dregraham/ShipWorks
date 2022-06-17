@@ -19,6 +19,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon.SFP
         private readonly IAmazonSFPCancelShipmentRequest cancelShipmentRequest;
         private readonly Func<ShipmentEntity, AmazonShipment, AmazonSFPDownloadedLabelData> createDownloadedLabelData;
         private readonly IRatesRetriever ratesRetriever;
+        private readonly IAmazonTermsOrchestrator amazonTermsOrchestrator;
 
         /// <summary>
         /// Constructor
@@ -26,12 +27,14 @@ namespace ShipWorks.Shipping.Carriers.Amazon.SFP
         public AmazonSFPLabelService(IAmazonSFPCreateShipmentRequest createShipmentRequest,
             IAmazonSFPCancelShipmentRequest cancelShipmentRequest,
             Func<ShipmentEntity, AmazonShipment, AmazonSFPDownloadedLabelData> createDownloadedLabelData,
-            IRatesRetriever ratesRetriever)
+            IRatesRetriever ratesRetriever,
+            IAmazonTermsOrchestrator amazonTermsOrchestrator)
         {
             this.createShipmentRequest = createShipmentRequest;
             this.cancelShipmentRequest = cancelShipmentRequest;
             this.createDownloadedLabelData = createDownloadedLabelData;
             this.ratesRetriever = ratesRetriever;
+            this.amazonTermsOrchestrator = amazonTermsOrchestrator;
         }
 
         /// <summary>

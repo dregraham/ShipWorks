@@ -171,6 +171,7 @@
     <Compile Include="Behaviors\WindowCloseOnClickBehavior.cs" />
     <Compile Include="BindingProxy.cs" />
     <Compile Include="Controls\AnimatedContentControl.cs" />
+    <Compile Include="Controls\BindableRichTextBox\BindableRichTextBox.cs" />
     <Compile Include="Controls\ChannelConfirmDelete\ChannelConfirmDeleteFactory.cs" />
     <Compile Include="Controls\ChannelConfirmDelete\ChannelConfirmDeleteViewModel.cs" />
     <Compile Include="Controls\ChannelConfirmDelete\ChannelConfirmDeleteDlg.xaml.cs">
@@ -694,6 +695,7 @@
     <Resource Include="Resources\endicia.png" />
     <Resource Include="Resources\ontrac.png" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>
