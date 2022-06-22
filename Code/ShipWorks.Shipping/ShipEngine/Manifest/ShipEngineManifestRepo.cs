@@ -94,16 +94,18 @@ namespace ShipWorks.Shipping.ShipEngine.Manifest
         /// <returns></returns>
         private void SaveManifestPdf(long shipEngineManifestId, string url)
         {
-            WebClient client = new WebClient();
-            var data = client.DownloadData(new Uri(url));
-
-            using (MemoryStream pdfBytes = new MemoryStream(data))
+            using (WebClient client = new WebClient())
             {
-                resourceManager.CreateFromPdf(PdfDocumentType.Color, 
-                    pdfBytes, 
-                    shipEngineManifestId,
-                    "DHLeCommerceManifest", 
-                    true);
+                var data = client.DownloadData(new Uri(url));
+
+                using (MemoryStream pdfBytes = new MemoryStream(data))
+                {
+                    resourceManager.CreateFromPdf(PdfDocumentType.Color,
+                        pdfBytes,
+                        shipEngineManifestId,
+                        "DHLeCommerceManifest",
+                        true);
+                }
             }
         }
 
@@ -112,7 +114,6 @@ namespace ShipWorks.Shipping.ShipEngine.Manifest
         /// </summary>
         public async Task<List<ShipEngineManifestEntity>> GetManifests(ICarrierAccount account, int maxToReturn)
         {
-            RelationPredicateBucket bucket = new RelationPredicateBucket(ShipEngineManifestFields.CarrierAccountID == account.AccountId);
             var collection = new ShipEngineManifestCollection();
 
             var queryParams = new QueryParameters

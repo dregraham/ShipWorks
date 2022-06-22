@@ -1,4 +1,5 @@
 ﻿using System;
+using ShipWorks.ApplicationCore.Licensing.Warehouse.Enums;
 using ShipWorks.Data.Model.EntityInterfaces;
 
 namespace ShipWorks.ApplicationCore.Licensing.Warehouse
@@ -34,8 +35,8 @@ namespace ShipWorks.ApplicationCore.Licensing.Warehouse
         private const string voidShipment = "api/orders/{0}/void";
         private const string rerouteOrderItems = "api/orders/{0}/rerouteItems";
         private const string getTrackingUpdates = "api/tracking/{0}";
-        private const string createOrderSourceInitiateUrl = "api/ordersource/{0}/auth?RedirectUrl={1}callbacks/{0}monoauth/subscribe&ApiRegion={2}&DaysBack={3}";
-        private const string updateOrderSourceInitiateUrl = "api/ordersource/{0}/auth?RedirectUrl={1}callbacks/{0}monoauth/update&OrderSourceId={2}&ApiRegion={3}";
+        private const string createOrderSourceInitiateUrl = "api/ordersource/{0}/auth?RedirectUrl={1}callbacks/{0}monoauth/subscribe&ApiRegion={2}&DaysBack={3}&MonoauthRequestType={4}";
+        private const string updateOrderSourceInitiateUrl = "api/ordersource/{0}/auth?RedirectUrl={1}callbacks/{0}monoauth/update&OrderSourceId={2}&ApiRegion={3}&MonoauthRequestType={4}";
         private const string orderSourceCarriersAmazon = "api/ordersource/carriers/amazon";
 
         /// <summary>
@@ -112,14 +113,14 @@ namespace ShipWorks.ApplicationCore.Licensing.Warehouse
         /// <summary>
         /// Get the URL to get the InitiateMonoauthUrl for creating a new order source
         /// </summary>
-        public static string GetCreateOrderSourceInitiateUrl(string orderSourceName, string redirectUrl, string apiRegion, int daysBack) =>
-            string.Format(createOrderSourceInitiateUrl, orderSourceName, redirectUrl, apiRegion, daysBack);
+        public static string GetCreateOrderSourceInitiateUrl(string orderSourceName, string redirectUrl, string apiRegion, int daysBack, MonoauthRequestType requestType) =>
+            string.Format(createOrderSourceInitiateUrl, orderSourceName, redirectUrl, apiRegion, daysBack, requestType.ToString());
 
         /// <summary>
         /// Get the URL to get the InitiateMonoauthUrl for updating an order source
         /// </summary>
-        public static string GetUpdateOrderSourceInitiateUrl(string orderSourceName, string redirectUrl, string orderSourceId, string apiRegion) =>
-            string.Format(updateOrderSourceInitiateUrl, orderSourceName, redirectUrl, orderSourceId, apiRegion);
+        public static string GetUpdateOrderSourceInitiateUrl(string orderSourceName, string redirectUrl, string orderSourceId, string apiRegion, MonoauthRequestType requestType) =>
+            string.Format(updateOrderSourceInitiateUrl, orderSourceName, redirectUrl, orderSourceId, apiRegion, requestType);
 
         /// <summary>
         /// Get the URL to get the order source url for Amazon Carrier

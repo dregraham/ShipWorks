@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using Interapptive.Shared.ComponentRegistration;
 using RestSharp;
 using ShipWorks.ApplicationCore.Licensing.Warehouse;
+using ShipWorks.ApplicationCore.Licensing.Warehouse.Enums;
 using ShipWorks.Stores.Platforms.Amazon.DTO;
 
 namespace ShipWorks.Stores.Platforms.Platform
@@ -39,7 +40,7 @@ namespace ShipWorks.Stores.Platforms.Platform
         public async Task<string> GetCreateOrderSourceInitiateUrl(string orderSourceName, string apiRegion, int? daysBack)
         {
             var request = warehouseRequestFactory.Create(
-                WarehouseEndpoints.GetCreateOrderSourceInitiateUrl(orderSourceName, UpdateLocalUrl(warehouseRequestClient.WarehouseUrl), apiRegion, daysBack ?? DefaultDaysBack), Method.GET,
+                WarehouseEndpoints.GetCreateOrderSourceInitiateUrl(orderSourceName, UpdateLocalUrl(warehouseRequestClient.WarehouseUrl), apiRegion, daysBack ?? DefaultDaysBack, MonoauthRequestType.CreateOrderSource), Method.GET,
                 null);
 
             var result = await warehouseRequestClient.MakeRequest<GetMonauthInitiateUrlResponse>(request, GetMonoauthInitiateUrl)
@@ -58,7 +59,7 @@ namespace ShipWorks.Stores.Platforms.Platform
         public async Task<string> GetUpdateOrderSourceInitiateUrl(string orderSourceName, string orderSourceId, string apiRegion)
         {
             var request = warehouseRequestFactory.Create(
-                WarehouseEndpoints.GetUpdateOrderSourceInitiateUrl(orderSourceName, UpdateLocalUrl(warehouseRequestClient.WarehouseUrl), orderSourceId, apiRegion), Method.GET,
+                WarehouseEndpoints.GetUpdateOrderSourceInitiateUrl(orderSourceName, UpdateLocalUrl(warehouseRequestClient.WarehouseUrl), orderSourceId, apiRegion, MonoauthRequestType.UpdateOrderSourceCredentials), Method.GET,
                 null);
 
             var result = await warehouseRequestClient.MakeRequest<GetMonauthInitiateUrlResponse>(request, GetInitiateUpdateOrderSourceUrl)
