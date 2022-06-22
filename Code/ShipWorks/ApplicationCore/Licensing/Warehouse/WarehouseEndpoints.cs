@@ -36,7 +36,7 @@ namespace ShipWorks.ApplicationCore.Licensing.Warehouse
         private const string rerouteOrderItems = "api/orders/{0}/rerouteItems";
         private const string getTrackingUpdates = "api/tracking/{0}";
         private const string createOrderSourceInitiateUrl = "api/ordersource/{0}/auth?RedirectUrl={1}callbacks/{0}monoauth/subscribe&ApiRegion={2}&DaysBack={3}&MonoauthRequestType={4}";
-        private const string updateOrderSourceInitiateUrl = "api/ordersource/{0}/auth?RedirectUrl={1}callbacks/{0}monoauth/update&OrderSourceId={2}&ApiRegion={3}&MonoauthRequestType={4}";
+        private const string updateOrderSourceInitiateUrl = "api/ordersource/{0}/auth?RedirectUrl={1}callbacks/{0}monoauth/update&OrderSourceId={2}&ApiRegion={3}&MonoauthRequestType={4}&SellerId={5}";
         private const string orderSourceCarriersAmazon = "api/ordersource/carriers/amazon";
 
         /// <summary>
@@ -119,8 +119,8 @@ namespace ShipWorks.ApplicationCore.Licensing.Warehouse
         /// <summary>
         /// Get the URL to get the InitiateMonoauthUrl for updating an order source
         /// </summary>
-        public static string GetUpdateOrderSourceInitiateUrl(string orderSourceName, string redirectUrl, string orderSourceId, string apiRegion, MonoauthRequestType requestType) =>
-            string.Format(updateOrderSourceInitiateUrl, orderSourceName, redirectUrl, orderSourceId, apiRegion, requestType);
+        public static string GetUpdateOrderSourceInitiateUrl(string orderSourceName, string redirectUrl, string orderSourceId, string apiRegion, MonoauthRequestType requestType, string sellerId) =>
+            string.Format(updateOrderSourceInitiateUrl, orderSourceName, redirectUrl, orderSourceId, apiRegion, requestType, sellerId);
 
         /// <summary>
         /// Get the URL to get the order source url for Amazon Carrier
