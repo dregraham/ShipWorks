@@ -83,6 +83,7 @@ using ShipWorks.Properties;
 using ShipWorks.Settings;
 using ShipWorks.Shipping;
 using ShipWorks.Shipping.Carriers;
+using ShipWorks.Shipping.Carriers.Amazon.SFP;
 using ShipWorks.Shipping.Carriers.Asendia;
 using ShipWorks.Shipping.Carriers.DhlEcommerce;
 using ShipWorks.Shipping.Carriers.FedEx;
@@ -926,6 +927,13 @@ namespace ShipWorks
             heartBeat.Start();
 
             ExecuteLogonActions();
+
+            UsingAsync(
+                    IoC.BeginLifetimeScope(),
+                    lifetimeScope => lifetimeScope.Resolve<IAmazonTermsOrchestrator>().Handle()
+                )
+                .Do(x => { }, ex => Console.WriteLine(ex.Message))
+                .Forget();
 
             // Update the nudges from Tango and show any upgrade related nudges
             NudgeManager.Initialize(StoreManager.GetAllStores());
