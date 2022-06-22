@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.UI;
 using log4net;
+using ShipWorks.Shipping.Settings;
 using ShipWorks.Users;
 
 namespace ShipWorks.Shipping.Carriers.Amazon.SFP.Terms
@@ -17,6 +18,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon.SFP.Terms
         private readonly ICurrentUserSettings currentUserSettings;
         private readonly IAmazonSfpTermsViewModel amazonSfpTermsViewModel;
         private readonly IAmazonTermsWebClient amazonTermsWebClient;
+        private readonly IShippingSettings shippingSettings;
         private static readonly ILog log = LogManager.GetLogger(typeof(AmazonTermsOrchestrator));
 
         /// <summary>
@@ -24,11 +26,13 @@ namespace ShipWorks.Shipping.Carriers.Amazon.SFP.Terms
         /// </summary>
         public AmazonTermsOrchestrator(IAmazonTermsWebClient amazonTermsWebClient,
             ICurrentUserSettings currentUserSettings,
-            IAmazonSfpTermsViewModel amazonSfpTermsViewModel)
+            IAmazonSfpTermsViewModel amazonSfpTermsViewModel,
+            IShippingSettings shippingSettings)
         {
             this.amazonTermsWebClient = amazonTermsWebClient;
             this.currentUserSettings = currentUserSettings;
             this.amazonSfpTermsViewModel = amazonSfpTermsViewModel;
+            this.shippingSettings = shippingSettings;
         }
 
         /// <summary>
@@ -38,6 +42,11 @@ namespace ShipWorks.Shipping.Carriers.Amazon.SFP.Terms
         {
             try
             {
+                if (!shippingSettings.IsConfigured(ShipmentTypeCode.AmazonSFP))
+                {
+                    return Unit.Default;
+                }
+
                 var terms = await amazonTermsWebClient.GetTerms().ConfigureAwait(false);
 
                 if (terms == null || string.IsNullOrWhiteSpace(terms.Version))
