@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using Interapptive.Shared.Collections;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.Amazon.SFP.Api.DTOs;
@@ -49,11 +48,6 @@ namespace ShipWorks.Shipping.Carriers.Amazon.SFP.Api
             if (amazonOrder == null)
             {
                 throw new AmazonSFPShippingException("Not an Amazon Order");
-            }
-
-            if (amazonOrder?.IsPrime == false)
-            {
-                throw new AmazonSFPShippingException("Not an Amazon Prime Order");
             }
 
             ShipmentRequestDetails requestDetails = requestFactory.Create(shipment, amazonOrder);

@@ -247,9 +247,9 @@ namespace ShipWorks.Stores.Platforms.Newegg
             package.TrackingNumber = shipment.TrackingNumber;
 
             package.ShipDateInPacificStandardTime = ConvertUtcToPacificStandardTime(shipment.ShipDate);
-            package.ShipCarrier = GetCarrierCode(shipment);
+            package.ShipCarrier = GetCarrierCode(shipment).RemoveSymbols();
 
-            package.ShipService = GetShipService(shipment);
+            package.ShipService = GetShipService(shipment).RemoveSymbols();
 
             package.ShipFromAddress1 = shipment.OriginStreet1;
             package.ShipFromAddress2 = shipment.OriginStreet2;
