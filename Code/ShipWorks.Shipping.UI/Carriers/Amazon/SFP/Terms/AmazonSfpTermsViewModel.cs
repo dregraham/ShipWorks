@@ -7,6 +7,7 @@ using Autofac;
 using GalaSoft.MvvmLight.CommandWpf;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.UI;
+using log4net;
 using ShipWorks.Core.UI;
 using ShipWorks.Shipping.Carriers.Amazon.SFP.DTO;
 using ShipWorks.Shipping.Carriers.Amazon.SFP.Terms;
@@ -27,6 +28,7 @@ namespace ShipWorks.Shipping.UI.Carriers.Amazon.SFP.Terms
         private readonly IAsyncMessageHelper messageHelper;
         private readonly PropertyChangedHandler handler;
         private readonly ILifetimeScope lifetimeScope;
+        private static readonly ILog log = LogManager.GetLogger(typeof(AmazonSfpTermsViewModel));
 
         private IAmazonSfpTermsDialog dialog;
         private string termsUrl = string.Empty;
@@ -103,10 +105,20 @@ namespace ShipWorks.Shipping.UI.Carriers.Amazon.SFP.Terms
         /// </summary>
         private IDialog SetupDialog(AmazonTermsVersion amazonTermsVersion)
         {
-            dialog = lifetimeScope.Resolve<IAmazonSfpTermsDialog>();
-            dialog.DataContext = this;
-            TermsUrl = amazonTermsVersion.Url;
-            TermsVersion = amazonTermsVersion.Version;
+            try
+            {
+                log.Info($"Terms version: {amazonTermsVersion.Version}, Terms Url: {amazonTermsVersion.Url}");
+
+                dialog = lifetimeScope.Resolve<IAmazonSfpTermsDialog>();
+                dialog.DataContext = this;
+                TermsUrl = amazonTermsVersion.Url;
+                TermsVersion = amazonTermsVersion.Version;
+            }
+            catch (Exception ex)
+            {
+                log.Error(ex.Message, ex);
+                throw;
+            }
 
             return dialog;
         }
