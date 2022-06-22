@@ -12,6 +12,7 @@ using ShipWorks.Shipping.Profiles;
 using ShipWorks.Shipping.Settings;
 using ShipWorks.Shipping.Settings.WizardPages;
 using ShipWorks.Stores;
+using ShipWorks.Stores.Platforms.Amazon;
 using ShipWorks.UI.Wizard;
 
 namespace ShipWorks.Shipping.Carriers.Amazon.SFP
@@ -123,16 +124,13 @@ namespace ShipWorks.Shipping.Carriers.Amazon.SFP
 
             IEnumerable<StoreEntity> stores = storeManager.GetAllStores();
 
-            foreach (StoreEntity store in stores.Where(s =>
-                s.TypeCode == (int) StoreTypeCode.Amazon || s.TypeCode == (int) StoreTypeCode.ChannelAdvisor))
+            // For each store that can use Amazon shipping
+            foreach (var store in stores.Where(s => s is IAmazonCredentials))
             {
                 storeManager.CreateStoreStatusFilters(this, store);
 
-                if (store.StoreTypeCode == StoreTypeCode.Amazon)
-                {
-                    var amazonBuyShippingShipmentType = (AmazonSFPShipmentType) ShipmentTypeManager.GetType(ShipmentTypeCode.AmazonSFP);
-                    amazonBuyShippingShipmentType.SetupPlatformCarrierIdIfNeeded((AmazonStoreEntity) store);
-                }
+                var amazonBuyShippingShipmentType = (AmazonSFPShipmentType) ShipmentTypeManager.GetType(ShipmentTypeCode.AmazonSFP);
+                amazonBuyShippingShipmentType.SetupPlatformCarrierIdIfNeeded(store);
             }
         }
 

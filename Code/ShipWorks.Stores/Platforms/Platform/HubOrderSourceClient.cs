@@ -75,11 +75,29 @@ namespace ShipWorks.Stores.Platforms.Platform
         public async Task<string> GetPlatformAmazonCarrierId(string uniqueIdentifier)
         {
             var request = warehouseRequestFactory.Create(
-                WarehouseEndpoints.GetOrderSourceAmazonCarrierUrl(), 
+                WarehouseEndpoints.GetCreateAmazonCarrierFromAmazonStoreUrl(),
                 Method.POST,
-                new { uniqueIdentifier = uniqueIdentifier});
+                new { uniqueIdentifier = uniqueIdentifier });
 
-            var result = await warehouseRequestClient.MakeRequest<GetPlatformAmazonCarrierIdResponse>(request, nameof(WarehouseEndpoints.GetOrderSourceAmazonCarrierUrl))
+            var result = await warehouseRequestClient.MakeRequest<GetPlatformAmazonCarrierIdResponse>(request, nameof(WarehouseEndpoints.GetCreateAmazonCarrierFromAmazonStoreUrl))
+                .ConfigureAwait(false);
+
+            return result.CarrierId;
+        }
+
+
+        /// <summary>
+        /// Call Hub to get a Platform Amazon carrier Id for Buy Shipping from a MWS store
+        /// </summary>
+        /// <returns></returns>
+        public async Task<string> CreateAmazonCarrierFromMws(string sellingPartnerId, string mwsAuthToken, string countryCode)
+        {
+            var request = warehouseRequestFactory.Create(
+                WarehouseEndpoints.GetCreateAmazonCarrierFromMwsUrl(),
+                Method.POST,
+                new { sellingPartnerId, mwsAuthToken, countryCode });
+
+            var result = await warehouseRequestClient.MakeRequest<GetPlatformAmazonCarrierIdResponse>(request, nameof(WarehouseEndpoints.GetCreateAmazonCarrierFromMwsUrl))
                 .ConfigureAwait(false);
 
             return result.CarrierId;
@@ -88,8 +106,8 @@ namespace ShipWorks.Stores.Platforms.Platform
         /// <summary>
         /// Updates the port if pointing local
         /// </summary>
-        private string UpdateLocalUrl(string warehouseUrl) =>        
+        private string UpdateLocalUrl(string warehouseUrl) =>
             warehouseUrl.Replace("http://localhost:4001", "http://localhost:3000");
-        
+
     }
 }

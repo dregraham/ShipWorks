@@ -10,6 +10,7 @@ using ShipWorks.Shipping.Carriers.Amazon.SFP;
 using ShipWorks.Shipping.Policies;
 using ShipWorks.Stores;
 using ShipWorks.Stores.Platforms.Amazon;
+using ShipWorks.Stores.Platforms.Platform;
 using Xunit;
 
 namespace ShipWorks.Shipping.Tests.Carriers.Amazon
@@ -22,6 +23,8 @@ namespace ShipWorks.Shipping.Tests.Carriers.Amazon
         private readonly Mock<IStoreManager> storeManager;
         private readonly Mock<ILicenseService> licenseService;
         private readonly Mock<ILicense> license;
+        private readonly Mock<IHubOrderSourceClient> orderSourceClient;
+
 
         private const long nonAmazonOrderID = 1;
         private const long amazonOrderID = 100;
@@ -54,7 +57,13 @@ namespace ShipWorks.Shipping.Tests.Carriers.Amazon
 
             license = mock.Mock<ILicense>();
             licenseService = mock.Mock<ILicenseService>();
-            licenseService.Setup(ls => ls.GetLicenses()).Returns(new[] {license.Object});
+            licenseService.Setup(ls => ls.GetLicenses()).Returns(new[] { license.Object });
+
+            orderSourceClient = mock.Mock<IHubOrderSourceClient>();
+            orderSourceClient.Setup(x => x.GetPlatformAmazonCarrierId(It.IsAny<string>()))
+                .ReturnsAsync("PlatformId");
+            orderSourceClient.Setup(x => x.CreateAmazonCarrierFromMws(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()))
+                .ReturnsAsync("PlatformId");
 
             amazonOrder.IsPrime = (int) AmazonIsPrime.No;
             shipment = new ShipmentEntity
@@ -118,7 +127,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.Amazon
         [InlineData(AmazonIsPrime.Unknown, false)]
         public void IsAllowedFor_ChannelAdvisorStoreAndOrders_ReturnsExpectedValue_BasedOnAmazonOrderIsPrime(AmazonIsPrime isPrime, bool expected)
         {
-            target.Shipment.Order = new ChannelAdvisorOrderEntity {IsPrime = (int) isPrime};
+            target.Shipment.Order = new ChannelAdvisorOrderEntity { IsPrime = (int) isPrime };
             target.AmazonOrder = target.Shipment.Order as IAmazonOrder;
 
             mock.Mock<IStoreManager>()
@@ -139,7 +148,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.Amazon
         [InlineData(EditionRestrictionLevel.None, true)]
         public void IsAllowedFor_ReturnsExpectedValue_WhenAmazonShipmentTypeIsRestricted(EditionRestrictionLevel restrictionLevel, bool expectedValue)
         {
-            target.Shipment.Order = new ChannelAdvisorOrderEntity {IsPrime = (int) AmazonIsPrime.Yes};
+            target.Shipment.Order = new ChannelAdvisorOrderEntity { IsPrime = (int) AmazonIsPrime.Yes };
             target.AmazonOrder = target.Shipment.Order as IAmazonOrder;
 
             var store = new ChannelAdvisorStoreEntity { TypeCode = (int) StoreTypeCode.ChannelAdvisor };
@@ -247,6 +256,99 @@ namespace ShipWorks.Shipping.Tests.Carriers.Amazon
             var testObject = mock.Create<AmazonSFPShipmentType>();
             var trackingUrl = testObject.GetCarrierTrackingUrl(shipment);
             Assert.Equal(expectedUrl, trackingUrl);
+        }
+
+        [Fact]
+        public void SetupPlatformCarrierIdIfNeeded_CarrierIdSet()
+        {
+            // Arrange
+            var testObject = mock.Create<AmazonSFPShipmentType>();
+            var store = new AmazonStoreEntity { StoreTypeCode = StoreTypeCode.Amazon, PlatformAmazonCarrierID = "valid" };
+
+            // Act
+            testObject.SetupPlatformCarrierIdIfNeeded(store);
+
+            // Assert
+            orderSourceClient.Verify(x => x.GetPlatformAmazonCarrierId(It.IsAny<string>()), Times.Never);
+        }
+
+        [Fact]
+        public void SetupPlatformCarrierIdIfNeeded_WrongStoreType()
+        {
+            // Arrange
+            var testObject = mock.Create<AmazonSFPShipmentType>();
+            var store = new GrouponStoreEntity { StoreTypeCode = StoreTypeCode.Groupon, PlatformAmazonCarrierID = null };
+
+            // Act
+            testObject.SetupPlatformCarrierIdIfNeeded(store);
+
+            // Assert
+            orderSourceClient.Verify(x => x.GetPlatformAmazonCarrierId(It.IsAny<string>()), Times.Never);
+        }
+
+        [Theory]
+        [InlineData(false, false)]
+        [InlineData(true, false)]
+        [InlineData(true, true)]
+        public void SetupPlatformCarrierIdIfNeeded_AmazonStore(bool hasMarketPlaceId, bool hasMerchantId)
+        {
+            // Arrange
+            var testObject = mock.Create<AmazonSFPShipmentType>();
+            var store = new AmazonStoreEntity
+            {
+                StoreTypeCode = StoreTypeCode.Amazon,
+                PlatformAmazonCarrierID = null,
+                MarketplaceID = hasMarketPlaceId ? "MarketPlaceId" : string.Empty,
+                MerchantID = hasMerchantId ? "MerchantId" : string.Empty
+            };
+
+            // Act
+            testObject.SetupPlatformCarrierIdIfNeeded(store);
+
+            // Assert
+            if (hasMarketPlaceId && hasMerchantId)
+            {
+                orderSourceClient.Verify(x => x.GetPlatformAmazonCarrierId(It.IsAny<string>()), Times.Once);
+                storeManager.Verify(x => x.SaveStore(It.Is<StoreEntity>(y => y.PlatformAmazonCarrierID == "PlatformId")), Times.Once);
+            }
+            else
+            {
+                orderSourceClient.Verify(x => x.GetPlatformAmazonCarrierId(It.IsAny<string>()), Times.Never);
+                storeManager.Verify(x => x.SaveStore(It.IsAny<StoreEntity>()), Times.Never);
+            }
+        }
+
+        [Theory]
+        [InlineData(false, false, false)]
+        [InlineData(true, false, false)]
+        [InlineData(true, true, true)]
+        public void SetupPlatformCarrierIdIfNeeded_NonAmazonStore(bool hasMerchantId, bool hasAuthToken, bool hasRegion)
+        {
+            // Arrange
+            var testObject = mock.Create<AmazonSFPShipmentType>();
+            var store = new ChannelAdvisorStoreEntity
+            {
+                StoreTypeCode = StoreTypeCode.ChannelAdvisor,
+                PlatformAmazonCarrierID = null,
+                MerchantID = hasMerchantId ? "MerchantId" : string.Empty,
+                AuthToken = hasAuthToken ? "AuthToken" : string.Empty,
+                Region = hasRegion ? "Region" : string.Empty,
+            };
+
+            // Act
+            testObject.SetupPlatformCarrierIdIfNeeded(store);
+
+            // Assert
+            if (hasMerchantId && hasAuthToken && hasRegion)
+            {
+                orderSourceClient.Verify(x => x.CreateAmazonCarrierFromMws(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()), Times.Once);
+                storeManager.Verify(x => x.SaveStore(It.Is<StoreEntity>(y => y.PlatformAmazonCarrierID == "PlatformId")), Times.Once);
+            }
+            else
+            {
+                orderSourceClient.Verify(x => x.CreateAmazonCarrierFromMws(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()), Times.Never);
+                storeManager.Verify(x => x.SaveStore(It.IsAny<StoreEntity>()), Times.Never);
+            }
         }
 
         public void Dispose()
