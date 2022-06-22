@@ -7,11 +7,9 @@ using Autofac;
 using GalaSoft.MvvmLight.CommandWpf;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.UI;
-using ShipWorks.ApplicationCore.Licensing.Warehouse;
 using ShipWorks.Core.UI;
 using ShipWorks.Shipping.Carriers.Amazon.SFP.DTO;
 using ShipWorks.Shipping.Carriers.Amazon.SFP.Terms;
-using ShipWorks.Shipping.Carriers.Amazon.SFP.Terms.DTO;
 using ShipWorks.Users;
 
 namespace ShipWorks.Shipping.UI.Carriers.Amazon.SFP.Terms
@@ -109,6 +107,7 @@ namespace ShipWorks.Shipping.UI.Carriers.Amazon.SFP.Terms
             dialog.DataContext = this;
             TermsUrl = amazonTermsVersion.Url;
             TermsVersion = amazonTermsVersion.Version;
+
             return dialog;
         }
 
@@ -136,11 +135,6 @@ namespace ShipWorks.Shipping.UI.Carriers.Amazon.SFP.Terms
             Task.WaitAll(acceptTermsTask);
 
             TermsAccepted = success;
-
-            if (success)
-            {
-                currentUserSettings.StopShowingNotification(notificationType);
-            }
 
             dialog.Close();
         }

@@ -3,6 +3,7 @@ using System.Reactive;
 using System.Threading.Tasks;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.UI;
+using log4net;
 using ShipWorks.Users;
 
 namespace ShipWorks.Shipping.Carriers.Amazon.SFP.Terms
@@ -16,6 +17,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon.SFP.Terms
         private readonly ICurrentUserSettings currentUserSettings;
         private readonly IAmazonSfpTermsViewModel amazonSfpTermsViewModel;
         private readonly IAmazonTermsWebClient amazonTermsWebClient;
+        private static readonly ILog log = LogManager.GetLogger(typeof(AmazonTermsOrchestrator));
 
         /// <summary>
         /// Constructor
@@ -34,21 +36,29 @@ namespace ShipWorks.Shipping.Carriers.Amazon.SFP.Terms
         /// </summary>
         public async Task<Unit> Handle()
         {
-            var terms = await amazonTermsWebClient.GetTerms().ConfigureAwait(false);
+            try
+            {
+                var terms = await amazonTermsWebClient.GetTerms().ConfigureAwait(false);
 
-            if (terms == null || string.IsNullOrWhiteSpace(terms.Version))
-            {
-                // No terms to agree to, just return
-                return Unit.Default;
+                if (terms == null || string.IsNullOrWhiteSpace(terms.Version))
+                {
+                    // No terms to agree to, just return
+                    return Unit.Default;
+                }
+                
+                var shouldShow = currentUserSettings.ShouldShowNotification(UserConditionalNotificationType.AmazonTermsAndConditions, DateTime.UtcNow) ||
+                                 DateTime.Parse(terms.DeadlineDate) <= DateTime.UtcNow;
+
+                if (shouldShow)
+                {
+                    await amazonSfpTermsViewModel.Show(terms).ConfigureAwait(false);
+                    TermsAccepted = amazonSfpTermsViewModel.TermsAccepted;
+                }
             }
-            
-            var  shouldShow = currentUserSettings.ShouldShowNotification(UserConditionalNotificationType.AmazonTermsAndConditions, DateTime.UtcNow) ||
-                              DateTime.Parse(terms.DeadlineDate) <= DateTime.UtcNow;
-            
-            if (shouldShow)
+            catch (Exception ex)
             {
-                await amazonSfpTermsViewModel.Show(terms).ConfigureAwait(false);
-                TermsAccepted = amazonSfpTermsViewModel.TermsAccepted;
+                // Just log and continue
+                log.Error(ex.Message, ex);
             }
 
             return Unit.Default;
