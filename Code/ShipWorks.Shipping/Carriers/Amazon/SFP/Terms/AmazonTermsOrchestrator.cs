@@ -3,15 +3,9 @@ using System.Reactive;
 using System.Threading.Tasks;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.UI;
-using Newtonsoft.Json;
-using RestSharp;
-using ShipWorks.ApplicationCore.Licensing.Warehouse;
-using ShipWorks.ApplicationCore.Logging;
-using ShipWorks.Shipping.Carriers.Amazon.SFP.DTO;
-using ShipWorks.Shipping.Carriers.Amazon.SFP.Terms;
 using ShipWorks.Users;
 
-namespace ShipWorks.Shipping.Carriers.Amazon.SFP
+namespace ShipWorks.Shipping.Carriers.Amazon.SFP.Terms
 {
     /// <summary>
     /// Class for interacting with the user and AmazonTerms
@@ -19,21 +13,18 @@ namespace ShipWorks.Shipping.Carriers.Amazon.SFP
     [Component]
     public class AmazonTermsOrchestrator : IAmazonTermsOrchestrator
     {
-        private const string GetTermsUrl = "";
-        private const string UpdateTermsUrl = "";
-
-        private readonly IWarehouseRequestClient warehouseRequestClient;
         private readonly ICurrentUserSettings currentUserSettings;
         private readonly IAmazonSfpTermsViewModel amazonSfpTermsViewModel;
+        private readonly IAmazonTermsWebClient amazonTermsWebClient;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public AmazonTermsOrchestrator(IWarehouseRequestClient warehouseRequestClient,
+        public AmazonTermsOrchestrator(IAmazonTermsWebClient amazonTermsWebClient,
             ICurrentUserSettings currentUserSettings,
             IAmazonSfpTermsViewModel amazonSfpTermsViewModel)
         {
-            this.warehouseRequestClient = warehouseRequestClient;
+            this.amazonTermsWebClient = amazonTermsWebClient;
             this.currentUserSettings = currentUserSettings;
             this.amazonSfpTermsViewModel = amazonSfpTermsViewModel;
         }
@@ -43,9 +34,9 @@ namespace ShipWorks.Shipping.Carriers.Amazon.SFP
         /// </summary>
         public async Task<Unit> Handle()
         {
-            var terms = await GetTerms().ConfigureAwait(false);
+            var terms = await amazonTermsWebClient.GetTerms().ConfigureAwait(false);
 
-            if (terms == null)
+            if (terms == null || string.IsNullOrWhiteSpace(terms.Version))
             {
                 // No terms to agree to, just return
                 return Unit.Default;
@@ -67,29 +58,5 @@ namespace ShipWorks.Shipping.Carriers.Amazon.SFP
         /// Have the terms been accepted
         /// </summary>
         public bool TermsAccepted { get; set; }
-
-        /// <summary>
-        /// Make a call to get the latest Amazon terms
-        /// </summary>
-        private async Task<AmazonTermsVersion> GetTerms()
-        {
-            var request = new RestRequest(GetTermsUrl, Method.GET);
-
-            // There's an issue with the deserialization and casting to an interface so we're casting manually
-            var result = await warehouseRequestClient.MakeRequest(request, "GetAmazonTerms", ApiLogSource.Amazon).ConfigureAwait(false);
-
-            // Check that the call returned valid information
-            AmazonTermsVersion returnObject;
-            if (string.IsNullOrWhiteSpace(result.Value?.Content))
-            {
-                returnObject = new AmazonTermsVersion();
-            }
-            else
-            {
-                returnObject = JsonConvert.DeserializeObject<AmazonTermsVersion>(result.Value.Content);
-            }
-
-            return returnObject;
-        }
     }
 }

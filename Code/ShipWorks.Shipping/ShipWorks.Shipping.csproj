@@ -176,7 +176,7 @@
     <Compile Include="Carriers\Amazon\SFP\AmazonSFPSameDayNotAvailableFootnoteFactory.cs" />
     <Compile Include="Carriers\Amazon\SFP\AmazonSFPServiceTypeRepository.cs" />
     <Compile Include="Carriers\Amazon\SFP\AmazonSFPShippingProfileApplicationStrategy.cs" />
-    <Compile Include="Carriers\Amazon\SFP\AmazonTermsOrchestrator.cs" />
+    <Compile Include="Carriers\Amazon\SFP\Terms\AmazonTermsOrchestrator.cs" />
     <Compile Include="Carriers\Amazon\SFP\IAmazonSFPCarrierTermsAndConditionsNotAcceptedFootnoteViewModel.cs" />
     <Compile Include="Carriers\Amazon\SFP\AmazonSFPShipmentAdapter.cs" />
     <Compile Include="Carriers\Amazon\SFP\AmazonSFPShipmentServicesBuilder.cs" />
@@ -185,8 +185,11 @@
     <Compile Include="Carriers\Amazon\SFP\IAmazonSFPSameDayNotAvailableFootnoteViewModel.cs" />
     <Compile Include="Carriers\Amazon\SFP\IAmazonSFPServiceTypeRepository.cs" />
     <Compile Include="Carriers\Amazon\SFP\RateGroupFilters\AmazonSFPAvailableServiceTypeRateGroupFilter.cs" />
+    <Compile Include="Carriers\Amazon\SFP\Terms\AmazonTermsWebClient.cs" />
+    <Compile Include="Carriers\Amazon\SFP\Terms\DTO\AmazonGetTermsInfoResponse.cs" />
     <Compile Include="Carriers\Amazon\SFP\Terms\IAmazonSfpTermsDialog.cs" />
     <Compile Include="Carriers\Amazon\SFP\Terms\IAmazonSfpTermsViewModel.cs" />
+    <Compile Include="Carriers\Amazon\SFP\Terms\IAmazonTermsWebClient.cs" />
     <Compile Include="Carriers\Amazon\SWA\AmazonSWARateHashingService.cs" />
     <Compile Include="Carriers\Amazon\SWA\AmazonSWAShipmentType.cs" />
     <Compile Include="Carriers\Amazon\SWA\AmazonSWAPackageAdapter.cs" />

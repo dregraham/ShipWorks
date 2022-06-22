@@ -7,9 +7,11 @@ using Autofac;
 using GalaSoft.MvvmLight.CommandWpf;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.UI;
+using ShipWorks.ApplicationCore.Licensing.Warehouse;
 using ShipWorks.Core.UI;
 using ShipWorks.Shipping.Carriers.Amazon.SFP.DTO;
 using ShipWorks.Shipping.Carriers.Amazon.SFP.Terms;
+using ShipWorks.Shipping.Carriers.Amazon.SFP.Terms.DTO;
 using ShipWorks.Users;
 
 namespace ShipWorks.Shipping.UI.Carriers.Amazon.SFP.Terms
@@ -21,7 +23,8 @@ namespace ShipWorks.Shipping.UI.Carriers.Amazon.SFP.Terms
     public class AmazonSfpTermsViewModel : IAmazonSfpTermsViewModel, INotifyPropertyChanged
     {
         private const UserConditionalNotificationType notificationType = UserConditionalNotificationType.AmazonTermsAndConditions;
-        
+
+        private readonly IAmazonTermsWebClient amazonTermsWebClient;
         private readonly ICurrentUserSettings currentUserSettings;
         private readonly IAsyncMessageHelper messageHelper;
         private readonly PropertyChangedHandler handler;
@@ -35,12 +38,14 @@ namespace ShipWorks.Shipping.UI.Carriers.Amazon.SFP.Terms
         /// </summary>
         public AmazonSfpTermsViewModel(ILifetimeScope lifetimeScope, 
             ICurrentUserSettings currentUserSettings, 
-            IAsyncMessageHelper messageHelper)
+            IAsyncMessageHelper messageHelper,
+            IAmazonTermsWebClient amazonTermsWebClient)
         {
             handler = new PropertyChangedHandler(this, () => PropertyChanged);
             this.lifetimeScope = lifetimeScope;
             this.messageHelper = messageHelper;
             this.currentUserSettings = currentUserSettings;
+            this.amazonTermsWebClient = amazonTermsWebClient;
 
             Dismiss = new RelayCommand(() => DismissAction());
             Accept = new RelayCommand(() => AcceptAction());
@@ -82,6 +87,15 @@ namespace ShipWorks.Shipping.UI.Carriers.Amazon.SFP.Terms
         }
 
         /// <summary>
+        /// Version of the Terms
+        /// </summary>
+        public string TermsVersion
+        {
+            get;
+            set;
+        }
+
+        /// <summary>
         /// Have the terms been accepted
         /// </summary>
         public bool TermsAccepted { get; set; }
@@ -94,6 +108,7 @@ namespace ShipWorks.Shipping.UI.Carriers.Amazon.SFP.Terms
             dialog = lifetimeScope.Resolve<IAmazonSfpTermsDialog>();
             dialog.DataContext = this;
             TermsUrl = amazonTermsVersion.Url;
+            TermsVersion = amazonTermsVersion.Version;
             return dialog;
         }
 
@@ -112,12 +127,20 @@ namespace ShipWorks.Shipping.UI.Carriers.Amazon.SFP.Terms
         /// </summary>
         private void AcceptAction()
         {
+            var success = false;
+
             // Make call to Hub to accept current terms
-            // TODO: BUY SHIPPING Make the call
+            var acceptTermsTask = Task.Run(async () =>
+                success = await amazonTermsWebClient.AcceptTerms(Version.Parse(TermsVersion)).ConfigureAwait(true));
 
-            TermsAccepted = true;
+            Task.WaitAll(acceptTermsTask);
 
-            currentUserSettings.StopShowingNotification(notificationType);
+            TermsAccepted = success;
+
+            if (success)
+            {
+                currentUserSettings.StopShowingNotification(notificationType);
+            }
 
             dialog.Close();
         }
