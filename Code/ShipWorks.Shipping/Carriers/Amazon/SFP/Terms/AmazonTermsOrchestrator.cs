@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.UI;
 using log4net;
+using Newtonsoft.Json;
 using ShipWorks.Shipping.Settings;
 using ShipWorks.Users;
 
@@ -44,6 +45,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon.SFP.Terms
             {
                 if (!shippingSettings.IsConfigured(ShipmentTypeCode.AmazonSFP))
                 {
+                    log.Info("Amazon Buy Shipping is not configured, so skipping additional terms checks.");
                     return Unit.Default;
                 }
 
@@ -51,17 +53,28 @@ namespace ShipWorks.Shipping.Carriers.Amazon.SFP.Terms
 
                 if (terms == null || string.IsNullOrWhiteSpace(terms.Version))
                 {
+                    log.Info("No Amazon Buy Shipping terms found from Hub, so skipping additional terms checks.");
                     // No terms to agree to, just return
                     return Unit.Default;
                 }
-                
-                var shouldShow = currentUserSettings.ShouldShowNotification(UserConditionalNotificationType.AmazonTermsAndConditions, DateTime.UtcNow) ||
-                                 DateTime.Parse(terms.DeadlineDate) <= DateTime.UtcNow;
+
+                log.Info($"Terms received: {JsonConvert.SerializeObject(terms)}");
+
+                var currentUserSettingsShouldShow = currentUserSettings.ShouldShowNotification(UserConditionalNotificationType.AmazonTermsAndConditions, DateTime.UtcNow);
+                var deadlinePassed = DateTime.Parse(terms.DeadlineDate) <= DateTime.UtcNow;
+
+                var shouldShow = currentUserSettingsShouldShow || deadlinePassed;
+
+                log.Info($"currentUserSettingsShouldShow: {currentUserSettingsShouldShow}, deadlinePassed: {deadlinePassed}, shouldShow: {shouldShow}");
 
                 if (shouldShow)
                 {
+                    log.Info("Show the Amazon Buy Shipping Terms.");
                     await amazonSfpTermsViewModel.Show(terms).ConfigureAwait(false);
+
                     TermsAccepted = amazonSfpTermsViewModel.TermsAccepted;
+
+                    log.Info($"User accepted terms: {TermsAccepted}");
                 }
             }
             catch (Exception ex)
