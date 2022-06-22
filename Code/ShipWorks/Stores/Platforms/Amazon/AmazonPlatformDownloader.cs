@@ -154,7 +154,7 @@ namespace ShipWorks.Stores.Platforms.Amazon
             order.AmazonOrderID = amazonOrderId;
             order.ChangeOrderNumber(amazonOrderId);
             order.OrderNumber = long.MinValue;
-            order.ChannelOrderID = salesOrder.OrderId;
+            order.ChannelOrderID = salesOrder.SalesOrderGuid;
 
             var orderStatus = salesOrder.Status.ToString();
 
@@ -179,7 +179,7 @@ namespace ShipWorks.Stores.Platforms.Amazon
             order.OnlineStatus = orderStatus;
             order.OnlineStatusCode = orderStatus;
 
-            // Fulfilled by
+            // TODO: set this to the new fulfillmentchannel field.
             order.FulfillmentChannel = (int) AmazonMwsFulfillmentChannel.Unknown;
 
             // If the order is new and it is of Amazon fulfillment type, increase the FBA count.
