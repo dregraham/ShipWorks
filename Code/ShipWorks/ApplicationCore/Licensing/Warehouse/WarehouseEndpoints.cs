@@ -27,6 +27,8 @@ namespace ShipWorks.ApplicationCore.Licensing.Warehouse
         public const string Tracking = "api/tracking";
         public const string MigrateAmazonStore = "api/ordersource/migrate";
         public const string AmazonBuyShippingTerms = "api/account-service/account/amazon/terms";
+        public const string CreateAmazonCarrierFromAmazonStore = "api/ordersource/carriers/amazon/fromordersource";
+        public const string CreateAmazonCarrierFromMws = "api/ordersource/carriers/amazon/frommws";
 
         private const string notifyShipped = "api/customer/notifyShipped/{0}";
         private const string linkWarehouse = "api/warehouses/{0}/link";
@@ -38,8 +40,6 @@ namespace ShipWorks.ApplicationCore.Licensing.Warehouse
         private const string getTrackingUpdates = "api/tracking/{0}";
         private const string createOrderSourceInitiateUrl = "api/ordersource/{0}/auth?RedirectUrl={1}callbacks/{0}monoauth/subscribe&ApiRegion={2}&DaysBack={3}&MonoauthRequestType={4}";
         private const string updateOrderSourceInitiateUrl = "api/ordersource/{0}/auth?RedirectUrl={1}callbacks/{0}monoauth/update&OrderSourceId={2}&ApiRegion={3}&MonoauthRequestType={4}&SellerId={5}";
-        private const string createAmazonCarrierFromAmazonStore = "api/ordersource/carriers/amazon/fromordersource";
-        private const string createAmazonCarrierFromMws = "api/ordersource/carriers/amazon/frommws";
 
         /// <summary>
         /// Create a link warehouse endpoint
@@ -123,15 +123,5 @@ namespace ShipWorks.ApplicationCore.Licensing.Warehouse
         /// </summary>
         public static string GetUpdateOrderSourceInitiateUrl(string orderSourceName, string redirectUrl, string orderSourceId, string apiRegion, MonoauthRequestType requestType, string sellerId) =>
             string.Format(updateOrderSourceInitiateUrl, orderSourceName, redirectUrl, orderSourceId, apiRegion, requestType, sellerId);
-
-        /// <summary>
-        /// Get the URL to get the order source url for Amazon Carrier
-        /// </summary>
-        public static string GetCreateAmazonCarrierFromAmazonStoreUrl() => createAmazonCarrierFromAmazonStore;
-
-        /// <summary>
-        /// Get the URL to get the order source url for Amazon Carrier
-        /// </summary>
-        public static string GetCreateAmazonCarrierFromMwsUrl() => createAmazonCarrierFromMws;
     }
 }
