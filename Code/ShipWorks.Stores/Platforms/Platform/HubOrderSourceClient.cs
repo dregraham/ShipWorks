@@ -85,11 +85,20 @@ namespace ShipWorks.Stores.Platforms.Platform
             return result.CarrierId;
         }
 
+        public Task<string> GetCreateCarrierInitiateUrl(string orderSourceName, string apiRegion)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<string> GetUpdateCarrierInitiateUrl(string orderSourceName, string carrierId, string apiRegion, string sellerId)
+        {
+            throw new NotImplementedException();
+        }
+
         /// <summary>
         /// Updates the port if pointing local
         /// </summary>
         private string UpdateLocalUrl(string warehouseUrl) =>        
             warehouseUrl.Replace("http://localhost:4001", "http://localhost:3000");
-        
     }
 }
