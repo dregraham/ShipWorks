@@ -14,12 +14,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon.SFP
     public interface IGetAmazonCarrierCredentialsViewModel
     {
         /// <summary>
-        /// Load the store
-        /// </summary>
-        void Load(StoreEntity store);
-
-        /// <summary>
-        /// Does Carrier Exist?
+        /// True if the loaded store associated has a carrier 
         /// </summary>
         bool CarrierExists { get; set; }
 
@@ -34,7 +29,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon.SFP
         Dictionary<string, string> Regions { get; }
 
         /// <summary>
-        /// The selected Region
+        /// The selected Amazon Region
         /// </summary>
         string SelectedRegion { get; set; }
 
@@ -51,7 +46,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon.SFP
         /// <summary>
         /// The token retrieved from the CreateCredentials process 
         /// </summary>
-        string CredentialsToken { get; }
+        string CredentialsToken { get; set; }
 
         /// <summary>
         /// Save carrier (if required)
@@ -62,5 +57,15 @@ namespace ShipWorks.Shipping.Carriers.Amazon.SFP
         /// Cancel the process (not applicabile when updating credentials)
         /// </summary>
         ICommand CancelCommand { get; }
+
+        /// <summary>
+        /// Action to run when the editor is completed
+        /// </summary>
+        Action OnComplete { get; set; }
+
+        /// <summary>
+        /// Load the store
+        /// </summary>
+        void Load(StoreEntity store);
     }
 }
