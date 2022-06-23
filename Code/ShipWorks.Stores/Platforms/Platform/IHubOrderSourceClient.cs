@@ -30,5 +30,11 @@ namespace ShipWorks.Stores.Platforms.Platform
         /// </summary>
         /// <returns></returns>
         Task<string> GetPlatformAmazonCarrierId(string uniqueIdentifier);
+
+        /// <summary>
+        /// Call Hub to get a Platform Amazon carrier Id for Buy Shipping from a MWS store
+        /// </summary>
+        /// <returns></returns>
+        Task<string> CreateAmazonCarrierFromMws(string sellingPartnerId, string mwsAuthToken, string countryCode);
     }
 }
