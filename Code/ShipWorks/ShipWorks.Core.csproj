@@ -805,7 +805,6 @@
     <Compile Include="ApplicationCore\Licensing\FeatureRestrictions\DhlEcommerce\DhlEcommerceMaxRestriction.cs" />
     <Compile Include="ApplicationCore\Licensing\TrialDetails.cs" />
     <Compile Include="ApplicationCore\Licensing\Warehouse\DTO\SqlConfigChangedDto.cs" />
-    <Compile Include="ApplicationCore\Licensing\Warehouse\Enums\MonoauthRequestType.cs" />
     <Compile Include="ApplicationCore\ReoccurringAppLockedTask.cs" />
     <Compile Include="ApplicationCore\Settings\ICubiscanSettingsPage.cs" />
     <Compile Include="AutoInstall\DTO\AutoInstallShipWorksDto.cs" />
@@ -1247,6 +1246,7 @@
     <Compile Include="Products\ProductSelectionChangedEventArgs.cs" />
     <Compile Include="Shipping\Carriers\Amazon\SFP\DTO\AmazonTermsVersion.cs" />
     <Compile Include="Shipping\Carriers\Amazon\SFP\IAmazonTermsOrchestrator.cs" />
+    <Compile Include="Shipping\Carriers\Amazon\SFP\IGetAmazonCarrierCredentialsViewModel.cs" />
     <Compile Include="Shipping\Carriers\DhlEcommerce\CoreExtensions\Filters\DhlEcommercePackagingTypeCondition.cs" />
     <Compile Include="Shipping\Carriers\DhlEcommerce\CoreExtensions\Filters\DhlEcommerceServiceTypeCondition.cs" />
     <Compile Include="Shipping\Carriers\DhlEcommerce\DhlEcommercePackagingType.cs" />
