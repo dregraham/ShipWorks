@@ -12,7 +12,6 @@ using Interapptive.Shared.Enums;
 using Interapptive.Shared.Metrics;
 using log4net;
 using ShipWorks.Data.Administration.Recovery;
-using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Communication;
 using ShipWorks.Stores.Content;
@@ -54,7 +53,7 @@ namespace ShipWorks.Stores.Platforms.Amazon
         /// <summary>
         /// Constructor
         /// </summary>
-        public AmazonPlatformDownloader(StoreEntity store, IStoreTypeManager storeTypeManager, 
+        public AmazonPlatformDownloader(StoreEntity store, IStoreTypeManager storeTypeManager,
             IStoreManager storeManager, Func<AmazonStoreEntity, IPlatformOrderWebClient> createWebClient)
             : base(store, storeTypeManager.GetType(store))
         {
@@ -132,7 +131,7 @@ namespace ShipWorks.Stores.Platforms.Amazon
         /// </summary>
         private async Task LoadOrders(ICollection<OrderSourceApiSalesOrder> orders)
         {
-            foreach (var salesOrder in orders)
+            foreach (var salesOrder in orders.Where(x => x.Status != SalesOrderStatus.AwaitingPayment))
             {
                 await LoadOrder(salesOrder);
             }
@@ -199,7 +198,7 @@ namespace ShipWorks.Stores.Platforms.Amazon
             {
                 order.IsPrime = (int) AmazonIsPrime.Unknown;
             }
-            
+
             // Purchase order number
             order.PurchaseOrderNumber = WebUtility.HtmlDecode(salesOrder.OriginalOrderSource.OrderId ?? string.Empty);
 
@@ -298,7 +297,7 @@ namespace ShipWorks.Stores.Platforms.Amazon
             order.ShipPostalCode = shipTo.PostalCode ?? string.Empty;
             order.ShipCountryCode = Geography.GetCountryCode(shipTo.CountryCode ?? string.Empty);
             order.ShipStateProvCode = Geography.GetStateProvCode(shipTo.StateProvince ?? string.Empty, order.ShipCountryCode);
-            
+
             order.ShipEmail = order.BillEmail ?? string.Empty;
 
             // Bill To
@@ -366,7 +365,7 @@ namespace ShipWorks.Stores.Platforms.Amazon
         private void LoadOrderItem(SalesOrderItem orderItem, AmazonOrderEntity order)
         {
             var item = (AmazonOrderItemEntity) InstantiateOrderItem(order);
-            
+
             // populate the basics
             item.Name = orderItem.Product.Name;
             item.Quantity = orderItem.Quantity;
@@ -374,7 +373,7 @@ namespace ShipWorks.Stores.Platforms.Amazon
             item.SKU = orderItem.Product.Identifiers.Sku;
             item.Code = item.SKU;
 
-            item.Weight = (double)orderItem.Product.Weight.Value;
+            item.Weight = (double) orderItem.Product.Weight.Value;
 
             item.Thumbnail = orderItem.Product.Urls?.ThumbnailUrl;
             item.Image = orderItem.Product.Urls?.ImageUrl;
@@ -386,7 +385,7 @@ namespace ShipWorks.Stores.Platforms.Amazon
             // amazon-specific fields
             item.AmazonOrderItemCode = orderItem.LineItemId;
             //TODO amz:ConditionNote
-                        item.ASIN = orderItem.Product.Identifiers?.Asin;
+            item.ASIN = orderItem.Product.Identifiers?.Asin;
 
             // see if we need to add any attributes
             SetOrderItemGiftDetails(orderItem, item);
@@ -433,7 +432,7 @@ namespace ShipWorks.Stores.Platforms.Amazon
                 return;
             }
 
-            var charge = order.OrderCharges.FirstOrDefault(c => String.Compare(c.Type, chargeType.ToUpper(), StringComparison.OrdinalIgnoreCase) == 0);
+            var charge = order.OrderCharges.FirstOrDefault(c => string.Compare(c.Type, chargeType.ToUpper(), StringComparison.OrdinalIgnoreCase) == 0);
             if (charge == null)
             {
                 // first one, create it
