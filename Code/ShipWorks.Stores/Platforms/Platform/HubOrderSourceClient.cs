@@ -84,14 +84,33 @@ namespace ShipWorks.Stores.Platforms.Platform
             return result.CarrierId;
         }
 
-        public Task<string> GetCreateCarrierInitiateUrl(string orderSourceName, string apiRegion)
+        /// <summary>
+        /// Get the monoauth url to initiate creating a Platform Carrier
+        /// </summary>
+        public async Task<string> GetCreateCarrierInitiateUrl(string orderSourceName, string apiRegion)
         {
-            throw new NotImplementedException();
+            var request = warehouseRequestFactory.Create(
+                WarehouseEndpoints.GetCreateCarrierInitiateUrl(orderSourceName, UpdateLocalUrl(warehouseRequestClient.WarehouseUrl), apiRegion), Method.GET, null);
+
+            var result = await warehouseRequestClient.MakeRequest<GetMonauthInitiateUrlResponse>(request, GetMonoauthInitiateUrl)
+                .ConfigureAwait(false);
+
+            return result.InitiateUrl;
         }
 
-        public Task<string> GetUpdateCarrierInitiateUrl(string orderSourceName, string carrierId, string apiRegion, string sellerId)
+        /// <summary>
+        /// Get the monoauth url to update a platform carrier
+        /// </summary>
+        public async Task<string> GetUpdateCarrierInitiateUrl(string orderSourceName, string carrierId, string apiRegion, string sellerId)
         {
-            throw new NotImplementedException();
+            var request = warehouseRequestFactory.Create(
+                 WarehouseEndpoints.GetUpdateCarrierInitiateUrl(orderSourceName, UpdateLocalUrl(warehouseRequestClient.WarehouseUrl), apiRegion, sellerId), Method.GET,
+                 null);
+
+            var result = await warehouseRequestClient.MakeRequest<GetMonauthInitiateUrlResponse>(request, GetInitiateUpdateOrderSourceUrl)
+                .ConfigureAwait(false);
+
+            return result.InitiateUrl;
         }
 
         /// <summary>
