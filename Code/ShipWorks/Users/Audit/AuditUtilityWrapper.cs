@@ -50,8 +50,8 @@ namespace ShipWorks.Users.Audit
             AuditEntity audit = new AuditEntity
             {
                 TransactionID = await GetTransactionID(sqlAdapter),
-                UserID = userSession.User.UserID,
-                Computer = userSession.Computer,
+                UserID = userSession?.User?.UserID ?? 1027309002, // Set to the system user id if we don't have a logged in user
+                Computer = userSession?.Computer,
                 Reason = (int) auditReason.ReasonType,
                 ReasonDetail = auditReason.ReasonDetail,
                 Date = DateTime.UtcNow,
