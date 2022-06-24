@@ -1,5 +1,10 @@
 ﻿using System;
+using System.IO;
+using System.Linq;
+using System.Net;
 using System.Threading.Tasks;
+using System.Windows;
+using System.Windows.Documents;
 using Interapptive.Shared.ComponentRegistration;
 using RestSharp;
 using ShipWorks.ApplicationCore.Licensing.Warehouse;
@@ -36,15 +41,40 @@ namespace ShipWorks.Shipping.Carriers.Amazon.SFP.Terms
 
             var response = await warehouseRequestClient.MakeRequest<AmazonGetTermsInfoResponse>(request, "AmazonGetTermsInfo").ConfigureAwait(true);
 
-            var returnObject = new AmazonTermsVersion()
+            if (IsValidUrl(response.AmazonTermsUrl))
             {
-                AvailableDate = response.AmazonTermsAvailableDate,
-                DeadlineDate = response.AmazonTermsDeadlineDate,
-                Url = response.AmazonTermsUrl,
-                Version = response.AmazonTermsVersion
-            };
+                var returnObject = new AmazonTermsVersion()
+                {
+                    AvailableDate = response.AmazonTermsAvailableDate,
+                    DeadlineDate = response.AmazonTermsDeadlineDate,
+                    Url = response.AmazonTermsUrl,
+                    Version = response.AmazonTermsVersion
+                };
 
-            return returnObject;
+                return returnObject;
+            }
+
+            return null;
+        }
+
+        /// <summary>
+        /// Check the URL to see if it exists and has data
+        /// </summary>
+        private bool IsValidUrl(string url)
+        {
+            try
+            {
+                using (WebClient webClient = new WebClient())
+                {
+                    var dataBytes = webClient.DownloadData(url);
+
+                    return dataBytes?.Any() == true;
+                }
+            }
+            catch
+            {
+                return false;
+            }
         }
 
         /// <summary>
