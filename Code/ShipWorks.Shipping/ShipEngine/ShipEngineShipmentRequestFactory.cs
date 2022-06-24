@@ -115,11 +115,9 @@ namespace ShipWorks.Shipping.ShipEngine
 
                 request.Shipment.Packages = shipmentElementFactory.CreatePackageForRating(packages, SetPackageInsurance);
 
-                if (shipment.Insurance)
+                if (shipment.Insurance && shipment.InsuranceProvider == (int) InsuranceProvider.Carrier)
                 {
-                    request.Shipment.InsuranceProvider = shipment.InsuranceProvider == (int) InsuranceProvider.Carrier ?
-                        AddressValidatingShipment.InsuranceProviderEnum.Carrier :
-                        AddressValidatingShipment.InsuranceProviderEnum.Thirdparty;
+                    request.Shipment.InsuranceProvider = AddressValidatingShipment.InsuranceProviderEnum.Carrier;
                 }
 
                 if (request.Shipment.Packages.Any() && shipment.ShipmentTypeCode == ShipmentTypeCode.DhlEcommerce)
