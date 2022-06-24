@@ -633,6 +633,7 @@
     <EmbeddedResource Include="Data\Administration\Scripts\Update\9.8\9.8.0.0.sql" />
     <EmbeddedResource Include="Data\Administration\Scripts\Update\9.8\9.8.1.0.sql" />
     <EmbeddedResource Include="Data\Administration\Scripts\Update\9.8\9.8.3.0.sql" />
+    <EmbeddedResource Include="Data\Administration\Scripts\Update\9.8\9.8.4.0.sql" />
     <EmbeddedResource Include="Data\Administration\Scripts\Update\9.9\9.9.0.0.sql" />
     <EmbeddedResource Include="Data\Administration\Scripts\Update\9.9\9.9.1.0.sql" />
     <EmbeddedResource Include="Data\Administration\Scripts\Update\9.9\9.9.2.0.sql" />
