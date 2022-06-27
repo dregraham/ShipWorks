@@ -166,7 +166,7 @@ namespace ShipWorks.ApplicationCore.Licensing
                 lastRefreshTimeInUtc = DateTime.UtcNow;
 
                 // Reset disabled reason now that we can reconnect
-                DisabledReason = String.Empty;
+                DisabledReason = string.Empty;
 
                 // Let anyone who cares know that enabled carriers may have changed.
                 messenger.Send(new EnabledCarriersChangedMessage(this, new List<ShipmentTypeCode>(), new List<ShipmentTypeCode>()));
