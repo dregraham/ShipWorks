@@ -34,8 +34,8 @@ namespace ShipWorks.Shipping.Carriers.Amazon.SFP
 
         public GetAmazonCarrierCredentialsViewModel(IMessageHelper messageHelper, Func<Type, ILog> logFactory, IHubOrderSourceClient hubOrderSourceClient, IWebHelper webHelper)
         {
-            Regions = CountryList.Countries.Where(c => (new string[] { "CA", "FR", "GR", "IT", "MX", "ES", "UK", "US" }).Contains(c.Key))
-                .ToDictionary(c => c.Key, c => c.Value);
+            Regions = CountryList.Countries.Where(c => (new string[] { "CA", "FR", "GR", "IT", "MX", "ES", "UK", "US" }).Contains(c.Value))
+                .ToDictionary(c => c.Value, c => c.Key);
 
             log = logFactory(typeof(GetAmazonCarrierCredentialsViewModel));
 
