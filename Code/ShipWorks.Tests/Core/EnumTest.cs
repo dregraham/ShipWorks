@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using Interapptive.Shared.Utility;
+using ShipWorks.ApplicationCore.Licensing.Warehouse.Enums;
 using ShipWorks.Shipping.Carriers.FedEx.Api.Rate;
 using ShipWorks.Tests.Shared;
 using Xunit;
@@ -54,14 +55,15 @@ namespace ShipWorks.Tests.Core
         public void Verify_EnumObfuscation_IsSet()
         {
             IEnumerable<Assembly> assemblies = AssemblyProvider.GetAssemblies();
-            IEnumerable<Type> types = assemblies
+            IEnumerable<System.Type> types = assemblies
                 .SelectMany(t => t.GetTypes())
                 .Except(ignoreTypes)
                 .Where(t => t.Namespace != null &&
                             t.IsEnum &&
                             t.Namespace.ToUpperInvariant().Contains("ShipWorks".ToUpperInvariant()) &&
                             ignoreShipmentTypeNameParts.All(istn => !t.FullName.ToUpperInvariant().Contains(istn)) &&
-                            ignoreShipmentTypeNames.All(istn => t.FullName.ToUpperInvariant() != istn)
+                            ignoreShipmentTypeNames.All(istn => t.FullName.ToUpperInvariant() != istn) &&
+                            t.Namespace != "ShipWorks.Stores.Platforms.ShipEngine.Apollo"
                     )
                 .OrderBy(t => t.FullName);
 
@@ -146,6 +148,7 @@ namespace ShipWorks.Tests.Core
         private readonly HashSet<Type> ignoreTypes = new HashSet<Type>
         {
             typeof(FedExRateRequestOptions),
+            typeof(MonoauthRequestType)
         };
 
         /// <summary>
