@@ -65,11 +65,9 @@ namespace ShipWorks.Shipping.ShipEngine
                 request.Shipment.Customs = CreateCustoms(shipment);
             }
 
-            if (shipment.Insurance)
+            if (shipment.Insurance && shipment.InsuranceProvider == (int) Shipment.InsuranceProviderEnum.Carrier)
             {
-                request.Shipment.InsuranceProvider = shipment.InsuranceProvider == (int) Shipment.InsuranceProviderEnum.Carrier ?
-                    Shipment.InsuranceProviderEnum.Carrier :
-                    Shipment.InsuranceProviderEnum.Thirdparty;
+                request.Shipment.InsuranceProvider = Shipment.InsuranceProviderEnum.Carrier;
             }
 
             if (request.Shipment.Packages.Any() && shipment.ShipmentTypeCode == ShipmentTypeCode.DhlEcommerce)
