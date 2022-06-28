@@ -19,15 +19,5 @@ namespace ShipWorks.Shipping.UI.Carriers.Amazon
         {
             InitializeComponent();
         }
-
-        /// <summary>
-        /// Exposes the Windows Close method
-        /// </summary>
-        public new void Close() => base.Close();
-        
-        /// <summary>
-        /// Exposes the Windows ShowDialog method
-        /// </summary>
-        public new void ShowDialog() => base.ShowDialog();
     }
 }

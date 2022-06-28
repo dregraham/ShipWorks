@@ -14,6 +14,6 @@
         /// <summary>
         /// Exposes the Windows ShowDialog method
         /// </summary>
-        void ShowDialog();
+        bool? ShowDialog();
     }
 }
