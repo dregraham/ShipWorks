@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Reactive.Disposables;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
@@ -19,6 +18,9 @@ using ShipWorks.Stores.Platforms.Platform;
 
 namespace ShipWorks.Shipping.Carriers.Amazon.SFP
 {
+    /// <summary>
+    /// View model for the Amazon Carrier Credentials dialog. Handles creating new credentials and updating existing.
+    /// </summary>
     [Component]
     public class GetAmazonCarrierCredentialsViewModel : ViewModelBase, IGetAmazonCarrierCredentialsViewModel
     {
