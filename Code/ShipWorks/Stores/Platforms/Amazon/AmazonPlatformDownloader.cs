@@ -131,9 +131,13 @@ namespace ShipWorks.Stores.Platforms.Amazon
         /// </summary>
         private async Task LoadOrders(ICollection<OrderSourceApiSalesOrder> orders)
         {
-            foreach (var salesOrder in orders.Where(x => x.Status != SalesOrderStatus.AwaitingPayment))
+            foreach (var salesOrder in orders.Where(x => x.Status != OrderSourceSalesOrderStatus.AwaitingPayment))
             {
-                await LoadOrder(salesOrder);
+                var channelWasParsed = Enum.TryParse<AmazonMwsFulfillmentChannel>(salesOrder.FulfillmentChannel, out var fulfillmentChannel);
+                if (!channelWasParsed || !(AmazonStore.ExcludeFBA && fulfillmentChannel == AmazonMwsFulfillmentChannel.AFN))
+                {
+                    await LoadOrder(salesOrder);
+                }
             }
         }
 
@@ -171,15 +175,21 @@ namespace ShipWorks.Stores.Platforms.Amazon
             order.OnlineLastModified = modifiedDate >= orderDate ? modifiedDate : orderDate;
 
             // TODO: Don't appear to be provided
-            order.EarliestExpectedDeliveryDate = null;
-            order.LatestExpectedDeliveryDate = null;
+            order.EarliestExpectedDeliveryDate = salesOrder.RequestedFulfillments?.Min(f => f?.ShippingPreferences?.DeliverByDate)?.DateTime;
+            order.LatestExpectedDeliveryDate = salesOrder.RequestedFulfillments?.Max(f => f?.ShippingPreferences?.DeliverByDate)?.DateTime;
 
             // set the status
             order.OnlineStatus = orderStatus;
             order.OnlineStatusCode = orderStatus;
 
-            // TODO: set this to the new fulfillmentchannel field.
-            order.FulfillmentChannel = (int) AmazonMwsFulfillmentChannel.Unknown;
+            if (Enum.TryParse<AmazonMwsFulfillmentChannel>(salesOrder.FulfillmentChannel, out var fulfillmentChannel))
+            {
+                order.FulfillmentChannel = (int) fulfillmentChannel;
+            }
+            else
+            {
+                order.FulfillmentChannel = (int) AmazonMwsFulfillmentChannel.Unknown;
+            }
 
             // If the order is new and it is of Amazon fulfillment type, increase the FBA count.
             if (order.IsNew && order.FulfillmentChannel == (int) AmazonMwsFulfillmentChannel.AFN)
@@ -351,7 +361,7 @@ namespace ShipWorks.Stores.Platforms.Amazon
         /// <summary>
         /// Loads the order items of an amazon order
         /// </summary>
-        private void LoadOrderItems(RequestedFulfillment fulfillment, AmazonOrderEntity order)
+        private void LoadOrderItems(OrderSourceRequestedFulfillment fulfillment, AmazonOrderEntity order)
         {
             foreach (var item in fulfillment.Items)
             {
@@ -362,7 +372,7 @@ namespace ShipWorks.Stores.Platforms.Amazon
         /// <summary>
         /// Load an order item
         /// </summary>
-        private void LoadOrderItem(SalesOrderItem orderItem, AmazonOrderEntity order)
+        private void LoadOrderItem(OrderSourceSalesOrderItem orderItem, AmazonOrderEntity order)
         {
             var item = (AmazonOrderItemEntity) InstantiateOrderItem(order);
 
@@ -399,7 +409,7 @@ namespace ShipWorks.Stores.Platforms.Amazon
         /// <summary>
         /// Add item charges to the order
         /// </summary>
-        private void AddOrderItemCharges(SalesOrderItem orderItem, AmazonOrderEntity order)
+        private void AddOrderItemCharges(OrderSourceSalesOrderItem orderItem, AmazonOrderEntity order)
         {
             // Charges
             if (AmazonStore.AmazonVATS != true)
@@ -448,7 +458,7 @@ namespace ShipWorks.Stores.Platforms.Amazon
         /// <summary>
         /// Set gift details on an order item
         /// </summary>
-        private void SetOrderItemGiftDetails(SalesOrderItem orderItem, AmazonOrderItemEntity item)
+        private void SetOrderItemGiftDetails(OrderSourceSalesOrderItem orderItem, AmazonOrderItemEntity item)
         {
             // TODO
         }
