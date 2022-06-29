@@ -24,7 +24,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon.SFP
     [Component]
     public class GetAmazonCarrierCredentialsViewModel : ViewModelBase, IGetAmazonCarrierCredentialsViewModel
     {
-        bool carrierExists;
+        private bool carrierExists;
         private string selectedRegion;
         private bool loadingUrl;
         private string credentialsToken;
