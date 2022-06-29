@@ -39,7 +39,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon.SFP.Terms
         /// <summary>
         /// Do any work needed for Amazon terms acceptance
         /// </summary>
-        public async Task<Unit> Handle()
+        public async Task<Unit> Handle(bool bypassDismissedTimeout = false)
         {
             try
             {
@@ -63,7 +63,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon.SFP.Terms
                 var currentUserSettingsShouldShow = currentUserSettings.ShouldShowNotification(UserConditionalNotificationType.AmazonTermsAndConditions, DateTime.UtcNow);
                 var deadlinePassed = DateTime.Parse(terms.DeadlineDate) <= DateTime.UtcNow;
 
-                var shouldShow = currentUserSettingsShouldShow || deadlinePassed;
+                var shouldShow = bypassDismissedTimeout || currentUserSettingsShouldShow || deadlinePassed;
 
                 log.Info($"currentUserSettingsShouldShow: {currentUserSettingsShouldShow}, deadlinePassed: {deadlinePassed}, shouldShow: {shouldShow}");
 

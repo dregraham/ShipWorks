@@ -86,8 +86,8 @@ namespace ShipWorks.Shipping.Carriers.Amazon.SFP
         {
             ShipmentTypeDataService.LoadShipmentData(this, shipment, shipment, "AmazonSFP", typeof(AmazonSFPShipmentEntity), refreshIfPresent);
 
-            AmazonStoreEntity amazonStore = (AmazonStoreEntity) (shipment.Order?.Store ?? storeManager.GetStore(shipment.Order.StoreID));
-            SetupPlatformCarrierIdIfNeeded(amazonStore);
+            var store = shipment.Order?.Store ?? storeManager.GetStore(shipment.Order.StoreID);
+            SetupPlatformCarrierIdIfNeeded(store);
         }
 
         /// <summary>
@@ -183,31 +183,58 @@ namespace ShipWorks.Shipping.Carriers.Amazon.SFP
         /// Check to see if the Amazon store has its PlatformAmazonCarrierID set
         /// If not, try to get it.
         /// </summary>
-        public void SetupPlatformCarrierIdIfNeeded(AmazonStoreEntity amazonStore)
+        public void SetupPlatformCarrierIdIfNeeded(StoreEntity store)
         {
-            if (string.IsNullOrWhiteSpace(amazonStore.PlatformAmazonCarrierID) && 
-                !string.IsNullOrWhiteSpace(amazonStore.MarketplaceID) &&
-                !string.IsNullOrWhiteSpace(amazonStore.MerchantID))
+            // Nothing to do if the carrier is already set or if the store does not have Amazon Credentials
+            if (!store.PlatformAmazonCarrierID.IsNullOrWhiteSpace() || !(store is IAmazonCredentials credentials))
+                return;
+
+            try
             {
-                try
+                Task<string> execTask;
+                var platformAmazonCarrierId = string.Empty;
+
+                // When dealing with an Amazon store we have a different path
+                if (store.StoreTypeCode == StoreTypeCode.Amazon)
                 {
-                    var amazonStoreType = StoreTypeManager.GetType(amazonStore);
-                    var platformAmazonCarrierId = string.Empty;
+                    var amazonStore = (AmazonStoreEntity) store;
+                    if (amazonStore.MarketplaceID.IsNullOrWhiteSpace() ||
+                        amazonStore.MerchantID.IsNullOrWhiteSpace())
+                    {
+                        log.Info($"Store {store.StoreID} {store.StoreTypeCode} was missing Marketplace or Merchant Id.");
+                        return;
+                    }
 
-                    var execTask = Task.Run(async () => platformAmazonCarrierId = await hubOrderSourceClient
-                        .GetPlatformAmazonCarrierId(amazonStoreType.LicenseIdentifier.ToUpper()).ConfigureAwait(false));
-                    Task.WaitAll(execTask);
+                    // Short circuit the id
+                    var uniqueIdentifier = $"{amazonStore.MerchantID}_{amazonStore.MarketplaceID}".ToUpper();
 
-                    amazonStore.PlatformAmazonCarrierID = platformAmazonCarrierId;
-
-                    storeManager.SaveStore(amazonStore);
+                    execTask = Task.Run(async () => platformAmazonCarrierId = await hubOrderSourceClient
+                        .GetPlatformAmazonCarrierId(uniqueIdentifier).ConfigureAwait(false));
                 }
-                catch (Exception ex)
+                // Stores that implement Amazon Credentials but aren't an Amazon store
+                else
                 {
-                    // Just catch and log.  We'll have to investigate the error to get the customer working.
-                    // But no reason to crash the app
-                    log.Error(ex);
+                    if (credentials.MerchantID.IsNullOrWhiteSpace() ||
+                        credentials.AuthToken.IsNullOrWhiteSpace() ||
+                        credentials.Region.IsNullOrWhiteSpace())
+                    {
+                        log.Info($"Store {store.StoreID} {store.StoreTypeCode} was missing Merchant Id, Auth Token, or Region.");
+                        return;
+                    }
+
+                    execTask = Task.Run(async () => platformAmazonCarrierId = await hubOrderSourceClient
+                        .CreateAmazonCarrierFromMws(credentials.MerchantID, credentials.AuthToken, credentials.Region).ConfigureAwait(false));
                 }
+
+                Task.WaitAll(execTask);
+                store.PlatformAmazonCarrierID = platformAmazonCarrierId;
+                storeManager.SaveStore(store);
+            }
+            catch (Exception ex)
+            {
+                // Just catch and log.  We'll have to investigate the error to get the customer working.
+                // But no reason to crash the app
+                log.Error(ex);
             }
         }
 

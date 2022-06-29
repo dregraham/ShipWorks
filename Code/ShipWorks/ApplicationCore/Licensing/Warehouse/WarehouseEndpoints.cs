@@ -26,6 +26,8 @@ namespace ShipWorks.ApplicationCore.Licensing.Warehouse
         public const string Tracking = "api/tracking";
         public const string MigrateAmazonStore = "api/ordersource/migrate";
         public const string AmazonBuyShippingTerms = "api/account-service/account/amazon/terms";
+        public const string CreateAmazonCarrierFromAmazonStore = "api/ordersource/carriers/amazon/fromordersource";
+        public const string CreateAmazonCarrierFromMws = "api/ordersource/carriers/amazon/frommws";
 
         private const string notifyShipped = "api/customer/notifyShipped/{0}";
         private const string linkWarehouse = "api/warehouses/{0}/link";
@@ -39,8 +41,6 @@ namespace ShipWorks.ApplicationCore.Licensing.Warehouse
         private const string updateOrderSourceInitiateUrl = "api/ordersource/{0}/auth?RedirectUrl={1}callbacks/{0}monoauth/update&OrderSourceId={2}&ApiRegion={3}&SellerId={4}&MonoauthRequestType=UpdateOrderSourceCredentials";
         private const string createCarrierInitiateUrl = "api/ordersource/{0}/auth?RedirectUrl={1}callbacks/{0}monoauth/createcarrier&ApiRegion={1}&MonoauthRequestType=CreateCarrier";
         private const string updateCarrierInitiateUrl = "api/ordersource/{0}/auth?RedirectUrl={1}callbacks/{0}monoauth/updatecarrier&ApiRegion={1}&SellerId={2}&MonoauthRequestType=CreateCarrier";
-
-        private const string orderSourceCarriersAmazon = "api/ordersource/carriers/amazon";
 
         /// <summary>
         /// Create a link warehouse endpoint
@@ -136,10 +136,5 @@ namespace ShipWorks.ApplicationCore.Licensing.Warehouse
         /// </summary>
         public static string GetUpdateCarrierInitiateUrl(string orderSourceName, string redirectUrl, string apiRegion, string sellerId) =>
             string.Format(updateCarrierInitiateUrl, orderSourceName, redirectUrl, apiRegion, sellerId);
-
-        /// <summary>
-        /// Get the URL to get the order source url for Amazon Carrier
-        /// </summary>
-        public static string GetOrderSourceAmazonCarrierUrl() => orderSourceCarriersAmazon;
     }
 }

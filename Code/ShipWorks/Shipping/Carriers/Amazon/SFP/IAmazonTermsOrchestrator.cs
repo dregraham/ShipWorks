@@ -11,7 +11,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon.SFP
         /// <summary>
         /// Do any work needed for Amazon terms acceptance
         /// </summary>
-        Task<Unit> Handle();
+        Task<Unit> Handle(bool bypassDismissedTimeout = false);
 
         /// <summary>
         /// Have the terms been accepted

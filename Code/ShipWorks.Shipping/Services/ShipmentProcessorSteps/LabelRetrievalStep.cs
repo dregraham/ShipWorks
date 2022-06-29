@@ -166,16 +166,14 @@ namespace ShipWorks.Shipping.Services.ShipmentProcessorSteps
             ICompositeValidatorResult validation = shipmentValidator.Apply(modifiedShipment);
             if (validation.Failure)
             {
-                if (shipment.ShipmentTypeCode == ShipmentTypeCode.AmazonSFP)
-                {
-                    await amazonTermsOrchestrator.Handle().ConfigureAwait(false);
+                throw new ShippingException(validation.Errors.First());
+            }
 
-                    if (!amazonTermsOrchestrator.TermsAccepted)
-                    {
-                        throw new ShippingException(validation.Errors.First());
-                    }
-                }
-                else
+            if (shipment.ShipmentTypeCode == ShipmentTypeCode.AmazonSFP)
+            {
+                await amazonTermsOrchestrator.Handle(true).ConfigureAwait(false);
+
+                if (!amazonTermsOrchestrator.TermsAccepted)
                 {
                     throw new ShippingException(validation.Errors.First());
                 }

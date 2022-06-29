@@ -63,7 +63,7 @@ namespace ShipWorks.Stores.Platforms.Amazon
             OpeningUrl = true;
             try
             {
-                var url = await hubOrderSourceClient.GetUpdateOrderSourceInitiateUrl(orderSourceName, store.OrderSourceID, store.AmazonApiRegion, store.MarketplaceID).ConfigureAwait(true);
+                var url = await hubOrderSourceClient.GetUpdateOrderSourceInitiateUrl(orderSourceName, store.OrderSourceID, store.AmazonApiRegion, store.MerchantID).ConfigureAwait(true);
                 webHelper.OpenUrl(url);
             }
             catch (Exception ex)

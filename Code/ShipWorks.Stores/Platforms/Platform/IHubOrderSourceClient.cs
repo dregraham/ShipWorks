@@ -32,6 +32,12 @@ namespace ShipWorks.Stores.Platforms.Platform
         Task<string> GetPlatformAmazonCarrierId(string uniqueIdentifier);
 
         /// <summary>
+        /// Call Hub to get a Platform Amazon carrier Id for Buy Shipping from a MWS store
+        /// </summary>
+        /// <returns></returns>
+        Task<string> CreateAmazonCarrierFromMws(string sellingPartnerId, string mwsAuthToken, string countryCode);
+
+        /// <summary>
         /// Get the monoauth url to initiate creating a Platform Carrier
         /// </summary>
         Task<string> GetCreateCarrierInitiateUrl(string orderSourceName, string apiRegion);
