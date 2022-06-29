@@ -19,7 +19,7 @@ namespace ShipWorks.Shipping.ShipEngine
         /// <summary>
         /// Creates a RateGroup from the given RateShipmentResponse
         /// </summary>
-        public RateGroup Create(RateResponse rateResponse, ShipmentTypeCode shipmentType, IEnumerable<string> availableServiceTypeApiCodes)
+        public virtual RateGroup Create(RateResponse rateResponse, ShipmentTypeCode shipmentType, IEnumerable<string> availableServiceTypeApiCodes)
         {
             List<RateResult> results = new List<RateResult>();
 
@@ -40,7 +40,7 @@ namespace ShipWorks.Shipping.ShipEngine
         /// <summary>
         /// Build the rate tag from the given shipment and service code
         /// </summary>
-        private object GetRateTag(ShipmentTypeCode shipmentType, string serviceCode)
+        protected virtual object GetRateTag(ShipmentTypeCode shipmentType, string serviceCode)
         {
             if (shipmentType == ShipmentTypeCode.UpsOnLineTools)
             {
@@ -53,7 +53,7 @@ namespace ShipWorks.Shipping.ShipEngine
         /// <summary>
         /// Build the rate result with the given rate
         /// </summary>
-        private RateResult GetRateResult(Rate apiRate, ShipmentTypeCode shipmentType)
+        protected virtual RateResult GetRateResult(Rate apiRate, ShipmentTypeCode shipmentType)
         {
             double amount = (apiRate.ShippingAmount?.Amount ?? 0) + (apiRate.OtherAmount?.Amount ?? 0) + (apiRate.InsuranceAmount?.Amount ?? 0);
             string days = apiRate.DeliveryDays.ToString();

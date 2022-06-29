@@ -74,7 +74,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon.SFP.Terms
 
                     TermsAccepted = amazonSfpTermsViewModel.TermsAccepted;
 
-                    log.Info($"User accepted terms: {TermsAccepted}");
+                    log.Info($"User accepted terms: { TermsAccepted }");
                 }
             }
             catch (Exception ex)

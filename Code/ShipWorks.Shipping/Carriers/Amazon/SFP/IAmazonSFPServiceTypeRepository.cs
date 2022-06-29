@@ -18,5 +18,20 @@ namespace ShipWorks.Shipping.Carriers.Amazon.SFP
         /// Creates and adds a new service to the repository
         /// </summary>
         void SaveNewService(string apiValue, string description);
+
+        /// <summary>
+        /// Get carrier name
+        /// </summary>
+        string GetCarrierName(AmazonSFPServiceTypeEntity amazonSfpServiceType);
+
+        /// <summary>
+        /// Get carrier name
+        /// </summary>
+        AmazonSFPServiceTypeEntity Find(string valueToSearch);
+
+        /// <summary>
+        /// Get carrier name
+        /// </summary>
+        string GetCarrierName(string id);
     }
 }
