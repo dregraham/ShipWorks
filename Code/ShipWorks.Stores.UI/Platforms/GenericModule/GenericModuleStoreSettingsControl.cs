@@ -41,7 +41,7 @@ namespace ShipWorks.Stores.UI.Platforms.GenericModule
                 throw new InvalidOperationException("A non Generic Module store was passed to the Channel Advisor store settings control.");
             }
 
-            amazonShippingSettingsControl.LoadStore(amazonCredentials);
+            amazonShippingSettingsControl.LoadStore(amazonCredentials, store);
         }
 
         /// <summary>

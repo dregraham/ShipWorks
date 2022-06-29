@@ -176,6 +176,7 @@
     <Compile Include="Carriers\Amazon\SFP\AmazonSFPSameDayNotAvailableFootnoteFactory.cs" />
     <Compile Include="Carriers\Amazon\SFP\AmazonSFPServiceTypeRepository.cs" />
     <Compile Include="Carriers\Amazon\SFP\AmazonSFPShippingProfileApplicationStrategy.cs" />
+    <Compile Include="Carriers\Amazon\SFP\GetAmazonCarrierCredentialsViewModel.cs" />
     <Compile Include="Carriers\Amazon\SFP\Terms\AmazonTermsOrchestrator.cs" />
     <Compile Include="Carriers\Amazon\SFP\IAmazonSFPCarrierTermsAndConditionsNotAcceptedFootnoteViewModel.cs" />
     <Compile Include="Carriers\Amazon\SFP\AmazonSFPShipmentAdapter.cs" />
