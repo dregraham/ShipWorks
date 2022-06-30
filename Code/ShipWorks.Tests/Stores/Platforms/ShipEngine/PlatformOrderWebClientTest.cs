@@ -28,7 +28,7 @@ namespace ShipWorks.Tests.Stores.Platforms.ShipEngine
         [Theory]
         [InlineData(null)]
         [InlineData("{}")]
-        [InlineData("{\"error\":false,\"orders\":{\"continuationToken\":null,\"data\":[],\"errors\":[]}")]
+        [InlineData("{\"error\":false,\"orders\":{\"continuationToken\":null,\"data\":[],\"errors\":[]}}")]
         public async Task GetOrders_EmptyValue(string content)
         {
             var warehouseRequestClient = mock.Mock<IWarehouseRequestClient>();

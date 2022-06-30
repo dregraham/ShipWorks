@@ -36,5 +36,15 @@ namespace ShipWorks.Stores.Platforms.Platform
         /// </summary>
         /// <returns></returns>
         Task<string> CreateAmazonCarrierFromMws(string sellingPartnerId, string mwsAuthToken, string countryCode);
+
+        /// <summary>
+        /// Get the monoauth url to initiate creating a Platform Carrier
+        /// </summary>
+        Task<string> GetCreateCarrierInitiateUrl(string orderSourceName, string apiRegion);
+
+        /// <summary>
+        /// Get the monoauth url to update a platform carrier
+        /// </summary>
+        Task<string> GetUpdateCarrierInitiateUrl(string orderSourceName, string carrierId, string apiRegion, string sellerId);
     }
 }

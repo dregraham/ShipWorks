@@ -171,6 +171,9 @@
     <Reference Include="WindowsFormsIntegration" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Carriers\Amazon\GetAmazonCarrierCredentials.xaml.cs">
+      <DependentUpon>GetAmazonCarrierCredentials.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Carriers\Amazon\SFP\Terms\AmazonSfpTermsViewModel.cs" />
     <Compile Include="Carriers\Amazon\SFP\Terms\AmazonSfpTermsDialog.xaml.cs">
       <DependentUpon>AmazonSfpTermsDialog.xaml</DependentUpon>
@@ -823,6 +826,9 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
+    <Page Include="Carriers\Amazon\GetAmazonCarrierCredentials.xaml">
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="Carriers\Amazon\SFP\Terms\AmazonSfpTermsDialog.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>

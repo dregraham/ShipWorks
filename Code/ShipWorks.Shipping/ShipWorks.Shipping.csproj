@@ -181,6 +181,7 @@
     <Compile Include="Carriers\Amazon\SFP\Platform\AmazonSfpShipEngineLabelClient.cs" />
     <Compile Include="Carriers\Amazon\SFP\Platform\AmazonSfpShipmentRequestFactory.cs" />
     <Compile Include="Carriers\Amazon\SFP\Platform\AmazonSfpShippingPlatformWebClient.cs" />
+    <Compile Include="Carriers\Amazon\SFP\GetAmazonCarrierCredentialsViewModel.cs" />
     <Compile Include="Carriers\Amazon\SFP\Platform\IAmazonSfpLabelClient.cs" />
     <Compile Include="Carriers\Amazon\SFP\Platform\IAmazonSfpRateGroupFactory.cs" />
     <Compile Include="Carriers\Amazon\SFP\Platform\IAmazonSfpShippingPlatformWebClient.cs" />
