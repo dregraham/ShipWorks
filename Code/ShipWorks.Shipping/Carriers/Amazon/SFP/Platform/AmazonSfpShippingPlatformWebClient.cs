@@ -161,7 +161,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon.SFP.Platform
                 Method.POST,
                 obj);
 
-            request.AddHeader("PlatformEndpoint", "shipengine/v1/rates");
+            request.AddHeader("PlatformEndpoint", "v1/rates");
             request.AddHeader("PlatformMethod", "POST");
 
             var rateShipmentResponse = await warehouseRequestClient.MakeRequest<RateShipmentResponse>(request, "GetRates")

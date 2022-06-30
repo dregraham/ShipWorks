@@ -54,7 +54,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon.SFP.Platform
             try
             {
                 var labelObj = await hubPlatformShippingClient.CallViaPassthrough(purchaseLabelRequest, 
-                        $"shipengine/{ShipEngineEndpoints.PurchaseLabel}", 
+                        $"{ShipEngineEndpoints.PurchaseLabel}", 
                         HttpMethod.Post)
                     .ConfigureAwait(false);
 
