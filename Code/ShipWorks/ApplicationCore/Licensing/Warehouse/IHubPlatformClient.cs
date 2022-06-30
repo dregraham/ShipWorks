@@ -1,12 +1,12 @@
 ﻿using System.Net.Http;
 using System.Threading.Tasks;
 
-namespace ShipWorks.Shipping.Hub
+namespace ShipWorks.ApplicationCore.Licensing.Warehouse
 {
     /// <summary>
     /// Client to communicate with SP (Via Platform)
     /// </summary>
-    public interface IHubPlatformShippingClient
+    public interface IHubPlatformClient
     {
         /// <summary>
         /// Call Hub to pass through  call to Platform
