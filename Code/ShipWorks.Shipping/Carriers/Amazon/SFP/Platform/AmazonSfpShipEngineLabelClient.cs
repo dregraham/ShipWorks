@@ -9,7 +9,6 @@ using Newtonsoft.Json;
 using ShipWorks.ApplicationCore.Licensing.Warehouse;
 using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Shipping.Hub;
 using ShipWorks.Shipping.ShipEngine;
 using ShipWorks.Shipping.ShipEngine.DTOs;
 
@@ -21,7 +20,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon.SFP.Platform
     [Component]
     public class AmazonSfpShipEngineLabelClient : ShipEngineLabelService, IAmazonSfpLabelClient
     {
-        private readonly IHubPlatformShippingClient hubPlatformShippingClient;
+        private readonly IHubPlatformClient hubPlatformShippingClient;
         private readonly Func<ShipmentEntity, Label, IDownloadedLabelData> createDownloadedLabelData;
         protected ILog log;
 
@@ -29,7 +28,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon.SFP.Platform
         /// Constructor
         /// </summary>
         public AmazonSfpShipEngineLabelClient(
-            IHubPlatformShippingClient hubPlatformShippingClient,
+            IHubPlatformClient hubPlatformShippingClient,
             IIndex<ShipmentTypeCode, ICarrierShipmentRequestFactory> shipmentRequestFactoryIndex,
             Func<ShipmentEntity, Label, AmazonSfpShipEngineDownloadedLabelData> createDownloadedLabelData,
             Func<Type, ILog> logFactory) : 
@@ -55,7 +54,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon.SFP.Platform
             try
             {
                 var labelObj = await hubPlatformShippingClient.CallViaPassthrough(purchaseLabelRequest, 
-                        $"shipengine/{ShipEngineEndpoints.PurchaseLabel}", 
+                        $"{ShipEngineEndpoints.PurchaseLabel}", 
                         HttpMethod.Post)
                     .ConfigureAwait(false);
 

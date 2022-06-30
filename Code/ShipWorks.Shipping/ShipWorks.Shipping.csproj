@@ -460,8 +460,6 @@
     <Compile Include="Carriers\Ups\UpsShipmentValidatorFactory.cs" />
     <Compile Include="Carriers\Ups\UpsShippingProfileApplicationStrategy.cs" />
     <Compile Include="Carriers\Ups\UpsTrackClient.cs" />
-    <Compile Include="Hub\HubPlatformShippingClient.cs" />
-    <Compile Include="Hub\IHubPlatformShippingClient.cs" />
     <Compile Include="Insurance\IInsuranceBehaviorChangeDialog.cs" />
     <Compile Include="Profiles\ProfileAppliedPipeline.cs" />
     <Compile Include="Insurance\InsuranceBehaviorChangeViewModel.cs" />

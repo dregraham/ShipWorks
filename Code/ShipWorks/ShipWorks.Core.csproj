@@ -806,6 +806,8 @@
     <Compile Include="ApplicationCore\Licensing\TrialDetails.cs" />
     <Compile Include="ApplicationCore\Licensing\Warehouse\DTO\SqlConfigChangedDto.cs" />
     <Compile Include="ApplicationCore\Licensing\Warehouse\Enums\MonoauthRequestType.cs" />
+    <Compile Include="ApplicationCore\Licensing\Warehouse\HubPlatformClient.cs" />
+    <Compile Include="ApplicationCore\Licensing\Warehouse\IHubPlatformClient.cs" />
     <Compile Include="ApplicationCore\ReoccurringAppLockedTask.cs" />
     <Compile Include="ApplicationCore\Settings\ICubiscanSettingsPage.cs" />
     <Compile Include="AutoInstall\DTO\AutoInstallShipWorksDto.cs" />
