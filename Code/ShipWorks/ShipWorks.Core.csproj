@@ -805,7 +805,6 @@
     <Compile Include="ApplicationCore\Licensing\FeatureRestrictions\DhlEcommerce\DhlEcommerceMaxRestriction.cs" />
     <Compile Include="ApplicationCore\Licensing\TrialDetails.cs" />
     <Compile Include="ApplicationCore\Licensing\Warehouse\DTO\SqlConfigChangedDto.cs" />
-    <Compile Include="ApplicationCore\Licensing\Warehouse\Enums\MonoauthRequestType.cs" />
     <Compile Include="ApplicationCore\Licensing\Warehouse\HubPlatformClient.cs" />
     <Compile Include="ApplicationCore\Licensing\Warehouse\IHubPlatformClient.cs" />
     <Compile Include="ApplicationCore\ReoccurringAppLockedTask.cs" />
