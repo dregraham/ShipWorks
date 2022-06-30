@@ -110,7 +110,8 @@ namespace ShipWorks.Stores.Services
                         CountryCode = store.AmazonApiRegion,
                         SellingPartnerId = store.MerchantID,
                         MwsAuthToken = store.AuthToken,
-                        LastModifiedDate = await downloadStartingPoint.OnlineLastModified(store) ?? DateTime.UtcNow.AddDays(-30)
+                        LastModifiedDate = await downloadStartingPoint.OnlineLastModified(store) ?? DateTime.UtcNow.AddDays(-30),
+                        IncludeFba = !store.ExcludeFBA
                     };
 
                     var request = requestFactory.Create(WarehouseEndpoints.MigrateAmazonStore, Method.POST, body);
