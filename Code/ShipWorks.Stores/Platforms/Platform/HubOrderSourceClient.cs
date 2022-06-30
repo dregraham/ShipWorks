@@ -122,7 +122,7 @@ namespace ShipWorks.Stores.Platforms.Platform
         public async Task<string> GetUpdateCarrierInitiateUrl(string orderSourceName, string carrierId, string apiRegion, string sellerId)
         {
             var request = warehouseRequestFactory.Create(
-                 WarehouseEndpoints.GetUpdateCarrierInitiateUrl(orderSourceName, UpdateLocalUrl(warehouseRequestClient.WarehouseUrl), apiRegion, sellerId), Method.GET,
+                 WarehouseEndpoints.GetUpdateCarrierInitiateUrl(orderSourceName, UpdateLocalUrl(warehouseRequestClient.WarehouseUrl), apiRegion, sellerId, carrierId), Method.GET,
                  null);
 
             var result = await warehouseRequestClient.MakeRequest<GetMonauthInitiateUrlResponse>(request, GetInitiateUpdateOrderSourceUrl)

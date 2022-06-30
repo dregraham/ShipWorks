@@ -181,8 +181,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon.SFP
         /// </summary>
         private Task CreateCredentials()
         {
-            IAmazonCredentials credentials = ((IAmazonCredentials) store);
-            return InitiateMonoauth(async () => await hubOrderSourceClient.GetCreateCarrierInitiateUrl("amazon", credentials.Region).ConfigureAwait(true));
+            return InitiateMonoauth(async () => await hubOrderSourceClient.GetCreateCarrierInitiateUrl("amazon", selectedRegion).ConfigureAwait(true));
         }
 
         /// <summary>
