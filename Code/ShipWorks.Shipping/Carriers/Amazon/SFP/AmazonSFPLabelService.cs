@@ -1,5 +1,4 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 using System.Threading.Tasks;
 using Interapptive.Shared.Utility;
 using Interapptive.Shared.ComponentRegistration;
@@ -16,24 +15,16 @@ namespace ShipWorks.Shipping.Carriers.Amazon.SFP
     [KeyedComponent(typeof(ILabelService), ShipmentTypeCode.AmazonSFP)]
     public class AmazonSFPLabelService : ILabelService
     {
-        private readonly IAmazonSFPCreateShipmentRequest createShipmentRequest;
-        private readonly IAmazonSFPCancelShipmentRequest cancelShipmentRequest;
-        private readonly Func<ShipmentEntity, AmazonShipment, AmazonSFPDownloadedLabelData> createDownloadedLabelData;
         private readonly IRatesRetriever ratesRetriever;
         private readonly IAmazonSfpLabelClient sfpLabelClient;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public AmazonSFPLabelService(IAmazonSFPCreateShipmentRequest createShipmentRequest,
-            IAmazonSFPCancelShipmentRequest cancelShipmentRequest,
-            Func<ShipmentEntity, AmazonShipment, AmazonSFPDownloadedLabelData> createDownloadedLabelData,
+        public AmazonSFPLabelService(
             IRatesRetriever ratesRetriever, 
             IAmazonSfpLabelClient sfpLabelClient)
         {
-            this.createShipmentRequest = createShipmentRequest;
-            this.cancelShipmentRequest = cancelShipmentRequest;
-            this.createDownloadedLabelData = createDownloadedLabelData;
             this.ratesRetriever = ratesRetriever;
             this.sfpLabelClient = sfpLabelClient;
         }
@@ -58,12 +49,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon.SFP
                 }
             }
 
-            //AmazonShipment labelResponse = null;
-            //labelResponse = createShipmentRequest.Submit(shipment, telemetricResult);
-            //telemetricResult.SetValue(createDownloadedLabelData(shipment, labelResponse));
-
             var response = await sfpLabelClient.Create(shipment).ConfigureAwait(false);
-            
 
             return response;
         }
@@ -73,7 +59,6 @@ namespace ShipWorks.Shipping.Carriers.Amazon.SFP
         /// </summary>
         public void Void(ShipmentEntity shipment)
         {
-            //cancelShipmentRequest.Submit(shipment);
             sfpLabelClient.Void(shipment);
         }
     }

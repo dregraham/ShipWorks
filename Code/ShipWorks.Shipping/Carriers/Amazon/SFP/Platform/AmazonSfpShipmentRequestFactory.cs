@@ -12,6 +12,7 @@ using ShipWorks.Shipping.Services;
 using ShipWorks.Shipping.ShipEngine;
 using ShipWorks.Shipping.ShipEngine.DTOs;
 using ShipWorks.Stores.Platforms.Amazon;
+using ShipWorks.Templates.Tokens;
 
 namespace ShipWorks.Shipping.Carriers.Amazon.SFP.Platform
 {
@@ -19,23 +20,22 @@ namespace ShipWorks.Shipping.Carriers.Amazon.SFP.Platform
     /// Factory for creating Amazon Buy Shipping ShipmentRequests
     /// </summary>
     [KeyedComponent(typeof(ICarrierShipmentRequestFactory), ShipmentTypeCode.AmazonSFP)]
-    public class AmazonSfpShipmentRequestFactory : ShipEngineShipmentRequestFactory, ICarrierShipmentRequestFactory
+    public class AmazonSfpShipmentRequestFactory : ShipEngineShipmentRequestFactory
     {
-        private readonly IShipEngineRequestFactory shipmentElementFactory;
-        private readonly IShipmentTypeManager shipmentTypeManager;
         private readonly IAmazonSFPServiceTypeRepository serviceTypeRepository;
+        private readonly ITemplateTokenProcessor templateTokenProcessor;
 
         /// <summary>
         /// Constructor
         /// </summary>
         public AmazonSfpShipmentRequestFactory(IShipEngineRequestFactory shipmentElementFactory,
             IShipmentTypeManager shipmentTypeManager,
-            IAmazonSFPServiceTypeRepository serviceTypeRepository)
+            IAmazonSFPServiceTypeRepository serviceTypeRepository, 
+            ITemplateTokenProcessor templateTokenProcessor)
             : base(shipmentElementFactory, shipmentTypeManager)
         {
-            this.shipmentElementFactory = shipmentElementFactory;
-            this.shipmentTypeManager = shipmentTypeManager;
             this.serviceTypeRepository = serviceTypeRepository;
+            this.templateTokenProcessor = templateTokenProcessor;
         }
 
         /// <summary>
@@ -87,7 +87,6 @@ namespace ShipWorks.Shipping.Carriers.Amazon.SFP.Platform
             return result;
         }
 
-
         /// <summary>
         /// Creates a ShipEngine purchase label request
         /// </summary>
@@ -102,6 +101,14 @@ namespace ShipWorks.Shipping.Carriers.Amazon.SFP.Platform
             purchaseLabelRequest.Shipment.Confirmation = GetConfirmation(deliveryExp);
             purchaseLabelRequest.Shipment.ExternalOrderId = amazonOrder.AmazonOrderID;
             purchaseLabelRequest.Shipment.Items = CreateItems(shipment);
+
+            if (shipment.AmazonSFP.Reference1.HasValue())
+            {
+                foreach (var package in purchaseLabelRequest.Shipment.Packages)
+                {
+                    package.LabelMessages.Reference1 = templateTokenProcessor.ProcessTokens(shipment.AmazonSFP.Reference1, shipment.ShipmentID);
+                }
+            }
 
             return purchaseLabelRequest;
         }
@@ -147,7 +154,6 @@ namespace ShipWorks.Shipping.Carriers.Amazon.SFP.Platform
         /// </summary>
         protected override string GetServiceApiValue(ShipmentEntity shipment)
         {
-            //EnumHelper.GetApiValue((AmazonSfpServiceType) shipment.AmazonSFP.Service);
             var platformApiCode = serviceTypeRepository.Find(shipment.AmazonSFP.ShippingServiceID)?.PlatformApiCode;
             return platformApiCode;
         }
@@ -177,15 +183,6 @@ namespace ShipWorks.Shipping.Carriers.Amazon.SFP.Platform
         /// </summary>
         protected override InternationalOptions CreateCustoms(ShipmentEntity shipment)
         {
-            //InternationalOptions customs = new InternationalOptions()
-            //{
-            //    Contents = (InternationalOptions.ContentsEnum) shipment.AmazonSFP.Contents,
-            //    CustomsItems = shipmentElementFactory.CreateCustomsItems(shipment),
-            //    NonDelivery = (InternationalOptions.NonDeliveryEnum) shipment.AmazonSFP.NonDelivery
-            //};
-
-            //return customs;
-
             return new InternationalOptions();
         }
 
@@ -195,17 +192,6 @@ namespace ShipWorks.Shipping.Carriers.Amazon.SFP.Platform
         protected override List<TaxIdentifier> CreateTaxIdentifiers(ShipmentEntity shipment)
         {
             List<TaxIdentifier> TaxIdentifiers = new List<TaxIdentifier>();
-            //if (!string.IsNullOrWhiteSpace(shipment.AmazonSFP.CustomsRecipientTin) && shipment.AmazonSFP.CustomsRecipientTin != string.Empty)
-            //{
-            //    TaxIdentifiers.Add(
-            //        new TaxIdentifier()
-            //        {
-            //            IdentifierType = (TaxIdentifier.IdentifierTypeEnum) shipment.AmazonSFP.CustomsTaxIdType,
-            //            IssuingAuthority = shipment.AmazonSFP.CustomsTinIssuingAuthority,
-            //            TaxableEntityType = "shipper",
-            //            Value = shipment.AmazonSFP.CustomsRecipientTin,
-            //        });
-            //};
 
             return TaxIdentifiers;
         }
@@ -222,7 +208,6 @@ namespace ShipWorks.Shipping.Carriers.Amazon.SFP.Platform
                 {
                     ExternalOrderId = amazonOrder.AmazonOrderID,
                     ExternalOrderItemId = x.AmazonOrderItemCode,
-                    //OrderSourceCode =
                     Quantity = (int) x.Quantity
                 })
                 .ToList();

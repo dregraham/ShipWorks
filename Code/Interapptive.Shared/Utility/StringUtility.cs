@@ -354,6 +354,14 @@ namespace Interapptive.Shared.Utility
         }
 
         /// <summary>
+        /// Indicates whether a specified string has a value
+        /// </summary>
+        public static bool HasValue(this string s)
+        {
+            return !string.IsNullOrWhiteSpace(s);
+        }
+
+        /// <summary>
         /// Removes symbol characters from the string
         /// </summary>
         public static string RemoveSymbols(this string value)

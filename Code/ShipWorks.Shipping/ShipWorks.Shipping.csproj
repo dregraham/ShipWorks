@@ -171,7 +171,6 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Carriers\Amazon\SFP\AmazonSFPDownloadedLabelData.cs" />
     <Compile Include="Carriers\Amazon\SFP\AmazonSFPPrefetchProvider.cs" />
     <Compile Include="Carriers\Amazon\SFP\AmazonSFPSameDayNotAvailableFootnoteFactory.cs" />
     <Compile Include="Carriers\Amazon\SFP\AmazonSFPServiceTypeRepository.cs" />
@@ -189,8 +188,6 @@
     <Compile Include="Carriers\Amazon\SFP\IAmazonSFPCarrierTermsAndConditionsNotAcceptedFootnoteViewModel.cs" />
     <Compile Include="Carriers\Amazon\SFP\AmazonSFPShipmentAdapter.cs" />
     <Compile Include="Carriers\Amazon\SFP\AmazonSFPShipmentServicesBuilder.cs" />
-    <Compile Include="Carriers\Amazon\SFP\IAmazonSFPCancelShipmentRequest.cs" />
-    <Compile Include="Carriers\Amazon\SFP\IAmazonSFPCreateShipmentRequest.cs" />
     <Compile Include="Carriers\Amazon\SFP\IAmazonSFPSameDayNotAvailableFootnoteViewModel.cs" />
     <Compile Include="Carriers\Amazon\SFP\IAmazonSFPServiceTypeRepository.cs" />
     <Compile Include="Carriers\Amazon\SFP\RateGroupFilters\AmazonSFPAvailableServiceTypeRateGroupFilter.cs" />
@@ -686,14 +683,12 @@
     </Compile>
     <Compile Include="CachedRatesService.cs" />
     <Compile Include="Carriers\Amazon\SFP\RateGroupFilters\AmazonSFPAllowedCarriersRateGroupFilter.cs" />
-    <Compile Include="Carriers\Amazon\SFP\AmazonSFPCancelShipmentRequest.cs" />
     <Compile Include="Carriers\Amazon\SFP\AmazonSFPCarrierTermsAndConditionsNotAcceptedFootnoteFactory.cs" />
     <Compile Include="Carriers\Amazon\SFP\AmazonSFPInsuranceChoice.cs" />
     <Compile Include="Carriers\Amazon\SFP\AmazonSFPLabelService.cs" />
     <Compile Include="Carriers\Amazon\SFP\AmazonMwsWebClientSettingsFactory.cs" />
     <Compile Include="Carriers\Amazon\SFP\AmazonSFPPackageAdapter.cs" />
     <Compile Include="Carriers\Amazon\SFP\AmazonSFPRatesRetrievedMessage.cs" />
-    <Compile Include="Carriers\Amazon\SFP\AmazonSFPCreateShipmentRequest.cs" />
     <Compile Include="Carriers\Amazon\SFP\AmazonSFPShipmentType.cs" />
     <Compile Include="Carriers\Amazon\SFP\Api\AmazonSFPAccountValidator.cs" />
     <Compile Include="Carriers\Amazon\SFP\Api\AmazonMwsSignature.cs" />
