@@ -89,6 +89,9 @@ namespace ShipWorks.Stores.Platforms.Amazon.Mws
             return true;
         }
 
+        /// <summary>
+        /// Update the store settings in platform
+        /// </summary>
         public override async Task<bool> SaveToPlatform(StoreEntity store)
         {
             AmazonStoreEntity storeEntity = store as AmazonStoreEntity;
@@ -108,7 +111,7 @@ namespace ShipWorks.Stores.Platforms.Amazon.Mws
                         var loggerFactory = lifetimeScope.Resolve<Func<Type, ILog>>();
                         var logger = loggerFactory(typeof(AmazonMwsStoreSettingsControl));
 
-                        logger.Error("An error occured updateing the amazon store settings in platform", ex);
+                        logger.Error("An error occured updating the amazon store settings in platform", ex);
                         messageHelper.ShowError("Failed to update settings. Please try again.");
                         return false;
                     }

@@ -47,7 +47,6 @@ namespace ShipWorks.Stores.Platforms.Platform
         /// </summary>
         Task<string> GetUpdateCarrierInitiateUrl(string orderSourceName, string carrierId, string apiRegion, string sellerId);
 
-
         /// <summary>
         /// Call hub to update the amazon sp FBA criteria
         /// </summary>
