@@ -40,8 +40,8 @@ namespace ShipWorks.ApplicationCore.Licensing.Warehouse
         private const string getTrackingUpdates = "api/tracking/{0}";
         private const string createOrderSourceInitiateUrl = "api/ordersource/{0}/auth?RedirectUrl={1}callbacks/{0}monoauth/subscribe&ApiRegion={2}&DaysBack={3}&MonoauthRequestType=CreateOrderSource";
         private const string updateOrderSourceInitiateUrl = "api/ordersource/{0}/auth?RedirectUrl={1}callbacks/{0}monoauth/update&OrderSourceId={2}&ApiRegion={3}&SellerId={4}&MonoauthRequestType=UpdateOrderSourceCredentials";
-        private const string createCarrierInitiateUrl = "api/ordersource/{0}/auth?RedirectUrl={1}callbacks/{0}monoauth/createcarrier&ApiRegion={1}&MonoauthRequestType=CreateCarrier";
-        private const string updateCarrierInitiateUrl = "api/ordersource/{0}/auth?RedirectUrl={1}callbacks/{0}monoauth/updatecarrier&ApiRegion={1}&SellerId={2}&MonoauthRequestType=CreateCarrier";
+        private const string createCarrierInitiateUrl = "api/ordersource/{0}/auth?RedirectUrl={1}callbacks/{0}monoauth/createcarrier&ApiRegion={2}&MonoauthRequestType=CreateCarrier";
+        private const string updateCarrierInitiateUrl = "api/ordersource/{0}/auth?RedirectUrl={1}callbacks/{0}monoauth/updatecarrier&ApiRegion={2}&SellerId={3}&MonoauthRequestType=UpdateCarrierCredentials";
 
         /// <summary>
         /// Create a link warehouse endpoint

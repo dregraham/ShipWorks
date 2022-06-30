@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using Interapptive.Shared.Utility;
-using ShipWorks.ApplicationCore.Licensing.Warehouse.Enums;
 using ShipWorks.Shipping.Carriers.FedEx.Api.Rate;
 using ShipWorks.Tests.Shared;
 using Xunit;
@@ -147,8 +146,7 @@ namespace ShipWorks.Tests.Core
 
         private readonly HashSet<Type> ignoreTypes = new HashSet<Type>
         {
-            typeof(FedExRateRequestOptions),
-            typeof(MonoauthRequestType)
+            typeof(FedExRateRequestOptions)
         };
 
         /// <summary>
