@@ -1,10 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IdentityModel;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Windows.Forms;
+using Autofac;
+using Interapptive.Shared.UI;
+using log4net;
+using ShipWorks.ApplicationCore;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Stores.Management;
+using ShipWorks.Stores.Platforms.Platform;
 
 namespace ShipWorks.Stores.Platforms.Amazon.Mws
 {
@@ -77,6 +84,35 @@ namespace ShipWorks.Stores.Platforms.Amazon.Mws
             if (ShowVATS(amazonStore))
             {
                 amazonStore.AmazonVATS = (bool) amazonVATS.SelectedValue;
+            }
+
+            return true;
+        }
+
+        public override async Task<bool> SaveToPlatform(StoreEntity store)
+        {
+            AmazonStoreEntity storeEntity = store as AmazonStoreEntity;
+            if(storeEntity.ExcludeFBA != excludeFba.Checked)
+            {
+                using (var lifetimeScope = IoC.BeginLifetimeScope())
+                {
+                    var orderSourceClient = lifetimeScope.Resolve<IHubOrderSourceClient>();
+                    try
+                    {
+                        await orderSourceClient.UpdateAmazonFbaCriteria(store.OrderSourceID, excludeFba.Checked, storeEntity.AmazonApiRegion).ConfigureAwait(false);
+                        return true;
+                    }
+                    catch(Exception ex)
+                    {
+                        var messageHelper = lifetimeScope.Resolve<IMessageHelper>();
+                        var loggerFactory = lifetimeScope.Resolve<Func<Type, ILog>>();
+                        var logger = loggerFactory(typeof(AmazonMwsStoreSettingsControl));
+
+                        logger.Error("An error occured updateing the amazon store settings in platform", ex);
+                        messageHelper.ShowError("Failed to update settings. Please try again.");
+                        return false;
+                    }
+                }
             }
 
             return true;
