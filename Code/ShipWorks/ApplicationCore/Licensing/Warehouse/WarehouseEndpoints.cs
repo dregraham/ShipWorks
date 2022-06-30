@@ -41,7 +41,7 @@ namespace ShipWorks.ApplicationCore.Licensing.Warehouse
         private const string createOrderSourceInitiateUrl = "api/ordersource/{0}/auth?RedirectUrl={1}callbacks/{0}monoauth/subscribe&ApiRegion={2}&DaysBack={3}&MonoauthRequestType=CreateOrderSource";
         private const string updateOrderSourceInitiateUrl = "api/ordersource/{0}/auth?RedirectUrl={1}callbacks/{0}monoauth/update&OrderSourceId={2}&ApiRegion={3}&SellerId={4}&MonoauthRequestType=UpdateOrderSourceCredentials";
         private const string createCarrierInitiateUrl = "api/ordersource/{0}/auth?RedirectUrl={1}callbacks/{0}monoauth/createcarrier&ApiRegion={2}&MonoauthRequestType=CreateCarrier";
-        private const string updateCarrierInitiateUrl = "api/ordersource/{0}/auth?RedirectUrl={1}callbacks/{0}monoauth/updatecarrier&ApiRegion={2}&SellerId={3}&MonoauthRequestType=UpdateCarrierCredentials";
+        private const string updateCarrierInitiateUrl = "api/ordersource/{0}/auth?RedirectUrl={1}callbacks/{0}monoauth/updatecarrier&ApiRegion={2}&SellerId={3}&CarrierId={4}&MonoauthRequestType=UpdateCarrierCredentials";
 
         /// <summary>
         /// Create a link warehouse endpoint
@@ -135,7 +135,7 @@ namespace ShipWorks.ApplicationCore.Licensing.Warehouse
         /// <summary>
         /// Gets the URL to get the InitiateMonoauthURL for updating a carrier
         /// </summary>
-        public static string GetUpdateCarrierInitiateUrl(string orderSourceName, string redirectUrl, string apiRegion, string sellerId) =>
-            string.Format(updateCarrierInitiateUrl, orderSourceName, redirectUrl, apiRegion, sellerId);
+        public static string GetUpdateCarrierInitiateUrl(string orderSourceName, string redirectUrl, string apiRegion, string sellerId, string carrierId) =>
+            string.Format(updateCarrierInitiateUrl, orderSourceName, redirectUrl, apiRegion, sellerId, carrierId);
     }
 }

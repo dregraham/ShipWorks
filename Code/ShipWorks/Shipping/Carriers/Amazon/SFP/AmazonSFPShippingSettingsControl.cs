@@ -34,9 +34,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon.SFP
 
             store = storeEntity;
 
-            CredentialsButton.Text = storeEntity.PlatformAmazonCarrierID.IsNullOrWhiteSpace()
-                ? "Create Amazon Token"
-                : "Update Credentials";
+            SetButtonText();
         }
 
         /// <summary>
@@ -59,9 +57,23 @@ namespace ShipWorks.Shipping.Carriers.Amazon.SFP
                 var viewModel = scope.Resolve<IGetAmazonCarrierCredentialsViewModel>();
                 var dialog = scope.Resolve<IGetAmazonCarrierCredentialsDialog>(TypedParameter.From(viewModel));
                 viewModel.Load(store);
-                viewModel.OnComplete = dialog.Close;
+                viewModel.OnComplete = () =>
+                {
+                    SetButtonText();
+                    dialog.Close();
+                };
                 dialog.ShowDialog();
             }
+        }
+
+        /// <summary>
+        /// Helper method to provide the UI text values
+        /// </summary>
+        private void SetButtonText()
+        {
+            CredentialsButton.Text = store.PlatformAmazonCarrierID.IsNullOrWhiteSpace()
+                ? "Create Amazon Token"
+                : "Update Credentials";
         }
     }
 }
