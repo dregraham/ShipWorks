@@ -86,7 +86,22 @@ namespace ShipWorks.Shipping.Carriers.Amazon.SFP
         {
             ShipmentTypeDataService.LoadShipmentData(this, shipment, shipment, "AmazonSFP", typeof(AmazonSFPShipmentEntity), refreshIfPresent);
 
-            var store = shipment.Order?.Store ?? storeManager.GetStore(shipment.Order.StoreID);
+            StoreEntity store = null;
+
+            if (shipment.Order?.Store != null)
+            {
+                store = shipment.Order.Store;
+            }
+            else if (shipment.Order == null)
+            {
+                orderManager.PopulateOrderDetails(shipment);
+                store = storeManager.GetStore(shipment.Order.StoreID);
+            }
+            else if (shipment.Order.Store == null)
+            {
+                store = storeManager.GetStore(shipment.Order.StoreID);
+            }
+
             SetupPlatformCarrierIdIfNeeded(store);
         }
 

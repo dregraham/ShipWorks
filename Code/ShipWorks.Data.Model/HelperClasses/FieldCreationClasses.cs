@@ -1267,6 +1267,11 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(AmazonSFPShipmentFieldIndex.RequestedLabelFormat);}
 		}
+		/// <summary>Creates a new AmazonSFPShipmentEntity.ShipEngineLabelID field instance</summary>
+		public static EntityField2 ShipEngineLabelID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(AmazonSFPShipmentFieldIndex.ShipEngineLabelID);}
+		}
 	}
 
 	/// <summary>Field Creation Class for entity AmazonStoreEntity</summary>

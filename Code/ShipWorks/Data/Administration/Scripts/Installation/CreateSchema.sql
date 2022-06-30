@@ -2032,7 +2032,8 @@ CREATE TABLE [dbo].[AmazonSFPShipment]
 [AmazonUniqueShipmentID] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
 [Insurance] [bit] NOT NULL,
 [RequestedLabelFormat] [INT] NOT NULL CONSTRAINT [DF_AmazonSFPShipment_RequestedLabelFormat] DEFAULT (-1),
-[Reference1] [nvarchar] (300) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL CONSTRAINT [DF_AmazonSFPShipment_ReferenceNumber] DEFAULT ('')
+[Reference1] [nvarchar] (300) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL CONSTRAINT [DF_AmazonSFPShipment_ReferenceNumber] DEFAULT (''),
+[ShipEngineLabelID] [nvarchar](50) NULL,
 )
 GO
 PRINT N'Creating primary key [PK_AmazonSFPShipment] on [dbo].[AmazonSFPShipment]'

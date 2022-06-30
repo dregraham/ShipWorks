@@ -562,6 +562,8 @@ namespace ShipWorks.Data.Model
 		Reference1,
 		///<summary>RequestedLabelFormat. </summary>
 		RequestedLabelFormat,
+		///<summary>ShipEngineLabelID. </summary>
+		ShipEngineLabelID,
 		/// <summary></summary>
 		AmountOfFields
 	}

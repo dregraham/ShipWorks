@@ -1038,6 +1038,13 @@ namespace ShipWorks.Shipping.ShipEngine.DTOs
 
 
         /// <summary>
+        /// Gets or Sets OriginType
+        /// </summary>
+        [DataMember(Name = "origin_type", EmitDefaultValue = false)]
+        public string OriginType { get; set; }
+
+
+        /// <summary>
         /// Gets or Sets Tags
         /// </summary>
         [DataMember(Name = "tags", EmitDefaultValue = false)]

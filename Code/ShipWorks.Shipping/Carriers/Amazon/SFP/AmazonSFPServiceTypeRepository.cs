@@ -129,5 +129,44 @@ namespace ShipWorks.Shipping.Carriers.Amazon.SFP
                 });
             }
         }
+
+        /// <summary>
+        /// Get carrier name
+        /// </summary>
+        public string GetCarrierName(AmazonSFPServiceTypeEntity amazonSfpServiceType)
+        {
+            var parts = amazonSfpServiceType.ApiValue.Split('_');
+
+            if (parts.Any())
+            {
+                return parts[0];
+            }
+
+            return amazonSfpServiceType.ApiValue;
+        }
+
+        /// <summary>
+        /// Get carrier name
+        /// </summary>
+        public string GetCarrierName(string id)
+        {
+            var amazonSfpServiceType = Find(id);
+
+            return GetCarrierName(amazonSfpServiceType);
+        }
+
+        /// <summary>
+        /// Get carrier name
+        /// </summary>
+        public AmazonSFPServiceTypeEntity Find(string valueToSearch)
+        {
+            var toCheck = Get();
+
+            var result = toCheck
+                .FirstOrDefault(t => t.PlatformApiCode?.Equals(valueToSearch, StringComparison.InvariantCultureIgnoreCase) == true ||
+                                     t.ApiValue?.Equals(valueToSearch, StringComparison.InvariantCultureIgnoreCase) == true);
+
+            return result;
+        }
     }
 }

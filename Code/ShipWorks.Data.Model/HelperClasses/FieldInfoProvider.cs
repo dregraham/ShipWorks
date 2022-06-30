@@ -474,6 +474,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 			this.AddElementFieldInfo("AmazonSFPShipmentEntity", "Insurance", typeof(System.Boolean), false, false, false, false,  (int)AmazonSFPShipmentFieldIndex.Insurance, 0, 0, 0);
 			this.AddElementFieldInfo("AmazonSFPShipmentEntity", "Reference1", typeof(System.String), false, false, false, false,  (int)AmazonSFPShipmentFieldIndex.Reference1, 300, 0, 0);
 			this.AddElementFieldInfo("AmazonSFPShipmentEntity", "RequestedLabelFormat", typeof(System.Int32), false, false, false, false,  (int)AmazonSFPShipmentFieldIndex.RequestedLabelFormat, 0, 0, 10);
+			this.AddElementFieldInfo("AmazonSFPShipmentEntity", "ShipEngineLabelID", typeof(System.String), false, false, false, true,  (int)AmazonSFPShipmentFieldIndex.ShipEngineLabelID, 50, 0, 0);
 		}
 		/// <summary>Inits AmazonStoreEntity's FieldInfo objects</summary>
 		private void InitAmazonStoreEntityInfos()

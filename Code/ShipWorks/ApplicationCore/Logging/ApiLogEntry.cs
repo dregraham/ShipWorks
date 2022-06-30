@@ -16,6 +16,7 @@ using Newtonsoft.Json.Linq;
 using Rebex.Mail;
 using RestSharp;
 using ShipWorks.ApplicationCore.Crashes;
+using Formatting = Newtonsoft.Json.Formatting;
 
 namespace ShipWorks.ApplicationCore.Logging
 {
@@ -46,6 +47,20 @@ namespace ShipWorks.ApplicationCore.Logging
         // For private log source encryption
         static readonly byte[] cryptoKey = new byte[] { 138, 93, 185, 133, 67, 44, 244, 240, 16, 54, 134, 138, 120, 144, 76, 213, 141, 89, 88, 153, 107, 76, 73, 73, 148, 17, 198, 118, 61, 30, 100, 146 };
         static readonly byte[] cryptoIV = new byte[] { 232, 28, 7, 50, 134, 234, 13, 195, 111, 182, 111, 224, 92, 44, 70, 237 };
+
+        private static readonly JsonSerializerSettings serializerSettings;
+
+        /// <summary>
+        /// Static constructor
+        /// </summary>
+        static ApiLogEntry()
+        {
+            // If debug, indent json.  Otherwise don't indent
+            serializerSettings = new JsonSerializerSettings()
+            {
+                Formatting = Debugger.IsAttached ? Formatting.Indented : Formatting.None
+            };
+        }
 
         /// <summary>
         /// Constructor.
@@ -137,7 +152,9 @@ namespace ShipWorks.ApplicationCore.Logging
                 uri = client.BuildUri(request),
             };
 
-            var toLog = request.JsonSerializer != null ? request.JsonSerializer.Serialize(requestToLog) : JsonConvert.SerializeObject(requestToLog);
+            var toLog = request.JsonSerializer != null ? 
+                request.JsonSerializer.Serialize(requestToLog) : 
+                JsonConvert.SerializeObject(requestToLog, serializerSettings);
 
             WriteLog(toLog, extension, ApiLogCategory.Request, null);
         }
@@ -147,15 +164,32 @@ namespace ShipWorks.ApplicationCore.Logging
         /// </summary>
         public void LogResponse(IRestResponse response, string extension)
         {
-            var responseToLog = new
-            {
-                statusCode = response.StatusCode,
-                content = response.Content,
-                headers = response.Headers,
-                errorMessage = response.ErrorMessage,
-            };
+            string toLog = string.Empty;
 
-            string toLog = JsonConvert.SerializeObject(responseToLog);
+            try
+            {
+                var responseToLogAsJson = new
+                {
+                    statusCode = response.StatusCode,
+                    content = JObject.Parse(response.Content),
+                    headers = response.Headers,
+                    errorMessage = response.ErrorMessage,
+                };
+
+                toLog = JsonConvert.SerializeObject(responseToLogAsJson, serializerSettings);
+            }
+            catch
+            {
+                var responseToLog = new
+                {
+                    statusCode = response.StatusCode,
+                    content = response.Content,
+                    headers = response.Headers,
+                    errorMessage = response.ErrorMessage,
+                };
+
+                toLog = JsonConvert.SerializeObject(responseToLog, serializerSettings);
+            }
 
             WriteLog(toLog, extension, ApiLogCategory.Response, null);
         }

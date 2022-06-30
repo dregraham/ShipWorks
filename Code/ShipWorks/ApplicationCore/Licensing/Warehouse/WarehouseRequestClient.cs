@@ -4,10 +4,12 @@ using System.Threading;
 using System.Threading.Tasks;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Utility;
+using Newtonsoft.Json;
 using RestSharp;
 using ShipWorks.ApplicationCore.Licensing.WebClientEnvironments;
 using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Data;
+using ShipWorks.Shipping.ShipEngine.DTOs;
 
 namespace ShipWorks.ApplicationCore.Licensing.Warehouse
 {
@@ -152,14 +154,19 @@ namespace ShipWorks.ApplicationCore.Licensing.Warehouse
                 .AddHeader("warehouse-id", configurationData.FetchReadOnly().WarehouseID);
 
             var restResponse = await restClient.ExecuteTaskAsync<T>(restRequest, cancellationToken).ConfigureAwait(false);
-
+            
             try
             {
                 logEntry.LogResponse(restResponse, "json");
-
+                
                 if (restResponse.StatusCode == HttpStatusCode.OK)
                 {
-                    return restResponse.Data;
+                    if (restResponse.Data != null)
+                    {
+                        return restResponse.Data;
+                    }
+
+                    return JsonConvert.DeserializeObject<T>(restResponse.Content);
                 }
 
                 if (restResponse.StatusCode == HttpStatusCode.Forbidden)
