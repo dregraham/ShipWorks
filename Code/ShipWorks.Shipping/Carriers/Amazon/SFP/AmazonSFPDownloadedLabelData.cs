@@ -1,16 +1,9 @@
-﻿using System;
-using System.Drawing;
-using System.Drawing.Imaging;
-using System.IO;
-using Interapptive.Shared.Imaging;
-using Interapptive.Shared.IO.Zip;
-using Interapptive.Shared.ComponentRegistration;
-using Interapptive.Shared.Pdf;
+﻿using Interapptive.Shared.ComponentRegistration;
 using ShipWorks.Common.IO.Hardware.Printers;
 using ShipWorks.Data;
 using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Shipping.Carriers.Amazon.SFP.Api.DTOs;
-using ShipWorks.Stores.Communication;
+using ShipWorks.Shipping.ShipEngine;
+using ShipWorks.Shipping.ShipEngine.DTOs;
 
 namespace ShipWorks.Shipping.Carriers.Amazon.SFP
 {
@@ -18,114 +11,40 @@ namespace ShipWorks.Shipping.Carriers.Amazon.SFP
     /// Label data that has been downloaded from a carrier
     /// </summary>
     [Component(RegistrationType.Self)]
-    public class AmazonSFPDownloadedLabelData : IDownloadedLabelData
+    public class AmazonSFPDownloadedLabelData : ShipEngineDownloadedLabelData
     {
-        private readonly ShipmentEntity shipment;
-        private readonly AmazonShipment labelResponse;
-        private readonly IObjectReferenceManager objectReferenceManager;
-        private readonly IDataResourceManager resourceManager;
-        private readonly ITemplateLabelUtility templateLabelUtility;
-
         /// <summary>
         /// Constructor
         /// </summary>
         public AmazonSFPDownloadedLabelData(ShipmentEntity shipment,
-            AmazonShipment labelResponse,
-            IObjectReferenceManager objectReferenceManager,
+            Label label,
             IDataResourceManager resourceManager,
-            ITemplateLabelUtility templateLabelUtility)
+            IShipEngineResourceDownloader resourceDownloader)
+            : base(shipment, label, resourceManager, resourceDownloader)
         {
-            this.shipment = shipment;
-            this.labelResponse = labelResponse;
-            this.objectReferenceManager = objectReferenceManager;
-            this.resourceManager = resourceManager;
-            this.templateLabelUtility = templateLabelUtility;
         }
 
         /// <summary>
-        /// Save label data to the database and/or disk
+        /// Save the label info to the shipment
         /// </summary>
-        public virtual void Save()
+        protected override void SaveLabelInfoToEntity(ShipmentEntity shipment, Label label)
         {
-            // Save shipment info
-            SaveShipmentInfoToEntity(labelResponse, shipment);
+            base.SaveLabelInfoToEntity(shipment, label);
 
-            // Save the label
-            SaveLabel(labelResponse.Label.FileContents, shipment.ShipmentID);
+            shipment.AmazonSFP.AmazonUniqueShipmentID = label.ShipmentId;
+            shipment.AmazonSFP.CarrierName = label.CarrierCode ?? string.Empty;
+            shipment.AmazonSFP.ShippingServiceName = label.ServiceCode ?? string.Empty;
+            shipment.ActualLabelFormat = shipment.AmazonSFP.RequestedLabelFormat == (int) ThermalLanguage.None ? 
+                (int?) null : 
+                shipment.AmazonSFP.RequestedLabelFormat;
         }
 
         /// <summary>
-        /// Save the shipment info to the entity
+        /// Save the ShipEngine label ID to the Amazon SFP shipment
         /// </summary>
-        private void SaveShipmentInfoToEntity(AmazonShipment amazonShipment, ShipmentEntity shipment)
+        protected override void SaveShipEngineLabelID(ShipmentEntity shipment, Label label)
         {
-            shipment.TrackingNumber = amazonShipment.TrackingId;
-            shipment.ShipmentCost = amazonShipment.ShippingService.Rate.Amount;
-            shipment.AmazonSFP.AmazonUniqueShipmentID = amazonShipment.ShipmentId;
-            shipment.AmazonSFP.CarrierName = amazonShipment.ShippingService?.CarrierName ?? string.Empty;
-            shipment.AmazonSFP.ShippingServiceName = amazonShipment.ShippingService?.ShippingServiceName ?? string.Empty;
-            shipment.ActualLabelFormat = shipment.AmazonSFP.RequestedLabelFormat == (int) ThermalLanguage.None ? (int?) null : shipment.AmazonSFP.RequestedLabelFormat;
-        }
-
-        /// <summary>
-        /// Save a label of the given name to the database from the specified fileContents
-        /// </summary>
-        private void SaveLabel(FileContents fileContents, long shipmentID)
-        {
-            // Interapptive users have an unprocess button.  If we are reprocessing we need to clear the old images
-            objectReferenceManager.ClearReferences(shipmentID);
-
-            // Decompress the label string
-            byte[] labelBytes = GZipUtility.Decompress(Convert.FromBase64String(fileContents.Contents));
-
-            // If it's a PDF we need to convert it
-            if (fileContents.FileType == "application/pdf")
-            {
-                using (MemoryStream pdfBytes = new MemoryStream(labelBytes))
-                {
-                    resourceManager.CreateFromPdf(PdfDocumentType.BlackAndWhite, pdfBytes, shipmentID,
-                        i => i == 0 ? "LabelPrimary" : $"LabelPart{i}",
-                        SaveCroppedLabel, true);
-                }
-            }
-            else if (fileContents.FileType == "application/zpl")
-            {
-                resourceManager.CreateFromBytes(labelBytes, shipmentID, "LabelPrimary", true);
-            }
-            else
-            {
-                // Save the label to the database
-                DataResourceReference resourceReference =
-                    resourceManager.CreateFromBytes(labelBytes, shipmentID, "LabelPrimary", true);
-
-                try
-                {
-                    templateLabelUtility.LoadImageFromResouceDirectory(resourceReference.Filename);
-                }
-                catch(OutOfMemoryException ex)
-                {
-                    throw new DownloadException(
-                        "ShipWorks was unable to read the label data. The label is likely invalid. Please void this label and create a new one. " +
-                        $"{Environment.NewLine} {Environment.NewLine}If the problem persists please make sure your comptuer has sufficient memory.",
-                        ex);
-                }
-            }
-        }
-
-        /// <summary>
-        /// Save the cropped label
-        /// </summary>
-        private byte[] SaveCroppedLabel(MemoryStream stream)
-        {
-            using (MemoryStream memoryStream = new MemoryStream())
-            {
-                using (Bitmap labelImage = stream.CropImageStream())
-                {
-                    labelImage.Save(memoryStream, ImageFormat.Png);
-                }
-
-                return memoryStream.ToArray();
-            }
+            shipment.AmazonSFP.ShipEngineLabelID = label.LabelId;
         }
     }
 }

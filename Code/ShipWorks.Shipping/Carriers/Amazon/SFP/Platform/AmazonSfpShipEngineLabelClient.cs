@@ -5,6 +5,7 @@ using Autofac.Features.Indexed;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Utility;
 using log4net;
+using Newtonsoft.Json;
 using ShipWorks.ApplicationCore.Licensing.Warehouse;
 using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Data.Model.EntityClasses;
@@ -58,7 +59,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon.SFP.Platform
                         HttpMethod.Post)
                     .ConfigureAwait(false);
 
-                var label = (Label) labelObj;
+                Label label = JsonConvert.DeserializeObject<Label>(JsonConvert.SerializeObject(labelObj));
 
                 telemetricResult.SetValue(createDownloadedLabelData(shipment, label));
 
@@ -79,17 +80,26 @@ namespace ShipWorks.Shipping.Carriers.Amazon.SFP.Platform
         /// </summary>
         public override void Void(ShipmentEntity shipment)
         {
-            VoidLabelResponse response;
             try
             {
-                response = Task.Run(async () =>
+                object response = null;
+                var voidTask = Task.Run(async () =>
                 {
-                    return await shipEngineWebClient.VoidLabel(GetShipEngineLabelID(shipment), ApiLogSource).ConfigureAwait(false);
-                }).Result;
+                    response = await hubPlatformShippingClient.CallViaPassthrough(new { ShipEngineLabelID  = shipment.AmazonSFP.ShipEngineLabelID },
+                            $"shipengine/{ShipEngineEndpoints.VoidLabel(shipment.AmazonSFP.ShipEngineLabelID)}",
+                            HttpMethod.Put)
+                        .ConfigureAwait(false);
+                });
+
+                Task.WaitAll(voidTask);
             }
-            catch (Exception ex) when (ex.GetBaseException().GetType() == typeof(ShipEngineException))
+            catch (Exception ex) when (ex.GetType() != typeof(ShippingException))
             {
-                log.Error(ex.GetBaseException());
+                throw new ShippingException(GetExceptionMessage(ex.GetBaseException(), GetShipEngineCarrierID(shipment)));
+            }
+            catch (Exception ex)
+            {
+                throw new ShippingException(GetExceptionMessage(ex.GetBaseException(), GetShipEngineCarrierID(shipment)));
             }
         }
 

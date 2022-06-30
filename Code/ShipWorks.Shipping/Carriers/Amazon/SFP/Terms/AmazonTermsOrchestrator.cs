@@ -55,6 +55,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon.SFP.Terms
                 {
                     log.Info("No Amazon Buy Shipping terms found from Hub, so skipping additional terms checks.");
                     // No terms to agree to, just return
+                    TermsAccepted = true;
                     return Unit.Default;
                 }
 

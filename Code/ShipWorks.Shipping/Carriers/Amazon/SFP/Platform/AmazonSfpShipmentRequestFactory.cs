@@ -23,16 +23,19 @@ namespace ShipWorks.Shipping.Carriers.Amazon.SFP.Platform
     {
         private readonly IShipEngineRequestFactory shipmentElementFactory;
         private readonly IShipmentTypeManager shipmentTypeManager;
+        private readonly IAmazonSFPServiceTypeRepository serviceTypeRepository;
 
         /// <summary>
         /// Constructor
         /// </summary>
         public AmazonSfpShipmentRequestFactory(IShipEngineRequestFactory shipmentElementFactory,
-            IShipmentTypeManager shipmentTypeManager)
+            IShipmentTypeManager shipmentTypeManager,
+            IAmazonSFPServiceTypeRepository serviceTypeRepository)
             : base(shipmentElementFactory, shipmentTypeManager)
         {
             this.shipmentElementFactory = shipmentElementFactory;
             this.shipmentTypeManager = shipmentTypeManager;
+            this.serviceTypeRepository = serviceTypeRepository;
         }
 
         /// <summary>
@@ -100,8 +103,6 @@ namespace ShipWorks.Shipping.Carriers.Amazon.SFP.Platform
             purchaseLabelRequest.Shipment.ExternalOrderId = amazonOrder.AmazonOrderID;
             purchaseLabelRequest.Shipment.Items = CreateItems(shipment);
 
-            purchaseLabelRequest.Shipment.ServiceCode = "ups_ground";
-
             return purchaseLabelRequest;
         }
 
@@ -147,7 +148,8 @@ namespace ShipWorks.Shipping.Carriers.Amazon.SFP.Platform
         protected override string GetServiceApiValue(ShipmentEntity shipment)
         {
             //EnumHelper.GetApiValue((AmazonSfpServiceType) shipment.AmazonSFP.Service);
-            return shipment.AmazonSFP.ShippingServiceID;
+            var platformApiCode = serviceTypeRepository.Find(shipment.AmazonSFP.ShippingServiceID)?.PlatformApiCode;
+            return platformApiCode;
         }
 
         /// <summary>
