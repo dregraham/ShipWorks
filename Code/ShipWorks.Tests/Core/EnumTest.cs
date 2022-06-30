@@ -62,8 +62,7 @@ namespace ShipWorks.Tests.Core
                             t.IsEnum &&
                             t.Namespace.ToUpperInvariant().Contains("ShipWorks".ToUpperInvariant()) &&
                             ignoreShipmentTypeNameParts.All(istn => !t.FullName.ToUpperInvariant().Contains(istn)) &&
-                            ignoreShipmentTypeNames.All(istn => t.FullName.ToUpperInvariant() != istn) &&
-                            t.Namespace != "ShipWorks.Stores.Platforms.ShipEngine.Apollo"
+                            ignoreShipmentTypeNames.All(istn => t.FullName.ToUpperInvariant() != istn)
                     )
                 .OrderBy(t => t.FullName);
 
@@ -142,7 +141,9 @@ namespace ShipWorks.Tests.Core
                 "PayPal.WebServices".ToUpperInvariant(),
                 "ShipWorks.Stores.Content.Panels.MapPanelType".ToUpperInvariant(),
                 "ShipWorks.Stores.Platforms.Odbc.Odbc32".ToUpperInvariant(),
-                "ShipWorks.Stores.Platforms.Walmart.DTO".ToUpperInvariant()
+                "ShipWorks.Stores.Platforms.Walmart.DTO".ToUpperInvariant(),
+                "ShipWorks.Stores.Platforms.Walmart.DTO".ToUpperInvariant(),
+                "ShipWorks.Stores.Platforms.ShipEngine.Apollo".ToUpperInvariant()
             };
 
         private readonly HashSet<Type> ignoreTypes = new HashSet<Type>

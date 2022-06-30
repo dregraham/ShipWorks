@@ -6,7 +6,7 @@ using Interapptive.Shared.Utility;
 using Moq;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.Amazon.SFP;
-using ShipWorks.Shipping.Carriers.Amazon.SFP.Api.DTOs;
+using ShipWorks.Shipping.Carriers.Amazon.SFP.Platform;
 using Xunit;
 
 namespace ShipWorks.Shipping.Tests.Carriers.Amazon
@@ -39,23 +39,21 @@ namespace ShipWorks.Shipping.Tests.Carriers.Amazon
         [Fact]
         public async Task Create_ReturnsLabelData_WithShipmentAndApiResults()
         {
-            var labelData = new AmazonShipment();
-            mock.Mock<IAmazonSFPCreateShipmentRequest>().Setup(x => x.Submit(It.IsAny<ShipmentEntity>(),
-                    It.IsAny<TelemetricResult<IDownloadedLabelData>>()))
-                .Returns(labelData);
-
-            var response = mock.Create<AmazonSFPDownloadedLabelData>(TypedParameter.From(defaultShipment));
-            mock.Provide<Func<ShipmentEntity, AmazonShipment, AmazonSFPDownloadedLabelData>>(
-                (s, a) => s == defaultShipment && a == labelData ? response : null);
+            var labelData = mock.Create<AmazonSfpShipEngineDownloadedLabelData>();
+            telemetricResult.SetValue(labelData);
+            
+            mock.Mock<IAmazonSfpLabelClient>()
+                .Setup(l => l.Create(It.IsAny<ShipmentEntity>()))
+                .ReturnsAsync(telemetricResult);
 
             var testObject = mock.Create<AmazonSFPLabelService>();
             var result = await testObject.Create(defaultShipment);
 
-            Assert.Equal(response, result.Value);
+            Assert.True(result.Value is AmazonSfpShipEngineDownloadedLabelData);
         }
 
         [Fact]
-        public void Void_Calls_IAmazonShipmentRequest()
+        public void Void_Calls_AmazonSFPLabelService()
         {
             AmazonSFPLabelService testObject = mock.Create<AmazonSFPLabelService>();
 
@@ -63,7 +61,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.Amazon
 
             testObject.Void(shipment);
 
-            mock.Mock<IAmazonSFPCancelShipmentRequest>().Verify(x => x.Submit(shipment));
+            mock.Mock<IAmazonSfpLabelClient>().Verify(x => x.Void(shipment), Times.Once);
         }
 
         public void Dispose()
