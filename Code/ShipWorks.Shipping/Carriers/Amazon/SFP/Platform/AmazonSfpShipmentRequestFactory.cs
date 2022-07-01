@@ -62,15 +62,15 @@ namespace ShipWorks.Shipping.Carriers.Amazon.SFP.Platform
         {
             var result = new List<ShipmentItem>();
 
-            AmazonOrderEntity amazonOrder = shipment.Order as AmazonOrderEntity;
+            IAmazonOrder amazonOrder = shipment.Order as IAmazonOrder;
             foreach (OrderItemEntity item in shipment.Order.OrderItems)
             {
-                AmazonOrderItemEntity amazonItem = item as AmazonOrderItemEntity;
+                IAmazonOrderItem amazonItem = item as IAmazonOrderItem;
                 result.Add(
                     new ShipmentItem(
                         externalOrderItemId: amazonItem?.AmazonOrderItemCode ?? string.Empty,
                         externalOrderId: amazonOrder?.AmazonOrderID ?? shipment.Order.OrderNumberComplete,
-                        asin: amazonItem?.ASIN ?? string.Empty,
+                        //asin: amazonItem?.ASIN ?? string.Empty,
                         name: item.Name,
                         quantity: Convert.ToInt32(item.Quantity)));
             }
@@ -145,8 +145,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon.SFP.Platform
         /// </summary>
         protected override string GetShipEngineCarrierID(ShipmentEntity shipment)
         {
-            IAmazonStoreEntity amazonStore = (IAmazonStoreEntity) shipment.Order.Store;
-            return amazonStore.PlatformAmazonCarrierID ?? string.Empty;
+            return shipment.Order?.Store?.PlatformAmazonCarrierID ?? string.Empty;
         }
 
         /// <summary>

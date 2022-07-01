@@ -21,5 +21,8 @@ namespace ShipWorks.Stores.Platforms.Amazon.DTO
 
         [JsonProperty("lastModifiedDate")]
         public DateTime LastModifiedDate { get; set; }
+
+        [JsonProperty("includeFba")]
+        public bool IncludeFba { get; set; }
     }
 }

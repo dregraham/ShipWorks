@@ -55,10 +55,10 @@ namespace ShipWorks.Stores.Platforms.Platform
         /// Note that the orderSourceName will be used in both the URL used to communicate with the hub and the
         /// redirectUrl the hub will send on to monoauth
         /// </remarks>
-        public async Task<string> GetUpdateOrderSourceInitiateUrl(string orderSourceName, string orderSourceId, string apiRegion, string sellerId)
+        public async Task<string> GetUpdateOrderSourceInitiateUrl(string orderSourceName, string orderSourceId, string apiRegion, string sellerId, bool includeFba)
         {
             var request = warehouseRequestFactory.Create(
-                WarehouseEndpoints.GetUpdateOrderSourceInitiateUrl(orderSourceName, UpdateLocalUrl(warehouseRequestClient.WarehouseUrl), orderSourceId, apiRegion, sellerId), Method.GET,
+                WarehouseEndpoints.GetUpdateOrderSourceInitiateUrl(orderSourceName, UpdateLocalUrl(warehouseRequestClient.WarehouseUrl), orderSourceId, apiRegion, sellerId, includeFba), Method.GET,
                 null);
 
             var result = await warehouseRequestClient.MakeRequest<GetMonauthInitiateUrlResponse>(request, GetInitiateUpdateOrderSourceUrl)
