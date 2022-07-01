@@ -6,7 +6,6 @@ using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
-using System.Windows.Forms;
 using Interapptive.Shared;
 using Interapptive.Shared.Business;
 using Interapptive.Shared.Enums;
@@ -740,7 +739,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.WorldShip
                 if (ups.DeliveryConfirmation != (int) UpsDeliveryConfirmationType.None)
                 {
                     worldshipPackage.DeliveryConfirmation = "Y";
-                    worldshipPackage.DeliveryConfirmationSignature = (ups.DeliveryConfirmation == (int) UpsDeliveryConfirmationType.NoSignature) ? "N" : "Y";
+                    worldshipPackage.DeliveryConfirmationSignature = "Y";
                     worldshipPackage.DeliveryConfirmationAdult = (ups.DeliveryConfirmation == (int) UpsDeliveryConfirmationType.AdultSignature) ? "Y" : "N";
                 }
             }

@@ -30,7 +30,6 @@ namespace ShipWorks.Shipping.Tests.Carriers.UPS.LocalRating.Surcharges
         }
 
         [Theory]
-        [InlineData(UpsDeliveryConfirmationType.NoSignature, 1, 1.11, "No Signature")]
         [InlineData(UpsDeliveryConfirmationType.Signature, 1, 2.22, "Signature Required")]
         [InlineData(UpsDeliveryConfirmationType.AdultSignature, 1, 3.33, "Adult Signature Required")]
         [InlineData(UpsDeliveryConfirmationType.AdultSignature, 2, 6.66, "Adult Signature Required")]
@@ -48,9 +47,9 @@ namespace ShipWorks.Shipping.Tests.Carriers.UPS.LocalRating.Surcharges
             var testObject = new SignatureSurcharge(surcharges);
             testObject.Apply(shipment, localServiceRate.Object);
 
-            localServiceRate.Verify(s=>s.AddAmount(amount, surchargeName), Times.Once);
+            localServiceRate.Verify(s => s.AddAmount(amount, surchargeName), Times.Once);
         }
-        
+
         [Theory]
         [InlineData(UpsDeliveryConfirmationType.None)]
         [InlineData(UpsDeliveryConfirmationType.UspsDeliveryConfirmation)]

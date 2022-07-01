@@ -47,10 +47,6 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating.Surcharges
 
             switch ((UpsDeliveryConfirmationType) shipment.DeliveryConfirmation)
             {
-                case UpsDeliveryConfirmationType.NoSignature:
-                    signatureSurcharge = UpsSurchargeType.NoSignature;
-                    break;
-
                 case UpsDeliveryConfirmationType.Signature:
                     signatureSurcharge = UpsSurchargeType.SignatureRequired;
                     break;

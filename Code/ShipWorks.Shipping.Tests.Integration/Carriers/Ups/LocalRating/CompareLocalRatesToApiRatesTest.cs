@@ -28,7 +28,6 @@ using ShipWorks.Tests.Integration.Shared;
 using ShipWorks.Tests.Shared;
 using ShipWorks.Tests.Shared.Database;
 using ShipWorks.Tests.Shared.EntityBuilders;
-using ShipWorks.Tests.Shared.ExtensionMethods;
 using Xunit;
 using Xunit.Abstractions;
 
@@ -51,19 +50,13 @@ namespace ShipWorks.Shipping.Tests.Integration.Carriers.Ups.LocalRating
         }
 
         [Fact]
-        public void GetLocalRates()
-        {
-            RunTest(s => { });
-        }
+        public void GetLocalRates() => RunTest(s => { });
 
         [Theory]
         [InlineData(100)]
         [InlineData(101)]
         [InlineData(400)]
-        public void DeclaredValue(decimal value)
-        {
-            RunTest(s => s.Ups.Packages[0].DeclaredValue = value);
-        }
+        public void DeclaredValue(decimal value) => RunTest(s => s.Ups.Packages[0].DeclaredValue = value);
 
         [Theory]
         [InlineData(100, 20, 10, 10)] // Dimensional Weight is 144
@@ -186,10 +179,7 @@ namespace ShipWorks.Shipping.Tests.Integration.Carriers.Ups.LocalRating
         }
 
         [Fact]
-        public void AdditionalHandling()
-        {
-            RunTest(s => s.Ups.Packages[0].DimsLength = 61);
-        }
+        public void AdditionalHandling() => RunTest(s => s.Ups.Packages[0].DimsLength = 61);
 
         [Fact]
         public void UseBillableWeightWhenDimensionalWeightDeviserIs139()
@@ -223,45 +213,29 @@ namespace ShipWorks.Shipping.Tests.Integration.Carriers.Ups.LocalRating
         [InlineData(UpsPackagingType.Custom)]
         [InlineData(UpsPackagingType.Letter)]
         [InlineData(UpsPackagingType.BoxExpress)]
-        public void UseDifferentPackaging(UpsPackagingType packagingType)
-        {
-            RunTest(s => s.Ups.Packages[0].PackagingType = (int) packagingType);
-        }
+        public void UseDifferentPackaging(UpsPackagingType packagingType) => RunTest(s => s.Ups.Packages[0].PackagingType = (int) packagingType);
 
         [Theory]
         [InlineData(UpsDeliveryConfirmationType.None)]
         [InlineData(UpsDeliveryConfirmationType.AdultSignature)]
-        [InlineData(UpsDeliveryConfirmationType.NoSignature)]
         [InlineData(UpsDeliveryConfirmationType.Signature)]
-        public void UseDifferentConfirmations(UpsDeliveryConfirmationType deliveryConfirmationType)
-        {
-            RunTest(s => s.Ups.DeliveryConfirmation = (int) deliveryConfirmationType);
-        }
+        public void UseDifferentConfirmations(UpsDeliveryConfirmationType deliveryConfirmationType) => RunTest(s => s.Ups.DeliveryConfirmation = (int) deliveryConfirmationType);
 
 
         [Theory]
         [InlineData(true)]
         [InlineData(false)]
-        public void ShipperReleaseTest(bool shipperRelease)
-        {
-            RunTest(s => s.Ups.ShipperRelease = shipperRelease);
-        }
+        public void ShipperReleaseTest(bool shipperRelease) => RunTest(s => s.Ups.ShipperRelease = shipperRelease);
 
         [Theory]
         [InlineData(true)]
         [InlineData(false)]
-        public void CarbonNeutralTest(bool carbonNeutral)
-        {
-            RunTest(s => s.Ups.CarbonNeutral = carbonNeutral);
-        }
+        public void CarbonNeutralTest(bool carbonNeutral) => RunTest(s => s.Ups.CarbonNeutral = carbonNeutral);
 
         [Theory]
         [InlineData(true)]
         [InlineData(false)]
-        public void AdditionalHandlingTest(bool additionalHandling)
-        {
-            RunTest(s => s.Ups.Packages[0].AdditionalHandlingEnabled = additionalHandling);
-        }
+        public void AdditionalHandlingTest(bool additionalHandling) => RunTest(s => s.Ups.Packages[0].AdditionalHandlingEnabled = additionalHandling);
 
         /// <remarks>
         /// In order to get dry ice to work:
@@ -295,10 +269,7 @@ namespace ShipWorks.Shipping.Tests.Integration.Carriers.Ups.LocalRating
         [Theory]
         [InlineData(true)]
         [InlineData(false)]
-        public void VerbalConfirmationTest(bool verbalConfirmation)
-        {
-            RunTest(s => s.Ups.Packages[0].VerbalConfirmationEnabled = verbalConfirmation);
-        }
+        public void VerbalConfirmationTest(bool verbalConfirmation) => RunTest(s => s.Ups.Packages[0].VerbalConfirmationEnabled = verbalConfirmation);
 
         [Theory]
         [InlineData(true, 10)]
@@ -326,19 +297,14 @@ namespace ShipWorks.Shipping.Tests.Integration.Carriers.Ups.LocalRating
         }
 
         [Fact]
-        public void ShipOnASaturday()
-        {
-            RunTest(s => s.ShipDate = DateTime.Now.Next(DayOfWeek.Saturday));
-        }
+        public void ShipOnASaturday() => RunTest(s => s.ShipDate = DateTime.Now.Next(DayOfWeek.Saturday));
 
         [Theory]
         [InlineData(UpsPayorType.Receiver)]
         [InlineData(UpsPayorType.Sender)]
-        public void ThirdPartyBilling(UpsPayorType payorType)
-        {
+        public void ThirdPartyBilling(UpsPayorType payorType) =>
             // Third party billing rates returned by api do not seem to include the third party billing surcharge
             RunTest(s => s.Ups.PayorType = (int) payorType);
-        }
 
         [Theory]
         // US 48 DAS
@@ -502,10 +468,7 @@ namespace ShipWorks.Shipping.Tests.Integration.Carriers.Ups.LocalRating
             return valid;
         }
 
-        private IUpsRateClient CreateLocalClient()
-        {
-            return context.Mock.Create<UpsLocalRateClient>();
-        }
+        private IUpsRateClient CreateLocalClient() => context.Mock.Create<UpsLocalRateClient>();
 
         private IUpsRateClient CreateApiClient()
         {
