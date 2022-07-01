@@ -49,7 +49,19 @@
           </xsl:otherwise>
         </xsl:choose>
       </xsl:when>
+	  
+	  <xsl:when test="contains(ServiceUsed, 'OnTrac')">
+		  <a href="https://www.ontrac.com/tracking.asp?trackingres=submit&amp;tracking_number={TrackingNumber}">
+			  <xsl:value-of select="TrackingNumber"/>
+		  </a>
+	  </xsl:when>
 
+	  <xsl:when test="contains(ServiceUsed, 'DYNAMEX')">
+		  <a href="https://www.ordertracker.com/track/{TrackingNumber}">
+			  <xsl:value-of select="TrackingNumber"/>
+		  </a>
+	  </xsl:when>
+	  
       <xsl:otherwise>
         <xsl:value-of select="TrackingNumber" />
       </xsl:otherwise>
