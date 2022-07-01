@@ -20,13 +20,18 @@ namespace ShipWorks.Stores.Platforms.Platform.OnlineUpdating
     /// <summary>
     /// Uploads shipment details to Platform
     /// </summary>
-    [Component]
+    [KeyedComponent(typeof(IPlatformOnlineUpdater), StoreTypeCode.Api)]
+    [KeyedComponent(typeof(IPlatformOnlineUpdater), StoreTypeCode.BrightpearlHub)]
+    [KeyedComponent(typeof(IPlatformOnlineUpdater), StoreTypeCode.WalmartHub)]
+    [KeyedComponent(typeof(IPlatformOnlineUpdater), StoreTypeCode.ChannelAdvisorHub)]
+    [KeyedComponent(typeof(IPlatformOnlineUpdater), StoreTypeCode.VolusionHub)]
+    [KeyedComponent(typeof(IPlatformOnlineUpdater), StoreTypeCode.GrouponHub)]
     public class PlatformOnlineUpdater : IPlatformOnlineUpdater
     {
         // Logger
         static readonly ILog log = LogManager.GetLogger(typeof(PlatformOnlineUpdater));
         private readonly IOrderManager orderManager;
-        private readonly IShippingManager shippingManager;
+        protected readonly IShippingManager shippingManager;
         private readonly ISqlAdapterFactory sqlAdapterFactory;
         private readonly Func<IWarehouseOrderClient> createWarehouseOrderClient;
         private readonly IIndex<StoreTypeCode, IOnlineUpdater> storeSpecificOnlineUpdaterFactory;
@@ -129,6 +134,14 @@ namespace ShipWorks.Stores.Platforms.Platform.OnlineUpdating
 
             var client = createWarehouseOrderClient();
 
+            await UploadShipmentsToPlatform(shipments, client).ConfigureAwait(false);
+        }
+        
+        /// <summary>
+        /// Upload shipments to Platform (one at a time)
+        /// </summary
+        protected virtual async Task UploadShipmentsToPlatform(List<ShipmentEntity> shipments, IWarehouseOrderClient client)
+        {
             foreach (var shipment in shipments.Where(x => !x.Order.ChannelOrderID.IsNullOrWhiteSpace()))
             {
                 await shippingManager.EnsureShipmentLoadedAsync(shipment).ConfigureAwait(false);
@@ -141,7 +154,7 @@ namespace ShipWorks.Stores.Platforms.Platform.OnlineUpdating
         /// <summary>
         /// Gets the carrier name that is allowed in shipengine
         /// </summary>
-        private string GetCarrierName(ShipmentEntity shipment)
+        protected string GetCarrierName(ShipmentEntity shipment)
         {
             CarrierDescription otherDesc = null;
             ShipmentTypeCode shipmentTypeCode = shipment.ShipmentTypeCode;

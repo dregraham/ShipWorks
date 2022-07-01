@@ -1315,6 +1315,8 @@
     </Compile>
     <Compile Include="Stores\Platforms\Amazon\AmazonPlatformDownloader.cs" />
     <Compile Include="Stores\Platforms\Platform\OnlineUpdating\IPlatformOnlineUpdater.cs" />
+    <Compile Include="Stores\Platforms\Platform\OnlineUpdating\PlatformBulkOnlineUpdater.cs" />
+    <Compile Include="Stores\Platforms\Platform\OnlineUpdating\PlatformBulkOnlineUpdaterRequest.cs" />
     <Compile Include="Stores\Platforms\Platform\OnlineUpdating\PlatformOnlineUpdater.cs" />
     <Compile Include="Stores\Platforms\Platform\PlatformStoreException.cs" />
     <Compile Include="Stores\Platforms\ShipEngine\Apollo\GetOrdersDTO.cs" />

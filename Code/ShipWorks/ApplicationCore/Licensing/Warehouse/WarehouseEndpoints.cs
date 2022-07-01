@@ -29,7 +29,7 @@ namespace ShipWorks.ApplicationCore.Licensing.Warehouse
         public const string CreateAmazonCarrierFromAmazonStore = "api/ordersource/carriers/amazon/fromordersource";
         public const string CreateAmazonCarrierFromMws = "api/ordersource/carriers/amazon/frommws";
         public const string PlatformPassthrough = "/api/platform/passthrough";
-
+        
         private const string notifyShipped = "api/customer/notifyShipped/{0}";
         private const string linkWarehouse = "api/warehouses/{0}/link";
 
