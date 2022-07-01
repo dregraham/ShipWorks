@@ -884,6 +884,8 @@ namespace ShipWorks
 
             UserEntity user = UserSession.User;
 
+            CheckForMessages();
+
             MigrateStoresToHub();
 
             SynchronizeConfig();
@@ -5544,6 +5546,25 @@ namespace ShipWorks
 
             manifestUtility.PopulateCreateManifestMenu(createMenu, accountRetriever);
             manifestUtility.PopulatePrintManifestMenu(printMenu, accountRetriever);
+        }
+
+        /// <summary>
+        /// Check for any messages
+        /// </summary>
+        private void CheckForMessages()
+        {
+            try
+            {
+                using (var lifetimeScope = IoC.BeginLifetimeScope())
+                {
+
+                    lifetimeScope.Resolve<HubMessageRetriever>().GetMessages(this);
+                }
+            }
+            catch (Exception ex)
+            {
+                log.Error("Failed to fetch messages", ex);
+            }
         }
 
         /// <summary>

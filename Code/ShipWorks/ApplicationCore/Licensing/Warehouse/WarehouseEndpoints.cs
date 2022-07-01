@@ -24,7 +24,8 @@ namespace ShipWorks.ApplicationCore.Licensing.Warehouse
         public const string GetConfig = "api/config";
         public const string GetSmsVerificationNumber = "api/config/smsVerificationNumber";
         public const string Tracking = "api/tracking";
-            
+        public const string GetMessages = "api/account-service/account/messages?username={0}";
+
         private const string notifyShipped = "api/customer/notifyShipped/{0}";
         private const string linkWarehouse = "api/warehouses/{0}/link";
         private const string orders = "api/warehouses/{0}/orders";
@@ -32,7 +33,7 @@ namespace ShipWorks.ApplicationCore.Licensing.Warehouse
         private const string voidShipment = "api/orders/{0}/void";
         private const string rerouteOrderItems = "api/orders/{0}/rerouteItems";
         private const string getTrackingUpdates = "api/tracking/{0}";
-         
+
         /// <summary>
         /// Create a link warehouse endpoint
         /// </summary>
