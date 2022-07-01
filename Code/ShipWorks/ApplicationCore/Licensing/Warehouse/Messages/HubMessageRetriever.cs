@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using System.Threading.Tasks;
 using System.Web;
 using System.Windows.Forms;
 using Interapptive.Shared.ComponentRegistration;
@@ -6,7 +7,7 @@ using RestSharp;
 using ShipWorks.ApplicationCore.Licensing.Warehouse.DTO;
 using ShipWorks.Users;
 
-namespace ShipWorks.ApplicationCore.Licensing.Warehouse
+namespace ShipWorks.ApplicationCore.Licensing.Warehouse.Messages
 {
     /// <summary>
     /// Retrieves messages from Hub for the current account and user
@@ -31,7 +32,7 @@ namespace ShipWorks.ApplicationCore.Licensing.Warehouse
         /// <summary>
         /// Get and display any relevant messages from Hub
         /// </summary>
-        public async void GetMessages(IWin32Window owner)
+        public async Task GetMessages(IWin32Window owner)
         {
             var request = requestFactory.Create(string.Format(WarehouseEndpoints.GetMessages, HttpUtility.UrlEncode(userSession.User.Username)), Method.GET, null);
 
@@ -39,7 +40,9 @@ namespace ShipWorks.ApplicationCore.Licensing.Warehouse
 
             if (response.Messages.Any())
             {
-
+                var messageDlg = new HubMessagesDialog();
+                messageDlg.SetMessages(response.Messages);
+                messageDlg.ShowDialog(owner);
             }
         }
     }
