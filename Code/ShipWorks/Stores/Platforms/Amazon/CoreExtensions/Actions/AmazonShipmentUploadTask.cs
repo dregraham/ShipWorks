@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Autofac.Features.Indexed;
 using log4net;
 using ShipWorks.Actions;
 using ShipWorks.Actions.Tasks;
@@ -18,17 +19,15 @@ namespace ShipWorks.Stores.Platforms.Amazon.CoreExtensions.Actions
     [ActionTask("Upload shipment details", "AmazonShipmentUploadTask", ActionTaskCategory.UpdateOnline)]
     public class AmazonShipmentUploadTask : StoreInstanceTaskBase
     {
-        static readonly ILog log = LogManager.GetLogger(typeof(AmazonShipmentUploadTask));
-
         const long maxBatchSize = 1000;
         private readonly IPlatformOnlineUpdater onlineUpdater;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public AmazonShipmentUploadTask(IPlatformOnlineUpdater onlineUpdater)
+        public AmazonShipmentUploadTask(IIndex<StoreTypeCode, IPlatformOnlineUpdater> platformOnlineUpdaterIndex)
         {
-            this.onlineUpdater = onlineUpdater;
+            this.onlineUpdater = platformOnlineUpdaterIndex[StoreTypeCode.Amazon];
         }
 
         /// <summary>

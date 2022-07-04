@@ -7,6 +7,11 @@ using Newtonsoft.Json;
 
 namespace ShipWorks.Stores.Platforms.Platform.OnlineUpdating
 {
+    public class NotifyMarketplaceShippedRequest
+    {
+        [JsonProperty("notify_marketplace_shipped_requests")]
+        public IEnumerable<PlatformBulkOnlineUpdateItem> NotifyMarketplaceShippedRequests { get; set; }
+    }
     /// <summary>
     /// The request takes an array of these items, so there is no root
     /// </summary>

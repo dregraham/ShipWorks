@@ -30,7 +30,7 @@ namespace ShipWorks.Stores.Platforms.Platform.OnlineUpdating
     public class PlatformBulkOnlineUpdater : PlatformOnlineUpdater, IPlatformOnlineUpdater
     {
         private readonly IHubPlatformClient platformWebClient;
-        private const string bulkShipNotifyEndpoint = "v-beta/sales_orders/notify_shipped/bulk";
+        private const string bulkShipNotifyEndpoint = "v-beta/order_sources/{0}/notify_shipped/bulk";
 
         /// <summary>
         /// Constructor
@@ -46,12 +46,16 @@ namespace ShipWorks.Stores.Platforms.Platform.OnlineUpdating
         /// <summary>
         /// Upload shipments to Platform (bulk)
         /// </summary
-        protected override async Task UploadShipmentsToPlatform(List<ShipmentEntity> shipments, IWarehouseOrderClient client)
+        protected override async Task UploadShipmentsToPlatform(List<ShipmentEntity> shipments, StoreEntity store, IWarehouseOrderClient client)
         {
             try
             {
                 var updates = shipments.Select(async s => await GetPlatformBulkOnlineUpdateItem(s)).Select(r => r.Result).Where(s => s != null);
-                await platformWebClient.CallViaPassthrough(updates, bulkShipNotifyEndpoint, HttpMethod.Post).ConfigureAwait(false);
+                var request = new NotifyMarketplaceShippedRequest
+                {
+                    NotifyMarketplaceShippedRequests = updates
+                };
+                await platformWebClient.CallViaPassthrough(request, string.Format(bulkShipNotifyEndpoint, store.OrderSourceID), HttpMethod.Post).ConfigureAwait(false);
             } 
             catch (Exception ex)
             {

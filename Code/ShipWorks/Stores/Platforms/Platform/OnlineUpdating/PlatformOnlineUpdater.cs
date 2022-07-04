@@ -134,13 +134,13 @@ namespace ShipWorks.Stores.Platforms.Platform.OnlineUpdating
 
             var client = createWarehouseOrderClient();
 
-            await UploadShipmentsToPlatform(shipments, client).ConfigureAwait(false);
+            await UploadShipmentsToPlatform(shipments, store, client).ConfigureAwait(false);
         }
         
         /// <summary>
         /// Upload shipments to Platform (one at a time)
         /// </summary
-        protected virtual async Task UploadShipmentsToPlatform(List<ShipmentEntity> shipments, IWarehouseOrderClient client)
+        protected virtual async Task UploadShipmentsToPlatform(List<ShipmentEntity> shipments, StoreEntity store, IWarehouseOrderClient client)
         {
             foreach (var shipment in shipments.Where(x => !x.Order.ChannelOrderID.IsNullOrWhiteSpace()))
             {
