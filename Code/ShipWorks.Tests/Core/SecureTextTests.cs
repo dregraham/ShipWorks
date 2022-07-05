@@ -35,21 +35,6 @@ namespace ShipWorks.Tests.Core
         }
 
         [Fact]
-        public void EncryptDecryptDifferentSalt()
-        {
-            string original = "Abcd Efgh 12345 $%^*(";
-            string salt = "This is the salt!";
-
-            string encrypted = SecureText.Encrypt(original, salt);
-
-            Assert.NotEqual(original, encrypted);
-
-            string decrypted = SecureText.Decrypt(encrypted, "whatever");
-
-            Assert.Equal(string.Empty, decrypted);
-        }
-
-        [Fact]
         public void EncryptDecryptEmptySalt()
         {
             string original = "asdf $%^*(";
@@ -68,6 +53,8 @@ namespace ShipWorks.Tests.Core
         [InlineData("tvM4uXTdWwhnI6zTNbZi+/QA/MSqvpic", "Encrypt me please!")]
         [InlineData("tvM4uXTdWwhnI6zTNbZi+/s3vpdLzn2iKFdQ+hwc7V/lCdBIxbGMjhF4Sfg28J+wjtPzDmd1E3do4SKLPEA+xIXUvKFVOb+UmuX2Z/VpU1jwDfnsUsYYctDJIz38Cy8N", "Encrypt me please! I'm a really long string that will hopefully cause a different exception.")]
         [InlineData("c6eW7VwJSF/sDIL93MhX6F0AR9VvouNC7mp9sdUvMYe7aimUcExSQvSlh0Rcm81OqVC+HRr67G945a7ugtsHZqfYXynzGpQwNSF86p5RjfuKDA67Doz3hRDjnv4MUWqw6vlyBqJztgqW2m4jHY5izMUSGY7w/NSJzw==", "String to Encrypt")]
+        [InlineData("6eV2gjBGo3e16RbFaX7o9SLzfFumOnfisqGi3JabJxcUiFHpBhg5QXWaXGYSCXe/NZN5Y3urGj6GxxcLvCyBy8+8S/K/KYWRylvcx+Dg12DDXXv87iMrXqn7Gg+Ww5HE88BG7bq+/hiFJYFUizh/G4+VTNcW0g==:1", "This is a test")]
+        [InlineData("usZPIRnc/ZgE1PatujgoOqU/ZnKx9TWrDHT9co6YAWiaL+4Q6+vqpj84yDdoTsfSSwNfJvXNv1Pm7qd3dBCbDHdy9IyTb+HX8241InWPvx5VHI6pVm7lsoOQ7nFlyq/pp215mS/5LeQAF1bHJ8rjj+k=:2", "Some text")]
         public void Decrypt_DecryptsOldVersions(string encrypted, string expected)
         {
             var decrypted = SecureText.Decrypt(encrypted, "salt");
@@ -82,7 +69,13 @@ namespace ShipWorks.Tests.Core
 
             var version = encrypted.Split(':');
 
-            Assert.Equal("1", version[1]);
+            Assert.Equal("2", version[1]);
+        }
+
+        [Fact]
+        public void Test()
+        {
+            var decrypted = SecureText.Decrypt("TghC31DQgjc6oEJyoR9wfRYq59DmF5NkHz1YTsYSsKBBobcnF13tc/1CE5/Lfeq+YP3XPEjLbVa/gS/lFUQQLQpRfP5rJzj5JndHJGKWM+aIbDOR8HL+irEL0eCHN+dmTj+ENzJdWE7AXqUDl64eZ2X9pMozh1vr:1", "UPS");
         }
 
         [Fact]
@@ -110,21 +103,9 @@ namespace ShipWorks.Tests.Core
         }
 
         [Fact]
-        public void EncryptNullSalt()
-        {
-            Assert.Throws<ArgumentNullException>(() => SecureText.Encrypt("", null));
-        }
-
-        [Fact]
         public void EncryptNullValue()
         {
             Assert.Throws<ArgumentNullException>(() => SecureText.Encrypt(null, ""));
-        }
-
-        [Fact]
-        public void DecryptNullSalt()
-        {
-            Assert.Throws<ArgumentNullException>(() => SecureText.Decrypt("", null));
         }
 
         [Fact]

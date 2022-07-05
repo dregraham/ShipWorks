@@ -316,6 +316,7 @@
     <Compile Include="Security\IDatabaseSpecificEncryptionProvider.cs" />
     <Compile Include="Security\SecureTextVersions\SecureTextBase.cs" />
     <Compile Include="Security\SecureTextVersions\SecureTextVersion0.cs" />
+    <Compile Include="Security\SecureTextVersions\SecureTextVersion2.cs" />
     <Compile Include="Security\SecureTextVersions\SecureTextVersion1.cs" />
     <Compile Include="Security\StreamCipherKey.cs" />
     <Compile Include="Security\ICipherKey.cs" />

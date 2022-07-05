@@ -151,7 +151,6 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Security\AesStreamEncryptionProviderTest.cs" />
     <Compile Include="Security\FunctionalTest.cs" />
-    <Compile Include="Security\SecureTextVersion1Test.cs" />
     <Compile Include="Utility\FunctionalTest.cs" />
     <Compile Include="Utility\SqlExceptionUtility.cs" />
     <Compile Include="Utility\EnumHelperTest.cs" />
