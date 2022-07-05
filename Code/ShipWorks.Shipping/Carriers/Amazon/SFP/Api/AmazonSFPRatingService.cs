@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Interapptive.Shared.Collections;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.Amazon.SFP.Api.DTOs;
@@ -55,7 +56,9 @@ namespace ShipWorks.Shipping.Carriers.Amazon.SFP.Api
 
             // As part of the Amazon SP migration, we are NOT saving new unknown types.
             // SaveUnknownServiceTypes(response);
-            
+
+            rateGroup = new RateGroup(rateGroup.Rates.OrderBy(r => r.AmountOrDefault));
+
             return rateGroup;
         }
 
