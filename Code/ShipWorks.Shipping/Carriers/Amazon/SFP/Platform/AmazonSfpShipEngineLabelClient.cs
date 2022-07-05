@@ -85,7 +85,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon.SFP.Platform
                 var voidTask = Task.Run(async () =>
                 {
                     response = await hubPlatformShippingClient.CallViaPassthrough(new { ShipEngineLabelID  = shipment.AmazonSFP.ShipEngineLabelID },
-                            $"shipengine/{ShipEngineEndpoints.VoidLabel(shipment.AmazonSFP.ShipEngineLabelID)}",
+                            ShipEngineEndpoints.VoidLabel(shipment.AmazonSFP.ShipEngineLabelID),
                             HttpMethod.Put)
                         .ConfigureAwait(false);
                 });
