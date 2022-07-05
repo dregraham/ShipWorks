@@ -9,7 +9,6 @@ using Interapptive.Shared.Collections;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Utility;
 using log4net;
-using ShipWorks.Shipping.ShipEngine.DTOs;
 using ShipWorks.Common.IO.Hardware.Printers;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
@@ -20,7 +19,6 @@ using ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net;
 using ShipWorks.Shipping.Carriers.Postal.Usps.WebServices;
 using ShipWorks.Shipping.Editing.Rating;
 using ShipWorks.Shipping.ShipEngine;
-using Syncfusion.XlsIO;
 using Address = ShipWorks.Shipping.Carriers.Postal.Usps.WebServices.Address;
 using Carrier = ShipWorks.Shipping.Carriers.Postal.Usps.WebServices.Carrier;
 
@@ -42,7 +40,7 @@ namespace ShipWorks.Shipping.Carriers.Dhl.API.Stamps
         public DhlExpressStampsWebClient(ILifetimeScope lifetimeScope,
             ICarrierAccountRepository<UspsAccountEntity, IUspsAccountEntity> uspsAccountRepository,
             ICarrierAccountRepository<DhlExpressAccountEntity, IDhlExpressAccountEntity> dhlExpressAccountRepository)
-            :base(lifetimeScope, UspsResellerType.None)
+            : base(lifetimeScope, UspsResellerType.None)
         {
             this.uspsAccountRepository = uspsAccountRepository;
             this.dhlExpressAccountRepository = dhlExpressAccountRepository;
@@ -65,7 +63,7 @@ namespace ShipWorks.Shipping.Carriers.Dhl.API.Stamps
                 throw new DhlExpressException("The Stamps.com account associated with this DHL Express account no longer exists.");
             }
 
-            return await ExceptionWrapperAsync(() => 
+            return await ExceptionWrapperAsync(() =>
                 ProcessShipmentInternal(shipment, uspsAccount, false, shipment.DhlExpress.IntegratorTransactionID.Value), uspsAccount).ConfigureAwait(false);
         }
 
@@ -83,7 +81,7 @@ namespace ShipWorks.Shipping.Carriers.Dhl.API.Stamps
             catch (SoapException ex) when (ex.Message == "The DHL Express mail class print was already voided.")
             {
                 log.Info("Stamps says we already voided the label. Swallowing error.", ex);
-            }           
+            }
         }
 
         /// <summary>
@@ -97,7 +95,7 @@ namespace ShipWorks.Shipping.Carriers.Dhl.API.Stamps
             {
                 var rates = ExceptionWrapper(() => GetRatesInternal(shipment, account, Carrier.DHLExpress), account).Where(r => r.ServiceType == ServiceType.DHLEWW);
 
-                return  rates
+                return rates
                         .Select(uspsRate => GetServiceType(uspsRate)
                         .Map(x => BuildRateResult(shipment, uspsRate, x)))
                         .Aggregate((rates: Enumerable.Empty<RateResult>(), errors: Enumerable.Empty<Exception>()),
@@ -234,7 +232,7 @@ namespace ShipWorks.Shipping.Carriers.Dhl.API.Stamps
         /// <summary>
         /// Create a rate object for processing
         /// </summary>
-        protected RateV40 CreateRateForProcessing(ShipmentEntity shipment, UspsAccountEntity account)
+        protected override RateV40 CreateRateForProcessing(ShipmentEntity shipment, UspsAccountEntity account, Address toAddress, Address fromAddress)
         {
             RateV40 rate = CreateRateForRating(shipment, account);
 
@@ -272,6 +270,10 @@ namespace ShipWorks.Shipping.Carriers.Dhl.API.Stamps
                 // Swapping out Normal with Return indicates a return label
                 rate.PrintLayout = rate.PrintLayout.Replace("Normal", "Return");
             }
+
+            //v11 change add the from and to
+            rate.From = fromAddress;
+            rate.To = toAddress;
 
             return rate;
         }
@@ -435,5 +437,5 @@ namespace ShipWorks.Shipping.Carriers.Dhl.API.Stamps
 
             return rate.Amount + addOns;
         }
-    } 
+    }
 }
