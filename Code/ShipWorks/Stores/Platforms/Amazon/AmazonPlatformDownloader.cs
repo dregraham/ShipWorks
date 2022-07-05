@@ -133,12 +133,29 @@ namespace ShipWorks.Stores.Platforms.Amazon
         {
             foreach (var salesOrder in orders.Where(x => x.Status != OrderSourceSalesOrderStatus.AwaitingPayment))
             {
-                var channelWasParsed = Enum.TryParse<AmazonMwsFulfillmentChannel>(salesOrder.FulfillmentChannel, out var fulfillmentChannel);
-                if (!channelWasParsed || !(AmazonStore.ExcludeFBA && fulfillmentChannel == AmazonMwsFulfillmentChannel.AFN))
+                var fulfillmentChannel = GetFulfillmentChannel(salesOrder);
+                if (!(AmazonStore.ExcludeFBA && fulfillmentChannel == AmazonMwsFulfillmentChannel.AFN))
                 {
                     await LoadOrder(salesOrder);
                 }
             }
+        }
+
+        /// <summary>
+        /// Get the fulfillment channel from a sales order
+        /// </summary>
+        private static AmazonMwsFulfillmentChannel GetFulfillmentChannel(OrderSourceApiSalesOrder salesOrder)
+        {
+            if(salesOrder.FulfillmentChannel == "MFN")
+            {
+                return AmazonMwsFulfillmentChannel.MFN;
+            } 
+            else if(salesOrder.FulfillmentChannel == "AFN")
+            {
+                return AmazonMwsFulfillmentChannel.AFN;
+            }
+
+            return AmazonMwsFulfillmentChannel.Unknown;
         }
 
         private async Task LoadOrder(OrderSourceApiSalesOrder salesOrder)
@@ -181,15 +198,8 @@ namespace ShipWorks.Stores.Platforms.Amazon
             order.OnlineStatus = orderStatus;
             order.OnlineStatusCode = orderStatus;
 
-            if (Enum.TryParse<AmazonMwsFulfillmentChannel>(salesOrder.FulfillmentChannel, out var fulfillmentChannel))
-            {
-                order.FulfillmentChannel = (int) fulfillmentChannel;
-            }
-            else
-            {
-                order.FulfillmentChannel = (int) AmazonMwsFulfillmentChannel.Unknown;
-            }
-
+            order.FulfillmentChannel = (int) GetFulfillmentChannel(salesOrder);
+            
             // If the order is new and it is of Amazon fulfillment type, increase the FBA count.
             if (order.IsNew && order.FulfillmentChannel == (int) AmazonMwsFulfillmentChannel.AFN)
             {
