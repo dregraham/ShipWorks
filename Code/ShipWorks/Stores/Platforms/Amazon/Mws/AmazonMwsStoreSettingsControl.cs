@@ -102,7 +102,7 @@ namespace ShipWorks.Stores.Platforms.Amazon.Mws
                     var orderSourceClient = lifetimeScope.Resolve<IHubOrderSourceClient>();
                     try
                     {
-                        await orderSourceClient.UpdateAmazonFbaCriteria(store.OrderSourceID, excludeFba.Checked, storeEntity.AmazonApiRegion).ConfigureAwait(false);
+                        await orderSourceClient.UpdateAmazonFbaCriteria(store.OrderSourceID, !excludeFba.Checked, storeEntity.AmazonApiRegion).ConfigureAwait(false);
                         return true;
                     }
                     catch(Exception ex)
