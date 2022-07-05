@@ -196,17 +196,17 @@ namespace ShipWorks.Stores.Platforms.Amazon
                 FbaOrdersDownloaded++;
             }
 
-            // IsPrime
-            if (salesOrder.OrderSourcePolicies.Count > 0)
+            // We keep this at the order level and it is at the item level. So, if they are all prime or all not prime we set Yes/No. In ohter cases, Unknown
+            var isPrime = AmazonIsPrime.Unknown;
+            if (salesOrder.RequestedFulfillments.All(f => f.ShippingPreferences?.IsPremiumProgram ?? false))
             {
-                order.IsPrime = (int) (salesOrder.OrderSourcePolicies.Any(x => x.IsPremiumProgram)
-                    ? AmazonIsPrime.Yes
-                    : AmazonIsPrime.No);
+                isPrime = AmazonIsPrime.Yes;
             }
-            else
+            else if (salesOrder.RequestedFulfillments.All(f => (!f.ShippingPreferences?.IsPremiumProgram) ?? false))
             {
-                order.IsPrime = (int) AmazonIsPrime.Unknown;
+                isPrime = AmazonIsPrime.No;
             }
+            order.IsPrime = (int) isPrime;
 
             // Purchase order number
             order.PurchaseOrderNumber = WebUtility.HtmlDecode(salesOrder.OriginalOrderSource.OrderId ?? string.Empty);
