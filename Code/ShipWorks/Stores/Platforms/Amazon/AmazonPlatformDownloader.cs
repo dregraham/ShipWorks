@@ -159,9 +159,7 @@ namespace ShipWorks.Stores.Platforms.Amazon
             order.OrderNumber = long.MinValue;
             order.ChannelOrderID = salesOrder.SalesOrderGuid;
 
-            var orderStatus = salesOrder.Status.ToString();
-
-            if (string.Compare(orderStatus, "Canceled", StringComparison.OrdinalIgnoreCase) == 0 && order.IsNew)
+            if (salesOrder.Status == OrderSourceSalesOrderStatus.Cancelled && order.IsNew)
             {
                 log.InfoFormat("Skipping order '{0}' due to canceled and not yet seen by ShipWorks.", amazonOrderId);
                 return;
@@ -179,6 +177,7 @@ namespace ShipWorks.Stores.Platforms.Amazon
             order.LatestExpectedDeliveryDate = salesOrder.RequestedFulfillments?.Max(f => f?.ShippingPreferences?.DeliverByDate)?.DateTime;
 
             // set the status
+            var orderStatus = salesOrder.Status.ToString();
             order.OnlineStatus = orderStatus;
             order.OnlineStatusCode = orderStatus;
 
