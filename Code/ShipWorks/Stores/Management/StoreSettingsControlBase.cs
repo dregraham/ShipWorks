@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 using ShipWorks.Data.Model.EntityClasses;
 
@@ -33,6 +34,14 @@ namespace ShipWorks.Stores.Management
         public virtual bool SaveToEntity(StoreEntity store)
         {
             return true;
+        }
+
+        /// <summary>
+        /// Save the data to platform.
+        /// </summary>
+        public virtual Task<bool> SaveToPlatform(StoreEntity store)
+        {
+            return Task.FromResult(true);
         }
     }
 }

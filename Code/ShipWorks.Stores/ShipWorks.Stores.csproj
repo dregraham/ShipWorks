@@ -306,7 +306,6 @@
     <Compile Include="Platforms\Odbc\Mapping\RefreshingOdbcStore.cs" />
     <Compile Include="Platforms\Platform\CoreExtensions\Actions\PlatformShipmentUploadTask.cs" />
     <Compile Include="Platforms\Platform\HubOrderSourceClient.cs" />
-    <Compile Include="Platforms\Platform\IHubOrderSourceClient.cs" />
     <Compile Include="Platforms\Platform\OnlineUpdating\PlatformOnlineUpdateCommandCreator.cs" />
     <Compile Include="Platforms\Platform\PlatformStoreDownloader.cs" />
     <Compile Include="Platforms\Platform\PlatformStoreSetup.cs" />

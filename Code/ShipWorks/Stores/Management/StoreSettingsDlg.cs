@@ -396,7 +396,14 @@ namespace ShipWorks.Stores.Management
 
             if (storeSettingsControl != null)
             {
-                result = storeSettingsControl.SaveToEntity(store);
+                if(await storeSettingsControl.SaveToPlatform(store).ConfigureAwait(true))
+                {
+                    result = storeSettingsControl.SaveToEntity(store);
+                }
+                else
+                {
+                    result = false;
+                }
             }
 
             if (result)

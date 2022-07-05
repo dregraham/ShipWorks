@@ -132,6 +132,20 @@ namespace ShipWorks.Stores.Platforms.Platform
         }
 
         /// <summary>
+        /// Call hub to update the amazon sp FBA criteria
+        /// </summary>
+        public async Task UpdateAmazonFbaCriteria(string orderSourceId, bool downloadFba, string apiRegion)
+        {
+            var request = warehouseRequestFactory.Create(WarehouseEndpoints.UpdateAmazonFbaCriteria, Method.POST, new { orderSourceId, downloadFba, apiRegion });
+            var result = await warehouseRequestClient.MakeRequest(request, "UpdateAmazonFbaCriteria");
+
+            if (result.Failure)
+            {
+                throw new Exception(result.Message);
+            }
+        }
+
+        /// <summary>
         /// Updates the port if pointing local
         /// </summary>
         private string UpdateLocalUrl(string warehouseUrl) =>
