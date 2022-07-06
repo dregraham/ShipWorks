@@ -364,7 +364,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon.SFP
             }
             else if (serviceUsed.IndexOf("FedEx", StringComparison.OrdinalIgnoreCase) >= 0)
             {
-                trackingLink = $"http://www.fedex.com/Tracking?language=english&amp;cntry_code=us&amp;tracknumbers={shipment.TrackingNumber}";
+                trackingLink = $"https://www.fedex.com/fedextrack/?trknbr={shipment.TrackingNumber}";
             }
             else if (serviceUsed.IndexOf("OnTrac", StringComparison.OrdinalIgnoreCase) >= 0)
             {

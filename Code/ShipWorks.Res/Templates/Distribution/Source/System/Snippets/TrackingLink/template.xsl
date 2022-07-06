@@ -43,7 +43,7 @@
             </a>
           </xsl:when>
           <xsl:otherwise>
-            <a href="http://www.fedex.com/Tracking?language=english&amp;cntry_code=us&amp;tracknumbers={TrackingNumber}">
+            <a href="https://www.fedex.com/fedextrack/?trknbr={TrackingNumber}">
               <xsl:value-of select="TrackingNumber" />
             </a>
           </xsl:otherwise>

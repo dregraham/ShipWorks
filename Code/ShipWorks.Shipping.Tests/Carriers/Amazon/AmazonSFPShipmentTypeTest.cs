@@ -235,7 +235,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.Amazon
         [InlineData("DHL SM X", "foo", true, "http://webtrack.dhlglobalmail.com/?mobile=&amp;trackingnumber=foo")]
         [InlineData("USPS X", "foo", true, "https://tools.usps.com/go/TrackConfirmAction.action?tLabels=foo")]
         [InlineData("fedex FIMS", "foo", true, "http://mailviewrecipient.fedex.com/recip_package_summary.aspx?PostalID=foo")]
-        [InlineData("fedeX", "foo", true, "http://www.fedex.com/Tracking?language=english&amp;cntry_code=us&amp;tracknumbers=foo")]
+        [InlineData("fedeX", "foo", true, "https://www.fedex.com/fedextrack/?trknbr=foo")]
         [InlineData("blah", "foo", true, "")]
         public void GetCarrierTrackingUrl_ReturnsCorrectTrackingUrl(string serviceUsed, string trackingNumber, bool processed, string expectedUrl)
         {
