@@ -1,20 +1,21 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
 
 namespace ShipWorks.Stores.Platforms.Platform.OnlineUpdating
 {
+    [Obfuscation]
     public class NotifyMarketplaceShippedRequest
     {
         [JsonProperty("notify_marketplace_shipped_requests")]
         public IEnumerable<PlatformBulkOnlineUpdateItem> NotifyMarketplaceShippedRequests { get; set; }
     }
-    /// <summary>
-    /// The request takes an array of these items, so there is no root
-    /// </summary>
+
+    [Obfuscation]
     public class PlatformBulkOnlineUpdateItem
     {
         [JsonProperty("sales_order_id")]
@@ -30,6 +31,7 @@ namespace ShipWorks.Stores.Platforms.Platform.OnlineUpdating
         public ShipFrom ShipFrom { get; set; }
     }
 
+    [Obfuscation]
     public class SalesOrderItem
     {
         [JsonProperty("sales_order_item_id")]
@@ -39,6 +41,7 @@ namespace ShipWorks.Stores.Platforms.Platform.OnlineUpdating
         public int Quantity { get; set; }
     }
 
+    [Obfuscation]
     public class ShipFrom
     {
         [JsonProperty("name")]

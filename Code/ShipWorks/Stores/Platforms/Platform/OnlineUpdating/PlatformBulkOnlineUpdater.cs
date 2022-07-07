@@ -63,6 +63,9 @@ namespace ShipWorks.Stores.Platforms.Platform.OnlineUpdating
             }
         }
 
+        /// <summary>
+        /// Create a Shipment Notification item to add to the bulk
+        /// </summary>
         private async Task<PlatformBulkOnlineUpdateItem> GetPlatformBulkOnlineUpdateItem(ShipmentEntity shipment)
         {
             await shippingManager.EnsureShipmentLoadedAsync(shipment).ConfigureAwait(false);
