@@ -28,9 +28,6 @@ namespace ShipWorks.Stores.Platforms.Platform.OnlineUpdating
 
         [JsonProperty("ship_from")]
         public ShipFrom ShipFrom { get; set; }
-
-        [JsonProperty("sales_order_items")]
-        public List<SalesOrderItem> SalesOrderItems { get; set; }
     }
 
     public class SalesOrderItem
@@ -73,8 +70,5 @@ namespace ShipWorks.Stores.Platforms.Platform.OnlineUpdating
 
         [JsonProperty("country_code")]
         public string CountryCode { get; set; }
-
-        [JsonProperty("address_residential_indicator")]
-        public string AddressResidentialIndicator { get; set; }
     }
 }
