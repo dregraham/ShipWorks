@@ -2879,6 +2879,9 @@ namespace ShipWorks.Stores.Platforms.ShipEngine.Apollo
         [Newtonsoft.Json.JsonProperty("couponCode", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
         public string CouponCode { get; set; }
 
+        [Newtonsoft.Json.JsonProperty("couponCodes", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public System.Collections.Generic.ICollection<string> CouponCodes { get; set; }
+
         [Newtonsoft.Json.JsonProperty("paymentMethod", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
         public string PaymentMethod { get; set; }
 
