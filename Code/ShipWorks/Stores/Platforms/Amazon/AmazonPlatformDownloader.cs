@@ -133,12 +133,29 @@ namespace ShipWorks.Stores.Platforms.Amazon
         {
             foreach (var salesOrder in orders.Where(x => x.Status != OrderSourceSalesOrderStatus.AwaitingPayment))
             {
-                var channelWasParsed = Enum.TryParse<AmazonMwsFulfillmentChannel>(salesOrder.FulfillmentChannel, out var fulfillmentChannel);
-                if (!channelWasParsed || !(AmazonStore.ExcludeFBA && fulfillmentChannel == AmazonMwsFulfillmentChannel.AFN))
+                var fulfillmentChannel = GetFulfillmentChannel(salesOrder);
+                if (!(AmazonStore.ExcludeFBA && fulfillmentChannel == AmazonMwsFulfillmentChannel.AFN))
                 {
                     await LoadOrder(salesOrder);
                 }
             }
+        }
+
+        /// <summary>
+        /// Get the fulfillment channel from a sales order
+        /// </summary>
+        private static AmazonMwsFulfillmentChannel GetFulfillmentChannel(OrderSourceApiSalesOrder salesOrder)
+        {
+            if(salesOrder.FulfillmentChannel == "MFN")
+            {
+                return AmazonMwsFulfillmentChannel.MFN;
+            } 
+            else if(salesOrder.FulfillmentChannel == "AFN")
+            {
+                return AmazonMwsFulfillmentChannel.AFN;
+            }
+
+            return AmazonMwsFulfillmentChannel.Unknown;
         }
 
         private async Task LoadOrder(OrderSourceApiSalesOrder salesOrder)
@@ -159,9 +176,7 @@ namespace ShipWorks.Stores.Platforms.Amazon
             order.OrderNumber = long.MinValue;
             order.ChannelOrderID = salesOrder.SalesOrderGuid;
 
-            var orderStatus = salesOrder.Status.ToString();
-
-            if (string.Compare(orderStatus, "Canceled", StringComparison.OrdinalIgnoreCase) == 0 && order.IsNew)
+            if (salesOrder.Status == OrderSourceSalesOrderStatus.Cancelled && order.IsNew)
             {
                 log.InfoFormat("Skipping order '{0}' due to canceled and not yet seen by ShipWorks.", amazonOrderId);
                 return;
@@ -179,35 +194,29 @@ namespace ShipWorks.Stores.Platforms.Amazon
             order.LatestExpectedDeliveryDate = salesOrder.RequestedFulfillments?.Max(f => f?.ShippingPreferences?.DeliverByDate)?.DateTime;
 
             // set the status
+            var orderStatus = salesOrder.Status.ToString();
             order.OnlineStatus = orderStatus;
             order.OnlineStatusCode = orderStatus;
 
-            if (Enum.TryParse<AmazonMwsFulfillmentChannel>(salesOrder.FulfillmentChannel, out var fulfillmentChannel))
-            {
-                order.FulfillmentChannel = (int) fulfillmentChannel;
-            }
-            else
-            {
-                order.FulfillmentChannel = (int) AmazonMwsFulfillmentChannel.Unknown;
-            }
-
+            order.FulfillmentChannel = (int) GetFulfillmentChannel(salesOrder);
+            
             // If the order is new and it is of Amazon fulfillment type, increase the FBA count.
             if (order.IsNew && order.FulfillmentChannel == (int) AmazonMwsFulfillmentChannel.AFN)
             {
                 FbaOrdersDownloaded++;
             }
 
-            // IsPrime
-            if (salesOrder.OrderSourcePolicies.Count > 0)
+            // We keep this at the order level and it is at the item level. So, if they are all prime or all not prime we set Yes/No. In ohter cases, Unknown
+            var isPrime = AmazonIsPrime.Unknown;
+            if (salesOrder.RequestedFulfillments.All(f => f.ShippingPreferences?.IsPremiumProgram ?? false))
             {
-                order.IsPrime = (int) (salesOrder.OrderSourcePolicies.Any(x => x.IsPremiumProgram)
-                    ? AmazonIsPrime.Yes
-                    : AmazonIsPrime.No);
+                isPrime = AmazonIsPrime.Yes;
             }
-            else
+            else if (salesOrder.RequestedFulfillments.All(f => (!f.ShippingPreferences?.IsPremiumProgram) ?? false))
             {
-                order.IsPrime = (int) AmazonIsPrime.Unknown;
+                isPrime = AmazonIsPrime.No;
             }
+            order.IsPrime = (int) isPrime;
 
             // Purchase order number
             order.PurchaseOrderNumber = WebUtility.HtmlDecode(salesOrder.OriginalOrderSource.OrderId ?? string.Empty);

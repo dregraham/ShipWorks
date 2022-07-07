@@ -354,7 +354,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon.SFP
             {
                 trackingLink = $"http://webtrack.dhlglobalmail.com/?mobile=&amp;trackingnumber={shipment.TrackingNumber}";
             }
-            else if (serviceUsed.IndexOf("USPS", StringComparison.OrdinalIgnoreCase) >= 0 || serviceUsed.IndexOf("SmartPost", StringComparison.OrdinalIgnoreCase) >= 0)
+            else if (serviceUsed.IndexOf("USPS", StringComparison.OrdinalIgnoreCase) >= 0 || serviceUsed.IndexOf("SmartPost", StringComparison.OrdinalIgnoreCase) >= 0 || serviceUsed.IndexOf("SDC", StringComparison.OrdinalIgnoreCase) >= 0)
             {
                 trackingLink = $"https://tools.usps.com/go/TrackConfirmAction.action?tLabels={shipment.TrackingNumber}";
             }
@@ -364,7 +364,15 @@ namespace ShipWorks.Shipping.Carriers.Amazon.SFP
             }
             else if (serviceUsed.IndexOf("FedEx", StringComparison.OrdinalIgnoreCase) >= 0)
             {
-                trackingLink = $"http://www.fedex.com/Tracking?language=english&amp;cntry_code=us&amp;tracknumbers={shipment.TrackingNumber}";
+                trackingLink = $"https://www.fedex.com/fedextrack/?trknbr={shipment.TrackingNumber}";
+            }
+            else if (serviceUsed.IndexOf("OnTrac", StringComparison.OrdinalIgnoreCase) >= 0)
+            {
+                trackingLink = $"https://www.ontrac.com/tracking.asp?trackingres=submit&tracking_number={shipment.TrackingNumber}";
+            }
+            else if (serviceUsed.IndexOf("Dynamex", StringComparison.OrdinalIgnoreCase) >= 0)
+            {
+                trackingLink = $"https://www.ordertracker.com/track/{shipment.TrackingNumber}";
             }
 
             return trackingLink;

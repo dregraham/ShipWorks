@@ -124,8 +124,7 @@ namespace ShipWorks.ApplicationCore.Licensing
         /// <summary>
         /// Whether or not this license is UPS CTP
         /// </summary>
-        public bool IsCtp => LicenseCapabilities.UpsStatus != UpsStatus.None && LicenseCapabilities.UpsStatus != UpsStatus.Discount;
-
+        public bool IsCtp => LicenseCapabilities != null && LicenseCapabilities?.UpsStatus != UpsStatus.None && LicenseCapabilities?.UpsStatus != UpsStatus.Discount;
 
         /// <summary>
         /// Gets the CustomerID.
@@ -167,7 +166,7 @@ namespace ShipWorks.ApplicationCore.Licensing
                 lastRefreshTimeInUtc = DateTime.UtcNow;
 
                 // Reset disabled reason now that we can reconnect
-                DisabledReason = String.Empty;
+                DisabledReason = string.Empty;
 
                 // Let anyone who cares know that enabled carriers may have changed.
                 messenger.Send(new EnabledCarriersChangedMessage(this, new List<ShipmentTypeCode>(), new List<ShipmentTypeCode>()));

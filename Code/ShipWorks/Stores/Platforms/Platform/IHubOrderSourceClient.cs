@@ -46,5 +46,10 @@ namespace ShipWorks.Stores.Platforms.Platform
         /// Get the monoauth url to update a platform carrier
         /// </summary>
         Task<string> GetUpdateCarrierInitiateUrl(string orderSourceName, string carrierId, string apiRegion, string sellerId);
+
+        /// <summary>
+        /// Call hub to update the amazon sp FBA criteria
+        /// </summary>
+        Task UpdateAmazonFbaCriteria(string orderSourceId, bool downloadFba, string apiRegion);
     }
 }

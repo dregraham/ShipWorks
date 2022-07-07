@@ -1,6 +1,8 @@
 ﻿using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using Interapptive.Shared.ComponentRegistration;
+using Interapptive.Shared.Utility;
 using ShipWorks.Core.Messaging;
 using ShipWorks.Shipping.Carriers.Amazon.SFP.Api.DTOs;
 using ShipWorks.Shipping.Carriers.Amazon.SFP.RateGroupFilters;
@@ -53,6 +55,8 @@ namespace ShipWorks.Shipping.Carriers.Amazon.SFP.Platform
         /// </summary>
         protected override RateResult GetRateResult(Rate apiRate, ShipmentTypeCode shipmentType)
         {
+            apiRate.DeliveryDays = null;
+            apiRate.CarrierDeliveryDays = string.Empty;
             var rateResult = base.GetRateResult(apiRate, shipmentType);
 
             var serviceType = serviceTypeRepository.Find(apiRate.ServiceCode);
@@ -66,8 +70,32 @@ namespace ShipWorks.Shipping.Carriers.Amazon.SFP.Platform
             };
 
             rateResult.Tag = tag;
+            rateResult.ProviderLogo = GetProviderLogo(tag.CarrierName ?? string.Empty);
 
             return rateResult;
+        }
+
+        /// <summary>
+        /// Determine which carrier the ShippingService belongs to
+        /// Return the logo of that carrier returns Null if we cannot
+        /// find a match for the carrier
+        /// </summary>
+        private static Image GetProviderLogo(string carrier)
+        {
+            switch (carrier.ToLowerInvariant())
+            {
+                case "ups":
+                    return EnumHelper.GetImage(ShipmentTypeCode.UpsOnLineTools);
+                case "fedex":
+                    return EnumHelper.GetImage(ShipmentTypeCode.FedEx);
+                case "usps":
+                case "stamps_dot_com":
+                    return EnumHelper.GetImage(ShipmentTypeCode.Usps);
+                case "ontrac":
+                    return EnumHelper.GetImage(ShipmentTypeCode.OnTrac);
+                default:
+                    return EnumHelper.GetImage(ShipmentTypeCode.None);
+            }
         }
 
         ///// <summary>
@@ -122,29 +150,5 @@ namespace ShipWorks.Shipping.Carriers.Amazon.SFP.Platform
         //    messenger.Send(new AmazonSFPRatesRetrievedMessage(this, filteredRateGroup));
 
         //    return filteredRateGroup;
-        //}
-
-        ///// <summary>
-        ///// Determine which carrier the ShippingService belongs to
-        ///// Return the logo of that carrier returns Null if we cannot
-        ///// find a match for the carrier
-        ///// </summary>
-        //private static Image GetProviderLogo(string carrier)
-        //{
-        //    switch (carrier.ToLowerInvariant())
-        //    {
-        //        case "ups":
-        //            return EnumHelper.GetImage(ShipmentTypeCode.UpsOnLineTools);
-        //        case "fedex":
-        //            return EnumHelper.GetImage(ShipmentTypeCode.FedEx);
-        //        case "usps":
-        //        case "stamps_dot_com":
-        //            return EnumHelper.GetImage(ShipmentTypeCode.Usps);
-        //        case "ontrac":
-        //            return EnumHelper.GetImage(ShipmentTypeCode.OnTrac);
-        //        default:
-        //            return EnumHelper.GetImage(ShipmentTypeCode.None);
-        //    }
-        //}
     }
 }

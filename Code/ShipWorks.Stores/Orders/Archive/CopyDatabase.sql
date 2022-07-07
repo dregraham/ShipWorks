@@ -73,11 +73,18 @@ BEGIN
 			MOVE @SourceLogName  TO @DestinationDatabaseLogPathAndFileName,  
 			NOUNLOAD,  REPLACE,  STATS = 10;
 
-		DECLARE @version NVARCHAR(20) = CONVERT(VARCHAR(20),SERVERPROPERTY('productversion'));
-		IF @version LIKE '14%'
-		BEGIN
+		-- Try these settings, just in case it works in other versions, but just catch in case it doesn't
+		BEGIN TRY
 			EXEC('ALTER DATABASE ' + @DestinationDatabaseName + ' SET TRUSTWORTHY ON')
-		END
+						
+			-- We alter authorization in other places, so try it here too
+			DECLARE @owner nvarchar(255);
+			SELECT @owner = SUSER_SNAME();
+			EXEC('ALTER AUTHORIZATION ON DATABASE::[' + @DestinationDatabaseName + '] TO [' + @owner + ']');
+		END TRY
+		BEGIN CATCH
+			PRINT 'Error while trying to SET TRUSTWORTHY ON'
+		END CATCH
 		
 		UPDATE [%destinationDatabaseName%]..[Configuration] SET ArchivalSettingsXml = '%archivalSettingsXml%'
 

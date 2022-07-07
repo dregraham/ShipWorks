@@ -622,12 +622,16 @@ namespace ShipWorks
                 sqlChangeTracking.Enable();
 
                 LogonToShipWorks(user);
-                DashboardManager.ShowOneBalancePromo();
 
-                // If we successfully logged on, the last update must have succeeded.
-                AutoUpdateSettings.LastAutoUpdateSucceeded = true;
+                if (UserSession.IsLoggedOn)
+                {
+                    DashboardManager.ShowOneBalancePromo();
 
-                ShipSenseLoader.LoadDataAsync();
+                    // If we successfully logged on, the last update must have succeeded.
+                    AutoUpdateSettings.LastAutoUpdateSucceeded = true;
+
+                    ShipSenseLoader.LoadDataAsync();
+                }
             }
             else
             {
