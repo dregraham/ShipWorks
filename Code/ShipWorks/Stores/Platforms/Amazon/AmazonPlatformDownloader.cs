@@ -353,13 +353,12 @@ namespace ShipWorks.Stores.Platforms.Amazon
                 return;
             }
 
-            //var shipFullName = PersonName.Parse(shipTo.Name ?? string.Empty);
-            //order.ShipFirstName = shipFullName.First;
-            //order.ShipMiddleName = shipFullName.Middle;
-            //order.ShipLastName = shipFullName.LastWithSuffix;
-            //order.ShipNameParseStatus = (int) shipFullName.ParseStatus;
-            //order.ShipUnparsedName = shipFullName.UnparsedName;
-            order.ShipUnparsedName = shipTo.Name ?? string.Empty;
+            var shipFullName = PersonName.Parse(shipTo.Name ?? string.Empty);
+            order.ShipFirstName = shipFullName.First;
+            order.ShipMiddleName = shipFullName.Middle;
+            order.ShipLastName = shipFullName.LastWithSuffix;
+            order.ShipNameParseStatus = (int) shipFullName.ParseStatus;
+            order.ShipUnparsedName = shipFullName.UnparsedName;
             order.ShipCompany = shipTo.Company;
             order.ShipPhone = shipTo.Phone ?? string.Empty;
 
@@ -381,13 +380,12 @@ namespace ShipWorks.Stores.Platforms.Amazon
             order.BillEmail = order.ShipEmail;
 
             // Bill To
-            //var billToFullName = PersonName.Parse(salesOrder.BillTo.Name ?? salesOrder.Buyer.Name ?? string.Empty);
-            //order.BillFirstName = billToFullName.First;
-            //order.BillMiddleName = billToFullName.Middle;
-            //order.BillLastName = billToFullName.LastWithSuffix;
-            //order.BillNameParseStatus = (int) billToFullName.ParseStatus;
-            ///order.BillUnparsedName = billToFullName.UnparsedName;
-            order.BillUnparsedName = salesOrder.BillTo.Name ?? salesOrder.Buyer.Name;
+            var billToFullName = PersonName.Parse(salesOrder.BillTo.Name ?? salesOrder.Buyer.Name ?? string.Empty);
+            order.BillFirstName = billToFullName.First;
+            order.BillMiddleName = billToFullName.Middle;
+            order.BillLastName = billToFullName.LastWithSuffix;
+            order.BillNameParseStatus = (int) billToFullName.ParseStatus;
+            / order.BillUnparsedName = billToFullName.UnparsedName;
             order.BillCompany = salesOrder.BillTo.Company;
             order.BillPhone = salesOrder.BillTo.Phone ?? salesOrder.Buyer.Phone ?? string.Empty;
 
