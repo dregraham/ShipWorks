@@ -9,6 +9,7 @@ using Interapptive.Shared.Business;
 using Interapptive.Shared.Business.Geography;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Enums;
+using Interapptive.Shared.Extensions;
 using Interapptive.Shared.Metrics;
 using log4net;
 using ShipWorks.Data.Administration.Recovery;
@@ -189,12 +190,12 @@ namespace ShipWorks.Stores.Platforms.Amazon
             order.OrderDate = orderDate;
             order.OnlineLastModified = modifiedDate >= orderDate ? modifiedDate : orderDate;
 
-            // TODO: Don't appear to be provided
-            order.EarliestExpectedDeliveryDate = salesOrder.RequestedFulfillments?.Min(f => f?.ShippingPreferences?.DeliverByDate)?.DateTime;
+            // Platform may provide this in the future, but this isn't MVP
+            order.EarliestExpectedDeliveryDate = null;
             order.LatestExpectedDeliveryDate = salesOrder.RequestedFulfillments?.Max(f => f?.ShippingPreferences?.DeliverByDate)?.DateTime;
 
             // set the status
-            var orderStatus = salesOrder.Status.ToString();
+            var orderStatus = GetAmazonStatus(salesOrder.Status, order.OrderNumberComplete);
             order.OnlineStatus = orderStatus;
             order.OnlineStatusCode = orderStatus;
 
@@ -219,14 +220,14 @@ namespace ShipWorks.Stores.Platforms.Amazon
             order.IsPrime = (int) isPrime;
 
             // Purchase order number
-            order.PurchaseOrderNumber = WebUtility.HtmlDecode(salesOrder.OriginalOrderSource.OrderId ?? string.Empty);
+            order.PurchaseOrderNumber = salesOrder.Payment?.PurchaseOrderNumber;
 
             // no customer ID in this Api
             order.OnlineCustomerID = null;
 
             // requested shipping
             order.RequestedShipping =
-                salesOrder.RequestedFulfillments.FirstOrDefault()?.ShippingPreferences?.ShippingService ?? string.Empty;
+                GetRequestedShipping(salesOrder.RequestedFulfillments.FirstOrDefault()?.ShippingPreferences?.ShippingService);
 
             // Address
             LoadAddresses(order, salesOrder);
@@ -240,14 +241,14 @@ namespace ShipWorks.Stores.Platforms.Amazon
                 }
 
                 // update the total
-                order.OrderTotal = OrderUtility.CalculateTotal(order);
+                var calculatedTotal = OrderUtility.CalculateTotal(order);
 
                 // get the amount so we can fudge order totals
-                var orderAmount = salesOrder.Payment.AmountPaid;
+                order.OrderTotal = salesOrder.Payment.AmountPaid ?? calculatedTotal;
 
-                if (order.OrderTotal != orderAmount)
+                if (order.OrderTotal != calculatedTotal)
                 {
-                    var warning = string.Format("Order '{0} total should have been {1}, but was calculated as {2}", order.AmazonOrderID, orderAmount, order.OrderTotal);
+                    var warning = string.Format("Order '{0} total should have been {1}, but was calculated as {2}", order.AmazonOrderID, calculatedTotal, order.OrderTotal);
                     log.WarnFormat(warning);
 
                     Debug.Fail(warning);
@@ -257,6 +258,49 @@ namespace ShipWorks.Stores.Platforms.Amazon
             // save
             var retryAdapter = new SqlAdapterRetry<SqlException>(5, -5, "AmazonPlatformDownloader.LoadOrder");
             await retryAdapter.ExecuteWithRetryAsync(() => SaveDownloadedOrder(order)).ConfigureAwait(false);
+        }
+
+        private string GetRequestedShipping(string shippingService)
+        {
+            if (string.IsNullOrWhiteSpace(shippingService))
+            {
+                return string.Empty;
+            }
+
+            var firstSpace = shippingService.IndexOf(' ');
+            if (firstSpace == -1)
+            {
+                return shippingService;
+            }
+
+            return $"{shippingService.Substring(0, firstSpace)}:{shippingService.Substring(firstSpace)}";
+        }
+
+        /// <summary>
+        /// Attempts to figure out the Amazon status based on the Platform status
+        /// </summary>
+        /// <remarks>
+        /// Unfortunately, this isn't a one to one to from Platform Status to Amazon Status. This
+        /// is the code I used to "unmap" the platform mapping for existing filters:
+        /// https://github.com/shipstation/integrations-ecommerce/blob/915ffd7a42f22ae737bf7d277e69409c3cf1b845/modules/amazon-order-source/src/methods/mappers/sales-orders-export-mappers.ts#L150
+        /// </remarks>
+        public static string GetAmazonStatus(OrderSourceSalesOrderStatus platformStatus, string orderId)
+        {
+            switch (platformStatus)
+            {
+                case OrderSourceSalesOrderStatus.AwaitingShipment:
+                    return "Unshipped";
+                case OrderSourceSalesOrderStatus.Cancelled:
+                    return "Cancelled";
+                case OrderSourceSalesOrderStatus.Completed:
+                    return "Shipped";
+                case OrderSourceSalesOrderStatus.AwaitingPayment:
+                    return "Pending";
+                case OrderSourceSalesOrderStatus.OnHold:
+                default:
+                    log.Warn($"Encountered unmapped status of {platformStatus} for orderId {orderId}.");
+                    return "Unknown";
+            }
         }
 
         /// <summary>
@@ -295,12 +339,13 @@ namespace ShipWorks.Stores.Platforms.Amazon
                 return;
             }
 
-            var shipFullName = PersonName.Parse(shipTo.Name ?? string.Empty);
-            order.ShipFirstName = shipFullName.First;
-            order.ShipMiddleName = shipFullName.Middle;
-            order.ShipLastName = shipFullName.LastWithSuffix;
-            order.ShipNameParseStatus = (int) shipFullName.ParseStatus;
-            order.ShipUnparsedName = shipFullName.UnparsedName;
+            //var shipFullName = PersonName.Parse(shipTo.Name ?? string.Empty);
+            //order.ShipFirstName = shipFullName.First;
+            //order.ShipMiddleName = shipFullName.Middle;
+            //order.ShipLastName = shipFullName.LastWithSuffix;
+            //order.ShipNameParseStatus = (int) shipFullName.ParseStatus;
+            //order.ShipUnparsedName = shipFullName.UnparsedName;
+            order.ShipUnparsedName = shipTo.Name ?? string.Empty;
             order.ShipCompany = shipTo.Company;
             order.ShipPhone = shipTo.Phone ?? string.Empty;
 
@@ -317,17 +362,20 @@ namespace ShipWorks.Stores.Platforms.Amazon
             order.ShipCountryCode = Geography.GetCountryCode(shipTo.CountryCode ?? string.Empty);
             order.ShipStateProvCode = Geography.GetStateProvCode(shipTo.StateProvince ?? string.Empty, order.ShipCountryCode);
 
-            order.ShipEmail = order.BillEmail ?? string.Empty;
+            // Platform only provides one email
+            order.ShipEmail = salesOrder.Buyer.Email ?? string.Empty;
+            order.BillEmail = order.ShipEmail;
 
             // Bill To
-            var billToFullName = PersonName.Parse(salesOrder.BillTo.Name ?? string.Empty);
-            order.BillFirstName = billToFullName.First;
-            order.BillMiddleName = billToFullName.Middle;
-            order.BillLastName = billToFullName.LastWithSuffix;
-            order.BillNameParseStatus = (int) billToFullName.ParseStatus;
-            order.BillUnparsedName = billToFullName.UnparsedName;
+            //var billToFullName = PersonName.Parse(salesOrder.BillTo.Name ?? salesOrder.Buyer.Name ?? string.Empty);
+            //order.BillFirstName = billToFullName.First;
+            //order.BillMiddleName = billToFullName.Middle;
+            //order.BillLastName = billToFullName.LastWithSuffix;
+            //order.BillNameParseStatus = (int) billToFullName.ParseStatus;
+            ///order.BillUnparsedName = billToFullName.UnparsedName;
+            order.BillUnparsedName = salesOrder.BillTo.Name ?? salesOrder.Buyer.Name;
             order.BillCompany = salesOrder.BillTo.Company;
-            order.BillPhone = salesOrder.BillTo.Phone ?? string.Empty;
+            order.BillPhone = salesOrder.BillTo.Phone ?? salesOrder.Buyer.Phone ?? string.Empty;
 
             var billAddressLines = new List<string>
             {
@@ -340,31 +388,7 @@ namespace ShipWorks.Stores.Platforms.Amazon
             order.BillCity = salesOrder.BillTo.City ?? string.Empty;
             order.BillPostalCode = salesOrder.BillTo.PostalCode ?? string.Empty;
             order.BillCountryCode = Geography.GetCountryCode(salesOrder.BillTo.CountryCode ?? string.Empty);
-            order.BillStateProvCode = Geography.GetStateProvCode(salesOrder.BillTo.StateProvince ?? string.Empty, order.ShipCountryCode);
-
-            order.BillEmail = salesOrder.Buyer.Email ?? string.Empty;
-        }
-
-        /// <summary>
-        /// Set the buyer name while downloading an order
-        /// </summary>
-        private static void SetBuyerName(AmazonOrderEntity order, string buyerFullName)
-        {
-            // parse the name
-            var buyerName = PersonName.Parse(buyerFullName);
-            order.BillFirstName = buyerName.First;
-            order.BillMiddleName = buyerName.Middle;
-            order.BillLastName = buyerName.LastWithSuffix;
-            order.BillNameParseStatus = (int) buyerName.ParseStatus;
-            order.BillUnparsedName = buyerName.UnparsedName;
-
-            // If first and last name on the buyer are the same as the shipping name, copy the rest of the address too
-            if ((string.Equals(order.BillFirstName, order.ShipFirstName, StringComparison.OrdinalIgnoreCase)) &&
-                (string.Equals(order.BillLastName, order.ShipLastName, StringComparison.OrdinalIgnoreCase)))
-            {
-                // until Amazon provides some billing information, copy everything to billing from shipping
-                PersonAdapter.Copy(new PersonAdapter(order, "Ship"), new PersonAdapter(order, "Bill"));
-            }
+            order.BillStateProvCode = Geography.GetStateProvCode(salesOrder.BillTo.StateProvince ?? string.Empty, order.BillCountryCode);
         }
 
         /// <summary>
@@ -425,18 +449,18 @@ namespace ShipWorks.Stores.Platforms.Amazon
             {
                 foreach (var orderItemTax in orderItem.Taxes)
                 {
-                    AddToCharge(order, "Tax", orderItemTax.Description, orderItemTax.Amount);
+                    AddToCharge(order, "Tax", orderItemTax.Description.Replace("Item ", string.Empty).FirstCharToUpper(), orderItemTax.Amount);
                 }
             }
 
             foreach (var orderItemAdjustment in orderItem.Adjustments)
             {
-                AddToCharge(order, "Discount", orderItemAdjustment.Description, -orderItemAdjustment.Amount);
+                AddToCharge(order, "Discount", orderItemAdjustment.Description, orderItemAdjustment.Amount);
             }
 
             foreach (var orderItemShippingCharge in orderItem.ShippingCharges)
             {
-                AddToCharge(order, "Shipping", orderItemShippingCharge.Description, orderItemShippingCharge.Amount);
+                AddToCharge(order, "Shipping", orderItemShippingCharge.Description.Replace(" price", string.Empty), orderItemShippingCharge.Amount);
             }
         }
 
