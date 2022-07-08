@@ -245,14 +245,6 @@ namespace ShipWorks.Stores.Platforms.Amazon
 
                 // get the amount so we can fudge order totals
                 order.OrderTotal = salesOrder.Payment.AmountPaid ?? calculatedTotal;
-
-                if (order.OrderTotal != calculatedTotal)
-                {
-                    var warning = string.Format("Order '{0} total should have been {1}, but was calculated as {2}", order.AmazonOrderID, calculatedTotal, order.OrderTotal);
-                    log.WarnFormat(warning);
-
-                    Debug.Fail(warning);
-                }
             }
 
             // save
