@@ -11,10 +11,14 @@ using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Enums;
 using Interapptive.Shared.Metrics;
 using log4net;
+using Newtonsoft.Json;
+using ShipWorks.Data;
 using ShipWorks.Data.Administration.Recovery;
+using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Communication;
 using ShipWorks.Stores.Content;
+using ShipWorks.Stores.Platforms.Amazon.DTO;
 using ShipWorks.Stores.Platforms.Amazon.Mws;
 using ShipWorks.Stores.Platforms.ShipEngine;
 using ShipWorks.Stores.Platforms.ShipEngine.Apollo;
@@ -234,9 +238,11 @@ namespace ShipWorks.Stores.Platforms.Amazon
             // only load order items on new orders
             if (order.IsNew)
             {
+                var giftNotes = GetGiftNotes(salesOrder);
+                var couponCodes = salesOrder.Payment.CouponCodes.Select((c) => JsonConvert.DeserializeObject<CouponCode>(c));
                 foreach (var fulfillment in salesOrder.RequestedFulfillments)
                 {
-                    LoadOrderItems(fulfillment, order);
+                    LoadOrderItems(fulfillment, order, giftNotes, couponCodes);
                 }
 
                 // update the total
@@ -370,18 +376,20 @@ namespace ShipWorks.Stores.Platforms.Amazon
         /// <summary>
         /// Loads the order items of an amazon order
         /// </summary>
-        private void LoadOrderItems(OrderSourceRequestedFulfillment fulfillment, AmazonOrderEntity order)
+        private void LoadOrderItems(OrderSourceRequestedFulfillment fulfillment, AmazonOrderEntity order, IEnumerable<GiftNote> giftNotes, IEnumerable<CouponCode> couponCodes)
         {
             foreach (var item in fulfillment.Items)
             {
-                LoadOrderItem(item, order);
+                var filteredNotes = giftNotes.Where(i => i.OrderItemId == item.LineItemId);
+                var filteredCouponCodes = couponCodes.Where((c) => c.OrderItemId == item.LineItemId);
+                LoadOrderItem(item, order, filteredNotes, filteredCouponCodes);
             }
         }
 
         /// <summary>
         /// Load an order item
         /// </summary>
-        private void LoadOrderItem(OrderSourceSalesOrderItem orderItem, AmazonOrderEntity order)
+        private void LoadOrderItem(OrderSourceSalesOrderItem orderItem, AmazonOrderEntity order, IEnumerable<GiftNote> giftNotes, IEnumerable<CouponCode> couponCodes)
         {
             var item = (AmazonOrderItemEntity) InstantiateOrderItem(order);
 
@@ -403,14 +411,37 @@ namespace ShipWorks.Stores.Platforms.Amazon
 
             // amazon-specific fields
             item.AmazonOrderItemCode = orderItem.LineItemId;
-            //TODO amz:ConditionNote
             item.ASIN = orderItem.Product.Identifiers?.Asin;
 
-            // see if we need to add any attributes
-            SetOrderItemGiftDetails(orderItem, item);
+            //Load the gift message
+            var giftNote = giftNotes.FirstOrDefault(i => i.Type == OrderSourceNoteType.GiftMessage);
+            if (giftNote != null)
+            {
+                OrderItemAttributeEntity giftAttribute = InstantiateOrderItemAttribute(item);
+                giftAttribute.Name = "Gift Message";
+                giftAttribute.Description = giftNote.Message;
+                giftAttribute.UnitPrice = 0;
+                item.OrderItemAttributes.Add(giftAttribute);
+            }
 
-            // add an attribute for each promotion
-            // TODO: amz:PromotionIds/amz:PromotionId
+            //Load any coupon codes
+            if (couponCodes != null)
+            {
+                foreach (var couponSet in couponCodes)
+                {
+                    foreach (var code in couponSet.Codes)
+                    {
+                        OrderItemAttributeEntity couponAttribute = InstantiateOrderItemAttribute(item);
+                        couponAttribute.Name = "Promotion ID";
+                        couponAttribute.Description = code;
+                        couponAttribute.UnitPrice = 0;
+                        item.OrderItemAttributes.Add(couponAttribute);
+                    }
+                }
+            }
+
+            item.ConditionNote = orderItem.Product?.Details?.FirstOrDefault((d) => d.Name == "Condition")?.Value;
+
 
             AddOrderItemCharges(orderItem, order);
         }
@@ -464,12 +495,21 @@ namespace ShipWorks.Stores.Platforms.Amazon
             charge.Amount += amount;
         }
 
-        /// <summary>
-        /// Set gift details on an order item
-        /// </summary>
-        private void SetOrderItemGiftDetails(OrderSourceSalesOrderItem orderItem, AmazonOrderItemEntity item)
+        private List<GiftNote> GetGiftNotes(OrderSourceApiSalesOrder salesOrder)
         {
-            // TODO
+            var itemNotes = new List<GiftNote>();
+            if (salesOrder.Notes != null)
+            {
+                foreach (var note in salesOrder.Notes)
+                {
+                    if (note.Type == OrderSourceNoteType.GiftMessage)
+                    {
+                        itemNotes.Add(GiftNote.FromOrderSourceNote(note));
+                    }
+                }
+            }
+
+            return itemNotes;
         }
     }
 }
