@@ -1314,6 +1314,8 @@
       <DependentUpon>AmazonInitialDownloadDaysControl.cs</DependentUpon>
     </Compile>
     <Compile Include="Stores\Platforms\Amazon\AmazonPlatformDownloader.cs" />
+    <Compile Include="Stores\Platforms\Amazon\DTO\CouponCode.cs" />
+    <Compile Include="Stores\Platforms\Amazon\DTO\GiftNote.cs" />
     <Compile Include="Stores\Platforms\Platform\IHubOrderSourceClient.cs" />
     <Compile Include="Stores\Platforms\Platform\OnlineUpdating\IPlatformOnlineUpdater.cs" />
     <Compile Include="Stores\Platforms\Platform\OnlineUpdating\PlatformBulkOnlineUpdater.cs" />
