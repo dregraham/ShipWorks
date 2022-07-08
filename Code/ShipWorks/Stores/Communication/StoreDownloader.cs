@@ -1246,7 +1246,7 @@ namespace ShipWorks.Stores.Communication
 
                 if(Math.Abs(total - order.OrderTotal) <= 0.01m)
                 {
-                    var msg = $"Order total does not match calculated total \r\n Calculated Total {total}\r\n should equal Order Total {order.OrderTotal} for order {order.OrderNumberComplete}.");
+                    var msg = $"Order total does not match calculated total \r\n Calculated Total {total}\r\n should equal Order Total {order.OrderTotal} for order {order.OrderNumberComplete}.";
                     log.Warn(msg);
                     Debug.Fail(msg);
                 }
