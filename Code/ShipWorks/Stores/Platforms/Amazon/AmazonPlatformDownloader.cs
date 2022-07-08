@@ -432,8 +432,10 @@ namespace ShipWorks.Stores.Platforms.Amazon
 
             item.Weight = (double) orderItem.Product.Weight.Value;
 
-            item.Thumbnail = orderItem.Product.Urls?.ThumbnailUrl;
-            item.Image = orderItem.Product.Urls?.ImageUrl;
+            item.Thumbnail = orderItem.Product.Details
+                .FirstOrDefault(d => d.Name.Equals("ThumbnailUrl", StringComparison.InvariantCultureIgnoreCase))?.Value ?? string.Empty;
+            item.Image = orderItem.Product.Details
+                .FirstOrDefault(d => d.Name.Equals("ImageUrl", StringComparison.InvariantCultureIgnoreCase))?.Value ?? string.Empty;
 
             item.Length = orderItem.Product.Dimensions?.Length ?? 0;
             item.Width = orderItem.Product.Dimensions?.Width ?? 0;
