@@ -308,7 +308,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon.SFP
             AmazonSFPProfileEntity amazon = profile.AmazonSFP;
             amazon.DeliveryExperience = (int) AmazonSFPDeliveryExperienceType.DeliveryConfirmationWithoutSignature;
             amazon.ShippingServiceID = string.Empty;
-            amazon.Reference1 = "Order {//Order/Number}";
+            amazon.Reference1 = "";
             amazon.ShippingProfile.RequestedLabelFormat = (int) ThermalLanguage.None;
         }
 
