@@ -16,6 +16,8 @@ namespace ShipWorks.Stores.Platforms.Amazon.DTO
         public string ASIN { get; set; }
         public string SKU { get; set; }
         public string OrderItemId { get; set; }
+        public decimal Fee { get; set; }
+        public string GiftWrapLevel { get; set; }
         public string Message { get; set; }
 
         /// <summary>
@@ -28,6 +30,13 @@ namespace ShipWorks.Stores.Platforms.Amazon.DTO
             itemNote.ASIN = ParseNoteTextProperty("ASIN", messageParts);
             itemNote.SKU = ParseNoteTextProperty("SKU", messageParts);
             itemNote.OrderItemId = ParseNoteTextProperty("OrderItemId", messageParts);
+            itemNote.GiftWrapLevel = ParseNoteTextProperty("Gift Wrap Level", messageParts);
+            var fee = ParseNoteTextProperty("Fee", messageParts);
+            if (fee.HasValue() && decimal.TryParse(fee, out decimal parsedFee))
+            {
+                itemNote.Fee = parsedFee;
+            }
+
             itemNote.Message = ParseNoteMessageProperty(messageParts);
 
             return itemNote;
@@ -57,9 +66,14 @@ namespace ShipWorks.Stores.Platforms.Amazon.DTO
             //the message is the last property and take everything after the "Message:" part of the string
             var remaining = messageParts.SkipWhile(p => !p.StartsWith("Message")).ToArray();
 
-            //Remove the "Message:" bit
-            remaining[0] = remaining[0].Substring(8);
-            return String.Join("\n", remaining).Trim();
+            if (remaining.Any())
+            {
+                //Remove the "Message:" bit
+                remaining[0] = remaining[0].Substring(8);
+                return String.Join("\n", remaining).Trim();
+            }
+
+            return string.Empty;
         }
     }
 }

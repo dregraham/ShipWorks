@@ -11,6 +11,7 @@ using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Enums;
 using Interapptive.Shared.Extensions;
 using Interapptive.Shared.Metrics;
+using Interapptive.Shared.Utility;
 using log4net;
 using Newtonsoft.Json;
 using ShipWorks.Data;
@@ -23,6 +24,7 @@ using ShipWorks.Stores.Platforms.Amazon.DTO;
 using ShipWorks.Stores.Platforms.Amazon.Mws;
 using ShipWorks.Stores.Platforms.ShipEngine;
 using ShipWorks.Stores.Platforms.ShipEngine.Apollo;
+using Syncfusion.XlsIO.Parser.Biff_Records;
 
 namespace ShipWorks.Stores.Platforms.Amazon
 {
@@ -448,11 +450,23 @@ namespace ShipWorks.Stores.Platforms.Amazon
             //Load the gift messages
             foreach(var giftNote in giftNotes)
             {
-                OrderItemAttributeEntity giftAttribute = InstantiateOrderItemAttribute(item);
-                giftAttribute.Name = "Gift Message";
-                giftAttribute.Description = giftNote.Message;
-                giftAttribute.UnitPrice = 0;
-                item.OrderItemAttributes.Add(giftAttribute);
+                if(giftNote.Message.HasValue() || giftNote.Fee > 0)
+                {
+                    OrderItemAttributeEntity giftAttribute = InstantiateOrderItemAttribute(item);
+                    giftAttribute.Name = "Gift Message";
+                    giftAttribute.Description = giftNote.Message;
+                    giftAttribute.UnitPrice = giftNote.Fee;
+                    item.OrderItemAttributes.Add(giftAttribute);
+                }
+
+                if (giftNote.GiftWrapLevel.HasValue())
+                {
+                    OrderItemAttributeEntity levelAttribute = InstantiateOrderItemAttribute(item);
+                    levelAttribute.Name = "Gift Wrap Level";
+                    levelAttribute.Description = giftNote.GiftWrapLevel;
+                    levelAttribute.UnitPrice = 0;
+                    item.OrderItemAttributes.Add(levelAttribute);
+                }
             }
 
             //Load any coupon codes
