@@ -246,6 +246,20 @@ namespace ShipWorks.Stores.Platforms.Amazon
                     LoadOrderItems(fulfillment, order, giftNotes, couponCodes);
                 }
 
+                // Taxes
+                if (AmazonStore.AmazonVATS != true)
+                {
+                    var totalTax = salesOrder.RequestedFulfillments?
+                        .SelectMany(f => f.Items)?
+                        .SelectMany(i => i.Taxes)?
+                        .Sum(t => t.Amount) ?? 0;
+
+                    if (totalTax > 0)
+                    {
+                        AddToCharge(order, "Tax", "Tax", totalTax);
+                    }
+                }
+
                 // update the total
                 var calculatedTotal = OrderUtility.CalculateTotal(order);
 
@@ -457,7 +471,6 @@ namespace ShipWorks.Stores.Platforms.Amazon
 
             item.ConditionNote = orderItem.Product?.Details?.FirstOrDefault((d) => d.Name == "Condition")?.Value;
 
-
             AddOrderItemCharges(orderItem, order);
         }
 
@@ -466,15 +479,6 @@ namespace ShipWorks.Stores.Platforms.Amazon
         /// </summary>
         private void AddOrderItemCharges(OrderSourceSalesOrderItem orderItem, AmazonOrderEntity order)
         {
-            // Charges
-            if (AmazonStore.AmazonVATS != true)
-            {
-                foreach (var orderItemTax in orderItem.Taxes)
-                {
-                    AddToCharge(order, "Tax", orderItemTax.Description.Replace("Item ", string.Empty).FirstCharToUpper(), orderItemTax.Amount);
-                }
-            }
-
             foreach (var orderItemAdjustment in orderItem.Adjustments)
             {
                 AddToCharge(order, "Discount", orderItemAdjustment.Description, orderItemAdjustment.Amount);
