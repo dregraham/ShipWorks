@@ -82,7 +82,7 @@ namespace Interapptive.Shared.Extensions
         }
 
         /// <summary>
-        /// Capatalize forst letter of string. Return input if null or empty
+        /// Capatalize first letter of string. Return input if null or empty
         /// </summary>
         public static string FirstCharToUpper(this string input)
         {
