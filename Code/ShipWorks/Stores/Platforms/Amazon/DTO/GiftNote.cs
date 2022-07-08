@@ -8,9 +8,11 @@ using ShipWorks.Stores.Platforms.ShipEngine.Apollo;
 
 namespace ShipWorks.Stores.Platforms.Amazon.DTO
 {
+    /// <summary>
+    /// DTO for Amazon Platform Item Gift Notes
+    /// </summary>
     public class GiftNote
-    {
-        public OrderSourceNoteType Type { get; set; }
+    { 
         public string ASIN { get; set; }
         public string SKU { get; set; }
         public string OrderItemId { get; set; }

@@ -413,9 +413,8 @@ namespace ShipWorks.Stores.Platforms.Amazon
             item.AmazonOrderItemCode = orderItem.LineItemId;
             item.ASIN = orderItem.Product.Identifiers?.Asin;
 
-            //Load the gift message
-            var giftNote = giftNotes.FirstOrDefault(i => i.Type == OrderSourceNoteType.GiftMessage);
-            if (giftNote != null)
+            //Load the gift messages
+            foreach(var giftNote in giftNotes)
             {
                 OrderItemAttributeEntity giftAttribute = InstantiateOrderItemAttribute(item);
                 giftAttribute.Name = "Gift Message";
