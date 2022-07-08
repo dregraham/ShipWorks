@@ -1244,7 +1244,7 @@ namespace ShipWorks.Stores.Communication
             {
                 decimal total = OrderUtility.CalculateTotal(order);
 
-                if(Math.Abs(total - order.OrderTotal) <= 0.01m)
+                if(Math.Abs(total - order.OrderTotal) >= 0.01m)
                 {
                     var msg = $"Order total does not match calculated total \r\n Calculated Total {total}\r\n should equal Order Total {order.OrderTotal} for order {order.OrderNumberComplete}.";
                     log.Warn(msg);
