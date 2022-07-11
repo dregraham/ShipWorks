@@ -385,7 +385,7 @@ namespace ShipWorks.Stores.Platforms.Amazon
             order.BillMiddleName = billToFullName.Middle;
             order.BillLastName = billToFullName.LastWithSuffix;
             order.BillNameParseStatus = (int) billToFullName.ParseStatus;
-            / order.BillUnparsedName = billToFullName.UnparsedName;
+            order.BillUnparsedName = billToFullName.UnparsedName;
             order.BillCompany = salesOrder.BillTo.Company;
             order.BillPhone = salesOrder.BillTo.Phone ?? salesOrder.Buyer.Phone ?? string.Empty;
 
