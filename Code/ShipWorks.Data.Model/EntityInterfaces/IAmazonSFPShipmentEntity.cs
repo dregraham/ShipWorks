@@ -123,6 +123,12 @@ namespace ShipWorks.Data.Model.EntityInterfaces
         /// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
         System.Int32 RequestedLabelFormat { get; }
+        /// <summary> The ShipEngineLabelID property of the Entity AmazonSFPShipment<br/><br/>
+        /// </summary>
+        /// <remarks>Mapped on table field: "AmazonSFPShipment"."ShipEngineLabelID"<br/>
+        /// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 50<br/>
+        /// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+        System.String ShipEngineLabelID { get; }
         
         IShipmentEntity Shipment { get; }
         

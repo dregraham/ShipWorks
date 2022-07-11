@@ -83,6 +83,7 @@ using ShipWorks.Properties;
 using ShipWorks.Settings;
 using ShipWorks.Shipping;
 using ShipWorks.Shipping.Carriers;
+using ShipWorks.Shipping.Carriers.Amazon.SFP;
 using ShipWorks.Shipping.Carriers.Asendia;
 using ShipWorks.Shipping.Carriers.DhlEcommerce;
 using ShipWorks.Shipping.Carriers.FedEx;
@@ -100,6 +101,7 @@ using ShipWorks.Stores.Content;
 using ShipWorks.Stores.Management;
 using ShipWorks.Stores.Orders.Archive;
 using ShipWorks.Stores.Orders.Split;
+using ShipWorks.Stores.Services;
 using ShipWorks.Templates;
 using ShipWorks.Templates.Controls;
 using ShipWorks.Templates.Controls.DefaultPickListTemplate;
@@ -620,12 +622,16 @@ namespace ShipWorks
                 sqlChangeTracking.Enable();
 
                 LogonToShipWorks(user);
-                DashboardManager.ShowOneBalancePromo();
 
-                // If we successfully logged on, the last update must have succeeded.
-                AutoUpdateSettings.LastAutoUpdateSucceeded = true;
+                if (UserSession.IsLoggedOn)
+                {
+                    DashboardManager.ShowOneBalancePromo();
 
-                ShipSenseLoader.LoadDataAsync();
+                    // If we successfully logged on, the last update must have succeeded.
+                    AutoUpdateSettings.LastAutoUpdateSucceeded = true;
+
+                    ShipSenseLoader.LoadDataAsync();
+                }
             }
             else
             {
@@ -892,6 +898,8 @@ namespace ShipWorks
 
             ConvertLegacyTrialStores();
 
+            ConvertAmazonStoresToSP();
+
             // Update the custom actions UI.  Has to come before applying the layout, so the QAT can pickup the buttons
             UpdateCustomButtonsActionsUI();
 
@@ -923,6 +931,13 @@ namespace ShipWorks
             heartBeat.Start();
 
             ExecuteLogonActions();
+
+            UsingAsync(
+                    IoC.BeginLifetimeScope(),
+                    lifetimeScope => lifetimeScope.Resolve<IAmazonTermsOrchestrator>().Handle()
+                )
+                .Do(x => { }, ex => Console.WriteLine(ex.Message))
+                .Forget();
 
             // Update the nudges from Tango and show any upgrade related nudges
             NudgeManager.Initialize(StoreManager.GetAllStores());
@@ -5625,6 +5640,19 @@ namespace ShipWorks
                 var legacyTrialStoreConverter = lifetimeScope.Resolve<ILegacyStoreTrialKeyConverter>();
 
                 legacyTrialStoreConverter.ConvertTrials();
+            }
+        }
+
+        /// <summary>
+        /// Convert MWS Amazon stores to SP
+        /// </summary>
+        private void ConvertAmazonStoresToSP()
+        {
+            using (var lifetimeScope = IoC.BeginLifetimeScope())
+            {
+                var amazonConverter = lifetimeScope.Resolve<IAmazonMwsToSpConverter>();
+
+                amazonConverter.ConvertStores(this);
             }
         }
 

@@ -31,6 +31,11 @@ namespace ShipWorks.ApplicationCore.Licensing
         string Key { get; }
 
         /// <summary>
+        /// The CustomerID
+        /// </summary>
+        string CustomerID { get; }
+
+        /// <summary>
         /// Details about the trial
         /// </summary>
         TrialDetails TrialDetails { get; }

@@ -4,6 +4,7 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Newtonsoft.Json.Serialization;
 using RestSharp;
+using RestSharp.Extensions;
 
 namespace ShipWorks.ApplicationCore.Licensing.Warehouse
 {
@@ -60,7 +61,23 @@ namespace ShipWorks.ApplicationCore.Licensing.Warehouse
                         },
                     });
 
-                return new HubApiException(error.Reason, (HubErrorCode) error.Code, restResponse.StatusCode);
+                var reason = string.Empty;
+                if (error != null)
+                {
+                    if (error.Reason.HasValue())
+                    {
+                        error.Errors.Add(error.Reason);
+                    }
+
+                    if (error.Error.HasValue())
+                    {
+                        error.Errors.Add(error.Error);
+                    }
+
+                    reason = string.Join(Environment.NewLine, error.Errors);
+                }
+
+                return new HubApiException(reason, (HubErrorCode) error.Code, restResponse.StatusCode);
             }
             catch (Exception)
             {

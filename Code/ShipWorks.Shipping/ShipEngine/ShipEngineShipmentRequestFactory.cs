@@ -65,11 +65,9 @@ namespace ShipWorks.Shipping.ShipEngine
                 request.Shipment.Customs = CreateCustoms(shipment);
             }
 
-            if (shipment.Insurance)
+            if (shipment.Insurance && shipment.InsuranceProvider == (int) Shipment.InsuranceProviderEnum.Carrier)
             {
-                request.Shipment.InsuranceProvider = shipment.InsuranceProvider == (int) Shipment.InsuranceProviderEnum.Carrier ?
-                    Shipment.InsuranceProviderEnum.Carrier :
-                    Shipment.InsuranceProviderEnum.Thirdparty;
+                request.Shipment.InsuranceProvider = Shipment.InsuranceProviderEnum.Carrier;
             }
 
             if (request.Shipment.Packages.Any() && shipment.ShipmentTypeCode == ShipmentTypeCode.DhlEcommerce)
@@ -115,11 +113,9 @@ namespace ShipWorks.Shipping.ShipEngine
 
                 request.Shipment.Packages = shipmentElementFactory.CreatePackageForRating(packages, SetPackageInsurance);
 
-                if (shipment.Insurance)
+                if (shipment.Insurance && shipment.InsuranceProvider == (int) InsuranceProvider.Carrier)
                 {
-                    request.Shipment.InsuranceProvider = shipment.InsuranceProvider == (int) InsuranceProvider.Carrier ?
-                        AddressValidatingShipment.InsuranceProviderEnum.Carrier :
-                        AddressValidatingShipment.InsuranceProviderEnum.Thirdparty;
+                    request.Shipment.InsuranceProvider = AddressValidatingShipment.InsuranceProviderEnum.Carrier;
                 }
 
                 if (request.Shipment.Packages.Any() && shipment.ShipmentTypeCode == ShipmentTypeCode.DhlEcommerce)
@@ -127,6 +123,8 @@ namespace ShipWorks.Shipping.ShipEngine
                     // Yes, set to Reference3 as per DHL
                     request.Shipment.Packages.First().LabelMessages.Reference3 = shipment.DhlEcommerce.Reference1;
                 }
+
+                request.Shipment.Items = CreateItems(shipment);
 
                 return request;
             }
@@ -176,6 +174,11 @@ namespace ShipWorks.Shipping.ShipEngine
         /// Creates the ShipEngine tax identifier node
         /// </summary>
         protected abstract List<TaxIdentifier> CreateTaxIdentifiers(ShipmentEntity shipment);
+
+        /// <summary>
+        /// Create shipment items
+        /// </summary>
+        protected abstract List<ShipmentItem> CreateItems(ShipmentEntity shipment);
 
         /// <summary>
         /// Gets the carrier specific packages

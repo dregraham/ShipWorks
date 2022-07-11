@@ -16,6 +16,11 @@ namespace Interapptive.Shared.Security
         /// <summary>
         /// Decrypts a string that was returned by the Encrypt method.
         /// </summary>
+        public static string Decrypt(string ciphertext) => Decrypt(ciphertext, null);
+
+        /// <summary>
+        /// Decrypts a string that was returned by the Encrypt method.
+        /// </summary>
         public static string Decrypt(string ciphertext, string password)
         {
             log.Debug("Beginning decryption");
@@ -24,12 +29,6 @@ namespace Interapptive.Shared.Security
             {
                 log.Info("Cipher text was null");
                 throw new ArgumentNullException("cipher");
-            }
-
-            if (password == null)
-            {
-                log.Info("Password was null");
-                throw new ArgumentNullException("salt");
             }
 
             if (ciphertext.Length == 0)
@@ -49,9 +48,17 @@ namespace Interapptive.Shared.Security
                     return new SecureTextVersion0(log).Decrypt(ciphertext, password);
                 }
 
-                // When new versions are created, this should become a switch statement based on encryptedVersion[1]
-                log.Debug("Decrypting with SecureText version 1");
-                return new SecureTextVersion1(log).Decrypt(encryptedVersion[0], password);
+                switch (encryptedVersion[1])
+                {
+                    case "1":
+                        log.Debug("Decrypting with SecureText version 1");
+                        return new SecureTextVersion1(log).Decrypt(encryptedVersion[0], password);
+                    case "2":
+                        log.Debug("Decrypting with SecureText version 2");
+                        return new SecureTextVersion2(log).Decrypt(encryptedVersion[0], password);
+                    default:
+                        throw new InvalidCipherTextException($"Unknown SecureText version: '{encryptedVersion[1]}'");
+                }
             }
             // OverflowException is thrown when the encrypted text is too short
             catch (Exception ex) when (ex is OverflowException || ex is InvalidCipherTextException)
@@ -60,6 +67,11 @@ namespace Interapptive.Shared.Security
                 return string.Empty;
             }
         }
+
+        /// <summary>
+        /// Encrypts the string and returns the cipher text.
+        /// </summary>
+        public static string Encrypt(string plaintext) => Encrypt(plaintext, null);
 
         /// <summary>
         /// Encrypts the string and returns the cipher text.
@@ -73,12 +85,8 @@ namespace Interapptive.Shared.Security
                 throw new ArgumentNullException("plaintext");
             }
 
-            if (password == null)
-            {
-                throw new ArgumentNullException("salt");
-            }
-
-            return new SecureTextVersion1(log).Encrypt(plaintext, password);
+            // This should always be updated to the latest version
+            return new SecureTextVersion2(log).Encrypt(plaintext, password);
         }
 
         /// <summary>

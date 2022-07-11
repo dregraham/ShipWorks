@@ -78,7 +78,7 @@ namespace ShipWorks.Shipping.ShipEngine
         /// <summary>
         /// Void the shipment
         /// </summary>
-        public void Void(ShipmentEntity shipment)
+        public virtual void Void(ShipmentEntity shipment)
         {
             DTOs.VoidLabelResponse response;
             try
@@ -97,7 +97,7 @@ namespace ShipWorks.Shipping.ShipEngine
         /// <summary>
         /// Get a user friendly message based on the exception
         /// </summary>
-        private string GetExceptionMessage(Exception ex, string seAccountId)
+        protected string GetExceptionMessage(Exception ex, string seAccountId)
         {
             string message = ex.Message;
             string carrier = EnumHelper.GetDescription(ShipmentTypeCode);

@@ -3,8 +3,9 @@ using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Drawing.Imaging;
 using System.Linq;
-using Interapptive.Shared.Collections;
+using System.Threading.Tasks;
 using Interapptive.Shared.Utility;
+using log4net;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.ApplicationCore.Licensing;
 using ShipWorks.Common.IO.Hardware.Printers;
@@ -24,6 +25,7 @@ using ShipWorks.Shipping.Tracking;
 using ShipWorks.Stores;
 using ShipWorks.Stores.Content;
 using ShipWorks.Stores.Platforms.Amazon;
+using ShipWorks.Stores.Platforms.Platform;
 using ShipWorks.Templates.Processing.TemplateXml.ElementOutlines;
 
 namespace ShipWorks.Shipping.Carriers.Amazon.SFP
@@ -38,18 +40,22 @@ namespace ShipWorks.Shipping.Carriers.Amazon.SFP
         private readonly ILicenseService licenseService;
         private readonly IAmazonSFPServiceTypeRepository serviceTypeRepository;
         private readonly IOrderManager orderManager;
+        private readonly IHubOrderSourceClient hubOrderSourceClient;
+        private static readonly ILog log = LogManager.GetLogger(typeof(AmazonSFPShipmentType));
 
         /// <summary>
         /// Constructor
         /// </summary>
         public AmazonSFPShipmentType(IStoreManager storeManager, IShippingManager shippingManager, ILicenseService licenseService,
-            IAmazonSFPServiceTypeRepository serviceTypeRepository, IOrderManager orderManager)
+            IAmazonSFPServiceTypeRepository serviceTypeRepository, IOrderManager orderManager,
+            IHubOrderSourceClient hubOrderSourceClient)
         {
             this.storeManager = storeManager;
             this.shippingManager = shippingManager;
             this.licenseService = licenseService;
             this.serviceTypeRepository = serviceTypeRepository;
             this.orderManager = orderManager;
+            this.hubOrderSourceClient = hubOrderSourceClient;
         }
 
         /// <summary>
@@ -79,6 +85,24 @@ namespace ShipWorks.Shipping.Carriers.Amazon.SFP
         protected override void LoadShipmentDataInternal(ShipmentEntity shipment, bool refreshIfPresent)
         {
             ShipmentTypeDataService.LoadShipmentData(this, shipment, shipment, "AmazonSFP", typeof(AmazonSFPShipmentEntity), refreshIfPresent);
+
+            StoreEntity store = null;
+
+            if (shipment.Order?.Store != null)
+            {
+                store = shipment.Order.Store;
+            }
+            else if (shipment.Order == null)
+            {
+                orderManager.PopulateOrderDetails(shipment);
+                store = storeManager.GetStore(shipment.Order.StoreID);
+            }
+            else if (shipment.Order.Store == null)
+            {
+                store = storeManager.GetStore(shipment.Order.StoreID);
+            }
+
+            SetupPlatformCarrierIdIfNeeded(store);
         }
 
         /// <summary>
@@ -171,6 +195,65 @@ namespace ShipWorks.Shipping.Carriers.Amazon.SFP
         }
 
         /// <summary>
+        /// Check to see if the Amazon store has its PlatformAmazonCarrierID set
+        /// If not, try to get it.
+        /// </summary>
+        public void SetupPlatformCarrierIdIfNeeded(StoreEntity store)
+        {
+            // Nothing to do if the carrier is already set or if the store does not have Amazon Credentials
+            if (!store.PlatformAmazonCarrierID.IsNullOrWhiteSpace() || !(store is IAmazonCredentials credentials))
+                return;
+
+            try
+            {
+                Task<string> execTask;
+                var platformAmazonCarrierId = string.Empty;
+
+                // When dealing with an Amazon store we have a different path
+                if (store.StoreTypeCode == StoreTypeCode.Amazon)
+                {
+                    var amazonStore = (AmazonStoreEntity) store;
+                    if (amazonStore.MarketplaceID.IsNullOrWhiteSpace() ||
+                        amazonStore.MerchantID.IsNullOrWhiteSpace())
+                    {
+                        log.Info($"Store {store.StoreID} {store.StoreTypeCode} was missing Marketplace or Merchant Id.");
+                        return;
+                    }
+
+                    // Short circuit the id
+                    var uniqueIdentifier = $"{amazonStore.MerchantID}_{amazonStore.MarketplaceID}".ToUpper();
+
+                    execTask = Task.Run(async () => platformAmazonCarrierId = await hubOrderSourceClient
+                        .GetPlatformAmazonCarrierId(uniqueIdentifier).ConfigureAwait(false));
+                }
+                // Stores that implement Amazon Credentials but aren't an Amazon store
+                else
+                {
+                    if (credentials.MerchantID.IsNullOrWhiteSpace() ||
+                        credentials.AuthToken.IsNullOrWhiteSpace() ||
+                        credentials.Region.IsNullOrWhiteSpace())
+                    {
+                        log.Info($"Store {store.StoreID} {store.StoreTypeCode} was missing Merchant Id, Auth Token, or Region.");
+                        return;
+                    }
+
+                    execTask = Task.Run(async () => platformAmazonCarrierId = await hubOrderSourceClient
+                        .CreateAmazonCarrierFromMws(credentials.MerchantID, credentials.AuthToken, credentials.Region).ConfigureAwait(false));
+                }
+
+                Task.WaitAll(execTask);
+                store.PlatformAmazonCarrierID = platformAmazonCarrierId;
+                storeManager.SaveStore(store);
+            }
+            catch (Exception ex)
+            {
+                // Just catch and log.  We'll have to investigate the error to get the customer working.
+                // But no reason to crash the app
+                log.Error(ex);
+            }
+        }
+
+        /// <summary>
         /// Amazon supports rates
         /// </summary>
         public override bool SupportsGetRates => true;
@@ -225,7 +308,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon.SFP
             AmazonSFPProfileEntity amazon = profile.AmazonSFP;
             amazon.DeliveryExperience = (int) AmazonSFPDeliveryExperienceType.DeliveryConfirmationWithoutSignature;
             amazon.ShippingServiceID = string.Empty;
-            amazon.Reference1 = "Order {//Order/Number}";
+            amazon.Reference1 = "";
             amazon.ShippingProfile.RequestedLabelFormat = (int) ThermalLanguage.None;
         }
 
@@ -271,7 +354,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon.SFP
             {
                 trackingLink = $"http://webtrack.dhlglobalmail.com/?mobile=&amp;trackingnumber={shipment.TrackingNumber}";
             }
-            else if (serviceUsed.IndexOf("USPS", StringComparison.OrdinalIgnoreCase) >= 0 || serviceUsed.IndexOf("SmartPost", StringComparison.OrdinalIgnoreCase) >= 0)
+            else if (serviceUsed.IndexOf("USPS", StringComparison.OrdinalIgnoreCase) >= 0 || serviceUsed.IndexOf("SmartPost", StringComparison.OrdinalIgnoreCase) >= 0 || serviceUsed.IndexOf("SDC", StringComparison.OrdinalIgnoreCase) >= 0)
             {
                 trackingLink = $"https://tools.usps.com/go/TrackConfirmAction.action?tLabels={shipment.TrackingNumber}";
             }
@@ -281,7 +364,15 @@ namespace ShipWorks.Shipping.Carriers.Amazon.SFP
             }
             else if (serviceUsed.IndexOf("FedEx", StringComparison.OrdinalIgnoreCase) >= 0)
             {
-                trackingLink = $"http://www.fedex.com/Tracking?language=english&amp;cntry_code=us&amp;tracknumbers={shipment.TrackingNumber}";
+                trackingLink = $"https://www.fedex.com/fedextrack/?trknbr={shipment.TrackingNumber}";
+            }
+            else if (serviceUsed.IndexOf("OnTrac", StringComparison.OrdinalIgnoreCase) >= 0)
+            {
+                trackingLink = $"https://www.ontrac.com/tracking.asp?trackingres=submit&tracking_number={shipment.TrackingNumber}";
+            }
+            else if (serviceUsed.IndexOf("Dynamex", StringComparison.OrdinalIgnoreCase) >= 0)
+            {
+                trackingLink = $"https://www.ordertracker.com/track/{shipment.TrackingNumber}";
             }
 
             return trackingLink;

@@ -518,9 +518,6 @@ namespace ShipWorks.Data.Model.Linq
 				case ShipWorks.Data.Model.EntityType.PermissionEntity:
 					toReturn = this.Permission;
 					break;
-				case ShipWorks.Data.Model.EntityType.PlatformStoreEntity:
-					toReturn = this.PlatformStore;
-					break;
 				case ShipWorks.Data.Model.EntityType.PostalProfileEntity:
 					toReturn = this.PostalProfile;
 					break;
@@ -1729,12 +1726,6 @@ namespace ShipWorks.Data.Model.Linq
 		public DataSource2<PermissionEntity> Permission
 		{
 			get { return new DataSource2<PermissionEntity>(_adapterToUse, new ElementCreator(), _customFunctionMappings, _contextToUse); }
-		}
-		
-		/// <summary>returns the datasource to use in a Linq query when targeting PlatformStoreEntity instances in the database.</summary>
-		public DataSource2<PlatformStoreEntity> PlatformStore
-		{
-			get { return new DataSource2<PlatformStoreEntity>(_adapterToUse, new ElementCreator(), _customFunctionMappings, _contextToUse); }
 		}
 		
 		/// <summary>returns the datasource to use in a Linq query when targeting PostalProfileEntity instances in the database.</summary>

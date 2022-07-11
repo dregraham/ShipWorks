@@ -88,7 +88,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
             : this(lifetimeScope, uspsResellerType, new TrustingCertificateInspector())
         {
         }
-        
+
         /// <summary>
         /// Initializes a new instance of the <see cref="UspsWebClient" /> class.
         /// </summary>
@@ -214,7 +214,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
             }
 #endif
         }
-        
+
         /// <summary>
         /// Get the account info for the given USPS user name
         /// </summary>
@@ -1020,7 +1020,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
             TelemetricResult<StampsLabelResponse> telemetricResult = new TelemetricResult<StampsLabelResponse>(TelemetricResultBaseName.ApiResponseTimeInMilliseconds);
             (Address toAddress, Address fromAddress) = await FixWebserviceAddresses(account, shipment, telemetricResult, requireFullAddressValidation).ConfigureAwait(false);
 
-            RateV40 rate = CreateRateForProcessing(shipment, account,toAddress,fromAddress);
+            RateV40 rate = CreateRateForProcessing(shipment, account, toAddress, fromAddress);
             CustomsV7 customs = CreateCustoms(shipment);
 
             // USPS requires that the address in the Rate match that of the request.  Makes sense - but could be different if they auto-cleansed the address.
