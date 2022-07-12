@@ -1,7 +1,7 @@
 ﻿using System;
+using System.Linq;
 using System.Net;
 using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 using Newtonsoft.Json.Serialization;
 using RestSharp;
 using RestSharp.Extensions;
@@ -61,9 +61,12 @@ namespace ShipWorks.ApplicationCore.Licensing.Warehouse
                         },
                     });
 
-                var reason = string.Empty;
+                var reason = "An unknown error occurred";
+                var code = HubErrorCode.Unknown;
                 if (error != null)
                 {
+                    code = (HubErrorCode) error.Code;
+
                     if (error.Reason.HasValue())
                     {
                         error.Errors.Add(error.Reason);
@@ -74,10 +77,18 @@ namespace ShipWorks.ApplicationCore.Licensing.Warehouse
                         error.Errors.Add(error.Error);
                     }
 
-                    reason = string.Join(Environment.NewLine, error.Errors);
+                    if (error.Message.HasValue())
+                    {
+                        error.Errors.Add(error.Message);
+                    }
+
+                    if (error.Errors.Any())
+                    {
+                        reason = string.Join(Environment.NewLine, error.Errors);
+                    }
                 }
 
-                return new HubApiException(reason, (HubErrorCode) error.Code, restResponse.StatusCode);
+                return new HubApiException(reason, code, restResponse.StatusCode);
             }
             catch (Exception)
             {

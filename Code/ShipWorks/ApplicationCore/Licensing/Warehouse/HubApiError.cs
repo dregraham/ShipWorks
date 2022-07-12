@@ -29,5 +29,8 @@ namespace ShipWorks.ApplicationCore.Licensing.Warehouse
 
         [JsonProperty("error")]
         public string Error { get; set; }
+
+        [JsonProperty("message")]
+        public string Message { get; set; }
     }
 }
