@@ -16,6 +16,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon.SFP.Terms
     [Component]
     public class AmazonTermsOrchestrator : IAmazonTermsOrchestrator
     {
+        private static DateTime LastAcceptedDate = DateTime.MinValue;
         private readonly ICurrentUserSettings currentUserSettings;
         private readonly IAmazonSfpTermsViewModel amazonSfpTermsViewModel;
         private readonly IAmazonTermsWebClient amazonTermsWebClient;
@@ -46,6 +47,14 @@ namespace ShipWorks.Shipping.Carriers.Amazon.SFP.Terms
                 if (!shippingSettings.IsConfigured(ShipmentTypeCode.AmazonSFP))
                 {
                     log.Info("Amazon Buy Shipping is not configured, so skipping additional terms checks.");
+                    TermsAccepted = true;
+                    return Unit.Default;
+                }
+
+                if (LastAcceptedDate != DateTime.MinValue && LastAcceptedDate > DateTime.Now.AddHours(-4))
+                {
+                    log.Info("Amazon Buy Shipping terms were accepted within the last 4 hours, so just return.");
+                    TermsAccepted = true;
                     return Unit.Default;
                 }
 
@@ -56,6 +65,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon.SFP.Terms
                     log.Info("No Amazon Buy Shipping terms found from Hub, so skipping additional terms checks.");
                     // No terms to agree to, just return
                     TermsAccepted = true;
+                    LastAcceptedDate = DateTime.Now;
                     return Unit.Default;
                 }
 
@@ -74,6 +84,11 @@ namespace ShipWorks.Shipping.Carriers.Amazon.SFP.Terms
                     await amazonSfpTermsViewModel.Show(terms).ConfigureAwait(false);
 
                     TermsAccepted = amazonSfpTermsViewModel.TermsAccepted;
+
+                    if (TermsAccepted)
+                    {
+                        LastAcceptedDate = DateTime.Now;
+                    }
 
                     log.Info($"User accepted terms: { TermsAccepted }");
                 }
