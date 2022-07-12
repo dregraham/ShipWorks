@@ -2,7 +2,6 @@
 using System.Threading.Tasks;
 using Interapptive.Shared.ComponentRegistration;
 using RestSharp;
-using ShipWorks.Shipping.ShipEngine.DTOs;
 
 namespace ShipWorks.ApplicationCore.Licensing.Warehouse
 {
@@ -27,7 +26,7 @@ namespace ShipWorks.ApplicationCore.Licensing.Warehouse
         /// <summary>
         /// Call Hub to pass through  call to Platform
         /// </summary>
-        public async Task<object> CallViaPassthrough(object obj, string platformEndpoint, HttpMethod method)
+        public async Task<object> CallViaPassthrough(object obj, string platformEndpoint, HttpMethod method, string logName)
         {
             var request = warehouseRequestFactory.Create(
                 WarehouseEndpoints.PlatformPassthrough,
@@ -37,7 +36,7 @@ namespace ShipWorks.ApplicationCore.Licensing.Warehouse
             request.AddHeader("PlatformEndpoint", platformEndpoint);
             request.AddHeader("PlatformMethod", method.Method);
 
-            var result = await warehouseRequestClient.MakeRequest<object>(request, nameof(WarehouseEndpoints.PlatformPassthrough))
+            var result = await warehouseRequestClient.MakeRequest<object>(request, logName)
                 .ConfigureAwait(false);
 
             return result;

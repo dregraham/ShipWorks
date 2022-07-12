@@ -432,10 +432,7 @@ namespace ShipWorks.Stores.Platforms.Amazon
 
             item.Weight = (double) orderItem.Product.Weight.Value;
 
-            item.Thumbnail = orderItem.Product.Details
-                .FirstOrDefault(d => d.Name.Equals("ThumbnailUrl", StringComparison.InvariantCultureIgnoreCase))?.Value ?? string.Empty;
-            item.Image = orderItem.Product.Details
-                .FirstOrDefault(d => d.Name.Equals("ImageUrl", StringComparison.InvariantCultureIgnoreCase))?.Value ?? string.Empty;
+            PopulateUrls(orderItem, item);
 
             item.Length = orderItem.Product.Dimensions?.Length ?? 0;
             item.Width = orderItem.Product.Dimensions?.Width ?? 0;
@@ -486,6 +483,17 @@ namespace ShipWorks.Stores.Platforms.Amazon
             item.ConditionNote = orderItem.Product?.Details?.FirstOrDefault((d) => d.Name == "Condition")?.Value;
 
             AddOrderItemCharges(orderItem, order);
+        }
+
+        /// <summary>
+        /// Populate image urls
+        /// </summary>
+        private static void PopulateUrls(OrderSourceSalesOrderItem orderItem, AmazonOrderItemEntity item)
+        {
+            var urls = orderItem.Product?.Urls;
+
+            item.Thumbnail = urls?.ThumbnailUrl ?? string.Empty;
+            item.Image = urls?.ImageUrl ?? string.Empty;
         }
 
         /// <summary>

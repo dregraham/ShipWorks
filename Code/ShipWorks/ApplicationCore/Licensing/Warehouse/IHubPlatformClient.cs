@@ -11,6 +11,6 @@ namespace ShipWorks.ApplicationCore.Licensing.Warehouse
         /// <summary>
         /// Call Hub to pass through  call to Platform
         /// </summary>
-        Task<object> CallViaPassthrough(object obj, string platformEndpoint, HttpMethod method);
+        Task<object> CallViaPassthrough(object obj, string platformEndpoint, HttpMethod method, string logName);
     }
 }

@@ -5,15 +5,11 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using Autofac.Features.Indexed;
 using Interapptive.Shared.ComponentRegistration;
-using Interapptive.Shared.Utility;
-using log4net;
 using ShipWorks.ApplicationCore.Licensing.Warehouse;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping;
-using ShipWorks.Shipping.Carriers;
 using ShipWorks.Shipping.Carriers.Api;
-using ShipWorks.Shipping.Carriers.Postal;
 using ShipWorks.Stores.Content;
 using ShipWorks.Warehouse.Orders;
 
@@ -55,8 +51,8 @@ namespace ShipWorks.Stores.Platforms.Platform.OnlineUpdating
                 {
                     NotifyMarketplaceShippedRequests = updates
                 };
-                await platformWebClient.CallViaPassthrough(request, string.Format(bulkShipNotifyEndpoint, store.OrderSourceID), HttpMethod.Post).ConfigureAwait(false);
-            } 
+                await platformWebClient.CallViaPassthrough(request, string.Format(bulkShipNotifyEndpoint, store.OrderSourceID), HttpMethod.Post, "UploadShipments").ConfigureAwait(false);
+            }
             catch (Exception ex)
             {
                 throw new PlatformStoreException($"Error uploading shipment details: {ex.Message}", ex);

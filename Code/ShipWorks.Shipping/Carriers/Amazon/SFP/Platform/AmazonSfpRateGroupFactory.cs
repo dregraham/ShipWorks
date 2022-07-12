@@ -16,7 +16,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon.SFP.Platform
     /// <summary>
     /// Factory for creating Amazon Buy Shipping rate groups
     /// </summary>
-    [Component]
+    [Component(RegistrationType.SpecificService, Service = typeof(IAmazonSfpRateGroupFactory))]
     public class AmazonSfpRateGroupFactory : ShipEngineRateGroupFactory, IAmazonSfpRateGroupFactory
     {
         private readonly IMessenger messenger;

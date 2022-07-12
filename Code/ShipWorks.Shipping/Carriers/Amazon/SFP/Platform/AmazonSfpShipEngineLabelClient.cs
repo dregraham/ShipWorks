@@ -31,7 +31,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon.SFP.Platform
             IHubPlatformClient hubPlatformShippingClient,
             IIndex<ShipmentTypeCode, ICarrierShipmentRequestFactory> shipmentRequestFactoryIndex,
             Func<ShipmentEntity, Label, AmazonSfpShipEngineDownloadedLabelData> createDownloadedLabelData,
-            Func<Type, ILog> logFactory) : 
+            Func<Type, ILog> logFactory) :
             base(null, shipmentRequestFactoryIndex, createDownloadedLabelData, logFactory)
         {
             log = logFactory(typeof(AmazonSfpShipEngineLabelClient));
@@ -53,9 +53,9 @@ namespace ShipWorks.Shipping.Carriers.Amazon.SFP.Platform
 
             try
             {
-                var labelObj = await hubPlatformShippingClient.CallViaPassthrough(purchaseLabelRequest, 
-                        $"{ShipEngineEndpoints.PurchaseLabel}", 
-                        HttpMethod.Post)
+                var labelObj = await hubPlatformShippingClient.CallViaPassthrough(purchaseLabelRequest,
+                        $"{ShipEngineEndpoints.PurchaseLabel}",
+                        HttpMethod.Post, "CreateLabel")
                     .ConfigureAwait(false);
 
                 Label label = JsonConvert.DeserializeObject<Label>(JsonConvert.SerializeObject(labelObj));
@@ -84,9 +84,9 @@ namespace ShipWorks.Shipping.Carriers.Amazon.SFP.Platform
                 object response = null;
                 var voidTask = Task.Run(async () =>
                 {
-                    response = await hubPlatformShippingClient.CallViaPassthrough(new { ShipEngineLabelID  = shipment.AmazonSFP.ShipEngineLabelID },
+                    response = await hubPlatformShippingClient.CallViaPassthrough(new { ShipEngineLabelID = shipment.AmazonSFP.ShipEngineLabelID },
                             ShipEngineEndpoints.VoidLabel(shipment.AmazonSFP.ShipEngineLabelID),
-                            HttpMethod.Put)
+                            HttpMethod.Put, "VoidLabel")
                         .ConfigureAwait(false);
                 });
 
