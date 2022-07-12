@@ -490,9 +490,10 @@ namespace ShipWorks.Stores.Platforms.Amazon
         /// </summary>
         private static void PopulateUrls(OrderSourceSalesOrderItem orderItem, AmazonOrderItemEntity item)
         {
-            item.Thumbnail = orderItem.Product.Urls.ThumbnailUrl ?? string.Empty;
-            
-            item.Image = orderItem.Product.Urls.ImageUrl ?? string.Empty;
+            var urls = orderItem.Product?.Urls;
+
+            item.Thumbnail = urls?.ThumbnailUrl ?? string.Empty;
+            item.Image = urls?.ImageUrl ?? string.Empty;
         }
 
         /// <summary>
