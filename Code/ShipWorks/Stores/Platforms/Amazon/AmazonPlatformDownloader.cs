@@ -433,13 +433,21 @@ namespace ShipWorks.Stores.Platforms.Amazon
             item.SKU = orderItem.Product.Identifiers.Sku;
             item.Code = item.SKU;
 
-            item.Weight = (double) orderItem.Product.Weight.Value;
+            var fromWeightUnit = PlatformUnitConverter.FromPlatformWeight(orderItem.Product.Weight.Unit);
+            var weight = WeightUtility.Convert(fromWeightUnit, WeightUnitOfMeasure.Pounds, (double) orderItem.Product.Weight.Value);
+            item.Weight = weight;
 
             PopulateUrls(orderItem, item);
 
-            item.Length = orderItem.Product.Dimensions?.Length ?? 0;
-            item.Width = orderItem.Product.Dimensions?.Width ?? 0;
-            item.Height = orderItem.Product.Dimensions?.Height ?? 0;
+            if (orderItem.Product?.Dimensions != null)
+            {
+                var dims = orderItem.Product.Dimensions;
+                var fromDimUnit = dims.Unit;
+
+                item.Length = (decimal) PlatformUnitConverter.ConvertDimension(dims.Length, fromDimUnit);
+                item.Width = (decimal) PlatformUnitConverter.ConvertDimension(dims.Width, fromDimUnit);
+                item.Height = (decimal) PlatformUnitConverter.ConvertDimension(dims.Height, fromDimUnit);
+            }
 
             // amazon-specific fields
             item.AmazonOrderItemCode = orderItem.LineItemId;
