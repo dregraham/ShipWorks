@@ -274,6 +274,9 @@ namespace ShipWorks.Stores.Platforms.Amazon
             await retryAdapter.ExecuteWithRetryAsync(() => SaveDownloadedOrder(order)).ConfigureAwait(false);
         }
 
+        /// <summary>
+        /// GetRequestedShipping (in the format we used to get it from MWS "carrier: details")
+        /// </summary
         private string GetRequestedShipping(string shippingService)
         {
             if (string.IsNullOrWhiteSpace(shippingService))
@@ -503,12 +506,12 @@ namespace ShipWorks.Stores.Platforms.Amazon
         {
             foreach (var orderItemAdjustment in orderItem.Adjustments)
             {
-                AddToCharge(order, "Discount", orderItemAdjustment.Description, orderItemAdjustment.Amount);
+                AddToCharge(order, orderItemAdjustment.Description, orderItemAdjustment.Description, orderItemAdjustment.Amount);
             }
 
             foreach (var orderItemShippingCharge in orderItem.ShippingCharges)
             {
-                AddToCharge(order, "Shipping", orderItemShippingCharge.Description.Replace(" price", string.Empty), orderItemShippingCharge.Amount);
+                AddToCharge(order, "SHIPPING", orderItemShippingCharge.Description.Replace(" price", string.Empty), orderItemShippingCharge.Amount);
             }
         }
 
