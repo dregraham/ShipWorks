@@ -238,6 +238,12 @@ namespace ShipWorks.SqlServer.Data.Auditing
                     continue;
                 }
 
+                // Skip TrackingHubTimestamp
+                if (columnInfo.ColumnName == "TrackingHubTimestamp")
+                {
+                    continue;
+                }
+
                 // Skip varbinary columns
                 if (columnInfo.DataType == VarBinaryDataType)
                 {
