@@ -29,7 +29,8 @@ namespace ShipWorks.Shipping.Tracking
         {
             ShipmentFields.ShipmentID,
             ShipmentFields.ShipmentType,
-            ShipmentFields.TrackingNumber
+            ShipmentFields.TrackingNumber,
+            ShipmentFields.TrackingHubTimestamp
         };
 
         /// <summary>
