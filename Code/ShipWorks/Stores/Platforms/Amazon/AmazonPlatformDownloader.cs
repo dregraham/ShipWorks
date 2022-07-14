@@ -274,6 +274,9 @@ namespace ShipWorks.Stores.Platforms.Amazon
             await retryAdapter.ExecuteWithRetryAsync(() => SaveDownloadedOrder(order)).ConfigureAwait(false);
         }
 
+        /// <summary>
+        /// GetRequestedShipping (in the format we used to get it from MWS "carrier: details")
+        /// </summary
         private string GetRequestedShipping(string shippingService)
         {
             if (string.IsNullOrWhiteSpace(shippingService))
@@ -430,13 +433,21 @@ namespace ShipWorks.Stores.Platforms.Amazon
             item.SKU = orderItem.Product.Identifiers.Sku;
             item.Code = item.SKU;
 
-            item.Weight = (double) orderItem.Product.Weight.Value;
+            var fromWeightUnit = PlatformUnitConverter.FromPlatformWeight(orderItem.Product.Weight.Unit);
+            var weight = WeightUtility.Convert(fromWeightUnit, WeightUnitOfMeasure.Pounds, (double) orderItem.Product.Weight.Value);
+            item.Weight = weight;
 
             PopulateUrls(orderItem, item);
 
-            item.Length = orderItem.Product.Dimensions?.Length ?? 0;
-            item.Width = orderItem.Product.Dimensions?.Width ?? 0;
-            item.Height = orderItem.Product.Dimensions?.Height ?? 0;
+            if (orderItem.Product?.Dimensions != null)
+            {
+                var dims = orderItem.Product.Dimensions;
+                var fromDimUnit = dims.Unit;
+
+                item.Length = (decimal) PlatformUnitConverter.ConvertDimension(dims.Length, fromDimUnit);
+                item.Width = (decimal) PlatformUnitConverter.ConvertDimension(dims.Width, fromDimUnit);
+                item.Height = (decimal) PlatformUnitConverter.ConvertDimension(dims.Height, fromDimUnit);
+            }
 
             // amazon-specific fields
             item.AmazonOrderItemCode = orderItem.LineItemId;
@@ -503,12 +514,12 @@ namespace ShipWorks.Stores.Platforms.Amazon
         {
             foreach (var orderItemAdjustment in orderItem.Adjustments)
             {
-                AddToCharge(order, "Discount", orderItemAdjustment.Description, orderItemAdjustment.Amount);
+                AddToCharge(order, orderItemAdjustment.Description, orderItemAdjustment.Description, orderItemAdjustment.Amount);
             }
 
             foreach (var orderItemShippingCharge in orderItem.ShippingCharges)
             {
-                AddToCharge(order, "Shipping", orderItemShippingCharge.Description.Replace(" price", string.Empty), orderItemShippingCharge.Amount);
+                AddToCharge(order, "SHIPPING", orderItemShippingCharge.Description.Replace(" price", string.Empty), orderItemShippingCharge.Amount);
             }
         }
 

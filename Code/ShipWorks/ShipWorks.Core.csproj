@@ -1324,6 +1324,7 @@
     <Compile Include="Stores\Platforms\Platform\PlatformStoreException.cs" />
     <Compile Include="Stores\Platforms\ShipEngine\Apollo\GetOrdersDTO.cs" />
     <Compile Include="Stores\Platforms\ShipEngine\Apollo\PlatformApolloDTO.cs" />
+    <Compile Include="Stores\Platforms\ShipEngine\Apollo\PlatformUnitConverter.cs" />
     <Compile Include="Stores\Platforms\ShipEngine\IPlatformOrderWebClient.cs" />
     <Compile Include="Stores\Platforms\ShipEngine\PlatformOrderWebClient.cs" />
     <Compile Include="Stores\Services\IAmazonMwsToSpConverter.cs" />
