@@ -25,7 +25,7 @@ namespace ShipWorks.Shipping.Tracking
     {
         private readonly ISqlAdapter sqlAdapter;
         private readonly ILog log;
-        private readonly object[] FieldsToReturn = 
+        private readonly object[] FieldsToReturn =
         {
             ShipmentFields.ShipmentID,
             ShipmentFields.ShipmentType,
@@ -41,7 +41,7 @@ namespace ShipWorks.Shipping.Tracking
             sqlAdapter = sqlAdapterFactory.Create();
             log = typeFactory(typeof(TrackingRepository));
         }
-        
+
         /// <summary>
         /// Marks the shipment with a status of AwaitingUpdate
         /// </summary>
@@ -54,7 +54,7 @@ namespace ShipWorks.Shipping.Tracking
 
             await sqlAdapter.UpdateEntitiesDirectlyAsync(shipmentToSave,
                 new RelationPredicateBucket(ShipmentFields.ShipmentID == shipment.ShipmentID),
-                CancellationToken.None);
+                CancellationToken.None).ConfigureAwait(false);
         }
 
         /// <summary>
@@ -81,7 +81,7 @@ namespace ShipWorks.Shipping.Tracking
                 };
 
                 await sqlAdapter.UpdateEntitiesDirectlyAsync(shipmentToSave,
-                    new RelationPredicateBucket(ShipmentFields.ShipmentID == shipmentToSave.ShipmentID));
+                    new RelationPredicateBucket(ShipmentFields.ShipmentID == shipmentToSave.ShipmentID)).ConfigureAwait(false);
             }
         }
 
@@ -142,7 +142,7 @@ namespace ShipWorks.Shipping.Tracking
         {
             var fetchResult = await sqlAdapter.FetchQueryAsync(query).ConfigureAwait(false);
 
-            var shipments = fetchResult.Select(s => 
+            var shipments = fetchResult.Select(s =>
                 new ShipmentEntity((long) s[0])
                 {
                     ShipmentType = (int) (s[1] ?? null),
