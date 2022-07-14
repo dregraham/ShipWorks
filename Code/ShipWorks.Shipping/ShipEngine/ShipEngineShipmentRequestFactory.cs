@@ -124,6 +124,8 @@ namespace ShipWorks.Shipping.ShipEngine
                     request.Shipment.Packages.First().LabelMessages.Reference3 = shipment.DhlEcommerce.Reference1;
                 }
 
+                request.Shipment.Items = CreateItems(shipment);
+
                 return request;
             }
 
@@ -172,6 +174,11 @@ namespace ShipWorks.Shipping.ShipEngine
         /// Creates the ShipEngine tax identifier node
         /// </summary>
         protected abstract List<TaxIdentifier> CreateTaxIdentifiers(ShipmentEntity shipment);
+
+        /// <summary>
+        /// Create shipment items
+        /// </summary>
+        protected abstract List<ShipmentItem> CreateItems(ShipmentEntity shipment);
 
         /// <summary>
         /// Gets the carrier specific packages

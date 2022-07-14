@@ -155,5 +155,13 @@ namespace ShipWorks.Shipping.Carriers.Amazon.SWA
         {
             return null;
         }
+
+        /// <summary>
+        /// Create items
+        /// </summary>
+        protected override List<ShipmentItem> CreateItems(ShipmentEntity shipment)
+        {
+            return new List<ShipmentItem>();
+        }
     }
 }

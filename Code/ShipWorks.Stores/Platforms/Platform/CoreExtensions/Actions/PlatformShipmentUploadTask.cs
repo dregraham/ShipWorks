@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Interapptive.Shared.Utility;
 using ShipWorks.Actions;
 using ShipWorks.Actions.Tasks;
 using ShipWorks.Actions.Tasks.Common;
@@ -57,7 +58,7 @@ namespace ShipWorks.Stores.Platforms.Platform.CoreExtensions.Actions
         /// Indicates if the task is supported for the specified store
         /// </summary>
         public override bool SupportsStore(StoreEntity store) =>
-            store is PlatformStoreEntity;
+            !store.OrderSourceID.IsNullOrWhiteSpace();
 
         /// <summary>
         /// Run the task
@@ -69,7 +70,7 @@ namespace ShipWorks.Stores.Platforms.Platform.CoreExtensions.Actions
                 throw new ActionTaskRunException("A store has not been configured for the task.");
             }
 
-            PlatformStoreEntity store = StoreManager.GetStore(StoreID) as PlatformStoreEntity;
+            var store = StoreManager.GetStore(StoreID);
             if (store == null)
             {
                 throw new ActionTaskRunException("The store configured for the task has been deleted.");
@@ -95,11 +96,11 @@ namespace ShipWorks.Stores.Platforms.Platform.CoreExtensions.Actions
         /// <summary>
         /// Run the batched up (already combined from postponed tasks, if any) input keys through the task
         /// </summary>
-        private async Task UpdloadShipmentDetails(PlatformStoreEntity store, IEnumerable<long> shipmentKeys)
+        private async Task UpdloadShipmentDetails(StoreEntity store, IEnumerable<long> shipmentKeys)
         {
             try
             {
-                await onlineUpdater.UploadShipmentDetails(shipmentKeys).ConfigureAwait(false);
+                await onlineUpdater.UploadShipmentDetails(store, shipmentKeys).ConfigureAwait(false);
             }
             catch (PlatformStoreException ex)
             {

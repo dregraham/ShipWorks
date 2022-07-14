@@ -46,7 +46,7 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
 
             attributes.LoadStore(caStore);
             consolidator.LoadStore(caStore);
-            amazon.LoadStore(caStore);
+            amazon.LoadStore(caStore, store);
             excludeFba.LoadStore(caStore);
         }
 

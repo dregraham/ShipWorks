@@ -3,6 +3,7 @@ using ShipWorks.Core.ApplicationCode;
 using ShipWorks.Shipping.Carriers.Amazon;
 using ShipWorks.Shipping.Carriers.Amazon.SFP.Api;
 using ShipWorks.Shipping.Carriers.Amazon.SFP;
+using ShipWorks.Shipping.Carriers.Amazon.SFP.Platform;
 using ShipWorks.Shipping.Editing;
 using ShipWorks.Shipping.Profiles;
 using ShipWorks.Shipping.Services;
@@ -67,7 +68,7 @@ namespace ShipWorks.Shipping.UI.Carriers.Amazon.SFP
                 .Keyed<IRateHashingService>(ShipmentTypeCode.AmazonSFP)
                 .AsSelf();
 
-            builder.RegisterType<AmazonSFPRateGroupFactory>()
+            builder.RegisterType<AmazonSfpRateGroupFactory>()
                 .AsImplementedInterfaces();
         }
     }

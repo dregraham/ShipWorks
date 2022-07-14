@@ -302,6 +302,8 @@ namespace ShipWorks.Data.Model.EntityClasses
 			_fieldsCustomProperties.Add("ApiValue", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
 			_fieldsCustomProperties.Add("Description", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+			_fieldsCustomProperties.Add("PlatformApiCode", fieldHashtable);
 		}
 		#endregion
 
@@ -391,6 +393,17 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			get { return (System.String)GetValue((int)AmazonSFPServiceTypeFieldIndex.Description, true); }
 			set	{ SetValue((int)AmazonSFPServiceTypeFieldIndex.Description, value); }
+		}
+
+		/// <summary> The PlatformApiCode property of the Entity AmazonSFPServiceType<br/><br/></summary>
+		/// <remarks>Mapped on  table field: "AmazonSFPServiceType"."PlatformApiCode"<br/>
+		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 100<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		[DataMember]
+		public virtual System.String PlatformApiCode
+		{
+			get { return (System.String)GetValue((int)AmazonSFPServiceTypeFieldIndex.PlatformApiCode, true); }
+			set	{ SetValue((int)AmazonSFPServiceTypeFieldIndex.PlatformApiCode, value); }
 		}
 	
 		/// <summary> Gets the type of the hierarchy this entity is in. </summary>

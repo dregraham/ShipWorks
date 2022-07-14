@@ -324,7 +324,15 @@ namespace ShipWorks.Shipping.ShipEngine
             }
             catch (Exception ex)
             {
-                throw new ShipEngineException($"An error occured while attempting to download resource.", ex);
+                try
+                {
+                    uri = new Uri(uri.AbsoluteUri.Replace("platform.auctane.dev", "platform.shipengine.com"));
+                    return WebRequest.Create(uri).GetResponse().GetResponseStream().ToArray();
+                }
+                catch (Exception ex2)
+                {
+                    throw new ShipEngineException($"An error occured while attempting to download resource.", ex2);
+                }
             }
         }
 

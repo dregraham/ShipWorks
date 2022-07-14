@@ -172,7 +172,6 @@ namespace ShipWorks.Data.Model.Custom
 				case "PayPalOrderSearchEntity": return EntityType.PayPalOrderSearchEntity;
 				case "PayPalStoreEntity": return EntityType.PayPalStoreEntity;
 				case "PermissionEntity": return EntityType.PermissionEntity;
-				case "PlatformStoreEntity": return EntityType.PlatformStoreEntity;
 				case "PostalProfileEntity": return EntityType.PostalProfileEntity;
 				case "PostalShipmentEntity": return EntityType.PostalShipmentEntity;
 				case "PrintResultEntity": return EntityType.PrintResultEntity;
@@ -371,7 +370,6 @@ namespace ShipWorks.Data.Model.Custom
 				case EntityType.PackageProfileEntity: return new PackageProfileRelations();
 				case EntityType.PayPalOrderEntity: return new PayPalOrderRelations();
 				case EntityType.PayPalStoreEntity: return new PayPalStoreRelations();
-				case EntityType.PlatformStoreEntity: return new PlatformStoreRelations();
 				case EntityType.ProStoresOrderEntity: return new ProStoresOrderRelations();
 				case EntityType.ProStoresStoreEntity: return new ProStoresStoreRelations();
 				case EntityType.RakutenOrderEntity: return new RakutenOrderRelations();

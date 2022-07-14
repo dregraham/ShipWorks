@@ -1,9 +1,9 @@
 ﻿using System.ComponentModel;
 using System.Windows.Forms;
 using Autofac;
-using Interapptive.Shared.Business.Geography;
 using Interapptive.Shared.Utility;
 using ShipWorks.ApplicationCore;
+using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Platforms.Amazon;
 
 namespace ShipWorks.Shipping.Carriers.Amazon.SFP
@@ -14,30 +14,27 @@ namespace ShipWorks.Shipping.Carriers.Amazon.SFP
     [ToolboxItem(true)]
     public partial class AmazonSFPShippingSettingsControl : UserControl
     {
+        private StoreEntity store;
+
         /// <summary>
         /// Constructor
         /// </summary>
         public AmazonSFPShippingSettingsControl()
         {
             InitializeComponent();
-
-            countries.Items.Add("Germany");
-            countries.Items.Add("United Kingdom");
-            countries.Items.Add("United States");
-
-            countries.SelectedItem = "United States";
         }
 
         /// <summary>
         /// Populate the UI with values from the store entity
         /// </summary>
-        public void LoadStore(IAmazonCredentials amazonCredentials)
+        public void LoadStore(IAmazonCredentials amazonCredentials, StoreEntity storeEntity)
         {
             MethodConditions.EnsureArgumentIsNotNull(amazonCredentials, nameof(amazonCredentials));
+            MethodConditions.EnsureArgumentIsNotNull(storeEntity, nameof(storeEntity));
 
-            countries.SelectedItem = Geography.GetCountryName(amazonCredentials.Region);
-            merchantID.Text = amazonCredentials.MerchantID;
-            authToken.Text = amazonCredentials.AuthToken;
+            store = storeEntity;
+
+            SetButtonText();
         }
 
         /// <summary>
@@ -46,27 +43,37 @@ namespace ShipWorks.Shipping.Carriers.Amazon.SFP
         public void SaveToEntity(IAmazonCredentials amazonCredentials)
         {
             MethodConditions.EnsureArgumentIsNotNull(amazonCredentials, nameof(amazonCredentials));
+        }
 
-            amazonCredentials.Region = Geography.GetCountryCode((string) countries.SelectedItem);
-            amazonCredentials.MerchantID = merchantID.Text;
-            amazonCredentials.AuthToken = authToken.Text;
+        /// <summary>
+        /// On click of the Credentials button to launch the dialog
+        /// </summary>
+        private void CredentialsButton_Click(object sender, System.EventArgs e)
+        {
+            MethodConditions.EnsureArgumentIsNotNull(store, nameof(store));
 
-            // If the credentials are not blank we test them to ensure they are correct
-            if (!string.IsNullOrWhiteSpace(merchantID.Text) && !string.IsNullOrWhiteSpace(authToken.Text))
+            using (var scope = IoC.BeginLifetimeScope())
             {
-                using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
+                var viewModel = scope.Resolve<IGetAmazonCarrierCredentialsViewModel>();
+                var dialog = scope.Resolve<IGetAmazonCarrierCredentialsDialog>(TypedParameter.From(viewModel));
+                viewModel.Load(store);
+                viewModel.OnComplete = () =>
                 {
-                    if (lifetimeScope.IsRegistered<IAmazonAccountValidator>())
-                    {
-                        // Account validator is available so we validate
-                        IAmazonAccountValidator validator = lifetimeScope.Resolve<IAmazonAccountValidator>();
-                        if (!validator.ValidateAccount(amazonCredentials))
-                        {
-                            throw new AmazonSFPShippingException("Invalid Amazon credentials.");
-                        }
-                    }
-                }
+                    SetButtonText();
+                    dialog.Close();
+                };
+                dialog.ShowDialog();
             }
+        }
+
+        /// <summary>
+        /// Helper method to provide the UI text values
+        /// </summary>
+        private void SetButtonText()
+        {
+            CredentialsButton.Text = store.PlatformAmazonCarrierID.IsNullOrWhiteSpace()
+                ? "Create Amazon Token"
+                : "Update Credentials";
         }
     }
 }

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Utility;
@@ -240,6 +241,14 @@ namespace ShipWorks.Shipping.Carriers.Ups.OneBalance
         protected override List<TaxIdentifier> CreateTaxIdentifiers(ShipmentEntity shipment)
         {
             return null;
+        }
+
+        /// <summary>
+        /// Create shipment items
+        /// </summary>
+        protected override List<ShipmentItem> CreateItems(ShipmentEntity shipment)
+        {
+            return new List<ShipmentItem>();
         }
     }
 }

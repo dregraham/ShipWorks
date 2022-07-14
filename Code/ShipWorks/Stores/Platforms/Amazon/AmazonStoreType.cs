@@ -87,22 +87,22 @@ namespace ShipWorks.Stores.Platforms.Amazon
         /// <summary>
         /// Create the account settings control
         /// </summary>
-        public override AccountSettingsControlBase CreateAccountSettingsControl() =>
-            new AmazonMwsAccountSettingsControl();
+        // public override AccountSettingsControlBase CreateAccountSettingsControl() =>
+        //     new AmazonMwsAccountSettingsControl();
 
         /// <summary>
         /// Create the collection of setup wizard pages for configuring the integration
         /// </summary>
         /// <param name="scope"></param>
-        public override List<WizardPage> CreateAddStoreWizardPages(ILifetimeScope scope)
-        {
-            return new List<WizardPage>()
-            {
-                new AmazonMwsCountryPage(),
-                new AmazonMwsPage(),
-                new AmazonMwsDownloadCriteriaPage()
-            };
-        }
+        // public override List<WizardPage> CreateAddStoreWizardPages(ILifetimeScope scope)
+        // {
+        //     return new List<WizardPage>()
+        //     {
+        //         new AmazonMwsCountryPage(),
+        //         new AmazonMwsPage(),
+        //         new AmazonMwsDownloadCriteriaPage()
+        //     };
+        // }
 
         /// <summary>
         /// Create the control for generating the online update shipment tasks
@@ -375,12 +375,6 @@ namespace ShipWorks.Stores.Platforms.Amazon
 
             return base.GridOnlineColumnSupported(column);
         }
-
-        /// <summary>
-        /// Get the initial download policy of amazon
-        /// </summary>
-        public override InitialDownloadPolicy InitialDownloadPolicy =>
-            new InitialDownloadPolicy(InitialDownloadRestrictionType.DaysBack) { DefaultDaysBack = 14, MaxDaysBack = 30 };
 
         /// <summary>
         /// Creates the custom OrderItem entity.

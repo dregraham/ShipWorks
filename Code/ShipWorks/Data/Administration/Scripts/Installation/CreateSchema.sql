@@ -28,7 +28,8 @@ CREATE TABLE [dbo].[AmazonSFPServiceType]
 (
 [AmazonSFPServiceTypeID] [int] NOT NULL IDENTITY(1, 1),
 [ApiValue] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
-[Description] [nvarchar] (100) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL
+[Description] [nvarchar] (100) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+[PlatformApiCode] [nvarchar] (100) COLLATE SQL_Latin1_General_CP1_CI_AS NULL
 )
 GO
 PRINT N'Creating primary key [PK_AmazonSFPServiceTypeID] on [dbo].[AmazonSFPServiceType]'
@@ -447,7 +448,8 @@ CREATE TABLE [dbo].[AmazonStore]
 [MarketplaceID] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [ExcludeFBA] [bit] NOT NULL,
 [DomainName] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
-[AmazonVATS] [bit] NOT NULL
+[AmazonVATS] [bit] NOT NULL,
+[ContinuationToken] [nvarchar] (2048) NULL
 )
 GO
 PRINT N'Creating primary key [PK_AmazonStore] on [dbo].[AmazonStore]'
@@ -1027,7 +1029,9 @@ CREATE TABLE [dbo].[Store]
 [InsureShipClientID] [bigint] NULL,
 [InsureShipApiKey] [nvarchar] (255) NULL,
 [WarehouseStoreID] [uniqueidentifier] NULL,
-[ManagedInHub] [bit] NOT NULL CONSTRAINT [DF_Store_ManagedInHub] DEFAULT (0)
+[ManagedInHub] [bit] NOT NULL CONSTRAINT [DF_Store_ManagedInHub] DEFAULT (0),
+[OrderSourceID] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
+[PlatformAmazonCarrierID] [nvarchar] (100) COLLATE SQL_Latin1_General_CP1_CI_AS NULL
 )
 GO
 PRINT N'Creating primary key [PK_Store] on [dbo].[Store]'
@@ -1057,19 +1061,6 @@ GO
 PRINT N'Creating primary key [PK_AmeriCommerceStore] on [dbo].[AmeriCommerceStore]'
 GO
 ALTER TABLE [dbo].[AmeriCommerceStore] ADD CONSTRAINT [PK_AmeriCommerceStore] PRIMARY KEY CLUSTERED  ([StoreID])
-GO
-PRINT N'Creating [dbo].[PlatformStore]'
-GO
-IF OBJECT_ID(N'[dbo].[PlatformStore]', 'U') IS NULL
-CREATE TABLE [dbo].[PlatformStore]
-(
-[StoreID] [bigint] NOT NULL,
-[OrderSourceID] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL
-)
-GO
-PRINT N'Creating primary key [PK_PlatformStore] on [dbo].[PlatformStore]'
-GO
-ALTER TABLE [dbo].[PlatformStore] ADD CONSTRAINT [PK_PlatformStore] PRIMARY KEY CLUSTERED  ([StoreID])
 GO
 PRINT N'Creating [dbo].[Audit]'
 GO
@@ -2041,7 +2032,8 @@ CREATE TABLE [dbo].[AmazonSFPShipment]
 [AmazonUniqueShipmentID] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
 [Insurance] [bit] NOT NULL,
 [RequestedLabelFormat] [INT] NOT NULL CONSTRAINT [DF_AmazonSFPShipment_RequestedLabelFormat] DEFAULT (-1),
-[Reference1] [nvarchar] (300) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL CONSTRAINT [DF_AmazonSFPShipment_ReferenceNumber] DEFAULT ('')
+[Reference1] [nvarchar] (300) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL CONSTRAINT [DF_AmazonSFPShipment_ReferenceNumber] DEFAULT (''),
+[ShipEngineLabelID] [nvarchar](50) NULL,
 )
 GO
 PRINT N'Creating primary key [PK_AmazonSFPShipment] on [dbo].[AmazonSFPShipment]'
@@ -5885,10 +5877,6 @@ GO
 PRINT N'Adding foreign keys to [dbo].[AmeriCommerceStore]'
 GO
 ALTER TABLE [dbo].[AmeriCommerceStore] ADD CONSTRAINT [FK_AmeriCommerceStore_Store] FOREIGN KEY ([StoreID]) REFERENCES [dbo].[Store] ([StoreID])
-GO
-PRINT N'Adding foreign keys to [dbo].[PlatformStore]'
-GO
-ALTER TABLE [dbo].[PlatformStore] ADD CONSTRAINT [FK_PlatformStore_Store] FOREIGN KEY ([StoreID]) REFERENCES [dbo].[Store] ([StoreID])
 GO
 PRINT N'Adding foreign keys to [dbo].[AuditChange]'
 GO

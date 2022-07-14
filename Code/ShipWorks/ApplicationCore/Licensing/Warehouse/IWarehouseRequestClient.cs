@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using Interapptive.Shared.Utility;
 using RestSharp;
+using ShipWorks.ApplicationCore.Logging;
 
 namespace ShipWorks.ApplicationCore.Licensing.Warehouse
 {
@@ -10,6 +11,11 @@ namespace ShipWorks.ApplicationCore.Licensing.Warehouse
     /// </summary>
     public interface IWarehouseRequestClient
     {
+        /// <summary>
+        /// Make the given request
+        /// </summary>
+        Task<GenericResult<IRestResponse>> MakeRequest(IRestRequest restRequest, string logName, ApiLogSource apiLogSource);
+        
         /// <summary>
         /// Make the given request
         /// </summary>
@@ -24,5 +30,10 @@ namespace ShipWorks.ApplicationCore.Licensing.Warehouse
         /// Make an authenticated request
         /// </summary>
         Task<T> MakeRequest<T>(IRestRequest restRequest, string logName, CancellationToken cancellationToken);
+        
+        /// <summary>
+        /// Get the WarehouseUrl
+        /// </summary>
+        string WarehouseUrl { get; }
     }
 }

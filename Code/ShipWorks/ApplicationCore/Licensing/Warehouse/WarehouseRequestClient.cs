@@ -4,10 +4,12 @@ using System.Threading;
 using System.Threading.Tasks;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Utility;
+using Newtonsoft.Json;
 using RestSharp;
 using ShipWorks.ApplicationCore.Licensing.WebClientEnvironments;
 using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Data;
+using ShipWorks.Shipping.ShipEngine.DTOs;
 
 namespace ShipWorks.ApplicationCore.Licensing.Warehouse
 {
@@ -37,9 +39,15 @@ namespace ShipWorks.ApplicationCore.Licensing.Warehouse
         /// <summary>
         /// Make an authenticated request
         /// </summary>
-        public async Task<GenericResult<IRestResponse>> MakeRequest(IRestRequest restRequest, string logName)
+        public Task<GenericResult<IRestResponse>> MakeRequest(IRestRequest restRequest, string logName)
+            => MakeRequest(restRequest, logName, ApiLogSource.ShipWorksWarehouse);
+
+        /// <summary>
+        /// Make an authenticated request
+        /// </summary>
+        public async Task<GenericResult<IRestResponse>> MakeRequest(IRestRequest restRequest, string logName, ApiLogSource apiLogSource)
         {
-            ApiLogEntry logEntry = new ApiLogEntry(ApiLogSource.ShipWorksWarehouse, logName);
+            ApiLogEntry logEntry = new ApiLogEntry(apiLogSource, logName);
             IRestResponse restResponse = null;
 
             try
@@ -112,6 +120,11 @@ namespace ShipWorks.ApplicationCore.Licensing.Warehouse
             MakeRequest<T>(restRequest, logName, CancellationToken.None);
 
         /// <summary>
+        /// Get the WarehouseUrl
+        /// </summary>
+        public string WarehouseUrl => webClientEnvironmentFactory.SelectedEnvironment.WarehouseUrl;
+
+        /// <summary>
         /// Make an authenticated request
         /// </summary>
         public async Task<T> MakeRequest<T>(IRestRequest restRequest, string logName, CancellationToken cancellationToken)
@@ -141,14 +154,19 @@ namespace ShipWorks.ApplicationCore.Licensing.Warehouse
                 .AddHeader("warehouse-id", configurationData.FetchReadOnly().WarehouseID);
 
             var restResponse = await restClient.ExecuteTaskAsync<T>(restRequest, cancellationToken).ConfigureAwait(false);
-
+            
             try
             {
                 logEntry.LogResponse(restResponse, "json");
-
+                
                 if (restResponse.StatusCode == HttpStatusCode.OK)
                 {
-                    return restResponse.Data;
+                    if (restResponse.Data != null)
+                    {
+                        return restResponse.Data;
+                    }
+
+                    return JsonConvert.DeserializeObject<T>(restResponse.Content);
                 }
 
                 if (restResponse.StatusCode == HttpStatusCode.Forbidden)

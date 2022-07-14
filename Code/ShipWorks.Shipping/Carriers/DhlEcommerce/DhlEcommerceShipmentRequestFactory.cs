@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Utility;
 using ShipWorks.Shipping.ShipEngine.DTOs;
@@ -122,6 +123,14 @@ namespace ShipWorks.Shipping.Carriers.DhlEcommerce
             };
 
             return TaxIdentifiers;
+        }
+
+        /// <summary>
+        /// Create shipment items
+        /// </summary>
+        protected override List<ShipmentItem> CreateItems(ShipmentEntity shipment)
+        {
+            return new List<ShipmentItem>();
         }
     }
 }

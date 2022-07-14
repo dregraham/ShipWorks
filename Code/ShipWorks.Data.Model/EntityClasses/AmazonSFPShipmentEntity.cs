@@ -383,6 +383,8 @@ namespace ShipWorks.Data.Model.EntityClasses
 			_fieldsCustomProperties.Add("Reference1", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
 			_fieldsCustomProperties.Add("RequestedLabelFormat", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+			_fieldsCustomProperties.Add("ShipEngineLabelID", fieldHashtable);
 		}
 		#endregion
 
@@ -666,6 +668,17 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			get { return (System.Int32)GetValue((int)AmazonSFPShipmentFieldIndex.RequestedLabelFormat, true); }
 			set	{ SetValue((int)AmazonSFPShipmentFieldIndex.RequestedLabelFormat, value); }
+		}
+
+		/// <summary> The ShipEngineLabelID property of the Entity AmazonSFPShipment<br/><br/></summary>
+		/// <remarks>Mapped on  table field: "AmazonSFPShipment"."ShipEngineLabelID"<br/>
+		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 50<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		[DataMember]
+		public virtual System.String ShipEngineLabelID
+		{
+			get { return (System.String)GetValue((int)AmazonSFPShipmentFieldIndex.ShipEngineLabelID, true); }
+			set	{ SetValue((int)AmazonSFPShipmentFieldIndex.ShipEngineLabelID, value); }
 		}
 
 		/// <summary> Gets / sets related entity of type 'ShipmentEntity' which has to be set using a fetch action earlier. If no related entity is set for this property, null is returned.<br/><br/>

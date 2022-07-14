@@ -110,6 +110,8 @@ namespace ShipWorks.Tests.Shared.Database
             throw new NotImplementedException();
         }
 
+        public string CustomerID { get; }
+
         public IEnumerable<IActiveStore> GetActiveStores()
         {
             throw new NotImplementedException();

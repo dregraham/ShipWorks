@@ -23,6 +23,11 @@ namespace ShipWorks.ApplicationCore.Licensing
         string AssociatedStampsUsername { get; set; }
 
         /// <summary>
+        /// Gets the CustomerID.
+        /// </summary>
+        string CustomerID { get; }
+
+        /// <summary>
         /// IEnumerable of ActiveStores for the license
         /// </summary>
         IEnumerable<IActiveStore> GetActiveStores();
