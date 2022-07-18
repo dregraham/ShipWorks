@@ -145,6 +145,8 @@ namespace ShipWorks.ApplicationCore.Logging
         [ApiPrivateLogSource]
         AmazonSWA,
         [ApiPrivateLogSource]
+        AmazonSfp,
+        [ApiPrivateLogSource]
         ShipWorksWarehouse,
 
         Rakuten,

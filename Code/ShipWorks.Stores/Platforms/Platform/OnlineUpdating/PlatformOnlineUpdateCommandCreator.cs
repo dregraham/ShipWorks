@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Autofac.Features.Indexed;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.UI;
 using Interapptive.Shared.Utility;
@@ -21,20 +22,22 @@ namespace ShipWorks.Stores.Platforms.Platform.OnlineUpdating
     [KeyedComponent(typeof(IOnlineUpdateCommandCreator), StoreTypeCode.ChannelAdvisorHub)]
     [KeyedComponent(typeof(IOnlineUpdateCommandCreator), StoreTypeCode.VolusionHub)]
     [KeyedComponent(typeof(IOnlineUpdateCommandCreator), StoreTypeCode.GrouponHub)]
+    [KeyedComponent(typeof(IOnlineUpdateCommandCreator), StoreTypeCode.Amazon)]
     public class PlatformUpdateCommandCreator : IOnlineUpdateCommandCreator
     {
-        private readonly IPlatformOnlineUpdater platformOnlineUpdater;
+        private readonly IIndex<StoreTypeCode, IPlatformOnlineUpdater> platformOnlineUpdaterIndex;
         private readonly IMessageHelper messageHelper;
         private readonly ILog log;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public PlatformUpdateCommandCreator(IPlatformOnlineUpdater platformOnlineUpdater,
+        public PlatformUpdateCommandCreator(
+            IIndex<StoreTypeCode, IPlatformOnlineUpdater> platformOnlineUpdaterIndex,
             IMessageHelper messageHelper,
             Func<Type, ILog> createLogger)
         {
-            this.platformOnlineUpdater = platformOnlineUpdater;
+            this.platformOnlineUpdaterIndex = platformOnlineUpdaterIndex;
             this.messageHelper = messageHelper;
             log = createLogger(GetType());
         }
@@ -80,13 +83,18 @@ namespace ShipWorks.Stores.Platforms.Platform.OnlineUpdating
                     "ShipWorks is uploading shipment information."))
                 {
                     progressDialog.ToUpdater($"Updating {orderKeys} orders...");
-
-                    await platformOnlineUpdater.UploadOrderShipmentDetails(orderKeys).ConfigureAwait(false);
+                    if (platformOnlineUpdaterIndex.TryGetValue(store.StoreTypeCode, out var platformOnlineUpdater)){
+                        await platformOnlineUpdater.UploadOrderShipmentDetails(store, orderKeys).ConfigureAwait(false);
+                    } 
+                    else
+                    {
+                        throw new Exception($"Couldn't find an online updater for {store.StoreName}");
+                    }
 
                     return Result.FromSuccess();
                 }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 log.ErrorFormat("Error uploading shipment information for orders {0}", ex.Message);
 

@@ -54,7 +54,7 @@ namespace ShipWorks.Tests.Core
         public void Verify_EnumObfuscation_IsSet()
         {
             IEnumerable<Assembly> assemblies = AssemblyProvider.GetAssemblies();
-            IEnumerable<Type> types = assemblies
+            IEnumerable<System.Type> types = assemblies
                 .SelectMany(t => t.GetTypes())
                 .Except(ignoreTypes)
                 .Where(t => t.Namespace != null &&
@@ -140,12 +140,14 @@ namespace ShipWorks.Tests.Core
                 "PayPal.WebServices".ToUpperInvariant(),
                 "ShipWorks.Stores.Content.Panels.MapPanelType".ToUpperInvariant(),
                 "ShipWorks.Stores.Platforms.Odbc.Odbc32".ToUpperInvariant(),
-                "ShipWorks.Stores.Platforms.Walmart.DTO".ToUpperInvariant()
+                "ShipWorks.Stores.Platforms.Walmart.DTO".ToUpperInvariant(),
+                "ShipWorks.Stores.Platforms.Walmart.DTO".ToUpperInvariant(),
+                "ShipWorks.Stores.Platforms.ShipEngine.Apollo".ToUpperInvariant()
             };
 
         private readonly HashSet<Type> ignoreTypes = new HashSet<Type>
         {
-            typeof(FedExRateRequestOptions),
+            typeof(FedExRateRequestOptions)
         };
 
         /// <summary>

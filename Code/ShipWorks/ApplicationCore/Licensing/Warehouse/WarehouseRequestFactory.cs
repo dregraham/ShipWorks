@@ -1,18 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Interapptive.Shared.ComponentRegistration;
+﻿using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Net.RestSharp;
 using RestSharp;
-using ShipWorks.ApplicationCore.Licensing.Warehouse;
 using ShipWorks.Common.Net;
 
 namespace ShipWorks.ApplicationCore.Licensing.Warehouse
 {
     /// <summary>
-    /// Create an initilized request for a warehouse
+    /// Create an initialized request for a warehouse
     /// </summary>
     [Component]
     public class WarehouseRequestFactory : IWarehouseRequestFactory
@@ -28,7 +22,7 @@ namespace ShipWorks.ApplicationCore.Licensing.Warehouse
         }
 
         /// <summary>
-        /// Create an initilized request for a warehouse
+        /// Create an initialized request for a warehouse
         /// </summary>
         public IRestRequest Create(string endpoint, Method method, object payload)
         {

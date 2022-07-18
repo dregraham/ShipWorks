@@ -143,6 +143,7 @@
       <namespace name="ShipWorks\.Stores\.Platforms\.ChannelAdvisor\.Enums\.*" regex="true" />
       <namespace name="Interapptive\.Shared\.StackTraceHelper\.*.*" regex="true" />
       <namespace name="ShipWorks.UI.Controls.Weight" />
+	  <namespace name="ShipWorks\.Stores\.Platforms\.ShipEngine\.Apollo\.*.*" regex="true" />
       <type name=".*" regex="true">
         <customattribute name="ShipWorks.Filters.Content.ConditionElementAttribute" />
       </type>
