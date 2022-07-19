@@ -597,6 +597,21 @@ namespace ShipWorks.Data.Connection
         }
 
         /// <summary>
+        /// Updates all entities of the same type or subtype of the entity entityWithNewValues
+        /// directly in the persistent storage if they match the filter supplied in filterBucket.
+        /// Only the fields changed in entityWithNewValues are updated for these fields.
+        /// Entities of a subtype of the type of entityWithNewValues which are affected
+        /// by the filterBucket's filter will thus also be updated.
+        /// </summary>
+        public override async Task<int> UpdateEntitiesDirectlyAsync(IEntity2 entityWithNewValues, IRelationPredicateBucket filterBucket, CancellationToken cancellationToken)
+        {
+            using (StartFakePyhsicalTransationIfNeeded())
+            {
+                return await base.UpdateEntitiesDirectlyAsync(entityWithNewValues, filterBucket, cancellationToken);
+            }
+        }
+
+        /// <summary>
         /// Saves all dirty objects inside the collection passed to the persistent storage.
         /// It will do this inside a transaction if a transaction is not yet available.
         /// </summary>
