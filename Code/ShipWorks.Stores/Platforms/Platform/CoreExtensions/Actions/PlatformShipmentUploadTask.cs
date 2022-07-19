@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Autofac.Features.Indexed;
 using Interapptive.Shared.Utility;
 using ShipWorks.Actions;
 using ShipWorks.Actions.Tasks;
@@ -23,14 +24,14 @@ namespace ShipWorks.Stores.Platforms.Platform.CoreExtensions.Actions
     public class PlatformShipmentUploadTask : StoreInstanceTaskBase
     {
         private const long MaxBatchSize = 1000;
-        private readonly IPlatformOnlineUpdater onlineUpdater;
+        private readonly IIndex<StoreTypeCode, IPlatformOnlineUpdater> platformOnlineUpdaterIndex;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public PlatformShipmentUploadTask(IPlatformOnlineUpdater onlineUpdater)
+        public PlatformShipmentUploadTask(IIndex<StoreTypeCode, IPlatformOnlineUpdater> platformOnlineUpdaterIndex)
         {
-            this.onlineUpdater = onlineUpdater;
+            this.platformOnlineUpdaterIndex = platformOnlineUpdaterIndex;
         }
 
         /// <summary>
@@ -100,7 +101,7 @@ namespace ShipWorks.Stores.Platforms.Platform.CoreExtensions.Actions
         {
             try
             {
-                await onlineUpdater.UploadShipmentDetails(store, shipmentKeys).ConfigureAwait(false);
+                await platformOnlineUpdaterIndex[store.StoreTypeCode].UploadShipmentDetails(store, shipmentKeys).ConfigureAwait(false);
             }
             catch (PlatformStoreException ex)
             {
