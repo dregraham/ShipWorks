@@ -5573,7 +5573,6 @@ namespace ShipWorks
             {
                 using (var lifetimeScope = IoC.BeginLifetimeScope())
                 {
-
                     lifetimeScope.Resolve<HubMessageRetriever>().GetMessages(this);
                 }
             }
