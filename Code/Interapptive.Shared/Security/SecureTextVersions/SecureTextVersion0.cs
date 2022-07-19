@@ -25,7 +25,7 @@ namespace Interapptive.Shared.Security.SecureTextVersions
         private const int SCryptBlockSize = 8;
         private const int SCryptParallelismFactor = 1;
 
-        protected override string KeyCachePrefix => "V0";
+        protected override string Version => "0";
 
         /// <summary>
         /// Constructor
@@ -124,7 +124,7 @@ namespace Interapptive.Shared.Security.SecureTextVersions
         /// <summary>
         /// Encrypt a plain text string with Version 0 of SecureText
         /// </summary>
-        public override string Encrypt(string plaintext, string password)
+        public override string EncryptInternal(string plaintext, string password)
         {
             throw new NotImplementedException("SecureTextVersion0 is outdated and should only be used for decryption");
         }

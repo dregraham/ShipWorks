@@ -1018,12 +1018,6 @@ namespace ShipWorks.Data.Model.FactoryClasses
 			get { return Create<PermissionEntity>(); }
 		}
 
-		/// <summary>Creates and returns a new EntityQuery for the PlatformStore entity</summary>
-		public EntityQuery<PlatformStoreEntity> PlatformStore
-		{
-			get { return Create<PlatformStoreEntity>(); }
-		}
-
 		/// <summary>Creates and returns a new EntityQuery for the PostalProfile entity</summary>
 		public EntityQuery<PostalProfileEntity> PostalProfile
 		{

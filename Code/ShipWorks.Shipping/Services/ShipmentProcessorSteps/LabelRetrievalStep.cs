@@ -13,6 +13,7 @@ using ShipWorks.Common;
 using ShipWorks.Data;
 using ShipWorks.Data.Model;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Shipping.Carriers.Amazon.SFP;
 using ShipWorks.Shipping.Carriers.Api;
 using ShipWorks.Shipping.Insurance.InsureShip;
 using ShipWorks.Shipping.Services.ShipmentProcessorSteps.LabelRetrieval;
@@ -33,6 +34,7 @@ namespace ShipWorks.Shipping.Services.ShipmentProcessorSteps
         private readonly IOrderedCompositeManipulator<ILabelRetrievalShipmentManipulator, ShipmentEntity> shipmentManipulator;
         private readonly ICompositeValidator<ILabelRetrievalShipmentValidator, ShipmentEntity> shipmentValidator;
         private readonly IAutoReturnShipmentService autoReturn;
+        private readonly IAmazonTermsOrchestrator amazonTermsOrchestrator;
 
         /// <summary>
         /// Constructor
@@ -44,13 +46,15 @@ namespace ShipWorks.Shipping.Services.ShipmentProcessorSteps
             IOrderedCompositeManipulator<ILabelRetrievalShipmentManipulator, ShipmentEntity> shipmentManipulator,
             ICompositeValidator<ILabelRetrievalShipmentValidator, ShipmentEntity> shipmentValidator,
             IAutoReturnShipmentService autoReturn,
-            Func<Type, ILog> createLogger)
+            Func<Type, ILog> createLogger,
+            IAmazonTermsOrchestrator amazonTermsOrchestrator)
         {
             this.shipmentValidator = shipmentValidator;
             this.shipmentManipulator = shipmentManipulator;
             this.labelServiceFactory = labelServiceFactory;
             this.storeTypeManager = storeTypeManager;
             this.autoReturn = autoReturn;
+            this.amazonTermsOrchestrator = amazonTermsOrchestrator;
             log = createLogger(GetType());
         }
 
@@ -163,6 +167,16 @@ namespace ShipWorks.Shipping.Services.ShipmentProcessorSteps
             if (validation.Failure)
             {
                 throw new ShippingException(validation.Errors.First());
+            }
+
+            if (shipment.ShipmentTypeCode == ShipmentTypeCode.AmazonSFP)
+            {
+                await amazonTermsOrchestrator.Handle(true).ConfigureAwait(false);
+
+                if (!amazonTermsOrchestrator.TermsAccepted)
+                {
+                    throw new ShippingException(validation.Errors.First());
+                }
             }
 
             // We're going to allow the store to confirm the shipping address for the shipping label, but we want to

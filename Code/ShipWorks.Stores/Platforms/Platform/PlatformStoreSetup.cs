@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Enums;
 using Interapptive.Shared.Utility;
@@ -22,7 +18,7 @@ namespace ShipWorks.Stores.Platforms.Platform
     [KeyedComponent(typeof(IStoreSetup), StoreTypeCode.ChannelAdvisorHub)]
     [KeyedComponent(typeof(IStoreSetup), StoreTypeCode.VolusionHub)]
     [KeyedComponent(typeof(IStoreSetup), StoreTypeCode.GrouponHub)]
-    public class PlatformStoreSetup: BaseStoreSetup 
+    public class PlatformStoreSetup : BaseStoreSetup
     {
         private readonly IStoreTypeManager storeTypeManager;
 
@@ -59,14 +55,14 @@ namespace ShipWorks.Stores.Platforms.Platform
             return store;
         }
 
-        
+
         /// <summary>
         /// Creates a PlatformStoreEntity given a storeType
         /// </summary>
-        public PlatformStoreEntity CreatePlatformStore(StoreTypeCode storeTypeCode)
+        public StoreEntity CreatePlatformStore(StoreTypeCode storeTypeCode)
         {
             var storeType = storeTypeManager.GetType(storeTypeCode);
-            var store = (PlatformStoreEntity) storeType.CreateStoreInstance();
+            var store = storeType.CreateStoreInstance();
             return store;
         }
 
@@ -74,7 +70,7 @@ namespace ShipWorks.Stores.Platforms.Platform
         /// <summary>
         /// Populates a PlatformStoreEntity with data from a StoreConfiguration
         /// </summary>
-        public void ApplyStoreConfig(PlatformStoreEntity store, StoreConfiguration config)
+        public void ApplyStoreConfig(StoreEntity store, StoreConfiguration config)
         {
             store.SetupComplete = true;
 
@@ -92,7 +88,8 @@ namespace ShipWorks.Stores.Platforms.Platform
                 store.Enabled = config.Settings.ActivelyShips;
             }
 
-            if (config.Address != null) {
+            if (config.Address != null)
+            {
                 store.Address.City = config.Address.City;
                 store.Address.Company = config.Address.Company;
                 store.Address.Phone = config.Address.Phone;

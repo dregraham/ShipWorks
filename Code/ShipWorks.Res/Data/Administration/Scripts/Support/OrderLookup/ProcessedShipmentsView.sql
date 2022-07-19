@@ -52,7 +52,7 @@ WITH ProcessedShipments AS
                     s.ProcessedComputerID, s.ProcessedWithUiMode, s.Voided, s.VoidedDate, s.VoidedUserID, s.VoidedComputerID, s.TotalWeight,
                     s.TrackingNumber, s.ShipmentCost, s.ShipSenseStatus, s.ShipAddressValidationStatus, s.ShipResidentialStatus, s.ShipPOBox,
                     s.ShipMilitaryAddress, s.ShipUSTerritory, s.RequestedLabelFormat, s.ActualLabelFormat, s.ReturnShipment, s.OrderID, s.OrderNumberComplete,
-                    s.CombineSplitStatus, c.ShippingServiceID, Verified, TrackingStatus
+                    s.CombineSplitStatus, c.ShippingServiceName, Verified, TrackingStatus
              FROM AmazonSFPShipment c, ProcessedShipments s WHERE c.ShipmentID = s.ShipmentID  AND s.ShipmentType = 16
          ),
      OtherShipments as

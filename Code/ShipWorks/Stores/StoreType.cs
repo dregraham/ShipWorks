@@ -94,6 +94,8 @@ namespace ShipWorks.Stores
 
             store.DomesticAddressValidationSetting = GetDefaultDomesticValidationSetting();
             store.InternationalAddressValidationSetting = AddressValidationStoreSettingType.ValidateAndNotify;
+
+            store.OrderSourceID = "";
         }
 
         /// <summary>

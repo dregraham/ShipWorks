@@ -23,6 +23,26 @@ namespace Interapptive.Shared.Extensions
                 }
             });
         }
+        /// <summary>
+        /// Re-throw an exception
+        /// </summary>
+        public static Task RethrowException(this Task task)
+        {
+            return task.ContinueWith(x =>
+            {
+                if (!x.IsFaulted || x.Exception == null)
+                {
+                    return;
+                }
+
+                if (x.Exception.InnerException != null)
+                {
+                    throw x.Exception.InnerException;
+                }
+
+                throw x.Exception;
+            });
+        }
 
         /// <summary>
         /// Map an exception to another type

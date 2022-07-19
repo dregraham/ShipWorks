@@ -80,5 +80,17 @@ namespace Interapptive.Shared.Extensions
 
             return Result.FromSuccess();
         }
+
+        /// <summary>
+        /// Capatalize first letter of string. Return input if null or empty
+        /// </summary>
+        public static string FirstCharToUpper(this string input)
+        {
+            if (string.IsNullOrWhiteSpace(input))
+            {
+                return input;
+            }
+            return input[0].ToString().ToUpper() + input.Substring(1);
+        }
     }
 }

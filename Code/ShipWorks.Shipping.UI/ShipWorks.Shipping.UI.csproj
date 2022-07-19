@@ -171,6 +171,13 @@
     <Reference Include="WindowsFormsIntegration" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Carriers\Amazon\GetAmazonCarrierCredentials.xaml.cs">
+      <DependentUpon>GetAmazonCarrierCredentials.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Carriers\Amazon\SFP\Terms\AmazonSfpTermsViewModel.cs" />
+    <Compile Include="Carriers\Amazon\SFP\Terms\AmazonSfpTermsDialog.xaml.cs">
+      <DependentUpon>AmazonSfpTermsDialog.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Carriers\DhlEcommerce\DhlEcommerceCustomsControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -819,6 +826,13 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
+    <Page Include="Carriers\Amazon\GetAmazonCarrierCredentials.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Carriers\Amazon\SFP\Terms\AmazonSfpTermsDialog.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="Settings\BestRateAccountSettingsControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -983,6 +997,7 @@
   <ItemGroup>
     <None Include="Resources\dhl_logo.gif" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>

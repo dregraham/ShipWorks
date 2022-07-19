@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Interapptive.Shared.Collections;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.Amazon.SFP.Api.DTOs;
+using ShipWorks.Shipping.Carriers.Amazon.SFP.Platform;
 using ShipWorks.Shipping.Editing.Rating;
 using ShipWorks.Shipping.Services;
 using ShipWorks.Stores.Content;
@@ -15,19 +17,19 @@ namespace ShipWorks.Shipping.Carriers.Amazon.SFP.Api
     /// </summary>
     public class AmazonSFPRatingService : IRatingService
     {
-        private readonly IAmazonSFPShippingWebClient webClient;
+        private readonly IAmazonSfpShippingPlatformWebClient webClient;
         private readonly IOrderManager orderManager;
         private readonly IAmazonSFPShipmentRequestDetailsFactory requestFactory;
-        private readonly IAmazonSFPRateGroupFactory amazonRateGroupFactory;
+        private readonly IAmazonSfpRateGroupFactory amazonRateGroupFactory;
         private readonly IAmazonSFPServiceTypeRepository serviceTypeRepository;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="AmazonSFPRatingService"/> class.
         /// </summary>
-        public AmazonSFPRatingService(IAmazonSFPShippingWebClient webClient,
+        public AmazonSFPRatingService(IAmazonSfpShippingPlatformWebClient webClient,
             IOrderManager orderManager,
             IAmazonSFPShipmentRequestDetailsFactory requestFactory,
-            IAmazonSFPRateGroupFactory amazonRateGroupFactory,
+            IAmazonSfpRateGroupFactory amazonRateGroupFactory,
             IAmazonSFPServiceTypeRepository serviceTypeRepository)
         {
             this.webClient = webClient;
@@ -50,17 +52,12 @@ namespace ShipWorks.Shipping.Carriers.Amazon.SFP.Api
                 throw new AmazonSFPShippingException("Not an Amazon Order");
             }
 
-            ShipmentRequestDetails requestDetails = requestFactory.Create(shipment, amazonOrder);
-            bool wasSameDay = requestDetails.ShippingServiceOptions.CarrierWillPickUp;
+            RateGroup rateGroup = webClient.GetRates(shipment);
 
-            RateGroup rateGroup = GetRates(shipment.AmazonSFP, requestDetails);
+            // As part of the Amazon SP migration, we are NOT saving new unknown types.
+            // SaveUnknownServiceTypes(response);
 
-            if (rateGroup.Rates.None() && rateGroup.FootnoteFactories.None() && wasSameDay)
-            {
-                requestDetails.ShippingServiceOptions.CarrierWillPickUp = false;
-                rateGroup = GetRates(shipment.AmazonSFP, requestDetails);
-                rateGroup.AddFootnoteFactory(new AmazonSFPSameDayNotAvailableFootnoteFactory());
-            }
+            rateGroup = new RateGroup(rateGroup.Rates.OrderBy(r => r.AmountOrDefault));
 
             return rateGroup;
         }
@@ -73,17 +70,18 @@ namespace ShipWorks.Shipping.Carriers.Amazon.SFP.Api
             throw new NotImplementedException("Amazon is not yet supported");
         }
 
-        /// <summary>
-        /// Make the actual rate request
-        /// </summary>
-        private RateGroup GetRates(AmazonSFPShipmentEntity amazonShipment, ShipmentRequestDetails requestDetails)
-        {
-            GetEligibleShippingServicesResponse response = webClient.GetRates(requestDetails, amazonShipment);
+        ///// <summary>
+        ///// Make the actual rate request
+        ///// </summary>
+        //private RateGroup GetRates(AmazonSFPShipmentEntity amazonShipment, ShipmentRequestDetails requestDetails)
+        //{
+        //    var response = webClient.GetRates(requestDetails, amazonShipment);
 
-            SaveUnknownServiceTypes(response);
+        //    // As part of the Amazon SP migration, we are NOT saving new unknown types.
+        //    // SaveUnknownServiceTypes(response);
 
-            return amazonRateGroupFactory.GetRateGroupFromResponse(response);
-        }
+        //    return amazonRateGroupFactory.GetRateGroupFromResponse(response);
+        //}
 
         /// <summary>
         /// Saves unknown service type to the ShippingService repository.

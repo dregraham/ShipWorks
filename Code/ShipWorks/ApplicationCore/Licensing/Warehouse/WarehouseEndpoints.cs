@@ -26,13 +26,25 @@ namespace ShipWorks.ApplicationCore.Licensing.Warehouse
         public const string Tracking = "api/tracking";
         public const string GetMessages = "api/account-service/account/messages?username={0}";
 
+        public const string MigrateAmazonStore = "api/ordersource/migrate";
+        public const string AmazonBuyShippingTerms = "api/account-service/account/amazon/terms";
+        public const string CreateAmazonCarrierFromAmazonStore = "api/ordersource/carriers/amazon/fromordersource";
+        public const string CreateAmazonCarrierFromMws = "api/ordersource/carriers/amazon/frommws";
+        public const string PlatformPassthrough = "/api/platform/passthrough";
+        public const string UpdateAmazonFbaCriteria = "api/ordersource/amazon/fba";
+        
         private const string notifyShipped = "api/customer/notifyShipped/{0}";
         private const string linkWarehouse = "api/warehouses/{0}/link";
+
         private const string orders = "api/warehouses/{0}/orders";
         private const string shipOrder = "api/orders/{0}/ship";
         private const string voidShipment = "api/orders/{0}/void";
         private const string rerouteOrderItems = "api/orders/{0}/rerouteItems";
         private const string getTrackingUpdates = "api/tracking/{0}";
+        private const string createOrderSourceInitiateUrl = "api/ordersource/{0}/auth?RedirectUrl={1}callbacks/{0}monoauth/subscribe&ApiRegion={2}&DaysBack={3}&MonoauthRequestType=CreateOrderSource";
+        private const string updateOrderSourceInitiateUrl = "api/ordersource/{0}/auth?RedirectUrl={1}callbacks/{0}monoauth/update&OrderSourceId={2}&ApiRegion={3}&SellerId={4}&IncludeFba={5}&MonoauthRequestType=UpdateOrderSourceCredentials";
+        private const string createCarrierInitiateUrl = "api/ordersource/{0}/auth?RedirectUrl={1}callbacks/{0}monoauth/createcarrier&ApiRegion={2}&MonoauthRequestType=CreateCarrier";
+        private const string updateCarrierInitiateUrl = "api/ordersource/{0}/auth?RedirectUrl={1}callbacks/{0}monoauth/updatecarrier&ApiRegion={2}&SellerId={3}&CarrierId={4}&MonoauthRequestType=UpdateCarrierCredentials";
 
         /// <summary>
         /// Create a link warehouse endpoint
@@ -93,6 +105,9 @@ namespace ShipWorks.ApplicationCore.Licensing.Warehouse
         public static string GetProductsAfterSequence(string warehouseId, long sequence) =>
             $"api/products/sync/{warehouseId}/after/{sequence}";
 
+        /// <summary>
+        /// Notify platform the order has shipped
+        /// </summary>
         public static string NotifyShipped(string salesOrderId) =>
             string.Format(notifyShipped, salesOrderId);
 
@@ -101,5 +116,29 @@ namespace ShipWorks.ApplicationCore.Licensing.Warehouse
         /// </summary>
         public static string GetTrackingUpdatesAfter(DateTime lastSeenTimestamp) =>
             string.Format(getTrackingUpdates, lastSeenTimestamp.ToUniversalTime().ToString("o"));
+
+        /// <summary>
+        /// Get the URL to get the InitiateMonoauthUrl for creating a new order source
+        /// </summary>
+        public static string GetCreateOrderSourceInitiateUrl(string orderSourceName, string redirectUrl, string apiRegion, int daysBack) =>
+            string.Format(createOrderSourceInitiateUrl, orderSourceName, redirectUrl, apiRegion, daysBack);
+
+        /// <summary>
+        /// Get the URL to get the InitiateMonoauthUrl for updating an order source
+        /// </summary>
+        public static string GetUpdateOrderSourceInitiateUrl(string orderSourceName, string redirectUrl, string orderSourceId, string apiRegion, string sellerId, bool includeFba) =>
+            string.Format(updateOrderSourceInitiateUrl, orderSourceName, redirectUrl, orderSourceId, apiRegion, sellerId, includeFba);
+
+        /// <summary>
+        /// Get the URL to get the InitiateMonoauthUrl for creating a carrier
+        /// </summary>
+        public static string GetCreateCarrierInitiateUrl(string orderSourceName, string redirectUrl, string apiRegion) =>
+            string.Format(createCarrierInitiateUrl, orderSourceName, redirectUrl, apiRegion);
+
+        /// <summary>
+        /// Gets the URL to get the InitiateMonoauthURL for updating a carrier
+        /// </summary>
+        public static string GetUpdateCarrierInitiateUrl(string orderSourceName, string redirectUrl, string apiRegion, string sellerId, string carrierId) =>
+            string.Format(updateCarrierInitiateUrl, orderSourceName, redirectUrl, apiRegion, sellerId, carrierId);
     }
 }

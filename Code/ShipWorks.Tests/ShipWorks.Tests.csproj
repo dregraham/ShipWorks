@@ -633,6 +633,7 @@
     <Compile Include="Stores\Platforms\NoMoreRack\IdentifierTests.cs" />
     <Compile Include="Stores\PayPal\ExceptionSerializationTests.cs" />
     <Compile Include="Stores\Platforms\GenericModule\GenericStoreStatusCodeProviderTest.cs" />
+    <Compile Include="Stores\Platforms\ShipEngine\PlatformOrderWebClientTest.cs" />
     <Compile Include="Stores\Platforms\Shopify\DTOs\ShopifyFulfillmentRequestTest.cs" />
     <Compile Include="Stores\Platforms\Shopify\DTOs\ShopifyInventoryLevelsResponseTest.cs" />
     <Compile Include="Stores\Platforms\Shopify\DTOs\ShopifyInventoryLevelTest.cs" />
