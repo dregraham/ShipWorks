@@ -10,6 +10,7 @@ namespace ShipWorks.ApplicationCore.Licensing.Warehouse.Messages
         {
             InitializeComponent();
             messageControl.ParentDialog = this;
+            this.StartPosition = FormStartPosition.CenterParent;
         }
 
         /// <summary>
