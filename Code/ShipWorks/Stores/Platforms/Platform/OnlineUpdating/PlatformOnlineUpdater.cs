@@ -134,7 +134,7 @@ namespace ShipWorks.Stores.Platforms.Platform.OnlineUpdating
 
             var client = createWarehouseOrderClient();
 
-            await UploadShipmentsToPlatform(shipments, store, client).ConfigureAwait(false);
+            await UploadShipmentsToPlatform(shipments.Where(x => !x.Order.ChannelOrderID.IsNullOrWhiteSpace()).ToList(), store, client).ConfigureAwait(false);
         }
         
         /// <summary>
