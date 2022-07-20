@@ -375,6 +375,7 @@
     <Compile Include="Platforms\Odbc\Warehouse\IOdbcStoreClient.cs" />
     <Compile Include="Platforms\Odbc\Warehouse\OdbcStoreClient.cs" />
     <Compile Include="Platforms\Odbc\Warehouse\OdbcStoreDtoFactory.cs" />
+    <Compile Include="Services\AmazonOrderSourceIdFetcher.cs" />
     <Compile Include="Services\AmazonMwsToSpConverter.cs" />
     <Compile Include="Services\LegacyStoreTrialKeyConverter.cs" />
     <Compile Include="Warehouse\Configuration\Stores\ActionTaskConfigurator.cs" />
