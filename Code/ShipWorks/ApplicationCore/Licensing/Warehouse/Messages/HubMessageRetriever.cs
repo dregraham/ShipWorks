@@ -1,8 +1,10 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
 using System.Web;
 using System.Windows.Forms;
 using Interapptive.Shared.ComponentRegistration;
+using log4net;
 using RestSharp;
 using ShipWorks.ApplicationCore.Licensing.Warehouse.DTO;
 using ShipWorks.Users;
@@ -18,15 +20,20 @@ namespace ShipWorks.ApplicationCore.Licensing.Warehouse.Messages
         private readonly IWarehouseRequestFactory requestFactory;
         private readonly IWarehouseRequestClient warehouseClient;
         private readonly IUserSession userSession;
+        private readonly ILog log;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public HubMessageRetriever(IWarehouseRequestFactory requestFactory, IWarehouseRequestClient warehouseClient, IUserSession userSession)
+        public HubMessageRetriever(IWarehouseRequestFactory requestFactory,
+            IWarehouseRequestClient warehouseClient,
+            IUserSession userSession,
+            Func<Type, ILog> logFactory)
         {
             this.requestFactory = requestFactory;
             this.warehouseClient = warehouseClient;
             this.userSession = userSession;
+            log = logFactory(typeof(HubMessageRetriever));
         }
 
         /// <summary>
@@ -37,6 +44,8 @@ namespace ShipWorks.ApplicationCore.Licensing.Warehouse.Messages
             var request = requestFactory.Create(string.Format(WarehouseEndpoints.GetMessages, HttpUtility.UrlEncode(userSession.User.Username)), Method.GET, null);
 
             var response = await warehouseClient.MakeRequest<MessagesResponse>(request, "GetMessages").ConfigureAwait(true);
+
+            log.Info($"Got {response.Messages.Count} messages");
 
             if (response.Messages.Any())
             {
