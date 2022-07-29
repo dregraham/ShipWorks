@@ -5566,25 +5566,24 @@ namespace ShipWorks
 
         /// <summary>
         /// Check for any messages
+        /// This is async void so we will fire-and-forget, and
+        /// just display the messages as soon as we fetch them
         /// </summary>
-        private void CheckForMessages()
+        private async void CheckForMessages()
         {
-            Task.Run(async () =>
+            try
             {
-                try
-                {
-                    log.Info("Checking for messages");
+                log.Info("Checking for messages");
 
-                    using (var lifetimeScope = IoC.BeginLifetimeScope())
-                    {
-                        await lifetimeScope.Resolve<HubMessageRetriever>().GetMessages(this);
-                    }
-                }
-                catch (Exception ex)
+                using (var lifetimeScope = IoC.BeginLifetimeScope())
                 {
-                    log.Error("Failed to fetch messages", ex);
+                    await lifetimeScope.Resolve<HubMessageRetriever>().GetMessages(this);
                 }
-            });
+            }
+            catch (Exception ex)
+            {
+                log.Error("Failed to fetch messages", ex);
+            }
         }
 
         /// <summary>
