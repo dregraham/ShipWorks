@@ -804,7 +804,18 @@
     <Compile Include="ApplicationCore\Licensing\CustomerLicenseKeyType.cs" />
     <Compile Include="ApplicationCore\Licensing\FeatureRestrictions\DhlEcommerce\DhlEcommerceMaxRestriction.cs" />
     <Compile Include="ApplicationCore\Licensing\TrialDetails.cs" />
+    <Compile Include="ApplicationCore\Licensing\Warehouse\DTO\MessagesResponse.cs" />
     <Compile Include="ApplicationCore\Licensing\Warehouse\DTO\SqlConfigChangedDto.cs" />
+    <Compile Include="ApplicationCore\Licensing\Warehouse\Messages\HubMessageRetriever.cs" />
+    <Compile Include="ApplicationCore\Licensing\Warehouse\Messages\HubMessagesControl.xaml.cs">
+      <DependentUpon>HubMessagesControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="ApplicationCore\Licensing\Warehouse\Messages\HubMessagesDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ApplicationCore\Licensing\Warehouse\Messages\HubMessagesDialog.Designer.cs">
+      <DependentUpon>HubMessagesDialog.cs</DependentUpon>
+    </Compile>
     <Compile Include="ApplicationCore\Licensing\Warehouse\HubPlatformClient.cs" />
     <Compile Include="ApplicationCore\Licensing\Warehouse\IHubPlatformClient.cs" />
     <Compile Include="ApplicationCore\ReoccurringAppLockedTask.cs" />
@@ -1724,6 +1735,9 @@
     <Compile Include="Warehouse\Orders\WarehouseOrderFactory.cs" />
     <EmbeddedResource Include="Actions\Tasks\Common\Editors\CreateLabelTaskEditor.resx">
       <DependentUpon>CreateLabelTaskEditor.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ApplicationCore\Licensing\Warehouse\Messages\HubMessagesDialog.resx">
+      <DependentUpon>HubMessagesDialog.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="ApplicationCore\MessageBoxes\ListSeparatorFormatRequiredDlg.resx">
       <DependentUpon>ListSeparatorFormatRequiredDlg.cs</DependentUpon>
@@ -11724,6 +11738,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="ApplicationCore\Crashes\CrashDialog.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="ApplicationCore\Licensing\Warehouse\Messages\HubMessagesControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

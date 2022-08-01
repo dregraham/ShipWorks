@@ -3,16 +3,15 @@ using System.Collections.Generic;
 using System.Linq;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Utility;
-using ShipWorks.Shipping.ShipEngine.DTOs;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
-using ShipWorks.Shipping.Carriers.Ups.ShipEngine;
 using ShipWorks.Shipping.Carriers.UPS;
 using ShipWorks.Shipping.Carriers.UPS.Enums;
 using ShipWorks.Shipping.Carriers.UPS.ShipEngine;
 using ShipWorks.Shipping.Insurance;
 using ShipWorks.Shipping.Services;
 using ShipWorks.Shipping.ShipEngine;
+using ShipWorks.Shipping.ShipEngine.DTOs;
 using ShipWorks.Templates.Tokens;
 
 namespace ShipWorks.Shipping.Carriers.Ups.OneBalance
@@ -73,9 +72,6 @@ namespace ShipWorks.Shipping.Carriers.Ups.OneBalance
 
             switch ((UpsDeliveryConfirmationType) shipment.Ups.DeliveryConfirmation)
             {
-                case UpsDeliveryConfirmationType.NoSignature:
-                    result.Shipment.Confirmation = Shipment.ConfirmationEnum.Delivery;
-                    break;
                 case UpsDeliveryConfirmationType.Signature:
                     result.Shipment.Confirmation = Shipment.ConfirmationEnum.Signature;
                     break;
@@ -104,7 +100,7 @@ namespace ShipWorks.Shipping.Carriers.Ups.OneBalance
 
             return result;
         }
-        
+
         /// <summary>
         /// Create a RateShipmentRequest for UPS that includes UPS Insurance
         /// </summary>
@@ -114,9 +110,6 @@ namespace ShipWorks.Shipping.Carriers.Ups.OneBalance
 
             switch ((UpsDeliveryConfirmationType) shipment.Ups.DeliveryConfirmation)
             {
-                case UpsDeliveryConfirmationType.NoSignature:
-                    result.Shipment.Confirmation = AddressValidatingShipment.ConfirmationEnum.Delivery;
-                    break;
                 case UpsDeliveryConfirmationType.Signature:
                     result.Shipment.Confirmation = AddressValidatingShipment.ConfirmationEnum.Signature;
                     break;
@@ -132,8 +125,8 @@ namespace ShipWorks.Shipping.Carriers.Ups.OneBalance
                     break;
             }
 
-            if (shipment.Insurance && 
-                shipment.InsuranceProvider == (int) InsuranceProvider.Carrier && 
+            if (shipment.Insurance &&
+                shipment.InsuranceProvider == (int) InsuranceProvider.Carrier &&
                 result?.Shipment != null)
             {
                 result.Shipment.InsuranceProvider = AddressValidatingShipment.InsuranceProviderEnum.Carrier;
@@ -141,7 +134,7 @@ namespace ShipWorks.Shipping.Carriers.Ups.OneBalance
 
             return result;
         }
-        
+
         /// <summary>
         /// Gets the api value for the UPS service
         /// </summary>
@@ -153,7 +146,7 @@ namespace ShipWorks.Shipping.Carriers.Ups.OneBalance
         /// </summary>
         protected override void SetPackageInsurance(ShipmentPackage shipmentPackage, IPackageAdapter packageAdapter)
         {
-            if (packageAdapter.InsuranceChoice.Insured && 
+            if (packageAdapter.InsuranceChoice.Insured &&
                 packageAdapter.InsuranceChoice.InsuranceProvider == InsuranceProvider.Carrier)
             {
                 shipmentPackage.InsuredValue = new MoneyDTO(MoneyDTO.CurrencyEnum.USD, decimal.ToDouble(packageAdapter.InsuranceChoice.InsuranceValue));
@@ -179,7 +172,7 @@ namespace ShipWorks.Shipping.Carriers.Ups.OneBalance
 
             return options;
         }
- 
+
         /// <summary>
         /// Get the packaging code for the given adapter
         /// </summary>
@@ -194,7 +187,7 @@ namespace ShipWorks.Shipping.Carriers.Ups.OneBalance
 
             return string.IsNullOrWhiteSpace(packagingCode) ? null : packagingCode;
         }
-            
+
 
         /// <summary>
         /// Creates the UPS customs node

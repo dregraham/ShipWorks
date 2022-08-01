@@ -91,7 +91,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.UPS.LocalRating.ServiceFilters
 
             var shipment = Create.Shipment().AsUps().Build();
 
-            var eligibleServiceTypes = testObject.GetEligibleServices(shipment.Ups, new []{UpsServiceType.UpsGround}).ToList();
+            var eligibleServiceTypes = testObject.GetEligibleServices(shipment.Ups, new[] { UpsServiceType.UpsGround }).ToList();
 
             Assert.Equal(UpsServiceType.UpsGround, eligibleServiceTypes.Single());
         }
@@ -102,7 +102,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.UPS.LocalRating.ServiceFilters
             var testObject = mock.Create<ValueAddServiceFilter>();
 
             var shipment = Create.Shipment().AsUps().Build();
-            shipment.Ups.DeliveryConfirmation = (int) UpsDeliveryConfirmationType.NoSignature;
+            shipment.Ups.DeliveryConfirmation = (int) UpsDeliveryConfirmationType.Signature;
 
             var eligibleServiceTypes = testObject.GetEligibleServices(shipment.Ups, new[] { UpsServiceType.UpsGround, UpsServiceType.UpsNextDayAirAM }).ToList();
 
@@ -115,7 +115,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.UPS.LocalRating.ServiceFilters
             var testObject = mock.Create<ValueAddServiceFilter>();
 
             var shipment = Create.Shipment().AsUps().Build();
-            shipment.Ups.Packages.Add(new UpsPackageEntity() {VerbalConfirmationEnabled = true});
+            shipment.Ups.Packages.Add(new UpsPackageEntity() { VerbalConfirmationEnabled = true });
 
             var eligibleServiceTypes = testObject.GetEligibleServices(shipment.Ups, new[] { UpsServiceType.UpsGround, UpsServiceType.UpsNextDayAirAM }).ToList();
 

@@ -26,8 +26,7 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating.ServiceFilters
         {
             // NextDayAirEarly does not work with delivery confirmation 
             if (service == UpsServiceType.UpsNextDayAirAM &&
-                (shipment.DeliveryConfirmation == (int) UpsDeliveryConfirmationType.NoSignature ||
-                 shipment.DeliveryConfirmation == (int) UpsDeliveryConfirmationType.Signature))
+                shipment.DeliveryConfirmation == (int) UpsDeliveryConfirmationType.Signature)
             {
                 return false;
             }
@@ -50,7 +49,7 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating.ServiceFilters
 
             return true;
         }
-        
+
         /// <summary>
         /// Determines whether [is return service] [the specified service].
         /// </summary>
