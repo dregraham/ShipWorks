@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net;
@@ -80,9 +81,9 @@ namespace ShipWorks.Shipping.Carriers.Amazon.SFP.Terms
         /// <summary>
         /// Make a call to accept Amazon terms
         /// </summary>
-        public async Task<bool> AcceptTerms(Version version)
+        public async Task<bool> AcceptTerms(Version version, IEnumerable<string> storeLicenses, bool isLegacy)
         {
-            var payload = new { amazonTermsVersion = version.ToString() };
+            var payload = new { AmazonTermsVersion = version.ToString(), StoreLicenses = storeLicenses, IsLegacy = isLegacy};
 
             var request = requestFactory.Create(WarehouseEndpoints.AmazonBuyShippingTerms, Method.PUT, payload);
 
