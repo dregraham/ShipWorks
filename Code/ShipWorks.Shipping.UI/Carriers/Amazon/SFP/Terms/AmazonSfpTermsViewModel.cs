@@ -142,7 +142,7 @@ namespace ShipWorks.Shipping.UI.Carriers.Amazon.SFP.Terms
         /// </summary>
         private void AcceptAction()
         {
-            var isLegacy = !lifetimeScope.Resolve<ILicenseService>().IsHub;
+            var isLegacy = lifetimeScope.Resolve<ILicenseService>().IsLegacy;
 
             IEnumerable<string> licenses = null;
 
