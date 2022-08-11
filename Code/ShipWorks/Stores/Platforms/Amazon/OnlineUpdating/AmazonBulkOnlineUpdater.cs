@@ -23,7 +23,6 @@ namespace ShipWorks.Stores.Platforms.Platform.OnlineUpdating
     public class AmazonBulkOnlineUpdater : PlatformOnlineUpdater, IPlatformOnlineUpdater
     {
         private readonly IAmazonMwsClient mwsClient;
-        private const string bulkShipNotifyEndpoint = "v-beta/order_sources/{0}/notify_shipped/bulk";
 
         /// <summary>
         /// Constructor
