@@ -16,6 +16,7 @@ using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Editions;
 using ShipWorks.Stores.Communication;
+using ShipWorks.Stores.Platforms.Amazon.OnlineUpdating.DTO;
 using ShipWorks.Warehouse.Orders;
 using ShipWorks.Warehouse.Orders.DTO;
 
@@ -276,6 +277,37 @@ namespace ShipWorks.Stores.Warehouse
             {
                 log.Error($"Failed to reroute order items for order {hubOrderID} to hub.", ex);
                 throw;
+            }
+        }
+
+        /// <summary>
+        /// Upload Amazon shipments
+        /// </summary>
+        public async Task<Result> UploadAmazonShipments(AmazonBulkUploadShipmentsRequest body)
+        {
+            try
+            {
+                IRestRequest request = new RestRequest(WarehouseEndpoints.UploadAmazonShipments, Method.POST);
+                request.AddJsonBody(body);
+                request.JsonSerializer = RestSharpJsonNetSerializer.CreateHubDefault();
+
+                GenericResult<IRestResponse> response = await warehouseRequestClient
+                    .MakeRequest(request, "Upload Amazon Shipments")
+                    .ConfigureAwait(true);
+
+                if (response.Failure)
+                {
+                    log.Error($"Failed to upload Amazon shipments. {response.Message}",
+                              response.Exception);
+                    return Result.FromError(response.Exception);
+                }
+
+                return Result.FromSuccess();
+            }
+            catch (Exception ex)
+            {
+                log.Error($"Failed to Amazon shipments: {ex.Message}", ex);
+                return Result.FromError(ex);
             }
         }
     }

@@ -74,5 +74,10 @@ namespace ShipWorks.Stores.Platforms.Amazon.Mws
         /// ONLY fails if we receive a time from Amazon and we are for sure out of sync.
         /// </summary>
         Task<bool> ClockInSyncWithMWS();
+
+        /// <summary>
+        /// Get the carrier name and tracking number
+        /// </summary>
+        (string carrier, string trackingNumber) GetCarrierNameAndTrackingNumber(ShipmentEntity shipment);
     }
 }

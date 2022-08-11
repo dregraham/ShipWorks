@@ -4,7 +4,6 @@ using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
 using Autofac.Features.Indexed;
-using Interapptive.Shared.ComponentRegistration;
 using ShipWorks.ApplicationCore.Licensing.Warehouse;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
@@ -19,10 +18,8 @@ namespace ShipWorks.Stores.Platforms.Platform.OnlineUpdating
     /// Bulk Upload shipment details to Platform
     /// </summary>
     /// <remarks>
-    /// Currently, only supported by Amazon. When other stores are supported, move the KeyedComponent 
-    /// for the working storetype to here.
+    /// When other stores are supported, move the KeyedComponent for the working storetype to here.
     /// </remarks>
-    [KeyedComponent(typeof(IPlatformOnlineUpdater), StoreTypeCode.Amazon)]
     public class PlatformBulkOnlineUpdater : PlatformOnlineUpdater, IPlatformOnlineUpdater
     {
         private readonly IHubPlatformClient platformWebClient;

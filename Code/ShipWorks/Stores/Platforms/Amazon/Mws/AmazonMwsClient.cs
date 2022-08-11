@@ -41,13 +41,13 @@ namespace ShipWorks.Stores.Platforms.Amazon.Mws
         public const int MaxItemsPerProductDetailsRequest = 5;
 
         // MWS settings class
-        private IAmazonMwsWebClientSettings mwsSettings;
+        private readonly IAmazonMwsWebClientSettings mwsSettings;
 
         // the store/account we are working with
-        private AmazonStoreEntity store;
+        private readonly AmazonStoreEntity store;
 
         // Throttling request submitter
-        private AmazonMwsRequestThrottle throttler;
+        private readonly AmazonMwsRequestThrottle throttler;
         private readonly IShippingManager shippingManager;
         private readonly WebClientEnvironmentFactory webClientEnvironmentFactory;
         private readonly AmazonStoreType storeType;
@@ -249,7 +249,7 @@ namespace ShipWorks.Stores.Platforms.Amazon.Mws
             }
             while (nextToken != null && nextToken.Length > 0);
         }
-        
+
         /// <summary>
         /// Reads the NextToken for use in subsequent requests
         /// </summary>
@@ -530,12 +530,12 @@ namespace ShipWorks.Stores.Platforms.Amazon.Mws
                 writer.WriteElementString("ShipperTrackingNumber", trackingNumber);
             }
         }
-        
+
         /// <summary>
         /// List of valid carrier codes from: https://sellercentral.amazon.com/gp/help/help.html?itemID=G200137470&
         /// </summary>
         /// <returns></returns>
-        private static HashSet<string> GetValidCarrierCodes() =>
+        public static HashSet<string> GetValidCarrierCodes() =>
             new HashSet<string>
             {
                 "Blue Package",
@@ -565,13 +565,16 @@ namespace ShipWorks.Stores.Platforms.Amazon.Mws
                 "YamatoTransport"
             };
 
+        /// <summary>
+        /// Get the carrier name and tracking number
+        /// </summary>
         public (string carrier, string trackingNumber) GetCarrierNameAndTrackingNumber(ShipmentEntity shipment)
         {
             // Per an email on 9/11/07, Amazon will only respond correctly if the code is in upper case, and if its also apart of the method.
             ShipmentTypeCode shipmentType = (ShipmentTypeCode) shipment.ShipmentType;
-            
+
             string trackingNumber = shipment.TrackingNumber;
-            
+
             // Get the carrier based on what we currently know, we'll check it in the DetermineAlternateTracking below
             string carrier = GetCarrierName(shipment, shipmentType);
 
@@ -786,14 +789,14 @@ namespace ShipWorks.Stores.Platforms.Amazon.Mws
                 request.Variables.OrderBy(v => v.Name, StringComparer.Ordinal),
                 QueryStringEncodingCasing.Upper);
 
-            string parameterString = String.Format("{0}\n{1}\n{2}\n{3}", verbString, request.Uri.Host, endpointPath, queryString);
+            string parameterString = string.Format("{0}\n{1}\n{2}\n{3}", verbString, request.Uri.Host, endpointPath, queryString);
 
             // sign the string and add it to the request
             string signature = RequestSignature.CreateRequestSignature(parameterString, Decrypt(mwsSettings.InterapptiveSecretKey), SigningAlgorithm.SHA256);
             request.Variables.Add("Signature", signature);
 
             // add a User Agent header
-            request.Headers.Add("x-amazon-user-agent", String.Format("ShipWorks/{0} (Language=.NET)", Assembly.GetExecutingAssembly().GetName().Version));
+            request.Headers.Add("x-amazon-user-agent", string.Format("ShipWorks/{0} (Language=.NET)", Assembly.GetExecutingAssembly().GetName().Version));
 
             // business logic failures are handled through status codes
             request.AllowHttpStatusCodes(new HttpStatusCode[] { HttpStatusCode.BadRequest });
