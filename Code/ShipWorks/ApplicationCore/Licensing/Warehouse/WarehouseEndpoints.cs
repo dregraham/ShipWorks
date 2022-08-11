@@ -32,7 +32,8 @@ namespace ShipWorks.ApplicationCore.Licensing.Warehouse
         public const string CreateAmazonCarrierFromMws = "api/ordersource/carriers/amazon/frommws";
         public const string PlatformPassthrough = "/api/platform/passthrough";
         public const string UpdateAmazonFbaCriteria = "api/ordersource/amazon/fba";
-        
+        public const string FetchOrderSourceIds = "api/ordersource/id";
+
         private const string notifyShipped = "api/customer/notifyShipped/{0}";
         private const string linkWarehouse = "api/warehouses/{0}/link";
 

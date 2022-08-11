@@ -903,6 +903,8 @@ namespace ShipWorks
 
             ConvertAmazonStoresToSP();
 
+            FetchAmazonOrderSourceIDs();
+
             // Update the custom actions UI.  Has to come before applying the layout, so the QAT can pickup the buttons
             UpdateCustomButtonsActionsUI();
 
@@ -5678,6 +5680,19 @@ namespace ShipWorks
                 var amazonConverter = lifetimeScope.Resolve<IAmazonMwsToSpConverter>();
 
                 amazonConverter.ConvertStores(this);
+            }
+        }
+
+        /// <summary>
+        /// Fetch missing Amazon OrderSourceIDs
+        /// </summary>
+        private void FetchAmazonOrderSourceIDs()
+        {
+            using (var lifetimeScope = IoC.BeginLifetimeScope())
+            {
+                var fetcher = lifetimeScope.Resolve<IAmazonOrderSourceIdFetcher>();
+
+                fetcher.FetchOrderSourceIds(this);
             }
         }
 

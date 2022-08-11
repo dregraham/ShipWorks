@@ -179,8 +179,6 @@ namespace ShipWorks.Stores.Platforms.Amazon
 
             var order = (AmazonOrderEntity) result.Value;
             order.AmazonOrderID = amazonOrderId;
-            order.ChangeOrderNumber(amazonOrderId);
-            order.OrderNumber = long.MinValue;
             order.ChannelOrderID = salesOrder.SalesOrderGuid;
 
             if (salesOrder.Status == OrderSourceSalesOrderStatus.Cancelled && order.IsNew)
@@ -241,6 +239,8 @@ namespace ShipWorks.Stores.Platforms.Amazon
             // only load order items on new orders
             if (order.IsNew)
             {
+                order.OrderNumber = await GetNextOrderNumberAsync().ConfigureAwait(false);
+
                 var giftNotes = GetGiftNotes(salesOrder);
                 var couponCodes = salesOrder.Payment.CouponCodes.Select((c) => JsonConvert.DeserializeObject<CouponCode>(c));
                 foreach (var fulfillment in salesOrder.RequestedFulfillments)
