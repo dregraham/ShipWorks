@@ -4,6 +4,7 @@ using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
 using Autofac.Features.Indexed;
+using log4net;
 using ShipWorks.ApplicationCore.Licensing.Warehouse;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
@@ -23,6 +24,7 @@ namespace ShipWorks.Stores.Platforms.Platform.OnlineUpdating
     public class PlatformBulkOnlineUpdater : PlatformOnlineUpdater, IPlatformOnlineUpdater
     {
         private readonly IHubPlatformClient platformWebClient;
+        private static readonly ILog log = LogManager.GetLogger(typeof(PlatformBulkOnlineUpdater));
         private const string bulkShipNotifyEndpoint = "v-beta/order_sources/{0}/notify_shipped/bulk";
 
         /// <summary>
@@ -43,11 +45,23 @@ namespace ShipWorks.Stores.Platforms.Platform.OnlineUpdating
         {
             try
             {
-                var updates = shipments.Select(async s => await GetPlatformBulkOnlineUpdateItem(s)).Select(r => r.Result).Where(s => s != null);
+                var updates = shipments
+                    .Select(async s => await GetPlatformBulkOnlineUpdateItem(s))
+                    .Select(r => r.Result)
+                    .Where(s => s != null)
+                    .ToList();
+
+                if (!updates.Any())
+                {
+                    log.WarnFormat("Not uploading bulk shipments to platform for store {0}, no valid shipments found.", store.StoreID);
+                    return;
+                }
+
                 var request = new NotifyMarketplaceShippedRequest
                 {
                     NotifyMarketplaceShippedRequests = updates
                 };
+
                 await platformWebClient.CallViaPassthrough(request, string.Format(bulkShipNotifyEndpoint, store.OrderSourceID), HttpMethod.Post, "UploadShipments").ConfigureAwait(false);
             }
             catch (Exception ex)
