@@ -4,6 +4,7 @@ using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
 using Autofac.Features.Indexed;
+using Interapptive.Shared.Collections;
 using Interapptive.Shared.ComponentRegistration;
 using ShipWorks.ApplicationCore.Licensing.Warehouse;
 using ShipWorks.Data.Connection;
@@ -46,6 +47,12 @@ namespace ShipWorks.Stores.Platforms.Platform.OnlineUpdating
         {
             try
             {
+                if (shipments.None())
+                {
+                    // Nothing to do, just return
+                    return;
+                }
+
                 var updates = shipments.Select(async s => await GetPlatformBulkOnlineUpdateItem(s)).Select(r => r.Result).Where(s => s != null);
                 var request = new NotifyMarketplaceShippedRequest
                 {
