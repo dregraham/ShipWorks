@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Reflection;
 
 namespace ShipWorks.Stores.Platforms.Amazon.OnlineUpdating.DTO
 {
+    [Obfuscation(Exclude = true, ApplyToMembers = true, StripAfterObfuscation = false)]
     public class AmazonBulkUploadShipmentsRequest
     {
         public string MarketplaceId { get; set; }
@@ -12,6 +14,7 @@ namespace ShipWorks.Stores.Platforms.Amazon.OnlineUpdating.DTO
         public List<AmazonUploadShipment> Shipments { get; set; }
     }
 
+    [Obfuscation(Exclude = true, ApplyToMembers = true, StripAfterObfuscation = false)]
     public class AmazonUploadShipment
     {
         public string AmazonOrderId { get; set; }
