@@ -10,7 +10,7 @@ using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping;
 using ShipWorks.Shipping.Carriers.Api;
 using ShipWorks.Stores.Content;
-using ShipWorks.Stores.Platforms.Amazon.Mws;
+using ShipWorks.Stores.Platforms.Amazon;
 using ShipWorks.Stores.Platforms.Amazon.OnlineUpdating.DTO;
 using ShipWorks.Warehouse.Orders;
 
@@ -22,17 +22,15 @@ namespace ShipWorks.Stores.Platforms.Platform.OnlineUpdating
     [KeyedComponent(typeof(IPlatformOnlineUpdater), StoreTypeCode.Amazon)]
     public class AmazonBulkOnlineUpdater : PlatformOnlineUpdater, IPlatformOnlineUpdater
     {
-        private readonly IAmazonMwsClient mwsClient;
-
         /// <summary>
         /// Constructor
         /// </summary>
         public AmazonBulkOnlineUpdater(IOrderManager orderManager, IShippingManager shippingManager,
             ISqlAdapterFactory sqlAdapterFactory, Func<IWarehouseOrderClient> createWarehouseOrderClient,
-            IIndex<StoreTypeCode, IOnlineUpdater> storeSpecificOnlineUpdaterFactory, IAmazonMwsClient mwsClient) :
+            IIndex<StoreTypeCode, IOnlineUpdater> storeSpecificOnlineUpdaterFactory) :
             base(orderManager, shippingManager, sqlAdapterFactory, createWarehouseOrderClient, storeSpecificOnlineUpdaterFactory)
         {
-            this.mwsClient = mwsClient;
+
         }
 
         /// <summary>
@@ -91,27 +89,19 @@ namespace ShipWorks.Stores.Platforms.Platform.OnlineUpdating
                 shipDate = DateTime.Now;
             }
 
-            (string carrier, string trackingNumber) = mwsClient.GetCarrierNameAndTrackingNumber(shipment);
+            (string carrierName, string carrierCode, string trackingNumber) = AmazonUtility.GetCarrierInfoAndTrackingNumber(shipment);
 
             var order = (AmazonOrderEntity) shipment.Order;
 
             var request = new AmazonUploadShipment
             {
                 AmazonOrderId = order.AmazonOrderID,
+                CarrierCode = carrierCode,
+                CarrierName = carrierName,
                 Service = serviceUsed,
                 ShipDate = shipDate,
                 TrackingNumber = trackingNumber,
             };
-
-            if (AmazonMwsClient.GetValidCarrierCodes().Contains(carrier))
-            {
-                request.CarrierCode = carrier;
-            }
-            else
-            {
-                request.CarrierCode = "Other";
-                request.CarrierName = carrier;
-            }
 
             return request;
         }

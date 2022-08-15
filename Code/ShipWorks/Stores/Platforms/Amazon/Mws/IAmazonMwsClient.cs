@@ -4,7 +4,6 @@ using System.Threading.Tasks;
 using Interapptive.Shared.Threading;
 using Interapptive.Shared.Utility;
 using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Shipping;
 
 namespace ShipWorks.Stores.Platforms.Amazon.Mws
 {
@@ -62,22 +61,9 @@ namespace ShipWorks.Stores.Platforms.Amazon.Mws
         Task UploadShipmentDetails(List<AmazonOrderUploadDetail> shipments);
 
         /// <summary>
-        /// Gets the carrier for the shipment.  If the shipment type is Other, it will use Other.Carrier.
-        /// </summary>
-        /// <param name="shipment">The shipment for which to get the carrier name.</param>
-        /// <param name="shipmentTypeCode">The shipment type code for this shipment.</param>
-        /// <returns>The carrier name of the shipment type, unless it is of type Other, then the Other.Carrier is returned.</returns>
-        string GetCarrierName(ShipmentEntity shipment, ShipmentTypeCode shipmentTypeCode);
-
-        /// <summary>
         /// Determines if the local system clock is in sync with Amazon's servers.
         /// ONLY fails if we receive a time from Amazon and we are for sure out of sync.
         /// </summary>
         Task<bool> ClockInSyncWithMWS();
-
-        /// <summary>
-        /// Get the carrier name and tracking number
-        /// </summary>
-        (string carrier, string trackingNumber) GetCarrierNameAndTrackingNumber(ShipmentEntity shipment);
     }
 }
