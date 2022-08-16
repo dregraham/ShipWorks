@@ -141,5 +141,10 @@ namespace ShipWorks.ApplicationCore.Licensing.Warehouse
         /// </summary>
         public static string GetUpdateCarrierInitiateUrl(string orderSourceName, string redirectUrl, string apiRegion, string sellerId, string carrierId) =>
             string.Format(updateCarrierInitiateUrl, orderSourceName, redirectUrl, apiRegion, sellerId, carrierId);
+
+        /// <summary>
+        /// Endpoint to upload amazon shipments
+        /// </summary>
+        public static string UploadAmazonShipments => "/api/ordersource/amazon/upload";
     }
 }
