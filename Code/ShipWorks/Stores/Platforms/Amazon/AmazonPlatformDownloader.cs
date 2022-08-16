@@ -88,31 +88,37 @@ namespace ShipWorks.Stores.Platforms.Amazon
                 var result =
                     await client.GetOrders(Store.OrderSourceID, AmazonStore.ContinuationToken).ConfigureAwait(false);
 
-                if (result.Orders.Errors.Count > 0)
+                while (result.Orders.Data.Any())
                 {
-                    foreach (var platformError in result.Orders.Errors)
+                    if (result.Orders.Errors.Count > 0)
                     {
-                        log.Error(platformError);
+                        foreach (var platformError in result.Orders.Errors)
+                        {
+                            log.Error(platformError);
+                        }
+
+                        return;
                     }
 
-                    return;
+                    if (Progress.IsCancelRequested)
+                    {
+                        log.Warn("A cancel was requested.");
+                        return;
+                    }
+
+                    // progress has to be indicated on each pass since we have 0 idea how many orders exists
+                    Progress.PercentComplete = 0;
+
+                    // load each order in this result page
+                    await LoadOrders(result.Orders.Data).ConfigureAwait(false);
+
+                    // Save the continuation token to the store
+                    AmazonStore.ContinuationToken = result.Orders.ContinuationToken;
+                    await storeManager.SaveStoreAsync(AmazonStore).ConfigureAwait(false);
+
+                    result = await client.GetOrders(Store.OrderSourceID, AmazonStore.ContinuationToken).ConfigureAwait(false);
+
                 }
-
-                if (Progress.IsCancelRequested)
-                {
-                    log.Warn("A cancel was requested.");
-                    return;
-                }
-
-                // progress has to be indicated on each pass since we have 0 idea how many orders exists
-                Progress.PercentComplete = 0;
-
-                // load each order in this result page
-                await LoadOrders(result.Orders.Data).ConfigureAwait(false);
-
-                // Save the continuation token to the store
-                AmazonStore.ContinuationToken = result.Orders.ContinuationToken;
-                await storeManager.SaveStoreAsync(AmazonStore);
 
                 trackedDurationEvent.AddMetric("Amazon.Fba.Order.Count", FbaOrdersDownloaded);
 

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
 using Autofac;
 using Autofac.Extras.Moq;
@@ -25,6 +26,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Amazon
         private readonly Mock<IPlatformOrderWebClient> webClient;
         private readonly AmazonStoreEntity amazonStore;
         private readonly AmazonPlatformDownloaderChild unitUnderTest;
+        private readonly string orderSourceId = "OrderSourceId";
 
         public AmazonPlatformDownloaderTest()
         {
@@ -35,20 +37,12 @@ namespace ShipWorks.Stores.Tests.Platforms.Amazon
             progressItem = mock.Mock<IProgressReporter>();
             webClient = mock.Mock<IPlatformOrderWebClient>();
 
-            amazonStore = new AmazonStoreEntity();
-            ordersDto = new GetOrdersDTO
-            {
-                Error = false,
-                Orders = new PaginatedPlatformServiceResponseOfOrderSourceApiSalesOrder
-                {
-                    Data = Array.Empty<OrderSourceApiSalesOrder>(),
-                    ContinuationToken = string.Empty,
-                    Errors = Array.Empty<PlatformError>()
-                }
-            };
+            amazonStore = new AmazonStoreEntity() { OrderSourceID = orderSourceId };
+            ordersDto = CreateOrderDTOResponse(string.Empty, 1);
 
-            webClient.Setup(x => x.GetOrders(It.IsAny<string>(), It.IsAny<string>()))
-                .ReturnsAsync(ordersDto);
+            webClient.SetupSequence(x => x.GetOrders(It.IsAny<string>(), It.IsAny<string>()))
+                .ReturnsAsync(ordersDto)
+                .ReturnsAsync(CreateOrderDTOResponse("CT", 0));
 
             Func<AmazonStoreEntity, IPlatformOrderWebClient> createWebClient = storeEntity => webClient.Object;
 
@@ -72,7 +66,9 @@ namespace ShipWorks.Stores.Tests.Platforms.Amazon
         public async Task AmazonPlatformDownloader_Download_OrderError()
         {
             // Arrange
-            ordersDto.Error = true;
+            webClient.SetupSequence(x => x.GetOrders(It.IsAny<string>(), It.IsAny<string>()))
+                .ReturnsAsync(CreateOrderDTOResponse("CT", 1, true))
+                .ReturnsAsync(CreateOrderDTOResponse("CT", 0, true));
 
             // Act
             async Task Act() => await unitUnderTest.ProtectedDownload(durationEvent);
@@ -82,6 +78,53 @@ namespace ShipWorks.Stores.Tests.Platforms.Amazon
             Assert.IsType<Exception>(result.InnerException);
             storeManager.Verify(x => x.SaveStoreAsync(It.IsAny<StoreEntity>()), Times.Once);
         }
+
+        [Fact]
+        public async Task AmazonPlatformDownloader_Download_GetsNextPageOfOrders()
+        {
+            // Arrange 
+            string firstToken = "FirstToken";
+            string secondToken = "SecondToken";
+            string thirdToken = "ThirdToken";
+
+            webClient.Setup(x => x.GetOrders(orderSourceId, null))
+               .ReturnsAsync(CreateOrderDTOResponse(firstToken,1));
+            webClient.Setup(x => x.GetOrders(orderSourceId, firstToken))
+                .ReturnsAsync(CreateOrderDTOResponse(secondToken, 1));
+            webClient.Setup(x => x.GetOrders(orderSourceId, secondToken))
+                .ReturnsAsync(CreateOrderDTOResponse(thirdToken, 1));
+            webClient.Setup(x => x.GetOrders(orderSourceId, thirdToken))
+                            .ReturnsAsync(CreateOrderDTOResponse(thirdToken, 0));
+            // Act
+            await unitUnderTest.ProtectedDownload(durationEvent);
+
+            // Assert
+            webClient.Verify(x => x.GetOrders(orderSourceId, null), Times.Once);
+            webClient.Verify(x => x.GetOrders(orderSourceId, firstToken), Times.Once);
+            webClient.Verify(x => x.GetOrders(orderSourceId, secondToken), Times.Once);
+            webClient.Verify(x => x.GetOrders(orderSourceId, thirdToken), Times.Once);
+            webClient.Verify(x => x.GetOrders(It.IsAny<string>(), It.IsAny<string>()), Times.Exactly(4));
+        }
+
+        private GetOrdersDTO CreateOrderDTOResponse(string continuationToken, int orderCount, bool error = false) => 
+            new GetOrdersDTO
+            {
+                Error = error,
+                Orders = new PaginatedPlatformServiceResponseOfOrderSourceApiSalesOrder
+                {
+                    Data = Enumerable.Range(0,orderCount).Select(_=>CreateOrder()).ToArray(),
+                    ContinuationToken = continuationToken,
+                    Errors = Array.Empty<PlatformError>()
+                }
+            };
+
+        private OrderSourceApiSalesOrder CreateOrder() =>
+            new OrderSourceApiSalesOrder()
+            {
+                RequestedFulfillments = Array.Empty<OrderSourceRequestedFulfillment>(),
+                Payment = new OrderSourcePayment { CouponCodes = Array.Empty<string>() }
+            };
+        
     }
 
     /// <summary>
