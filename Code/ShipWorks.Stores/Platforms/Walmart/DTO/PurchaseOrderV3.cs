@@ -1344,6 +1344,9 @@
         ESTES,
 
         SAIA,
+        
+        [XmlEnum("DHL Ecommerce - US")]
+        DHL_Ecommerce_US
     }
 
     /// <remarks/>
