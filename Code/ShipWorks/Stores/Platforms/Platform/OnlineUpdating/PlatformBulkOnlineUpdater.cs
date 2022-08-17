@@ -4,6 +4,7 @@ using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
 using Autofac.Features.Indexed;
+using Interapptive.Shared.Collections;
 using log4net;
 using ShipWorks.ApplicationCore.Licensing.Warehouse;
 using ShipWorks.Data.Connection;
