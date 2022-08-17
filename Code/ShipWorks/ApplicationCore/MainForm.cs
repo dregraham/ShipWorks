@@ -5571,6 +5571,8 @@ namespace ShipWorks
         /// This is async void so we will fire-and-forget, and
         /// just display the messages as soon as we fetch them
         /// </summary>
+        [SuppressMessage("SonarQube", "S3168:Async methods should not return void",
+            Justification = "We want this to fire and forget")]
         private async void CheckForMessages()
         {
             try
