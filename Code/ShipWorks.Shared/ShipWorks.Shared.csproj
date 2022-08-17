@@ -147,6 +147,7 @@
     <Compile Include="Shipping\ShipmentStatus.cs" />
     <Compile Include="Shipping\ShipmentTypeCode.cs" />
     <Compile Include="Shipping\ShipmentTypeIconAttribute.cs" />
+    <Compile Include="ShipWorksBusinessConstants.cs" />
     <Compile Include="Stores\Platforms\Amazon\IAmazonCredentials.cs" />
     <Compile Include="Stores\Platforms\Amazon\IAmazonOrder.cs" />
     <Compile Include="Stores\Platforms\Amazon\IAmazonOrderItem.cs" />

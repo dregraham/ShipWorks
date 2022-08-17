@@ -3007,7 +3007,7 @@ namespace ShipWorks
         /// </summary>
         private void OnRequestHelp(object sender, EventArgs e)
         {
-            WebHelper.OpenUrl("https://www.shipworks.com/contact-us/", this);
+            WebHelper.OpenUrl(ShipWorksBusinessConstants.ContactUrl, this);
         }
 
         /// <summary>
