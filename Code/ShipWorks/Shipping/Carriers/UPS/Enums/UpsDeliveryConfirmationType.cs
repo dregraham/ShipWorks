@@ -1,9 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.ComponentModel;
 using System.Reflection;
-using System.ComponentModel;
 
 namespace ShipWorks.Shipping.Carriers.UPS.Enums
 {
@@ -15,9 +11,6 @@ namespace ShipWorks.Shipping.Carriers.UPS.Enums
     {
         [Description("None")]
         None = 0,
-
-        [Description("No Signature")]
-        NoSignature = 1,
 
         [Description("Signature Required")]
         Signature = 2,

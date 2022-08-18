@@ -104,6 +104,10 @@ namespace ShipWorks.Stores.Platforms.Platform.OnlineUpdating
                 {
                     log.InfoFormat("Not uploading shipment details, since the shipment {0} was deleted.", shipmentID);
                 }
+                else if (!shipment.Processed)
+                {
+                    log.InfoFormat($"Not uploading non-processed shipment with ID {shipmentID}");
+                }
                 else
                 {
                     shipments.Add(shipment);
@@ -136,7 +140,7 @@ namespace ShipWorks.Stores.Platforms.Platform.OnlineUpdating
 
             await UploadShipmentsToPlatform(shipments.Where(x => !x.Order.ChannelOrderID.IsNullOrWhiteSpace()).ToList(), store, client).ConfigureAwait(false);
         }
-        
+
         /// <summary>
         /// Upload shipments to Platform (one at a time)
         /// </summary

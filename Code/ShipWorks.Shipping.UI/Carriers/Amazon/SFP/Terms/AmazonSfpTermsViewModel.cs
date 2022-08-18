@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
+using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
 using System.Windows.Input;
@@ -8,9 +10,11 @@ using GalaSoft.MvvmLight.CommandWpf;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.UI;
 using log4net;
+using ShipWorks.ApplicationCore.Licensing;
 using ShipWorks.Core.UI;
 using ShipWorks.Shipping.Carriers.Amazon.SFP.DTO;
 using ShipWorks.Shipping.Carriers.Amazon.SFP.Terms;
+using ShipWorks.Stores;
 using ShipWorks.Users;
 
 namespace ShipWorks.Shipping.UI.Carriers.Amazon.SFP.Terms
@@ -138,11 +142,23 @@ namespace ShipWorks.Shipping.UI.Carriers.Amazon.SFP.Terms
         /// </summary>
         private void AcceptAction()
         {
+            var isLegacy = lifetimeScope.Resolve<ILicenseService>().IsLegacy;
+
+            IEnumerable<string> licenses = null;
+
+            if (isLegacy)
+            {
+                var storeManager = lifetimeScope.Resolve<IStoreManager>();
+                var stores = storeManager.GetAllStores();
+
+                licenses = stores.Select(s => s.License);
+            }
+
             var success = false;
 
             // Make call to Hub to accept current terms
             var acceptTermsTask = Task.Run(async () =>
-                success = await amazonTermsWebClient.AcceptTerms(Version.Parse(TermsVersion)).ConfigureAwait(true));
+                success = await amazonTermsWebClient.AcceptTerms(Version.Parse(TermsVersion), licenses, isLegacy).ConfigureAwait(true));
 
             Task.WaitAll(acceptTermsTask);
 

@@ -18,13 +18,10 @@ using Interapptive.Shared.Security;
 using Interapptive.Shared.Threading;
 using Interapptive.Shared.Utility;
 using log4net;
-using ShipWorks.ApplicationCore.Licensing.WebClientEnvironments;
 using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping;
-using ShipWorks.Shipping.Carriers.Postal;
-using ShipWorks.Shipping.Carriers.UPS.WorldShip;
 using ShipWorks.Stores.Communication.Throttling;
 
 namespace ShipWorks.Stores.Platforms.Amazon.Mws
@@ -41,30 +38,23 @@ namespace ShipWorks.Stores.Platforms.Amazon.Mws
         public const int MaxItemsPerProductDetailsRequest = 5;
 
         // MWS settings class
-        private IAmazonMwsWebClientSettings mwsSettings;
+        private readonly IAmazonMwsWebClientSettings mwsSettings;
 
         // the store/account we are working with
-        private AmazonStoreEntity store;
+        private readonly AmazonStoreEntity store;
 
         // Throttling request submitter
-        private AmazonMwsRequestThrottle throttler;
+        private readonly AmazonMwsRequestThrottle throttler;
         private readonly IShippingManager shippingManager;
-        private readonly WebClientEnvironmentFactory webClientEnvironmentFactory;
-        private readonly AmazonStoreType storeType;
-        private static readonly HashSet<string> validCarrierCodes = GetValidCarrierCodes();
 
         /// <summary>
         /// Constructor
         /// </summary>
         public AmazonMwsClient(AmazonStoreEntity store,
             IShippingManager shippingManager,
-            Func<StoreEntity, AmazonStoreType> getStoreType,
-            Func<IAmazonCredentials, IAmazonMwsWebClientSettings> getWebClientSettings,
-            WebClientEnvironmentFactory webClientEnvironmentFactory)
+            Func<IAmazonCredentials, IAmazonMwsWebClientSettings> getWebClientSettings)
         {
-            storeType = getStoreType(store);
             this.shippingManager = shippingManager;
-            this.webClientEnvironmentFactory = webClientEnvironmentFactory;
             MethodConditions.EnsureArgumentIsNotNull(store, nameof(store));
 
             this.store = store;
@@ -249,7 +239,7 @@ namespace ShipWorks.Stores.Platforms.Amazon.Mws
             }
             while (nextToken != null && nextToken.Length > 0);
         }
-        
+
         /// <summary>
         /// Reads the NextToken for use in subsequent requests
         /// </summary>
@@ -515,122 +505,18 @@ namespace ShipWorks.Stores.Platforms.Amazon.Mws
                 string serviceUsed = shippingManager.GetOverriddenServiceUsed(shipment);
                 serviceUsed = Regex.Replace(serviceUsed, @"[^\u001F-\u007F]", string.Empty);
 
-                (string carrier, string trackingNumber) = GetCarrierNameAndTrackingNumber(shipment);
-                if (validCarrierCodes.Contains(carrier))
+                (string carrierName, string carrierCode, string trackingNumber) = AmazonUtility.GetCarrierInfoAndTrackingNumber(shipment);
+
+                writer.WriteElementString("CarrierCode", carrierCode);
+
+                if (carrierName.HasValue())
                 {
-                    writer.WriteElementString("CarrierCode", carrier);
-                }
-                else
-                {
-                    writer.WriteElementString("CarrierCode", "Other");
-                    writer.WriteElementString("CarrierName", carrier);
+                    writer.WriteElementString("CarrierName", carrierName);
                 }
 
                 writer.WriteElementString("ShippingMethod", serviceUsed);
                 writer.WriteElementString("ShipperTrackingNumber", trackingNumber);
             }
-        }
-        
-        /// <summary>
-        /// List of valid carrier codes from: https://sellercentral.amazon.com/gp/help/help.html?itemID=G200137470&
-        /// </summary>
-        /// <returns></returns>
-        private static HashSet<string> GetValidCarrierCodes() =>
-            new HashSet<string>
-            {
-                "Blue Package",
-                "Canada Post",
-                "City Link",
-                "DHL",
-                "DHL Global Mail",
-                "Fastway",
-                "FedEx",
-                "FedEx SmartPost",
-                "GLS",
-                "GO!",
-                "Hermes Logistik Gruppe",
-                "Newgistics",
-                "NipponExpress",
-                "OnTrac",
-                "OSM",
-                "Parcelforce",
-                "Royal Mail",
-                "SagawaExpress",
-                "Streamlite",
-                "Target",
-                "TNT",
-                "UPS",
-                "UPS Mail Innovations",
-                "USPS",
-                "YamatoTransport"
-            };
-
-        public (string carrier, string trackingNumber) GetCarrierNameAndTrackingNumber(ShipmentEntity shipment)
-        {
-            // Per an email on 9/11/07, Amazon will only respond correctly if the code is in upper case, and if its also apart of the method.
-            ShipmentTypeCode shipmentType = (ShipmentTypeCode) shipment.ShipmentType;
-            
-            string trackingNumber = shipment.TrackingNumber;
-            
-            // Get the carrier based on what we currently know, we'll check it in the DetermineAlternateTracking below
-            string carrier = GetCarrierName(shipment, shipmentType);
-
-            // Adjust tracking details per Mail Innovations and others
-            WorldShipUtility.DetermineAlternateTracking(shipment, (track, service) =>
-            {
-                if (track.Length > 0)
-                {
-                    trackingNumber = track;
-                    carrier = "UPS Mail Innovations";
-                }
-                else
-                {
-                    shipmentType = ShipmentTypeCode.Other;
-                }
-            });
-
-            return (carrier, trackingNumber);
-        }
-
-        /// <summary>
-        /// Gets the carrier for the shipment.  If the shipment type is Other, it will use Other.Carrier.
-        /// </summary>
-        /// <param name="shipment">The shipment for which to get the carrier name.</param>
-        /// <param name="shipmentTypeCode">The shipment type code for this shipment.</param>
-        /// <returns>The carrier name of the shipment type, unless it is of type Other, then the Other.Carrier is returned.</returns>
-        public string GetCarrierName(ShipmentEntity shipment, ShipmentTypeCode shipmentTypeCode)
-        {
-            if (shipment.ShipmentType == (int) ShipmentTypeCode.Other)
-            {
-                return shippingManager.GetOtherCarrierDescription(shipment).Name;
-            }
-
-            if (shipment.ShipmentType == (int) ShipmentTypeCode.DhlEcommerce)
-            {
-                return "DHL";
-            }
-
-            if (ShipmentTypeManager.ShipmentTypeCodeSupportsDhl((ShipmentTypeCode) shipment.ShipmentType))
-            {
-                PostalServiceType service = (PostalServiceType) shipment.Postal.Service;
-
-                // The shipment is an Endicia or Stamps shipment, check to see if it's DHL
-                if (ShipmentTypeManager.IsDhl(service))
-                {
-                    // The DHL carrier for Endicia/Stamps is:
-                    return "DHL eCommerce";
-                }
-
-                if (ShipmentTypeManager.IsConsolidator(service))
-                {
-                    return "Consolidator";
-                }
-
-                // Use the default carrier for other Endicia types
-                return shippingManager.GetCarrierName(shipmentTypeCode);
-            }
-
-            return shippingManager.GetCarrierName(shipmentTypeCode);
         }
 
         /// <summary>
@@ -786,14 +672,14 @@ namespace ShipWorks.Stores.Platforms.Amazon.Mws
                 request.Variables.OrderBy(v => v.Name, StringComparer.Ordinal),
                 QueryStringEncodingCasing.Upper);
 
-            string parameterString = String.Format("{0}\n{1}\n{2}\n{3}", verbString, request.Uri.Host, endpointPath, queryString);
+            string parameterString = string.Format("{0}\n{1}\n{2}\n{3}", verbString, request.Uri.Host, endpointPath, queryString);
 
             // sign the string and add it to the request
             string signature = RequestSignature.CreateRequestSignature(parameterString, Decrypt(mwsSettings.InterapptiveSecretKey), SigningAlgorithm.SHA256);
             request.Variables.Add("Signature", signature);
 
             // add a User Agent header
-            request.Headers.Add("x-amazon-user-agent", String.Format("ShipWorks/{0} (Language=.NET)", Assembly.GetExecutingAssembly().GetName().Version));
+            request.Headers.Add("x-amazon-user-agent", string.Format("ShipWorks/{0} (Language=.NET)", Assembly.GetExecutingAssembly().GetName().Version));
 
             // business logic failures are handled through status codes
             request.AllowHttpStatusCodes(new HttpStatusCode[] { HttpStatusCode.BadRequest });

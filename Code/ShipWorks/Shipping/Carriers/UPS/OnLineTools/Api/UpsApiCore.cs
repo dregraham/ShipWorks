@@ -26,7 +26,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api
         /// <summary>
         /// Packging codes for the UPS API
         /// </summary>
-        static Dictionary<UpsPackagingType, string> upsPackagingCodes = new Dictionary<UpsPackagingType, string>();
+        static readonly Dictionary<UpsPackagingType, string> upsPackagingCodes = new Dictionary<UpsPackagingType, string>();
 
         /// <summary>
         /// Constructor
@@ -396,8 +396,6 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api
         {
             switch (confirmationType)
             {
-                case UpsDeliveryConfirmationType.NoSignature:
-                    return "";
                 case UpsDeliveryConfirmationType.Signature:
                     return "1";
                 case UpsDeliveryConfirmationType.AdultSignature:
@@ -416,8 +414,6 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api
         {
             switch (confirmationType)
             {
-                case UpsDeliveryConfirmationType.NoSignature:
-                    return "1";
                 case UpsDeliveryConfirmationType.Signature:
                     return "2";
                 case UpsDeliveryConfirmationType.AdultSignature:

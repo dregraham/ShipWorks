@@ -48,6 +48,7 @@ using ShipWorks.ApplicationCore.Interaction;
 using ShipWorks.ApplicationCore.Licensing;
 using ShipWorks.ApplicationCore.Licensing.LicenseEnforcement;
 using ShipWorks.ApplicationCore.Licensing.Warehouse;
+using ShipWorks.ApplicationCore.Licensing.Warehouse.Messages;
 using ShipWorks.ApplicationCore.MessageBoxes;
 using ShipWorks.ApplicationCore.Nudges;
 using ShipWorks.ApplicationCore.Settings;
@@ -889,6 +890,8 @@ namespace ShipWorks
             ThreadPool.QueueUserWorkItem(ExceptionMonitor.WrapWorkItem(LogonToShipWorksAsyncGetLicenseStatus, "checking license status"));
 
             UserEntity user = UserSession.User;
+
+            CheckForMessages();
 
             MigrateStoresToHub();
 
@@ -3004,7 +3007,7 @@ namespace ShipWorks
         /// </summary>
         private void OnRequestHelp(object sender, EventArgs e)
         {
-            WebHelper.OpenUrl("https://www.shipworks.com/contact-us/", this);
+            WebHelper.OpenUrl(ShipWorksBusinessConstants.ContactUrl, this);
         }
 
         /// <summary>
@@ -5561,6 +5564,30 @@ namespace ShipWorks
 
             manifestUtility.PopulateCreateManifestMenu(createMenu, accountRetriever);
             manifestUtility.PopulatePrintManifestMenu(printMenu, accountRetriever);
+        }
+
+        /// <summary>
+        /// Check for any messages
+        /// This is async void so we will fire-and-forget, and
+        /// just display the messages as soon as we fetch them
+        /// </summary>
+        [SuppressMessage("SonarQube", "S3168:Async methods should not return void",
+            Justification = "We want this to fire and forget")]
+        private async void CheckForMessages()
+        {
+            try
+            {
+                log.Info("Checking for messages");
+
+                using (var lifetimeScope = IoC.BeginLifetimeScope())
+                {
+                    await lifetimeScope.Resolve<HubMessageRetriever>().GetMessages(this);
+                }
+            }
+            catch (Exception ex)
+            {
+                log.Error("Failed to fetch messages", ex);
+            }
         }
 
         /// <summary>

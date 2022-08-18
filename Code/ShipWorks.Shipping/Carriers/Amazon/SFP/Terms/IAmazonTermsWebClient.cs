@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using ShipWorks.Shipping.Carriers.Amazon.SFP.DTO;
 
@@ -17,6 +18,6 @@ namespace ShipWorks.Shipping.Carriers.Amazon.SFP.Terms
         /// <summary>
         /// Make a call to accept Amazon terms
         /// </summary>
-        Task<bool> AcceptTerms(Version version);
+        Task<bool> AcceptTerms(Version version, IEnumerable<string> storeLicenses, bool IsLegacy);
     }
 }

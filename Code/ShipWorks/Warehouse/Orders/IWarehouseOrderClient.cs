@@ -6,6 +6,7 @@ using ShipWorks.ApplicationCore.Licensing.Warehouse.DTO;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Stores;
+using ShipWorks.Stores.Platforms.Amazon.OnlineUpdating.DTO;
 using ShipWorks.Warehouse.Orders.DTO;
 
 namespace ShipWorks.Warehouse.Orders
@@ -45,5 +46,10 @@ namespace ShipWorks.Warehouse.Orders
         /// Reroute order items for the given warehouse ID from the ShipWorks Warehouse app
         /// </summary>
         Task<Result> RerouteOrderItems(Guid hubOrderID, ItemsToReroute itemsToReroute);
+
+        /// <summary>
+        /// Upload Amazon shipments
+        /// </summary>
+        Task<Result> UploadAmazonShipments(AmazonBulkUploadShipmentsRequest body);
     }
 }

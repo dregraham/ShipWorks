@@ -5,7 +5,7 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using Autofac.Features.Indexed;
 using Interapptive.Shared.Collections;
-using Interapptive.Shared.ComponentRegistration;
+using log4net;
 using ShipWorks.ApplicationCore.Licensing.Warehouse;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
@@ -20,13 +20,12 @@ namespace ShipWorks.Stores.Platforms.Platform.OnlineUpdating
     /// Bulk Upload shipment details to Platform
     /// </summary>
     /// <remarks>
-    /// Currently, only supported by Amazon. When other stores are supported, move the KeyedComponent 
-    /// for the working storetype to here.
+    /// When other stores are supported, move the KeyedComponent for the working storetype to here.
     /// </remarks>
-    [KeyedComponent(typeof(IPlatformOnlineUpdater), StoreTypeCode.Amazon)]
     public class PlatformBulkOnlineUpdater : PlatformOnlineUpdater, IPlatformOnlineUpdater
     {
         private readonly IHubPlatformClient platformWebClient;
+        private static readonly ILog log = LogManager.GetLogger(typeof(PlatformBulkOnlineUpdater));
         private const string bulkShipNotifyEndpoint = "v-beta/order_sources/{0}/notify_shipped/bulk";
 
         /// <summary>
@@ -47,17 +46,23 @@ namespace ShipWorks.Stores.Platforms.Platform.OnlineUpdating
         {
             try
             {
-                if (shipments.None())
+                var updates = shipments
+                    .Select(async s => await GetPlatformBulkOnlineUpdateItem(s))
+                    .Select(r => r.Result)
+                    .Where(s => s != null)
+                    .ToList();
+
+                if (!updates.Any())
                 {
-                    // Nothing to do, just return
+                    log.WarnFormat("Not uploading bulk shipments to platform for store {0}, no valid shipments found.", store.StoreID);
                     return;
                 }
 
-                var updates = shipments.Select(async s => await GetPlatformBulkOnlineUpdateItem(s)).Select(r => r.Result).Where(s => s != null);
                 var request = new NotifyMarketplaceShippedRequest
                 {
                     NotifyMarketplaceShippedRequests = updates
                 };
+
                 await platformWebClient.CallViaPassthrough(request, string.Format(bulkShipNotifyEndpoint, store.OrderSourceID), HttpMethod.Post, "UploadShipments").ConfigureAwait(false);
             }
             catch (Exception ex)

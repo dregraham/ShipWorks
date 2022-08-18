@@ -24,6 +24,8 @@ namespace ShipWorks.ApplicationCore.Licensing.Warehouse
         public const string GetConfig = "api/config";
         public const string GetSmsVerificationNumber = "api/config/smsVerificationNumber";
         public const string Tracking = "api/tracking";
+        public const string GetMessages = "api/account-service/account/messages?username={0}";
+
         public const string MigrateAmazonStore = "api/ordersource/migrate";
         public const string AmazonBuyShippingTerms = "api/account-service/account/amazon/terms";
         public const string CreateAmazonCarrierFromAmazonStore = "api/ordersource/carriers/amazon/fromordersource";
@@ -139,5 +141,10 @@ namespace ShipWorks.ApplicationCore.Licensing.Warehouse
         /// </summary>
         public static string GetUpdateCarrierInitiateUrl(string orderSourceName, string redirectUrl, string apiRegion, string sellerId, string carrierId) =>
             string.Format(updateCarrierInitiateUrl, orderSourceName, redirectUrl, apiRegion, sellerId, carrierId);
+
+        /// <summary>
+        /// Endpoint to upload amazon shipments
+        /// </summary>
+        public static string UploadAmazonShipments => "/api/ordersource/amazon/upload";
     }
 }
