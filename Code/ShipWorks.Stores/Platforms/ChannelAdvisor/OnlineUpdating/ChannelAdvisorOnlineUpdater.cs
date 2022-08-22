@@ -12,6 +12,7 @@ using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Shipping;
 using ShipWorks.Shipping.Carriers.Amazon.SWA;
+using ShipWorks.Shipping.Carriers.DhlEcommerce;
 using ShipWorks.Shipping.Carriers.FedEx.Enums;
 using ShipWorks.Shipping.Carriers.iParcel.Enums;
 using ShipWorks.Shipping.Carriers.OnTrac.Enums;
@@ -262,6 +263,24 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor.OnlineUpdating
 
                 case ShipmentTypeCode.OnTrac:
                     return GetOntracShipmentClassCode(shipment);
+
+                case ShipmentTypeCode.DhlEcommerce:
+                    return GetDhlEcommerceClassCode(shipment);
+            }
+
+            return "NONE";
+        }
+
+        /// <summary>
+        /// Gets the Dhl Ecommerce Class Code
+        /// </summary>
+        private static string GetDhlEcommerceClassCode(ShipmentEntity shipment)
+        {
+            var service = (DhlEcommerceServiceType) shipment.DhlEcommerce.Service;
+
+            if(DhlEcommerceServiceMap.ContainsKey(service))
+            {
+                return DhlEcommerceServiceMap[service];
             }
 
             return "NONE";
@@ -373,6 +392,39 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor.OnlineUpdating
             ChannelAdvisorOrderEntity caOrder = shipment.Order as ChannelAdvisorOrderEntity;
             return caOrder?.MarketplaceNames.Contains("sears", StringComparison.InvariantCultureIgnoreCase) ?? false;
         }
+
+        /// <summary>
+        /// Maps DHL service to what CA is expecting
+        /// </summary>
+        /// <remarks>
+        /// See WORKS-3805 for reference document
+        /// </remarks>
+        private static Dictionary<DhlEcommerceServiceType, string> DhlEcommerceServiceMap = new Dictionary<DhlEcommerceServiceType, string>
+        {
+            { DhlEcommerceServiceType.US_DhlGlobalmailPacketIPA,  "Globalmail Packet IPA" },
+            { DhlEcommerceServiceType.US_DhlGlobalmailPacketISAL, "Globalmail Packet ISAL" },
+            { DhlEcommerceServiceType.US_DhlGlobalmailPacketStandard, "Globalmail Packet Standard" },
+            { DhlEcommerceServiceType.US_DhlGlobalMailBusinessIPA, "Globalmail Packet IPA" }, // Didn' find a bussiness specific service
+            { DhlEcommerceServiceType.US_DhlParcelInternationalExpeditedDDP, "Globalmail Parcel Direct Express" },
+            { DhlEcommerceServiceType.US_DhlParcelInternationalExpeditedDDU, "Globalmail Parcel Direct Express" },
+            { DhlEcommerceServiceType.US_DhlParcelInternationalPriority, "Globalmail Parcel Priority" },
+            { DhlEcommerceServiceType.US_DhlParcelInternationalDirectDDP, "Globalmail Parcel Direct" },
+            { DhlEcommerceServiceType.US_DhlParcelInternationalDirectDDU, "Globalmail Parcel Direct" },
+            { DhlEcommerceServiceType.US_DhlPacketInternational, "Packet IPA" },
+            { DhlEcommerceServiceType.US_DhlPacketPlusInternational, "Packet Plus" },
+            { DhlEcommerceServiceType.US_DhlParcelInternationalStandard, "Globalmail Parcel Standard" },
+            { DhlEcommerceServiceType.US_DhlSmartMailParcelGround, "SmartMail Parcel Ground" },
+            { DhlEcommerceServiceType.US_DhlSmartMailParcelPlusGround, "SmartMail Parcel Plus Ground" },
+            { DhlEcommerceServiceType.US_DhlSmartMailParcelExpedited, "Smartmail Parcel Expedited" },
+            { DhlEcommerceServiceType.US_DhlSmartMailParcelPlusExpedited, "Smartmail Parcel Plus Expedited" },
+            { DhlEcommerceServiceType.US_DhlSmartMailBPMExpedited, "Smartmail BPM Expedited" },
+            { DhlEcommerceServiceType.US_DhlSmartMailBPMGround, "Smartmail BPM Ground" },
+            { DhlEcommerceServiceType.US_DhlSMMarketingParcelExpedited, "SmartMail Marketing Parcel Expedited" },
+            { DhlEcommerceServiceType.US_DhlSMMarketingParcelGround, "SmartMail Marketing Parcel Ground" },
+            { DhlEcommerceServiceType.US_DhlSMParcelExpeditedMax, "Smartmail Parcel Plus Expedited" },
+            { DhlEcommerceServiceType.CA_DhlParcelInternationalDirectPriority, "Globalmail Parcel Direct" },
+            { DhlEcommerceServiceType.CA_DhlParcelInternationalDirectStandard, "Globalmail Parcel Direct" }
+        };
 
         /// <summary>
         /// Gets the ups service type class codes map.
@@ -569,7 +621,7 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor.OnlineUpdating
                     return "DHL EXPRESS";
 
                 case ShipmentTypeCode.DhlEcommerce:
-                    return "DHL";
+                    return "DHL Global Mail";
 
                 case ShipmentTypeCode.Other:
                     return shipment.Other.Carrier;
@@ -731,4 +783,4 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor.OnlineUpdating
             return string.Empty;
         }
     }
-}
+} 
