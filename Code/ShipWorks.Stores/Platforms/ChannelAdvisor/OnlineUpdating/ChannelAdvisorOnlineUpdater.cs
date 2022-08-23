@@ -404,7 +404,7 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor.OnlineUpdating
             { DhlEcommerceServiceType.US_DhlGlobalmailPacketIPA,  "Globalmail Packet IPA" },
             { DhlEcommerceServiceType.US_DhlGlobalmailPacketISAL, "Globalmail Packet ISAL" },
             { DhlEcommerceServiceType.US_DhlGlobalmailPacketStandard, "Globalmail Packet Standard" },
-            { DhlEcommerceServiceType.US_DhlGlobalMailBusinessIPA, "Globalmail Packet IPA" }, // Didn' find a bussiness specific service
+            { DhlEcommerceServiceType.US_DhlGlobalMailBusinessIPA, "Globalmail Packet IPA" }, // Didn't find a bussiness specific service
             { DhlEcommerceServiceType.US_DhlParcelInternationalExpeditedDDP, "Globalmail Parcel Direct Express" },
             { DhlEcommerceServiceType.US_DhlParcelInternationalExpeditedDDU, "Globalmail Parcel Direct Express" },
             { DhlEcommerceServiceType.US_DhlParcelInternationalPriority, "Globalmail Parcel Priority" },
