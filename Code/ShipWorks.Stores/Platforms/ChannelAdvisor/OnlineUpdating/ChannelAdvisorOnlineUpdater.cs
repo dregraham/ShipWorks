@@ -178,7 +178,7 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor.OnlineUpdating
         /// <summary>
         /// Gets the codes required for uploading shipment details to ChannelAdvisor
         /// </summary>
-        private static void GetShipmentUploadValues(ShipmentEntity shipment, out string carrierCode, out string serviceClass, out string trackingNumber)
+        private void GetShipmentUploadValues(ShipmentEntity shipment, out string carrierCode, out string serviceClass, out string trackingNumber)
         {
             string tempTracking = shipment.TrackingNumber;
             string tempCarrierCode = GetCarrierCode(shipment);
@@ -206,7 +206,7 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor.OnlineUpdating
         /// Gets the CA shipment Class code
         /// http://ssc.channeladvisor.com/howto/account-shipping-carrier-options
         /// </summary>
-        public static string GetShipmentClassCode(ShipmentEntity shipment)
+        public string GetShipmentClassCode(ShipmentEntity shipment)
         {
             ChannelAdvisorStoreEntity store = StoreManager.GetStore(shipment.Order.StoreID) as ChannelAdvisorStoreEntity;
             return GetShipmentClassCode(shipment, store);
@@ -216,7 +216,7 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor.OnlineUpdating
         /// Gets the CA shipment Class code
         /// http://ssc.channeladvisor.com/howto/account-shipping-carrier-options
         /// </summary>
-        public static string GetShipmentClassCode(ShipmentEntity shipment, ChannelAdvisorStoreEntity store)
+        public string GetShipmentClassCode(ShipmentEntity shipment, ChannelAdvisorStoreEntity store)
         {
             if (!shipment.Processed)
             {
@@ -274,16 +274,18 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor.OnlineUpdating
         /// <summary>
         /// Gets the Dhl Ecommerce Class Code
         /// </summary>
-        private static string GetDhlEcommerceClassCode(ShipmentEntity shipment)
+        private string GetDhlEcommerceClassCode(ShipmentEntity shipment)
         {
-            var service = (DhlEcommerceServiceType) shipment.DhlEcommerce.Service;
-
-            if(DhlEcommerceServiceMap.ContainsKey(service))
+            try
             {
-                return DhlEcommerceServiceMap[service];
+                var service = (DhlEcommerceServiceType) shipment.DhlEcommerce.Service;
+                return EnumHelper.GetDescription(service).Replace("DHL",string.Empty).Trim();
             }
-
-            return "NONE";
+            catch (Exception ex)
+            {
+                log.Warn($"Exception getting service. Service = '{shipment.DhlEcommerce?.Service.ToString() ?? "NULL"}'", ex);
+                return "NONE";
+            }
         }
 
         /// <summary>
@@ -392,39 +394,6 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor.OnlineUpdating
             ChannelAdvisorOrderEntity caOrder = shipment.Order as ChannelAdvisorOrderEntity;
             return caOrder?.MarketplaceNames.Contains("sears", StringComparison.InvariantCultureIgnoreCase) ?? false;
         }
-
-        /// <summary>
-        /// Maps DHL service to what CA is expecting
-        /// </summary>
-        /// <remarks>
-        /// See WORKS-3805 for reference document
-        /// </remarks>
-        private static Dictionary<DhlEcommerceServiceType, string> DhlEcommerceServiceMap = new Dictionary<DhlEcommerceServiceType, string>
-        {
-            { DhlEcommerceServiceType.US_DhlGlobalmailPacketIPA,  "Globalmail Packet IPA" },
-            { DhlEcommerceServiceType.US_DhlGlobalmailPacketISAL, "Globalmail Packet ISAL" },
-            { DhlEcommerceServiceType.US_DhlGlobalmailPacketStandard, "Globalmail Packet Standard" },
-            { DhlEcommerceServiceType.US_DhlGlobalMailBusinessIPA, "Globalmail Packet IPA" }, // Didn't find a bussiness specific service
-            { DhlEcommerceServiceType.US_DhlParcelInternationalExpeditedDDP, "Globalmail Parcel Direct Express" },
-            { DhlEcommerceServiceType.US_DhlParcelInternationalExpeditedDDU, "Globalmail Parcel Direct Express" },
-            { DhlEcommerceServiceType.US_DhlParcelInternationalPriority, "Globalmail Parcel Priority" },
-            { DhlEcommerceServiceType.US_DhlParcelInternationalDirectDDP, "Globalmail Parcel Direct" },
-            { DhlEcommerceServiceType.US_DhlParcelInternationalDirectDDU, "Globalmail Parcel Direct" },
-            { DhlEcommerceServiceType.US_DhlPacketInternational, "Packet IPA" },
-            { DhlEcommerceServiceType.US_DhlPacketPlusInternational, "Packet Plus" },
-            { DhlEcommerceServiceType.US_DhlParcelInternationalStandard, "Globalmail Parcel Standard" },
-            { DhlEcommerceServiceType.US_DhlSmartMailParcelGround, "SmartMail Parcel Ground" },
-            { DhlEcommerceServiceType.US_DhlSmartMailParcelPlusGround, "SmartMail Parcel Plus Ground" },
-            { DhlEcommerceServiceType.US_DhlSmartMailParcelExpedited, "Smartmail Parcel Expedited" },
-            { DhlEcommerceServiceType.US_DhlSmartMailParcelPlusExpedited, "Smartmail Parcel Plus Expedited" },
-            { DhlEcommerceServiceType.US_DhlSmartMailBPMExpedited, "Smartmail BPM Expedited" },
-            { DhlEcommerceServiceType.US_DhlSmartMailBPMGround, "Smartmail BPM Ground" },
-            { DhlEcommerceServiceType.US_DhlSMMarketingParcelExpedited, "SmartMail Marketing Parcel Expedited" },
-            { DhlEcommerceServiceType.US_DhlSMMarketingParcelGround, "SmartMail Marketing Parcel Ground" },
-            { DhlEcommerceServiceType.US_DhlSMParcelExpeditedMax, "Smartmail Parcel Plus Expedited" },
-            { DhlEcommerceServiceType.CA_DhlParcelInternationalDirectPriority, "Globalmail Parcel Direct" },
-            { DhlEcommerceServiceType.CA_DhlParcelInternationalDirectStandard, "Globalmail Parcel Direct" }
-        };
 
         /// <summary>
         /// Gets the ups service type class codes map.
