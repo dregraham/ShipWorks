@@ -428,19 +428,29 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
 
             if (httpResponseReader?.HttpWebResponse.StatusCode == HttpStatusCode.BadRequest)
             {
-                throw new ChannelAdvisorException(GetErrorMessage(result) ?? unknownError);
+                throw new ChannelAdvisorException(GetErrorMessage(result, channelAdvisorShipment) ?? unknownError);
             }
         }
 
         /// <summary>
         /// Parse the channel advisor error message. Null if no error.message
         /// </summary>
-        private string GetErrorMessage(string result)
+        private string GetErrorMessage(string result, ChannelAdvisorShipment channelAdvisorShipment)
         {
             string errorMessage;
             try
             {
-                errorMessage = JObject.Parse(result).SelectToken("error.message")?.Value<string>() ?? null;
+                errorMessage = JObject.Parse(result).SelectToken("error.message")?.Value<string>() ??
+                    JObject.Parse(result).SelectToken("Message")?.Value<string>() ??
+                    null;
+
+                if(errorMessage == "Carrier and Class is invalid.")
+                {
+                    errorMessage = $"The shipment details upload failed for Carrier '{channelAdvisorShipment.ShippingCarrier}' and Class '{channelAdvisorShipment.ShippingClass}'.\r\n" +
+                                                          "Update your ChannelAdvisor store's Account Shipping Carriers to include these values as supported carriers.\r\n" +
+                                                          "The supported carriers are located at Fulfill > Carriers menu in your online store.\r\n\r\n";
+                            
+                }
             }
             catch (Exception)
             {
