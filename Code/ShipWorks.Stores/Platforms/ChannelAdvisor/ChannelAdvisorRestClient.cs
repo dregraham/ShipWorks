@@ -447,7 +447,7 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
                 if(errorMessage == "Carrier and Class is invalid.")
                 {
                     errorMessage = $"The shipment details upload failed for Carrier '{channelAdvisorShipment.ShippingCarrier}' and Class '{channelAdvisorShipment.ShippingClass}'.\r\n" +
-                                                          "Update your ChannelAdvisor store's Account Shipping Carriers to include these values as supported carriers.\r\n" +
+                                                          "Update your ChannelAdvisor store's Account Shipping Carriers to include these values as a supported carrier.\r\n" +
                                                           "The supported carriers are located at Fulfill > Carriers menu in your online store.\r\n\r\n";
                             
                 }
