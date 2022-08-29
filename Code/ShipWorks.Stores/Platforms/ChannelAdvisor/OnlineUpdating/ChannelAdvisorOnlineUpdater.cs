@@ -226,24 +226,14 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor.OnlineUpdating
             // not going through ShippingManager.GetServiceDescription because we need to not include any prefixes like "USPS"
             ShipmentTypeCode type = (ShipmentTypeCode) shipment.ShipmentType;
 
-            if (type == ShipmentTypeCode.AmazonSWA)
-            {
-                return EnumHelper.GetDescription((AmazonSWAServiceType) shipment.AmazonSWA.Service);
-            }
-
-            if (type == ShipmentTypeCode.AmazonSFP)
-            {
-                return GetAmazonShipmentClassCode(shipment);
-            }
-
-            // If Other, just take the user-entered value
-            if (type == ShipmentTypeCode.Other)
-            {
-                return shipment.Other.Service;
-            }
-
             switch (type)
             {
+                case ShipmentTypeCode.AmazonSFP:
+                    return GetAmazonShipmentClassCode(shipment);
+
+                case ShipmentTypeCode.AmazonSWA:
+                    return EnumHelper.GetDescription((AmazonSWAServiceType) shipment.AmazonSWA.Service);
+
                 case ShipmentTypeCode.iParcel:
                     return GetIParcelShipmentClassCode(shipment);
 
@@ -266,6 +256,10 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor.OnlineUpdating
 
                 case ShipmentTypeCode.DhlEcommerce:
                     return GetDhlEcommerceClassCode(shipment);
+                
+                case ShipmentTypeCode.Other:
+                    // If Other, just take the user-entered value
+                    return shipment.Other.Service;
             }
 
             return "NONE";
