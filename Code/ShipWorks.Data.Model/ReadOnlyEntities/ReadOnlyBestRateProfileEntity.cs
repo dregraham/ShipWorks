@@ -38,6 +38,7 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
             
             ShippingProfileID = source.ShippingProfileID;
             ServiceLevel = source.ServiceLevel;
+            InternalAllowedCarrierAccounts = source.InternalAllowedCarrierAccounts;
             
             ShippingProfile = (IShippingProfileEntity) source.ShippingProfile?.AsReadOnly(objectMap);
             
@@ -59,6 +60,12 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
         /// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
         public Nullable<System.Int32> ServiceLevel { get; }
+        /// <summary> The InternalAllowedCarrierAccounts property of the Entity BestRateProfile<br/><br/>
+        /// </summary>
+        /// <remarks>Mapped on table field: "BestRateProfile"."InternalAllowedCarrierAccounts"<br/>
+        /// Table field type characteristics (type, precision, scale, length): VarChar, 0, 0, 2147483647<br/>
+        /// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+        public System.String InternalAllowedCarrierAccounts { get; }
         
         public IShippingProfileEntity ShippingProfile { get; }
         

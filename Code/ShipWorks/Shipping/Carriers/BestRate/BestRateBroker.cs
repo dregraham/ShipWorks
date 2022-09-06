@@ -256,6 +256,12 @@ namespace ShipWorks.Shipping.Carriers.BestRate
 
             // Only add the account to the account list if it's not null         
             IEnumerable<TAccount> accounts = AccountRepository.Accounts.Where(account => !excludedAccounts.Any(e=>e==account.AccountId));
+
+            //Filter out accounts if the user has applied a profile to only use certain accounts
+            if (shipment.BestRate.AllowedCarrierAccounts.Count > 0)
+            {
+                accounts = accounts.Where(a => shipment.BestRate.AllowedCarrierAccounts.Any(e=>e==a.AccountId));
+            }
             
             // Filter the list to be the default profile account, and that it's other properties are valid
             ShipmentTypeCode shipmentType = (ShipmentTypeCode) shipment.ShipmentType;

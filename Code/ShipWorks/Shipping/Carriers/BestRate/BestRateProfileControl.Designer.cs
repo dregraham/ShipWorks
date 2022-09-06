@@ -32,6 +32,7 @@ namespace ShipWorks.Shipping.Carriers.BestRate
         {
             this.tabControl = new System.Windows.Forms.TabControl();
             this.tabPageSettings = new System.Windows.Forms.TabPage();
+            this.tabPageCarriers = new System.Windows.Forms.TabPage();
             this.groupBoxFrom = new System.Windows.Forms.GroupBox();
             this.kryptonBorderEdge1 = new ComponentFactory.Krypton.Toolkit.KryptonBorderEdge();
             this.labelOrigin = new System.Windows.Forms.Label();
@@ -62,6 +63,7 @@ namespace ShipWorks.Shipping.Carriers.BestRate
             // tabControl
             // 
             this.tabControl.Controls.Add(this.tabPageSettings);
+            this.tabControl.Controls.Add(this.tabPageCarriers);
             this.tabControl.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tabControl.Location = new System.Drawing.Point(0, 0);
             this.tabControl.Name = "tabControl";
@@ -82,6 +84,17 @@ namespace ShipWorks.Shipping.Carriers.BestRate
             this.tabPageSettings.TabIndex = 0;
             this.tabPageSettings.Text = "Settings";
             this.tabPageSettings.UseVisualStyleBackColor = true;
+            // 
+            // tabPageCarriers
+            // 
+            this.tabPageCarriers.AutoScroll = true;
+            this.tabPageCarriers.Location = new System.Drawing.Point(4, 22);
+            this.tabPageCarriers.Name = "tabPageCarriers";
+            this.tabPageCarriers.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPageCarriers.Size = new System.Drawing.Size(431, 474);
+            this.tabPageCarriers.TabIndex = 0;
+            this.tabPageCarriers.Text = "Allowed Carriers";
+            this.tabPageCarriers.UseVisualStyleBackColor = true;
             // 
             // groupBoxFrom
             // 
@@ -338,6 +351,7 @@ namespace ShipWorks.Shipping.Carriers.BestRate
 
         private System.Windows.Forms.TabControl tabControl;
         private System.Windows.Forms.TabPage tabPageSettings;
+        private System.Windows.Forms.TabPage tabPageCarriers;
         private System.Windows.Forms.GroupBox groupInsurance;
         private Insurance.InsuranceProfileControl insuranceControl;
         private System.Windows.Forms.CheckBox insuranceState;

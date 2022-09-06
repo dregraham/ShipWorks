@@ -2362,6 +2362,11 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(BestRateProfileFieldIndex.ServiceLevel);}
 		}
+		/// <summary>Creates a new BestRateProfileEntity.InternalAllowedCarrierAccounts field instance</summary>
+		public static EntityField2 InternalAllowedCarrierAccounts
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(BestRateProfileFieldIndex.InternalAllowedCarrierAccounts);}
+		}
 	}
 
 	/// <summary>Field Creation Class for entity BestRateShipmentEntity</summary>
@@ -2421,6 +2426,11 @@ namespace ShipWorks.Data.Model.HelperClasses
 		public static EntityField2 Insurance
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(BestRateShipmentFieldIndex.Insurance);}
+		}
+		/// <summary>Creates a new BestRateShipmentEntity.InternalAllowedCarrierAccounts field instance</summary>
+		public static EntityField2 InternalAllowedCarrierAccounts
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(BestRateShipmentFieldIndex.InternalAllowedCarrierAccounts);}
 		}
 	}
 

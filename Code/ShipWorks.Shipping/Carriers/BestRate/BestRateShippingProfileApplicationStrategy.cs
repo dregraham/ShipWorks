@@ -59,6 +59,8 @@ namespace ShipWorks.Shipping.Carriers.BestRate
             {
                 ApplyProfileValue(packageProfileEntity.Weight, shipment, ShipmentFields.ContentWeight);
             }
+
+            ApplyProfileValue(bestRateProfile.InternalAllowedCarrierAccounts, bestRateShipment, BestRateShipmentFields.InternalAllowedCarrierAccounts);
         }
     }
 }

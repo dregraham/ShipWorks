@@ -7,6 +7,10 @@ using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Shipping.Editing.Enums;
 using ShipWorks.Shipping.Profiles;
+using System.Security.Principal;
+using ShipWorks.Data.Model.Custom;
+using System.Windows.Forms;
+using ShipWorks.UI.Controls;
 
 namespace ShipWorks.Shipping.Carriers.BestRate
 {
@@ -16,12 +20,21 @@ namespace ShipWorks.Shipping.Carriers.BestRate
     [KeyedComponent(typeof(ShippingProfileControlBase), ShipmentTypeCode.BestRate)]
     public partial class BestRateProfileControl : ShippingProfileControlBase
     {
+        private readonly ICarrierAccountRetrieverFactory accountRetrieverFactory;
+        private readonly IBestRateExcludedAccountRepository excludedAccountRepository;
+        private readonly IShipmentTypeManager shipmentTypeManager;
+        private BestRateProfileEntity bestRateProfile;
+        private HashSet<long> allowedCarrierAccounts;
+
         /// <summary>
         /// Constructor
         /// </summary>
-        public BestRateProfileControl()
+        public BestRateProfileControl(ICarrierAccountRetrieverFactory accountRetrieverFactory, IBestRateExcludedAccountRepository excludedAccountRepository, IShipmentTypeManager shipmentTypeManager)
         {
             InitializeComponent();
+            this.accountRetrieverFactory = accountRetrieverFactory;
+            this.excludedAccountRepository = excludedAccountRepository;
+            this.shipmentTypeManager = shipmentTypeManager;
         }
 
         /// <summary>
@@ -38,7 +51,11 @@ namespace ShipWorks.Shipping.Carriers.BestRate
             LoadOrigins();
             dimensionsControl.Initialize();
 
-            BestRateProfileEntity bestRateProfile = profile.BestRate;
+            bestRateProfile = profile.BestRate;
+            allowedCarrierAccounts = bestRateProfile.AllowedCarrierAccounts;
+
+            CreateCarrierControls();
+
             PackageProfileEntity packageProfile = profile.Packages.Single();
 
             //TODO: Implement insurance wording correctly in story SHIP-156: Specifying insurance/declared value with best rate
@@ -67,6 +84,7 @@ namespace ShipWorks.Shipping.Carriers.BestRate
         /// </summary>
         public override void SaveToEntity()
         {
+            bestRateProfile.AllowedCarrierAccounts = allowedCarrierAccounts;
             base.SaveToEntity();
 
             if (dimensionsControl.Enabled)
@@ -85,6 +103,57 @@ namespace ShipWorks.Shipping.Carriers.BestRate
             origin.DisplayMember = "Key";
             origin.ValueMember = "Value";
             origin.DataSource = origins;
+        }
+
+        /// <summary>
+        /// Create the carrier account checkboxes for the Allowed Carriers
+        /// </summary>
+        private void CreateCarrierControls()
+        {
+            var shipmentTypes = shipmentTypeManager.ShipmentTypeCodes.Except(shipmentTypeManager.BestRateExcludedShipmentTypes());
+            var excludedAccounts = excludedAccountRepository.GetAll();
+            var currentCheckboxY = 10;
+            foreach (var shipmentType in shipmentTypes)
+            {
+                IEnumerable<ICarrierAccount> carrierAccounts = accountRetrieverFactory.Create(shipmentType).AccountsReadOnly;
+                if (carrierAccounts.Any())
+                {
+                    var possibleAccounts = carrierAccounts.Where(a => !excludedAccounts.Contains(a.AccountId));
+
+                    foreach(var account in possibleAccounts)
+                    {
+                        var checkBox = new ValueCheckBox<ICarrierAccount>
+                        {
+                            Text = $"{account.ShipmentType}-{account.AccountDescription}",
+                            Value = account,
+                            Checked = bestRateProfile.AllowedCarrierAccounts.Contains(account.AccountId),
+                            Location = new System.Drawing.Point(10, currentCheckboxY),
+                            Width = 430,
+                            Height = 20
+                        };
+
+                        checkBox.CheckStateChanged += AccountCheckBox_CheckedChanged;
+                        currentCheckboxY += 20;
+                        this.tabPageCarriers.Controls.Add(checkBox);
+                    }
+                }
+            }
+        }
+
+        /// <summary>
+        /// Event handler for a carrier checkboxes checked changed event
+        /// </summary>
+        private void AccountCheckBox_CheckedChanged(object sender, EventArgs e)
+        {
+            var senderCheckbox = (ValueCheckBox<ICarrierAccount>) sender;
+            if (senderCheckbox.Checked)
+            {
+                allowedCarrierAccounts.Add(senderCheckbox.Value.AccountId);
+            }
+            else
+            {
+                allowedCarrierAccounts.Remove(senderCheckbox.Value.AccountId);
+            }
         }
     }
 }
