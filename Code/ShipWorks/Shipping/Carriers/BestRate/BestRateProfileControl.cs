@@ -7,7 +7,6 @@ using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Shipping.Editing.Enums;
 using ShipWorks.Shipping.Profiles;
-using System.Security.Principal;
 using ShipWorks.Data.Model.Custom;
 using System.Windows.Forms;
 using ShipWorks.UI.Controls;
@@ -112,28 +111,48 @@ namespace ShipWorks.Shipping.Carriers.BestRate
         {
             var shipmentTypes = shipmentTypeManager.ShipmentTypeCodes.Except(shipmentTypeManager.BestRateExcludedShipmentTypes());
             var excludedAccounts = excludedAccountRepository.GetAll();
-            var currentCheckboxY = 10;
+            var currentControlY = 10;
             foreach (var shipmentType in shipmentTypes)
             {
                 IEnumerable<ICarrierAccount> carrierAccounts = accountRetrieverFactory.Create(shipmentType).AccountsReadOnly;
                 if (carrierAccounts.Any())
                 {
-                    var possibleAccounts = carrierAccounts.Where(a => !excludedAccounts.Contains(a.AccountId));
-
-                    foreach(var account in possibleAccounts)
+                    var header = new Label
                     {
+                        Text = EnumHelper.GetDescription(shipmentType),
+                        Location = new System.Drawing.Point(10, currentControlY),
+                        Font = new System.Drawing.Font(this.Font, System.Drawing.FontStyle.Bold),
+                        Width = 200,
+                        Height = 20,
+                    };
+                    currentControlY += 20;
+                    this.tabPageCarriers.Controls.Add(header);
+
+                    var possibleAccounts = carrierAccounts.Where(a => !excludedAccounts.Contains(a.AccountId)).ToArray();
+
+                    for(var i = 0; i < possibleAccounts.Length; i++)
+                    {
+                        var account = possibleAccounts[i];
                         var checkBox = new ValueCheckBox<ICarrierAccount>
                         {
-                            Text = $"{account.ShipmentType}-{account.AccountDescription}",
+                            Text = account.AccountDescription,
                             Value = account,
                             Checked = bestRateProfile.AllowedCarrierAccounts.Contains(account.AccountId),
-                            Location = new System.Drawing.Point(10, currentCheckboxY),
+                            Location = new System.Drawing.Point(20, currentControlY),
                             Width = 430,
                             Height = 20
                         };
 
                         checkBox.CheckStateChanged += AccountCheckBox_CheckedChanged;
-                        currentCheckboxY += 20;
+                        if(i < possibleAccounts.Length - 1)
+                        {
+                            currentControlY += 20;
+                        }
+                        else
+                        {
+                            currentControlY += 40;
+                        }
+
                         this.tabPageCarriers.Controls.Add(checkBox);
                     }
                 }
