@@ -1,4 +1,5 @@
 ﻿using System;
+using Autofac.Extras.Moq;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping;
 using ShipWorks.Shipping.Carriers.FedEx.Enums;
@@ -24,10 +25,14 @@ namespace ShipWorks.Tests.Stores.Platforms.ChannelAdvisor
         private readonly UspsShipmentEntity uspsShipmentEntity;
         private readonly OtherShipmentEntity otherShipmentEntity;
         private AmazonSFPShipmentEntity amazonShipmentEntity;
+        private readonly ChannelAdvisorOnlineUpdater testObject;
 
 
         public ChannelAdvisorOnlineUpdaterTest()
         {
+
+            var mock = AutoMock.GetLoose();
+            testObject = mock.Create<ChannelAdvisorOnlineUpdater>();
             orderEntity = new ChannelAdvisorOrderEntity { OrderNumber = 123456, MarketplaceNames = string.Empty };
             storeEntity = new ChannelAdvisorStoreEntity();
             storeEntity.ConsolidatorAsUsps = false;
@@ -48,7 +53,7 @@ namespace ShipWorks.Tests.Stores.Platforms.ChannelAdvisor
 
             postalShipmentEntity.Service = (int) PostalServiceType.ConsolidatorDomestic;
 
-            string code = ChannelAdvisorOnlineUpdater.GetShipmentClassCode(shipmentEntity, storeEntity);
+            string code = testObject.GetShipmentClassCode(shipmentEntity, storeEntity);
 
             Assert.Equal("CONSOLIDATOR", code);
         }
@@ -60,7 +65,7 @@ namespace ShipWorks.Tests.Stores.Platforms.ChannelAdvisor
 
             postalShipmentEntity.Service = (int) PostalServiceType.DhlParcelGround;
 
-            string code = ChannelAdvisorOnlineUpdater.GetShipmentClassCode(shipmentEntity, storeEntity);
+            string code = testObject.GetShipmentClassCode(shipmentEntity, storeEntity);
 
             Assert.Equal("DHL", code);
         }
@@ -72,7 +77,7 @@ namespace ShipWorks.Tests.Stores.Platforms.ChannelAdvisor
 
             postalShipmentEntity.Service = (int) PostalServiceType.DhlParcelGround;
 
-            string code = ChannelAdvisorOnlineUpdater.GetShipmentClassCode(shipmentEntity, storeEntity);
+            string code = testObject.GetShipmentClassCode(shipmentEntity, storeEntity);
 
             Assert.Equal("DHL", code);
         }
@@ -84,7 +89,7 @@ namespace ShipWorks.Tests.Stores.Platforms.ChannelAdvisor
 
             postalShipmentEntity.Service = (int) PostalServiceType.FirstClass;
 
-            string code = ChannelAdvisorOnlineUpdater.GetShipmentClassCode(shipmentEntity, storeEntity);
+            string code = testObject.GetShipmentClassCode(shipmentEntity, storeEntity);
 
             Assert.Equal("FIRSTCLASS", code);
         }
@@ -96,7 +101,7 @@ namespace ShipWorks.Tests.Stores.Platforms.ChannelAdvisor
 
             postalShipmentEntity.Service = (int) PostalServiceType.FirstClass;
 
-            string code = ChannelAdvisorOnlineUpdater.GetShipmentClassCode(shipmentEntity, storeEntity);
+            string code = testObject.GetShipmentClassCode(shipmentEntity, storeEntity);
 
             Assert.Equal("FIRSTCLASS", code);
         }
@@ -108,7 +113,7 @@ namespace ShipWorks.Tests.Stores.Platforms.ChannelAdvisor
 
             postalShipmentEntity.Service = (int) PostalServiceType.GlobalPostEconomyIntl;
 
-            string code = ChannelAdvisorOnlineUpdater.GetShipmentClassCode(shipmentEntity, storeEntity);
+            string code = testObject.GetShipmentClassCode(shipmentEntity, storeEntity);
 
             Assert.Equal("IFIRSTCLASS", code);
         }
@@ -120,7 +125,7 @@ namespace ShipWorks.Tests.Stores.Platforms.ChannelAdvisor
 
             postalShipmentEntity.Service = (int) PostalServiceType.GlobalPostSmartSaverEconomyIntl;
 
-            string code = ChannelAdvisorOnlineUpdater.GetShipmentClassCode(shipmentEntity, storeEntity);
+            string code = testObject.GetShipmentClassCode(shipmentEntity, storeEntity);
 
             Assert.Equal("IFIRSTCLASS", code);
         }
@@ -132,7 +137,7 @@ namespace ShipWorks.Tests.Stores.Platforms.ChannelAdvisor
 
             postalShipmentEntity.Service = (int) PostalServiceType.GlobalPostStandardIntl;
 
-            string code = ChannelAdvisorOnlineUpdater.GetShipmentClassCode(shipmentEntity, storeEntity);
+            string code = testObject.GetShipmentClassCode(shipmentEntity, storeEntity);
 
             Assert.Equal("IPRIORITY", code);
         }
@@ -144,7 +149,7 @@ namespace ShipWorks.Tests.Stores.Platforms.ChannelAdvisor
 
             postalShipmentEntity.Service = (int) PostalServiceType.GlobalPostSmartSaverStandardIntl;
 
-            string code = ChannelAdvisorOnlineUpdater.GetShipmentClassCode(shipmentEntity, storeEntity);
+            string code = testObject.GetShipmentClassCode(shipmentEntity, storeEntity);
 
             Assert.Equal("IPRIORITY", code);
         }
@@ -156,12 +161,12 @@ namespace ShipWorks.Tests.Stores.Platforms.ChannelAdvisor
 
             upsEntity.Service = (int) UpsServiceType.UpsMailInnovationsFirstClass;
 
-            string code = ChannelAdvisorOnlineUpdater.GetShipmentClassCode(shipmentEntity, storeEntity);
+            string code = testObject.GetShipmentClassCode(shipmentEntity, storeEntity);
 
             Assert.Equal("MI", code);
 
             shipmentEntity.ShipmentType = (int) ShipmentTypeCode.UpsWorldShip;
-            code = ChannelAdvisorOnlineUpdater.GetShipmentClassCode(shipmentEntity, storeEntity);
+            code = testObject.GetShipmentClassCode(shipmentEntity, storeEntity);
 
             Assert.Equal("MI", code);
         }
@@ -173,12 +178,12 @@ namespace ShipWorks.Tests.Stores.Platforms.ChannelAdvisor
 
             upsEntity.Service = (int) UpsServiceType.UpsGround;
 
-            string code = ChannelAdvisorOnlineUpdater.GetShipmentClassCode(shipmentEntity, storeEntity);
+            string code = testObject.GetShipmentClassCode(shipmentEntity, storeEntity);
 
             Assert.Equal("GROUND", code);
 
             shipmentEntity.ShipmentType = (int) ShipmentTypeCode.UpsWorldShip;
-            code = ChannelAdvisorOnlineUpdater.GetShipmentClassCode(shipmentEntity, storeEntity);
+            code = testObject.GetShipmentClassCode(shipmentEntity, storeEntity);
 
             Assert.Equal("GROUND", code);
         }
@@ -288,7 +293,7 @@ namespace ShipWorks.Tests.Stores.Platforms.ChannelAdvisor
             caOrder.MarketplaceNames = "ebay";
 
 
-            string code = ChannelAdvisorOnlineUpdater.GetShipmentClassCode(shipmentEntity, storeEntity);
+            string code = testObject.GetShipmentClassCode(shipmentEntity, storeEntity);
 
             Assert.Equal("Global Mail", code);
         }
@@ -354,7 +359,7 @@ namespace ShipWorks.Tests.Stores.Platforms.ChannelAdvisor
 
             SetupShipmentDefaults(ShipmentTypeCode.AmazonSFP);
 
-            string code = ChannelAdvisorOnlineUpdater.GetShipmentClassCode(shipmentEntity, storeEntity);
+            string code = testObject.GetShipmentClassCode(shipmentEntity, storeEntity);
 
             Assert.Equal(expectedValue, code);
         }
@@ -433,7 +438,7 @@ namespace ShipWorks.Tests.Stores.Platforms.ChannelAdvisor
             SetupShipmentDefaults(ShipmentTypeCode.FedEx);
             fedExEntity.Service = (int) service;
 
-            string code = ChannelAdvisorOnlineUpdater.GetShipmentClassCode(shipmentEntity, storeEntity);
+            string code = testObject.GetShipmentClassCode(shipmentEntity, storeEntity);
 
             Assert.Equal(expected, code);
         }
