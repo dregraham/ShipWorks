@@ -671,6 +671,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 			this.AddFieldIndexEnumForElementName(typeof(BestRateProfileFieldIndex), "BestRateProfileEntity");
 			this.AddElementFieldInfo("BestRateProfileEntity", "ShippingProfileID", typeof(System.Int64), true, true, false, false,  (int)BestRateProfileFieldIndex.ShippingProfileID, 0, 0, 19);
 			this.AddElementFieldInfo("BestRateProfileEntity", "ServiceLevel", typeof(Nullable<System.Int32>), false, false, false, true,  (int)BestRateProfileFieldIndex.ServiceLevel, 0, 0, 10);
+			this.AddElementFieldInfo("BestRateProfileEntity", "InternalAllowedCarrierAccounts", typeof(System.String), false, false, false, true,  (int)BestRateProfileFieldIndex.InternalAllowedCarrierAccounts, 2147483647, 0, 0);
 		}
 		/// <summary>Inits BestRateShipmentEntity's FieldInfo objects</summary>
 		private void InitBestRateShipmentEntityInfos()
@@ -687,6 +688,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 			this.AddElementFieldInfo("BestRateShipmentEntity", "InsuranceValue", typeof(System.Decimal), false, false, false, false,  (int)BestRateShipmentFieldIndex.InsuranceValue, 0, 4, 19);
 			this.AddElementFieldInfo("BestRateShipmentEntity", "RequestedLabelFormat", typeof(System.Int32), false, false, false, false,  (int)BestRateShipmentFieldIndex.RequestedLabelFormat, 0, 0, 10);
 			this.AddElementFieldInfo("BestRateShipmentEntity", "Insurance", typeof(System.Boolean), false, false, false, false,  (int)BestRateShipmentFieldIndex.Insurance, 0, 0, 0);
+			this.AddElementFieldInfo("BestRateShipmentEntity", "InternalAllowedCarrierAccounts", typeof(System.String), false, false, false, true,  (int)BestRateShipmentFieldIndex.InternalAllowedCarrierAccounts, 2147483647, 0, 0);
 		}
 		/// <summary>Inits BigCommerceOrderItemEntity's FieldInfo objects</summary>
 		private void InitBigCommerceOrderItemEntityInfos()

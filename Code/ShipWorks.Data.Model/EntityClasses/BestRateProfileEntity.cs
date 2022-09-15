@@ -353,6 +353,8 @@ namespace ShipWorks.Data.Model.EntityClasses
 			_fieldsCustomProperties.Add("ShippingProfileID", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
 			_fieldsCustomProperties.Add("ServiceLevel", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+			_fieldsCustomProperties.Add("InternalAllowedCarrierAccounts", fieldHashtable);
 		}
 		#endregion
 
@@ -471,6 +473,17 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			get { return (Nullable<System.Int32>)GetValue((int)BestRateProfileFieldIndex.ServiceLevel, false); }
 			set	{ SetValue((int)BestRateProfileFieldIndex.ServiceLevel, value); }
+		}
+
+		/// <summary> The InternalAllowedCarrierAccounts property of the Entity BestRateProfile<br/><br/></summary>
+		/// <remarks>Mapped on  table field: "BestRateProfile"."InternalAllowedCarrierAccounts"<br/>
+		/// Table field type characteristics (type, precision, scale, length): VarChar, 0, 0, 2147483647<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		[DataMember]
+		public virtual System.String InternalAllowedCarrierAccounts
+		{
+			get { return (System.String)GetValue((int)BestRateProfileFieldIndex.InternalAllowedCarrierAccounts, true); }
+			set	{ SetValue((int)BestRateProfileFieldIndex.InternalAllowedCarrierAccounts, value); }
 		}
 
 		/// <summary> Gets / sets related entity of type 'ShippingProfileEntity' which has to be set using a fetch action earlier. If no related entity is set for this property, null is returned.<br/><br/>

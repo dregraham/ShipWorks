@@ -1238,7 +1238,8 @@ GO
 CREATE TABLE [dbo].[BestRateProfile]
 (
 [ShippingProfileID] [bigint] NOT NULL,
-[ServiceLevel] [int] NULL
+[ServiceLevel] [int] NULL,
+[InternalAllowedCarrierAccounts] [varchar] (MAX) NULL
 )
 GO
 PRINT N'Creating primary key [PK_BestRateProfile] on [dbo].[BestRateProfile]'
@@ -1435,7 +1436,8 @@ CREATE TABLE [dbo].[BestRateShipment]
 [ServiceLevel] [int] NOT NULL,
 [InsuranceValue] [money] NOT NULL,
 [RequestedLabelFormat] [int] NOT NULL,
-[Insurance] [bit] NOT NULL
+[Insurance] [bit] NOT NULL,
+[InternalAllowedCarrierAccounts] [varchar] (MAX) NULL
 )
 GO
 PRINT N'Creating primary key [PK_BestRateShipment] on [dbo].[BestRateShipment]'

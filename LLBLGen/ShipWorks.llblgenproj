@@ -515,6 +515,7 @@
       </EntityDefinition>
       <EntityDefinition Name="BestRateProfile" ObjectID="78df09d7-4c41-4415-9288-1ca0a9399767">
         <Fields>
+          <Field Name="InternalAllowedCarrierAccounts" Type="string" IsOptional="true" MaxLength="2147483647" FieldIndex="2" />
           <Field Name="ServiceLevel" Type="int" IsOptional="true" FieldIndex="1" />
           <Field Name="ShippingProfileID" Type="long" IsPrimaryKey="true" IsAutoCreated="true" FieldIndex="0" />
         </Fields>
@@ -529,6 +530,7 @@
           <Field Name="DimsWidth" Type="double" FieldIndex="3" />
           <Field Name="Insurance" Type="bool" FieldIndex="10" />
           <Field Name="InsuranceValue" Type="decimal" Precision="19" Scale="4" FieldIndex="8" />
+          <Field Name="InternalAllowedCarrierAccounts" Type="string" IsOptional="true" MaxLength="2147483647" FieldIndex="11" />
           <Field Name="RequestedLabelFormat" Type="int" FieldIndex="9" />
           <Field Name="ServiceLevel" Type="int" FieldIndex="7" />
           <Field Name="ShipmentID" Type="long" IsPrimaryKey="true" IsAutoCreated="true" FieldIndex="0" />
@@ -4832,7 +4834,7 @@
       <Catalogs>
         <Catalog Name="ShipWorksLocal">
           <Schemas>
-            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2022-06-23T17:25:51.5250599Z">
+            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2022-09-06T15:48:44.8141207Z">
               <Tables>
                 <Table Name="Action">
                   <PkConstraintName Name="PK_Action" />
@@ -5251,6 +5253,7 @@
                   <Fields>
                     <Field Name="ShippingProfileID" Ordinal="1" IsPrimaryKey="true" DbType="0" Precision="19" />
                     <Field Name="ServiceLevel" Ordinal="2" IsOptional="true" DbType="8" Precision="10" />
+                    <Field Name="InternalAllowedCarrierAccounts" Ordinal="3" IsOptional="true" DbType="24" Length="2147483647" />
                   </Fields>
                 </Table>
                 <Table Name="BestRateShipment">
@@ -5267,6 +5270,7 @@
                     <Field Name="InsuranceValue" Ordinal="9" DbType="9" Precision="19" Scale="4" />
                     <Field Name="RequestedLabelFormat" Ordinal="10" DbType="8" Precision="10" />
                     <Field Name="Insurance" Ordinal="11" DbType="2" />
+                    <Field Name="InternalAllowedCarrierAccounts" Ordinal="12" IsOptional="true" DbType="12" Length="2147483647" />
                   </Fields>
                 </Table>
                 <Table Name="BigCommerceOrderItem">
@@ -11791,6 +11795,7 @@
         </EntityMapping>
         <EntityMapping EntityName=":BestRateProfile" TargetName="ShipWorksLocal:dbo:BestRateProfile">
           <FieldMappings>
+            <FieldMapping FieldName="InternalAllowedCarrierAccounts" TargetFieldName="InternalAllowedCarrierAccounts" />
             <FieldMapping FieldName="ServiceLevel" TargetFieldName="ServiceLevel" />
             <FieldMapping FieldName="ShippingProfileID" TargetFieldName="ShippingProfileID" />
           </FieldMappings>
@@ -11805,6 +11810,7 @@
             <FieldMapping FieldName="DimsWidth" TargetFieldName="DimsWidth" />
             <FieldMapping FieldName="Insurance" TargetFieldName="Insurance" />
             <FieldMapping FieldName="InsuranceValue" TargetFieldName="InsuranceValue" />
+            <FieldMapping FieldName="InternalAllowedCarrierAccounts" TargetFieldName="InternalAllowedCarrierAccounts" />
             <FieldMapping FieldName="RequestedLabelFormat" TargetFieldName="RequestedLabelFormat" />
             <FieldMapping FieldName="ServiceLevel" TargetFieldName="ServiceLevel" />
             <FieldMapping FieldName="ShipmentID" TargetFieldName="ShipmentID" />

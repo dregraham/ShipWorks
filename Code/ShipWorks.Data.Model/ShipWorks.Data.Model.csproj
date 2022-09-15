@@ -156,6 +156,8 @@
     <Compile Include="Custom\EntityClasses\ActionQueueEntity.cs" />
     <Compile Include="Custom\EntityClasses\ActionTaskEntity.cs" />
     <Compile Include="Custom\EntityClasses\AmazonSWAAccountEntity.ReadOnly.cs" />
+    <Compile Include="Custom\EntityClasses\BestRateProfileEntity.cs" />
+    <Compile Include="Custom\EntityClasses\BestRateShipmentEntity.cs" />
     <Compile Include="Custom\EntityClasses\BuyDotComOrderItemEntity.cs" />
     <Compile Include="Custom\EntityClasses\ChannelAdvisorOrderItemEntity.cs" />
     <Compile Include="Custom\EntityClasses\AmazonOrderItemEntity.cs" />

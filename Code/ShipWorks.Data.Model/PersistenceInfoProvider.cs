@@ -689,15 +689,16 @@ namespace ShipWorks.Data.Model
 		/// <summary>Inits BestRateProfileEntity's mappings</summary>
 		private void InitBestRateProfileEntityMappings()
 		{
-			this.AddElementMapping("BestRateProfileEntity", @"ShipWorksLocal", @"dbo", "BestRateProfile", 2, 0);
+			this.AddElementMapping("BestRateProfileEntity", @"ShipWorksLocal", @"dbo", "BestRateProfile", 3, 0);
 			this.AddElementFieldMapping("BestRateProfileEntity", "ShippingProfileID", "ShippingProfileID", false, "BigInt", 0, 19, 0, false, "", null, typeof(System.Int64), 0);
 			this.AddElementFieldMapping("BestRateProfileEntity", "ServiceLevel", "ServiceLevel", true, "Int", 0, 10, 0, false, "", null, typeof(System.Int32), 1);
+			this.AddElementFieldMapping("BestRateProfileEntity", "InternalAllowedCarrierAccounts", "InternalAllowedCarrierAccounts", true, "VarChar", 2147483647, 0, 0, false, "", null, typeof(System.String), 2);
 		}
 
 		/// <summary>Inits BestRateShipmentEntity's mappings</summary>
 		private void InitBestRateShipmentEntityMappings()
 		{
-			this.AddElementMapping("BestRateShipmentEntity", @"ShipWorksLocal", @"dbo", "BestRateShipment", 11, 0);
+			this.AddElementMapping("BestRateShipmentEntity", @"ShipWorksLocal", @"dbo", "BestRateShipment", 12, 0);
 			this.AddElementFieldMapping("BestRateShipmentEntity", "ShipmentID", "ShipmentID", false, "BigInt", 0, 19, 0, false, "", null, typeof(System.Int64), 0);
 			this.AddElementFieldMapping("BestRateShipmentEntity", "DimsProfileID", "DimsProfileID", false, "BigInt", 0, 19, 0, false, "", null, typeof(System.Int64), 1);
 			this.AddElementFieldMapping("BestRateShipmentEntity", "DimsLength", "DimsLength", false, "Float", 0, 38, 0, false, "", null, typeof(System.Double), 2);
@@ -709,6 +710,7 @@ namespace ShipWorks.Data.Model
 			this.AddElementFieldMapping("BestRateShipmentEntity", "InsuranceValue", "InsuranceValue", false, "Money", 0, 19, 4, false, "", null, typeof(System.Decimal), 8);
 			this.AddElementFieldMapping("BestRateShipmentEntity", "RequestedLabelFormat", "RequestedLabelFormat", false, "Int", 0, 10, 0, false, "", null, typeof(System.Int32), 9);
 			this.AddElementFieldMapping("BestRateShipmentEntity", "Insurance", "Insurance", false, "Bit", 0, 0, 0, false, "", null, typeof(System.Boolean), 10);
+			this.AddElementFieldMapping("BestRateShipmentEntity", "InternalAllowedCarrierAccounts", "InternalAllowedCarrierAccounts", true, "NVarChar", 2147483647, 0, 0, false, "", null, typeof(System.String), 11);
 		}
 
 		/// <summary>Inits BigCommerceOrderItemEntity's mappings</summary>
