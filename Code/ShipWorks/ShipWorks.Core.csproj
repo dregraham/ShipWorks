@@ -1343,6 +1343,9 @@
     <Compile Include="Stores\Platforms\ShipEngine\PlatformOrderWebClient.cs" />
     <Compile Include="Stores\Services\IAmazonMwsToSpConverter.cs" />
     <Compile Include="Stores\Services\IAmazonOrderSourceIdFetcher.cs" />
+    <Compile Include="UI\Controls\ValueCheckBox.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="UI\Controls\WeightChangedEventArgs.cs" />
     <Compile Include="Users\ComputerManagerWrapper.cs" />
     <Compile Include="Users\IComputerManager.cs" />

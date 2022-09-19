@@ -1052,6 +1052,8 @@ namespace ShipWorks.Data.Model
 		ShippingProfileID,
 		///<summary>ServiceLevel. </summary>
 		ServiceLevel,
+		///<summary>InternalAllowedCarrierAccounts. </summary>
+		InternalAllowedCarrierAccounts,
 		/// <summary></summary>
 		AmountOfFields
 	}
@@ -1080,6 +1082,8 @@ namespace ShipWorks.Data.Model
 		RequestedLabelFormat,
 		///<summary>Insurance. </summary>
 		Insurance,
+		///<summary>InternalAllowedCarrierAccounts. </summary>
+		InternalAllowedCarrierAccounts,
 		/// <summary></summary>
 		AmountOfFields
 	}

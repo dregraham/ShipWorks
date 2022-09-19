@@ -482,6 +482,16 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
                 case (int) PostalServiceType.GlobalPostPlusSmartSaver:
                     return $"USPS {EnumHelper.GetDescription(PostalServiceType.InternationalPriority)}";
 
+                case (int) PostalServiceType.FirstClass:
+                {
+                    if ((PostalPackagingType) shipment.Postal.PackagingType == PostalPackagingType.Envelope)
+                    {
+                        return $"USPS {EnumHelper.GetDescription(PostalServiceType.FirstClass)} Mail Envelope";
+                    }
+
+                    return base.GetServiceDescription(shipment);
+                }
+
                 default:
                     return base.GetServiceDescription(shipment);
             }

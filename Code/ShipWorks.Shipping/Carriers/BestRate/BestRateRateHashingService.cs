@@ -29,6 +29,7 @@ namespace ShipWorks.Shipping.Carriers.BestRate
                 ratingField.AddShipmentField(BestRateShipmentFields.ServiceLevel);
                 ratingField.AddShipmentField(BestRateShipmentFields.InsuranceValue);
                 ratingField.AddShipmentField(BestRateShipmentFields.Insurance);
+                ratingField.AddShipmentField(BestRateShipmentFields.InternalAllowedCarrierAccounts);
 
                 return ratingField;
             }

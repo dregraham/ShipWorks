@@ -75,56 +75,35 @@ namespace ShipWorks.Shipping.Carriers.DhlEcommerce
 
         [Description("DHL SmartMail Parcel Ground")]
         [ApiValue("smartmail_parcels_ground")]
-
         US_DhlSmartMailParcelGround = 12,
 
         [Description("DHL SmartMail Parcel Plus Ground")]
         [ApiValue("smartmail_parcel_plus_ground")]
-
         US_DhlSmartMailParcelPlusGround = 13,
 
         [Description("DHL SmartMail Parcel Expedited")]
         [ApiValue("smartmail_parcels_expedited")]
-
         US_DhlSmartMailParcelExpedited = 14,
 
         [Description("DHL SmartMail Parcel Plus Expedited")]
         [ApiValue("smartmail_parcel_plus_expedited")]
-
         US_DhlSmartMailParcelPlusExpedited = 15,
 
         [Description("DHL SmartMail BPM Expedited")]
         [ApiValue("dhl_smartmail_bpm_expedited")]
-
         US_DhlSmartMailBPMExpedited = 16,
 
         [Description("DHL SmartMail BPM Ground")]
         [ApiValue("dhl_smartmail_bpm_ground")]
-
         US_DhlSmartMailBPMGround = 17,
 
         [Description("DHL SM Marketing Parcel Expedited")]
         [ApiValue("dhl_sm_marketing_parcel_expedited")]
-
         US_DhlSMMarketingParcelExpedited = 18,
 
         [Description("DHL SM Marketing Parcel Ground")]
         [ApiValue("dhl_sm_marketing_parcel_ground")]
-
         US_DhlSMMarketingParcelGround = 19,
-
-        /* Currently platform doesn't support returns through DHL eCommerce
-         * [Description("DHL SmartMail Parcel Return Light")]
-         [ApiValue("dhl_smartmail_parcel_return_light")]
-         US_DhlSmartMailParcelReturnLight = 20,
-
-         [Description("DHL SmartMail Parcel Return Plus")]
-         [ApiValue("dhl_smartmail_parcel_return_plus")]
-         US_DhlSmartMailParcelReturnPlus = 21,
-
-         [Description("DHL SmartMail Parcel Return Ground")]
-         [ApiValue("dhl_smartmail_parcel_return_ground")]
-         US_DhlSmartMailParcelReturnGround = 22,*/
 
         [Description("DHL SM Parcel Expedited Max")]
         [ApiValue("dhl_sm_parcel_expedited_max")]

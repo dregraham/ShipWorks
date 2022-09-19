@@ -12,6 +12,7 @@ using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Shipping;
 using ShipWorks.Shipping.Carriers.Amazon.SWA;
+using ShipWorks.Shipping.Carriers.DhlEcommerce;
 using ShipWorks.Shipping.Carriers.FedEx.Enums;
 using ShipWorks.Shipping.Carriers.iParcel.Enums;
 using ShipWorks.Shipping.Carriers.OnTrac.Enums;
@@ -177,7 +178,7 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor.OnlineUpdating
         /// <summary>
         /// Gets the codes required for uploading shipment details to ChannelAdvisor
         /// </summary>
-        private static void GetShipmentUploadValues(ShipmentEntity shipment, out string carrierCode, out string serviceClass, out string trackingNumber)
+        private void GetShipmentUploadValues(ShipmentEntity shipment, out string carrierCode, out string serviceClass, out string trackingNumber)
         {
             string tempTracking = shipment.TrackingNumber;
             string tempCarrierCode = GetCarrierCode(shipment);
@@ -205,7 +206,7 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor.OnlineUpdating
         /// Gets the CA shipment Class code
         /// http://ssc.channeladvisor.com/howto/account-shipping-carrier-options
         /// </summary>
-        public static string GetShipmentClassCode(ShipmentEntity shipment)
+        public string GetShipmentClassCode(ShipmentEntity shipment)
         {
             ChannelAdvisorStoreEntity store = StoreManager.GetStore(shipment.Order.StoreID) as ChannelAdvisorStoreEntity;
             return GetShipmentClassCode(shipment, store);
@@ -215,7 +216,7 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor.OnlineUpdating
         /// Gets the CA shipment Class code
         /// http://ssc.channeladvisor.com/howto/account-shipping-carrier-options
         /// </summary>
-        public static string GetShipmentClassCode(ShipmentEntity shipment, ChannelAdvisorStoreEntity store)
+        public string GetShipmentClassCode(ShipmentEntity shipment, ChannelAdvisorStoreEntity store)
         {
             if (!shipment.Processed)
             {
@@ -225,24 +226,14 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor.OnlineUpdating
             // not going through ShippingManager.GetServiceDescription because we need to not include any prefixes like "USPS"
             ShipmentTypeCode type = (ShipmentTypeCode) shipment.ShipmentType;
 
-            if (type == ShipmentTypeCode.AmazonSWA)
-            {
-                return EnumHelper.GetDescription((AmazonSWAServiceType) shipment.AmazonSWA.Service);
-            }
-
-            if (type == ShipmentTypeCode.AmazonSFP)
-            {
-                return GetAmazonShipmentClassCode(shipment);
-            }
-
-            // If Other, just take the user-entered value
-            if (type == ShipmentTypeCode.Other)
-            {
-                return shipment.Other.Service;
-            }
-
             switch (type)
             {
+                case ShipmentTypeCode.AmazonSFP:
+                    return GetAmazonShipmentClassCode(shipment);
+
+                case ShipmentTypeCode.AmazonSWA:
+                    return EnumHelper.GetDescription((AmazonSWAServiceType) shipment.AmazonSWA.Service);
+
                 case ShipmentTypeCode.iParcel:
                     return GetIParcelShipmentClassCode(shipment);
 
@@ -262,9 +253,33 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor.OnlineUpdating
 
                 case ShipmentTypeCode.OnTrac:
                     return GetOntracShipmentClassCode(shipment);
+
+                case ShipmentTypeCode.DhlEcommerce:
+                    return GetDhlEcommerceClassCode(shipment);
+                
+                case ShipmentTypeCode.Other:
+                    // If Other, just take the user-entered value
+                    return shipment.Other.Service;
             }
 
             return "NONE";
+        }
+
+        /// <summary>
+        /// Gets the Dhl Ecommerce Class Code
+        /// </summary>
+        private string GetDhlEcommerceClassCode(ShipmentEntity shipment)
+        {
+            try
+            {
+                var service = (DhlEcommerceServiceType) shipment.DhlEcommerce.Service;
+                return EnumHelper.GetDescription(service).Replace("DHL",string.Empty).Trim();
+            }
+            catch (Exception ex)
+            {
+                log.Warn($"Exception getting service. Service = '{shipment.DhlEcommerce?.Service.ToString() ?? "NULL"}'", ex);
+                return "NONE";
+            }
         }
 
         /// <summary>
@@ -569,7 +584,7 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor.OnlineUpdating
                     return "DHL EXPRESS";
 
                 case ShipmentTypeCode.DhlEcommerce:
-                    return "DHL";
+                    return "DHL Global Mail";
 
                 case ShipmentTypeCode.Other:
                     return shipment.Other.Carrier;
@@ -731,4 +746,4 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor.OnlineUpdating
             return string.Empty;
         }
     }
-}
+} 

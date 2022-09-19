@@ -11,6 +11,7 @@ using ShipWorks.Shipping;
 using ShipWorks.Shipping.Carriers.Api;
 using ShipWorks.Stores.Content;
 using ShipWorks.Stores.Platforms.Amazon;
+using ShipWorks.Stores.Platforms.Amazon.OnlineUpdating;
 using ShipWorks.Stores.Platforms.Amazon.OnlineUpdating.DTO;
 using ShipWorks.Warehouse.Orders;
 
@@ -22,15 +23,17 @@ namespace ShipWorks.Stores.Platforms.Platform.OnlineUpdating
     [KeyedComponent(typeof(IPlatformOnlineUpdater), StoreTypeCode.Amazon)]
     public class AmazonBulkOnlineUpdater : PlatformOnlineUpdater, IPlatformOnlineUpdater
     {
+        private readonly IAmazonOrderSearchProvider orderSearchProvider;
+
         /// <summary>
         /// Constructor
         /// </summary>
         public AmazonBulkOnlineUpdater(IOrderManager orderManager, IShippingManager shippingManager,
             ISqlAdapterFactory sqlAdapterFactory, Func<IWarehouseOrderClient> createWarehouseOrderClient,
-            IIndex<StoreTypeCode, IOnlineUpdater> storeSpecificOnlineUpdaterFactory) :
+            IIndex<StoreTypeCode, IOnlineUpdater> storeSpecificOnlineUpdaterFactory, IAmazonOrderSearchProvider orderSearchProvider) :
             base(orderManager, shippingManager, sqlAdapterFactory, createWarehouseOrderClient, storeSpecificOnlineUpdaterFactory)
         {
-
+            this.orderSearchProvider = orderSearchProvider;
         }
 
         /// <summary>
@@ -42,12 +45,12 @@ namespace ShipWorks.Stores.Platforms.Platform.OnlineUpdating
             {
                 var typedStore = (AmazonStoreEntity) store;
 
-                var requestShipments = await Task.WhenAll(shipments.Select(async s => await GetShipmentRequest(s).ConfigureAwait(false))).ConfigureAwait(false);
+                var requestShipments = await Task.WhenAll(shipments.Select(async s => await GetShipmentRequests(s).ConfigureAwait(false))).ConfigureAwait(false);
                 var request = new AmazonBulkUploadShipmentsRequest
                 {
                     MarketplaceId = typedStore.MarketplaceID,
                     OrderSourceId = typedStore.OrderSourceID,
-                    Shipments = requestShipments.ToList()
+                    Shipments = requestShipments.SelectMany(x => x).ToList(),
                 };
 
                 var result = await client.UploadAmazonShipments(request).ConfigureAwait(false);
@@ -66,7 +69,7 @@ namespace ShipWorks.Stores.Platforms.Platform.OnlineUpdating
         /// <summary>
         /// Create a Shipment Notification item to add to the bulk
         /// </summary>
-        private async Task<AmazonUploadShipment> GetShipmentRequest(ShipmentEntity shipment)
+        private async Task<IEnumerable<AmazonUploadShipment>> GetShipmentRequests(ShipmentEntity shipment)
         {
             await shippingManager.EnsureShipmentLoadedAsync(shipment).ConfigureAwait(false);
 
@@ -93,17 +96,24 @@ namespace ShipWorks.Stores.Platforms.Platform.OnlineUpdating
 
             var order = (AmazonOrderEntity) shipment.Order;
 
-            var request = new AmazonUploadShipment
-            {
-                AmazonOrderId = order.AmazonOrderID,
-                CarrierCode = carrierCode,
-                CarrierName = carrierName,
-                Service = serviceUsed,
-                ShipDate = shipDate,
-                TrackingNumber = trackingNumber,
-            };
+            var amazonOrderIds = await orderSearchProvider.GetOrderIdentifiers(order).ConfigureAwait(false);
 
-            return request;
+            var requests = new List<AmazonUploadShipment>();
+
+            foreach (var orderId in amazonOrderIds)
+            {
+                requests.Add(new AmazonUploadShipment
+                {
+                    AmazonOrderId = orderId,
+                    CarrierCode = carrierCode,
+                    CarrierName = carrierName,
+                    Service = serviceUsed,
+                    ShipDate = shipDate,
+                    TrackingNumber = trackingNumber,
+                });
+            }
+
+            return requests;
         }
     }
 }

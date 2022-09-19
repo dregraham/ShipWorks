@@ -47,6 +47,20 @@ namespace ShipWorks.Shipping.Carriers.Amazon.SFP.Platform
 
             request.Shipment.Items = GetShipmentItems(shipment);
 
+            switch ((AmazonSFPDeliveryExperienceType) shipment.AmazonSFP.DeliveryExperience)
+            {
+                case AmazonSFPDeliveryExperienceType.DeliveryConfirmationWithSignature:
+                    request.Shipment.Confirmation = AddressValidatingShipment.ConfirmationEnum.Signature;
+                    break;
+                case AmazonSFPDeliveryExperienceType.DeliveryConfirmationWithAdultSignature:
+                    request.Shipment.Confirmation = AddressValidatingShipment.ConfirmationEnum.Adultsignature;
+                    break;
+                case AmazonSFPDeliveryExperienceType.DeliveryConfirmationWithoutSignature:
+                default:
+                    request.Shipment.Confirmation = AddressValidatingShipment.ConfirmationEnum.None;
+                    break;
+            }
+
             if (shipment.Order is AmazonOrderEntity)
             {
                 request.Shipment.OrderSourceCode = AddressValidatingShipment.OrderSourceCodeEnum.Amazon;
@@ -101,6 +115,20 @@ namespace ShipWorks.Shipping.Carriers.Amazon.SFP.Platform
             purchaseLabelRequest.Shipment.Confirmation = GetConfirmation(deliveryExp);
             purchaseLabelRequest.Shipment.ExternalOrderId = amazonOrder.AmazonOrderID;
             purchaseLabelRequest.Shipment.Items = CreateItems(shipment);
+
+            switch ((AmazonSFPDeliveryExperienceType) shipment.AmazonSFP.DeliveryExperience)
+            {
+                case AmazonSFPDeliveryExperienceType.DeliveryConfirmationWithSignature:
+                    purchaseLabelRequest.Shipment.Confirmation = Shipment.ConfirmationEnum.Signature;
+                    break;
+                case AmazonSFPDeliveryExperienceType.DeliveryConfirmationWithAdultSignature:
+                    purchaseLabelRequest.Shipment.Confirmation = Shipment.ConfirmationEnum.Adultsignature;
+                    break;
+                case AmazonSFPDeliveryExperienceType.DeliveryConfirmationWithoutSignature:
+                default:
+                    purchaseLabelRequest.Shipment.Confirmation = Shipment.ConfirmationEnum.None;
+                    break;
+            }
 
             if (shipment.AmazonSFP.Reference1.HasValue())
             {
