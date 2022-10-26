@@ -13,7 +13,6 @@ namespace ShipWorks.Stores.Tests.Platforms.Walmart.DTO
         [Fact]
         public void ManuallyAlteredCarrierNameExist()
         {
-            var testObject = new carrierNameType();
             Assert.True(typeof(string).Equals(typeof(carrierNameType).GetProperty("Item").PropertyType));
         }
     }
