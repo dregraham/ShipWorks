@@ -70,7 +70,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Walmart
                 .Verify(
                     w => w.UpdateShipmentDetails(It.IsAny<WalmartStoreEntity>(),
                         It.Is<orderShipment>(s =>
-                            (carrierType) s.orderLines[0].orderLineStatuses[0].trackingInfo.carrierName.Item == carrierType.USPS),
+                            s.orderLines[0].orderLineStatuses[0].trackingInfo.carrierName.Item == "USPS"),
                         It.IsAny<string>()), Times.Once);
 
         }
