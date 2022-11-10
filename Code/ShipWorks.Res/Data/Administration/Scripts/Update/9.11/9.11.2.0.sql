@@ -1,7 +1,7 @@
 ﻿PRINT N'Altering [dbo].[ShipmentCustomsItem]'
 GO
 IF COL_LENGTH(N'[dbo].[ShipmentCustomsItem]', N'SKU') IS NULL
-ALTER TABLE [dbo].[ShipmentCustomsItem] ADD[SKU] [nvarchar] (100) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL CONSTRAINT [DF_ShipmentCustomsItem_SKU] DEFAULT ('')
+ALTER TABLE [dbo].[ShipmentCustomsItem] ADD [SKU] [nvarchar] (100) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL CONSTRAINT [DF_ShipmentCustomsItem_SKU] DEFAULT ('')
 GO
 PRINT N'Dropping constraints from [dbo].[ShipmentCustomsItem]'
 GO
