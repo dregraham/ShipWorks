@@ -58,7 +58,8 @@ namespace ShipWorks.Shipping.ShipSense.Customs
                 new XElement("Quantity", knowledgebaseCustomsItem.Quantity),
                 new XElement("UnitPriceAmount", knowledgebaseCustomsItem.UnitPriceAmount),
                 new XElement("UnitValue", knowledgebaseCustomsItem.UnitValue),
-                new XElement("Weight", knowledgebaseCustomsItem.Weight)
+                new XElement("Weight", knowledgebaseCustomsItem.Weight),
+                new XElement("SKU", knowledgebaseCustomsItem.SKU)
                 );
         }
     }

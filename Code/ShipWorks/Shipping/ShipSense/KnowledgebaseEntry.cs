@@ -275,7 +275,8 @@ namespace ShipWorks.Shipping.ShipSense
                         CountryOfOrigin = knowledgebaseCustomsItem.CountryOfOrigin,
                         HarmonizedCode = knowledgebaseCustomsItem.HarmonizedCode,
                         NumberOfPieces = knowledgebaseCustomsItem.NumberOfPieces,
-                        UnitPriceAmount = knowledgebaseCustomsItem.UnitPriceAmount
+                        UnitPriceAmount = knowledgebaseCustomsItem.UnitPriceAmount,
+                        SKU = knowledgebaseCustomsItem.SKU
                     });
             }
         }

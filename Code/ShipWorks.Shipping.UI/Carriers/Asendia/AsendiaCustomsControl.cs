@@ -87,6 +87,28 @@ namespace ShipWorks.Shipping.UI.Carriers.Asendia
             customsRecipientTIN.TextChanged += this.OnChangeOption;
             customsRecipientTINType.SelectedIndexChanged += this.OnChangeOption;
             customsRecipientIssuingAuthority.SelectedIndexChanged += this.OnChangeOption;
+
+            sku.Enabled = enableEditing;
+        }
+
+        /// <summary>
+        /// Loads the form data.
+        /// </summary>
+        protected override void LoadFormData(ShipmentCustomsItemEntity customsItem)
+        {
+            base.LoadFormData(customsItem);
+
+            sku.ApplyMultiText(customsItem.SKU);
+        }
+
+        /// <summary>
+        /// Saves the customs item.
+        /// </summary>
+        protected override void SaveCustomsItem(ShipmentCustomsItemEntity customsItem, List<long> changedWeights, List<long> changedValues)
+        {
+            base.SaveCustomsItem(customsItem, changedWeights, changedValues);
+
+            sku.ReadMultiText(s=> customsItem.SKU = s);
         }
 
         /// <summary>

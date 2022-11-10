@@ -117,17 +117,13 @@ namespace ShipWorks.Shipping.UI.Carriers.Asendia
                 return;
             }
 
-            //long asendiaAccountNumber;
-            //if (long.TryParse(accountNumber.Text.Trim(), out asendiaAccountNumber))
-            //{
             this.Enabled = false;
             this.Cursor = Cursors.WaitCursor;
 
             GenericResult<string> connectAccountResult = await shipEngineClient.ConnectAsendiaAccount(accountNumber.Text.Trim(), username.Text.Trim(), password.Text.Trim(), apiKey.Text.Trim(), processingLocation.SelectedValue.ToString());
             if (connectAccountResult.Success)
             {
-                // this needs to change back. Point this out in a code review!!!
-                account.AccountNumber = 123;
+                account.AccountNumber = accountNumber.Text.Trim();
                 account.ShipEngineCarrierId = connectAccountResult.Value;
             }
             else
@@ -137,11 +133,6 @@ namespace ShipWorks.Shipping.UI.Carriers.Asendia
 
             this.Enabled = true;
             this.Cursor = Cursors.Default;
-            //}
-            //else
-            //{
-            //    ShowWizardError("Asendia account number must contain only numbers.", e);
-            //}
         }
 
         /// <summary>
