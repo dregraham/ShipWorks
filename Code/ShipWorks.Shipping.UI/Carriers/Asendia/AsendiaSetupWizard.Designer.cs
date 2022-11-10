@@ -136,7 +136,7 @@
             this.processingLocation.Location = new System.Drawing.Point(129, 211);
             this.processingLocation.Name = "processingLocation";
             this.processingLocation.Size = new System.Drawing.Size(230, 21);
-            this.processingLocation.TabIndex = 23;
+            this.processingLocation.TabIndex = 5;
             // 
             // apiKey
             // 
@@ -144,7 +144,7 @@
             this.apiKey.Margin = new System.Windows.Forms.Padding(3, 10, 3, 3);
             this.apiKey.Name = "apiKey";
             this.apiKey.Size = new System.Drawing.Size(230, 21);
-            this.apiKey.TabIndex = 21;
+            this.apiKey.TabIndex = 4;
             // 
             // label3
             // 

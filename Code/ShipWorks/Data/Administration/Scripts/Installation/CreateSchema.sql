@@ -3954,7 +3954,8 @@ CREATE TABLE [dbo].[ShipmentCustomsItem]
 [CountryOfOrigin] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [HarmonizedCode] [nvarchar] (20) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [NumberOfPieces] [int] NOT NULL,
-[UnitPriceAmount] [money] NOT NULL
+[UnitPriceAmount] [money] NOT NULL,
+[SKU] [nvarchar] (100) COLLATE SQL_Latin1_General_CP1_CI_AS
 )
 GO
 PRINT N'Creating primary key [PK_ShipmentCustomsItem] on [dbo].[ShipmentCustomsItem]'
@@ -5617,7 +5618,7 @@ CREATE TABLE [dbo].[AsendiaAccount]
 (
 [AsendiaAccountID] [bigint] NOT NULL IDENTITY(1103, 1000),
 [RowVersion] [timestamp] NOT NULL,
-[AccountNumber] [bigint] NOT NULL,
+[AccountNumber] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [ShipEngineCarrierId] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [Description] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [FirstName] [nvarchar] (30) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
