@@ -12,3 +12,12 @@ PRINT N'Altering [dbo].[AsendiaAccount]'
 GO
 ALTER TABLE [dbo].[AsendiaAccount] ALTER COLUMN [AccountNumber] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL
 GO
+PRINT N'Update Default Asendia Profile to valid shipment type'
+GO
+UPDATE asendia
+SET asendia.Service = 35
+FROM AsendiaAccount asendia
+INNER JOIN shippingprofile ship
+	ON ship.ShippingProfileID = stamps.ShippingProfileID
+WHERE ship.ShipmentTypePrimary = 1
+GO
