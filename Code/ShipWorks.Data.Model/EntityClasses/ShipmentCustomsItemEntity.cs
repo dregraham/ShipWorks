@@ -368,6 +368,8 @@ namespace ShipWorks.Data.Model.EntityClasses
 			_fieldsCustomProperties.Add("NumberOfPieces", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
 			_fieldsCustomProperties.Add("UnitPriceAmount", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+			_fieldsCustomProperties.Add("SKU", fieldHashtable);
 		}
 		#endregion
 
@@ -585,6 +587,17 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			get { return (System.Decimal)GetValue((int)ShipmentCustomsItemFieldIndex.UnitPriceAmount, true); }
 			set	{ SetValue((int)ShipmentCustomsItemFieldIndex.UnitPriceAmount, value); }
+		}
+
+		/// <summary> The SKU property of the Entity ShipmentCustomsItem<br/><br/></summary>
+		/// <remarks>Mapped on  table field: "ShipmentCustomsItem"."SKU"<br/>
+		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 100<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
+		public virtual System.String SKU
+		{
+			get { return (System.String)GetValue((int)ShipmentCustomsItemFieldIndex.SKU, true); }
+			set	{ SetValue((int)ShipmentCustomsItemFieldIndex.SKU, value); }
 		}
 
 		/// <summary> Gets / sets related entity of type 'ShipmentEntity' which has to be set using a fetch action earlier. If no related entity is set for this property, null is returned..<br/><br/></summary>
