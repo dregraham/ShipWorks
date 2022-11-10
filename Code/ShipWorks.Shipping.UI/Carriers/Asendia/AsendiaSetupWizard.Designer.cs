@@ -38,6 +38,10 @@
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(AsendiaSetupWizard));
             this.wizardPageWelcome = new ShipWorks.UI.Wizard.WizardPage();
+            this.label4 = new System.Windows.Forms.Label();
+            this.processingLocation = new System.Windows.Forms.ComboBox();
+            this.apiKey = new System.Windows.Forms.TextBox();
+            this.label3 = new System.Windows.Forms.Label();
             this.username = new System.Windows.Forms.TextBox();
             this.password = new System.Windows.Forms.TextBox();
             this.labelPassword = new System.Windows.Forms.Label();
@@ -92,6 +96,10 @@
             // 
             // wizardPageWelcome
             // 
+            this.wizardPageWelcome.Controls.Add(this.label4);
+            this.wizardPageWelcome.Controls.Add(this.processingLocation);
+            this.wizardPageWelcome.Controls.Add(this.apiKey);
+            this.wizardPageWelcome.Controls.Add(this.label3);
             this.wizardPageWelcome.Controls.Add(this.username);
             this.wizardPageWelcome.Controls.Add(this.password);
             this.wizardPageWelcome.Controls.Add(this.labelPassword);
@@ -111,9 +119,46 @@
             this.wizardPageWelcome.TabIndex = 0;
             this.wizardPageWelcome.Title = "Setup Asendia Shipping";
             // 
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.Location = new System.Drawing.Point(20, 214);
+            this.label4.Margin = new System.Windows.Forms.Padding(3, 0, 10, 0);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(105, 13);
+            this.label4.TabIndex = 24;
+            this.label4.Text = "Processing Location:";
+            // 
+            // processingLocation
+            // 
+            this.processingLocation.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.processingLocation.FormattingEnabled = true;
+            this.processingLocation.Location = new System.Drawing.Point(129, 211);
+            this.processingLocation.Name = "processingLocation";
+            this.processingLocation.Size = new System.Drawing.Size(230, 21);
+            this.processingLocation.TabIndex = 23;
+            // 
+            // apiKey
+            // 
+            this.apiKey.Location = new System.Drawing.Point(129, 175);
+            this.apiKey.Margin = new System.Windows.Forms.Padding(3, 10, 3, 3);
+            this.apiKey.Name = "apiKey";
+            this.apiKey.Size = new System.Drawing.Size(230, 21);
+            this.apiKey.TabIndex = 21;
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(76, 183);
+            this.label3.Margin = new System.Windows.Forms.Padding(3, 0, 10, 0);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(49, 13);
+            this.label3.TabIndex = 22;
+            this.label3.Text = "API Key:";
+            // 
             // username
             // 
-            this.username.Location = new System.Drawing.Point(129, 104);
+            this.username.Location = new System.Drawing.Point(129, 107);
             this.username.Margin = new System.Windows.Forms.Padding(3, 10, 3, 3);
             this.username.Name = "username";
             this.username.Size = new System.Drawing.Size(230, 21);
@@ -121,7 +166,7 @@
             // 
             // password
             // 
-            this.password.Location = new System.Drawing.Point(129, 135);
+            this.password.Location = new System.Drawing.Point(129, 141);
             this.password.Margin = new System.Windows.Forms.Padding(3, 10, 3, 3);
             this.password.Name = "password";
             this.password.Size = new System.Drawing.Size(230, 21);
@@ -131,7 +176,7 @@
             // labelPassword
             // 
             this.labelPassword.AutoSize = true;
-            this.labelPassword.Location = new System.Drawing.Point(68, 138);
+            this.labelPassword.Location = new System.Drawing.Point(68, 144);
             this.labelPassword.Margin = new System.Windows.Forms.Padding(3, 0, 10, 0);
             this.labelPassword.Name = "labelPassword";
             this.labelPassword.Size = new System.Drawing.Size(57, 13);
@@ -141,7 +186,7 @@
             // labelUsername
             // 
             this.labelUsername.AutoSize = true;
-            this.labelUsername.Location = new System.Drawing.Point(66, 107);
+            this.labelUsername.Location = new System.Drawing.Point(66, 110);
             this.labelUsername.Margin = new System.Windows.Forms.Padding(3, 0, 10, 0);
             this.labelUsername.Name = "labelUsername";
             this.labelUsername.Size = new System.Drawing.Size(59, 13);
@@ -161,7 +206,7 @@
             // openAccountLink
             // 
             this.openAccountLink.AutoSize = true;
-            this.openAccountLink.Location = new System.Drawing.Point(229, 159);
+            this.openAccountLink.Location = new System.Drawing.Point(229, 246);
             this.openAccountLink.Name = "openAccountLink";
             this.openAccountLink.Size = new System.Drawing.Size(55, 13);
             this.openAccountLink.TabIndex = 16;
@@ -172,7 +217,7 @@
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(126, 159);
+            this.label2.Location = new System.Drawing.Point(126, 246);
             this.label2.Margin = new System.Windows.Forms.Padding(0);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(109, 13);
@@ -282,9 +327,13 @@
         private System.Windows.Forms.LinkLabel openAccountLink;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label labelPassword;
-        private System.Windows.Forms.Label labelUsername;
         private System.Windows.Forms.Label labelAccountNumber;
-        private System.Windows.Forms.TextBox username;
         private System.Windows.Forms.TextBox password;
+        private System.Windows.Forms.TextBox apiKey;
+        private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.TextBox username;
+        private System.Windows.Forms.Label labelUsername;
+        private System.Windows.Forms.Label label4;
+        private System.Windows.Forms.ComboBox processingLocation;
     }
 }

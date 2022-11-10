@@ -82,6 +82,9 @@ namespace ShipWorks.Shipping.UI.Carriers.Asendia
             Pages.Add(new ShippingWizardPageDefaults(shipmentType));
             Pages.Add(new ShippingWizardPagePrinting(shipmentType));
             Pages.Add(new ShippingWizardPageAutomation(shipmentType));
+
+            EnumHelper.BindComboBox<AsendiaProcessingLocation>(processingLocation);
+
             Pages.Add(CreateFinishPage());
         }
 
@@ -104,39 +107,41 @@ namespace ShipWorks.Shipping.UI.Carriers.Asendia
             fieldChecker.Check("Account Number", accountNumber.Text);
             fieldChecker.Check("Username", username.Text);
             fieldChecker.Check("Password", password.Text);
+            fieldChecker.Check("API Key", apiKey.Text);
 
             GenericResult<string> validationResult = fieldChecker.Validate();
-            
-            if(validationResult.Failure)
+
+            if (validationResult.Failure)
             {
                 ShowWizardError(validationResult.Message, e);
                 return;
             }
 
-            long asendiaAccountNumber;
-            if (long.TryParse(accountNumber.Text.Trim(), out asendiaAccountNumber))
+            //long asendiaAccountNumber;
+            //if (long.TryParse(accountNumber.Text.Trim(), out asendiaAccountNumber))
+            //{
+            this.Enabled = false;
+            this.Cursor = Cursors.WaitCursor;
+
+            GenericResult<string> connectAccountResult = await shipEngineClient.ConnectAsendiaAccount(accountNumber.Text.Trim(), username.Text.Trim(), password.Text.Trim(), apiKey.Text.Trim(), processingLocation.SelectedValue.ToString());
+            if (connectAccountResult.Success)
             {
-                this.Enabled = false;
-                this.Cursor = Cursors.WaitCursor;
-
-                GenericResult<string> connectAccountResult = await shipEngineClient.ConnectAsendiaAccount(asendiaAccountNumber.ToString(), username.Text.Trim(), password.Text.Trim());
-                if (connectAccountResult.Success)
-                {
-                    account.AccountNumber = asendiaAccountNumber;
-                    account.ShipEngineCarrierId = connectAccountResult.Value;
-                }
-                else
-                {
-                    ShowWizardError(connectAccountResult.Message, e);
-                }
-
-                this.Enabled = true;
-                this.Cursor = Cursors.Default;
+                // this needs to change back. Point this out in a code review!!!
+                account.AccountNumber = 123;
+                account.ShipEngineCarrierId = connectAccountResult.Value;
             }
             else
             {
-                ShowWizardError("Asendia account number must contain only numbers.", e);
+                ShowWizardError(connectAccountResult.Message, e);
             }
+
+            this.Enabled = true;
+            this.Cursor = Cursors.Default;
+            //}
+            //else
+            //{
+            //    ShowWizardError("Asendia account number must contain only numbers.", e);
+            //}
         }
 
         /// <summary>
