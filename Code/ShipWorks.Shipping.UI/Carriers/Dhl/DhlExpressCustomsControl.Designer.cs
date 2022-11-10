@@ -41,14 +41,14 @@ namespace ShipWorks.Shipping.UI.Carriers.Dhl
             this.taxIdType = new ShipWorks.UI.Controls.MultiValueComboBox();
             this.labelTaxIdType = new System.Windows.Forms.Label();
             this.customsTinIssuingAuthority = new ShipWorks.UI.Controls.MultiValueComboBox();
-            this.labelCustomsTinIssuingAuthority = new System.Windows.Forms.Label();
-            ((System.ComponentModel.ISupportInitialize)(this.sectionContents)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.sectionContents.ContentPanel)).BeginInit();
+            this.labelCustomsTinIssuingAuthority = new Label();
+            ((System.ComponentModel.ISupportInitialize) (this.sectionContents)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize) (this.sectionContents.ContentPanel)).BeginInit();
             this.sectionContents.ContentPanel.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.sectionGeneral)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.sectionGeneral.ContentPanel)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize) (this.sectionGeneral)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize) (this.sectionGeneral.ContentPanel)).BeginInit();
             this.sectionGeneral.ContentPanel.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.fieldLengthProvider)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize) (this.fieldLengthProvider)).BeginInit();
             this.SuspendLayout();
             // 
             // sectionContents
@@ -60,8 +60,7 @@ namespace ShipWorks.Shipping.UI.Carriers.Dhl
             this.sectionContents.ContentPanel.Controls.Add(this.groupSelectedContent);
             this.sectionContents.ContentPanel.Controls.Add(this.delete);
             this.sectionContents.ContentPanel.Controls.Add(this.add);
-            this.sectionContents.Location = new System.Drawing.Point(6, 201);
-            this.sectionContents.Size = new System.Drawing.Size(555, 362);
+            this.sectionContents.Location = new System.Drawing.Point(6, 132);
             // 
             // label1
             // 
@@ -93,22 +92,6 @@ namespace ShipWorks.Shipping.UI.Carriers.Dhl
             this.sectionGeneral.ContentPanel.Controls.Add(this.labelCustomsTinIssuingAuthority);
             this.sectionGeneral.Location = new System.Drawing.Point(6, 5);
             this.sectionGeneral.Size = new System.Drawing.Size(572, 191);
-            // 
-            // groupSelectedContent
-            // 
-            this.groupSelectedContent.Size = new System.Drawing.Size(534, 190);
-            // 
-            // add
-            // 
-            this.add.Location = new System.Drawing.Point(483, 10);
-            // 
-            // delete
-            // 
-            this.delete.Location = new System.Drawing.Point(483, 37);
-            // 
-            // itemsGrid
-            // 
-            this.itemsGrid.Size = new System.Drawing.Size(469, 116);
             // 
             // contentType
             // 
@@ -149,77 +132,75 @@ namespace ShipWorks.Shipping.UI.Carriers.Dhl
             this.labelNonDelivery.Size = new System.Drawing.Size(72, 13);
             this.labelNonDelivery.TabIndex = 2;
             this.labelNonDelivery.Text = "Non Delivery:";
-            // 
+            //
             // labelCustomsRecipientTin
-            // 
+            //
             this.labelCustomsRecipientTin.AutoSize = true;
             this.labelCustomsRecipientTin.BackColor = System.Drawing.Color.Transparent;
             this.labelCustomsRecipientTin.Location = new System.Drawing.Point(20, 90);
             this.labelCustomsRecipientTin.Name = "labelCustomsRecipientTin";
-            this.labelCustomsRecipientTin.Size = new System.Drawing.Size(90, 13);
             this.labelCustomsRecipientTin.TabIndex = 3;
             this.labelCustomsRecipientTin.Text = "Recipient Tax ID:";
-            // 
+            //
             // customsRecipientTin
-            // 
+            //
             this.customsRecipientTin.Location = new System.Drawing.Point(113, 85);
             this.customsRecipientTin.Name = "customsRecipientTin";
-            this.customsRecipientTin.Size = new System.Drawing.Size(160, 21);
             this.customsRecipientTin.TabIndex = 4;
-            // 
-            // taxIdType
-            // 
-            this.taxIdType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.taxIdType.FormattingEnabled = true;
-            this.taxIdType.Location = new System.Drawing.Point(113, 111);
-            this.taxIdType.Name = "taxIdType";
-            this.taxIdType.PromptText = "(Multiple Values)";
-            this.taxIdType.Size = new System.Drawing.Size(160, 21);
-            this.taxIdType.TabIndex = 6;
-            // 
+            this.customsRecipientTin.Size = new System.Drawing.Size(160, 21);
+            //
             // labelTaxIdType
-            // 
+            //
             this.labelTaxIdType.AutoSize = true;
             this.labelTaxIdType.BackColor = System.Drawing.Color.Transparent;
             this.labelTaxIdType.Location = new System.Drawing.Point(40, 114);
             this.labelTaxIdType.Name = "labelTaxIdType";
-            this.labelTaxIdType.Size = new System.Drawing.Size(55, 13);
             this.labelTaxIdType.TabIndex = 5;
             this.labelTaxIdType.Text = "TIN Type:";
-            // 
-            // customsTinIssuingAuthority
-            // 
-            this.customsTinIssuingAuthority.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.customsTinIssuingAuthority.Location = new System.Drawing.Point(113, 137);
-            this.customsTinIssuingAuthority.Name = "customsTinIssuingAuthority";
-            this.customsTinIssuingAuthority.PromptText = "(Multiple Values)";
-            this.customsTinIssuingAuthority.Size = new System.Drawing.Size(160, 21);
-            this.customsTinIssuingAuthority.TabIndex = 8;
-            // 
+            //
+            // taxIdType
+            //
+            this.taxIdType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.taxIdType.FormattingEnabled = true;
+            this.taxIdType.Location = new System.Drawing.Point(113, 111);
+            this.taxIdType.Name = "taxIdType";
+            this.taxIdType.PromptText = "(TIN Types)";
+            this.taxIdType.Size = new System.Drawing.Size(160, 21);
+            this.taxIdType.TabIndex = 6;
+            //
             // labelCustomsTinIssuingAuthority
-            // 
+            //
             this.labelCustomsTinIssuingAuthority.AutoSize = true;
-            this.labelCustomsTinIssuingAuthority.BackColor = System.Drawing.Color.Transparent;
-            this.labelCustomsTinIssuingAuthority.Location = new System.Drawing.Point(20, 138);
+            this.labelCustomsTinIssuingAuthority.BackColor = Color.Transparent;
+            this.labelCustomsTinIssuingAuthority.Location = new Point(20, 138);
             this.labelCustomsTinIssuingAuthority.Name = "labelCustomsTinIssuingAuthority";
-            this.labelCustomsTinIssuingAuthority.Size = new System.Drawing.Size(93, 13);
             this.labelCustomsTinIssuingAuthority.TabIndex = 7;
             this.labelCustomsTinIssuingAuthority.Text = "Issuing Authority:";
-            // 
+            //
+            // customsTinIssuingAuthority
+            //
+            this.customsTinIssuingAuthority.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.customsTinIssuingAuthority.FormattingEnabled = false;
+            this.customsTinIssuingAuthority.Location = new Point(113, 137);
+            this.customsTinIssuingAuthority.Name = "customsTinIssuingAuthority";
+            this.customsTinIssuingAuthority.PromptText = "(Issuing Authority)";
+            this.customsTinIssuingAuthority.Size = new Size(160, 21);
+            this.customsTinIssuingAuthority.TabIndex = 8;
+            //
             // DhlExpressCustomsControl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.Name = "DhlExpressCustomsControl";
-            this.Size = new System.Drawing.Size(581, 582);
-            ((System.ComponentModel.ISupportInitialize)(this.sectionContents.ContentPanel)).EndInit();
+            this.Size = new System.Drawing.Size(581, 525);
+            ((System.ComponentModel.ISupportInitialize) (this.sectionContents.ContentPanel)).EndInit();
             this.sectionContents.ContentPanel.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.sectionContents)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.sectionGeneral.ContentPanel)).EndInit();
+            ((System.ComponentModel.ISupportInitialize) (this.sectionContents)).EndInit();
+            ((System.ComponentModel.ISupportInitialize) (this.sectionGeneral.ContentPanel)).EndInit();
             this.sectionGeneral.ContentPanel.ResumeLayout(false);
             this.sectionGeneral.ContentPanel.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.sectionGeneral)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.fieldLengthProvider)).EndInit();
+            ((System.ComponentModel.ISupportInitialize) (this.sectionGeneral)).EndInit();
+            ((System.ComponentModel.ISupportInitialize) (this.fieldLengthProvider)).EndInit();
             this.ResumeLayout(false);
 
         }
