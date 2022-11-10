@@ -92,7 +92,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Walmart
                 .Verify(
                     w => w.UpdateShipmentDetails(It.IsAny<WalmartStoreEntity>(),
                         It.Is<orderShipment>(s =>
-                            (string) s.orderLines[0].orderLineStatuses[0].trackingInfo.carrierName.Item == "Other"),
+                            (string) s.orderLines[0].orderLineStatuses[0].trackingInfo.carrierName.Item == "blah"),
                         It.IsAny<string>()), Times.Once);
 
         }

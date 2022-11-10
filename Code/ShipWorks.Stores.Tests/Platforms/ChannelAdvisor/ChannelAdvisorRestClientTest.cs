@@ -347,7 +347,7 @@ namespace ShipWorks.Stores.Tests.Platforms.ChannelAdvisor
         [Fact]
         public void UploadShipmentDetails_ReturnsErrorMessage()
         {
-            ChannelAdvisorShipment shipment = new ChannelAdvisorShipment();
+            ChannelAdvisorShipment shipment = new ChannelAdvisorShipment() { ShippingCarrier = "a", ShippingClass = "b" };
 
             var response = mock.CreateMock<HttpWebResponse>();
             response.Setup(r => r.StatusCode).Returns(HttpStatusCode.BadRequest);
@@ -361,7 +361,8 @@ namespace ShipWorks.Stores.Tests.Platforms.ChannelAdvisor
 
             // Since we are throwing a 401 for both attempts of uploading, the final result is throwing a CA exception
             var ex = Assert.Throws<ChannelAdvisorException>(() => testObject.UploadShipmentDetails(shipment, "refresh", "1"));
-            Assert.Equal("Carrier and Class is invalid.", ex.Message);
+            Assert.Equal("The shipment details upload failed for Carrier 'a' and Class 'b'.\r\nUpdate your ChannelAdvisor store's Account Shipping Carriers to include these values as a supported carrier.\r\nThe supported carriers are located at Fulfill > Carriers menu in your online store.\r\n\r\n", 
+                ex.Message);
         }
 
         [Fact]
