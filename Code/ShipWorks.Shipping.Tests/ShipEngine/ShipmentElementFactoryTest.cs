@@ -275,7 +275,8 @@ namespace ShipWorks.Shipping.Tests.ShipEngine
                 Description = "desc",
                 HarmonizedCode = "Harm",
                 Quantity = 42.5,
-                UnitValue = 12
+                UnitValue = 12,
+                SKU = "asdf"
             };
             shipment.CustomsItems.Add(customsItem);
 
@@ -287,6 +288,7 @@ namespace ShipWorks.Shipping.Tests.ShipEngine
             Assert.Equal(customsItem.HarmonizedCode, apiCustoms.HarmonizedTariffCode);
             Assert.Equal(43, apiCustoms.Quantity);
             Assert.Equal((double) customsItem.UnitValue, apiCustoms.Value);
+            Assert.Equal(customsItem.SKU, apiCustoms.SKU);
         }
 
         [Fact]

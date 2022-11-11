@@ -564,7 +564,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 			this.AddFieldIndexEnumForElementName(typeof(AsendiaAccountFieldIndex), "AsendiaAccountEntity");
 			this.AddElementFieldInfo("AsendiaAccountEntity", "AsendiaAccountID", typeof(System.Int64), true, false, true, false,  (int)AsendiaAccountFieldIndex.AsendiaAccountID, 0, 0, 19);
 			this.AddElementFieldInfo("AsendiaAccountEntity", "RowVersion", typeof(System.Byte[]), false, false, true, false,  (int)AsendiaAccountFieldIndex.RowVersion, 2147483647, 0, 0);
-			this.AddElementFieldInfo("AsendiaAccountEntity", "AccountNumber", typeof(System.Int64), false, false, false, false,  (int)AsendiaAccountFieldIndex.AccountNumber, 0, 0, 19);
+			this.AddElementFieldInfo("AsendiaAccountEntity", "AccountNumber", typeof(System.String), false, false, false, false,  (int)AsendiaAccountFieldIndex.AccountNumber, 50, 0, 0);
 			this.AddElementFieldInfo("AsendiaAccountEntity", "ShipEngineCarrierId", typeof(System.String), false, false, false, false,  (int)AsendiaAccountFieldIndex.ShipEngineCarrierId, 50, 0, 0);
 			this.AddElementFieldInfo("AsendiaAccountEntity", "Description", typeof(System.String), false, false, false, false,  (int)AsendiaAccountFieldIndex.Description, 50, 0, 0);
 			this.AddElementFieldInfo("AsendiaAccountEntity", "FirstName", typeof(System.String), false, false, false, false,  (int)AsendiaAccountFieldIndex.FirstName, 30, 0, 0);
@@ -3239,6 +3239,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 			this.AddElementFieldInfo("ShipmentCustomsItemEntity", "HarmonizedCode", typeof(System.String), false, false, false, false,  (int)ShipmentCustomsItemFieldIndex.HarmonizedCode, 20, 0, 0);
 			this.AddElementFieldInfo("ShipmentCustomsItemEntity", "NumberOfPieces", typeof(System.Int32), false, false, false, false,  (int)ShipmentCustomsItemFieldIndex.NumberOfPieces, 0, 0, 10);
 			this.AddElementFieldInfo("ShipmentCustomsItemEntity", "UnitPriceAmount", typeof(System.Decimal), false, false, false, false,  (int)ShipmentCustomsItemFieldIndex.UnitPriceAmount, 0, 4, 19);
+			this.AddElementFieldInfo("ShipmentCustomsItemEntity", "SKU", typeof(System.String), false, false, false, false,  (int)ShipmentCustomsItemFieldIndex.SKU, 100, 0, 0);
 		}
 		/// <summary>Inits ShipmentReturnItemEntity's FieldInfo objects</summary>
 		private void InitShipmentReturnItemEntityInfos()

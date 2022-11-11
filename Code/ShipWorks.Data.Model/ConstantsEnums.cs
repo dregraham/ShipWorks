@@ -11876,6 +11876,8 @@ namespace ShipWorks.Data.Model
 		NumberOfPieces,
 		///<summary>UnitPriceAmount. </summary>
 		UnitPriceAmount,
+		///<summary>SKU. </summary>
+		SKU,
 		/// <summary></summary>
 		AmountOfFields
 	}

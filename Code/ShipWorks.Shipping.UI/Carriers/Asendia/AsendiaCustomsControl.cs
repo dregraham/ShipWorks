@@ -90,6 +90,33 @@ namespace ShipWorks.Shipping.UI.Carriers.Asendia
         }
 
         /// <summary>
+        /// Loads the form data.
+        /// </summary>
+        protected override void LoadFormData(ShipmentCustomsItemEntity customsItem)
+        {
+            base.LoadFormData(customsItem);
+
+            sku.ApplyMultiText(customsItem.SKU);
+        }
+
+        /// <summary>
+        /// Saves the customs item.
+        /// </summary>
+        protected override void SaveCustomsItem(ShipmentCustomsItemEntity customsItem, List<long> changedWeights, List<long> changedValues)
+        {
+            base.SaveCustomsItem(customsItem, changedWeights, changedValues);
+
+            sku.ReadMultiText(s=> customsItem.SKU = s);
+        }
+
+        protected override void UpdateEnabledUI()
+        {
+            base.UpdateEnabledUI();
+
+            sku.Enabled = enableEditing && itemsGrid.SelectedElements.Count > 0;
+        }
+
+        /// <summary>
         /// Content type has changed
         /// </summary>
         void OnChangeOption(object sender, EventArgs e)

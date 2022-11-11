@@ -112,7 +112,7 @@ namespace ShipWorks.Shipping.Tests.ShipEngine
 
             var testObject = mock.Create<ShipEngineWebClient>();
 
-            GenericResult<string> result = await testObject.ConnectAsendiaAccount("abcd", "username", "password");
+            GenericResult<string> result = await testObject.ConnectAsendiaAccount("abcd", "username", "password", "foo", "ord");
 
             Assert.False(result.Success);
             Assert.Equal("'account_number' must be 9 characters in length. You entered 3 characters.", result.Message);
@@ -128,7 +128,7 @@ namespace ShipWorks.Shipping.Tests.ShipEngine
 
             var testObject = mock.Create<ShipEngineWebClient>();
 
-            GenericResult<string> result = await testObject.ConnectAsendiaAccount("abcd", "username", "password");
+            GenericResult<string> result = await testObject.ConnectAsendiaAccount("abcd", "username", "password", "foo", "ord");
 
             Assert.False(result.Success);
             Assert.Equal("Unable to connect to Asendia. Please check your account information and try again.", result.Message);
@@ -139,7 +139,7 @@ namespace ShipWorks.Shipping.Tests.ShipEngine
         {
             var testObject = mock.Create<ShipEngineWebClient>();
 
-            testObject.ConnectAsendiaAccount("AccountNumber", "username", "password");
+            testObject.ConnectAsendiaAccount("AccountNumber", "username", "password", "foo", "ord");
 
             restRequest.Verify(x => x.AddJsonBody(It.Is<object>(y => (y as AsendiaAccountInformationDTO).AccountNumber == "AccountNumber")));
         }

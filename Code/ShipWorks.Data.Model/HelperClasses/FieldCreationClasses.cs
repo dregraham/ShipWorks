@@ -27862,6 +27862,11 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(ShipmentCustomsItemFieldIndex.UnitPriceAmount);}
 		}
+		/// <summary>Creates a new ShipmentCustomsItemEntity.SKU field instance</summary>
+		public static EntityField2 SKU
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ShipmentCustomsItemFieldIndex.SKU);}
+		}
 	}
 
 	/// <summary>Field Creation Class for entity ShipmentReturnItemEntity</summary>

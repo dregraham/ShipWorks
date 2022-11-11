@@ -47,6 +47,7 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
             HarmonizedCode = source.HarmonizedCode;
             NumberOfPieces = source.NumberOfPieces;
             UnitPriceAmount = source.UnitPriceAmount;
+            SKU = source.SKU;
             
             
             Shipment = (IShipmentEntity) source.Shipment?.AsReadOnly(objectMap);
@@ -122,6 +123,12 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
         /// Table field type characteristics (type, precision, scale, length): Money, 19, 4, 0<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
         public System.Decimal UnitPriceAmount { get; }
+        /// <summary> The SKU property of the Entity ShipmentCustomsItem<br/><br/>
+        /// </summary>
+        /// <remarks>Mapped on table field: "ShipmentCustomsItem"."SKU"<br/>
+        /// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 100<br/>
+        /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+        public System.String SKU { get; }
         
         
         public IShipmentEntity Shipment { get; }
