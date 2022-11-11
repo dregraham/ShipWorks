@@ -87,8 +87,6 @@ namespace ShipWorks.Shipping.UI.Carriers.Asendia
             customsRecipientTIN.TextChanged += this.OnChangeOption;
             customsRecipientTINType.SelectedIndexChanged += this.OnChangeOption;
             customsRecipientIssuingAuthority.SelectedIndexChanged += this.OnChangeOption;
-
-            sku.Enabled = enableEditing;
         }
 
         /// <summary>
@@ -109,6 +107,13 @@ namespace ShipWorks.Shipping.UI.Carriers.Asendia
             base.SaveCustomsItem(customsItem, changedWeights, changedValues);
 
             sku.ReadMultiText(s=> customsItem.SKU = s);
+        }
+
+        protected override void UpdateEnabledUI()
+        {
+            base.UpdateEnabledUI();
+
+            sku.Enabled = enableEditing && itemsGrid.SelectedElements.Count > 0;
         }
 
         /// <summary>
