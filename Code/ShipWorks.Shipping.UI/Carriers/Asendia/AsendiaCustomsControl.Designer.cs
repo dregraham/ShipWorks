@@ -91,27 +91,27 @@
             this.sectionGeneral.ContentPanel.Controls.Add(this.labelCustomsRecipientIssuingAuthority);
             this.sectionGeneral.ContentPanel.Controls.Add(this.customsRecipientIssuingAuthority);
             this.sectionGeneral.Location = new System.Drawing.Point(6, 5);
-            this.sectionGeneral.Size = new System.Drawing.Size(572, 200);
+            this.sectionGeneral.Size = new System.Drawing.Size(536, 200);
             // 
             // groupSelectedContent
             // 
             this.groupSelectedContent.Controls.Add(this.sku);
             this.groupSelectedContent.Controls.Add(this.labelSku);
-            this.groupSelectedContent.Size = new System.Drawing.Size(509, 231);
+            this.groupSelectedContent.Size = new System.Drawing.Size(526, 231);
             this.groupSelectedContent.Controls.SetChildIndex(this.labelSku, 0);
             this.groupSelectedContent.Controls.SetChildIndex(this.sku, 0);
             // 
             // add
             // 
-            this.add.Location = new System.Drawing.Point(463, 10);
+            this.add.Location = new System.Drawing.Point(462, 10);
             // 
             // delete
             // 
-            this.delete.Location = new System.Drawing.Point(463, 37);
+            this.delete.Location = new System.Drawing.Point(462, 37);
             // 
             // itemsGrid
             // 
-            this.itemsGrid.Size = new System.Drawing.Size(449, 116);
+            this.itemsGrid.Size = new System.Drawing.Size(441, 116);
             // 
             // contentType
             // 
@@ -218,11 +218,11 @@
             this.sku.Size = new System.Drawing.Size(95, 21);
             this.sku.TabIndex = 15;
             // 
-            // labelNumberOfPieces
+            // labelSku
             // 
             this.labelSku.AutoSize = true;
             this.labelSku.Location = new System.Drawing.Point(69, 189);
-            this.labelSku.Name = "labelNumberOfPieces";
+            this.labelSku.Name = "labelSku";
             this.labelSku.Size = new System.Drawing.Size(30, 13);
             this.labelSku.TabIndex = 14;
             this.labelSku.Text = "SKU:";
