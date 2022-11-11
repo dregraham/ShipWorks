@@ -124,7 +124,8 @@ namespace ShipWorks.Products
                 CountryOfOrigin = "US",
                 HarmonizedCode = item.HarmonizedCode,
                 NumberOfPieces = 0,
-                UnitPriceAmount = item.UnitPrice
+                UnitPriceAmount = item.UnitPrice,
+                SKU = item.SKU
             };
 
             if (variantEntity != null && variantEntity.IsActive)

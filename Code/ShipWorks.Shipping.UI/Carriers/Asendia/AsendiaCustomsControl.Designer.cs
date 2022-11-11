@@ -60,7 +60,7 @@
             this.sectionContents.ContentPanel.Controls.Add(this.delete);
             this.sectionContents.ContentPanel.Controls.Add(this.add);
             this.sectionContents.Location = new System.Drawing.Point(6, 210);
-            this.sectionContents.Size = new System.Drawing.Size(538, 403);
+            this.sectionContents.Size = new System.Drawing.Size(503, 403);
             // 
             // label1
             // 
@@ -91,27 +91,27 @@
             this.sectionGeneral.ContentPanel.Controls.Add(this.labelCustomsRecipientIssuingAuthority);
             this.sectionGeneral.ContentPanel.Controls.Add(this.customsRecipientIssuingAuthority);
             this.sectionGeneral.Location = new System.Drawing.Point(6, 5);
-            this.sectionGeneral.Size = new System.Drawing.Size(536, 200);
+            this.sectionGeneral.Size = new System.Drawing.Size(503, 200);
             // 
             // groupSelectedContent
             // 
             this.groupSelectedContent.Controls.Add(this.sku);
             this.groupSelectedContent.Controls.Add(this.labelSku);
-            this.groupSelectedContent.Size = new System.Drawing.Size(526, 231);
+            this.groupSelectedContent.Size = new System.Drawing.Size(508, 231);
             this.groupSelectedContent.Controls.SetChildIndex(this.labelSku, 0);
             this.groupSelectedContent.Controls.SetChildIndex(this.sku, 0);
             // 
             // add
             // 
-            this.add.Location = new System.Drawing.Point(462, 10);
+            this.add.Location = new System.Drawing.Point(405, 10);
             // 
             // delete
             // 
-            this.delete.Location = new System.Drawing.Point(462, 37);
+            this.delete.Location = new System.Drawing.Point(405, 37);
             // 
             // itemsGrid
             // 
-            this.itemsGrid.Size = new System.Drawing.Size(441, 116);
+            this.itemsGrid.Size = new System.Drawing.Size(388, 116);
             // 
             // contentType
             // 

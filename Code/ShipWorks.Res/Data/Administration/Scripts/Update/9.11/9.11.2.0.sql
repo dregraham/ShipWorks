@@ -16,8 +16,8 @@ PRINT N'Update Default Asendia Profile to valid shipment type'
 GO
 UPDATE asendia
 SET asendia.Service = 35
-FROM AsendiaAccount asendia
+FROM dbo.AsendiaProfile asendia
 INNER JOIN shippingprofile ship
-	ON ship.ShippingProfileID = stamps.ShippingProfileID
+	ON ship.ShippingProfileID = asendia.ShippingProfileID
 WHERE ship.ShipmentTypePrimary = 1
 GO

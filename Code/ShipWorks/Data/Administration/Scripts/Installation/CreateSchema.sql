@@ -3955,7 +3955,7 @@ CREATE TABLE [dbo].[ShipmentCustomsItem]
 [HarmonizedCode] [nvarchar] (20) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [NumberOfPieces] [int] NOT NULL,
 [UnitPriceAmount] [money] NOT NULL,
-[SKU] [nvarchar] (100) COLLATE SQL_Latin1_General_CP1_CI_AS
+[SKU] [nvarchar] (100) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL
 )
 GO
 PRINT N'Creating primary key [PK_ShipmentCustomsItem] on [dbo].[ShipmentCustomsItem]'
