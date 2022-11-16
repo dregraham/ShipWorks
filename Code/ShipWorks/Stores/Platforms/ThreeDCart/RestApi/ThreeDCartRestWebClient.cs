@@ -108,7 +108,7 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart.RestApi
             submitter.Variables.Add("datestart", startDate.ToShortDateString());
             submitter.Variables.Add("limit", GetOrderLimit);
             submitter.Variables.Add("offset", offset.ToString());
-            submitter.AllowHttpStatusCodes(HttpStatusCode.BadRequest);
+            submitter.AllowHttpStatusCodes(HttpStatusCode.NotFound);
 
             EnumResult<HttpStatusCode> response = null;
 
@@ -117,19 +117,9 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart.RestApi
                 response = submitter.ProcessRequest(CreateLogEntry("GetOrders"), exceptionToRethrow);
             });
 
-            if (response.Value == HttpStatusCode.BadRequest)
+            if (response.Value == HttpStatusCode.NotFound)
             {
-                JArray errorResponse = JArray.Parse(response.Message);
-                string message = errorResponse?[0]?["Message"]?.Value<string>() ?? string.Empty;
-
-                if (message.Equals("Offset amount exceeds the total number of records", StringComparison.InvariantCultureIgnoreCase))
-                {
-                    return new List<ThreeDCartOrder>();
-                }
-
-                throw new ThreeDCartException(string.IsNullOrEmpty(message) ?
-                    "An error occured while downloading orders" :
-                    response.Message);
+                return new List<ThreeDCartOrder>();
             }
 
             IEnumerable<ThreeDCartOrder> orders = JsonConvert.DeserializeObject<IEnumerable<ThreeDCartOrder>>(response.Message);
