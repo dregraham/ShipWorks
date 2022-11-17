@@ -25,7 +25,7 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart.RestApi
     public class ThreeDCartRestWebClient : IThreeDCartRestWebClient
     {
         private const string LiveHttpHost = "https://apirest.3dcart.com/3dCartWebAPI";
-        private const string OrderApiVersion = "v1";
+        private const string OrderApiVersion = "v2";
         private const string ProductApiVersion = "v1";
         private const string OrderUrlExtension = "Orders";
         private const string ProductUrlExtension = "Products";
