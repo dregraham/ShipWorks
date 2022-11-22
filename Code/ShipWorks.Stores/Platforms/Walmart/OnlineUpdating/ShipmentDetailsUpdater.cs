@@ -213,11 +213,21 @@ namespace ShipWorks.Stores.Platforms.Walmart.OnlineUpdating
                 case ShipmentTypeCode.OnTrac:
                     carrierName.Item = "OnTrac";
                     break;
+                // Copying ShipStation logic: https://github.com/shipstation/shipstation/pull/14802/files#diff-c30f618fc0c587d20d07bb6f6cc9709127ede05a4c962a88cc49994963b625c2
+                case ShipmentTypeCode.DhlEcommerce:
+                case ShipmentTypeCode.DhlExpress:
+                    carrierName.Item = EnumHelper.GetApiValue(WalmartCarrierType.DHL_Ecommerce_US);
+                    break;
                 case ShipmentTypeCode.Other:
 
                     // This first part is done to make sure we have the casing right
                     if (EnumHelper.TryGetEnumByApiValue<WalmartCarrierType>(shipment.Other.Carrier, out var walmartCarrierType))
                     {
+                        if (walmartCarrierType == WalmartCarrierType.DHL)
+                        {
+                            walmartCarrierType = WalmartCarrierType.DHL_Ecommerce_US;
+                        }
+                        
                         carrierName.Item = EnumHelper.GetApiValue(walmartCarrierType);
                     }
                     else
