@@ -364,6 +364,7 @@
     <Compile Include="Platforms\Volusion\Warehouse\VolusionStoreDtoFactory.cs" />
     <Compile Include="Platforms\Volusion\Warehouse\VolusionWarehouseOrderFactory.cs" />
     <Compile Include="Platforms\WalmartHub\WalmartHubStoreType.cs" />
+    <Compile Include="Platforms\Walmart\WalmartCarrierType.cs" />
     <Compile Include="Platforms\Walmart\WalmartWebClientSettings.cs" />
     <Compile Include="Platforms\Walmart\IWalmartWebClientSettings.cs" />
     <Compile Include="Platforms\Walmart\Warehouse\WalmartStore.cs" />

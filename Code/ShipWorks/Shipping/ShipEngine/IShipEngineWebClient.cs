@@ -30,7 +30,7 @@ namespace ShipWorks.Shipping.ShipEngine
         /// Connects the given Asendia account to the users ShipEngine account
         /// </summary>
         /// <returns>The CarrierId</returns>
-        Task<GenericResult<string>> ConnectAsendiaAccount(string accountNumber, string username, string password);
+        Task<GenericResult<string>> ConnectAsendiaAccount(string accountNumber, string username, string password, string apiKey, string processingLocation);
 
         /// <summary>
         /// Disconnect the given amazon shipping account

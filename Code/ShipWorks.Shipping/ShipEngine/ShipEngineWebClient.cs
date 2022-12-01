@@ -150,7 +150,7 @@ namespace ShipWorks.Shipping.ShipEngine
         /// <summary>
         /// Connect an Asendia account
         /// </summary>
-        public async Task<GenericResult<string>> ConnectAsendiaAccount(string accountNumber, string username, string password)
+        public async Task<GenericResult<string>> ConnectAsendiaAccount(string accountNumber, string username, string password, string apiKey, string processingCenter)
         {
             // Check to see if the account already exists in ShipEngine
             GenericResult<string> existingAccount = await GetCarrierId(accountNumber);
@@ -165,7 +165,9 @@ namespace ShipWorks.Shipping.ShipEngine
                 AccountNumber = accountNumber,
                 Nickname = accountNumber,
                 FtpUsername = username,
-                FtpPassword = password
+                FtpPassword = password,
+                ApiKey = apiKey,
+                ProcessingLocation = processingCenter
             };
 
             var response = await MakeRequest<ConnectAccountResponseDTO>(

@@ -1510,6 +1510,15 @@ namespace ShipWorks.Shipping
                         customsControlArea.Controls.Remove(reduceFlash);
                     }
                 }
+            } 
+            else
+            {
+                if (CustomsControl != null)
+                {
+                    CustomsControl.ShipSenseFieldChanged -= OnShipSenseFieldChanged;
+                    CustomsControl.UnloadShipments();
+                    customsControlArea.Controls.Clear();
+                }
             }
 
             UpdateCustomsDisplay(shipments);

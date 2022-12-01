@@ -22,12 +22,14 @@ namespace ShipWorks.Shipping.ShipEngine.DTOs
         /// <param name="accountNumber">accountNumber.</param>
         /// <param name="ftpUsername">ftpUsername.</param>
         /// <param name="ftpPassword">ftpPassword.</param>
-        public AsendiaAccountInformationDTO(string nickname = default(string), string accountNumber = default(string), string ftpUsername = default(string), string ftpPassword = default(string))
+        public AsendiaAccountInformationDTO(string nickname = default(string), string accountNumber = default(string), string ftpUsername = default(string), string ftpPassword = default(string), string apiKey = default(string), string processingLocation = default(string))
         {
             this.Nickname = nickname;
             this.AccountNumber = accountNumber;
             this.FtpUsername = ftpUsername;
             this.FtpPassword = ftpPassword;
+            this.ApiKey = apiKey;
+            this.ProcessingLocation = processingLocation;
         }
 
         /// <summary>
@@ -54,6 +56,12 @@ namespace ShipWorks.Shipping.ShipEngine.DTOs
         [DataMember(Name = "ftp_password", EmitDefaultValue = false)]
         public string FtpPassword { get; set; }
 
+        [DataMember(Name = "api_key", EmitDefaultValue = false)]
+        public string ApiKey { get; set; }
+
+        [DataMember(Name = "processing_location", EmitDefaultValue = false)]
+        public string ProcessingLocation { get; set; }
+
         /// <summary>
         /// Returns the string presentation of the object
         /// </summary>
@@ -66,6 +74,8 @@ namespace ShipWorks.Shipping.ShipEngine.DTOs
             sb.Append("  AccountNumber: ").Append(AccountNumber).Append("\n");
             sb.Append("  FtpUsername: ").Append(FtpUsername).Append("\n");
             sb.Append("  FtpPassword: ").Append(FtpPassword).Append("\n");
+            sb.Append("  ApiKey: ").Append(ApiKey).Append("\n");
+            sb.Append("  ProcessingLocation: ").Append(ProcessingLocation).Append("\n");
             sb.Append("}\n");
             return sb.ToString();
         }
@@ -119,6 +129,16 @@ namespace ShipWorks.Shipping.ShipEngine.DTOs
                     this.FtpPassword == input.FtpPassword ||
                     (this.FtpPassword != null &&
                     this.FtpPassword.Equals(input.FtpPassword))
+                ) &&
+                (
+                    this.ApiKey == input.ApiKey ||
+                    (this.ApiKey != null &&
+                    this.ApiKey.Equals(input.ApiKey))
+                ) &&
+                (
+                    this.ProcessingLocation == input.ProcessingLocation ||
+                    (this.ProcessingLocation != null &&
+                    this.ProcessingLocation.Equals(input.ProcessingLocation))
                 );
         }
 
@@ -139,6 +159,10 @@ namespace ShipWorks.Shipping.ShipEngine.DTOs
                     hashCode = hashCode * 59 + this.FtpUsername.GetHashCode();
                 if (this.FtpPassword != null)
                     hashCode = hashCode * 59 + this.FtpPassword.GetHashCode();
+                if (this.ApiKey != null)
+                    hashCode = hashCode * 59 + this.ApiKey.GetHashCode();
+                if (this.ProcessingLocation != null)
+                    hashCode = hashCode * 59 + this.ProcessingLocation.GetHashCode();
                 return hashCode;
             }
         }

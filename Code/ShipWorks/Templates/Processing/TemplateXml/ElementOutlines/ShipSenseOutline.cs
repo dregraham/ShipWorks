@@ -77,7 +77,7 @@ namespace ShipWorks.Templates.Processing.TemplateXml.ElementOutlines
         /// <param name="name"></param>
         public string GetValue(string name)
         {
-            return element.XPathSelectElement(name).Value;
+            return element.XPathSelectElement(name)?.Value ?? string.Empty;
         }
     }
 
@@ -270,6 +270,7 @@ namespace ShipWorks.Templates.Processing.TemplateXml.ElementOutlines
             AddElement("UnitPriceAmount", () => GetValue("UnitPriceAmount"));
             AddElement("UnitValue", () => GetValue("UnitValue"));
             AddElement("Weight", () => GetValue("Weight"));
+            AddElement("SKU", () => GetValue("SKU"));
         }
 
         /// <summary>

@@ -144,6 +144,7 @@ namespace ShipWorks.Shipping
             customsItem.HarmonizedCode = "";
             customsItem.UnitPriceAmount = 0;
             customsItem.NumberOfPieces = 0;
+            customsItem.SKU = string.Empty;
 
             return customsItem;
         }

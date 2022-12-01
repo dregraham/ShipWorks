@@ -43,11 +43,11 @@ namespace ShipWorks.Shipping.UI.Carriers.Asendia
             this.labelShipDate = new System.Windows.Forms.Label();
             this.shipDate = new ShipWorks.UI.Controls.MultiValueDateTimePicker();
             this.sectionOptions = new ShipWorks.UI.Controls.CollapsibleGroupControl();
+            this.labelNonMachinable = new System.Windows.Forms.Label();
+            this.nonMachinable = new System.Windows.Forms.CheckBox();
             this.insuranceControl = new ShipWorks.Shipping.Insurance.InsuranceSelectionControl();
             this.dimensionsControl = new ShipWorks.Shipping.Editing.DimensionsControl();
             this.dimensionsLabel = new System.Windows.Forms.Label();
-            this.labelNonMachinable = new System.Windows.Forms.Label();
-            this.nonMachinable = new System.Windows.Forms.CheckBox();
             this.labelWeight = new System.Windows.Forms.Label();
             this.weight = new ShipWorks.UI.Controls.WeightControl();
             ((System.ComponentModel.ISupportInitialize)(this.sectionRecipient)).BeginInit();
@@ -60,6 +60,7 @@ namespace ShipWorks.Shipping.UI.Carriers.Asendia
             this.sectionShipment.ContentPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.sectionLabelOptions)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.sectionLabelOptions.ContentPanel)).BeginInit();
+            this.sectionLabelOptions.ContentPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.sectionFrom)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.sectionFrom.ContentPanel)).BeginInit();
             this.sectionFrom.ContentPanel.SuspendLayout();
@@ -84,7 +85,7 @@ namespace ShipWorks.Shipping.UI.Carriers.Asendia
             // 
             // personControl
             // 
-            this.personControl.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+            this.personControl.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.personControl.Size = new System.Drawing.Size(389, 333);
             // 
@@ -98,7 +99,7 @@ namespace ShipWorks.Shipping.UI.Carriers.Asendia
             // 
             // residentialDetermination
             // 
-            this.residentialDetermination.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+            this.residentialDetermination.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.residentialDetermination.Location = new System.Drawing.Point(79, 358);
             this.residentialDetermination.Size = new System.Drawing.Size(300, 21);
@@ -129,9 +130,12 @@ namespace ShipWorks.Shipping.UI.Carriers.Asendia
             // 
             // sectionLabelOptions
             // 
-            this.sectionLabelOptions.Location = new System.Drawing.Point(3, 347);
+            // 
+            // sectionLabelOptions.ContentPanel
+            // 
+            this.sectionLabelOptions.ContentPanel.Controls.Add(this.labelFormat);
+            this.sectionLabelOptions.Location = new System.Drawing.Point(3, 418);
             this.sectionLabelOptions.Size = new System.Drawing.Size(399, 24);
-            this.sectionLabelOptions.TabIndex = 4;
             // 
             // cutoffDateDisplay
             // 
@@ -149,7 +153,7 @@ namespace ShipWorks.Shipping.UI.Carriers.Asendia
             // 
             // sectionFrom
             // 
-            this.sectionFrom.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+            this.sectionFrom.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.sectionFrom.Collapsed = true;
             // 
@@ -170,15 +174,15 @@ namespace ShipWorks.Shipping.UI.Carriers.Asendia
             // 
             // originControl
             // 
-            this.originControl.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+            this.originControl.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.originControl.AvailableFields = ((ShipWorks.Data.Controls.PersonFields)(((((((((ShipWorks.Data.Controls.PersonFields.Name | ShipWorks.Data.Controls.PersonFields.Company)
-            | ShipWorks.Data.Controls.PersonFields.Street)
-            | ShipWorks.Data.Controls.PersonFields.City)
-            | ShipWorks.Data.Controls.PersonFields.State)
-            | ShipWorks.Data.Controls.PersonFields.Postal)
-            | ShipWorks.Data.Controls.PersonFields.Residential)
-            | ShipWorks.Data.Controls.PersonFields.Email)
+            this.originControl.AvailableFields = ((ShipWorks.Data.Controls.PersonFields)(((((((((ShipWorks.Data.Controls.PersonFields.Name | ShipWorks.Data.Controls.PersonFields.Company) 
+            | ShipWorks.Data.Controls.PersonFields.Street) 
+            | ShipWorks.Data.Controls.PersonFields.City) 
+            | ShipWorks.Data.Controls.PersonFields.State) 
+            | ShipWorks.Data.Controls.PersonFields.Postal) 
+            | ShipWorks.Data.Controls.PersonFields.Residential) 
+            | ShipWorks.Data.Controls.PersonFields.Email) 
             | ShipWorks.Data.Controls.PersonFields.Phone)));
             this.originControl.BackColor = System.Drawing.Color.Transparent;
             this.originControl.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -202,7 +206,7 @@ namespace ShipWorks.Shipping.UI.Carriers.Asendia
             // 
             // asendiaAccount
             // 
-            this.asendiaAccount.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+            this.asendiaAccount.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.asendiaAccount.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.asendiaAccount.FormattingEnabled = true;
@@ -240,7 +244,7 @@ namespace ShipWorks.Shipping.UI.Carriers.Asendia
             this.service.Location = new System.Drawing.Point(80, 12);
             this.service.Name = "service";
             this.service.PromptText = "(Multiple Values)";
-            this.service.Size = new System.Drawing.Size(175, 21);
+            this.service.Size = new System.Drawing.Size(299, 21);
             this.service.TabIndex = 65;
             // 
             // labelShipDate
@@ -263,7 +267,7 @@ namespace ShipWorks.Shipping.UI.Carriers.Asendia
             // 
             // sectionOptions
             // 
-            this.sectionOptions.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+            this.sectionOptions.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             // 
             // sectionOptions.ContentPanel
@@ -271,43 +275,12 @@ namespace ShipWorks.Shipping.UI.Carriers.Asendia
             this.sectionOptions.ContentPanel.Controls.Add(this.labelNonMachinable);
             this.sectionOptions.ContentPanel.Controls.Add(this.nonMachinable);
             this.sectionOptions.ExtraText = "";
-            this.sectionOptions.Location = new System.Drawing.Point(3, 398);
+            this.sectionOptions.Location = new System.Drawing.Point(3, 347);
             this.sectionOptions.Name = "sectionOptions";
             this.sectionOptions.SectionName = "Options";
             this.sectionOptions.SettingsKey = "{2740f860-1d14-453e-a511-8f62ad1e7dcc}";
             this.sectionOptions.Size = new System.Drawing.Size(399, 66);
             this.sectionOptions.TabIndex = 3;
-            // 
-            // insuranceControl
-            // 
-            this.insuranceControl.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.insuranceControl.BackColor = System.Drawing.Color.Transparent;
-            this.insuranceControl.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.insuranceControl.Location = new System.Drawing.Point(11, 170);
-            this.insuranceControl.Name = "insuranceControl";
-            this.insuranceControl.Size = new System.Drawing.Size(507, 50);
-            this.insuranceControl.TabIndex = 74;
-            // 
-            // dimensionsControl
-            // 
-            this.dimensionsControl.BackColor = System.Drawing.Color.Transparent;
-            this.dimensionsControl.Cleared = false;
-            this.dimensionsControl.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.dimensionsControl.Location = new System.Drawing.Point(77, 91);
-            this.dimensionsControl.Name = "dimensionsControl";
-            this.dimensionsControl.Size = new System.Drawing.Size(210, 74);
-            this.dimensionsControl.TabIndex = 73;
-            // 
-            // dimensionsLabel
-            // 
-            this.dimensionsLabel.AutoSize = true;
-            this.dimensionsLabel.BackColor = System.Drawing.Color.Transparent;
-            this.dimensionsLabel.Location = new System.Drawing.Point(10, 97);
-            this.dimensionsLabel.Name = "dimensionsLabel";
-            this.dimensionsLabel.Size = new System.Drawing.Size(64, 13);
-            this.dimensionsLabel.TabIndex = 72;
-            this.dimensionsLabel.Text = "Dimensions:";
             // 
             // labelNonMachinable
             // 
@@ -329,6 +302,37 @@ namespace ShipWorks.Shipping.UI.Carriers.Asendia
             this.nonMachinable.TabIndex = 8;
             this.nonMachinable.Text = "Non-Machinable";
             this.nonMachinable.UseVisualStyleBackColor = false;
+            // 
+            // insuranceControl
+            // 
+            this.insuranceControl.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.insuranceControl.BackColor = System.Drawing.Color.Transparent;
+            this.insuranceControl.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.insuranceControl.Location = new System.Drawing.Point(11, 170);
+            this.insuranceControl.Name = "insuranceControl";
+            this.insuranceControl.Size = new System.Drawing.Size(521, 50);
+            this.insuranceControl.TabIndex = 74;
+            // 
+            // dimensionsControl
+            // 
+            this.dimensionsControl.BackColor = System.Drawing.Color.Transparent;
+            this.dimensionsControl.Cleared = false;
+            this.dimensionsControl.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.dimensionsControl.Location = new System.Drawing.Point(77, 91);
+            this.dimensionsControl.Name = "dimensionsControl";
+            this.dimensionsControl.Size = new System.Drawing.Size(210, 74);
+            this.dimensionsControl.TabIndex = 73;
+            // 
+            // dimensionsLabel
+            // 
+            this.dimensionsLabel.AutoSize = true;
+            this.dimensionsLabel.BackColor = System.Drawing.Color.Transparent;
+            this.dimensionsLabel.Location = new System.Drawing.Point(10, 97);
+            this.dimensionsLabel.Name = "dimensionsLabel";
+            this.dimensionsLabel.Size = new System.Drawing.Size(64, 13);
+            this.dimensionsLabel.TabIndex = 72;
+            this.dimensionsLabel.Text = "Dimensions:";
             // 
             // labelWeight
             // 
@@ -382,16 +386,18 @@ namespace ShipWorks.Shipping.UI.Carriers.Asendia
             this.sectionShipment.ContentPanel.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.sectionShipment)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.sectionLabelOptions.ContentPanel)).EndInit();
+            this.sectionLabelOptions.ContentPanel.ResumeLayout(false);
+            this.sectionLabelOptions.ContentPanel.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.sectionLabelOptions)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.sectionFrom.ContentPanel)).EndInit();
             this.sectionFrom.ContentPanel.ResumeLayout(false);
             this.sectionFrom.ContentPanel.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.sectionFrom)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.fieldLengthProvider)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.sectionOptions.ContentPanel)).EndInit();
             this.sectionOptions.ContentPanel.ResumeLayout(false);
             this.sectionOptions.ContentPanel.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.sectionOptions)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.fieldLengthProvider)).EndInit();
             this.ResumeLayout(false);
 
         }

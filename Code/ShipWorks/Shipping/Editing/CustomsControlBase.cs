@@ -28,7 +28,7 @@ namespace ShipWorks.Shipping.Editing
         static readonly ILog log = LogManager.GetLogger(typeof(CustomsControlBase));
 
         // If enableEditing was specified in LoadShipments
-        bool enableEditing;
+        protected bool enableEditing;
 
         // The shipments that were called LoadShipments
         List<ShipmentEntity> loadedShipments;
@@ -299,7 +299,7 @@ namespace ShipWorks.Shipping.Editing
         /// <summary>
         /// Update the editable state of the control
         /// </summary>
-        private void UpdateEnabledUI()
+        protected virtual void UpdateEnabledUI()
         {
             add.Enabled = enableEditing && loadedShipments.Count > 0;
             delete.Enabled = enableEditing && itemsGrid.SelectedElements.Count > 0;

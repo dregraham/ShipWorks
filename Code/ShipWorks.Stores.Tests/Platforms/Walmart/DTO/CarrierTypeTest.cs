@@ -11,18 +11,9 @@ namespace ShipWorks.Stores.Tests.Platforms.Walmart.DTO
     public class CarrierTypeTest
     {
         [Fact]
-        public void ManuallyAddedTypesExist()
+        public void ManuallyAlteredCarrierNameExist()
         {
-            // DHL was added manually. Make sure it is still there.
-            Assert.Equal(carrierType.DHL, carrierType.DHL);
-            Assert.Equal(carrierType.NG, carrierType.NG);
-            Assert.Equal(carrierType.LS, carrierType.LS);
-            Assert.Equal(carrierType.UDS, carrierType.UDS);
-            Assert.Equal(carrierType.UPSMI, carrierType.UPSMI);
-            Assert.Equal(carrierType.FDX, carrierType.FDX);
-            Assert.Equal(carrierType.PILOT, carrierType.PILOT);
-            Assert.Equal(carrierType.ESTES, carrierType.ESTES);
-            Assert.Equal(carrierType.SAIA, carrierType.SAIA);
+            Assert.True(typeof(string).Equals(typeof(carrierNameType).GetProperty("Item").PropertyType));
         }
     }
 }

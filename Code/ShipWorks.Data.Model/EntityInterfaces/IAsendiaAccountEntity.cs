@@ -36,9 +36,9 @@ namespace ShipWorks.Data.Model.EntityInterfaces
         /// <summary> The AccountNumber property of the Entity AsendiaAccount<br/><br/>
         /// </summary>
         /// <remarks>Mapped on table field: "AsendiaAccount"."AccountNumber"<br/>
-        /// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
+        /// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 50<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
-        System.Int64 AccountNumber { get; }
+        System.String AccountNumber { get; }
         /// <summary> The ShipEngineCarrierId property of the Entity AsendiaAccount<br/><br/>
         /// </summary>
         /// <remarks>Mapped on table field: "AsendiaAccount"."ShipEngineCarrierId"<br/>
