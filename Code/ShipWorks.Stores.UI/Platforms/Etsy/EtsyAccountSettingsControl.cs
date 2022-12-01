@@ -3,23 +3,23 @@ using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.ComponentRegistration.Ordering;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Management;
-using ShipWorks.Stores.Platforms.Amazon;
+using ShipWorks.Stores.Platforms.Etsy;
 using ShipWorks.UI.Wizard;
 
-namespace ShipWorks.Stores.UI.Platforms.Amazon
+namespace ShipWorks.Stores.UI.Platforms.Etsy
 {
     /// <summary>
-    /// Amazon Account Settings Control
+    /// Etsy Account Settings Control
     /// </summary>
-    [KeyedComponent(typeof(AccountSettingsControlBase), StoreTypeCode.Amazon)]
-    public partial class AmazonAccountSettingsControl : AccountSettingsControlBase
+    [KeyedComponent(typeof(AccountSettingsControlBase), StoreTypeCode.Etsy)]
+    public partial class EtsyAccountSettingsControl : AccountSettingsControlBase
     {
-        private readonly IAmazonAccountSettingsViewModel viewModel;
+        private readonly IEtsyAccountSettingsViewModel viewModel;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public AmazonAccountSettingsControl(IAmazonAccountSettingsViewModel viewModel)
+        public EtsyAccountSettingsControl(IEtsyAccountSettingsViewModel viewModel)
         {
             this.viewModel = viewModel;
             InitializeComponent();            
@@ -39,7 +39,7 @@ namespace ShipWorks.Stores.UI.Platforms.Amazon
         /// </summary>
         public override void LoadStore(StoreEntity store)
         {
-            viewModel.Load((AmazonStoreEntity) store);
+            viewModel.Load((EtsyStoreEntity) store);
         }
     }
 }

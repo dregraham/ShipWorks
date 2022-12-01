@@ -2,28 +2,28 @@
 using Interapptive.Shared.ComponentRegistration.Ordering;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Management;
-using ShipWorks.Stores.Platforms.Amazon;
+using ShipWorks.Stores.Platforms.Etsy;
 using ShipWorks.UI.Wizard;
 
-namespace ShipWorks.Stores.UI.Platforms.Amazon
+namespace ShipWorks.Stores.UI.Platforms.Etsy
 {
     /// <summary>
     /// Wizard page to capture the order source id
     /// </summary>
-    [KeyedComponent(typeof(WizardPage), StoreTypeCode.Amazon, ExternallyOwned = true)]
+    [KeyedComponent(typeof(WizardPage), StoreTypeCode.Etsy, ExternallyOwned = true)]
     [Order(typeof(WizardPage), Order.Unordered)]
-    public partial class AmazonCreateOrderSourceWizardPage : AddStoreWizardPage
+    public partial class EtsyCreateOrderSourceWizardPage : AddStoreWizardPage
     {
-        private readonly IAmazonCreateOrderSourceViewModel viewModel;
+        private readonly IEtsyCreateOrderSourceViewModel viewModel;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public AmazonCreateOrderSourceWizardPage(IAmazonCreateOrderSourceViewModel viewModel)
+        public EtsyCreateOrderSourceWizardPage(IEtsyCreateOrderSourceViewModel viewModel)
         {
             this.viewModel = viewModel;
-            Title = "Amazon Store Setup";
-            Description = "Allow ShipWorks to access your Amazon store.";
+            Title = "Etsy Store Setup";
+            Description = "Allow ShipWorks to access your Etsy store.";
             
             InitializeComponent();
         }
@@ -33,7 +33,7 @@ namespace ShipWorks.Stores.UI.Platforms.Amazon
         /// </summary>
         private void OnSteppingInto(object sender, WizardSteppingIntoEventArgs e)
         {
-            viewModel.Load(GetStore<AmazonStoreEntity>());
+            viewModel.Load(GetStore<EtsyStoreEntity>());
         }
 
         /// <summary>
@@ -41,7 +41,7 @@ namespace ShipWorks.Stores.UI.Platforms.Amazon
         /// </summary>
         private void OnStepNext(object sender, WizardStepEventArgs e)
         {
-            if (!viewModel.Save(GetStore<AmazonStoreEntity>()))
+            if (!viewModel.Save(GetStore<EtsyStoreEntity>()))
             {
                 e.NextPage = this;
             }

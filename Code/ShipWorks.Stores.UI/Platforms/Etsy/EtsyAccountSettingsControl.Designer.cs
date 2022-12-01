@@ -2,7 +2,7 @@
 
 namespace ShipWorks.Stores.UI.Platforms.Etsy
 {
-	partial class AmazonAccountSettingsControl
+	partial class EtsyAccountSettingsControl
 	{
 		/// <summary> 
 		/// Required designer variable.
