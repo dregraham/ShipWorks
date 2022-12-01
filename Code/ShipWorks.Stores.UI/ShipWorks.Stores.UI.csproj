@@ -216,6 +216,24 @@
     <Compile Include="Platforms\Amazon\AmazonCreateOrderSourceWizardPage.Designer.cs">
       <DependentUpon>AmazonCreateOrderSourceWizardPage.cs</DependentUpon>
     </Compile>
+    <Compile Include="Platforms\Etsy\EtsyAccountSettings.xaml.cs">
+      <DependentUpon>EtsyAccountSettings.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Platforms\Etsy\EtsyAccountSettingsControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Platforms\Etsy\EtsyAccountSettingsControl.Designer.cs">
+      <DependentUpon>EtsyAccountSettingsControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Platforms\Etsy\EtsyCreateOrderSource.xaml.cs">
+      <DependentUpon>EtsyCreateOrderSource.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Platforms\Etsy\EtsyCreateOrderSourceWizardPage.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Platforms\Etsy\EtsyCreateOrderSourceWizardPage.Designer.cs">
+      <DependentUpon>EtsyCreateOrderSourceWizardPage.cs</DependentUpon>
+    </Compile>
     <Compile Include="Platforms\Platform\PlatformAccountSettingsControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -681,6 +699,12 @@
     <EmbeddedResource Include="Platforms\Amazon\AmazonCreateOrderSourceWizardPage.resx">
       <DependentUpon>AmazonCreateOrderSourceWizardPage.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Platforms\Etsy\EtsyAccountSettingsControl.resx">
+      <DependentUpon>EtsyAccountSettingsControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Platforms\Etsy\EtsyCreateOrderSourceWizardPage.resx">
+      <DependentUpon>EtsyCreateOrderSourceWizardPage.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Platforms\Platform\PlatformAccountSettingsControl.resx">
       <DependentUpon>PlatformAccountSettingsControl.cs</DependentUpon>
     </EmbeddedResource>
@@ -952,6 +976,12 @@
     <Page Include="Platforms\ChannelAdvisor\ChannelAdvisorRestAuthorizationControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Platforms\Etsy\EtsyAccountSettings.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Platforms\Etsy\EtsyCreateOrderSource.xaml">
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="Platforms\GenericFile\GenericStoreHubControl.xaml">
       <SubType>Designer</SubType>

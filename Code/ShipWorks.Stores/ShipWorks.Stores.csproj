@@ -294,6 +294,10 @@
     <Compile Include="Platforms\ChannelAdvisorHub\ChannelAdvisorHubStoreType.cs" />
     <Compile Include="Platforms\ChannelAdvisor\DTO\ChannelAdvisorProductList.cs" />
     <Compile Include="Platforms\Ebay\Warehouse\EbayStoreDtoFactory.cs" />
+    <Compile Include="Platforms\Etsy\EtsyAccountSettingsViewModel.cs" />
+    <Compile Include="Platforms\Etsy\EtsyCreateOrderSourceViewModel.cs" />
+    <Compile Include="Platforms\Etsy\IEtsyAccountSettingsViewModel.cs" />
+    <Compile Include="Platforms\Etsy\IEtsyCreateOrderSourceViewModel.cs" />
     <Compile Include="Platforms\GenericFile\Warehouse\GenericFileStoreDtoFactory.cs" />
     <Compile Include="Platforms\GenericModule\CoreExtensions\Filters\Orders\GenericModuleOrderSourceCondition.cs" />
     <Compile Include="Platforms\GrouponHub\GrouponHubStoreType.cs" />
