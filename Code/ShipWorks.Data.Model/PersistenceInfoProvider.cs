@@ -710,7 +710,7 @@ namespace ShipWorks.Data.Model
 			this.AddElementFieldMapping("BestRateShipmentEntity", "InsuranceValue", "InsuranceValue", false, "Money", 0, 19, 4, false, "", null, typeof(System.Decimal), 8);
 			this.AddElementFieldMapping("BestRateShipmentEntity", "RequestedLabelFormat", "RequestedLabelFormat", false, "Int", 0, 10, 0, false, "", null, typeof(System.Int32), 9);
 			this.AddElementFieldMapping("BestRateShipmentEntity", "Insurance", "Insurance", false, "Bit", 0, 0, 0, false, "", null, typeof(System.Boolean), 10);
-			this.AddElementFieldMapping("BestRateShipmentEntity", "InternalAllowedCarrierAccounts", "InternalAllowedCarrierAccounts", true, "VarChar", 2147483647, 0, 0, false, "", null, typeof(System.String), 11);
+			this.AddElementFieldMapping("BestRateShipmentEntity", "InternalAllowedCarrierAccounts", "InternalAllowedCarrierAccounts", true, "NVarChar", 2147483647, 0, 0, false, "", null, typeof(System.String), 11);
 		}
 
 		/// <summary>Inits BigCommerceOrderItemEntity's mappings</summary>
@@ -1945,14 +1945,13 @@ namespace ShipWorks.Data.Model
 		/// <summary>Inits GenericModuleOrderEntity's mappings</summary>
 		private void InitGenericModuleOrderEntityMappings()
 		{
-			this.AddElementMapping("GenericModuleOrderEntity", @"ShipWorksLocal", @"dbo", "GenericModuleOrder", 7, 0);
+			this.AddElementMapping("GenericModuleOrderEntity", @"ShipWorksLocal", @"dbo", "GenericModuleOrder", 6, 0);
 			this.AddElementFieldMapping("GenericModuleOrderEntity", "OrderID", "OrderID", false, "BigInt", 0, 19, 0, false, "", null, typeof(System.Int64), 0);
 			this.AddElementFieldMapping("GenericModuleOrderEntity", "AmazonOrderID", "AmazonOrderID", false, "VarChar", 32, 0, 0, false, "", null, typeof(System.String), 1);
 			this.AddElementFieldMapping("GenericModuleOrderEntity", "IsFBA", "IsFBA", false, "Bit", 0, 0, 0, false, "", null, typeof(System.Boolean), 2);
 			this.AddElementFieldMapping("GenericModuleOrderEntity", "IsPrime", "IsPrime", false, "Int", 0, 10, 0, false, "", null, typeof(System.Int32), 3);
 			this.AddElementFieldMapping("GenericModuleOrderEntity", "IsSameDay", "IsSameDay", false, "Bit", 0, 0, 0, false, "", null, typeof(System.Boolean), 4);
 			this.AddElementFieldMapping("GenericModuleOrderEntity", "Marketplace", "Marketplace", false, "NVarChar", 50, 0, 0, false, "", null, typeof(System.String), 5);
-			this.AddElementFieldMapping("GenericModuleOrderEntity", "Foo", "Foo", true, "NChar", 10, 0, 0, false, "", null, typeof(System.String), 6);
 		}
 
 		/// <summary>Inits GenericModuleOrderItemEntity's mappings</summary>

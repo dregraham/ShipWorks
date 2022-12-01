@@ -359,8 +359,6 @@ namespace ShipWorks.Data.Model.EntityClasses
 			_fieldsCustomProperties.Add("IsSameDay", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
 			_fieldsCustomProperties.Add("Marketplace", fieldHashtable);
-			fieldHashtable = new Dictionary<string, string>();
-			_fieldsCustomProperties.Add("Foo", fieldHashtable);
 		}
 		#endregion
 
@@ -467,17 +465,6 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			get { return (System.String)GetValue((int)GenericModuleOrderFieldIndex.Marketplace, true); }
 			set	{ SetValue((int)GenericModuleOrderFieldIndex.Marketplace, value); }
-		}
-
-		/// <summary> The Foo property of the Entity GenericModuleOrder<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "GenericModuleOrder"."Foo"<br/>
-		/// Table field type characteristics (type, precision, scale, length): NChar, 0, 0, 10<br/>
-		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
-		[DataMember]
-		public virtual System.String Foo
-		{
-			get { return (System.String)GetValue((int)GenericModuleOrderFieldIndex.Foo, true); }
-			set	{ SetValue((int)GenericModuleOrderFieldIndex.Foo, value); }
 		}
 	
 		/// <summary> Gets the type of the hierarchy this entity is in. </summary>

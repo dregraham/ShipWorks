@@ -223,11 +223,6 @@
     <Compile Include="Carriers\DhlEcommerce\DhlEcommerceProfileControl.Designer.cs">
       <DependentUpon>DhlEcommerceProfileControl.cs</DependentUpon>
     </Compile>
-    <Compile Include="Properties\Resources.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Resources.resx</DependentUpon>
-    </Compile>
     <Compile Include="Settings\BestRateAccount.cs" />
     <Compile Include="Settings\BestRateAccountSettingsControl.xaml.cs">
       <DependentUpon>BestRateAccountSettingsControl.xaml</DependentUpon>
