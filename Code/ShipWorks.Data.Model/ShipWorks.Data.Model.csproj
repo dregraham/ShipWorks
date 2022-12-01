@@ -184,6 +184,7 @@
     <Compile Include="Custom\EntityClasses\EndiciaAccountEntity.cs" />
     <Compile Include="Custom\EntityClasses\EbayOrderItemEntity.cs" />
     <Compile Include="Custom\EntityClasses\EtsyOrderEntity.cs" />
+    <Compile Include="Custom\EntityClasses\EtsyStoreEntity.cs" />
     <Compile Include="Custom\EntityClasses\FedExShipmentEntity.cs" />
     <Compile Include="Custom\EntityClasses\FedExAccountEntity.cs" />
     <Compile Include="Custom\EntityClasses\BigCommerceOrderItemEntity.cs" />

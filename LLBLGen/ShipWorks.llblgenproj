@@ -1640,6 +1640,7 @@
       <EntityDefinition Name="GenericModuleOrder" ObjectID="7fac8cc7-084c-43fa-8529-52b0ccae879a" InheritanceType="2">
         <Fields>
           <Field Name="AmazonOrderID" Type="string" MaxLength="32" FieldIndex="0" />
+          <Field Name="Foo" Type="string" IsOptional="true" MaxLength="10" FieldIndex="5" />
           <Field Name="IsFBA" Type="bool" FieldIndex="1" />
           <Field Name="IsPrime" Type="AmazonIsPrime" FieldIndex="2" />
           <Field Name="IsSameDay" Type="bool" FieldIndex="3" />
@@ -4834,7 +4835,7 @@
       <Catalogs>
         <Catalog Name="ShipWorksLocal">
           <Schemas>
-            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2022-09-06T15:48:44.8141207Z">
+            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2022-10-05T12:22:16.4089626Z">
               <Tables>
                 <Table Name="Action">
                   <PkConstraintName Name="PK_Action" />
@@ -5270,7 +5271,7 @@
                     <Field Name="InsuranceValue" Ordinal="9" DbType="9" Precision="19" Scale="4" />
                     <Field Name="RequestedLabelFormat" Ordinal="10" DbType="8" Precision="10" />
                     <Field Name="Insurance" Ordinal="11" DbType="2" />
-                    <Field Name="InternalAllowedCarrierAccounts" Ordinal="12" IsOptional="true" DbType="12" Length="2147483647" />
+                    <Field Name="InternalAllowedCarrierAccounts" Ordinal="12" IsOptional="true" DbType="24" Length="2147483647" />
                   </Fields>
                 </Table>
                 <Table Name="BigCommerceOrderItem">
@@ -7241,6 +7242,7 @@
                     <Field Name="IsPrime" Ordinal="4" DbType="8" Precision="10" />
                     <Field Name="IsSameDay" Ordinal="5" DbType="2" />
                     <Field Name="Marketplace" Ordinal="6" DbType="12" Length="50" />
+                    <Field Name="Foo" Ordinal="7" IsOptional="true" DbType="10" Length="10" />
                   </Fields>
                 </Table>
                 <Table Name="GenericModuleOrderItem">
@@ -12932,6 +12934,7 @@
         <EntityMapping EntityName=":GenericModuleOrder" TargetName="ShipWorksLocal:dbo:GenericModuleOrder">
           <FieldMappings>
             <FieldMapping FieldName="AmazonOrderID" TargetFieldName="AmazonOrderID" />
+            <FieldMapping FieldName="Foo" TargetFieldName="Foo" />
             <FieldMapping FieldName="IsFBA" TargetFieldName="IsFBA" />
             <FieldMapping FieldName="IsPrime" TargetFieldName="IsPrime" />
             <FieldMapping FieldName="IsSameDay" TargetFieldName="IsSameDay" />

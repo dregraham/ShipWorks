@@ -12007,6 +12007,11 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(GenericModuleOrderFieldIndex.Marketplace);}
 		}
+		/// <summary>Creates a new GenericModuleOrderEntity.Foo field instance</summary>
+		public static EntityField2 Foo
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(GenericModuleOrderFieldIndex.Foo);}
+		}
 	}
 
 	/// <summary>Field Creation Class for entity GenericModuleOrderItemEntity</summary>
@@ -16696,6 +16701,11 @@ namespace ShipWorks.Data.Model.HelperClasses
 		public static EntityField2 Marketplace
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(MagentoOrderFieldIndex.Marketplace);}
+		}
+		/// <summary>Creates a new MagentoOrderEntity.Foo field instance</summary>
+		public static EntityField2 Foo
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(MagentoOrderFieldIndex.Foo);}
 		}
 		/// <summary>Creates a new MagentoOrderEntity.OrderID field instance</summary>
 		public static EntityField2 OrderID

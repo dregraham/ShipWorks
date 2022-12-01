@@ -51,6 +51,12 @@ namespace ShipWorks.Data.Model.EntityInterfaces
         /// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 50<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
         System.String Marketplace { get; }
+        /// <summary> The Foo property of the Entity GenericModuleOrder<br/><br/>
+        /// </summary>
+        /// <remarks>Mapped on table field: "GenericModuleOrder"."Foo"<br/>
+        /// Table field type characteristics (type, precision, scale, length): NChar, 0, 0, 10<br/>
+        /// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+        System.String Foo { get; }
         
         
         

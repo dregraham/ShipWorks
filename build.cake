@@ -17,13 +17,13 @@ FilePath msBuildPathX64 = SetBuildPath();
 // We default to Build and Debug in case no param is passed in
 var args = ""; 
 var target = Argument("Target", "Build");
-var configuration = Argument("configuration", "Debug");
+var configuration = Argument("configuration", "Debug (No Analyzers)");
 var bracketParam = "";
 var treatWarningsAsErrors = "true";
 var buildDir = "";
 var instanceID = "";
 var testCategory = "";
-var verbosity = Verbosity.Quiet;
+var verbosity = Verbosity.Minimal;
 
 if (target.Contains(":"))
 {

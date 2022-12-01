@@ -5150,6 +5150,8 @@ namespace ShipWorks.Data.Model
 		IsSameDay,
 		///<summary>Marketplace. </summary>
 		Marketplace,
+		///<summary>Foo. </summary>
+		Foo,
 		/// <summary></summary>
 		AmountOfFields
 	}
@@ -7130,6 +7132,8 @@ namespace ShipWorks.Data.Model
 		IsSameDay,
 		///<summary>Marketplace. Inherited from GenericModuleOrder</summary>
 		Marketplace,
+		///<summary>Foo. Inherited from GenericModuleOrder</summary>
+		Foo,
 		///<summary>OrderID. </summary>
 		OrderID,
 		///<summary>MagentoOrderID. </summary>
