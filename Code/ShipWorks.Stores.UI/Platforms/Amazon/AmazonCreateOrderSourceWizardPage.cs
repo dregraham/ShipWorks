@@ -11,7 +11,7 @@ namespace ShipWorks.Stores.UI.Platforms.Amazon
     /// Wizard page to capture the order source id
     /// </summary>
     [KeyedComponent(typeof(WizardPage), StoreTypeCode.Amazon, ExternallyOwned = true)]
-    [Order(typeof(WizardPage), Order.Unordered)]
+    [Order(typeof(WizardPage), 0)]
     public partial class AmazonCreateOrderSourceWizardPage : AddStoreWizardPage
     {
         private readonly IAmazonCreateOrderSourceViewModel viewModel;

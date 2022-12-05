@@ -11,7 +11,7 @@ namespace ShipWorks.Stores.UI.Platforms.Etsy
     /// Wizard page to capture the order source id
     /// </summary>
     [KeyedComponent(typeof(WizardPage), StoreTypeCode.Etsy, ExternallyOwned = true)]
-    [Order(typeof(WizardPage), Order.Unordered)]
+    [Order(typeof(WizardPage), 0)]
     public partial class EtsyCreateOrderSourceWizardPage : AddStoreWizardPage
     {
         private readonly IEtsyCreateOrderSourceViewModel viewModel;

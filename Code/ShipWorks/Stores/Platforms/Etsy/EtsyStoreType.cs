@@ -220,16 +220,5 @@ namespace ShipWorks.Stores.Platforms.Etsy
                 return EtsyStore.EtsyShopID.ToString();
             }
         }
-
-        /// <summary>
-        /// Initial download policy of the store
-        /// </summary>
-        public override InitialDownloadPolicy InitialDownloadPolicy
-        {
-            get
-            {
-                return new InitialDownloadPolicy(InitialDownloadRestrictionType.DaysBack);
-            }
-        }
     }
 }

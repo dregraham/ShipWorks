@@ -51,7 +51,7 @@ namespace ShipWorks.Stores.Platforms.Etsy
             OpeningUrl = true;
             try
             {
-                var url = await hubOrderSourceClient.GetCreateOrderSourceInitiateUrl(orderSourceName, store.EtsyApiRegion, store.InitialDownloadDays).ConfigureAwait(true);
+                var url = await hubOrderSourceClient.GetCreateOrderSourceInitiateUrl(orderSourceName, "", store.InitialDownloadDays).ConfigureAwait(true);
                 webHelper.OpenUrl(url);
             }
             catch(ObjectDisposedException ex)
@@ -125,7 +125,7 @@ namespace ShipWorks.Stores.Platforms.Etsy
                 return string.Empty;
             }
 
-            var plainText = $"{store.MerchantID}_{store.MarketplaceID}_{store.OrderSourceID}";
+            var plainText = $"Etsy-{store.OrderSourceID}";
             var plainBytes = Encoding.UTF8.GetBytes(plainText);
             return Convert.ToBase64String(plainBytes);
         }
@@ -139,23 +139,21 @@ namespace ShipWorks.Stores.Platforms.Etsy
             {
                 var data = Convert.FromBase64String(encodedOrderSource);
                 var decodedString = Encoding.UTF8.GetString(data);
-                var splitString = decodedString.Split('_');
+                var splitString = decodedString.Split('-');
 
-                if (splitString.Length != 3)
+                if (splitString.Length != 2)
                 {
-                    log.Error("The provided Base64 string did not have 3 sections separated by the '_' character.");
+                    log.Error("The provided Base64 string did not have 2 sections separated by the '-' character.");
                     return false;
                 }
 
-                if (!GuidHelper.IsGuid(splitString[2]))
+                if (!GuidHelper.IsGuid(splitString[1]))
                 {
                     log.Error("The provided token's third part was not a GUID");
                     return false;
                 }
 
-                store.MerchantID = splitString[0];
-                store.MarketplaceID = splitString[1];
-                store.OrderSourceID = splitString[2];
+                store.OrderSourceID = splitString[1];
 
                 return true;
             }
