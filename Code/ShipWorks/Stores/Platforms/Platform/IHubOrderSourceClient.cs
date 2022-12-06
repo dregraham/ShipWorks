@@ -14,22 +14,40 @@ namespace ShipWorks.Stores.Platforms.Platform
         /// Note that the orderSourceName will be used in both the URL used to communicate with the hub and the
         /// redirectUrl the hub will send on to monoauth
         /// </remarks>
-        Task<string> GetCreateOrderSourceInitiateUrl(string orderSourceName, string apiRegion, int? daysBack);
+        Task<string> GetCreateOrderSourceInitiateUrl(string orderSourceName, int? daysBack);
 
         /// <summary>
-        /// Get the Monoauth URL to initiate an order source credential change
+        /// Get the monoauth URL to initiate an order source creation
         /// </summary>
         /// <remarks>
         /// Note that the orderSourceName will be used in both the URL used to communicate with the hub and the
         /// redirectUrl the hub will send on to monoauth
         /// </remarks>
-        Task<string> GetUpdateOrderSourceInitiateUrl(string orderSourceName, string orderSourceId, string apiRegion, string sellerId, bool includeFba);
+        Task<string> GetAmazonCreateOrderSourceInitiateUrl(string orderSourceName, string apiRegion, int? daysBack);
 
-        /// <summary>
-        /// Call Hub to get a Platform Amazon carrier Id for Buy Shipping
-        /// </summary>
-        /// <returns></returns>
-        Task<string> GetPlatformAmazonCarrierId(string uniqueIdentifier);
+		/// <summary>
+		/// Get the Monoauth URL to initiate an order source credential change for non Amazon
+		/// </summary>
+		/// <remarks>
+		/// Note that the orderSourceName will be used in both the URL used to communicate with the hub and the
+		/// redirectUrl the hub will send on to monoauth
+		/// </remarks>
+		Task<string> GetUpdateOrderSourceInitiateUrl(string orderSourceName, string orderSourceId, string sellerId);
+
+		/// <summary>
+		/// Get the Monoauth URL to initiate an order source credential change for Amazon
+		/// </summary>
+		/// <remarks>
+		/// Note that the orderSourceName will be used in both the URL used to communicate with the hub and the
+		/// redirectUrl the hub will send on to monoauth
+		/// </remarks>
+		Task<string> GetAmazonUpdateOrderSourceInitiateUrl(string orderSourceName, string orderSourceId, string apiRegion, string sellerId, bool includeFba);
+
+		/// <summary>
+		/// Call Hub to get a Platform Amazon carrier Id for Buy Shipping
+		/// </summary>
+		/// <returns></returns>
+		Task<string> GetPlatformAmazonCarrierId(string uniqueIdentifier);
 
         /// <summary>
         /// Call Hub to get a Platform Amazon carrier Id for Buy Shipping from a MWS store
