@@ -1330,12 +1330,6 @@
     <Compile Include="Stores\Platforms\Amazon\DTO\GiftNote.cs" />
     <Compile Include="Stores\Platforms\Amazon\OnlineUpdating\AmazonBulkOnlineUpdater.cs" />
     <Compile Include="Stores\Platforms\Amazon\OnlineUpdating\DTO\AmazonBulkUploadShipmentsRequest.cs" />
-    <Compile Include="Stores\Platforms\Etsy\EtsyInitialDownloadDaysControl.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Stores\Platforms\Etsy\EtsyInitialDownloadDaysControl.Designer.cs">
-      <DependentUpon>EtsyInitialDownloadDaysControl.cs</DependentUpon>
-    </Compile>
     <Compile Include="Stores\Platforms\Platform\IHubOrderSourceClient.cs" />
     <Compile Include="Stores\Platforms\Platform\OnlineUpdating\IPlatformOnlineUpdater.cs" />
     <Compile Include="Stores\Platforms\Platform\OnlineUpdating\PlatformBulkOnlineUpdater.cs" />
@@ -8804,9 +8798,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Stores\Platforms\ChannelAdvisor\ChannelAdvisorSettingsControl.resx">
       <DependentUpon>ChannelAdvisorSettingsControl.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Stores\Platforms\Etsy\EtsyInitialDownloadDaysControl.resx">
-      <DependentUpon>EtsyInitialDownloadDaysControl.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Stores\Platforms\Magento\MagentoDownloadSettingsControl.resx">
       <DependentUpon>MagentoDownloadSettingsControl.cs</DependentUpon>
