@@ -271,7 +271,7 @@ namespace ShipWorks.Stores
         {
             if (scope.IsRegisteredWithKey<WizardPage>(TypeCode))
             {
-                return scope.ResolveKeyed<IEnumerable<WizardPage>>(TypeCode).AsOrdered().ToList();
+                return scope.ResolveKeyed<IEnumerable<WizardPage>>(TypeCode).SortByOrder().ToList();
             }
 
             throw new InvalidOperationException("Invalid store type. " + TypeCode);

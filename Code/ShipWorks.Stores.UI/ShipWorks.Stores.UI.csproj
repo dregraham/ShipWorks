@@ -234,6 +234,15 @@
     <Compile Include="Platforms\Etsy\EtsyCreateOrderSourceWizardPage.Designer.cs">
       <DependentUpon>EtsyCreateOrderSourceWizardPage.cs</DependentUpon>
     </Compile>
+    <Compile Include="Platforms\Etsy\EtsyDaysBack.xaml.cs">
+      <DependentUpon>EtsyDaysBack.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Platforms\Etsy\EtsyDaysBackWizardPage.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Platforms\Etsy\EtsyDaysBackWizardPage.Designer.cs">
+      <DependentUpon>EtsyDaysBackWizardPage.cs</DependentUpon>
+    </Compile>
     <Compile Include="Platforms\Platform\PlatformAccountSettingsControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -982,6 +991,10 @@
     </Page>
     <Page Include="Platforms\Etsy\EtsyCreateOrderSource.xaml">
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Platforms\Etsy\EtsyDaysBack.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Platforms\GenericFile\GenericStoreHubControl.xaml">
       <SubType>Designer</SubType>

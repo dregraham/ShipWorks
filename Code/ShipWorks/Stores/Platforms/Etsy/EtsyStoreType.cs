@@ -120,19 +120,6 @@ namespace ShipWorks.Stores.Platforms.Etsy
         }
 
         /// <summary>
-        /// Create the pages to be displayed in the Add Store Wizard
-        /// </summary>
-        /// <param name="scope"></param>
-        public override List<WizardPage> CreateAddStoreWizardPages(ILifetimeScope scope)
-        {
-            List<WizardPage> pages = new List<WizardPage>();
-
-            pages.Add(new WizardPages.EtsyAssociateAccountPage());
-
-            return pages;
-        }
-
-        /// <summary>
         /// Create the control used to configured the actions for online update after shipping
         /// </summary>
         public override OnlineUpdateActionControlBase CreateAddStoreWizardOnlineUpdateActionControl()
