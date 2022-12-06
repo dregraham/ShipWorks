@@ -43,10 +43,10 @@ namespace ShipWorks.ApplicationCore.Licensing.Warehouse
         private const string rerouteOrderItems = "api/orders/{0}/rerouteItems";
         private const string getTrackingUpdates = "api/tracking/{0}";
 
-        private const string createOrderSourceInitiateUrl = "api/ordersource/{0}/auth?RedirectUrl={1}callbacks/{0}monoauth/subscribe&DaysBack={2}&MonoauthRequestType=CreateOrderSource";
-        private const string updateOrderSourceInitiateUrl = "api/ordersource/{0}/auth?RedirectUrl={1}callbacks/{0}monoauth/update&OrderSourceId={2}&SellerId={3}&MonoauthRequestType=UpdateOrderSourceCredentials";
-        private const string createCarrierInitiateUrl = "api/ordersource/{0}/auth?RedirectUrl={1}callbacks/{0}monoauth/createcarrier&MonoauthRequestType=CreateCarrier";
-        private const string updateCarrierInitiateUrl = "api/ordersource/{0}/auth?RedirectUrl={1}callbacks/{0}monoauth/updatecarrier&SellerId={2}&CarrierId={3}&MonoauthRequestType=UpdateCarrierCredentials";
+        private const string createOrderSourceInitiateUrl = "api/ordersource/{0}/auth?RedirectUrl={1}callbacks/{0}/monoauth/subscribe&DaysBack={2}&MonoauthRequestType=CreateOrderSource";
+        private const string updateOrderSourceInitiateUrl = "api/ordersource/{0}/auth?RedirectUrl={1}callbacks/{0}/monoauth/update&OrderSourceId={2}&SellerId={3}&MonoauthRequestType=UpdateOrderSourceCredentials";
+        private const string createCarrierInitiateUrl = "api/ordersource/{0}/auth?RedirectUrl={1}callbacks/{0}/monoauth/createcarrier&MonoauthRequestType=CreateCarrier";
+        private const string updateCarrierInitiateUrl = "api/ordersource/{0}/auth?RedirectUrl={1}callbacks/{0}/monoauth/updatecarrier&SellerId={2}&CarrierId={3}&MonoauthRequestType=UpdateCarrierCredentials";
 
         private const string createAmazonOrderSourceInitiateUrl = "api/ordersource/{0}/auth?RedirectUrl={1}callbacks/{0}monoauth/subscribe&ApiRegion={2}&DaysBack={3}&MonoauthRequestType=CreateOrderSource";
         private const string updateAmazonOrderSourceInitiateUrl = "api/ordersource/{0}/auth?RedirectUrl={1}callbacks/{0}monoauth/update&OrderSourceId={2}&ApiRegion={3}&SellerId={4}&IncludeFba={5}&MonoauthRequestType=UpdateOrderSourceCredentials";
