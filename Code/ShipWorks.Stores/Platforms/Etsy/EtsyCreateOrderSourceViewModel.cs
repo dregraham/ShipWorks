@@ -139,11 +139,11 @@ namespace ShipWorks.Stores.Platforms.Etsy
             {
                 var data = Convert.FromBase64String(encodedOrderSource);
                 var decodedString = Encoding.UTF8.GetString(data);
-                var splitString = decodedString.Split('-');
+                var splitString = decodedString.Split('_');
 
                 if (splitString.Length != 2)
                 {
-                    log.Error("The provided Base64 string did not have 2 sections separated by the '-' character.");
+                    log.Error("The provided Base64 string did not have 2 sections separated by the '_' character.");
                     return false;
                 }
 
@@ -152,6 +152,20 @@ namespace ShipWorks.Stores.Platforms.Etsy
                     log.Error("The provided token's third part was not a GUID");
                     return false;
                 }
+                
+                var etsyPrefix = splitString[0].Split('-');
+                if(etsyPrefix.Length != 2 || etsyPrefix[0]!= "Etsy")
+                {
+                    log.Error("The provided token is not valid Etsy token. It does not start with 'Etsy-' prefix");
+                    return false;
+                }
+                
+                if (!long.TryParse(etsyPrefix[1],out long etsyShopId))
+                {
+                    log.Error($"The provided Etsy ShopId is not valid. Should be numeric but is: '{etsyPrefix[1]}'");
+                    return false;
+                }
+                store.EtsyShopID = etsyShopId;
 
                 store.OrderSourceID = splitString[1];
 
