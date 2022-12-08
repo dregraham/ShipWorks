@@ -1330,6 +1330,7 @@
     <Compile Include="Stores\Platforms\Amazon\DTO\GiftNote.cs" />
     <Compile Include="Stores\Platforms\Amazon\OnlineUpdating\AmazonBulkOnlineUpdater.cs" />
     <Compile Include="Stores\Platforms\Amazon\OnlineUpdating\DTO\AmazonBulkUploadShipmentsRequest.cs" />
+    <Compile Include="Stores\Platforms\Etsy\EtsyPlatformDownloader.cs" />
     <Compile Include="Stores\Platforms\Platform\IHubOrderSourceClient.cs" />
     <Compile Include="Stores\Platforms\Platform\OnlineUpdating\IPlatformOnlineUpdater.cs" />
     <Compile Include="Stores\Platforms\Platform\OnlineUpdating\PlatformBulkOnlineUpdater.cs" />

@@ -367,8 +367,6 @@ namespace ShipWorks.Data.Model.EntityClasses
 			_fieldsCustomProperties.Add("DomainName", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
 			_fieldsCustomProperties.Add("AmazonVATS", fieldHashtable);
-			fieldHashtable = new Dictionary<string, string>();
-			_fieldsCustomProperties.Add("ContinuationToken", fieldHashtable);
 		}
 		#endregion
 
@@ -618,17 +616,6 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			get { return (System.Boolean)GetValue((int)AmazonStoreFieldIndex.AmazonVATS, true); }
 			set	{ SetValue((int)AmazonStoreFieldIndex.AmazonVATS, value); }
-		}
-
-		/// <summary> The ContinuationToken property of the Entity AmazonStore<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "AmazonStore"."ContinuationToken"<br/>
-		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 2048<br/>
-		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
-		[DataMember]
-		public virtual System.String ContinuationToken
-		{
-			get { return (System.String)GetValue((int)AmazonStoreFieldIndex.ContinuationToken, true); }
-			set	{ SetValue((int)AmazonStoreFieldIndex.ContinuationToken, value); }
 		}
 	
 		/// <summary> Gets the type of the hierarchy this entity is in. </summary>

@@ -426,6 +426,8 @@ namespace ShipWorks.Data.Model.EntityClasses
 			_fieldsCustomProperties.Add("OrderSourceID", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
 			_fieldsCustomProperties.Add("PlatformAmazonCarrierID", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+			_fieldsCustomProperties.Add("ContinuationToken", fieldHashtable);
 		}
 		#endregion
 
@@ -896,6 +898,17 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			get { return (System.String)GetValue((int)StoreFieldIndex.PlatformAmazonCarrierID, true); }
 			set	{ SetValue((int)StoreFieldIndex.PlatformAmazonCarrierID, value); }
+		}
+
+		/// <summary> The ContinuationToken property of the Entity Store<br/><br/></summary>
+		/// <remarks>Mapped on  table field: "Store"."ContinuationToken"<br/>
+		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 2048<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		[DataMember]
+		public virtual System.String ContinuationToken
+		{
+			get { return (System.String)GetValue((int)StoreFieldIndex.ContinuationToken, true); }
+			set	{ SetValue((int)StoreFieldIndex.ContinuationToken, value); }
 		}
 
 		/// <summary> Gets the EntityCollection with the related entities of type 'OrderSearchEntity' which are related to this entity via a relation of type '1:n'. If the EntityCollection hasn't been fetched yet, the collection returned will be empty.<br/><br/></summary>

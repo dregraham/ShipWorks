@@ -488,7 +488,7 @@ namespace ShipWorks.Data.Model
 		/// <summary>Inits AmazonStoreEntity's mappings</summary>
 		private void InitAmazonStoreEntityMappings()
 		{
-			this.AddElementMapping("AmazonStoreEntity", @"ShipWorksLocal", @"dbo", "AmazonStore", 20, 0);
+			this.AddElementMapping("AmazonStoreEntity", @"ShipWorksLocal", @"dbo", "AmazonStore", 19, 0);
 			this.AddElementFieldMapping("AmazonStoreEntity", "StoreID", "StoreID", false, "BigInt", 0, 19, 0, false, "", null, typeof(System.Int64), 0);
 			this.AddElementFieldMapping("AmazonStoreEntity", "AmazonApi", "AmazonApi", false, "Int", 0, 10, 0, false, "", null, typeof(System.Int32), 1);
 			this.AddElementFieldMapping("AmazonStoreEntity", "AmazonApiRegion", "AmazonApiRegion", false, "Char", 2, 0, 0, false, "", null, typeof(System.String), 2);
@@ -508,7 +508,6 @@ namespace ShipWorks.Data.Model
 			this.AddElementFieldMapping("AmazonStoreEntity", "ExcludeFBA", "ExcludeFBA", false, "Bit", 0, 0, 0, false, "", null, typeof(System.Boolean), 16);
 			this.AddElementFieldMapping("AmazonStoreEntity", "DomainName", "DomainName", false, "NVarChar", 50, 0, 0, false, "", null, typeof(System.String), 17);
 			this.AddElementFieldMapping("AmazonStoreEntity", "AmazonVATS", "AmazonVATS", false, "Bit", 0, 0, 0, false, "", null, typeof(System.Boolean), 18);
-			this.AddElementFieldMapping("AmazonStoreEntity", "ContinuationToken", "ContinuationToken", true, "NVarChar", 2048, 0, 0, false, "", null, typeof(System.String), 19);
 		}
 
 		/// <summary>Inits AmazonSWAAccountEntity's mappings</summary>
@@ -710,7 +709,7 @@ namespace ShipWorks.Data.Model
 			this.AddElementFieldMapping("BestRateShipmentEntity", "InsuranceValue", "InsuranceValue", false, "Money", 0, 19, 4, false, "", null, typeof(System.Decimal), 8);
 			this.AddElementFieldMapping("BestRateShipmentEntity", "RequestedLabelFormat", "RequestedLabelFormat", false, "Int", 0, 10, 0, false, "", null, typeof(System.Int32), 9);
 			this.AddElementFieldMapping("BestRateShipmentEntity", "Insurance", "Insurance", false, "Bit", 0, 0, 0, false, "", null, typeof(System.Boolean), 10);
-			this.AddElementFieldMapping("BestRateShipmentEntity", "InternalAllowedCarrierAccounts", "InternalAllowedCarrierAccounts", true, "NVarChar", 2147483647, 0, 0, false, "", null, typeof(System.String), 11);
+			this.AddElementFieldMapping("BestRateShipmentEntity", "InternalAllowedCarrierAccounts", "InternalAllowedCarrierAccounts", true, "VarChar", 2147483647, 0, 0, false, "", null, typeof(System.String), 11);
 		}
 
 		/// <summary>Inits BigCommerceOrderItemEntity's mappings</summary>
@@ -3695,7 +3694,7 @@ namespace ShipWorks.Data.Model
 		/// <summary>Inits StoreEntity's mappings</summary>
 		private void InitStoreEntityMappings()
 		{
-			this.AddElementMapping("StoreEntity", @"ShipWorksLocal", @"dbo", "Store", 37, 0);
+			this.AddElementMapping("StoreEntity", @"ShipWorksLocal", @"dbo", "Store", 38, 0);
 			this.AddElementFieldMapping("StoreEntity", "StoreID", "StoreID", false, "BigInt", 0, 19, 0, true, "SCOPE_IDENTITY()", null, typeof(System.Int64), 0);
 			this.AddElementFieldMapping("StoreEntity", "RowVersion", "RowVersion", false, "Timestamp", 2147483647, 0, 0, false, "", null, typeof(System.Byte[]), 1);
 			this.AddElementFieldMapping("StoreEntity", "License", "License", false, "NVarChar", 150, 0, 0, false, "", null, typeof(System.String), 2);
@@ -3733,6 +3732,7 @@ namespace ShipWorks.Data.Model
 			this.AddElementFieldMapping("StoreEntity", "ManagedInHub", "ManagedInHub", false, "Bit", 0, 0, 0, false, "", null, typeof(System.Boolean), 34);
 			this.AddElementFieldMapping("StoreEntity", "OrderSourceID", "OrderSourceID", true, "NVarChar", 50, 0, 0, false, "", null, typeof(System.String), 35);
 			this.AddElementFieldMapping("StoreEntity", "PlatformAmazonCarrierID", "PlatformAmazonCarrierID", true, "NVarChar", 100, 0, 0, false, "", null, typeof(System.String), 36);
+			this.AddElementFieldMapping("StoreEntity", "ContinuationToken", "ContinuationToken", true, "NVarChar", 2048, 0, 0, false, "", null, typeof(System.String), 37);
 		}
 
 		/// <summary>Inits SystemDataEntity's mappings</summary>
