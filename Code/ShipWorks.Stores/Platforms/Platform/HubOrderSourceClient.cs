@@ -1,9 +1,12 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Interapptive.Shared.ComponentRegistration;
 using RestSharp;
 using ShipWorks.ApplicationCore.Licensing.Warehouse;
 using ShipWorks.Stores.Platforms.Amazon.DTO;
+using ShipWorks.Stores.Platforms.AmeriCommerce.WebServices;
 
 namespace ShipWorks.Stores.Platforms.Platform
 {
@@ -30,16 +33,22 @@ namespace ShipWorks.Stores.Platforms.Platform
         }
 
         /// <summary>
-        /// Get the monoauth URL to initiate an order source creation for Amazon
+        /// Get the monoauth URL to initiate an order source creation for non Amazon
         /// </summary>
         /// <remarks>
         /// Note that the orderSourceName will be used in both the URL used to communicate with the hub and the
         /// redirectUrl the hub will send on to monoauth
         /// </remarks>
-        public async Task<string> GetAmazonCreateOrderSourceInitiateUrl(string orderSourceName, string apiRegion, int? daysBack)
+        public async Task<string> GetCreateOrderSourceInitiateUrl(string orderSourceName, int? daysBack, Dictionary<string, string> otherParameters = default)
         {
+            string otherParametersString = string.Empty;
+            if (otherParameters != null && otherParameters.Count > 0)
+            {
+                var paramaterStrings = otherParameters.Select(op => $"{op.Key}={op.Value}");
+                otherParametersString = $"&{string.Join("&", paramaterStrings)}";
+            }
             var request = warehouseRequestFactory.Create(
-                WarehouseEndpoints.GetAmazonCreateOrderSourceInitiateUrl(orderSourceName, UpdateLocalUrl(warehouseRequestClient.WarehouseUrl), apiRegion, daysBack ?? DefaultDaysBack), Method.GET,
+                WarehouseEndpoints.GetCreateOrderSourceInitiateUrl(orderSourceName, UpdateLocalUrl(warehouseRequestClient.WarehouseUrl), daysBack ?? DefaultDaysBack, otherParametersString), Method.GET,
                 null);
 
             var result = await warehouseRequestClient.MakeRequest<GetMonauthInitiateUrlResponse>(request, GetMonoauthInitiateUrl)
@@ -48,34 +57,14 @@ namespace ShipWorks.Stores.Platforms.Platform
             return result.InitiateUrl;
         }
 
-
         /// <summary>
-        /// Get the monoauth URL to initiate an order source creation for non Amazon
+        /// Get the Monoauth URL to initiate an order source credential change
         /// </summary>
         /// <remarks>
         /// Note that the orderSourceName will be used in both the URL used to communicate with the hub and the
         /// redirectUrl the hub will send on to monoauth
         /// </remarks>
-        public async Task<string> GetCreateOrderSourceInitiateUrl(string orderSourceName, int? daysBack)
-        {
-	        var request = warehouseRequestFactory.Create(
-		        WarehouseEndpoints.GetCreateOrderSourceInitiateUrl(orderSourceName, UpdateLocalUrl(warehouseRequestClient.WarehouseUrl), daysBack ?? DefaultDaysBack), Method.GET,
-		        null);
-
-	        var result = await warehouseRequestClient.MakeRequest<GetMonauthInitiateUrlResponse>(request, GetMonoauthInitiateUrl)
-		        .ConfigureAwait(false);
-
-	        return result.InitiateUrl;
-        }
-
-		/// <summary>
-		/// Get the Monoauth URL to initiate an order source credential change
-		/// </summary>
-		/// <remarks>
-		/// Note that the orderSourceName will be used in both the URL used to communicate with the hub and the
-		/// redirectUrl the hub will send on to monoauth
-		/// </remarks>
-		public async Task<string> GetAmazonUpdateOrderSourceInitiateUrl(string orderSourceName, string orderSourceId, string apiRegion, string sellerId, bool includeFba)
+        public async Task<string> GetAmazonUpdateOrderSourceInitiateUrl(string orderSourceName, string orderSourceId, string apiRegion, string sellerId, bool includeFba)
         {
             var request = warehouseRequestFactory.Create(
                 WarehouseEndpoints.GetAmazonUpdateOrderSourceInitiateUrl(orderSourceName, UpdateLocalUrl(warehouseRequestClient.WarehouseUrl), orderSourceId, apiRegion, sellerId, includeFba), Method.GET,
@@ -87,30 +76,30 @@ namespace ShipWorks.Stores.Platforms.Platform
             return result.InitiateUrl;
         }
 
-		/// <summary>
-		/// Get the Monoauth URL to initiate an order source credential change
-		/// </summary>
-		/// <remarks>
-		/// Note that the orderSourceName will be used in both the URL used to communicate with the hub and the
-		/// redirectUrl the hub will send on to monoauth
-		/// </remarks>
-		public async Task<string> GetUpdateOrderSourceInitiateUrl(string orderSourceName, string orderSourceId, string sellerId)
-		{
-			var request = warehouseRequestFactory.Create(
-				WarehouseEndpoints.GetUpdateOrderSourceInitiateUrl(orderSourceName, UpdateLocalUrl(warehouseRequestClient.WarehouseUrl), orderSourceId, sellerId), Method.GET,
-				null);
+        /// <summary>
+        /// Get the Monoauth URL to initiate an order source credential change
+        /// </summary>
+        /// <remarks>
+        /// Note that the orderSourceName will be used in both the URL used to communicate with the hub and the
+        /// redirectUrl the hub will send on to monoauth
+        /// </remarks>
+        public async Task<string> GetUpdateOrderSourceInitiateUrl(string orderSourceName, string orderSourceId, string sellerId)
+        {
+            var request = warehouseRequestFactory.Create(
+                WarehouseEndpoints.GetUpdateOrderSourceInitiateUrl(orderSourceName, UpdateLocalUrl(warehouseRequestClient.WarehouseUrl), orderSourceId, sellerId), Method.GET,
+                null);
 
-			var result = await warehouseRequestClient.MakeRequest<GetMonauthInitiateUrlResponse>(request, GetInitiateUpdateOrderSourceUrl)
-				.ConfigureAwait(false);
+            var result = await warehouseRequestClient.MakeRequest<GetMonauthInitiateUrlResponse>(request, GetInitiateUpdateOrderSourceUrl)
+                .ConfigureAwait(false);
 
-			return result.InitiateUrl;
-		}
+            return result.InitiateUrl;
+        }
 
-		/// <summary>
-		/// Call Hub to get a Platform Amazon carrier Id for Buy Shipping
-		/// </summary>
-		/// <returns></returns>
-		public async Task<string> GetPlatformAmazonCarrierId(string uniqueIdentifier)
+        /// <summary>
+        /// Call Hub to get a Platform Amazon carrier Id for Buy Shipping
+        /// </summary>
+        /// <returns></returns>
+        public async Task<string> GetPlatformAmazonCarrierId(string uniqueIdentifier)
         {
             var request = warehouseRequestFactory.Create(
                 WarehouseEndpoints.CreateAmazonCarrierFromAmazonStore,

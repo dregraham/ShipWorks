@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace ShipWorks.Stores.Platforms.Platform
 {
@@ -14,16 +15,7 @@ namespace ShipWorks.Stores.Platforms.Platform
         /// Note that the orderSourceName will be used in both the URL used to communicate with the hub and the
         /// redirectUrl the hub will send on to monoauth
         /// </remarks>
-        Task<string> GetCreateOrderSourceInitiateUrl(string orderSourceName, int? daysBack);
-
-        /// <summary>
-        /// Get the monoauth URL to initiate an order source creation
-        /// </summary>
-        /// <remarks>
-        /// Note that the orderSourceName will be used in both the URL used to communicate with the hub and the
-        /// redirectUrl the hub will send on to monoauth
-        /// </remarks>
-        Task<string> GetAmazonCreateOrderSourceInitiateUrl(string orderSourceName, string apiRegion, int? daysBack);
+        Task<string> GetCreateOrderSourceInitiateUrl(string orderSourceName, int? daysBack, Dictionary<string, string> otherParameters = default);
 
 		/// <summary>
 		/// Get the Monoauth URL to initiate an order source credential change for non Amazon
