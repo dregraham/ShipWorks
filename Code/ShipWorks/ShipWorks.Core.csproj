@@ -805,6 +805,7 @@
     <Compile Include="ApplicationCore\Licensing\FeatureRestrictions\DhlEcommerce\DhlEcommerceMaxRestriction.cs" />
     <Compile Include="ApplicationCore\Licensing\TrialDetails.cs" />
     <Compile Include="ApplicationCore\Licensing\Warehouse\DTO\MessagesResponse.cs" />
+    <Compile Include="ApplicationCore\Licensing\Warehouse\DTO\ShipEngineStore.cs" />
     <Compile Include="ApplicationCore\Licensing\Warehouse\DTO\SqlConfigChangedDto.cs" />
     <Compile Include="ApplicationCore\Licensing\Warehouse\Messages\HubMessageRetriever.cs" />
     <Compile Include="ApplicationCore\Licensing\Warehouse\Messages\HubMessagesControl.xaml.cs">
