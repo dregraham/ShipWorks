@@ -1031,7 +1031,8 @@ CREATE TABLE [dbo].[Store]
 [WarehouseStoreID] [uniqueidentifier] NULL,
 [ManagedInHub] [bit] NOT NULL CONSTRAINT [DF_Store_ManagedInHub] DEFAULT (0),
 [OrderSourceID] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
-[PlatformAmazonCarrierID] [nvarchar] (100) COLLATE SQL_Latin1_General_CP1_CI_AS NULL
+[PlatformAmazonCarrierID] [nvarchar] (100) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
+[ShouldMigrate] [bit] NOT NULL 
 )
 GO
 PRINT N'Creating primary key [PK_Store] on [dbo].[Store]'
