@@ -28,7 +28,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api
         {
             // Create the client for connecting to the UPS server
             XmlDocument xmlResponse;
-            using (XmlTextWriter xmlWriter = UpsWebClient.CreateRequest(UpsOnLineToolType.Track, GetAccount()))
+            using (XmlTextWriter xmlWriter = UpsWebClient.CreateRequest(UpsOnLineToolType.Track, GetAccount(shipment.Ups.UpsAccountID)))
             {
                 // Only valid tag, the tracking number
                 xmlWriter.WriteElementString("TrackingNumber", GetTrackingNumber(shipment));
@@ -67,9 +67,16 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api
         /// </summary>
         /// <returns></returns>
         /// <exception cref="UpsException">ShipWorks cannot track a UPS shipment without a configured UPS account.</exception>
-        private static UpsAccountEntity GetAccount()
+        private static UpsAccountEntity GetAccount(long upsAccountID)
         {
-            UpsAccountEntity upsAccount = UpsAccountManager.Accounts.FirstOrDefault();
+            var accounts = UpsAccountManager.Accounts;
+            
+            // Try to get the matching account, if that doesn't work, get a non-onebalance account, if that doesn't work,
+            // get any account
+            UpsAccountEntity upsAccount = accounts.FirstOrDefault(a => a.UpsAccountID == upsAccountID) ??
+                accounts.FirstOrDefault(a => !string.IsNullOrWhiteSpace(a.UserID)) ??
+                accounts.FirstOrDefault();
+
             if (upsAccount == null)
             {
                 throw new UpsException("ShipWorks cannot track a UPS shipment without a configured UPS account.");
