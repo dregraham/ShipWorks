@@ -27,6 +27,7 @@ using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Data.Utility;
 using ShipWorks.Stores.Platforms.Amazon;
+using ShipWorks.Stores.Platforms.Etsy;
 using ShipWorks.Users;
 using ShipWorks.Users.Audit;
 using ShipWorks.Users.Security;
@@ -509,10 +510,13 @@ namespace ShipWorks.Stores.Communication
 
                                 // Create the downloader
                                 // TODO: Once all Amazon stores have moved onto the new provider this can be removed and resolved as before
-                                if (store.StoreTypeCode == StoreTypeCode.Amazon &&
+                                if ((store.StoreTypeCode == StoreTypeCode.Amazon || store.StoreTypeCode == StoreTypeCode.Etsy) &&
                                     !string.IsNullOrEmpty(store.OrderSourceID))
                                 {
-                                    downloader = lifetimeScope.Resolve<AmazonPlatformDownloader>(TypedParameter.From(store));
+                                    if (store.StoreTypeCode == StoreTypeCode.Amazon)
+                                        downloader = lifetimeScope.Resolve<AmazonPlatformDownloader>(TypedParameter.From(store));
+                                    else
+                                        downloader = lifetimeScope.Resolve<EtsyPlatformDownloader>(TypedParameter.From(store));
                                 }
                                 else
                                 {
