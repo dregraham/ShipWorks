@@ -20,9 +20,7 @@ using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Communication;
 using ShipWorks.Stores.Content;
-using ShipWorks.Stores.Platforms.Amazon;
-using ShipWorks.Stores.Platforms.Amazon.DTO;
-using ShipWorks.Stores.Platforms.Amazon.Mws;
+using ShipWorks.Stores.Platforms.Etsy;
 using ShipWorks.Stores.Platforms.ShipEngine;
 using ShipWorks.Stores.Platforms.ShipEngine.Apollo;
 using Syncfusion.XlsIO.Parser.Biff_Records;
@@ -31,7 +29,7 @@ namespace ShipWorks.Stores.Platforms.Etsy
 {
     // TODO: Update registration to use a Keyed Component to replace the MWS downloader
     /// <summary>
-    /// Order downloader for Amazon stores via Platform
+    /// Order downloader for Etsy stores via Platform
     /// </summary>
     [Component(RegistrationType.Self)]
     public class EtsyPlatformDownloader : StoreDownloader
@@ -44,7 +42,7 @@ namespace ShipWorks.Stores.Platforms.Etsy
         public int FbaOrdersDownloaded { get; private set; }
 
         /// <summary>
-        /// Gets the Amazon store entity
+        /// Gets the Etsy store entity
         /// </summary>
         private EtsyStoreEntity EtsyStore => (EtsyStoreEntity) Store;
 
@@ -70,13 +68,14 @@ namespace ShipWorks.Stores.Platforms.Etsy
         }
 
         /// <summary>
-        /// Start the download from Platform for the Amazon store
+        /// Start the download from Platform for the Etsy store
         /// </summary>
         protected override async Task Download(TrackedDurationEvent trackedDurationEvent)
         {
             try
             {
-                FbaOrdersDownloaded = 0;
+				//FbaOrdersDownloaded - To be removed or replaced !!
+				FbaOrdersDownloaded = 0;
 
                 Progress.Detail = "Connecting to Platform...";
 
@@ -121,7 +120,7 @@ namespace ShipWorks.Stores.Platforms.Etsy
 
                 }
 
-                trackedDurationEvent.AddMetric("Amazon.Fba.Order.Count", FbaOrdersDownloaded);
+                trackedDurationEvent.AddMetric("Etsy.Fba.Order.Count", FbaOrdersDownloaded);
 
                 Progress.PercentComplete = 100;
                 Progress.Detail = "Done.";
@@ -131,7 +130,7 @@ namespace ShipWorks.Stores.Platforms.Etsy
                 {
                     // We only throw at the end to give the import a chance to process any orders that were provided.
                     throw new Exception(
-                        "Connection to Amazon failed. Please try again. If it continues to fail, update your credentials in store settings or contact ShipWorks support.");
+                        "Connection to Etsy failed. Please try again. If it continues to fail, update your credentials in store settings or contact ShipWorks support.");
                 }
             }
             catch (Exception ex)
@@ -147,50 +146,28 @@ namespace ShipWorks.Stores.Platforms.Etsy
         {
             foreach (var salesOrder in orders.Where(x => x.Status != OrderSourceSalesOrderStatus.AwaitingPayment))
             {
-                var fulfillmentChannel = GetFulfillmentChannel(salesOrder);
-                //if (!(EtsyStore.ExcludeFBA && fulfillmentChannel == AmazonMwsFulfillmentChannel.AFN))
-                //{
-                    await LoadOrder(salesOrder);
-                //}
+	            await LoadOrder(salesOrder);
             }
-        }
-
-        /// <summary>
-        /// Get the fulfillment channel from a sales order
-        /// </summary>
-        private static AmazonMwsFulfillmentChannel GetFulfillmentChannel(OrderSourceApiSalesOrder salesOrder)
-        {
-            if(salesOrder.FulfillmentChannel == "MFN")
-            {
-                return AmazonMwsFulfillmentChannel.MFN;
-            } 
-            else if(salesOrder.FulfillmentChannel == "AFN")
-            {
-                return AmazonMwsFulfillmentChannel.AFN;
-            }
-
-            return AmazonMwsFulfillmentChannel.Unknown;
         }
 
         private async Task LoadOrder(OrderSourceApiSalesOrder salesOrder)
         {
-            var amazonOrderId = salesOrder.OrderNumber;
+            var etsyOrderId = salesOrder.OrderNumber;
 
             // get the order instance
-            var result = await InstantiateOrder(new AmazonOrderIdentifier(amazonOrderId)).ConfigureAwait(false);
+            var result = await InstantiateOrder(long.Parse(etsyOrderId)).ConfigureAwait(false);
             if (result.Failure)
             {
-                log.InfoFormat("Skipping order '{0}': {1}.", amazonOrderId, result.Message);
+                log.InfoFormat("Skipping order '{0}': {1}.", etsyOrderId, result.Message);
                 return;
             }
 
-            var order = (AmazonOrderEntity) result.Value;
-            order.AmazonOrderID = amazonOrderId;
+            var order = (EtsyOrderEntity) result.Value;
             order.ChannelOrderID = salesOrder.SalesOrderGuid;
 
             if (salesOrder.Status == OrderSourceSalesOrderStatus.Cancelled && order.IsNew)
             {
-                log.InfoFormat("Skipping order '{0}' due to canceled and not yet seen by ShipWorks.", amazonOrderId);
+                log.InfoFormat("Skipping order '{0}' due to canceled and not yet seen by ShipWorks.", etsyOrderId);
                 return;
             }
 
@@ -200,20 +177,14 @@ namespace ShipWorks.Stores.Platforms.Etsy
             //Basic properties
             order.OrderDate = orderDate;
             order.OnlineLastModified = modifiedDate >= orderDate ? modifiedDate : orderDate;
-
-            // Platform may provide this in the future, but this isn't MVP
-            order.EarliestExpectedDeliveryDate = null;
-            order.LatestExpectedDeliveryDate = salesOrder.RequestedFulfillments?.Max(f => f?.ShippingPreferences?.DeliverByDate)?.DateTime;
-
+            
             // set the status
             var orderStatus = GetAmazonStatus(salesOrder.Status, order.OrderNumberComplete);
             order.OnlineStatus = orderStatus;
             order.OnlineStatusCode = orderStatus;
-
-            order.FulfillmentChannel = (int) GetFulfillmentChannel(salesOrder);
             
-            // If the order is new and it is of Amazon fulfillment type, increase the FBA count.
-            if (order.IsNew && order.FulfillmentChannel == (int) AmazonMwsFulfillmentChannel.AFN)
+            // If the order is new and it is of Etsy fulfillment type, increase the FBA count.
+            if (order.IsNew)
             {
                 FbaOrdersDownloaded++;
             }
@@ -228,10 +199,6 @@ namespace ShipWorks.Stores.Platforms.Etsy
             {
                 isPrime = AmazonIsPrime.No;
             }
-            order.IsPrime = (int) isPrime;
-
-            // Purchase order number
-            order.PurchaseOrderNumber = salesOrder.Payment?.PurchaseOrderNumber;
 
             // no customer ID in this Api
             order.OnlineCustomerID = null;
@@ -248,11 +215,9 @@ namespace ShipWorks.Stores.Platforms.Etsy
             {
                 order.OrderNumber = await GetNextOrderNumberAsync().ConfigureAwait(false);
 
-                var giftNotes = GetGiftNotes(salesOrder);
-                var couponCodes = salesOrder.Payment.CouponCodes.Select((c) => JsonConvert.DeserializeObject<CouponCode>(c));
                 foreach (var fulfillment in salesOrder.RequestedFulfillments)
                 {
-                    LoadOrderItems(fulfillment, order, giftNotes, couponCodes);
+                    LoadOrderItems(fulfillment, order);
                 }
 
                 // Taxes
@@ -301,10 +266,10 @@ namespace ShipWorks.Stores.Platforms.Etsy
         }
 
         /// <summary>
-        /// Attempts to figure out the Amazon status based on the Platform status
+        /// Attempts to figure out the Etsy status based on the Platform status
         /// </summary>
         /// <remarks>
-        /// Unfortunately, this isn't a one to one to from Platform Status to Amazon Status. This
+        /// Unfortunately, this isn't a one to one to from Platform Status to Etsy Status. This
         /// is the code I used to "unmap" the platform mapping for existing filters:
         /// https://github.com/shipstation/integrations-ecommerce/blob/915ffd7a42f22ae737bf7d277e69409c3cf1b845/modules/amazon-order-source/src/methods/mappers/sales-orders-export-mappers.ts#L150
         /// </remarks>
@@ -355,7 +320,7 @@ namespace ShipWorks.Stores.Platforms.Etsy
             }
         }
 
-        private static void LoadAddresses(AmazonOrderEntity order, OrderSourceApiSalesOrder salesOrder)
+        private static void LoadAddresses(EtsyOrderEntity order, OrderSourceApiSalesOrder salesOrder)
         {
             var shipTo = salesOrder.RequestedFulfillments.FirstOrDefault(x => x?.ShipTo != null)?.ShipTo;
             if (shipTo == null || !order.IsNew)
@@ -416,20 +381,18 @@ namespace ShipWorks.Stores.Platforms.Etsy
         /// <summary>
         /// Loads the order items of an amazon order
         /// </summary>
-        private void LoadOrderItems(OrderSourceRequestedFulfillment fulfillment, AmazonOrderEntity order, IEnumerable<GiftNote> giftNotes, IEnumerable<CouponCode> couponCodes)
+        private void LoadOrderItems(OrderSourceRequestedFulfillment fulfillment, EtsyOrderEntity order)
         {
             foreach (var item in fulfillment.Items)
             {
-                var filteredNotes = giftNotes.Where(i => i.OrderItemId == item.LineItemId);
-                var filteredCouponCodes = couponCodes.Where((c) => c.OrderItemId == item.LineItemId);
-                LoadOrderItem(item, order, filteredNotes, filteredCouponCodes);
+	            LoadOrderItem(item, order);
             }
         }
 
         /// <summary>
         /// Load an order item
         /// </summary>
-        private void LoadOrderItem(OrderSourceSalesOrderItem orderItem, AmazonOrderEntity order, IEnumerable<GiftNote> giftNotes, IEnumerable<CouponCode> couponCodes)
+        private void LoadOrderItem(OrderSourceSalesOrderItem orderItem, EtsyOrderEntity order)
         {
             var item = (AmazonOrderItemEntity) InstantiateOrderItem(order);
 
@@ -460,44 +423,6 @@ namespace ShipWorks.Stores.Platforms.Etsy
             item.AmazonOrderItemCode = orderItem.LineItemId;
             item.ASIN = orderItem.Product.Identifiers?.Asin;
 
-            //Load the gift messages
-            foreach(var giftNote in giftNotes)
-            {
-                if(giftNote.Message.HasValue() || giftNote.Fee > 0)
-                {
-                    OrderItemAttributeEntity giftAttribute = InstantiateOrderItemAttribute(item);
-                    giftAttribute.Name = "Gift Message";
-                    giftAttribute.Description = giftNote.Message;
-                    giftAttribute.UnitPrice = giftNote.Fee;
-                    item.OrderItemAttributes.Add(giftAttribute);
-                }
-
-                if (giftNote.GiftWrapLevel.HasValue())
-                {
-                    OrderItemAttributeEntity levelAttribute = InstantiateOrderItemAttribute(item);
-                    levelAttribute.Name = "Gift Wrap Level";
-                    levelAttribute.Description = giftNote.GiftWrapLevel;
-                    levelAttribute.UnitPrice = 0;
-                    item.OrderItemAttributes.Add(levelAttribute);
-                }
-            }
-
-            //Load any coupon codes
-            if (couponCodes != null)
-            {
-                foreach (var couponSet in couponCodes)
-                {
-                    foreach (var code in couponSet.Codes)
-                    {
-                        OrderItemAttributeEntity couponAttribute = InstantiateOrderItemAttribute(item);
-                        couponAttribute.Name = "Promotion ID";
-                        couponAttribute.Description = code;
-                        couponAttribute.UnitPrice = 0;
-                        item.OrderItemAttributes.Add(couponAttribute);
-                    }
-                }
-            }
-
             item.ConditionNote = orderItem.Product?.Details?.FirstOrDefault((d) => d.Name == "Condition")?.Value;
 
             AddOrderItemCharges(orderItem, order);
@@ -517,7 +442,7 @@ namespace ShipWorks.Stores.Platforms.Etsy
         /// <summary>
         /// Add item charges to the order
         /// </summary>
-        private void AddOrderItemCharges(OrderSourceSalesOrderItem orderItem, AmazonOrderEntity order)
+        private void AddOrderItemCharges(OrderSourceSalesOrderItem orderItem, EtsyOrderEntity order)
         {
             foreach (var orderItemAdjustment in orderItem.Adjustments)
             {
@@ -552,23 +477,6 @@ namespace ShipWorks.Stores.Platforms.Etsy
             }
 
             charge.Amount += amount;
-        }
-
-        private List<GiftNote> GetGiftNotes(OrderSourceApiSalesOrder salesOrder)
-        {
-            var itemNotes = new List<GiftNote>();
-            if (salesOrder.Notes != null)
-            {
-                foreach (var note in salesOrder.Notes)
-                {
-                    if (note.Type == OrderSourceNoteType.GiftMessage)
-                    {
-                        itemNotes.Add(GiftNote.FromOrderSourceNote(note));
-                    }
-                }
-            }
-
-            return itemNotes;
         }
     }
 }
