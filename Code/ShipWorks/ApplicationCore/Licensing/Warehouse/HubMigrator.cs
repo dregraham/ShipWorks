@@ -73,7 +73,7 @@ namespace ShipWorks.ApplicationCore.Licensing.Warehouse
             {
                 IEnumerable<StoreEntity> storesToMigrate =
                     storeManager.GetAllStores()
-                        .Where(s => s.WarehouseStoreID == null && storeTypeManager.GetType(s).ShouldUseHub(s));
+                        .Where(s => s.WarehouseStoreID == null && storeTypeManager.GetType(s).ShouldUseHub(s) && s.ShouldMigrate);
 
                 // Only prompt user to migrate if they have stores that need to be migrated
                 if (storesToMigrate.Any())
