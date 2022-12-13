@@ -31,7 +31,9 @@ namespace ShipWorks.Stores.Platforms.Etsy
     /// <summary>
     /// Order downloader for Etsy stores via Platform
     /// </summary>
-    [Component(RegistrationType.Self)]
+    //[Component(RegistrationType.Self)]
+    [KeyedComponent(typeof(IStoreDownloader), StoreTypeCode.Etsy)]
+
     public class EtsyPlatformDownloader : StoreDownloader
     {
         private static readonly ILog log = LogManager.GetLogger(typeof(EtsyPlatformDownloader));
@@ -86,7 +88,7 @@ namespace ShipWorks.Stores.Platforms.Etsy
                 Progress.Detail = "Checking for new orders ";
 
                 var result =
-                    await client.GetOrders(Store.OrderSourceID, EtsyStore.ContinuationToken).ConfigureAwait(false);
+                    await client.GetOrders(Store.OrderSourceID, EtsyStore.ContinuationToken, Progress.CancellationToken).ConfigureAwait(false);
 
                 while (result.Orders.Data.Any())
                 {
@@ -116,7 +118,7 @@ namespace ShipWorks.Stores.Platforms.Etsy
                     EtsyStore.ContinuationToken = result.Orders.ContinuationToken;
                     await storeManager.SaveStoreAsync(EtsyStore).ConfigureAwait(false);
 
-                    result = await client.GetOrders(Store.OrderSourceID, EtsyStore.ContinuationToken).ConfigureAwait(false);
+                    result = await client.GetOrders(Store.OrderSourceID, EtsyStore.ContinuationToken, Progress.CancellationToken).ConfigureAwait(false);
 
                 }
 

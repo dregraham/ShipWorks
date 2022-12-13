@@ -86,7 +86,7 @@ namespace ShipWorks.Stores.Platforms.Amazon
                 Progress.Detail = "Checking for new orders ";
 
                 var result =
-                    await client.GetOrders(Store.OrderSourceID, AmazonStore.ContinuationToken).ConfigureAwait(false);
+                    await client.GetOrders(Store.OrderSourceID, AmazonStore.ContinuationToken, Progress.CancellationToken).ConfigureAwait(false);
 
                 while (result.Orders.Data.Any())
                 {
@@ -116,7 +116,7 @@ namespace ShipWorks.Stores.Platforms.Amazon
                     AmazonStore.ContinuationToken = result.Orders.ContinuationToken;
                     await storeManager.SaveStoreAsync(AmazonStore).ConfigureAwait(false);
 
-                    result = await client.GetOrders(Store.OrderSourceID, AmazonStore.ContinuationToken).ConfigureAwait(false);
+                    result = await client.GetOrders(Store.OrderSourceID, AmazonStore.ContinuationToken, Progress.CancellationToken).ConfigureAwait(false);
 
                 }
 

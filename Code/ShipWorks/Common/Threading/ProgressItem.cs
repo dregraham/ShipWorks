@@ -1,5 +1,6 @@
 using System;
 using System.Diagnostics;
+using System.Threading;
 using Interapptive.Shared.Threading;
 using log4net;
 
@@ -40,6 +41,8 @@ namespace ShipWorks.Common.Threading
 
         // Raised when an of the properties of the item changed
         public event EventHandler Changed;
+
+        private CancellationTokenSource cancellationTokenSource = new CancellationTokenSource();
 
         /// <summary>
         /// Constructor
@@ -273,6 +276,8 @@ namespace ShipWorks.Common.Threading
                 cancelRequested = true;
             }
 
+            cancellationTokenSource.Cancel();
+
             if (status == ProgressItemStatus.Pending && CanCancel)
             {
                 Status = ProgressItemStatus.Canceled;
@@ -291,5 +296,7 @@ namespace ShipWorks.Common.Threading
         {
             Changed?.Invoke(this, EventArgs.Empty);
         }
+        public CancellationToken CancellationToken => cancellationTokenSource.Token;
+
     }
 }

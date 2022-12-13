@@ -14,7 +14,7 @@ namespace ShipWorks.ApplicationCore.Licensing.Warehouse
         /// <summary>
         /// Make the given request
         /// </summary>
-        Task<GenericResult<IRestResponse>> MakeRequest(IRestRequest restRequest, string logName, ApiLogSource apiLogSource);
+        Task<GenericResult<IRestResponse>> MakeRequest(IRestRequest restRequest, string logName, ApiLogSource apiLogSource, CancellationToken cancellationToken);
         
         /// <summary>
         /// Make the given request

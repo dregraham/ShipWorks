@@ -1,4 +1,5 @@
 using System;
+using System.Threading;
 
 namespace Interapptive.Shared.Threading
 {
@@ -64,5 +65,7 @@ namespace Interapptive.Shared.Threading
 
         // Raised when an of the properties of the item changed
         event EventHandler Changed;
+
+        CancellationToken CancellationToken { get; }
     }
 }

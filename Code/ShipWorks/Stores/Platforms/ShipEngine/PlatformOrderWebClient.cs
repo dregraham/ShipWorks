@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading;
 using System.Threading.Tasks;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Threading;
@@ -35,13 +36,13 @@ namespace ShipWorks.Stores.Platforms.ShipEngine
         /// <summary>
         /// Get a page of orders from a platform order source
         /// </summary>
-        public async Task<GetOrdersDTO> GetOrders(string orderSourceId, string continuationToken)
+        public async Task<GetOrdersDTO> GetOrders(string orderSourceId, string continuationToken, CancellationToken cancellationToken)
         {
             var request = new RestRequest($"api/ordersource/{orderSourceId}", Method.GET);
             request.AddQueryParameter("ContinuationToken", continuationToken);
 
             // There's an issue with the deserialization and casting to an interface so we're casting manually
-            var result = await warehouseRequestClient.MakeRequest(request, "PlatformGetOrders", ApiLogSource.Amazon).ConfigureAwait(false);
+            var result = await warehouseRequestClient.MakeRequest(request, "PlatformGetOrders", ApiLogSource.Amazon, cancellationToken).ConfigureAwait(false);
 
             // Check that the call returned valid information
             GetOrdersDTO returnObject;

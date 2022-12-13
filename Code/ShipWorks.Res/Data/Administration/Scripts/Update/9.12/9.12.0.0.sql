@@ -7,7 +7,7 @@ BEGIN
 END
 GO
 
-PRINT N'Altering [dbo].[Store]'
+PRINT N'Altering [dbo].[AmazonStore]'
 GO
 IF EXISTS(SELECT * FROM sys.columns WHERE [name] = N'ContinuationToken' AND [object_id] = OBJECT_ID(N'AmazonStore'))
 BEGIN

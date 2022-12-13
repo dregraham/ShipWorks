@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using Autofac;
 using Autofac.Extras.Moq;
@@ -40,7 +41,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Amazon
             amazonStore = new AmazonStoreEntity() { OrderSourceID = orderSourceId };
             ordersDto = CreateOrderDTOResponse(string.Empty, 1);
 
-            webClient.SetupSequence(x => x.GetOrders(It.IsAny<string>(), It.IsAny<string>()))
+            webClient.SetupSequence(x => x.GetOrders(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<CancellationToken>()))
                 .ReturnsAsync(ordersDto)
                 .ReturnsAsync(CreateOrderDTOResponse("CT", 0));
 
@@ -66,7 +67,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Amazon
         public async Task AmazonPlatformDownloader_Download_OrderError()
         {
             // Arrange
-            webClient.SetupSequence(x => x.GetOrders(It.IsAny<string>(), It.IsAny<string>()))
+            webClient.SetupSequence(x => x.GetOrders(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<CancellationToken>()))
                 .ReturnsAsync(CreateOrderDTOResponse("CT", 1, true))
                 .ReturnsAsync(CreateOrderDTOResponse("CT", 0, true));
 
@@ -87,23 +88,23 @@ namespace ShipWorks.Stores.Tests.Platforms.Amazon
             string secondToken = "SecondToken";
             string thirdToken = "ThirdToken";
 
-            webClient.Setup(x => x.GetOrders(orderSourceId, null))
+            webClient.Setup(x => x.GetOrders(orderSourceId, null, CancellationToken.None))
                .ReturnsAsync(CreateOrderDTOResponse(firstToken,1));
-            webClient.Setup(x => x.GetOrders(orderSourceId, firstToken))
+            webClient.Setup(x => x.GetOrders(orderSourceId, firstToken, CancellationToken.None))
                 .ReturnsAsync(CreateOrderDTOResponse(secondToken, 1));
-            webClient.Setup(x => x.GetOrders(orderSourceId, secondToken))
+            webClient.Setup(x => x.GetOrders(orderSourceId, secondToken, CancellationToken.None))
                 .ReturnsAsync(CreateOrderDTOResponse(thirdToken, 1));
-            webClient.Setup(x => x.GetOrders(orderSourceId, thirdToken))
+            webClient.Setup(x => x.GetOrders(orderSourceId, thirdToken, CancellationToken.None))
                             .ReturnsAsync(CreateOrderDTOResponse(thirdToken, 0));
             // Act
             await unitUnderTest.ProtectedDownload(durationEvent);
 
             // Assert
-            webClient.Verify(x => x.GetOrders(orderSourceId, null), Times.Once);
-            webClient.Verify(x => x.GetOrders(orderSourceId, firstToken), Times.Once);
-            webClient.Verify(x => x.GetOrders(orderSourceId, secondToken), Times.Once);
-            webClient.Verify(x => x.GetOrders(orderSourceId, thirdToken), Times.Once);
-            webClient.Verify(x => x.GetOrders(It.IsAny<string>(), It.IsAny<string>()), Times.Exactly(4));
+            webClient.Verify(x => x.GetOrders(orderSourceId, null, CancellationToken.None), Times.Once);
+            webClient.Verify(x => x.GetOrders(orderSourceId, firstToken, CancellationToken.None), Times.Once);
+            webClient.Verify(x => x.GetOrders(orderSourceId, secondToken, CancellationToken.None), Times.Once);
+            webClient.Verify(x => x.GetOrders(orderSourceId, thirdToken, CancellationToken.None), Times.Once);
+            webClient.Verify(x => x.GetOrders(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<CancellationToken>()), Times.Exactly(4));
         }
 
         private GetOrdersDTO CreateOrderDTOResponse(string continuationToken, int orderCount, bool error = false) => 
