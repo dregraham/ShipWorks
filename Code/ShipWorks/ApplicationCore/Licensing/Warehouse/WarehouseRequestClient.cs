@@ -92,7 +92,7 @@ namespace ShipWorks.ApplicationCore.Licensing.Warehouse
                         return GenericResult.FromError<IRestResponse>("Unable to obtain a valid token from redirectToken.");
                     }
 
-                    restResponse = await ResendAction(restRequest, restClient, redirectTokenResult, CancellationToken.None);
+                    restResponse = await ResendAction(restRequest, restClient, redirectTokenResult, cancellationToken);
                 }
 
                 if (restResponse.StatusCode == HttpStatusCode.OK)

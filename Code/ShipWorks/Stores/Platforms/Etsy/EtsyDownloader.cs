@@ -32,8 +32,7 @@ namespace ShipWorks.Stores.Platforms.Etsy
     /// <summary>
     /// Downloader for EtsyStores
     /// </summary>
-    //[KeyedComponent(typeof(IStoreDownloader), StoreTypeCode.Etsy)]
-    //TODO: should we remove this class?
+    [KeyedComponent(typeof(IStoreDownloader), StoreTypeCode.Etsy)]
     public class EtsyDownloader : StoreDownloader
     {
         private static readonly ILog log = LogManager.GetLogger(typeof(EtsyDownloader));

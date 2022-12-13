@@ -510,7 +510,7 @@ namespace ShipWorks.Stores.Communication
 
                                 // Create the downloader
                                 // TODO: Once all Amazon stores have moved onto the new provider this can be removed and resolved as before
-                                if ((store.StoreTypeCode == StoreTypeCode.Amazon) &&
+                                if ((store.StoreTypeCode == StoreTypeCode.Amazon || store.StoreTypeCode == StoreTypeCode.Etsy) &&
                                     !string.IsNullOrEmpty(store.OrderSourceID))
                                 {
                                     if (store.StoreTypeCode == StoreTypeCode.Amazon)

@@ -31,8 +31,8 @@ namespace ShipWorks.Stores.Platforms.Etsy
     /// <summary>
     /// Order downloader for Etsy stores via Platform
     /// </summary>
-    //[Component(RegistrationType.Self)]
-    [KeyedComponent(typeof(IStoreDownloader), StoreTypeCode.Etsy)]
+    [Component(RegistrationType.Self)]
+    //[KeyedComponent(typeof(IStoreDownloader), StoreTypeCode.Etsy)]
 
     public class EtsyPlatformDownloader : StoreDownloader
     {
@@ -181,7 +181,7 @@ namespace ShipWorks.Stores.Platforms.Etsy
             order.OnlineLastModified = modifiedDate >= orderDate ? modifiedDate : orderDate;
             
             // set the status
-            var orderStatus = GetAmazonStatus(salesOrder.Status, order.OrderNumberComplete);
+            var orderStatus = GetOrderStatus(salesOrder.Status, order.OrderNumberComplete);
             order.OnlineStatus = orderStatus;
             order.OnlineStatusCode = orderStatus;
             
@@ -275,7 +275,7 @@ namespace ShipWorks.Stores.Platforms.Etsy
         /// is the code I used to "unmap" the platform mapping for existing filters:
         /// https://github.com/shipstation/integrations-ecommerce/blob/915ffd7a42f22ae737bf7d277e69409c3cf1b845/modules/amazon-order-source/src/methods/mappers/sales-orders-export-mappers.ts#L150
         /// </remarks>
-        public static string GetAmazonStatus(OrderSourceSalesOrderStatus platformStatus, string orderId)
+        private static string GetOrderStatus(OrderSourceSalesOrderStatus platformStatus, string orderId)
         {
             switch (platformStatus)
             {
