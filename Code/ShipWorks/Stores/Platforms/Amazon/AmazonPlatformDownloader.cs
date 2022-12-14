@@ -33,10 +33,8 @@ namespace ShipWorks.Stores.Platforms.Amazon
     /// Order downloader for Amazon stores via Platform
     /// </summary>
     [Component(RegistrationType.Self)]
-    public class AmazonPlatformDownloader : StoreDownloader
+    public class AmazonPlatformDownloader : PlatformDownloader
     {
-        private static readonly ILog log = LogManager.GetLogger(typeof(AmazonPlatformDownloader));
-
         /// <summary>
         /// Count of FBA orders in a Download call.
         /// </summary>
@@ -307,7 +305,7 @@ namespace ShipWorks.Stores.Platforms.Amazon
         /// is the code I used to "unmap" the platform mapping for existing filters:
         /// https://github.com/shipstation/integrations-ecommerce/blob/915ffd7a42f22ae737bf7d277e69409c3cf1b845/modules/amazon-order-source/src/methods/mappers/sales-orders-export-mappers.ts#L150
         /// </remarks>
-        public static string GetAmazonStatus(OrderSourceSalesOrderStatus platformStatus, string orderId)
+        private string GetAmazonStatus(OrderSourceSalesOrderStatus platformStatus, string orderId)
         {
             switch (platformStatus)
             {

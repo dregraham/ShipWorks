@@ -32,12 +32,9 @@ namespace ShipWorks.Stores.Platforms.Etsy
     /// Order downloader for Etsy stores via Platform
     /// </summary>
     [Component(RegistrationType.Self)]
-    //[KeyedComponent(typeof(IStoreDownloader), StoreTypeCode.Etsy)]
 
-    public class EtsyPlatformDownloader : StoreDownloader
+    public class EtsyPlatformDownloader : PlatformDownloader
     {
-        private static readonly ILog log = LogManager.GetLogger(typeof(EtsyPlatformDownloader));
-
         /// <summary>
         /// Count of FBA orders in a Download call.
         /// </summary>
@@ -166,8 +163,8 @@ namespace ShipWorks.Stores.Platforms.Etsy
 
             var order = (EtsyOrderEntity) result.Value;
             order.ChannelOrderID = salesOrder.SalesOrderGuid;
-            order.WasPaid = false;//TODO
-            order.WasShipped= false;//TODO
+            order.WasPaid = salesOrder.Payment.PaymentStatus == OrderSourcePaymentStatus.Paid;
+            order.WasShipped = salesOrder.Status == OrderSourceSalesOrderStatus.Completed;
 
             if (salesOrder.Status == OrderSourceSalesOrderStatus.Cancelled && order.IsNew)
             {
@@ -183,7 +180,7 @@ namespace ShipWorks.Stores.Platforms.Etsy
             order.OnlineLastModified = modifiedDate >= orderDate ? modifiedDate : orderDate;
             
             // set the status
-            var orderStatus = GetOrderStatus(salesOrder.Status, order.OrderNumberComplete);
+            var orderStatus = GetEtsyOrderStatus(salesOrder.Status, salesOrder.Payment.PaymentStatus, order.OrderNumberComplete);
             order.OnlineStatus = orderStatus;
             order.OnlineStatusCode = orderStatus;
             
@@ -264,21 +261,28 @@ namespace ShipWorks.Stores.Platforms.Etsy
         /// <remarks>
         /// Unfortunately, this isn't a one to one to from Platform Status to Etsy Status. This
         /// is the code I used to "unmap" the platform mapping for existing filters:
-        /// https://github.com/shipstation/integrations-ecommerce/blob/915ffd7a42f22ae737bf7d277e69409c3cf1b845/modules/amazon-order-source/src/methods/mappers/sales-orders-export-mappers.ts#L150
+        /// https://github.com/shipstation/integrations-vice/blob/master/ecommerce/modules/etsy/src/services/mappers/salesOrderExport.Mapper.js#L133
         /// </remarks>
-        private static string GetOrderStatus(OrderSourceSalesOrderStatus platformStatus, string orderId)
+        private string GetEtsyOrderStatus(OrderSourceSalesOrderStatus platformStatus, OrderSourcePaymentStatus paymentStatus, string orderId)
         {
+            switch (paymentStatus)
+            {
+                case OrderSourcePaymentStatus.PaymentInProcess:
+                    return "Payment Processing";
+            }
             switch (platformStatus)
             {
+                case OrderSourceSalesOrderStatus.PendingFulfillment:
+                    return "Open";
                 case OrderSourceSalesOrderStatus.AwaitingShipment:
-                    return "Unshipped";
+                    return "Paid";
                 case OrderSourceSalesOrderStatus.Cancelled:
                     return "Cancelled";
                 case OrderSourceSalesOrderStatus.Completed:
-                    return "Shipped";
+                    //return "Shipped"; - ambigous: in platform, both  Completed and Shipped are mapped to Completed
+                    return "Completed";
                 case OrderSourceSalesOrderStatus.AwaitingPayment:
-                    return "Pending";
-                case OrderSourceSalesOrderStatus.OnHold:
+                    return "Unpaid";
                 default:
                     log.Warn($"Encountered unmapped status of {platformStatus} for orderId {orderId}.");
                     return "Unknown";
