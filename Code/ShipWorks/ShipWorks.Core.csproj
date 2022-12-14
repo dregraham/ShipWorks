@@ -1318,6 +1318,8 @@
     <Compile Include="Shipping\ShipEngine\Manifest\IShipEngineManifestUtility.cs" />
     <Compile Include="Shipping\ShipEngine\Manifest\IShipEngineManifestRepo.cs" />
     <Compile Include="Shipping\ShipEngine\Manifest\IShipEngineManifestCreator.cs" />
+    <Compile Include="Stores\Communication\IPlatformDownloader.cs" />
+    <Compile Include="Stores\Communication\PlatformDownloader.cs" />
     <Compile Include="Stores\ILegacyStoreTrialKeyConverter.cs" />
     <Compile Include="Stores\Platforms\Amazon\AmazonInitialDownloadDaysControl.cs">
       <SubType>UserControl</SubType>

@@ -517,7 +517,9 @@ namespace ShipWorks.Stores.Communication
                                         downloader = lifetimeScope.Resolve<AmazonPlatformDownloader>(TypedParameter.From(store));
                                     else
                                         downloader = lifetimeScope.Resolve<EtsyPlatformDownloader>(TypedParameter.From(store));
-                                }
+
+                                    //downloader = lifetimeScope.ResolveKeyed<IPlatformDownloader>(store.StoreTypeCode, TypedParameter.From(store));
+								}
                                 else
                                 {
                                     downloader = lifetimeScope.ResolveKeyed<IStoreDownloader>(store.StoreTypeCode, TypedParameter.From(store));

@@ -191,17 +191,6 @@ namespace ShipWorks.Stores.Platforms.Etsy
                 FbaOrdersDownloaded++;
             }
 
-            // We keep this at the order level and it is at the item level. So, if they are all prime or all not prime we set Yes/No. In ohter cases, Unknown
-            var isPrime = AmazonIsPrime.Unknown;
-            if (salesOrder.RequestedFulfillments.All(f => f.ShippingPreferences?.IsPremiumProgram ?? false))
-            {
-                isPrime = AmazonIsPrime.Yes;
-            }
-            else if (salesOrder.RequestedFulfillments.All(f => (!f.ShippingPreferences?.IsPremiumProgram) ?? false))
-            {
-                isPrime = AmazonIsPrime.No;
-            }
-
             // no customer ID in this Api
             order.OnlineCustomerID = null;
 
@@ -396,7 +385,7 @@ namespace ShipWorks.Stores.Platforms.Etsy
         /// </summary>
         private void LoadOrderItem(OrderSourceSalesOrderItem orderItem, EtsyOrderEntity order)
         {
-            var item = (AmazonOrderItemEntity) InstantiateOrderItem(order);
+            var item = (EtsyOrderItemEntity) InstantiateOrderItem(order);
 
             // populate the basics
             item.Name = orderItem.Product.Name;
@@ -421,11 +410,11 @@ namespace ShipWorks.Stores.Platforms.Etsy
                 item.Height = (decimal) PlatformUnitConverter.ConvertDimension(dims.Height, fromDimUnit);
             }
 
-            // amazon-specific fields
-            item.AmazonOrderItemCode = orderItem.LineItemId;
-            item.ASIN = orderItem.Product.Identifiers?.Asin;
+            //amazon-specific fields
+            //item.AmazonOrderItemCode = orderItem.LineItemId;
+            //item.ASIN = orderItem.Product.Identifiers?.Asin;
 
-            item.ConditionNote = orderItem.Product?.Details?.FirstOrDefault((d) => d.Name == "Condition")?.Value;
+            //item.ConditionNote = orderItem.Product?.Details?.FirstOrDefault((d) => d.Name == "Condition")?.Value;
 
             AddOrderItemCharges(orderItem, order);
         }
@@ -433,7 +422,7 @@ namespace ShipWorks.Stores.Platforms.Etsy
         /// <summary>
         /// Populate image urls
         /// </summary>
-        private static void PopulateUrls(OrderSourceSalesOrderItem orderItem, AmazonOrderItemEntity item)
+        private static void PopulateUrls(OrderSourceSalesOrderItem orderItem, EtsyOrderItemEntity item)
         {
             var urls = orderItem.Product?.Urls;
 
