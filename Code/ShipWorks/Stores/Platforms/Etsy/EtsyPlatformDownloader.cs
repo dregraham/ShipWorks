@@ -166,6 +166,8 @@ namespace ShipWorks.Stores.Platforms.Etsy
 
             var order = (EtsyOrderEntity) result.Value;
             order.ChannelOrderID = salesOrder.SalesOrderGuid;
+            order.WasPaid = false;//TODO
+            order.WasShipped= false;//TODO
 
             if (salesOrder.Status == OrderSourceSalesOrderStatus.Cancelled && order.IsNew)
             {
