@@ -20,6 +20,7 @@ using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Communication;
 using ShipWorks.Stores.Content;
+using ShipWorks.Stores.Platforms.Amazon.DTO;
 using ShipWorks.Stores.Platforms.Etsy;
 using ShipWorks.Stores.Platforms.ShipEngine;
 using ShipWorks.Stores.Platforms.ShipEngine.Apollo;
@@ -35,11 +36,6 @@ namespace ShipWorks.Stores.Platforms.Etsy
 
     public class EtsyPlatformDownloader : PlatformDownloader
     {
-        /// <summary>
-        /// Count of FBA orders in a Download call.
-        /// </summary>
-        public int FbaOrdersDownloaded { get; private set; }
-
         /// <summary>
         /// Gets the Etsy store entity
         /// </summary>
@@ -73,9 +69,6 @@ namespace ShipWorks.Stores.Platforms.Etsy
         {
             try
             {
-				//FbaOrdersDownloaded - To be removed or replaced !!
-				FbaOrdersDownloaded = 0;
-
                 Progress.Detail = "Connecting to Platform...";
 
                 var client = createWebClient(EtsyStore);
@@ -118,8 +111,6 @@ namespace ShipWorks.Stores.Platforms.Etsy
                     result = await client.GetOrders(Store.OrderSourceID, EtsyStore.ContinuationToken, Progress.CancellationToken).ConfigureAwait(false);
 
                 }
-
-                trackedDurationEvent.AddMetric("Etsy.Fba.Order.Count", FbaOrdersDownloaded);
 
                 Progress.PercentComplete = 100;
                 Progress.Detail = "Done.";
@@ -184,12 +175,6 @@ namespace ShipWorks.Stores.Platforms.Etsy
             order.OnlineStatus = orderStatus;
             order.OnlineStatusCode = orderStatus;
             
-            // If the order is new and it is of Etsy fulfillment type, increase the FBA count.
-            if (order.IsNew)
-            {
-                FbaOrdersDownloaded++;
-            }
-
             // no customer ID in this Api
             order.OnlineCustomerID = null;
 
@@ -204,10 +189,12 @@ namespace ShipWorks.Stores.Platforms.Etsy
             if (order.IsNew)
             {
                 order.OrderNumber = await GetNextOrderNumberAsync().ConfigureAwait(false);
+                var giftNotes = GetGiftNotes(salesOrder);
+                IEnumerable<CouponCode> couponCodes = GetCouponCodes(salesOrder);
 
                 foreach (var fulfillment in salesOrder.RequestedFulfillments)
                 {
-                    LoadOrderItems(fulfillment, order);
+                    LoadOrderItems(fulfillment, order, giftNotes, couponCodes);
                 }
 
                 // Taxes
@@ -287,193 +274,6 @@ namespace ShipWorks.Stores.Platforms.Etsy
                     log.Warn($"Encountered unmapped status of {platformStatus} for orderId {orderId}.");
                     return "Unknown";
             }
-        }
-
-        /// <summary>
-        /// Sets the XXXStreet1 - XXXStreet3 address lines
-        /// </summary>
-        private static void SetStreetAddress(PersonAdapter address, List<string> addressLines)
-        {
-            // first get rid of blanks
-            addressLines.RemoveAll(s => s.Length == 0);
-
-            var targetLine = 0;
-            foreach (var addressLine in addressLines)
-            {
-                targetLine++;
-
-                switch (targetLine)
-                {
-                    case 1:
-                        address.Street1 = addressLine;
-                        break;
-                    case 2:
-                        address.Street2 = addressLine;
-                        break;
-                    case 3:
-                        address.Street3 = addressLine;
-                        break;
-                }
-            }
-        }
-
-        private static void LoadAddresses(EtsyOrderEntity order, OrderSourceApiSalesOrder salesOrder)
-        {
-            var shipTo = salesOrder.RequestedFulfillments.FirstOrDefault(x => x?.ShipTo != null)?.ShipTo;
-            if (shipTo == null || !order.IsNew)
-            {
-                return;
-            }
-
-            var shipFullName = PersonName.Parse(shipTo.Name ?? string.Empty);
-            order.ShipFirstName = shipFullName.First;
-            order.ShipMiddleName = shipFullName.Middle;
-            order.ShipLastName = shipFullName.LastWithSuffix;
-            order.ShipNameParseStatus = (int) shipFullName.ParseStatus;
-            order.ShipUnparsedName = shipFullName.UnparsedName;
-            order.ShipCompany = shipTo.Company;
-            order.ShipPhone = shipTo.Phone ?? string.Empty;
-
-            var shipAddressLines = new List<string>
-            {
-                shipTo.AddressLine1 ?? string.Empty,
-                shipTo.AddressLine2 ?? string.Empty,
-                shipTo.AddressLine3 ?? string.Empty
-            };
-            SetStreetAddress(new PersonAdapter(order, "Ship"), shipAddressLines);
-
-            order.ShipCity = shipTo.City ?? string.Empty;
-            order.ShipPostalCode = shipTo.PostalCode ?? string.Empty;
-            order.ShipCountryCode = Geography.GetCountryCode(shipTo.CountryCode ?? string.Empty);
-            order.ShipStateProvCode = Geography.GetStateProvCode(shipTo.StateProvince ?? string.Empty, order.ShipCountryCode);
-
-            // Platform only provides one email
-            order.ShipEmail = salesOrder.Buyer.Email ?? string.Empty;
-            order.BillEmail = order.ShipEmail;
-
-            // Bill To
-            var billToFullName = PersonName.Parse(salesOrder.BillTo.Name ?? salesOrder.Buyer.Name ?? string.Empty);
-            order.BillFirstName = billToFullName.First;
-            order.BillMiddleName = billToFullName.Middle;
-            order.BillLastName = billToFullName.LastWithSuffix;
-            order.BillNameParseStatus = (int) billToFullName.ParseStatus;
-            order.BillUnparsedName = billToFullName.UnparsedName;
-            order.BillCompany = salesOrder.BillTo.Company;
-            order.BillPhone = salesOrder.BillTo.Phone ?? salesOrder.Buyer.Phone ?? string.Empty;
-
-            var billAddressLines = new List<string>
-            {
-                salesOrder.BillTo.AddressLine1 ?? string.Empty,
-                salesOrder.BillTo.AddressLine2 ?? string.Empty,
-                salesOrder.BillTo.AddressLine3 ?? string.Empty
-            };
-            SetStreetAddress(new PersonAdapter(order, "Bill"), billAddressLines);
-
-            order.BillCity = salesOrder.BillTo.City ?? string.Empty;
-            order.BillPostalCode = salesOrder.BillTo.PostalCode ?? string.Empty;
-            order.BillCountryCode = Geography.GetCountryCode(salesOrder.BillTo.CountryCode ?? string.Empty);
-            order.BillStateProvCode = Geography.GetStateProvCode(salesOrder.BillTo.StateProvince ?? string.Empty, order.BillCountryCode);
-        }
-
-        /// <summary>
-        /// Loads the order items of an amazon order
-        /// </summary>
-        private void LoadOrderItems(OrderSourceRequestedFulfillment fulfillment, EtsyOrderEntity order)
-        {
-            foreach (var item in fulfillment.Items)
-            {
-	            LoadOrderItem(item, order);
-            }
-        }
-
-        /// <summary>
-        /// Load an order item
-        /// </summary>
-        private void LoadOrderItem(OrderSourceSalesOrderItem orderItem, EtsyOrderEntity order)
-        {
-            var item = (EtsyOrderItemEntity) InstantiateOrderItem(order);
-
-            // populate the basics
-            item.Name = orderItem.Product.Name;
-            item.Quantity = orderItem.Quantity;
-            item.UnitPrice = orderItem.UnitPrice;
-            item.SKU = orderItem.Product.Identifiers.Sku;
-            item.Code = item.SKU;
-
-            var fromWeightUnit = PlatformUnitConverter.FromPlatformWeight(orderItem.Product.Weight.Unit);
-            var weight = WeightUtility.Convert(fromWeightUnit, WeightUnitOfMeasure.Pounds, (double) orderItem.Product.Weight.Value);
-            item.Weight = weight;
-
-            PopulateUrls(orderItem, item);
-
-            if (orderItem.Product?.Dimensions != null)
-            {
-                var dims = orderItem.Product.Dimensions;
-                var fromDimUnit = dims.Unit;
-
-                item.Length = (decimal) PlatformUnitConverter.ConvertDimension(dims.Length, fromDimUnit);
-                item.Width = (decimal) PlatformUnitConverter.ConvertDimension(dims.Width, fromDimUnit);
-                item.Height = (decimal) PlatformUnitConverter.ConvertDimension(dims.Height, fromDimUnit);
-            }
-
-            //amazon-specific fields
-            //item.AmazonOrderItemCode = orderItem.LineItemId;
-            //item.ASIN = orderItem.Product.Identifiers?.Asin;
-
-            //item.ConditionNote = orderItem.Product?.Details?.FirstOrDefault((d) => d.Name == "Condition")?.Value;
-
-            AddOrderItemCharges(orderItem, order);
-        }
-
-        /// <summary>
-        /// Populate image urls
-        /// </summary>
-        private static void PopulateUrls(OrderSourceSalesOrderItem orderItem, EtsyOrderItemEntity item)
-        {
-            var urls = orderItem.Product?.Urls;
-
-            item.Thumbnail = urls?.ThumbnailUrl ?? string.Empty;
-            item.Image = urls?.ImageUrl ?? string.Empty;
-        }
-
-        /// <summary>
-        /// Add item charges to the order
-        /// </summary>
-        private void AddOrderItemCharges(OrderSourceSalesOrderItem orderItem, EtsyOrderEntity order)
-        {
-            foreach (var orderItemAdjustment in orderItem.Adjustments)
-            {
-                AddToCharge(order, orderItemAdjustment.Description, orderItemAdjustment.Description, orderItemAdjustment.Amount);
-            }
-
-            foreach (var orderItemShippingCharge in orderItem.ShippingCharges)
-            {
-                AddToCharge(order, "SHIPPING", orderItemShippingCharge.Description.Replace(" price", string.Empty), orderItemShippingCharge.Amount);
-            }
-        }
-
-        /// <summary>
-        /// Locates an order's charge (or creates it) and adds the value
-        /// </summary>
-        private void AddToCharge(OrderEntity order, string chargeType, string name, decimal amount)
-        {
-            // Don't need to create 0-value charges
-            if (amount == 0)
-            {
-                return;
-            }
-
-            var charge = order.OrderCharges.FirstOrDefault(c => string.Compare(c.Type, chargeType.ToUpper(), StringComparison.OrdinalIgnoreCase) == 0);
-            if (charge == null)
-            {
-                // first one, create it
-                charge = InstantiateOrderCharge(order);
-                charge.Type = chargeType.ToUpper();
-                charge.Description = name;
-                charge.Amount = 0;
-            }
-
-            charge.Amount += amount;
         }
     }
 }
