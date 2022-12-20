@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
+using Autofac.Features.Indexed;
 using Interapptive.Shared.Utility;
 using ShipWorks.Actions;
 using ShipWorks.Actions.Tasks;
@@ -8,7 +10,10 @@ using ShipWorks.Actions.Tasks.Common;
 using ShipWorks.Actions.Tasks.Common.Editors;
 using ShipWorks.Data.Model;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Stores.Platforms.Amazon;
 using ShipWorks.Stores.Platforms.Etsy.OnlineUpdating;
+using ShipWorks.Stores.Platforms.Platform;
+using ShipWorks.Stores.Platforms.Platform.OnlineUpdating;
 
 namespace ShipWorks.Stores.Platforms.Etsy.CoreExtensions.Actions
 {
@@ -19,14 +24,14 @@ namespace ShipWorks.Stores.Platforms.Etsy.CoreExtensions.Actions
     public class EtsyShipmentUploadTask : StoreInstanceTaskBase
     {
         const long maxBatchSize = 300;
-        private readonly Func<EtsyStoreEntity, IEtsyOnlineUpdater> createOnlineUpdater;
+        protected readonly IPlatformOnlineUpdater onlineUpdater;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public EtsyShipmentUploadTask(Func<EtsyStoreEntity, IEtsyOnlineUpdater> createOnlineUpdater)
+        public EtsyShipmentUploadTask(IIndex<StoreTypeCode, IPlatformOnlineUpdater> platformOnlineUpdaterIndex)
         {
-            this.createOnlineUpdater = createOnlineUpdater;
+            this.onlineUpdater = platformOnlineUpdaterIndex[StoreTypeCode.Etsy];
         }
 
         /// <summary>
@@ -56,6 +61,7 @@ namespace ShipWorks.Stores.Platforms.Etsy.CoreExtensions.Actions
 
         /// <summary>
         /// Run the task
+        /// TODO: copied from Amazon, should be extracted to common base
         /// </summary>
         public override async Task RunAsync(List<long> inputKeys, IActionStepContext context)
         {
@@ -73,19 +79,38 @@ namespace ShipWorks.Stores.Platforms.Etsy.CoreExtensions.Actions
                 throw new ActionTaskRunException("The store configured for the task has been deleted.");
             }
 
-            var updater = createOnlineUpdater(store);
+            // Get any postponed data we've previously stored away
+            List<long> postponedKeys = context.GetPostponedData().SelectMany(d => (List<long>) d).ToList();
 
-            foreach (var shipmentID in inputKeys)
+            // To avoid postponing forever on big selections, we only postpone up to maxBatchSize
+            if (context.CanPostpone && postponedKeys.Count < maxBatchSize)
             {
+                context.Postpone(inputKeys);
+            }
+            else
+            {
+                context.ConsumingPostponed();
+
                 // Upload the details, first starting with all the postponed input, plus the current input
-                try
-                {
-                    await updater.UploadShipmentDetails(shipmentID, context.CommitWork).ConfigureAwait(false);
-                }
-                catch (EtsyException ex)
-                {
-                    throw new ActionTaskRunException(ex.Message, ex);
-                }
+                await UpdloadShipmentDetails(store, postponedKeys.Concat(inputKeys)).ConfigureAwait(false);
+            }
+        }
+        /// <summary>
+        /// Run the batched up (already combined from postponed tasks, if any) input keys through the task
+        /// </summary>
+        protected async Task UpdloadShipmentDetails(StoreEntity store, IEnumerable<long> shipmentKeys)
+        {
+            try
+            {
+                await onlineUpdater.UploadShipmentDetails(store, shipmentKeys).ConfigureAwait(false);
+            }
+            catch (AmazonException ex)
+            {
+                throw new ActionTaskRunException(ex.Message, ex);
+            }
+            catch (PlatformStoreException platformException)
+            {
+                throw new ActionTaskRunException(platformException.Message, platformException);
             }
         }
     }

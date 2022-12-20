@@ -16,6 +16,7 @@ using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.Custom;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping;
+using ShipWorks.Shipping.Carriers.Api;
 using ShipWorks.Shipping.Carriers.Postal;
 using ShipWorks.Stores.Orders.Combine;
 using ShipWorks.Templates.Tokens;
@@ -26,7 +27,8 @@ namespace ShipWorks.Stores.Platforms.Etsy.OnlineUpdating
     /// Updates payment and tracking information to Etsy.
     /// </summary>
     [Component]
-    public class EtsyOnlineUpdater : IEtsyOnlineUpdater
+    [KeyedComponent(typeof(IOnlineUpdater), StoreTypeCode.Etsy)]
+    public class EtsyOnlineUpdater : IEtsyOnlineUpdater, IOnlineUpdater
     {
         static readonly ILog log = LogManager.GetLogger(typeof(EtsyOnlineUpdater));
         private readonly EtsyStoreEntity etsyStore;
@@ -124,6 +126,12 @@ namespace ShipWorks.Stores.Platforms.Etsy.OnlineUpdating
             if (order.IsManual && !order.CombineSplitStatus.IsCombined())
             {
                 log.InfoFormat("Not uploading tracking number since order {0} is manual.", order.OrderID);
+                return;
+            }
+
+            if (etsyStore.IsPlatformOrderSource)
+            {
+                log.InfoFormat("Not uploading tracking number since order {0} is from Platform.", order.OrderID);
                 return;
             }
 
@@ -319,6 +327,20 @@ namespace ShipWorks.Stores.Platforms.Etsy.OnlineUpdating
                     return "none";
                 default:
                     return "other";
+            }
+        }
+
+        /// <summary>
+        /// Uploads shipment details for a particular shipment
+        /// </summary>
+        public async Task UploadShipmentDetails(StoreEntity store, List<ShipmentEntity> shipments)
+        {
+            foreach (var shipment in shipments)
+            {
+                bool? markAsPaid = null;//TODO: how to get status?
+                bool? markAsShipped = null;
+                string comment = string.Empty;
+                await UpdateOnlineStatus(shipment, markAsPaid, markAsShipped, comment).ConfigureAwait(false);
             }
         }
     }
