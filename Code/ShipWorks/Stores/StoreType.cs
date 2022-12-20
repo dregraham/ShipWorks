@@ -96,6 +96,7 @@ namespace ShipWorks.Stores
             store.InternationalAddressValidationSetting = AddressValidationStoreSettingType.ValidateAndNotify;
 
             store.OrderSourceID = "";
+            store.ShouldMigrate = true;
         }
 
         /// <summary>

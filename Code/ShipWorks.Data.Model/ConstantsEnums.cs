@@ -644,6 +644,8 @@ namespace ShipWorks.Data.Model
 		OrderSourceID,
 		///<summary>PlatformAmazonCarrierID. Inherited from Store</summary>
 		PlatformAmazonCarrierID,
+		///<summary>ShouldMigrate. Inherited from Store</summary>
+		ShouldMigrate,
 		///<summary>ContinuationToken. Inherited from Store</summary>
 		ContinuationToken,
 		///<summary>StoreID. </summary>
@@ -844,6 +846,8 @@ namespace ShipWorks.Data.Model
 		OrderSourceID,
 		///<summary>PlatformAmazonCarrierID. Inherited from Store</summary>
 		PlatformAmazonCarrierID,
+		///<summary>ShouldMigrate. Inherited from Store</summary>
+		ShouldMigrate,
 		///<summary>ContinuationToken. Inherited from Store</summary>
 		ContinuationToken,
 		///<summary>StoreID. </summary>
@@ -1258,6 +1262,8 @@ namespace ShipWorks.Data.Model
 		OrderSourceID,
 		///<summary>PlatformAmazonCarrierID. Inherited from Store</summary>
 		PlatformAmazonCarrierID,
+		///<summary>ShouldMigrate. Inherited from Store</summary>
+		ShouldMigrate,
 		///<summary>ContinuationToken. Inherited from Store</summary>
 		ContinuationToken,
 		///<summary>StoreID. </summary>
@@ -1454,6 +1460,8 @@ namespace ShipWorks.Data.Model
 		OrderSourceID,
 		///<summary>PlatformAmazonCarrierID. Inherited from Store</summary>
 		PlatformAmazonCarrierID,
+		///<summary>ShouldMigrate. Inherited from Store</summary>
+		ShouldMigrate,
 		///<summary>ContinuationToken. Inherited from Store</summary>
 		ContinuationToken,
 		///<summary>StoreID. </summary>
@@ -1868,6 +1876,8 @@ namespace ShipWorks.Data.Model
 		OrderSourceID,
 		///<summary>PlatformAmazonCarrierID. Inherited from Store</summary>
 		PlatformAmazonCarrierID,
+		///<summary>ShouldMigrate. Inherited from Store</summary>
+		ShouldMigrate,
 		///<summary>ContinuationToken. Inherited from Store</summary>
 		ContinuationToken,
 		///<summary>StoreID. </summary>
@@ -3312,6 +3322,8 @@ namespace ShipWorks.Data.Model
 		OrderSourceID,
 		///<summary>PlatformAmazonCarrierID. Inherited from Store</summary>
 		PlatformAmazonCarrierID,
+		///<summary>ShouldMigrate. Inherited from Store</summary>
+		ShouldMigrate,
 		///<summary>ContinuationToken. Inherited from Store</summary>
 		ContinuationToken,
 		///<summary>StoreID. </summary>
@@ -3974,6 +3986,8 @@ namespace ShipWorks.Data.Model
 		OrderSourceID,
 		///<summary>PlatformAmazonCarrierID. Inherited from Store</summary>
 		PlatformAmazonCarrierID,
+		///<summary>ShouldMigrate. Inherited from Store</summary>
+		ShouldMigrate,
 		///<summary>ContinuationToken. Inherited from Store</summary>
 		ContinuationToken,
 		///<summary>StoreID. </summary>
@@ -4918,6 +4932,8 @@ namespace ShipWorks.Data.Model
 		OrderSourceID,
 		///<summary>PlatformAmazonCarrierID. Inherited from Store</summary>
 		PlatformAmazonCarrierID,
+		///<summary>ShouldMigrate. Inherited from Store</summary>
+		ShouldMigrate,
 		///<summary>ContinuationToken. Inherited from Store</summary>
 		ContinuationToken,
 		///<summary>StoreID. </summary>
@@ -5326,6 +5342,8 @@ namespace ShipWorks.Data.Model
 		OrderSourceID,
 		///<summary>PlatformAmazonCarrierID. Inherited from Store</summary>
 		PlatformAmazonCarrierID,
+		///<summary>ShouldMigrate. Inherited from Store</summary>
+		ShouldMigrate,
 		///<summary>ContinuationToken. Inherited from Store</summary>
 		ContinuationToken,
 		///<summary>StoreID. </summary>
@@ -5814,6 +5832,8 @@ namespace ShipWorks.Data.Model
 		OrderSourceID,
 		///<summary>PlatformAmazonCarrierID. Inherited from Store</summary>
 		PlatformAmazonCarrierID,
+		///<summary>ShouldMigrate. Inherited from Store</summary>
+		ShouldMigrate,
 		///<summary>ContinuationToken. Inherited from Store</summary>
 		ContinuationToken,
 		///<summary>StoreID. </summary>
@@ -5988,6 +6008,8 @@ namespace ShipWorks.Data.Model
 		OrderSourceID,
 		///<summary>PlatformAmazonCarrierID. Inherited from Store</summary>
 		PlatformAmazonCarrierID,
+		///<summary>ShouldMigrate. Inherited from Store</summary>
+		ShouldMigrate,
 		///<summary>ContinuationToken. Inherited from Store</summary>
 		ContinuationToken,
 		///<summary>StoreID. </summary>
@@ -6524,6 +6546,8 @@ namespace ShipWorks.Data.Model
 		OrderSourceID,
 		///<summary>PlatformAmazonCarrierID. Inherited from Store</summary>
 		PlatformAmazonCarrierID,
+		///<summary>ShouldMigrate. Inherited from Store</summary>
+		ShouldMigrate,
 		///<summary>ContinuationToken. Inherited from Store</summary>
 		ContinuationToken,
 		///<summary>StoreID. </summary>
@@ -6940,6 +6964,8 @@ namespace ShipWorks.Data.Model
 		OrderSourceID,
 		///<summary>PlatformAmazonCarrierID. Inherited from Store</summary>
 		PlatformAmazonCarrierID,
+		///<summary>ShouldMigrate. Inherited from Store</summary>
+		ShouldMigrate,
 		///<summary>ContinuationToken. Inherited from Store</summary>
 		ContinuationToken,
 		///<summary>StoreID. </summary>
@@ -7252,6 +7278,8 @@ namespace ShipWorks.Data.Model
 		OrderSourceID,
 		///<summary>PlatformAmazonCarrierID. Inherited from Store</summary>
 		PlatformAmazonCarrierID,
+		///<summary>ShouldMigrate. Inherited from Store</summary>
+		ShouldMigrate,
 		///<summary>ContinuationToken. Inherited from Store</summary>
 		ContinuationToken,
 		///<summary>StoreID. Inherited from GenericModuleStore</summary>
@@ -7608,6 +7636,8 @@ namespace ShipWorks.Data.Model
 		OrderSourceID,
 		///<summary>PlatformAmazonCarrierID. Inherited from Store</summary>
 		PlatformAmazonCarrierID,
+		///<summary>ShouldMigrate. Inherited from Store</summary>
+		ShouldMigrate,
 		///<summary>ContinuationToken. Inherited from Store</summary>
 		ContinuationToken,
 		///<summary>StoreID. </summary>
@@ -7728,6 +7758,8 @@ namespace ShipWorks.Data.Model
 		OrderSourceID,
 		///<summary>PlatformAmazonCarrierID. Inherited from Store</summary>
 		PlatformAmazonCarrierID,
+		///<summary>ShouldMigrate. Inherited from Store</summary>
+		ShouldMigrate,
 		///<summary>ContinuationToken. Inherited from Store</summary>
 		ContinuationToken,
 		///<summary>StoreID. Inherited from GenericModuleStore</summary>
@@ -8082,6 +8114,8 @@ namespace ShipWorks.Data.Model
 		OrderSourceID,
 		///<summary>PlatformAmazonCarrierID. Inherited from Store</summary>
 		PlatformAmazonCarrierID,
+		///<summary>ShouldMigrate. Inherited from Store</summary>
+		ShouldMigrate,
 		///<summary>ContinuationToken. Inherited from Store</summary>
 		ContinuationToken,
 		///<summary>StoreID. </summary>
@@ -8466,6 +8500,8 @@ namespace ShipWorks.Data.Model
 		OrderSourceID,
 		///<summary>PlatformAmazonCarrierID. Inherited from Store</summary>
 		PlatformAmazonCarrierID,
+		///<summary>ShouldMigrate. Inherited from Store</summary>
+		ShouldMigrate,
 		///<summary>ContinuationToken. Inherited from Store</summary>
 		ContinuationToken,
 		///<summary>StoreID. </summary>
@@ -8614,6 +8650,8 @@ namespace ShipWorks.Data.Model
 		OrderSourceID,
 		///<summary>PlatformAmazonCarrierID. Inherited from Store</summary>
 		PlatformAmazonCarrierID,
+		///<summary>ShouldMigrate. Inherited from Store</summary>
+		ShouldMigrate,
 		///<summary>ContinuationToken. Inherited from Store</summary>
 		ContinuationToken,
 		///<summary>StoreID. </summary>
@@ -9366,6 +9404,8 @@ namespace ShipWorks.Data.Model
 		OrderSourceID,
 		///<summary>PlatformAmazonCarrierID. Inherited from Store</summary>
 		PlatformAmazonCarrierID,
+		///<summary>ShouldMigrate. Inherited from Store</summary>
+		ShouldMigrate,
 		///<summary>ContinuationToken. Inherited from Store</summary>
 		ContinuationToken,
 		///<summary>StoreID. </summary>
@@ -9816,6 +9856,8 @@ namespace ShipWorks.Data.Model
 		OrderSourceID,
 		///<summary>PlatformAmazonCarrierID. Inherited from Store</summary>
 		PlatformAmazonCarrierID,
+		///<summary>ShouldMigrate. Inherited from Store</summary>
+		ShouldMigrate,
 		///<summary>ContinuationToken. Inherited from Store</summary>
 		ContinuationToken,
 		///<summary>StoreID. </summary>
@@ -10144,6 +10186,8 @@ namespace ShipWorks.Data.Model
 		OrderSourceID,
 		///<summary>PlatformAmazonCarrierID. Inherited from Store</summary>
 		PlatformAmazonCarrierID,
+		///<summary>ShouldMigrate. Inherited from Store</summary>
+		ShouldMigrate,
 		///<summary>ContinuationToken. Inherited from Store</summary>
 		ContinuationToken,
 		///<summary>StoreID. </summary>
@@ -10828,6 +10872,8 @@ namespace ShipWorks.Data.Model
 		OrderSourceID,
 		///<summary>PlatformAmazonCarrierID. Inherited from Store</summary>
 		PlatformAmazonCarrierID,
+		///<summary>ShouldMigrate. Inherited from Store</summary>
+		ShouldMigrate,
 		///<summary>ContinuationToken. Inherited from Store</summary>
 		ContinuationToken,
 		///<summary>StoreID. </summary>
@@ -11154,6 +11200,8 @@ namespace ShipWorks.Data.Model
 		OrderSourceID,
 		///<summary>PlatformAmazonCarrierID. Inherited from Store</summary>
 		PlatformAmazonCarrierID,
+		///<summary>ShouldMigrate. Inherited from Store</summary>
+		ShouldMigrate,
 		///<summary>ContinuationToken. Inherited from Store</summary>
 		ContinuationToken,
 		///<summary>StoreID. </summary>
@@ -11600,6 +11648,8 @@ namespace ShipWorks.Data.Model
 		OrderSourceID,
 		///<summary>PlatformAmazonCarrierID. Inherited from Store</summary>
 		PlatformAmazonCarrierID,
+		///<summary>ShouldMigrate. Inherited from Store</summary>
+		ShouldMigrate,
 		///<summary>ContinuationToken. Inherited from Store</summary>
 		ContinuationToken,
 		///<summary>StoreID. </summary>
@@ -12602,6 +12652,8 @@ namespace ShipWorks.Data.Model
 		OrderSourceID,
 		///<summary>PlatformAmazonCarrierID. Inherited from Store</summary>
 		PlatformAmazonCarrierID,
+		///<summary>ShouldMigrate. Inherited from Store</summary>
+		ShouldMigrate,
 		///<summary>ContinuationToken. Inherited from Store</summary>
 		ContinuationToken,
 		///<summary>StoreID. </summary>
@@ -12702,6 +12754,8 @@ namespace ShipWorks.Data.Model
 		OrderSourceID,
 		///<summary>PlatformAmazonCarrierID. Inherited from Store</summary>
 		PlatformAmazonCarrierID,
+		///<summary>ShouldMigrate. Inherited from Store</summary>
+		ShouldMigrate,
 		///<summary>ContinuationToken. Inherited from Store</summary>
 		ContinuationToken,
 		///<summary>StoreID. </summary>
@@ -12828,6 +12882,8 @@ namespace ShipWorks.Data.Model
 		OrderSourceID,
 		///<summary>PlatformAmazonCarrierID. Inherited from Store</summary>
 		PlatformAmazonCarrierID,
+		///<summary>ShouldMigrate. Inherited from Store</summary>
+		ShouldMigrate,
 		///<summary>ContinuationToken. Inherited from Store</summary>
 		ContinuationToken,
 		///<summary>StoreID. </summary>
@@ -12936,6 +12992,8 @@ namespace ShipWorks.Data.Model
 		OrderSourceID,
 		///<summary>PlatformAmazonCarrierID. </summary>
 		PlatformAmazonCarrierID,
+		///<summary>ShouldMigrate. </summary>
+		ShouldMigrate,
 		///<summary>ContinuationToken. </summary>
 		ContinuationToken,
 		/// <summary></summary>
@@ -13452,6 +13510,8 @@ namespace ShipWorks.Data.Model
 		OrderSourceID,
 		///<summary>PlatformAmazonCarrierID. Inherited from Store</summary>
 		PlatformAmazonCarrierID,
+		///<summary>ShouldMigrate. Inherited from Store</summary>
+		ShouldMigrate,
 		///<summary>ContinuationToken. Inherited from Store</summary>
 		ContinuationToken,
 		///<summary>StoreID. </summary>
@@ -14304,6 +14364,8 @@ namespace ShipWorks.Data.Model
 		OrderSourceID,
 		///<summary>PlatformAmazonCarrierID. Inherited from Store</summary>
 		PlatformAmazonCarrierID,
+		///<summary>ShouldMigrate. Inherited from Store</summary>
+		ShouldMigrate,
 		///<summary>ContinuationToken. Inherited from Store</summary>
 		ContinuationToken,
 		///<summary>StoreID. </summary>
@@ -14710,6 +14772,8 @@ namespace ShipWorks.Data.Model
 		OrderSourceID,
 		///<summary>PlatformAmazonCarrierID. Inherited from Store</summary>
 		PlatformAmazonCarrierID,
+		///<summary>ShouldMigrate. Inherited from Store</summary>
+		ShouldMigrate,
 		///<summary>ContinuationToken. Inherited from Store</summary>
 		ContinuationToken,
 		///<summary>StoreID. </summary>
@@ -15412,6 +15476,8 @@ namespace ShipWorks.Data.Model
 		OrderSourceID,
 		///<summary>PlatformAmazonCarrierID. Inherited from Store</summary>
 		PlatformAmazonCarrierID,
+		///<summary>ShouldMigrate. Inherited from Store</summary>
+		ShouldMigrate,
 		///<summary>ContinuationToken. Inherited from Store</summary>
 		ContinuationToken,
 		///<summary>StoreID. </summary>

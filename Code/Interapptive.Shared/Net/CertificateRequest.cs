@@ -81,6 +81,10 @@ namespace Interapptive.Shared.Net
             if (level == CertificateSecurityLevel.Trusted)
             {
                 nextSecureConnectionValidation = DateTime.UtcNow.AddMinutes(throttlePeriod);
+            } 
+            else
+            {
+                log.Warn($"Certificate not trusted for '{webRequest?.RequestUri?.Host}'");
             }
 
             return level;

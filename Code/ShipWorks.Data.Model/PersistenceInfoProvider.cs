@@ -3732,6 +3732,7 @@ namespace ShipWorks.Data.Model
 			this.AddElementFieldMapping("StoreEntity", "ManagedInHub", "ManagedInHub", false, "Bit", 0, 0, 0, false, "", null, typeof(System.Boolean), 34);
 			this.AddElementFieldMapping("StoreEntity", "OrderSourceID", "OrderSourceID", true, "NVarChar", 50, 0, 0, false, "", null, typeof(System.String), 35);
 			this.AddElementFieldMapping("StoreEntity", "PlatformAmazonCarrierID", "PlatformAmazonCarrierID", true, "NVarChar", 100, 0, 0, false, "", null, typeof(System.String), 36);
+			this.AddElementFieldMapping("StoreEntity", "ShouldMigrate", "ShouldMigrate", false, "Bit", 0, 0, 0, false, "", null, typeof(System.Boolean), 37);
 			this.AddElementFieldMapping("StoreEntity", "ContinuationToken", "ContinuationToken", true, "NVarChar", 2048, 0, 0, false, "", null, typeof(System.String), 37);
 		}
 

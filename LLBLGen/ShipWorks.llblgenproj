@@ -3150,6 +3150,7 @@
           <Field Name="PostalCode" Type="string" MaxLength="20" FieldIndex="14" />
           <Field Name="RowVersion" Type="byte[]" IsReadOnly="true" FieldIndex="1" />
           <Field Name="SetupComplete" Type="bool" FieldIndex="6" />
+          <Field Name="ShouldMigrate" Type="bool" FieldIndex="37" />
           <Field Name="StateProvCode" Type="string" MaxLength="50" FieldIndex="13" />
           <Field Name="StoreID" Type="long" Precision="19" IsPrimaryKey="true" FieldIndex="0" />
           <Field Name="StoreName" Type="string" MaxLength="75" FieldIndex="7" />
@@ -4835,7 +4836,7 @@
       <Catalogs>
         <Catalog Name="ShipWorksLocal">
           <Schemas>
-            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2022-12-08T15:22:40.9250976Z">
+            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2022-12-12T22:51:54.9869236Z">
               <Tables>
                 <Table Name="Action">
                   <PkConstraintName Name="PK_Action" />
@@ -9239,6 +9240,7 @@
                     <Field Name="ManagedInHub" Ordinal="35" HasDefaultValue="true" DefaultValue="(0)" DbType="2" />
                     <Field Name="OrderSourceID" Ordinal="36" IsOptional="true" DbType="12" Length="50" />
                     <Field Name="PlatformAmazonCarrierID" Ordinal="37" IsOptional="true" DbType="12" Length="100" />
+                    <Field Name="ShouldMigrate" Ordinal="38" DbType="2" />
                     <Field Name="ContinuationToken" Ordinal="38" IsOptional="true" DbType="12" Length="2048" />
                   </Fields>
                 </Table>
@@ -14483,6 +14485,7 @@
             <FieldMapping FieldName="PostalCode" TargetFieldName="PostalCode" />
             <FieldMapping FieldName="RowVersion" TargetFieldName="RowVersion" />
             <FieldMapping FieldName="SetupComplete" TargetFieldName="SetupComplete" />
+            <FieldMapping FieldName="ShouldMigrate" TargetFieldName="ShouldMigrate" />
             <FieldMapping FieldName="StateProvCode" TargetFieldName="StateProvCode" />
             <FieldMapping FieldName="StoreID" TargetFieldName="StoreID" SequenceToUse="SCOPE_IDENTITY()" />
             <FieldMapping FieldName="StoreName" TargetFieldName="StoreName" />

@@ -427,6 +427,8 @@ namespace ShipWorks.Data.Model.EntityClasses
 			fieldHashtable = new Dictionary<string, string>();
 			_fieldsCustomProperties.Add("PlatformAmazonCarrierID", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
+			_fieldsCustomProperties.Add("ShouldMigrate", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
 			_fieldsCustomProperties.Add("ContinuationToken", fieldHashtable);
 		}
 		#endregion
@@ -898,6 +900,17 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			get { return (System.String)GetValue((int)StoreFieldIndex.PlatformAmazonCarrierID, true); }
 			set	{ SetValue((int)StoreFieldIndex.PlatformAmazonCarrierID, value); }
+		}
+
+		/// <summary> The ShouldMigrate property of the Entity Store<br/><br/></summary>
+		/// <remarks>Mapped on  table field: "Store"."ShouldMigrate"<br/>
+		/// Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
+		public virtual System.Boolean ShouldMigrate
+		{
+			get { return (System.Boolean)GetValue((int)StoreFieldIndex.ShouldMigrate, true); }
+			set	{ SetValue((int)StoreFieldIndex.ShouldMigrate, value); }
 		}
 
 		/// <summary> The ContinuationToken property of the Entity Store<br/><br/></summary>
