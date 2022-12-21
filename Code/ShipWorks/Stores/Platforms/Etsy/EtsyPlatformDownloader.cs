@@ -47,18 +47,12 @@ namespace ShipWorks.Stores.Platforms.Etsy
         private readonly Func<EtsyStoreEntity, IPlatformOrderWebClient> createWebClient;
 
         /// <summary>
-        /// Store manager used to save the continuation token to the amazon store
-        /// </summary>
-        private readonly IStoreManager storeManager;
-
-        /// <summary>
         /// Constructor
         /// </summary>
         public EtsyPlatformDownloader(StoreEntity store, IStoreTypeManager storeTypeManager,
             IStoreManager storeManager, Func<EtsyStoreEntity, IPlatformOrderWebClient> createWebClient)
-            : base(store, storeTypeManager.GetType(store))
+            : base(store, storeTypeManager.GetType(store), storeManager)
         {
-            this.storeManager = storeManager;
             this.createWebClient = createWebClient;
         }
 

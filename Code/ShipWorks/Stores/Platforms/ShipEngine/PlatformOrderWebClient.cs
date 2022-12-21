@@ -21,7 +21,7 @@ namespace ShipWorks.Stores.Platforms.ShipEngine
         private readonly IWarehouseRequestClient warehouseRequestClient;
 
         /// <summary>
-        /// Constuctor
+        /// Constructor
         /// </summary>
         public PlatformOrderWebClient(IWarehouseRequestClient warehouseRequestClient)
         {
