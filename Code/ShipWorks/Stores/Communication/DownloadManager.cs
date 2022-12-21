@@ -509,14 +509,11 @@ namespace ShipWorks.Stores.Communication
                                 downloadLog = CreateDownloadLog(store, initiatedBy);
 
                                 // Create the downloader
-                                // TODO: Once all Amazon stores have moved onto the new provider this can be removed and resolved as before
-                                if ((store.StoreTypeCode == StoreTypeCode.Amazon || store.StoreTypeCode == StoreTypeCode.Etsy) &&
+                                // TODO: Once all Etsy stores have moved onto the new provider this can be removed and resolved as before
+                                if ((store.StoreTypeCode == StoreTypeCode.Etsy) &&
                                     store.IsPlatformOrderSource)
                                 {
-                                    if (store.StoreTypeCode == StoreTypeCode.Amazon)
-                                        downloader = lifetimeScope.Resolve<AmazonPlatformDownloader>(TypedParameter.From(store));
-                                    else
-                                        downloader = lifetimeScope.Resolve<EtsyPlatformDownloader>(TypedParameter.From(store));
+                                    downloader = lifetimeScope.Resolve<EtsyPlatformDownloader>(TypedParameter.From(store));
                                 }
                                 else
                                 {

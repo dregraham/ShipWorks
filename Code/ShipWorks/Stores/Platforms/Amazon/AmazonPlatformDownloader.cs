@@ -32,7 +32,7 @@ namespace ShipWorks.Stores.Platforms.Amazon
     /// <summary>
     /// Order downloader for Amazon stores via Platform
     /// </summary>
-    [Component(RegistrationType.Self)]
+    [KeyedComponent(typeof(IStoreDownloader), StoreTypeCode.Amazon)]
     public class AmazonPlatformDownloader : PlatformDownloader
     {
         /// <summary>
