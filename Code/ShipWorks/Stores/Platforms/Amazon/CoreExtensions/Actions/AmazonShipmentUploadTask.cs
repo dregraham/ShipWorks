@@ -86,14 +86,14 @@ namespace ShipWorks.Stores.Platforms.Amazon.CoreExtensions.Actions
                 context.ConsumingPostponed();
 
                 // Upload the details, first starting with all the postponed input, plus the current input
-                await UpdloadShipmentDetails(store, postponedKeys.Concat(inputKeys)).ConfigureAwait(false);
+                await UploadShipmentDetails(store, postponedKeys.Concat(inputKeys)).ConfigureAwait(false);
             }
         }
 
         /// <summary>
         /// Run the batched up (already combined from postponed tasks, if any) input keys through the task
         /// </summary>
-        private async Task UpdloadShipmentDetails(AmazonStoreEntity store, IEnumerable<long> shipmentKeys)
+        private async Task UploadShipmentDetails(AmazonStoreEntity store, IEnumerable<long> shipmentKeys)
         {
             try
             {

@@ -51,18 +51,12 @@ namespace ShipWorks.Stores.Platforms.Amazon
         private readonly Func<AmazonStoreEntity, IPlatformOrderWebClient> createWebClient;
 
         /// <summary>
-        /// Store manager used to save the continuation token to the amazon store
-        /// </summary>
-        private readonly IStoreManager storeManager;
-
-        /// <summary>
         /// Constructor
         /// </summary>
         public AmazonPlatformDownloader(StoreEntity store, IStoreTypeManager storeTypeManager,
             IStoreManager storeManager, Func<AmazonStoreEntity, IPlatformOrderWebClient> createWebClient)
-            : base(store, storeTypeManager.GetType(store))
+            : base(store, storeTypeManager.GetType(store), storeManager)
         {
-            this.storeManager = storeManager;
             this.createWebClient = createWebClient;
         }
 

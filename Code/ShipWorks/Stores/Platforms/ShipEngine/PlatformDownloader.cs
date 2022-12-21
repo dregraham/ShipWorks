@@ -21,9 +21,16 @@ namespace ShipWorks.Stores.Platforms.ShipEngine
     {
         protected readonly ILog log;
 
-        protected PlatformDownloader(StoreEntity store, StoreType storeType) : base(store, storeType)
+        /// <summary>
+        /// Store manager used to save the continuation token to the platform store
+        /// </summary>
+        protected readonly IStoreManager storeManager;
+
+
+        protected PlatformDownloader(StoreEntity store, StoreType storeType, IStoreManager storeManager) : base(store, storeType)
         {
             log = LogManager.GetLogger(this.GetType());
+            this.storeManager = storeManager;
         }
         protected List<GiftNote> GetGiftNotes(OrderSourceApiSalesOrder salesOrder)
         {

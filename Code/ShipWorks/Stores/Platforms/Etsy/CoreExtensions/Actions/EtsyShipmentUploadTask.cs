@@ -79,38 +79,18 @@ namespace ShipWorks.Stores.Platforms.Etsy.CoreExtensions.Actions
                 throw new ActionTaskRunException("The store configured for the task has been deleted.");
             }
 
-            // Get any postponed data we've previously stored away
-            List<long> postponedKeys = context.GetPostponedData().SelectMany(d => (List<long>) d).ToList();
-
-            // To avoid postponing forever on big selections, we only postpone up to maxBatchSize
-            if (context.CanPostpone && postponedKeys.Count < maxBatchSize)
-            {
-                context.Postpone(inputKeys);
-            }
-            else
-            {
-                context.ConsumingPostponed();
-
-                // Upload the details, first starting with all the postponed input, plus the current input
-                await UpdloadShipmentDetails(store, postponedKeys.Concat(inputKeys)).ConfigureAwait(false);
-            }
+            await UploadShipmentDetails(store, inputKeys).ConfigureAwait(false);
         }
-        /// <summary>
-        /// Run the batched up (already combined from postponed tasks, if any) input keys through the task
-        /// </summary>
-        protected async Task UpdloadShipmentDetails(StoreEntity store, IEnumerable<long> shipmentKeys)
+
+        private async Task UploadShipmentDetails(StoreEntity store, IEnumerable<long> shipmentKeys)
         {
             try
             {
                 await onlineUpdater.UploadShipmentDetails(store, shipmentKeys).ConfigureAwait(false);
             }
-            catch (AmazonException ex)
+            catch (PlatformStoreException ex)
             {
                 throw new ActionTaskRunException(ex.Message, ex);
-            }
-            catch (PlatformStoreException platformException)
-            {
-                throw new ActionTaskRunException(platformException.Message, platformException);
             }
         }
     }

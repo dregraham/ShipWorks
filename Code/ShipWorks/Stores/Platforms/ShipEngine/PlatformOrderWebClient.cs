@@ -42,7 +42,7 @@ namespace ShipWorks.Stores.Platforms.ShipEngine
             request.AddQueryParameter("ContinuationToken", continuationToken);
 
             // There's an issue with the deserialization and casting to an interface so we're casting manually
-            var result = await warehouseRequestClient.MakeRequest(request, "PlatformGetOrders", ApiLogSource.Amazon, cancellationToken).ConfigureAwait(false);
+            var result = await warehouseRequestClient.MakeRequest(request, "PlatformGetOrders", ApiLogSource.Platform, cancellationToken).ConfigureAwait(false);
 
             // Check that the call returned valid information
             GetOrdersDTO returnObject;
