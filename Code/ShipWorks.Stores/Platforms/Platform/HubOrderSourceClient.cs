@@ -32,6 +32,7 @@ namespace ShipWorks.Stores.Platforms.Platform
             this.warehouseRequestClient = warehouseRequestClient;
         }
 
+
         /// <summary>
         /// Get the monoauth URL to initiate an order source creation for non Amazon
         /// </summary>
@@ -41,12 +42,7 @@ namespace ShipWorks.Stores.Platforms.Platform
         /// </remarks>
         public async Task<string> GetCreateOrderSourceInitiateUrl(string orderSourceName, int? daysBack, Dictionary<string, string> otherParameters = default)
         {
-            string otherParametersString = string.Empty;
-            if (otherParameters != null && otherParameters.Count > 0)
-            {
-                var paramaterStrings = otherParameters.Select(op => $"{op.Key}={op.Value}");
-                otherParametersString = $"&{string.Join("&", paramaterStrings)}";
-            }
+            string otherParametersString = CreateOtherParametersString(otherParameters);
             var request = warehouseRequestFactory.Create(
                 WarehouseEndpoints.GetCreateOrderSourceInitiateUrl(orderSourceName, UpdateLocalUrl(warehouseRequestClient.WarehouseUrl), daysBack ?? DefaultDaysBack, otherParametersString), Method.GET,
                 null);
@@ -57,23 +53,16 @@ namespace ShipWorks.Stores.Platforms.Platform
             return result.InitiateUrl;
         }
 
-        /// <summary>
-        /// Get the Monoauth URL to initiate an order source credential change
-        /// </summary>
-        /// <remarks>
-        /// Note that the orderSourceName will be used in both the URL used to communicate with the hub and the
-        /// redirectUrl the hub will send on to monoauth
-        /// </remarks>
-        public async Task<string> GetAmazonUpdateOrderSourceInitiateUrl(string orderSourceName, string orderSourceId, string apiRegion, string sellerId, bool includeFba)
+        private static string CreateOtherParametersString(Dictionary<string, string> otherParameters)
         {
-            var request = warehouseRequestFactory.Create(
-                WarehouseEndpoints.GetAmazonUpdateOrderSourceInitiateUrl(orderSourceName, UpdateLocalUrl(warehouseRequestClient.WarehouseUrl), orderSourceId, apiRegion, sellerId, includeFba), Method.GET,
-                null);
+            string otherParametersString = string.Empty;
+            if (otherParameters != null && otherParameters.Count > 0)
+            {
+                var paramaterStrings = otherParameters.Select(op => $"{op.Key}={op.Value}");
+                otherParametersString = $"&{string.Join("&", paramaterStrings)}";
+            }
 
-            var result = await warehouseRequestClient.MakeRequest<GetMonauthInitiateUrlResponse>(request, GetInitiateUpdateOrderSourceUrl)
-                .ConfigureAwait(false);
-
-            return result.InitiateUrl;
+            return otherParametersString;
         }
 
         /// <summary>
@@ -83,10 +72,10 @@ namespace ShipWorks.Stores.Platforms.Platform
         /// Note that the orderSourceName will be used in both the URL used to communicate with the hub and the
         /// redirectUrl the hub will send on to monoauth
         /// </remarks>
-        public async Task<string> GetUpdateOrderSourceInitiateUrl(string orderSourceName, string orderSourceId, string sellerId)
+        public async Task<string> GetUpdateOrderSourceInitiateUrl(string orderSourceName, string orderSourceId, string sellerId, Dictionary<string, string> otherParameters = default)
         {
             var request = warehouseRequestFactory.Create(
-                WarehouseEndpoints.GetUpdateOrderSourceInitiateUrl(orderSourceName, UpdateLocalUrl(warehouseRequestClient.WarehouseUrl), orderSourceId, sellerId), Method.GET,
+                WarehouseEndpoints.GetUpdateOrderSourceInitiateUrl(orderSourceName, UpdateLocalUrl(warehouseRequestClient.WarehouseUrl), orderSourceId, sellerId, CreateOtherParametersString(otherParameters)), Method.GET,
                 null);
 
             var result = await warehouseRequestClient.MakeRequest<GetMonauthInitiateUrlResponse>(request, GetInitiateUpdateOrderSourceUrl)
