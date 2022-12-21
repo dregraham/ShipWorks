@@ -50,6 +50,8 @@
     <BootstrapperEnabled>true</BootstrapperEnabled>
     <NuGetPackageImportStamp>
     </NuGetPackageImportStamp>
+    <Nullable>enable</Nullable>
+    <LangVersion>8</LangVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -4093,19 +4095,12 @@
     <Compile Include="Stores\Platforms\SureDone\SureDoneStoreType.cs" />
     <Compile Include="Stores\Platforms\WooCommerce\WooCommerceStoreType.cs" />
     <Compile Include="Stores\Platforms\Amazon\AmazonApi.cs" />
-    <Compile Include="Stores\Platforms\Amazon\AmazonMwsAccountSettingsControl.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Stores\Platforms\Amazon\AmazonMwsAccountSettingsControl.Designer.cs">
-      <DependentUpon>AmazonMwsAccountSettingsControl.cs</DependentUpon>
-    </Compile>
     <Compile Include="Stores\Platforms\Amazon\AmazonCountryControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="Stores\Platforms\Amazon\AmazonCountryControl.Designer.cs">
       <DependentUpon>AmazonCountryControl.cs</DependentUpon>
     </Compile>
-    <Compile Include="Stores\Platforms\Amazon\AmazonMwsDownloader.cs" />
     <Compile Include="Stores\Platforms\Amazon\CoreExtensions\Filters\AmazonFulfillmentChannelCondition.cs" />
     <Compile Include="Stores\Platforms\Amazon\Mws\AmazonMwsFeedRequestSubmitter.cs" />
     <Compile Include="Stores\Platforms\Amazon\Mws\AmazonMwsActivity.cs" />
@@ -4138,12 +4133,6 @@
     </Compile>
     <Compile Include="Stores\Platforms\Amazon\WizardPages\AmazonInitialSettingsPage.Designer.cs">
       <DependentUpon>AmazonInitialSettingsPage.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Stores\Platforms\Amazon\WizardPages\AmazonMwsPage.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Stores\Platforms\Amazon\WizardPages\AmazonMwsPage.Designer.cs">
-      <DependentUpon>AmazonMwsPage.cs</DependentUpon>
     </Compile>
     <Compile Include="Stores\Platforms\Amazon\WizardPages\AmazonMwsDownloadCriteriaPage.cs">
       <SubType>UserControl</SubType>
@@ -8865,9 +8854,6 @@
     <EmbeddedResource Include="Stores\Management\StoreAddressControl.resx">
       <DependentUpon>StoreAddressControl.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Stores\Platforms\Amazon\AmazonMwsAccountSettingsControl.resx">
-      <DependentUpon>AmazonMwsAccountSettingsControl.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="Stores\Platforms\Amazon\AmazonCountryControl.resx">
       <DependentUpon>AmazonCountryControl.cs</DependentUpon>
     </EmbeddedResource>
@@ -8879,9 +8865,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Stores\Platforms\Amazon\WizardPages\AmazonInitialSettingsPage.resx">
       <DependentUpon>AmazonInitialSettingsPage.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Stores\Platforms\Amazon\WizardPages\AmazonMwsPage.resx">
-      <DependentUpon>AmazonMwsPage.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Stores\Platforms\Amazon\WizardPages\AmazonMwsDownloadCriteriaPage.resx">
       <DependentUpon>AmazonMwsDownloadCriteriaPage.cs</DependentUpon>

@@ -29,6 +29,8 @@
     <BootstrapperEnabled>true</BootstrapperEnabled>
     <NuGetPackageImportStamp>
     </NuGetPackageImportStamp>
+    <Nullable>enable</Nullable>
+    <LangVersion>8</LangVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
