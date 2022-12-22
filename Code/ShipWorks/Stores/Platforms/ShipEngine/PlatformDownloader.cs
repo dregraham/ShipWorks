@@ -69,9 +69,9 @@ namespace ShipWorks.Stores.Platforms.ShipEngine
         /// <summary>
         /// Load an order item
         /// </summary>
-        protected void LoadOrderItem(OrderSourceSalesOrderItem orderItem, OrderEntity order, IEnumerable<GiftNote> giftNotes, IEnumerable<CouponCode> couponCodes)
+        protected virtual OrderItemEntity LoadOrderItem(OrderSourceSalesOrderItem orderItem, OrderEntity order, IEnumerable<GiftNote> giftNotes, IEnumerable<CouponCode> couponCodes)
         {
-            var item = (AmazonOrderItemEntity) InstantiateOrderItem(order);
+            var item = InstantiateOrderItem(order);
 
             // populate the basics
             item.Name = orderItem.Product.Name;
@@ -95,10 +95,6 @@ namespace ShipWorks.Stores.Platforms.ShipEngine
                 item.Width = (decimal) PlatformUnitConverter.ConvertDimension(dims.Width, fromDimUnit);
                 item.Height = (decimal) PlatformUnitConverter.ConvertDimension(dims.Height, fromDimUnit);
             }
-
-            // amazon-specific fields
-            item.AmazonOrderItemCode = orderItem.LineItemId;
-            item.ASIN = orderItem.Product.Identifiers?.Asin;
 
             //Load the gift messages
             foreach(var giftNote in giftNotes)
@@ -138,15 +134,14 @@ namespace ShipWorks.Stores.Platforms.ShipEngine
                 }
             }
 
-            item.ConditionNote = orderItem.Product?.Details?.FirstOrDefault((d) => d.Name == "Condition")?.Value;
-
             AddOrderItemCharges(orderItem, order);
+            return item;
         }
 
         /// <summary>
         /// Populate image urls
         /// </summary>
-        private static void PopulateUrls(OrderSourceSalesOrderItem orderItem, AmazonOrderItemEntity item)
+        private static void PopulateUrls(OrderSourceSalesOrderItem orderItem, OrderItemEntity item)
         {
             var urls = orderItem.Product?.Urls;
 
@@ -480,10 +475,7 @@ namespace ShipWorks.Stores.Platforms.ShipEngine
                 .SelectMany(i => i.Taxes)?
                 .Sum(t => t.Amount) ?? 0;
 
-            if (totalTax > 0)
-            {
-                AddToCharge(order, "Tax", "Tax", totalTax);
-            }
+            AddToCharge(order, "Tax", "Tax", totalTax);
         }
     }
 }

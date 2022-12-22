@@ -138,6 +138,18 @@ namespace ShipWorks.Stores.Platforms.Amazon
             base.AddTaxes(salesOrder, order);
         }
 
+        protected override OrderItemEntity LoadOrderItem(OrderSourceSalesOrderItem orderItem, OrderEntity order, IEnumerable<GiftNote> giftNotes, IEnumerable<CouponCode> couponCodes)
+        {
+            var item = (AmazonOrderItemEntity) base.LoadOrderItem(orderItem, order, giftNotes, couponCodes);
+
+            // amazon-specific fields
+            item.AmazonOrderItemCode = orderItem.LineItemId;
+            item.ASIN = orderItem.Product.Identifiers?.Asin;
+            item.ConditionNote = orderItem.Product?.Details?.FirstOrDefault((d) => d.Name == "Condition")?.Value;
+
+            return item;
+        }
+
         /// <summary>
         /// Attempts to figure out the Amazon status based on the Platform status
         /// </summary>

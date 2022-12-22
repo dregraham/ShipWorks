@@ -95,5 +95,19 @@ namespace ShipWorks.Stores.Platforms.Etsy
             log.Warn($"Encountered unmapped status of {salesOrder.Status} for orderId {orderId}.");
             return base.GetOrderStatusString(salesOrder, orderId);
         }
+
+        protected override OrderItemEntity LoadOrderItem(OrderSourceSalesOrderItem orderItem, OrderEntity order, IEnumerable<GiftNote> giftNotes, IEnumerable<CouponCode> couponCodes)
+        {
+            var item = (EtsyOrderItemEntity) base.LoadOrderItem(orderItem, order, giftNotes, couponCodes);
+            item.TransactionID = orderItem.LineItemId;
+            
+            var productListing = orderItem.Product?.ProductId;//"productId": "3114960238:653614320"
+            int length;
+            if (productListing != null && ((length = productListing.IndexOf(":")) > 0))
+            {
+                item.ListingID = productListing.Substring(length+1);
+            }
+            return item;
+        }
     }
 }
