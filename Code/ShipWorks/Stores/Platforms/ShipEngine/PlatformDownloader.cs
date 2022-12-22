@@ -280,5 +280,24 @@ namespace ShipWorks.Stores.Platforms.ShipEngine
                 LoadOrderItem(item, order, filteredNotes, filteredCouponCodes);
             }
         }
+
+        protected virtual string GetOrderStatusString(OrderSourceApiSalesOrder orderSourceApiSalesOrder, string orderId)
+        {
+            switch (orderSourceApiSalesOrder.Status)
+            {
+                case OrderSourceSalesOrderStatus.AwaitingPayment:
+                    return "Awaiting Payment";
+                case OrderSourceSalesOrderStatus.AwaitingShipment:
+                    return "Awaiting Shipment";
+                case OrderSourceSalesOrderStatus.PendingFulfillment:
+                    return "Pending Fulfillment";
+                case OrderSourceSalesOrderStatus.OnHold:
+                    return "On Hold";
+                case OrderSourceSalesOrderStatus.Cancelled:
+                case OrderSourceSalesOrderStatus.Completed:
+                default:
+                    return orderSourceApiSalesOrder.Status.ToString();
+            }
+        }
     }
 }

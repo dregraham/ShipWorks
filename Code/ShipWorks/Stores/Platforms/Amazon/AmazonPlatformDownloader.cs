@@ -197,7 +197,7 @@ namespace ShipWorks.Stores.Platforms.Amazon
             order.LatestExpectedDeliveryDate = salesOrder.RequestedFulfillments?.Max(f => f?.ShippingPreferences?.DeliverByDate)?.DateTime;
 
             // set the status
-            var orderStatus = GetAmazonStatus(salesOrder.Status, order.OrderNumberComplete);
+            var orderStatus = GetOrderStatusString(salesOrder, order.OrderNumberComplete);
             order.OnlineStatus = orderStatus;
             order.OnlineStatusCode = orderStatus;
 
@@ -300,9 +300,9 @@ namespace ShipWorks.Stores.Platforms.Amazon
         /// is the code I used to "unmap" the platform mapping for existing filters:
         /// https://github.com/shipstation/integrations-ecommerce/blob/915ffd7a42f22ae737bf7d277e69409c3cf1b845/modules/amazon-order-source/src/methods/mappers/sales-orders-export-mappers.ts#L150
         /// </remarks>
-        private string GetAmazonStatus(OrderSourceSalesOrderStatus platformStatus, string orderId)
+        protected override string GetOrderStatusString(OrderSourceApiSalesOrder salesOrder, string orderId)
         {
-            switch (platformStatus)
+            switch (salesOrder.Status)
             {
                 case OrderSourceSalesOrderStatus.AwaitingShipment:
                     return "Unshipped";
@@ -312,11 +312,9 @@ namespace ShipWorks.Stores.Platforms.Amazon
                     return "Shipped";
                 case OrderSourceSalesOrderStatus.AwaitingPayment:
                     return "Pending";
-                case OrderSourceSalesOrderStatus.OnHold:
-                default:
-                    log.Warn($"Encountered unmapped status of {platformStatus} for orderId {orderId}.");
-                    return "Unknown";
             }
+            log.Warn($"Encountered unmapped status of {salesOrder.Status} for orderId {orderId}.");
+            return base.GetOrderStatusString(salesOrder, orderId);
         }
     }
 }

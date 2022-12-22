@@ -165,7 +165,7 @@ namespace ShipWorks.Stores.Platforms.Etsy
             order.OnlineLastModified = modifiedDate >= orderDate ? modifiedDate : orderDate;
             
             // set the status
-            var orderStatus = GetEtsyOrderStatus(salesOrder.Status, salesOrder.Payment.PaymentStatus, order.OrderNumberComplete);
+            var orderStatus = GetOrderStatusString(salesOrder, order.OrderNumberComplete);
             order.OnlineStatus = orderStatus;
             order.OnlineStatusCode = orderStatus;
             
@@ -244,14 +244,14 @@ namespace ShipWorks.Stores.Platforms.Etsy
         /// is the code I used to "unmap" the platform mapping for existing filters:
         /// https://github.com/shipstation/integrations-vice/blob/master/ecommerce/modules/etsy/src/services/mappers/salesOrderExport.Mapper.js#L133
         /// </remarks>
-        private string GetEtsyOrderStatus(OrderSourceSalesOrderStatus platformStatus, OrderSourcePaymentStatus paymentStatus, string orderId)
+        protected override string GetOrderStatusString(OrderSourceApiSalesOrder salesOrder, string orderId)
         {
-            switch (paymentStatus)
+            switch (salesOrder.Payment.PaymentStatus)
             {
                 case OrderSourcePaymentStatus.PaymentInProcess:
                     return "Payment Processing";
             }
-            switch (platformStatus)
+            switch (salesOrder.Status)
             {
                 case OrderSourceSalesOrderStatus.PendingFulfillment:
                     return "Open";
@@ -265,9 +265,9 @@ namespace ShipWorks.Stores.Platforms.Etsy
                 case OrderSourceSalesOrderStatus.AwaitingPayment:
                     return "Unpaid";
                 default:
-                    log.Warn($"Encountered unmapped status of {platformStatus} for orderId {orderId}.");
-                    return "Unknown";
+                    log.Warn($"Encountered unmapped status of {salesOrder.Status} for orderId {orderId}.");
             }
+            return base.GetOrderStatusString(salesOrder, orderId);
         }
     }
 }
