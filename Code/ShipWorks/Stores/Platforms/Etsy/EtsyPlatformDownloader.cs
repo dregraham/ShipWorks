@@ -72,7 +72,7 @@ namespace ShipWorks.Stores.Platforms.Etsy
                 Progress.Detail = "Checking for new orders ";
 
                 var result =
-                    await client.GetOrders(Store.OrderSourceID, EtsyStore.ContinuationToken, Progress.CancellationToken).ConfigureAwait(false);
+                    await client.GetOrders(Store.OrderSourceID, Store.ContinuationToken, Progress.CancellationToken).ConfigureAwait(false);
 
                 while (result.Orders.Data.Any())
                 {

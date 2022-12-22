@@ -296,6 +296,7 @@ namespace ShipWorks.Common.Threading
         {
             Changed?.Invoke(this, EventArgs.Empty);
         }
+
         public CancellationToken CancellationToken => cancellationTokenSource.Token;
 
     }

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Autofac.Features.Indexed;
@@ -9,6 +10,7 @@ using ShipWorks.Actions.Tasks.Common;
 using ShipWorks.Actions.Tasks.Common.Editors;
 using ShipWorks.Data.Model;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Stores.Platforms.Platform;
 using ShipWorks.Stores.Platforms.Platform.OnlineUpdating;
 
 namespace ShipWorks.Stores.Platforms.Amazon.CoreExtensions.Actions
@@ -99,7 +101,7 @@ namespace ShipWorks.Stores.Platforms.Amazon.CoreExtensions.Actions
             {
                 await onlineUpdater.UploadShipmentDetails(store, shipmentKeys).ConfigureAwait(false);
             }
-            catch (AmazonException ex)
+            catch (Exception ex) when (ex is PlatformStoreException || ex is AmazonException)
             {
                 throw new ActionTaskRunException(ex.Message, ex);
             }
