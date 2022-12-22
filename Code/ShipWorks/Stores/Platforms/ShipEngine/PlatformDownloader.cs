@@ -1,20 +1,27 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Interapptive.Shared.Business;
 using Interapptive.Shared.Business.Geography;
 using Interapptive.Shared.Enums;
+using Interapptive.Shared.Metrics;
 using Interapptive.Shared.Utility;
 using log4net;
 using Newtonsoft.Json;
+using ShipWorks.Data.Administration.Recovery;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Communication;
+using ShipWorks.Stores.Content;
+using ShipWorks.Stores.Platforms.Amazon;
 using ShipWorks.Stores.Platforms.Amazon.DTO;
+using ShipWorks.Stores.Platforms.Amazon.Mws;
 using ShipWorks.Stores.Platforms.Etsy;
 using ShipWorks.Stores.Platforms.ShipEngine.Apollo;
 
+#nullable enable
 namespace ShipWorks.Stores.Platforms.ShipEngine
 {
     public abstract class PlatformDownloader : StoreDownloader
@@ -22,15 +29,20 @@ namespace ShipWorks.Stores.Platforms.ShipEngine
         protected readonly ILog log;
 
         /// <summary>
+        /// Object factory for the platform web client
+        /// </summary>
+        private readonly Func<StoreEntity, IPlatformOrderWebClient> createWebClient;
+        /// <summary>
         /// Store manager used to save the continuation token to the platform store
         /// </summary>
         protected readonly IStoreManager storeManager;
 
 
-        protected PlatformDownloader(StoreEntity store, StoreType storeType, IStoreManager storeManager) : base(store, storeType)
+        protected PlatformDownloader(StoreEntity store, StoreType storeType, IStoreManager storeManager, Func<StoreEntity, IPlatformOrderWebClient> createWebClient) : base(store, storeType)
         {
             log = LogManager.GetLogger(this.GetType());
             this.storeManager = storeManager;
+            this.createWebClient = createWebClient;
         }
         protected List<GiftNote> GetGiftNotes(OrderSourceApiSalesOrder salesOrder)
         {
@@ -303,7 +315,7 @@ namespace ShipWorks.Stores.Platforms.ShipEngine
         /// <summary>
         /// GetRequestedShipping (in the format we used to get it from MWS "carrier: details")
         /// </summary
-        protected string GetRequestedShipping(string shippingService)
+        protected string GetRequestedShipping(string? shippingService)
         {
             if (string.IsNullOrWhiteSpace(shippingService))
             {
@@ -317,6 +329,161 @@ namespace ShipWorks.Stores.Platforms.ShipEngine
             }
 
             return $"{shippingService.Substring(0, firstSpace)}:{shippingService.Substring(firstSpace)}";
+        }
+
+        /// <summary>
+        /// Start the download from Platform for the Etsy store
+        /// </summary>
+        protected override async Task Download(TrackedDurationEvent trackedDurationEvent)
+        {
+            try
+            {
+                Progress.Detail = "Connecting to Platform...";
+
+                var client = createWebClient(Store);
+
+                client.Progress = Progress;
+
+                Progress.Detail = "Checking for new orders ";
+
+                var result =
+                    await client.GetOrders(Store.OrderSourceID, Store.ContinuationToken, Progress.CancellationToken).ConfigureAwait(false);
+
+                while (result.Orders.Data.Any())
+                {
+                    if (result.Orders.Errors.Count > 0)
+                    {
+                        foreach (var platformError in result.Orders.Errors)
+                        {
+                            log.Error(platformError);
+                        }
+
+                        return;
+                    }
+
+                    if (Progress.IsCancelRequested)
+                    {
+                        log.Warn("A cancel was requested.");
+                        return;
+                    }
+
+                    // progress has to be indicated on each pass since we have 0 idea how many orders exists
+                    Progress.PercentComplete = 0;
+
+                    foreach (var salesOrder in result.Orders.Data.Where(x => x.Status != OrderSourceSalesOrderStatus.AwaitingPayment))
+                    {
+                        await LoadOrder(salesOrder).ConfigureAwait(false); 
+                    }
+
+                    // Save the continuation token to the store
+                    Store.ContinuationToken = result.Orders.ContinuationToken;
+                    await storeManager.SaveStoreAsync(Store).ConfigureAwait(false);
+
+                    result = await client.GetOrders(Store.OrderSourceID, Store.ContinuationToken, Progress.CancellationToken).ConfigureAwait(false);
+
+                }
+
+                Progress.PercentComplete = 100;
+                Progress.Detail = "Done.";
+
+                // There's an error within the refresh
+                if (result.Error)
+                {
+                    // We only throw at the end to give the import a chance to process any orders that were provided.
+                    throw new Exception(
+                        "Connection to Etsy failed. Please try again. If it continues to fail, update your credentials in store settings or contact ShipWorks support.");
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new DownloadException(ex.Message, ex);
+            }
+        }
+
+
+        /// <summary>
+        /// Create the order instance
+        /// </summary>
+        protected abstract Task<OrderEntity?> CreateOrder(OrderSourceApiSalesOrder salesOrder);
+        
+        /// <summary>
+        /// Store order in database
+        /// </summary>
+        private async Task LoadOrder(OrderSourceApiSalesOrder salesOrder)
+        {
+            var order = await CreateOrder(salesOrder);
+            if (order == null)
+            {
+                return;
+            }
+
+            if (salesOrder.Status == OrderSourceSalesOrderStatus.Cancelled && order.IsNew)
+            {
+                log.InfoFormat("Skipping order '{0}' due to canceled and not yet seen by ShipWorks.", salesOrder.OrderNumber);
+                return;
+            }
+
+            order.ChannelOrderID = salesOrder.SalesOrderGuid;
+
+            var orderDate = salesOrder.CreatedDateTime?.DateTime ?? DateTime.UtcNow;
+            var modifiedDate = salesOrder.ModifiedDateTime?.DateTime ?? DateTime.UtcNow;
+
+            //Basic properties
+            order.OrderDate = orderDate;
+            order.OnlineLastModified = modifiedDate >= orderDate ? modifiedDate : orderDate;
+
+            // set the status
+            var orderStatus = GetOrderStatusString(salesOrder, order.OrderNumberComplete);
+            order.OnlineStatus = orderStatus;
+            order.OnlineStatusCode = orderStatus;
+
+            // no customer ID in this Api
+            order.OnlineCustomerID = null;
+
+            // requested shipping
+            order.RequestedShipping =
+                GetRequestedShipping(salesOrder.RequestedFulfillments.FirstOrDefault()?.ShippingPreferences?.ShippingService);
+
+            // Address
+            LoadAddresses(order, salesOrder);
+
+            // only load order items on new orders
+            if (order.IsNew)
+            {
+                order.OrderNumber = await GetNextOrderNumberAsync().ConfigureAwait(false);
+
+                var giftNotes = GetGiftNotes(salesOrder);
+                IEnumerable<CouponCode> couponCodes = GetCouponCodes(salesOrder);
+                foreach (var fulfillment in salesOrder.RequestedFulfillments)
+                {
+                    LoadOrderItems(fulfillment, order, giftNotes, couponCodes);
+                }
+
+                AddTaxes(salesOrder, order);
+
+                // update the total
+                var calculatedTotal = OrderUtility.CalculateTotal(order);
+
+                // get the amount so we can fudge order totals
+                order.OrderTotal = salesOrder.Payment.AmountPaid ?? calculatedTotal;
+            }
+
+            // save
+            var retryAdapter = new SqlAdapterRetry<SqlException>(5, -5, "PlatformDownloader.LoadOrder");
+            await retryAdapter.ExecuteWithRetryAsync(() => SaveDownloadedOrder(order)).ConfigureAwait(false);
+        }
+
+        protected virtual void AddTaxes(OrderSourceApiSalesOrder salesOrder, OrderEntity order)
+        {
+            var totalTax = salesOrder.RequestedFulfillments?
+                .SelectMany(f => f.Items)?
+                .SelectMany(i => i.Taxes)?
+                .Sum(t => t.Amount) ?? 0;
+
+            if (totalTax > 0)
+            {
+                AddToCharge(order, "Tax", "Tax", totalTax);
+            }
         }
     }
 }
