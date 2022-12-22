@@ -50,8 +50,8 @@ namespace ShipWorks.Stores.Platforms.Amazon
         /// Constructor
         /// </summary>
         public AmazonPlatformDownloader(StoreEntity store, IStoreTypeManager storeTypeManager,
-            IStoreManager storeManager, Func<StoreEntity, IPlatformOrderWebClient> createWebClient)
-            : base(store, storeTypeManager.GetType(store), storeManager, createWebClient)
+            IStoreManager storeManager, IPlatformOrderWebClient platformOrderWebClient)
+            : base(store, storeTypeManager.GetType(store), storeManager, platformOrderWebClient)
         {
         }
 

@@ -41,8 +41,8 @@ namespace ShipWorks.Stores.Platforms.Etsy
         /// Constructor
         /// </summary>
         public EtsyPlatformDownloader(StoreEntity store, IStoreTypeManager storeTypeManager,
-            IStoreManager storeManager, Func<StoreEntity, IPlatformOrderWebClient> createWebClient)
-            : base(store, storeTypeManager.GetType(store), storeManager, createWebClient)
+            IStoreManager storeManager, IPlatformOrderWebClient platformOrderWebClient)
+            : base(store, storeTypeManager.GetType(store), storeManager, platformOrderWebClient)
         {
         }
 

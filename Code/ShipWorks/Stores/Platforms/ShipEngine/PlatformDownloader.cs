@@ -28,22 +28,20 @@ namespace ShipWorks.Stores.Platforms.ShipEngine
     {
         protected readonly ILog log;
 
-        /// <summary>
-        /// Object factory for the platform web client
-        /// </summary>
-        private readonly Func<StoreEntity, IPlatformOrderWebClient> createWebClient;
+        private readonly IPlatformOrderWebClient platformOrderWebClient;
         /// <summary>
         /// Store manager used to save the continuation token to the platform store
         /// </summary>
         protected readonly IStoreManager storeManager;
 
 
-        protected PlatformDownloader(StoreEntity store, StoreType storeType, IStoreManager storeManager, Func<StoreEntity, IPlatformOrderWebClient> createWebClient) : base(store, storeType)
+        protected PlatformDownloader(StoreEntity store, StoreType storeType, IStoreManager storeManager, IPlatformOrderWebClient platformOrderWebClient) : base(store, storeType)
         {
             log = LogManager.GetLogger(this.GetType());
             this.storeManager = storeManager;
-            this.createWebClient = createWebClient;
+            this.platformOrderWebClient = platformOrderWebClient;
         }
+
         protected List<GiftNote> GetGiftNotes(OrderSourceApiSalesOrder salesOrder)
         {
             var itemNotes = new List<GiftNote>();
@@ -335,14 +333,12 @@ namespace ShipWorks.Stores.Platforms.ShipEngine
             {
                 Progress.Detail = "Connecting to Platform...";
 
-                var client = createWebClient(Store);
-
-                client.Progress = Progress;
+                platformOrderWebClient.Progress = Progress;
 
                 Progress.Detail = "Checking for new orders ";
 
                 var result =
-                    await client.GetOrders(Store.OrderSourceID, Store.ContinuationToken, Progress.CancellationToken).ConfigureAwait(false);
+                    await platformOrderWebClient.GetOrders(Store.OrderSourceID, Store.ContinuationToken, Progress.CancellationToken).ConfigureAwait(false);
 
                 while (result.Orders.Data.Any())
                 {
@@ -374,7 +370,7 @@ namespace ShipWorks.Stores.Platforms.ShipEngine
                     Store.ContinuationToken = result.Orders.ContinuationToken;
                     await storeManager.SaveStoreAsync(Store).ConfigureAwait(false);
 
-                    result = await client.GetOrders(Store.OrderSourceID, Store.ContinuationToken, Progress.CancellationToken).ConfigureAwait(false);
+                    result = await platformOrderWebClient.GetOrders(Store.OrderSourceID, Store.ContinuationToken, Progress.CancellationToken).ConfigureAwait(false);
 
                 }
 

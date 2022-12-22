@@ -52,8 +52,6 @@ namespace ShipWorks.Stores.Platforms.Etsy.OnlineUpdating
 
             return new[]
             {
-                new AsyncMenuCommand("Mark as Paid", context => OnUploadPaidStatus(context, typedStore, true)),
-                new AsyncMenuCommand("Mark as Not Paid", context => OnUploadPaidStatus(context, typedStore, false)),
                 new AsyncMenuCommand("Upload Tracking Information", context => OnUploadTrackingDetails(context, typedStore))
             };
         }
