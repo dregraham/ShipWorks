@@ -51,7 +51,7 @@ namespace ShipWorks.Stores.Platforms.Etsy
                 store.InitialDownloadDays = initialDownloadDays;
                 return true;
             }
-            errorMessage = "Number of days back must be between 0 and 30";
+            ErrorMessage = "Number of days back must be between 0 and 30";
             return false;
         }
     }
