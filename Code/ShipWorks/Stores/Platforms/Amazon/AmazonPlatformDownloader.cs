@@ -272,26 +272,6 @@ namespace ShipWorks.Stores.Platforms.Amazon
             await retryAdapter.ExecuteWithRetryAsync(() => SaveDownloadedOrder(order)).ConfigureAwait(false);
         }
 
-
-        /// <summary>
-        /// GetRequestedShipping (in the format we used to get it from MWS "carrier: details")
-        /// </summary
-        private string GetRequestedShipping(string shippingService)
-        {
-            if (string.IsNullOrWhiteSpace(shippingService))
-            {
-                return string.Empty;
-            }
-
-            var firstSpace = shippingService.IndexOf(' ');
-            if (firstSpace == -1)
-            {
-                return shippingService;
-            }
-
-            return $"{shippingService.Substring(0, firstSpace)}:{shippingService.Substring(firstSpace)}";
-        }
-
         /// <summary>
         /// Attempts to figure out the Amazon status based on the Platform status
         /// </summary>

@@ -218,25 +218,6 @@ namespace ShipWorks.Stores.Platforms.Etsy
         }
 
         /// <summary>
-        /// GetRequestedShipping (in the format we used to get it from MWS "carrier: details")
-        /// </summary
-        private string GetRequestedShipping(string shippingService)
-        {
-            if (string.IsNullOrWhiteSpace(shippingService))
-            {
-                return string.Empty;
-            }
-
-            var firstSpace = shippingService.IndexOf(' ');
-            if (firstSpace == -1)
-            {
-                return shippingService;
-            }
-
-            return $"{shippingService.Substring(0, firstSpace)}:{shippingService.Substring(firstSpace)}";
-        }
-
-        /// <summary>
         /// Attempts to figure out the Etsy status based on the Platform status
         /// </summary>
         /// <remarks>
@@ -264,9 +245,8 @@ namespace ShipWorks.Stores.Platforms.Etsy
                     return "Completed";
                 case OrderSourceSalesOrderStatus.AwaitingPayment:
                     return "Unpaid";
-                default:
-                    log.Warn($"Encountered unmapped status of {salesOrder.Status} for orderId {orderId}.");
             }
+            log.Warn($"Encountered unmapped status of {salesOrder.Status} for orderId {orderId}.");
             return base.GetOrderStatusString(salesOrder, orderId);
         }
     }
