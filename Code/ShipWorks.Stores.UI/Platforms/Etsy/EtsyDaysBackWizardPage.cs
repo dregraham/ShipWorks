@@ -13,6 +13,7 @@ using ShipWorks.UI.Wizard;
 using ShipWorks.Stores.Management;
 using ShipWorks.Stores.Platforms.Etsy;
 using ShipWorks.Data.Model.EntityClasses;
+using Interapptive.Shared.UI;
 
 namespace ShipWorks.Stores.UI.Platforms.Etsy
 {
@@ -44,6 +45,7 @@ namespace ShipWorks.Stores.UI.Platforms.Etsy
         {
             if (!viewModel.Save(GetStore<EtsyStoreEntity>()))
             {
+                MessageHelper.ShowInformation(this, viewModel.ErrorMessage);
                 e.NextPage = this;
             }
         }
