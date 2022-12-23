@@ -128,16 +128,6 @@ namespace ShipWorks.Stores.Platforms.Etsy
         }
 
         /// <summary>
-        /// Create the control that is used for editing the account settings in the Store Settings window.
-        /// </summary>
-        public override AccountSettingsControlBase CreateAccountSettingsControl()
-        {
-            var control = new EtsyAccountSettingsControl();
-
-            return control;
-        }
-
-        /// <summary>
         /// Get the available online status choices
         /// </summary>
         /// <returns></returns>
