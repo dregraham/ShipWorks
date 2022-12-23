@@ -137,8 +137,8 @@ namespace ShipWorks.Stores.Tests.Platforms.Amazon
         /// Constructor
         /// </summary>
         public AmazonPlatformDownloaderChild(IProgressReporter progress, StoreEntity store, IStoreTypeManager storeTypeManager,
-            IStoreManager storeManager, Func<StoreEntity, IPlatformOrderWebClient> createWebClient) :
-            base(store, storeTypeManager, storeManager, createWebClient)
+            IStoreManager storeManager, IPlatformOrderWebClient platformOrderWebClient) :
+            base(store, storeTypeManager, storeManager, platformOrderWebClient)
         {
             Progress = progress;
         }
