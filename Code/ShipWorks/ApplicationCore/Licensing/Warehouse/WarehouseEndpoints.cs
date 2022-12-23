@@ -44,9 +44,7 @@ namespace ShipWorks.ApplicationCore.Licensing.Warehouse
         private const string getTrackingUpdates = "api/tracking/{0}";
 
         private const string createOrderSourceInitiateUrl = "api/ordersource/{0}/auth?RedirectUrl={1}callbacks/{0}/monoauth/subscribe&DaysBack={2}&MonoauthRequestType=CreateOrderSource{3}";
-        private const string updateOrderSourceInitiateUrl = "api/ordersource/{0}/auth?RedirectUrl={1}callbacks/{0}/monoauth/update&OrderSourceId={2}&SellerId={3}&MonoauthRequestType=UpdateOrderSourceCredentials{4}";
-        private const string createCarrierInitiateUrl = "api/ordersource/{0}/auth?RedirectUrl={1}callbacks/{0}/monoauth/createcarrier&MonoauthRequestType=CreateCarrier";
-        private const string updateCarrierInitiateUrl = "api/ordersource/{0}/auth?RedirectUrl={1}callbacks/{0}/monoauth/updatecarrier&SellerId={2}&CarrierId={3}&MonoauthRequestType=UpdateCarrierCredentials";
+        private const string updateOrderSourceInitiateUrl = "api/ordersource/{0}/auth?RedirectUrl={1}callbacks/{0}/monoauth/update&OrderSourceId={2}&MonoauthRequestType=UpdateOrderSourceCredentials{3}";
 
         private const string createAmazonCarrierInitiateUrl = "api/ordersource/{0}/auth?RedirectUrl={1}callbacks/{0}monoauth/createcarrier&ApiRegion={2}&MonoauthRequestType=CreateCarrier";
         private const string updateAmazonCarrierInitiateUrl = "api/ordersource/{0}/auth?RedirectUrl={1}callbacks/{0}monoauth/updatecarrier&ApiRegion={2}&SellerId={3}&CarrierId={4}&MonoauthRequestType=UpdateCarrierCredentials";
@@ -131,8 +129,8 @@ namespace ShipWorks.ApplicationCore.Licensing.Warehouse
         /// <summary>
         /// Get the URL to get the InitiateMonoauthUrl for updating an order source
         /// </summary>
-        public static string GetUpdateOrderSourceInitiateUrl(string orderSourceName, string redirectUrl, string orderSourceId, string sellerId, string otherParameters) =>
-            string.Format(updateOrderSourceInitiateUrl, orderSourceName, redirectUrl, orderSourceId, sellerId, otherParameters);
+        public static string GetUpdateOrderSourceInitiateUrl(string orderSourceName, string redirectUrl, string orderSourceId, string otherParameters) =>
+            string.Format(updateOrderSourceInitiateUrl, orderSourceName, redirectUrl, orderSourceId, otherParameters);
 
         /// <summary>
         /// Get the URL to get the InitiateMonoauthUrl for creating a carrier
