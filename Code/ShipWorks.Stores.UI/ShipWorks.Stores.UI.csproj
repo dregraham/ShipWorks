@@ -219,6 +219,13 @@
     <Compile Include="Platforms\Etsy\EtsyAccountSettings.xaml.cs">
       <DependentUpon>EtsyAccountSettings.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Platforms\Etsy\EtsyAccountSettingsControlFactory.cs" />
+    <Compile Include="Platforms\Etsy\EtsyAccountSettingsMigrationControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Platforms\Etsy\EtsyAccountSettingsMigrationControl.Designer.cs">
+      <DependentUpon>EtsyAccountSettingsMigrationControl.cs</DependentUpon>
+    </Compile>
     <Compile Include="Platforms\Etsy\EtsyAccountSettingsControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -707,6 +714,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Platforms\Amazon\AmazonCreateOrderSourceWizardPage.resx">
       <DependentUpon>AmazonCreateOrderSourceWizardPage.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Platforms\Etsy\EtsyAccountSettingsMigrationControl.resx">
+      <DependentUpon>EtsyAccountSettingsMigrationControl.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Platforms\Etsy\EtsyAccountSettingsControl.resx">
       <DependentUpon>EtsyAccountSettingsControl.cs</DependentUpon>

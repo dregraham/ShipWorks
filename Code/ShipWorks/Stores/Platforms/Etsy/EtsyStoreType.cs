@@ -5,6 +5,7 @@ using Interapptive.Shared.UI;
 using Interapptive.Shared.Utility;
 using log4net;
 using SD.LLBLGen.Pro.ORMSupportClasses;
+using ShipWorks.ApplicationCore;
 using ShipWorks.Data;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
@@ -132,13 +133,12 @@ namespace ShipWorks.Stores.Platforms.Etsy
         /// </summary>
         public override AccountSettingsControlBase CreateAccountSettingsControl()
         {
-            if (string.IsNullOrEmpty(Store.OrderSourceID))
+            using (var scope = IoC.BeginLifetimeScope())
             {
-                var control = new EtsyAccountSettingsControl();
-
+                var factory = scope.Resolve<IEtsyAccountSettingsControlFactory>();
+                var control = factory.Create(Store);
                 return control;
             }
-            return base.CreateAccountSettingsControl();
         }
 
         /// <summary>

@@ -63,7 +63,10 @@ namespace ShipWorks.Stores.Platforms.Etsy
             OpeningUrl = true;
             try
             {
-                var url = await hubOrderSourceClient.GetUpdateOrderSourceInitiateUrl(orderSourceName, store.OrderSourceID).ConfigureAwait(true);
+                var url = await hubOrderSourceClient.GetUpdateOrderSourceInitiateUrl(orderSourceName, store.OrderSourceID, new Dictionary<string, string>
+                {
+                    { "EtsyShopId", store.EtsyShopID.ToString() }
+                }).ConfigureAwait(true);
                 webHelper.OpenUrl(url);
             }
             catch (Exception ex)
