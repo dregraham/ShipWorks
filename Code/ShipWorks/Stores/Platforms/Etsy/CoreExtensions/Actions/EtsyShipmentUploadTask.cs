@@ -23,7 +23,6 @@ namespace ShipWorks.Stores.Platforms.Etsy.CoreExtensions.Actions
     [ActionTask("Upload shipment details", "EtsyShipmentUploadTask", ActionTaskCategory.UpdateOnline)]
     public class EtsyShipmentUploadTask : StoreInstanceTaskBase
     {
-        const long maxBatchSize = 300;
         protected readonly IPlatformOnlineUpdater onlineUpdater;
 
         /// <summary>

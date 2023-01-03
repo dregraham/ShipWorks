@@ -77,7 +77,7 @@ namespace ShipWorks.ApplicationCore.Licensing.Warehouse
                 restResponse = await restClient.ExecuteTaskAsync(restRequest, cancellationToken).ConfigureAwait(false);
                 logEntry.LogResponse(restResponse, "json");
 
-                if (restResponse.StatusCode == HttpStatusCode.OK)
+                if (restResponse.StatusCode == HttpStatusCode.OK || restResponse.StatusCode == HttpStatusCode.NoContent)
                 {
                     return GenericResult.FromSuccess(restResponse);
                 }

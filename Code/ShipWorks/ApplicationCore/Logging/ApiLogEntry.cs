@@ -167,11 +167,11 @@ namespace ShipWorks.ApplicationCore.Logging
             string toLog = string.Empty;
 
             try
-            {
+            {                
                 var responseToLogAsJson = new
                 {
                     statusCode = response.StatusCode,
-                    content = JObject.Parse(response.Content),
+                    content = string.IsNullOrWhiteSpace(response.Content) ? default(JObject) : JObject.Parse(response.Content),
                     headers = response.Headers,
                     errorMessage = response.ErrorMessage,
                 };

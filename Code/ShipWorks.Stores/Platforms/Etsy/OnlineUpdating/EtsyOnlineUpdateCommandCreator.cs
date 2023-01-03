@@ -17,7 +17,6 @@ namespace ShipWorks.Stores.Platforms.Etsy.OnlineUpdating
     /// <summary>
     /// Create online update commands for Etsy
     /// </summary>
-    [KeyedComponent(typeof(IOnlineUpdateCommandCreator), StoreTypeCode.Etsy)]
     public class EtsyOnlineUpdateCommandCreator : IOnlineUpdateCommandCreator
     {
         private readonly Func<EtsyStoreEntity, IEtsyOnlineUpdater> createOnlineUpdater;
