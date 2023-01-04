@@ -16,5 +16,7 @@ namespace ShipWorks.Stores.Platforms.Etsy
         /// Save the store
         /// </summary>
         bool Save(EtsyStoreEntity store);
+
+        string EncodedOrderSource { get; set; }
     }
 }

@@ -15,6 +15,7 @@ namespace ShipWorks.Stores.UI.Platforms.Etsy
     public partial class EtsyAccountSettingsMigrationControl : AccountSettingsControlBase
     {
         private readonly IEtsyCreateOrderSourceViewModel viewModel;
+        private string encodedOrderSourceBeforeEdit;
 
         /// <summary>
         /// Constructor
@@ -22,7 +23,7 @@ namespace ShipWorks.Stores.UI.Platforms.Etsy
         public EtsyAccountSettingsMigrationControl(IEtsyCreateOrderSourceViewModel viewModel)
         {
             this.viewModel = viewModel;
-            InitializeComponent();            
+            InitializeComponent();
         }
 
         /// <summary>
@@ -30,7 +31,11 @@ namespace ShipWorks.Stores.UI.Platforms.Etsy
         /// </summary>
         public override bool SaveToEntity(StoreEntity store)
         {
-           return viewModel.Save((EtsyStoreEntity) store);            
+            if (viewModel.EncodedOrderSource == encodedOrderSourceBeforeEdit)
+            {
+                return true;
+            }
+            return viewModel.Save((EtsyStoreEntity) store);
         }
 
         /// <summary>
@@ -39,6 +44,7 @@ namespace ShipWorks.Stores.UI.Platforms.Etsy
         public override void LoadStore(StoreEntity store)
         {
             viewModel.Load((EtsyStoreEntity) store);
+            encodedOrderSourceBeforeEdit = viewModel.EncodedOrderSource;
         }
     }
 }
