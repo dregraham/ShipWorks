@@ -105,7 +105,12 @@ namespace ShipWorks.Stores.Platforms.Etsy
         /// </summary>
         public bool Save(EtsyStoreEntity store)
         {
-            if (!Decode(EncodedOrderSource, store))
+            if (string.IsNullOrWhiteSpace(EncodedOrderSource))
+            {
+                messageHelper.ShowError("The token is empty. Please copy and paste it.");
+                return false;
+            }
+            else if (!Decode(EncodedOrderSource, store))
             {
                 log.Error("Failed to decode the encoded order source token.");
                 messageHelper.ShowError("The token does not appear to be correct. Please copy and paste it again.");
