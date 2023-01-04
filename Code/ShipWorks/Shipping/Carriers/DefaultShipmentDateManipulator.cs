@@ -1,4 +1,5 @@
-﻿using Interapptive.Shared.ComponentRegistration;
+﻿using System;
+using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Utility;
 using ShipWorks.Data.Model.EntityClasses;
 
@@ -33,10 +34,11 @@ namespace ShipWorks.Shipping.Carriers
         public virtual void Manipulate(ShipmentEntity shipment)
         {
             var now = dateTimeProvider.Now;
+            var timeZoneInfo = dateTimeProvider.TimeZoneInfo;
 
             if (!shipment.Processed && shipment.ShipDate.Date < now.Date)
             {
-                shipment.ShipDate = now.Date.ToUniversalTime();
+                shipment.ShipDate = TimeZoneInfo.ConvertTimeToUtc(now.Date, timeZoneInfo);
             }
         }
     }
