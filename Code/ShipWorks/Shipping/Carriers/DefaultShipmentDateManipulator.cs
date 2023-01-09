@@ -38,7 +38,7 @@ namespace ShipWorks.Shipping.Carriers
 
             if (!shipment.Processed && shipment.ShipDate.Date < now.Date)
             {
-                shipment.ShipDate = TimeZoneInfo.ConvertTimeToUtc(now.Date, timeZoneInfo);
+                shipment.ShipDate = now.Date.ToUniversalTime(timeZoneInfo);
             }
         }
     }
