@@ -43,7 +43,7 @@ namespace ShipWorks.Stores.Tests.Platforms.ThreeDCart
             ThreeDCartStoreEntity store = new ThreeDCartStoreEntity
             {
                 TypeCode = (int) StoreTypeCode.ThreeDCart,
-                StoreTimeZone = TimeZoneInfo.Utc,
+                TimeZoneID = "Central Standard Time",
                 StoreUrl = "http://www.shipworks.com"
             };
 
@@ -153,6 +153,8 @@ namespace ShipWorks.Stores.Tests.Platforms.ThreeDCart
         private List<T> DeserializeEmbeddedList<T>(string name)
         {
             var json = GetType().Assembly.GetEmbeddedResourceString($"Platforms.ThreeDCart.Artifacts.{name}.json");
+            JsonSerializerSettings serializerSettings = new JsonSerializerSettings();
+            serializerSettings.DateTimeZoneHandling = DateTimeZoneHandling.RoundtripKind;
             return JsonConvert.DeserializeObject<List<T>>(json);
         }
     }
