@@ -1,8 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Autofac.Extras.Moq;
+using Interapptive.Shared.Utility;
+using Moq;
 using ShipWorks.Actions.Scheduling.ActionSchedules;
 using ShipWorks.Actions.Scheduling.QuartzNet.ActionScheduleAdapters;
+using ShipWorks.Shipping.Carriers;
+using ShipWorks.Tests.Shared;
 using Xunit;
 
 
@@ -10,14 +15,19 @@ namespace ShipWorks.Tests.Actions.Scheduling.QuartzNet.ActionScheduleAdapters
 {
     public class DailyActionScheduleAdapterTests
     {
-        DailyActionScheduleAdapter target;
+        private readonly DailyActionScheduleAdapter target;
         private TimeSpan ThreeDays = new TimeSpan(3, 0, 0, 0);
         private TimeSpan OneDay = new TimeSpan(1, 0, 0, 0);
         private TimeSpan OneHour = new TimeSpan(0, 1, 0, 0);
+        private readonly TimeZoneInfo stLouisTimeZoneInfo;
+        private readonly AutoMock mock;
 
         public DailyActionScheduleAdapterTests()
         {
-            target = new DailyActionScheduleAdapter();
+            stLouisTimeZoneInfo = TimeZoneInfo.FindSystemTimeZoneById("Central Standard Time");
+            mock = AutoMockExtensions.GetLooseThatReturnsMocks();
+            mock.Mock<IDateTimeProvider>().SetupGet(x => x.TimeZoneInfo).Returns(stLouisTimeZoneInfo);//StLouis time zone
+            target = mock.Create<DailyActionScheduleAdapter>();
         }
 
         [Fact]
@@ -47,7 +57,11 @@ namespace ShipWorks.Tests.Actions.Scheduling.QuartzNet.ActionScheduleAdapters
         [Fact]
         public void FiresAtSpecifiedFrequency_WhenDstEnds()
         {
-            DailyActionSchedule schedule = new DailyActionSchedule { FrequencyInDays = 3, StartDateTimeInUtc = DateTime.Parse("10/27/2015").AddHours(4).ToUniversalTime() };
+            DailyActionSchedule schedule = new DailyActionSchedule
+            {
+                FrequencyInDays = 3,
+                StartDateTimeInUtc = DateTime.Parse("10/27/2015").AddHours(4).ToUniversalTime(stLouisTimeZoneInfo)
+            };
 
             DateTimeOffset[] fireTimes = schedule.ComputeFireTimes(target, 5).ToArray();
 
@@ -59,13 +73,12 @@ namespace ShipWorks.Tests.Actions.Scheduling.QuartzNet.ActionScheduleAdapters
             Assert.True(intervals[1] == ThreeDays.Add(OneHour));
             Assert.True(intervals[2] == ThreeDays);
             Assert.True(intervals[3] == ThreeDays);
-
         }
 
         [Fact]
         public void FiresAtSpecifiedFrequency_WhenDstStarts()
         {
-            DailyActionSchedule schedule = new DailyActionSchedule { FrequencyInDays = 3, StartDateTimeInUtc = DateTime.Parse("3/4/2015").AddHours(4).ToUniversalTime() };
+            DailyActionSchedule schedule = new DailyActionSchedule { FrequencyInDays = 3, StartDateTimeInUtc = DateTime.Parse("3/4/2015").AddHours(4).ToUniversalTime(stLouisTimeZoneInfo) };
 
             DateTimeOffset[] fireTimes = schedule.ComputeFireTimes(target, 5).ToArray();
 
@@ -82,7 +95,7 @@ namespace ShipWorks.Tests.Actions.Scheduling.QuartzNet.ActionScheduleAdapters
         [Fact]
         public void FiresOnceWhenHourRepeats_WhenDstEnds()
         {
-            DailyActionSchedule schedule = new DailyActionSchedule { FrequencyInDays = 1, StartDateTimeInUtc = DateTime.Parse("10/30/2015 02:30:00 AM").ToUniversalTime() };
+            DailyActionSchedule schedule = new DailyActionSchedule { FrequencyInDays = 1, StartDateTimeInUtc = DateTime.Parse("10/30/2015 02:30:00 AM").ToUniversalTime(stLouisTimeZoneInfo) };
 
             DateTimeOffset[] fireTimes = schedule.ComputeFireTimes(target, 5).ToArray();
 
