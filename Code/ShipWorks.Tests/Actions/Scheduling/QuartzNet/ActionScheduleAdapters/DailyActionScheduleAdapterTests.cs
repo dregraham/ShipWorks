@@ -20,14 +20,13 @@ namespace ShipWorks.Tests.Actions.Scheduling.QuartzNet.ActionScheduleAdapters
         private TimeSpan OneDay = new TimeSpan(1, 0, 0, 0);
         private TimeSpan OneHour = new TimeSpan(0, 1, 0, 0);
         private readonly TimeZoneInfo stLouisTimeZoneInfo;
-        private readonly AutoMock mock;
 
         public DailyActionScheduleAdapterTests()
         {
             stLouisTimeZoneInfo = TimeZoneInfo.FindSystemTimeZoneById("Central Standard Time");
-            mock = AutoMockExtensions.GetLooseThatReturnsMocks();
-            mock.Mock<IDateTimeProvider>().SetupGet(x => x.TimeZoneInfo).Returns(stLouisTimeZoneInfo);//StLouis time zone
-            target = mock.Create<DailyActionScheduleAdapter>();
+            var autoMock = AutoMockExtensions.GetLooseThatReturnsMocks();
+            autoMock.Mock<IDateTimeProvider>().SetupGet(x => x.TimeZoneInfo).Returns(stLouisTimeZoneInfo);//StLouis time zone
+            target = autoMock.Create<DailyActionScheduleAdapter>();
         }
 
         [Fact]
