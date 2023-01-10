@@ -75,17 +75,23 @@ namespace ShipWorks.Tests.Interapptive.Shared.Utility
         }
 
         [Theory]
-        [InlineData("2018-03-05T12:00:00", "2018-03-05T12:00:00Z", "Today")]
-        [InlineData("2018-03-06T01:00:00", "2018-03-05T22:00:00-600", "Today")]
-        [InlineData("2018-03-04T22:00:00", "2018-03-05T22:00:00-600", "Yesterday")]
+        [InlineData("2018-03-06T01:00:00", "2018-03-05T01:00:00", "Tomorrow")]
+        [InlineData("2018-03-04T01:00:00", "2018-03-05T01:00:00", "Yesterday")]
+        [InlineData("2018-03-05T01:00:00", "2018-03-05T01:00:00", "Today")]
+        [InlineData("2018-03-05T23:00:00-600", "2018-03-05T23:00:00", "Tomorrow")]
+        [InlineData("2018-03-03T23:00:00-600", "2018-03-05T23:00:00", "Yesterday")]
+        [InlineData("2018-03-04T23:00:00-600", "2018-03-05T23:00:00", "Today")]
+
         public void FormatFriendlyDate_ReturnsFriendlyValue(string dateTimeValue, string nowValue, string expected)
         {
             var now = DateTime.SpecifyKind(DateTime.Parse(nowValue), DateTimeKind.Local);
             var dateTime = DateTime.SpecifyKind(DateTime.Parse(dateTimeValue), DateTimeKind.Unspecified);
 
-            var result = dateTime.FormatFriendlyDate("d", now);
+            var stLouisTimeZone = TimeZoneInfo.FindSystemTimeZoneById("Central Standard Time");
+            var utcDateTime = TimeZoneInfo.ConvertTimeToUtc(dateTime, stLouisTimeZone);
 
-            Assert.Equal(expected, result);
+            Assert.Equal(expected, dateTime.FormatFriendlyDate("d", now));
+            Assert.Equal(expected, utcDateTime.FormatFriendlyDate("d", now));
         }
 
         [Theory]
