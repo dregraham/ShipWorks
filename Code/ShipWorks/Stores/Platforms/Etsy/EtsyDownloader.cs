@@ -62,6 +62,8 @@ namespace ShipWorks.Stores.Platforms.Etsy
         /// associate any store-specific download properties/metrics.</param>
         protected override async Task Download(TrackedDurationEvent trackedDurationEvent)
         {
+            var upgradeErrorMessage = "Go to Manager > Stores and Update your Etsy store credentials";
+
             try
             {
                 Progress.Detail = "Checking for shipped orders...";
@@ -73,14 +75,12 @@ namespace ShipWorks.Stores.Platforms.Etsy
                 Progress.Detail = "Checking for new orders...";
                 await DownloadNewOrders().ConfigureAwait(false);
             }
-            catch (EtsyException ex)
+            catch (Exception ex)
             {
-                throw new DownloadException(ex.Message, ex);
+                throw new DownloadException(upgradeErrorMessage, ex);
             }
-            catch (SqlForeignKeyException ex)
-            {
-                throw new DownloadException(ex.Message, ex);
-            }
+
+            throw new DownloadException(upgradeErrorMessage);
         }
 
         /// <summary>

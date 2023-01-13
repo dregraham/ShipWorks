@@ -587,6 +587,12 @@
     <Compile Include="Actions\ActionTaskChangingEventArgs.cs" />
     <Compile Include="Actions\Tasks\ActionTaskCategory.cs" />
     <Compile Include="Actions\Tasks\ActionTaskFactory.cs" />
+    <Compile Include="Actions\Tasks\Common\Editors\DeprecatedTaskEditor.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Actions\Tasks\Common\Editors\DeprecatedTaskEditor.Designer.cs">
+      <DependentUpon>DeprecatedTaskEditor.cs</DependentUpon>
+    </Compile>
     <Compile Include="Actions\Tasks\IActionTaskFactory.cs" />
     <Compile Include="Actions\Tasks\ActionTaskFlowInfoControl.cs">
       <SubType>UserControl</SubType>
@@ -1744,6 +1750,10 @@
     <Compile Include="Warehouse\Orders\IWarehouseOrderClient.cs" />
     <Compile Include="Warehouse\Orders\IWarehouseOrderFactory.cs" />
     <Compile Include="Warehouse\Orders\WarehouseOrderFactory.cs" />
+    <EmbeddedResource Include="Actions\Tasks\Common\Editors\DeprecatedTaskEditor.resx">
+      <DependentUpon>DeprecatedTaskEditor.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
     <EmbeddedResource Include="Actions\Tasks\Common\Editors\CreateLabelTaskEditor.resx">
       <DependentUpon>CreateLabelTaskEditor.cs</DependentUpon>
     </EmbeddedResource>
@@ -4239,12 +4249,6 @@
     <Compile Include="Stores\Platforms\Ebay\Shipping\GlobalShippingProgram\Rules\SelectedShippingMethodRule.cs" />
     <Compile Include="Stores\Platforms\Etsy\CoreExtensions\Actions\EtsyShipmentUploadTask.cs" />
     <Compile Include="Stores\Platforms\Etsy\CoreExtensions\Actions\EtsyUploadTask.cs" />
-    <Compile Include="Stores\Platforms\Etsy\CoreExtensions\Actions\EtsyUploadTaskEditor.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Stores\Platforms\Etsy\CoreExtensions\Actions\EtsyUploadTaskEditor.Designer.cs">
-      <DependentUpon>EtsyUploadTaskEditor.cs</DependentUpon>
-    </Compile>
     <Compile Include="Stores\Platforms\Etsy\CoreExtensions\Filters\EtsyWasPaidCondition.cs" />
     <Compile Include="Stores\Platforms\Etsy\CoreExtensions\Filters\EtsyWasShippedCondition.cs" />
     <Compile Include="Stores\Platforms\Etsy\Dialog\GetCommentTokenDlg.cs">
@@ -4263,12 +4267,6 @@
     <Compile Include="Stores\Platforms\Etsy\EtsyOrderStatusUtility.cs" />
     <Compile Include="Stores\Platforms\Etsy\EtsyTokenUtility.cs" />
     <Compile Include="Stores\Platforms\Etsy\EtsyEndpoints.cs" />
-    <Compile Include="Stores\Platforms\Etsy\WizardPages\EtsyOnlineShipmentUpdateActionControl.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Stores\Platforms\Etsy\WizardPages\EtsyOnlineShipmentUpdateActionControl.Designer.cs">
-      <DependentUpon>EtsyOnlineShipmentUpdateActionControl.cs</DependentUpon>
-    </Compile>
     <Compile Include="Stores\Platforms\OrderDesk\OrderDeskStoreType.cs" />
     <Compile Include="Stores\Platforms\Newegg\Enums\NeweggOrderType.cs" />
     <Compile Include="Stores\Platforms\Newegg\Net\PageCalculator.cs" />
@@ -8889,17 +8887,11 @@
     <EmbeddedResource Include="Stores\Platforms\ChannelSale\WizardPages\ChannelSaleWizardPage.resx">
       <DependentUpon>ChannelSaleWizardPage.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Stores\Platforms\Etsy\CoreExtensions\Actions\EtsyUploadTaskEditor.resx">
-      <DependentUpon>EtsyUploadTaskEditor.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="Stores\Platforms\Etsy\Dialog\GetCommentTokenDlg.resx">
       <DependentUpon>GetCommentTokenDlg.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Stores\Platforms\Etsy\EtsyAccountSettingsControl.resx">
       <DependentUpon>EtsyAccountSettingsControl.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Stores\Platforms\Etsy\WizardPages\EtsyOnlineShipmentUpdateActionControl.resx">
-      <DependentUpon>EtsyOnlineShipmentUpdateActionControl.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Stores\Platforms\Groupon\GrouponAccountSettingsControl.resx">
       <DependentUpon>GrouponAccountSettingsControl.cs</DependentUpon>

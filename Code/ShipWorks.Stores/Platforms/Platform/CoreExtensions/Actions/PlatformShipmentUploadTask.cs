@@ -7,6 +7,7 @@ using ShipWorks.Actions;
 using ShipWorks.Actions.Tasks;
 using ShipWorks.Actions.Tasks.Common;
 using ShipWorks.Actions.Tasks.Common.Editors;
+using ShipWorks.ApplicationCore;
 using ShipWorks.Data.Model;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Platforms.Platform.OnlineUpdating;
@@ -58,8 +59,13 @@ namespace ShipWorks.Stores.Platforms.Platform.CoreExtensions.Actions
         /// <summary>
         /// Indicates if the task is supported for the specified store
         /// </summary>
-        public override bool SupportsStore(StoreEntity store) =>
-            !store.OrderSourceID.IsNullOrWhiteSpace();
+        public override bool SupportsStore(StoreEntity store)
+        {
+            using (var scope = IoC.BeginLifetimeScope())
+            {
+                return StoreTypeManager.GetType((StoreTypeCode) store.TypeCode, store) is PlatformStoreType;
+            }
+        }
 
         /// <summary>
         /// Run the task
