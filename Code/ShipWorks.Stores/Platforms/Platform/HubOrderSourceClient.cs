@@ -40,7 +40,7 @@ namespace ShipWorks.Stores.Platforms.Platform
         /// Note that the orderSourceName will be used in both the URL used to communicate with the hub and the
         /// redirectUrl the hub will send on to monoauth
         /// </remarks>
-        public async Task<string> GetCreateOrderSourceInitiateUrl(string orderSourceName, int? daysBack, Dictionary<string, string> otherParameters = default)
+        public async Task<string> GetCreateOrderSourceInitiateUrl(string orderSourceName, int? daysBack, Dictionary<string, string> otherParameters = null)
         {
             string otherParametersString = CreateOtherParametersString(otherParameters);
             var request = warehouseRequestFactory.Create(
@@ -72,7 +72,7 @@ namespace ShipWorks.Stores.Platforms.Platform
         /// Note that the orderSourceName will be used in both the URL used to communicate with the hub and the
         /// redirectUrl the hub will send on to monoauth
         /// </remarks>
-        public async Task<string> GetUpdateOrderSourceInitiateUrl(string orderSourceName, string orderSourceId, Dictionary<string, string> otherParameters = default)
+        public async Task<string> GetUpdateOrderSourceInitiateUrl(string orderSourceName, string orderSourceId, Dictionary<string, string> otherParameters = null)
         {
             var request = warehouseRequestFactory.Create(
                 WarehouseEndpoints.GetUpdateOrderSourceInitiateUrl(orderSourceName, UpdateLocalUrl(warehouseRequestClient.WarehouseUrl), orderSourceId, CreateOtherParametersString(otherParameters)), Method.GET,
