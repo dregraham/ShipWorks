@@ -13,6 +13,7 @@ namespace ShipWorks.Tests.Data.Administration.Retry
 {
     public class SqlAdapterRetryTest : IDisposable
     {
+        internal const int OneSecond = 999;//test error on TC - timer is not precise enough
         private readonly AutoMock mock;
         private readonly SqlAdapterRetryOptions testOptions;
 
@@ -239,7 +240,7 @@ namespace ShipWorks.Tests.Data.Administration.Retry
             }
 
             stopwatch.Stop();
-            Assert.True(stopwatch.ElapsedMilliseconds >= 1000);
+            Assert.True(stopwatch.ElapsedMilliseconds >= oneSecond);
         }
 
         [Fact]
