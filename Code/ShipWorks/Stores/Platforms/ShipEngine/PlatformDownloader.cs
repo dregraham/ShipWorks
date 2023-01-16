@@ -21,7 +21,6 @@ using ShipWorks.Stores.Platforms.Amazon.Mws;
 using ShipWorks.Stores.Platforms.Etsy;
 using ShipWorks.Stores.Platforms.ShipEngine.Apollo;
 
-#nullable enable
 namespace ShipWorks.Stores.Platforms.ShipEngine
 {
     public abstract class PlatformDownloader : StoreDownloader
@@ -308,7 +307,7 @@ namespace ShipWorks.Stores.Platforms.ShipEngine
         /// <summary>
         /// GetRequestedShipping (in the format we used to get it from MWS "carrier: details")
         /// </summary
-        protected string GetRequestedShipping(string? shippingService)
+        protected string GetRequestedShipping(string shippingService)
         {
             if (string.IsNullOrWhiteSpace(shippingService))
             {
@@ -395,7 +394,7 @@ namespace ShipWorks.Stores.Platforms.ShipEngine
         /// <summary>
         /// Create the order instance
         /// </summary>
-        protected abstract Task<OrderEntity?> CreateOrder(OrderSourceApiSalesOrder salesOrder);
+        protected abstract Task<OrderEntity> CreateOrder(OrderSourceApiSalesOrder salesOrder);
         
         /// <summary>
         /// Store order in database
