@@ -82,7 +82,7 @@ namespace ShipWorks.Shipping.Carriers.Asendia
             }
 
             AsendiaShipmentEntity asendiaShipment = shipment.Asendia;
-            asendiaShipment.Service = AsendiaServiceType.AsendiaPriorityTracked;
+            asendiaShipment.Service = AsendiaServiceType.EpaqSelectCustom;
             asendiaShipment.RequestedLabelFormat = (int) ThermalLanguage.None;
             asendiaShipment.Contents = (int) ShipEngineContentsType.Merchandise;
             asendiaShipment.NonDelivery = (int) ShipEngineNonDeliveryType.ReturnToSender;

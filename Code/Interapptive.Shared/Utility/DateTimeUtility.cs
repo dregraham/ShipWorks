@@ -46,21 +46,6 @@ namespace Interapptive.Shared.Utility
         }
 
         /// <summary>
-        /// Converts a date time to the specified time zone.  If the converted time falls during DST, 2 hours will be added and returned.
-        /// </summary>
-        public static DateTime ConvertTimeToUtcForTimeZone(DateTime sourceDateTime, TimeZoneInfo timeZoneInfo)
-        {
-            try
-            {
-                return TimeZoneInfo.ConvertTimeToUtc(sourceDateTime, timeZoneInfo);
-            }
-            catch (ArgumentException)
-            {
-                return TimeZoneInfo.ConvertTimeToUtc(sourceDateTime.AddHours(2), timeZoneInfo);
-            }
-        }
-
-        /// <summary>
         /// Determines if a date is a business day
         /// </summary>
         public static bool IsBusinessDay(this DateTime value)
