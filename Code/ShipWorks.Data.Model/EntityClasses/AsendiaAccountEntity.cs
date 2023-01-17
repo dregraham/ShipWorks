@@ -410,12 +410,12 @@ namespace ShipWorks.Data.Model.EntityClasses
 
 		/// <summary> The AccountNumber property of the Entity AsendiaAccount<br/><br/></summary>
 		/// <remarks>Mapped on  table field: "AsendiaAccount"."AccountNumber"<br/>
-		/// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
+		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 50<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
 		[DataMember]
-		public virtual System.Int64 AccountNumber
+		public virtual System.String AccountNumber
 		{
-			get { return (System.Int64)GetValue((int)AsendiaAccountFieldIndex.AccountNumber, true); }
+			get { return (System.String)GetValue((int)AsendiaAccountFieldIndex.AccountNumber, true); }
 			set	{ SetValue((int)AsendiaAccountFieldIndex.AccountNumber, value); }
 		}
 

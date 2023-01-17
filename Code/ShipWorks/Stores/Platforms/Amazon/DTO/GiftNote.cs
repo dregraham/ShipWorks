@@ -27,11 +27,11 @@ namespace ShipWorks.Stores.Platforms.Amazon.DTO
         {
             var itemNote = new GiftNote();
             var messageParts = orderSourceNote.Text.Split('\n');
-            itemNote.ASIN = ParseNoteTextProperty("ASIN", messageParts);
-            itemNote.SKU = ParseNoteTextProperty("SKU", messageParts);
-            itemNote.OrderItemId = ParseNoteTextProperty("OrderItemId", messageParts);
-            itemNote.GiftWrapLevel = ParseNoteTextProperty("Gift Wrap Level", messageParts);
-            var fee = ParseNoteTextProperty("Fee", messageParts);
+            itemNote.ASIN = ParseNoteTextProperty("ASIN:", messageParts);
+            itemNote.SKU = ParseNoteTextProperty("SKU:", messageParts);
+            itemNote.OrderItemId = ParseNoteTextProperty("OrderItemId:", messageParts);
+            itemNote.GiftWrapLevel = ParseNoteTextProperty("Gift Wrap Level:", messageParts);
+            var fee = ParseNoteTextProperty("Fee:", messageParts);
             if (fee.HasValue() && decimal.TryParse(fee, out decimal parsedFee))
             {
                 itemNote.Fee = parsedFee;
@@ -47,7 +47,7 @@ namespace ShipWorks.Stores.Platforms.Amazon.DTO
         /// </summary>
         private static string ParseNoteTextProperty(string propertyName, string[] messageParts)
         {
-            var property = messageParts.FirstOrDefault((p) => p.Contains(propertyName));
+            var property = messageParts.FirstOrDefault((p) => p.StartsWith(propertyName));
             if (property.HasValue())
             {
                 return property.Split(':')[1].Trim();
@@ -64,7 +64,7 @@ namespace ShipWorks.Stores.Platforms.Amazon.DTO
             //The different properties provided in the OrderSourceNote text are delimited by a \n
             //However, The message can also contain \n so in order to keep the full message we assume
             //the message is the last property and take everything after the "Message:" part of the string
-            var remaining = messageParts.SkipWhile(p => !p.StartsWith("Message")).ToArray();
+            var remaining = messageParts.SkipWhile(p => !p.StartsWith("Message:")).ToArray();
 
             if (remaining.Any())
             {

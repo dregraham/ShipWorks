@@ -38,12 +38,15 @@
             this.customsRecipientTINType = new ShipWorks.UI.Controls.MultiValueComboBox();
             this.labelCustomsRecipientIssuingAuthority = new System.Windows.Forms.Label();
             this.customsRecipientIssuingAuthority = new ShipWorks.UI.Controls.MultiValueComboBox();
+            this.sku = new ShipWorks.UI.Controls.MultiValueTextBox();
+            this.labelSku = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.sectionContents)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.sectionContents.ContentPanel)).BeginInit();
             this.sectionContents.ContentPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.sectionGeneral)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.sectionGeneral.ContentPanel)).BeginInit();
             this.sectionGeneral.ContentPanel.SuspendLayout();
+            this.groupSelectedContent.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.fieldLengthProvider)).BeginInit();
             this.SuspendLayout();
             // 
@@ -57,8 +60,7 @@
             this.sectionContents.ContentPanel.Controls.Add(this.delete);
             this.sectionContents.ContentPanel.Controls.Add(this.add);
             this.sectionContents.Location = new System.Drawing.Point(6, 210);
-            this.sectionContents.MinimumSize = new System.Drawing.Size(480, 362);
-            this.sectionContents.Size = new System.Drawing.Size(480, 362);
+            this.sectionContents.Size = new System.Drawing.Size(503, 403);
             // 
             // label1
             // 
@@ -89,23 +91,27 @@
             this.sectionGeneral.ContentPanel.Controls.Add(this.labelCustomsRecipientIssuingAuthority);
             this.sectionGeneral.ContentPanel.Controls.Add(this.customsRecipientIssuingAuthority);
             this.sectionGeneral.Location = new System.Drawing.Point(6, 5);
-            this.sectionGeneral.Size = new System.Drawing.Size(480, 200);
+            this.sectionGeneral.Size = new System.Drawing.Size(503, 200);
             // 
             // groupSelectedContent
             // 
-            this.groupSelectedContent.Size = new System.Drawing.Size(643, 190);
+            this.groupSelectedContent.Controls.Add(this.sku);
+            this.groupSelectedContent.Controls.Add(this.labelSku);
+            this.groupSelectedContent.Size = new System.Drawing.Size(508, 231);
+            this.groupSelectedContent.Controls.SetChildIndex(this.labelSku, 0);
+            this.groupSelectedContent.Controls.SetChildIndex(this.sku, 0);
             // 
             // add
             // 
-            this.add.Location = new System.Drawing.Point(407, 10);
+            this.add.Location = new System.Drawing.Point(405, 10);
             // 
             // delete
             // 
-            this.delete.Location = new System.Drawing.Point(407, 37);
+            this.delete.Location = new System.Drawing.Point(405, 37);
             // 
             // itemsGrid
             // 
-            this.itemsGrid.Size = new System.Drawing.Size(393, 116);
+            this.itemsGrid.Size = new System.Drawing.Size(388, 116);
             // 
             // contentType
             // 
@@ -205,13 +211,29 @@
             this.customsRecipientIssuingAuthority.Size = new System.Drawing.Size(160, 21);
             this.customsRecipientIssuingAuthority.TabIndex = 9;
             // 
+            // sku
+            // 
+            this.sku.Location = new System.Drawing.Point(105, 186);
+            this.sku.Name = "sku";
+            this.sku.Size = new System.Drawing.Size(95, 21);
+            this.sku.TabIndex = 15;
+            // 
+            // labelSku
+            // 
+            this.labelSku.AutoSize = true;
+            this.labelSku.Location = new System.Drawing.Point(69, 189);
+            this.labelSku.Name = "labelSku";
+            this.labelSku.Size = new System.Drawing.Size(30, 13);
+            this.labelSku.TabIndex = 14;
+            this.labelSku.Text = "SKU:";
+            // 
             // AsendiaCustomsControl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.MinimumSize = new System.Drawing.Size(489, 525);
             this.Name = "AsendiaCustomsControl";
-            this.Size = new System.Drawing.Size(472, 525);
+            this.Size = new System.Drawing.Size(564, 616);
             ((System.ComponentModel.ISupportInitialize)(this.sectionContents.ContentPanel)).EndInit();
             this.sectionContents.ContentPanel.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.sectionContents)).EndInit();
@@ -219,6 +241,8 @@
             this.sectionGeneral.ContentPanel.ResumeLayout(false);
             this.sectionGeneral.ContentPanel.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.sectionGeneral)).EndInit();
+            this.groupSelectedContent.ResumeLayout(false);
+            this.groupSelectedContent.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.fieldLengthProvider)).EndInit();
             this.ResumeLayout(false);
 
@@ -235,5 +259,7 @@
         private ShipWorks.UI.Controls.MultiValueComboBox customsRecipientTINType;
         private System.Windows.Forms.Label labelCustomsRecipientIssuingAuthority;
         private ShipWorks.UI.Controls.MultiValueComboBox customsRecipientIssuingAuthority;
+        private ShipWorks.UI.Controls.MultiValueTextBox sku;
+        private System.Windows.Forms.Label labelSku;
     }
 }

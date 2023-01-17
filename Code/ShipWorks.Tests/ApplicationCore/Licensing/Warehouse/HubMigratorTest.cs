@@ -37,7 +37,7 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing.Warehouse
             messageHelper = mock.Mock<IMessageHelper>();
             configurationData = mock.Mock<IConfigurationData>();
             userSession = mock.Mock<IUserSession>();
-            store = new StoreEntity();
+            store = new StoreEntity { ShouldMigrate = true };
             owner = mock.Mock<IWin32Window>().Object;
         }
 
@@ -99,6 +99,24 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing.Warehouse
             storeType.Setup(x => x.ShouldUseHub(store)).Returns(false);
             storeTypeManager.Setup(x => x.GetType(store))
                 .Returns(storeType);
+
+            var testObject = mock.Create<HubMigrator>();
+            testObject.MigrateStores(owner);
+
+            messageHelper.Verify(x => x.ShowQuestion(owner, AnyString), Times.Never);
+        }
+
+        [Fact]
+        public void MigrateStores_DoesNotPromptUser_WhenStoreIsSetToNotMigrate()
+        {
+            configurationData.Setup(x => x.FetchReadOnly()).Returns(new ConfigurationEntity { WarehouseID = "foo" });
+            userSession.Setup(x => x.User).Returns(new UserEntity() { IsAdmin = true });
+            storeManager.Setup(x => x.GetAllStores()).Returns(new List<StoreEntity> { store });
+            storeType.Setup(x => x.ShouldUseHub(store)).Returns(true);
+            storeTypeManager.Setup(x => x.GetType(store))
+                .Returns(storeType);
+
+            store.ShouldMigrate = false;
 
             var testObject = mock.Create<HubMigrator>();
             testObject.MigrateStores(owner);

@@ -80,6 +80,7 @@ namespace ShipWorks.ApplicationCore.Licensing.WebClientEnvironments
                 CreateAlphaEnvironment(),
                 CreateBetaEnvironment(),
                 CreateLocalhostEnvironment(),
+                CreateLocalhostFiddlerEnvironment(),
                 CreateOtherEnvironment(otherTangoUrl, otherWarehouseUrl, otherActivationUrl, otherProxyUrl)
             };
 
@@ -210,6 +211,29 @@ namespace ShipWorks.ApplicationCore.Licensing.WebClientEnvironments
                 ActivationUrl = "http://localhost:3999/tango",
                 WarehouseUrl = "http://localhost:4001/",
                 ProxyUrl = "http://localhost:3999/",
+                HeaderShipWorksUsername = encryptionProvider.Decrypt("C5NOiKdNaM/324R7sIjFUA=="),
+                HeaderShipWorksPassword = encryptionProvider.Decrypt("lavEgsQoKGM="),
+                SoapAction = "",
+                ForcePreCallCertificationValidation = false,
+                TangoSecurityValidator = fakeTangoSecurityValidator
+            };
+        }
+
+        /// <summary>
+        /// Create a localhost via port 8888 environment
+        /// </summary>
+        private WebClientEnvironment CreateLocalhostFiddlerEnvironment()
+        {
+            // In Fiddler, add OnBeforeRequest:
+            // 		if (oSession.host.toLowerCase() == "localhost:8888") oSession.host = "localhost:3999";
+            //      if (oSession.host.toLowerCase() == "localhost:8889") oSession.host = "localhost:4001";
+            return new WebClientEnvironment()
+            {
+                Name = "Localhost_Fiddler",
+                TangoUrl = "http://localhost:8888/tango",
+                ActivationUrl = "http://localhost:8888/tango",
+                WarehouseUrl = "http://localhost:8889/",
+                ProxyUrl = "http://localhost:8888/",
                 HeaderShipWorksUsername = encryptionProvider.Decrypt("C5NOiKdNaM/324R7sIjFUA=="),
                 HeaderShipWorksPassword = encryptionProvider.Decrypt("lavEgsQoKGM="),
                 SoapAction = "",

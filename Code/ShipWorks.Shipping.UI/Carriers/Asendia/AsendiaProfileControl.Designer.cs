@@ -235,7 +235,7 @@
             this.labelCustomsRecipientTIN.BackColor = System.Drawing.Color.Transparent;
             this.labelCustomsRecipientTIN.Location = new System.Drawing.Point(40, 78);
             this.labelCustomsRecipientTIN.Name = "labelCustomsRecipientTIN";
-            this.labelCustomsRecipientTIN.Size = new System.Drawing.Size(72, 13);
+            this.labelCustomsRecipientTIN.Size = new System.Drawing.Size(89, 13);
             this.labelCustomsRecipientTIN.TabIndex = 116;
             this.labelCustomsRecipientTIN.Text = "Recipient Tax Id:";
             // 
@@ -265,7 +265,7 @@
             this.labelCustomsRecipientTINType.BackColor = System.Drawing.Color.Transparent;
             this.labelCustomsRecipientTINType.Location = new System.Drawing.Point(77, 105);
             this.labelCustomsRecipientTINType.Name = "labelCustomsRecipientTINType";
-            this.labelCustomsRecipientTINType.Size = new System.Drawing.Size(72, 13);
+            this.labelCustomsRecipientTINType.Size = new System.Drawing.Size(52, 13);
             this.labelCustomsRecipientTINType.TabIndex = 126;
             this.labelCustomsRecipientTINType.Text = "Tin Type:";
             // 
@@ -275,7 +275,7 @@
             this.customsRecipientTINType.FormattingEnabled = true;
             this.customsRecipientTINType.Location = new System.Drawing.Point(138, 102);
             this.customsRecipientTINType.Name = "customsRecipientTINType";
-            this.customsRecipientTINType.PromptText = "(Select a Value)";
+            this.customsRecipientTINType.PromptText = "(Multiple Values)";
             this.customsRecipientTINType.Size = new System.Drawing.Size(196, 21);
             this.customsRecipientTINType.TabIndex = 7;
             // 
@@ -297,7 +297,7 @@
             this.labelCustomsRecipientIssuingAuthority.BackColor = System.Drawing.Color.Transparent;
             this.labelCustomsRecipientIssuingAuthority.Location = new System.Drawing.Point(35, 132);
             this.labelCustomsRecipientIssuingAuthority.Name = "labelCustomsRecipientIssuingAuthority";
-            this.labelCustomsRecipientIssuingAuthority.Size = new System.Drawing.Size(72, 13);
+            this.labelCustomsRecipientIssuingAuthority.Size = new System.Drawing.Size(93, 13);
             this.labelCustomsRecipientIssuingAuthority.TabIndex = 136;
             this.labelCustomsRecipientIssuingAuthority.Text = "Issuing Authority:";
             // 
@@ -307,7 +307,7 @@
             this.customsRecipientIssuingAuthority.FormattingEnabled = true;
             this.customsRecipientIssuingAuthority.Location = new System.Drawing.Point(138, 129);
             this.customsRecipientIssuingAuthority.Name = "customsRecipientIssuingAuthority";
-            this.customsRecipientIssuingAuthority.PromptText = "(Select a Value)";
+            this.customsRecipientIssuingAuthority.PromptText = "(Multiple Values)";
             this.customsRecipientIssuingAuthority.Size = new System.Drawing.Size(196, 21);
             this.customsRecipientIssuingAuthority.TabIndex = 9;
             // 
@@ -573,7 +573,7 @@
             this.service.Location = new System.Drawing.Point(128, 18);
             this.service.Name = "service";
             this.service.PromptText = "(Multiple Values)";
-            this.service.Size = new System.Drawing.Size(206, 21);
+            this.service.Size = new System.Drawing.Size(269, 21);
             this.service.TabIndex = 1;
             // 
             // serviceState

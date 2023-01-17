@@ -219,6 +219,7 @@
     <Compile Include="Carriers\Asendia\AsendiaLabelService.cs" />
     <Compile Include="Carriers\Asendia\AsendiaManifestCreator.cs" />
     <Compile Include="Carriers\Asendia\AsendiaPackageAdapter.cs" />
+    <Compile Include="Carriers\Asendia\AsendiaProcessingLocation.cs" />
     <Compile Include="Carriers\Asendia\AsendiaShipmentRequestFactory.cs" />
     <Compile Include="Carriers\Asendia\AsendiaShipmentType.cs" />
     <Compile Include="Carriers\Asendia\AsendiaAccountManager.cs" />

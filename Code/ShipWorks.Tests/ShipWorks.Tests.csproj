@@ -592,6 +592,7 @@
     <Compile Include="Stores\Platforms\Amazon\AmazonStoreEntityTest.cs" />
     <Compile Include="Stores\Platforms\Amazon\AmazonOrderEntityTest.cs" />
     <Compile Include="Stores\Platforms\Amazon\AmazonUtilityTest.cs" />
+    <Compile Include="Stores\Platforms\Amazon\DTO\GiftNoteTest.cs" />
     <Compile Include="Stores\Platforms\Amazon\EnsClientTest.cs" />
     <Compile Include="Stores\Platforms\Amazon\MwsClientTests.cs" />
     <Compile Include="Stores\Platforms\BigCommerce\BigCommerceProductImageCacheTest.cs" />

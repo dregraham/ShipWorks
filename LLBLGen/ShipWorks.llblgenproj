@@ -415,7 +415,7 @@
       </EntityDefinition>
       <EntityDefinition Name="AsendiaAccount" ObjectID="c52eca27-f251-4cc6-a3e0-96315ddd468a">
         <Fields>
-          <Field Name="AccountNumber" Type="long" Precision="19" FieldIndex="2" />
+          <Field Name="AccountNumber" Type="string" MaxLength="50" FieldIndex="2" />
           <Field Name="AsendiaAccountID" Type="long" IsReadOnly="true" Precision="19" IsPrimaryKey="true" FieldIndex="0" />
           <Field Name="City" Type="string" MaxLength="25" FieldIndex="10" />
           <Field Name="Company" Type="string" MaxLength="30" FieldIndex="8" />
@@ -2880,6 +2880,7 @@
           <Field Name="RowVersion" Type="byte[]" IsReadOnly="true" FieldIndex="1" />
           <Field Name="ShipmentCustomsItemID" Type="long" IsReadOnly="true" IsPrimaryKey="true" FieldIndex="0" />
           <Field Name="ShipmentID" Type="long" IsAutoCreated="true" FieldIndex="2" />
+          <Field Name="SKU" Type="string" MaxLength="100" FieldIndex="11" />
           <Field Name="UnitPriceAmount" Type="decimal" Precision="19" Scale="4" FieldIndex="10" />
           <Field Name="UnitValue" Type="decimal" Precision="19" Scale="4" FieldIndex="6" />
           <Field Name="Weight" Type="double" FieldIndex="5" />
@@ -3149,6 +3150,7 @@
           <Field Name="PostalCode" Type="string" MaxLength="20" FieldIndex="14" />
           <Field Name="RowVersion" Type="byte[]" IsReadOnly="true" FieldIndex="1" />
           <Field Name="SetupComplete" Type="bool" FieldIndex="6" />
+          <Field Name="ShouldMigrate" Type="bool" FieldIndex="37" />
           <Field Name="StateProvCode" Type="string" MaxLength="50" FieldIndex="13" />
           <Field Name="StoreID" Type="long" Precision="19" IsPrimaryKey="true" FieldIndex="0" />
           <Field Name="StoreName" Type="string" MaxLength="75" FieldIndex="7" />
@@ -4834,7 +4836,7 @@
       <Catalogs>
         <Catalog Name="ShipWorksLocal">
           <Schemas>
-            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2022-09-06T15:48:44.8141207Z">
+            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2022-12-12T22:51:54.9869236Z">
               <Tables>
                 <Table Name="Action">
                   <PkConstraintName Name="PK_Action" />
@@ -5138,7 +5140,7 @@
                   <Fields>
                     <Field Name="AsendiaAccountID" Ordinal="1" IsIdentity="true" IsPrimaryKey="true" DbType="0" Precision="19" />
                     <Field Name="RowVersion" Ordinal="2" IsTimestamp="true" DbType="21" />
-                    <Field Name="AccountNumber" Ordinal="3" DbType="0" Precision="19" />
+                    <Field Name="AccountNumber" Ordinal="3" DbType="12" Length="50" />
                     <Field Name="ShipEngineCarrierId" Ordinal="4" DbType="12" Length="50" />
                     <Field Name="Description" Ordinal="5" DbType="12" Length="50" />
                     <Field Name="FirstName" Ordinal="6" DbType="12" Length="30" />
@@ -5270,7 +5272,7 @@
                     <Field Name="InsuranceValue" Ordinal="9" DbType="9" Precision="19" Scale="4" />
                     <Field Name="RequestedLabelFormat" Ordinal="10" DbType="8" Precision="10" />
                     <Field Name="Insurance" Ordinal="11" DbType="2" />
-                    <Field Name="InternalAllowedCarrierAccounts" Ordinal="12" IsOptional="true" DbType="12" Length="2147483647" />
+                    <Field Name="InternalAllowedCarrierAccounts" Ordinal="12" IsOptional="true" DbType="24" Length="2147483647" />
                   </Fields>
                 </Table>
                 <Table Name="BigCommerceOrderItem">
@@ -8920,6 +8922,7 @@
                     <Field Name="HarmonizedCode" Ordinal="9" DbType="12" Length="20" />
                     <Field Name="NumberOfPieces" Ordinal="10" DbType="8" Precision="10" />
                     <Field Name="UnitPriceAmount" Ordinal="11" DbType="9" Precision="19" Scale="4" />
+                    <Field Name="SKU" Ordinal="12" DbType="12" Length="100" />
                   </Fields>
                 </Table>
                 <Table Name="ShipmentReturnItem">
@@ -9238,6 +9241,7 @@
                     <Field Name="ManagedInHub" Ordinal="35" HasDefaultValue="true" DefaultValue="(0)" DbType="2" />
                     <Field Name="OrderSourceID" Ordinal="36" IsOptional="true" DbType="12" Length="50" />
                     <Field Name="PlatformAmazonCarrierID" Ordinal="37" IsOptional="true" DbType="12" Length="100" />
+                    <Field Name="ShouldMigrate" Ordinal="38" DbType="2" />
                   </Fields>
                 </Table>
                 <Table Name="SystemData">
@@ -14206,6 +14210,7 @@
             <FieldMapping FieldName="RowVersion" TargetFieldName="RowVersion" />
             <FieldMapping FieldName="ShipmentCustomsItemID" TargetFieldName="ShipmentCustomsItemID" SequenceToUse="SCOPE_IDENTITY()" />
             <FieldMapping FieldName="ShipmentID" TargetFieldName="ShipmentID" />
+            <FieldMapping FieldName="SKU" TargetFieldName="SKU" />
             <FieldMapping FieldName="UnitPriceAmount" TargetFieldName="UnitPriceAmount" />
             <FieldMapping FieldName="UnitValue" TargetFieldName="UnitValue" />
             <FieldMapping FieldName="Weight" TargetFieldName="Weight" />
@@ -14480,6 +14485,7 @@
             <FieldMapping FieldName="PostalCode" TargetFieldName="PostalCode" />
             <FieldMapping FieldName="RowVersion" TargetFieldName="RowVersion" />
             <FieldMapping FieldName="SetupComplete" TargetFieldName="SetupComplete" />
+            <FieldMapping FieldName="ShouldMigrate" TargetFieldName="ShouldMigrate" />
             <FieldMapping FieldName="StateProvCode" TargetFieldName="StateProvCode" />
             <FieldMapping FieldName="StoreID" TargetFieldName="StoreID" SequenceToUse="SCOPE_IDENTITY()" />
             <FieldMapping FieldName="StoreName" TargetFieldName="StoreName" />

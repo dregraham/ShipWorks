@@ -222,7 +222,8 @@ namespace ShipWorks.Shipping.ShipEngine
                     Description = item.Description,
                     HarmonizedTariffCode = item.HarmonizedCode,
                     Quantity = (int) Math.Round(item.Quantity, 0, MidpointRounding.AwayFromZero),
-                    Value = (double) item.UnitValue
+                    Value = (double) item.UnitValue,
+                    SKU = item.SKU
                 };
                 customItems.Add(apiItem);
             }

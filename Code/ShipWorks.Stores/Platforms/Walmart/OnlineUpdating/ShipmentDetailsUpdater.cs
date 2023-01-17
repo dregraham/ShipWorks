@@ -192,7 +192,8 @@ namespace ShipWorks.Stores.Platforms.Walmart.OnlineUpdating
         private carrierNameType GetCarrierName(IShipmentEntity shipment)
         {
             carrierNameType carrierName = new carrierNameType();
-
+            carrierName.ItemType = ItemChoiceType.carrier;
+            
             switch (shipment.ShipmentTypeCode)
             {
                 case ShipmentTypeCode.Endicia:
@@ -200,24 +201,45 @@ namespace ShipWorks.Stores.Platforms.Walmart.OnlineUpdating
                 case ShipmentTypeCode.Express1Endicia:
                 case ShipmentTypeCode.Express1Usps:
                 case ShipmentTypeCode.Usps:
-                    carrierName.Item = carrierType.USPS;
+                    carrierName.Item = "USPS";
                     break;
                 case ShipmentTypeCode.UpsOnLineTools:
                 case ShipmentTypeCode.UpsWorldShip:
-                    carrierName.Item = carrierType.UPS;
+                    carrierName.Item = "UPS";
                     break;
                 case ShipmentTypeCode.FedEx:
-                    carrierName.Item = carrierType.FedEx;
+                    carrierName.Item = "FedEx";
                     break;
                 case ShipmentTypeCode.OnTrac:
-                    carrierName.Item = carrierType.OnTrac;
+                    carrierName.Item = "OnTrac";
+                    break;
+                // Copying ShipStation logic: https://github.com/shipstation/shipstation/pull/14802/files#diff-c30f618fc0c587d20d07bb6f6cc9709127ede05a4c962a88cc49994963b625c2
+                case ShipmentTypeCode.DhlEcommerce:
+                case ShipmentTypeCode.DhlExpress:
+                    carrierName.Item = EnumHelper.GetApiValue(WalmartCarrierType.DHL_Ecommerce_US);
                     break;
                 case ShipmentTypeCode.Other:
-                    carrierName.Item = EnumHelper.TryParseEnum<carrierType>(shipment.Other.Carrier, true) ??
-                        (object) EnumHelper.GetDescription(shipment.ShipmentTypeCode);
+
+                    // This first part is done to make sure we have the casing right
+                    if (EnumHelper.TryGetEnumByApiValue<WalmartCarrierType>(shipment.Other.Carrier, out var walmartCarrierType))
+                    {
+                        if (walmartCarrierType == WalmartCarrierType.DHL)
+                        {
+                            walmartCarrierType = WalmartCarrierType.DHL_Ecommerce_US;
+                        }
+                        
+                        carrierName.Item = EnumHelper.GetApiValue(walmartCarrierType);
+                    }
+                    else
+                    {
+                        carrierName.ItemType = ItemChoiceType.otherCarrier;
+                        carrierName.Item = shipment.Other.Carrier;
+                    }
+                    
                     break;
                 default:
                     carrierName.Item = EnumHelper.GetDescription(shipment.ShipmentTypeCode);
+                    carrierName.ItemType = ItemChoiceType.otherCarrier;
                     break;
             }
 

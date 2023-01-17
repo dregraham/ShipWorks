@@ -426,6 +426,8 @@ namespace ShipWorks.Data.Model.EntityClasses
 			_fieldsCustomProperties.Add("OrderSourceID", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
 			_fieldsCustomProperties.Add("PlatformAmazonCarrierID", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+			_fieldsCustomProperties.Add("ShouldMigrate", fieldHashtable);
 		}
 		#endregion
 
@@ -896,6 +898,17 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			get { return (System.String)GetValue((int)StoreFieldIndex.PlatformAmazonCarrierID, true); }
 			set	{ SetValue((int)StoreFieldIndex.PlatformAmazonCarrierID, value); }
+		}
+
+		/// <summary> The ShouldMigrate property of the Entity Store<br/><br/></summary>
+		/// <remarks>Mapped on  table field: "Store"."ShouldMigrate"<br/>
+		/// Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
+		public virtual System.Boolean ShouldMigrate
+		{
+			get { return (System.Boolean)GetValue((int)StoreFieldIndex.ShouldMigrate, true); }
+			set	{ SetValue((int)StoreFieldIndex.ShouldMigrate, value); }
 		}
 
 		/// <summary> Gets the EntityCollection with the related entities of type 'OrderSearchEntity' which are related to this entity via a relation of type '1:n'. If the EntityCollection hasn't been fetched yet, the collection returned will be empty.<br/><br/></summary>

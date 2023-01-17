@@ -18,13 +18,7 @@ namespace ShipWorks.Shipping.ShipEngine.DTOs
         /// <summary>
         /// Initializes a new instance of the <see cref="CustomsItem" /> class.
         /// </summary>
-        /// <param name="customsItemId">customsItemId.</param>
-        /// <param name="description">description.</param>
-        /// <param name="quantity">quantity.</param>
-        /// <param name="value">value.</param>
-        /// <param name="harmonizedTariffCode">harmonizedTariffCode.</param>
-        /// <param name="countryOfOrigin">countryOfOrigin.</param>
-        public CustomsItem(string customsItemId = default(string), string description = default(string), int? quantity = default(int?), double? value = default(double?), string harmonizedTariffCode = default(string), string countryOfOrigin = default(string))
+        public CustomsItem(string customsItemId = default(string), string description = default(string), int? quantity = default(int?), double? value = default(double?), string harmonizedTariffCode = default(string), string countryOfOrigin = default(string), string sku = default(string))
         {
             this.CustomsItemId = customsItemId;
             this.Description = description;
@@ -32,6 +26,7 @@ namespace ShipWorks.Shipping.ShipEngine.DTOs
             this.Value = value;
             this.HarmonizedTariffCode = harmonizedTariffCode;
             this.CountryOfOrigin = countryOfOrigin;
+            this.SKU = sku;
         }
 
         /// <summary>
@@ -71,6 +66,12 @@ namespace ShipWorks.Shipping.ShipEngine.DTOs
         public string CountryOfOrigin { get; set; }
 
         /// <summary>
+        /// Gets or Sets SKU
+        /// </summary>
+        [DataMember(Name = "sku", EmitDefaultValue = false)]
+        public string SKU { get; set; }
+
+        /// <summary>
         /// Returns the string presentation of the object
         /// </summary>
         /// <returns>String presentation of the object</returns>
@@ -84,6 +85,7 @@ namespace ShipWorks.Shipping.ShipEngine.DTOs
             sb.Append("  Value: ").Append(Value).Append("\n");
             sb.Append("  HarmonizedTariffCode: ").Append(HarmonizedTariffCode).Append("\n");
             sb.Append("  CountryOfOrigin: ").Append(CountryOfOrigin).Append("\n");
+            sb.Append("  SKU: ").Append(SKU).Append("\n");
             sb.Append("}\n");
             return sb.ToString();
         }
@@ -147,6 +149,11 @@ namespace ShipWorks.Shipping.ShipEngine.DTOs
                     this.CountryOfOrigin == input.CountryOfOrigin ||
                     (this.CountryOfOrigin != null &&
                     this.CountryOfOrigin.Equals(input.CountryOfOrigin))
+                ) &&
+                (
+                    this.SKU == input.SKU ||
+                    (this.SKU != null &&
+                    this.SKU.Equals(input.SKU))
                 );
         }
 
@@ -171,6 +178,8 @@ namespace ShipWorks.Shipping.ShipEngine.DTOs
                     hashCode = hashCode * 59 + this.HarmonizedTariffCode.GetHashCode();
                 if (this.CountryOfOrigin != null)
                     hashCode = hashCode * 59 + this.CountryOfOrigin.GetHashCode();
+                if (this.SKU != null)
+                    hashCode = hashCode * 59 + this.SKU.GetHashCode();
                 return hashCode;
             }
         }

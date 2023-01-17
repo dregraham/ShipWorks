@@ -39,6 +39,7 @@ namespace ShipWorks.Shipping.ShipSense.Customs
             HarmonizedCode = customsItemEntity.HarmonizedCode ?? string.Empty;
             NumberOfPieces = customsItemEntity.NumberOfPieces;
             UnitPriceAmount = customsItemEntity.UnitPriceAmount;
+            SKU = customsItemEntity.SKU;
         }
 
         /// <summary>
@@ -49,9 +50,9 @@ namespace ShipWorks.Shipping.ShipSense.Customs
         {
             get
             {
-                string valueForHashing = string.Format("{0}|{1}|{2}|{3}|{4}|{5}|{6}|{7}",
+                string valueForHashing = string.Format("{0}|{1}|{2}|{3}|{4}|{5}|{6}|{7}|{8}",
                                                        Description, Quantity.ToString("N4", CultureInfo.InvariantCulture), Weight.ToString("N4", CultureInfo.InvariantCulture), UnitValue.ToString("N4"), CountryOfOrigin, HarmonizedCode,
-                                                       NumberOfPieces.ToString("N", CultureInfo.InvariantCulture), UnitPriceAmount.ToString("N4"));
+                                                       NumberOfPieces.ToString("N", CultureInfo.InvariantCulture), UnitPriceAmount.ToString("N4"), SKU);
 
                 // Since Description is being used in the hash value, 
                 // use SHA256 value to reduce the length of the hash value
@@ -99,5 +100,10 @@ namespace ShipWorks.Shipping.ShipSense.Customs
         /// Gets or sets the unit price amount.
         /// </summary>
         public decimal UnitPriceAmount { get; set; }
+
+        /// <summary>
+        /// Gets or sets the SKU
+        /// </summary>
+        public string SKU { get; set; }
     }
 }
