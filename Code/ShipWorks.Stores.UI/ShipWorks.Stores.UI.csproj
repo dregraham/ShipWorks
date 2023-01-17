@@ -599,6 +599,9 @@
       <DependentUpon>RakutenStoreSetupControlHost.cs</DependentUpon>
     </Compile>
     <Compile Include="Platforms\Rakuten\RakutenStoreSetupControlViewModel.cs" />
+    <Compile Include="Platforms\Shopify\ShopifyCreateOrderSource.xaml.cs">
+      <DependentUpon>ShopifyCreateOrderSource.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Platforms\Shopify\ShopifyCreateTokenDialog.xaml.cs">
       <DependentUpon>ShopifyCreateTokenDialog.xaml</DependentUpon>
     </Compile>
@@ -1056,6 +1059,9 @@
     </Page>
     <Page Include="Platforms\Rakuten\RakutenStoreSetupControl.xaml">
       <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Platforms\Shopify\ShopifyCreateOrderSource.xaml">
       <SubType>Designer</SubType>
     </Page>
     <Page Include="Platforms\Shopify\ShopifyCreateTokenDialog.xaml">
