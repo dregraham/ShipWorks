@@ -303,7 +303,7 @@ namespace ShipWorks.Tests.Data.Administration.Retry
             }
 
             stopwatch.Stop();
-            Assert.InRange(stopwatch.ElapsedMilliseconds, 1000, long.MaxValue);
+            Assert.InRange(stopwatch.ElapsedMilliseconds, SqlAdapterRetryTest.OneSecond, long.MaxValue);
         }
 
         [Fact]

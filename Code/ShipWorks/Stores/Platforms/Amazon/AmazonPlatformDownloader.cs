@@ -26,7 +26,6 @@ using ShipWorks.Stores.Platforms.ShipEngine;
 using ShipWorks.Stores.Platforms.ShipEngine.Apollo;
 using Syncfusion.XlsIO.Parser.Biff_Records;
 
-#nullable enable
 namespace ShipWorks.Stores.Platforms.Amazon
 {
     // TODO: Update registration to use a Keyed Component to replace the MWS downloader
@@ -78,7 +77,7 @@ namespace ShipWorks.Stores.Platforms.Amazon
             base.CollectDownloadTelemetry(trackedDurationEvent);
         }
 
-        protected override async Task<OrderEntity?> CreateOrder(OrderSourceApiSalesOrder salesOrder)
+        protected override async Task<OrderEntity> CreateOrder(OrderSourceApiSalesOrder salesOrder)
         {
             var fulfillmentChannel = GetFulfillmentChannel(salesOrder);
             if (AmazonStore.ExcludeFBA && fulfillmentChannel == AmazonMwsFulfillmentChannel.AFN)
