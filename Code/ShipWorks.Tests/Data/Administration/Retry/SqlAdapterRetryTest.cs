@@ -240,7 +240,7 @@ namespace ShipWorks.Tests.Data.Administration.Retry
             }
 
             stopwatch.Stop();
-            Assert.True(stopwatch.ElapsedMilliseconds >= oneSecond);
+            Assert.True(stopwatch.ElapsedMilliseconds >= OneSecond);
         }
 
         [Fact]
