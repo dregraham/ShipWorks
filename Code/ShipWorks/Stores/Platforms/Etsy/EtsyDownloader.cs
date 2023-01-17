@@ -62,7 +62,7 @@ namespace ShipWorks.Stores.Platforms.Etsy
         /// associate any store-specific download properties/metrics.</param>
         protected override async Task Download(TrackedDurationEvent trackedDurationEvent)
         {
-            var upgradeErrorMessage = "Go to Manager > Stores and Update your Etsy store credentials";
+            var upgradeErrorMessage = "Unable to connect to Etsy. Please update your Etsy credentials in Manage > Stores.";
 
             try
             {
