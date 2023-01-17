@@ -50,7 +50,7 @@
             this.errorMessageLabel.Name = "label1";
             this.errorMessageLabel.Size = new System.Drawing.Size(457, 13);
             this.errorMessageLabel.TabIndex = 1;
-            this.errorMessageLabel.Text = "ShipWorks no loner supports marking this task.";
+            this.errorMessageLabel.Text = "This task is no longer supported.";
             // 
             // DeprecatedTaskEditor
             // 
