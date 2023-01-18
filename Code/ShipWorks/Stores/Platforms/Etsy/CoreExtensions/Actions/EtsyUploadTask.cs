@@ -18,7 +18,7 @@ namespace ShipWorks.Stores.Platforms.Etsy.CoreExtensions.Actions
     [ActionTask("Update store status", "EtsyUploadTask", ActionTaskCategory.UpdateOnline)]
     public class EtsyUploadTask : StoreInstanceTaskBase
     {
-        private const string errorMessage = "ShipWorks no loner supports marking items as shipped or paid. Use \"Upload Shipment Details.\"";
+        private const string errorMessage = "The action \"Update store status\" is not supported. Please use \"Upload Shipment Details\".";
 
         /// <summary>
         /// Constructor
