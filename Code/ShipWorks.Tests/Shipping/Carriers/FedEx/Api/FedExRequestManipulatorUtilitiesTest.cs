@@ -89,6 +89,8 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
         [Fact]
         public void GetApiServiceType_ReturnFreight_WhenServiceTypeIsFreight()
         {
+            //TODO:PLATFORM Update this test when platform request objects exists
+            
             Dictionary<FedExServiceType, ServiceType> serviceList = new Dictionary<FedExServiceType, ServiceType>();
 
             serviceList.Add(FedExServiceType.PriorityOvernight, ServiceType.PRIORITY_OVERNIGHT);
