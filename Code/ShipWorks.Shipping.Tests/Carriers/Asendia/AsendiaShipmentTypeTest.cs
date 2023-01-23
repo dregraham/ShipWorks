@@ -50,7 +50,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.Asendia
             testObject.ConfigurePrimaryProfile(profile);
             PackageProfileEntity packageProfile = profile.Packages.Single();
 
-            Assert.Equal(123456789, profile.Asendia.AsendiaAccountID);
+            Assert.Equal(1234567890, profile.Asendia.AsendiaAccountID);
             Assert.Equal(AsendiaServiceType.EpaqSelectCustom, profile.Asendia.Service);
             Assert.Equal((int) ShipEngineContentsType.Merchandise, profile.Asendia.Contents);
             Assert.Equal((int) ShipEngineNonDeliveryType.ReturnToSender, profile.Asendia.NonDelivery);
