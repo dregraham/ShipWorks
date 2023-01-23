@@ -255,7 +255,7 @@ namespace ShipWorks.Tests.Stores.Platforms.ChannelAdvisor
 
             string code = ChannelAdvisorOnlineUpdater.GetCarrierCode(shipmentEntity, storeEntity);
 
-            Assert.Equal("DHL", code);
+            Assert.Equal("DHL Global Mail", code);
         }
 
         [Fact]
