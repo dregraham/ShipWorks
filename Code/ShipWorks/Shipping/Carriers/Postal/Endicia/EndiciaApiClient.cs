@@ -433,7 +433,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
 
             return new RateResult(PostalUtility.GetPostalServiceTypeDescription(serviceType) + description,
                 PostalUtility.GetServiceTransitDays(serviceType),
-                value.postage.Postage.TotalAmount + getAmount(value.postage),
+                value.postage.Postage.TotalAmount + getAmount(value.postage) + value.postage.Surcharge.TotalAmount,
                 new PostalRateSelection(serviceType))
             {
                 ProviderLogo = EnumHelper.GetImage(ShipmentTypeCode.Endicia)
