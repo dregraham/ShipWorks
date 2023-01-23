@@ -1,7 +1,9 @@
 ﻿using System;
+using System.ComponentModel;
 using System.Threading.Tasks;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Security;
+using ShipWorks.ApplicationCore.Licensing;
 using ShipWorks.ApplicationCore.Licensing.Warehouse.DTO;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Communication;
@@ -49,6 +51,13 @@ namespace ShipWorks.Stores.Platforms.Shopify.Warehouse
                 store.ShopifyToken = await helpers.EncryptSecret(storeEntity.ShopifyAccessToken).ConfigureAwait(false);
                 store.ShopifyShopUrlName = storeEntity.ShopifyShopUrlName;
             }
+            store.OrderSourceID = storeEntity.OrderSourceID;
+
+            store.PlatformAccountId = license?.CustomerID.HasValue() == true ?
+                license.CustomerID :
+                tangoWebClient.GetTangoCustomerId();
+
+            store.ContinuationToken = storeEntity.ContinuationToken;
 
             return store;
         }
