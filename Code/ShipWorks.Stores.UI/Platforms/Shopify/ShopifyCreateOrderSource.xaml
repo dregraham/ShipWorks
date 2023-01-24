@@ -38,6 +38,8 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
         <TextBlock
@@ -55,7 +57,20 @@
             <LineBreak />4. Then copy and paste the Shopify token into the <Bold>Enter the Shopify Token</Bold> field      
         </TextBlock>
         <StackPanel Grid.Row="1" Style="{StaticResource StepBlock}">
-            <TextBlock Style="{StaticResource StepHeader}">1: Get an API Token from Shopify</TextBlock>
+            <TextBlock Style="{StaticResource StepHeader}">1: Fill in your Shopify address</TextBlock>
+            <StackPanel Orientation="Horizontal" Style="{StaticResource StepContents}">
+                <TextBlock VerticalAlignment="Center">http://</TextBlock>
+                <TextBox
+                    Width="150"
+                    Padding="8,4"
+                    Style="{StaticResource BlueSteelTextBox}"
+                    IsEnabled="{Binding NameEnabled}"
+                    Text="{Binding ShopifyShopUrlName, UpdateSourceTrigger=PropertyChanged}" />
+                <TextBlock VerticalAlignment="Center">.myshopify.com</TextBlock>
+            </StackPanel>
+        </StackPanel>
+        <StackPanel Grid.Row="2" Style="{StaticResource StepBlock}">
+            <TextBlock Style="{StaticResource StepHeader}">2: Get an API Token from Shopify</TextBlock>
             <Grid Style="{StaticResource StepContents}">
                 <Button
                     Padding="8,4"
@@ -75,8 +90,8 @@
             Opening Browser
         </ui:WaitSpinner>
 
-        <StackPanel Grid.Row="2" Style="{StaticResource StepBlock}">
-            <TextBlock Style="{StaticResource StepHeader}">2: Enter the Shopify Token</TextBlock>
+        <StackPanel Grid.Row="3" Style="{StaticResource StepBlock}">
+            <TextBlock Style="{StaticResource StepHeader}">3: Enter the Shopify Token</TextBlock>
             <Grid Style="{StaticResource StepContents}">
                 <TextBox
                     Width="250"

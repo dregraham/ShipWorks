@@ -18,5 +18,7 @@ namespace ShipWorks.Stores.Platforms.Shopify
         bool Save(ShopifyStoreEntity store);
 
         string EncodedOrderSource { get; set; }
+
+        string ShopifyShopUrlName { get; set; }
     }
 }

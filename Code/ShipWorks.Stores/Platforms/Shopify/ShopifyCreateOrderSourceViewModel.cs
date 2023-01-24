@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
@@ -10,6 +11,7 @@ using Interapptive.Shared.Net;
 using Interapptive.Shared.UI;
 using Interapptive.Shared.Utility;
 using log4net;
+using Newtonsoft.Json;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Platforms.Platform;
 
@@ -21,7 +23,6 @@ namespace ShipWorks.Stores.Platforms.Shopify
     [Component]
     public class ShopifyCreateOrderSourceViewModel : ViewModelBase, IShopifyCreateOrderSourceViewModel
     {
-        private const string orderSourceName = "Shopify";
 
         private readonly IWebHelper webHelper;
         private readonly IHubOrderSourceClient hubOrderSourceClient;
@@ -29,6 +30,7 @@ namespace ShipWorks.Stores.Platforms.Shopify
         private readonly ILog log;
         private bool openingUrl;
         private ShopifyStoreEntity store;
+        private string OrderSourceName => store.StoreTypeCode.ToString().ToLowerInvariant();
 
         /// <summary>
         /// Constructor
@@ -51,10 +53,11 @@ namespace ShipWorks.Stores.Platforms.Shopify
             OpeningUrl = true;
             try
             {
-                var url = await hubOrderSourceClient.GetCreateOrderSourceInitiateUrl(orderSourceName, store.InitialDownloadDays).ConfigureAwait(true);
+                var parameters = new Dictionary<string, string> { { "shopify_domain", ShopifyShopUrlName + ".myshopify.com" } };
+                var url = await hubOrderSourceClient.GetCreateOrderSourceInitiateUrl(OrderSourceName, store.InitialDownloadDays, parameters).ConfigureAwait(true);
                 webHelper.OpenUrl(url);
             }
-            catch(ObjectDisposedException ex)
+            catch (ObjectDisposedException ex)
             {
                 //User cancelled the dialog before we could open the browser
                 //Do nothing
@@ -90,6 +93,8 @@ namespace ShipWorks.Stores.Platforms.Shopify
             get => openingUrl;
             private set => Set(ref openingUrl, value);
         }
+        [Obfuscation(Exclude = true)]
+        public string ShopifyShopUrlName { get; set; }
 
         /// <summary>
         /// Load the order source
@@ -98,6 +103,7 @@ namespace ShipWorks.Stores.Platforms.Shopify
         {
             this.store = store;
             EncodedOrderSource = Encode(store);
+            ShopifyShopUrlName = store.ShopifyShopUrlName;
         }
 
         /// <summary>
@@ -105,6 +111,11 @@ namespace ShipWorks.Stores.Platforms.Shopify
         /// </summary>
         public bool Save(ShopifyStoreEntity store)
         {
+            if (string.IsNullOrWhiteSpace(ShopifyShopUrlName))
+            {
+                messageHelper.ShowError("The Shopify shop name is empty. Please enter correct Shopify address.");
+                return false;
+            }
             if (string.IsNullOrWhiteSpace(EncodedOrderSource))
             {
                 messageHelper.ShowError("The token is empty. Please copy and paste it.");
@@ -134,7 +145,6 @@ namespace ShipWorks.Stores.Platforms.Shopify
             var plainBytes = Encoding.UTF8.GetBytes(plainText);
             return Convert.ToBase64String(plainBytes);
         }
-
         /// <summary>
         /// Decodes the provided value and if successful populates the store's data fields.
         /// </summary>
@@ -144,32 +154,37 @@ namespace ShipWorks.Stores.Platforms.Shopify
             {
                 var data = Convert.FromBase64String(encodedOrderSource);
                 var decodedString = Encoding.UTF8.GetString(data);
-                var splitString = decodedString.Split('_');
-
-                if (splitString.Length != 2)
+                CreateOrderSourceResult createOrderSourceResult;
+                try
                 {
-                    log.Error("The provided Base64 string did not have 2 sections separated by the '_' character.");
+                    createOrderSourceResult = JsonConvert.DeserializeObject<CreateOrderSourceResult>(decodedString);
+                }
+                catch (Exception ex)
+                {
+                    log.Error("The provided string could not be deserialized.");
+                    return false;
+                }
+                if (createOrderSourceResult.StoreType!= "Shopify")
+                {
+                    log.Error("The provided token is not valid Shopify token.");
                     return false;
                 }
 
-                if (!GuidHelper.IsGuid(splitString[1]))
+                if (createOrderSourceResult.Domain != ShopifyShopUrlName + ".myshopify.com")
+                {
+                    log.Error($"The provided token is not valid for shop `{ShopifyShopUrlName}`. It is created for ${createOrderSourceResult.Domain}");
+                    return false;
+                }
+
+                if (!GuidHelper.IsGuid(createOrderSourceResult.OrderSourceId))
                 {
                     log.Error("The provided token's third part was not a GUID");
                     return false;
                 }
                 
-                var prefix = splitString[0].Split('-');
-                if(prefix.Length != 2 || prefix[0]!= "Shopify")
-                {
-                    log.Error("The provided token is not valid Shopify token. It does not start with 'Shopify-' prefix");
-                    return false;
-                }
+                store.ShopifyShopUrlName = ShopifyShopUrlName;
 
-                var shopifyDomain = prefix[1];
-                
-                store.ShopifyShopUrlName = shopifyDomain;
-
-                store.OrderSourceID = splitString[1];
+                store.OrderSourceID = createOrderSourceResult.OrderSourceId;
 
                 return true;
             }

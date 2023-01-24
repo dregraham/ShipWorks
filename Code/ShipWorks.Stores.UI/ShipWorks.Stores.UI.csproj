@@ -599,8 +599,12 @@
       <DependentUpon>RakutenStoreSetupControlHost.cs</DependentUpon>
     </Compile>
     <Compile Include="Platforms\Rakuten\RakutenStoreSetupControlViewModel.cs" />
-    <Compile Include="Platforms\Shopify\IShopifyCreateOrderSourceViewModel.cs" />
-    <Compile Include="Platforms\Shopify\ShopifyCreateOrderSourceViewModel.cs" />
+    <Compile Include="Platforms\Shopify\ShopifyDaysBackWizardPage.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Platforms\Shopify\ShopifyDaysBackWizardPage.Designer.cs">
+      <DependentUpon>ShopifyDaysBackWizardPage.cs</DependentUpon>
+    </Compile>
     <Compile Include="Platforms\Shopify\ShopifyAccountSettings.xaml.cs">
       <DependentUpon>ShopifyAccountSettings.xaml</DependentUpon>
     </Compile>
