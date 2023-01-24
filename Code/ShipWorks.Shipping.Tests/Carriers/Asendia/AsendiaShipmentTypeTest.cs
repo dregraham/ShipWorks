@@ -51,7 +51,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.Asendia
             PackageProfileEntity packageProfile = profile.Packages.Single();
 
             Assert.Equal(123456789, profile.Asendia.AsendiaAccountID);
-            Assert.Equal(AsendiaServiceType.EpaqSelectCustom, profile.Asendia.Service);
+            Assert.Equal(AsendiaServiceType.AsendiaPriorityTracked, profile.Asendia.Service);
             Assert.Equal((int) ShipEngineContentsType.Merchandise, profile.Asendia.Contents);
             Assert.Equal((int) ShipEngineNonDeliveryType.ReturnToSender, profile.Asendia.NonDelivery);
             Assert.False(profile.Asendia.NonMachinable);
