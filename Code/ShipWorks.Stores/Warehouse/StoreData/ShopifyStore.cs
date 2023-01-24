@@ -7,7 +7,7 @@ namespace ShipWorks.Stores.Warehouse.StoreData
     /// Shopify store credentials needed for downloading
     /// </summary>
     [Obfuscation(Exclude = true, ApplyToMembers = true, StripAfterObfuscation = false)]
-    public class ShopifyStore : Store
+    public class ShopifyStore : ShipEngineStore
     {
         /// <summary>
         /// The date to start downloading orders from
