@@ -24,7 +24,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Enums
         /// <summary>
         /// The priority alert plus
         /// </summary>
-        [Description("FedEx Priority Alert®")] 
+        [Description("FedEx Priority Alert\u00AE")] 
         [ApiValue("")]
         PriorityAlert = 2
     }
