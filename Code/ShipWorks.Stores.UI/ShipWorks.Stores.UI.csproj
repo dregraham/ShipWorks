@@ -599,6 +599,24 @@
       <DependentUpon>RakutenStoreSetupControlHost.cs</DependentUpon>
     </Compile>
     <Compile Include="Platforms\Rakuten\RakutenStoreSetupControlViewModel.cs" />
+    <Compile Include="Platforms\Shopify\ShopifyDaysBackWizardPage.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Platforms\Shopify\ShopifyDaysBackWizardPage.Designer.cs">
+      <DependentUpon>ShopifyDaysBackWizardPage.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Platforms\Shopify\ShopifyAccountSettings.xaml.cs">
+      <DependentUpon>ShopifyAccountSettings.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Platforms\Shopify\ShopifyDaysBack.xaml.cs">
+      <DependentUpon>ShopifyDaysBack.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Platforms\Shopify\ShopifyCreateOrderSourceWizardPage.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Platforms\Shopify\ShopifyCreateOrderSourceWizardPage.Designer.cs">
+      <DependentUpon>ShopifyCreateOrderSourceWizardPage.cs</DependentUpon>
+    </Compile>
     <Compile Include="Platforms\Shopify\ShopifyCreateOrderSource.xaml.cs">
       <DependentUpon>ShopifyCreateOrderSource.xaml</DependentUpon>
     </Compile>
@@ -859,6 +877,9 @@
     <EmbeddedResource Include="Platforms\Rakuten\RakutenStoreSetupControlHost.resx">
       <DependentUpon>RakutenStoreSetupControlHost.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Platforms\Shopify\ShopifyCreateOrderSourceWizardPage.resx">
+      <DependentUpon>ShopifyCreateOrderSourceWizardPage.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Platforms\ShopSite\ShopSiteAccountSettingsControl.resx">
       <DependentUpon>ShopSiteAccountSettingsControl.cs</DependentUpon>
       <SubType>Designer</SubType>
@@ -1058,6 +1079,13 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="Platforms\Rakuten\RakutenStoreSetupControl.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Platforms\Shopify\ShopifyAccountSettings.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Platforms\Shopify\ShopifyDaysBack.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
