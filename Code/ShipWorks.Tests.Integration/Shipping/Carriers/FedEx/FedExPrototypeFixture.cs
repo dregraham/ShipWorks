@@ -270,7 +270,6 @@ namespace ShipWorks.Tests.Integration.Shipping.Carriers.FedEx
                             ),
                             settingsRepository,
                             new ExcludedServiceTypeRepository(),
-                            null,
                             LogManager.GetLogger
                         );
 

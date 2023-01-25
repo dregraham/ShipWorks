@@ -179,14 +179,6 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Fims
         }
 
         /// <summary>
-        /// Does not register an account as FIMS does not support registering an account .
-        /// </summary>
-        public void RegisterAccount(EntityBase2 account)
-        {
-            return;
-        }
-
-        /// <summary>
         /// Does not get rates as FIMS does not support getting rates.
         /// </summary>
         public RateGroup GetRates(ShipmentEntity shipment, ICertificateInspector certificateInspector)

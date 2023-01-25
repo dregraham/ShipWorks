@@ -166,26 +166,6 @@ namespace ShipWorks.Shipping.Tests.Carriers.CarrierSetup
         }
 
         [Fact]
-        public async Task Setup_RethrowsException_WhenShippingClerkCallFails()
-        {
-            var accounts = new List<FedExAccountEntity>
-            {
-            };
-
-            carrierAccountRepository.Setup(x => x.Accounts).Returns(accounts);
-            carrierAccountRepository.Setup(x => x.AccountsReadOnly).Returns(accounts);
-
-            var clerk = mock.Mock<IFedExShippingClerk>();
-            clerk.Setup(x => x.RegisterAccount(It.IsAny<EntityBase2>())).Throws(new WebException());
-
-            var factory = mock.Mock<IFedExShippingClerkFactory>();
-            factory.Setup(x => x.Create()).Returns(clerk.Object);
-
-            var testObject = mock.Create<FedExCarrierSetup>();
-            await Assert.ThrowsAsync<WebException>(async () => await testObject.Setup(payload, null));
-        }
-
-        [Fact]
         public async Task Setup_UpdatesHubVersion()
         {
             var accounts = new List<FedExAccountEntity>

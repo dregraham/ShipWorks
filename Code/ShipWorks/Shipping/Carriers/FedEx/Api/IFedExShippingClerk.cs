@@ -1,5 +1,3 @@
-using System.Threading.Tasks;
-using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Shipping.Carriers.Api;
@@ -33,11 +31,5 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
         /// </summary>
         /// <param name="account"></param>
         void PerformUploadImages(FedExAccountEntity account);
-
-        /// <summary>
-        /// Registers a carrier account for use with the carrier API.
-        /// </summary>
-        /// <param name="account">The carrier specific account.</param>
-        Task RegisterAccountAsync(EntityBase2 account);
     }
 }

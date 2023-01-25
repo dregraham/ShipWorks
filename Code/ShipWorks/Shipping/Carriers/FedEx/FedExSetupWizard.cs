@@ -1,6 +1,6 @@
 ﻿using System;
-using System.Data;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 using Autofac;
 using Interapptive.Shared;
@@ -13,11 +13,12 @@ using ShipWorks.ApplicationCore;
 using ShipWorks.Common.IO.Hardware.Printers;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.Api;
-using ShipWorks.Shipping.Carriers.FedEx.Api;
 using ShipWorks.Shipping.Editing.Rating;
 using ShipWorks.Shipping.Profiles;
 using ShipWorks.Shipping.Settings;
 using ShipWorks.Shipping.Settings.WizardPages;
+using ShipWorks.Shipping.ShipEngine.DTOs.CarrierAccount;
+using ShipWorks.Shipping.ShipEngine;
 using ShipWorks.UI.Wizard;
 
 namespace ShipWorks.Shipping.Carriers.FedEx
@@ -152,11 +153,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             {
                 Cursor.Current = Cursors.WaitCursor;
 
-                using (var lifetimeScope = IoC.BeginLifetimeScope())
-                {
-                    IFedExShippingClerk clerk = lifetimeScope.Resolve<IFedExShippingClerkFactory>().Create();
-                    await clerk.RegisterAccountAsync(account);
-                }
+                await RegisterAccount(account);
 
                 account.Description = FedExAccountManager.GetDefaultDescription(account);
 
@@ -170,6 +167,42 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             {
                 MessageHelper.ShowError(this, ex.Message);
                 e.NextPage = CurrentPage;
+            }
+        }
+
+        /// <summary>
+        /// Registers a FedEx account for use with the FedEx API.
+        /// </summary>
+        /// <param name="fedExAccount">The account.</param>
+        private async Task RegisterAccount(FedExAccountEntity fedExAccount)
+        {
+            using (var lifetimeScope = IoC.BeginLifetimeScope())
+            {
+                var webClient = lifetimeScope.Resolve<IShipEngineWebClient>();
+
+                // Response contains the ShipEngine carrier id
+                var response = await webClient.ConnectFedExAccount(new FedExRegistrationRequest
+                {
+                    Nickname = fedExAccount.Email,
+                    AccountNumber = fedExAccount.AccountNumber,
+                    Company = fedExAccount.Company,
+                    FirstName = fedExAccount.FirstName,
+                    LastName = fedExAccount.LastName,
+                    Phone = fedExAccount.Phone,
+                    Address1 = fedExAccount.Street1,
+                    Address2 = fedExAccount.Street2,
+                    City = fedExAccount.City,
+                    State = fedExAccount.StateProvCode,
+                    PostalCode = fedExAccount.PostalCode,
+                    CountryCode = fedExAccount.CountryCode,
+                    Email = fedExAccount.Email,
+                    AgreeToEula = "true"
+                });
+
+                if (response.Success)
+                {
+                    fedExAccount.ShipEngineCarrierID = response.Value;
+                }
             }
         }
 
