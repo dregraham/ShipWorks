@@ -108,7 +108,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         /// Stepping next from the account information page
         /// </summary>
         [NDependIgnoreLongMethod]
-        private void OnStepNextAccountInfo(object sender, WizardStepEventArgs e)
+        private async void OnStepNextAccountInfo(object sender, WizardStepEventArgs e)
         {
             account.AccountNumber = accountNumber.Text;
             account.SignatureRelease = "";
@@ -152,11 +152,10 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             {
                 Cursor.Current = Cursors.WaitCursor;
 
-
                 using (var lifetimeScope = IoC.BeginLifetimeScope())
                 {
                     IFedExShippingClerk clerk = lifetimeScope.Resolve<IFedExShippingClerkFactory>().Create();
-                    clerk.RegisterAccount(account);
+                    await clerk.RegisterAccountAsync(account);
                 }
 
                 account.Description = FedExAccountManager.GetDefaultDescription(account);

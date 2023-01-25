@@ -99,6 +99,36 @@ namespace ShipWorks.Shipping.ShipEngine
         }
 
         /// <summary>
+        /// Connect the given FedEx account to ShipEngine
+        /// </summary>
+        public async Task<GenericResult<string>> ConnectFedExAccount(FedExRegistrationRequest fedExRequest)
+        {
+            try
+            {
+                // Check to see if the carrier already exists in ShipEngine
+                var existingShipEngineCarrierIdResult = await GetCarrierId(fedExRequest.AccountNumber).ConfigureAwait(false);
+                if (existingShipEngineCarrierIdResult.Success)
+                {
+                    return existingShipEngineCarrierIdResult;
+                }
+
+                var connectAccountResult = await MakeRequest<ConnectAccountResponseDTO>(
+                    ShipEngineEndpoints.FedExAccountCreation, Method.POST, fedExRequest, "ConnectFedExAccount");
+
+                if (connectAccountResult.Failure)
+                {
+                    return GenericResult.FromError<string>(connectAccountResult.Message);
+                }
+
+                return GenericResult.FromSuccess(connectAccountResult.Value.CarrierId);
+            }
+            catch
+            {
+                return GenericResult.FromError<string>("Exception"); ;
+            }
+        }
+
+        /// <summary>
         /// Disconnect AmazonShipping
         /// </summary>
         public async Task<Result> DisconnectAmazonShippingAccount(string accountId) =>
@@ -497,7 +527,7 @@ namespace ShipWorks.Shipping.ShipEngine
                 var logEntry = logEntryFactory.GetLogEntry(logSource, logName, LogActionType.Other);
                 logEntry.LogRequest(request, client, "txt");
 
-                IRestResponse response = await client.ExecuteTaskAsync(request).ConfigureAwait(false);
+                IRestResponse response = await client.ExecuteTaskAsync(request);//.ConfigureAwait(false);
 
                 logEntry.LogResponse(response, "txt");
 

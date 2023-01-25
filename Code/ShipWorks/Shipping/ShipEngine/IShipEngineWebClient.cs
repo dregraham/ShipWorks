@@ -27,6 +27,11 @@ namespace ShipWorks.Shipping.ShipEngine
         Task<GenericResult<string>> ConnectDhlEcommerceAccount(DhlEcommerceRegistrationRequest dhlRequest);
 
         /// <summary>
+        /// Connect the given FedEx account to ShipEngine
+        /// </summary>
+        Task<GenericResult<string>> ConnectFedExAccount(FedExRegistrationRequest fedExRequest);
+
+        /// <summary>
         /// Connects the given Asendia account to the users ShipEngine account
         /// </summary>
         /// <returns>The CarrierId</returns>

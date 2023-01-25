@@ -28,6 +28,8 @@ using ShipWorks.Shipping.Carriers.FedEx.Enums;
 using ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip;
 using ShipWorks.Shipping.FedEx;
 using ShipWorks.Shipping.Settings;
+using ShipWorks.Shipping.ShipEngine;
+using ShipWorks.Stores;
 using ShipWorks.Tests.Integration.MSTest.Utilities;
 using ShipWorks.Tests.Integration.Shared;
 using FedExLocationType = ShipWorks.Shipping.Carriers.FedEx.Api.Enums.FedExLocationType;
@@ -268,6 +270,7 @@ namespace ShipWorks.Tests.Integration.Shipping.Carriers.FedEx
                             ),
                             settingsRepository,
                             new ExcludedServiceTypeRepository(),
+                            null,
                             LogManager.GetLogger
                         );
 

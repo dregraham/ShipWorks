@@ -30,6 +30,8 @@ using ShipWorks.Shipping.Carriers.FedEx.WebServices.Rate;
 using ShipWorks.Shipping.Editing.Enums;
 using ShipWorks.Shipping.Editing.Rating;
 using ShipWorks.Shipping.Settings;
+using ShipWorks.Shipping.ShipEngine;
+using ShipWorks.Shipping.ShipEngine.DTOs.CarrierAccount;
 using ShipWorks.Shipping.Tracking;
 using ReturnedRateType = ShipWorks.Shipping.Carriers.FedEx.WebServices.Rate.ReturnedRateType;
 using ServiceType = ShipWorks.Shipping.Carriers.FedEx.WebServices.Rate.ServiceType;
@@ -49,6 +51,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
         private readonly IFedExRequestFactory requestFactory;
         private readonly IFedExSettingsRepository settingsRepository;
         private readonly IExcludedServiceTypeRepository excludedServiceTypeRepository;
+        private readonly IShipEngineWebClient shipEngineWebClient;
         private readonly ILog log;
 
         /// <summary>
@@ -59,12 +62,14 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
             IFedExRequestFactory requestFactory,
             IFedExSettingsRepository settingsRepository,
             IExcludedServiceTypeRepository excludedServiceTypeRepository,
+            IShipEngineWebClient shipEngineWebClient,
             Func<Type, ILog> createLog)
         {
             this.settingsRepository = settingsRepository;
             this.requestFactory = requestFactory;
             this.labelRepositoryFactory = labelRepositoryFactory;
             this.excludedServiceTypeRepository = excludedServiceTypeRepository;
+            this.shipEngineWebClient = shipEngineWebClient;
             log = createLog(GetType());
         }
 
@@ -457,10 +462,6 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
             }
         }
 
-        /// <summary>
-        /// Registers a FedEx account for use with the FedEx API.
-        /// </summary>
-        /// <param name="account">The account.</param>
         public void RegisterAccount(EntityBase2 account)
         {
             FedExAccountEntity fedExAccount = account as FedExAccountEntity;
@@ -489,6 +490,46 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
                 // on the account entity that was provided to this method
                 ICarrierResponse subscriptionResponse = subscriptionRequest.Submit();
                 subscriptionResponse.Process();
+            }
+            catch (Exception ex)
+            {
+                throw (HandleException(ex));
+            }
+        }
+
+        /// <summary>
+        /// Registers a FedEx account for use with the FedEx API.
+        /// </summary>
+        /// <param name="account">The account.</param>
+        public async Task RegisterAccountAsync(EntityBase2 account)
+        {
+            var fedExAccount = account as FedExAccountEntity;
+
+            try
+            {
+                // Response contains the ShipEngine carrier id
+                var response = await shipEngineWebClient.ConnectFedExAccount(new FedExRegistrationRequest
+                {
+                    Nickname = fedExAccount.Email,
+                    AccountNumber = fedExAccount.AccountNumber,
+                    Company = fedExAccount.Company,
+                    FirstName = fedExAccount.FirstName,
+                    LastName = fedExAccount.LastName,
+                    Phone = fedExAccount.Phone,
+                    Address1 = fedExAccount.Street1,
+                    Address2 = fedExAccount.Street2,
+                    City = fedExAccount.City,
+                    State = fedExAccount.StateProvCode,
+                    PostalCode = fedExAccount.PostalCode,
+                    CountryCode = fedExAccount.CountryCode,
+                    Email = fedExAccount.Email,
+                    AgreeToEula = "true"
+                });
+
+                if (response.Success)
+                {
+                    fedExAccount.ShipEngineCarrierID = response.Value;
+                }
             }
             catch (Exception ex)
             {
