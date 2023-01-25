@@ -52,6 +52,7 @@ using ShipWorks.ApplicationCore.Licensing.Warehouse.Messages;
 using ShipWorks.ApplicationCore.MessageBoxes;
 using ShipWorks.ApplicationCore.Nudges;
 using ShipWorks.ApplicationCore.Settings;
+using ShipWorks.Carriers.Services;
 using ShipWorks.Common.IO.Hardware.Printers;
 using ShipWorks.Common.Threading;
 using ShipWorks.Core.Common.Threading;
@@ -896,6 +897,8 @@ namespace ShipWorks
             MigrateStoresToHub();
 
             SynchronizeConfig();
+
+            MigrateFedExAccountsToShipEngine();
 
             MigrateSqlConfigToHub();
 
@@ -5695,6 +5698,19 @@ namespace ShipWorks
                 var fetcher = lifetimeScope.Resolve<IAmazonOrderSourceIdFetcher>();
 
                 fetcher.FetchOrderSourceIds(this);
+            }
+        }
+
+        /// <summary>
+        /// Migrate FedEx Accounts to ShipEngine
+        /// </summary>
+        private void MigrateFedExAccountsToShipEngine()
+        {
+            using (var lifetimeScope = IoC.BeginLifetimeScope())
+            {
+                var migrator = lifetimeScope.Resolve<IFedExShipEngineMigrator>();
+
+                migrator.Migrate(this);
             }
         }
 
