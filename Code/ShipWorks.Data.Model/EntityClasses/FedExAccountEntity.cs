@@ -344,6 +344,8 @@ namespace ShipWorks.Data.Model.EntityClasses
 			_fieldsCustomProperties.Add("HubVersion", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
 			_fieldsCustomProperties.Add("HubCarrierId", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+			_fieldsCustomProperties.Add("ShipEngineCarrierID", fieldHashtable);
 		}
 		#endregion
 
@@ -664,6 +666,17 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			get { return (Nullable<System.Guid>)GetValue((int)FedExAccountFieldIndex.HubCarrierId, false); }
 			set	{ SetValue((int)FedExAccountFieldIndex.HubCarrierId, value); }
+		}
+
+		/// <summary> The ShipEngineCarrierID property of the Entity FedExAccount<br/><br/></summary>
+		/// <remarks>Mapped on  table field: "FedExAccount"."ShipEngineCarrierID"<br/>
+		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 50<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		[DataMember]
+		public virtual System.String ShipEngineCarrierID
+		{
+			get { return (System.String)GetValue((int)FedExAccountFieldIndex.ShipEngineCarrierID, true); }
+			set	{ SetValue((int)FedExAccountFieldIndex.ShipEngineCarrierID, value); }
 		}
 	
 		/// <summary> Gets the type of the hierarchy this entity is in. </summary>
