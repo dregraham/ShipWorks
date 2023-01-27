@@ -267,7 +267,7 @@ namespace ShipWorks.Shipping.Carriers.Asendia
                 accountRepository.AccountsReadOnly.First().AsendiaAccountID :
                 0;
 
-            asendia.Service = (int) AsendiaServiceType.AsendiaPriorityTracked;
+            asendia.Service = AsendiaServiceType.EpaqSelectCustom;
             asendia.Contents = (int) ShipEngineContentsType.Merchandise;
             asendia.NonDelivery = (int) ShipEngineNonDeliveryType.ReturnToSender;
             asendia.CustomsRecipientTin = string.Empty;
