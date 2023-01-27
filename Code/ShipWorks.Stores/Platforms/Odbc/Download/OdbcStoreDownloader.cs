@@ -190,7 +190,7 @@ namespace ShipWorks.Stores.Platforms.Odbc.Download
 
                 await Download(downloadCommand, hubDownloadCallback).ConfigureAwait(false);
             }
-            catch (ShipWorksOdbcException ex)
+            catch (Exception ex) when (ex is ShipWorksOdbcException || ex is OdbcException)
             {
                 throw new DownloadException(ex.Message, ex);
             }
