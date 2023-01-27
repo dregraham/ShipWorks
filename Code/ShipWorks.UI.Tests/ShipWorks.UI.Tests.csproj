@@ -196,6 +196,10 @@
     <Compile Include="ValueConverters\ValueEqualToParameterConverterTest.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\CultureAttribute\CultureAttribute.csproj">
+      <Project>{2933CB4D-BD4C-446B-92BF-175517F650DE}</Project>
+      <Name>CultureAttribute</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Interapptive.Shared\Interapptive.Shared.csproj">
       <Project>{1e53a000-fdeb-4e9e-8be0-19cdc14a0282}</Project>
       <Name>Interapptive.Shared</Name>
