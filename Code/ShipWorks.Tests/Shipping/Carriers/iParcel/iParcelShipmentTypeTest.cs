@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.IO;
 using Autofac.Extras.Moq;
+using CultureAttribute;
 using Moq;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
@@ -19,275 +20,276 @@ using Xunit;
 
 namespace ShipWorks.Tests.Shipping.Carriers.iParcel
 {
-    public class iParcelShipmentTypeTest
-    {
-        private iParcelShipmentType testObject;
-        private Mock<IBestRateExcludedAccountRepository> bestRateExludedAccountRepositoryMock;
-        private ShipmentEntity shipment;
-        private AutoMock mock;
-
-        public iParcelShipmentTypeTest()
-        {
-            shipment = Create.Shipment(new OrderEntity()).AsIParcel(x => x.WithPackage()).Build();
-            mock = AutoMockExtensions.GetLooseThatReturnsMocks();
-
-            mock.Mock<ICarrierAccountRepository<IParcelAccountEntity, IIParcelAccountEntity>>()
-                .Setup(x => x.AccountsReadOnly)
-                .Returns(new[]
-                {
-                                new IParcelAccountEntity { IParcelAccountID = 6 },
-                                new IParcelAccountEntity { IParcelAccountID = 9 }
-                });
-
-            testObject = mock.Create<iParcelShipmentType>();
-            bestRateExludedAccountRepositoryMock = new Mock<IBestRateExcludedAccountRepository>();
-            bestRateExludedAccountRepositoryMock.Setup(r => r.GetAll()).Returns(new List<long>());
-        }
-
-        [Fact]
-        public void SupportsMultiplePackages_ReturnsTrue()
-        {
-            Assert.True(testObject.SupportsMultiplePackages);
-        }
-
-        [Fact]
-        public void TrackShipment_ThrowsArgumentNullException()
-        {
-            Assert.Throws<ArgumentNullException>(() => testObject.TrackShipment(null));
-        }
-
-        [Fact]
-        public void TrackShipment_ThrowsShippingException_WhenIParcelShipmentIsNull()
-        {
-            shipment = new ShipmentEntity();
-            Assert.Throws<ShippingException>(() => testObject.TrackShipment(shipment));
-        }
-
-        [Fact]
-        public void TrackShipment_ThrowsShippingException_WhenIParcelPackageListIsEmpty()
-        {
-            shipment.IParcel.Packages.Clear();
-
-            Assert.Throws<ShippingException>(() => testObject.TrackShipment(shipment));
-        }
-
-        [Fact]
-        public void TrackShipment_DelegatesToRepository()
-        {
-            mock.Mock<IiParcelServiceGateway>()
-                .Setup(g => g.TrackShipment(It.IsAny<iParcelCredentials>(), It.IsAny<ShipmentEntity>()))
-                .Returns(GetDeliveredPackageTrackingInfo());
-            shipment.IParcel.IParcelAccountID = 996;
-
-            testObject.TrackShipment(shipment);
-
-            mock.Mock<ICarrierAccountRepository<IParcelAccountEntity, IIParcelAccountEntity>>()
-                .Verify(r => r.GetAccountReadOnly(996), Times.Once());
-        }
-
-        [Fact]
-        public void TrackShipment_DelegatesToServiceGateway()
-        {
-            mock.Mock<IiParcelServiceGateway>()
-                .Setup(g => g.TrackShipment(It.IsAny<iParcelCredentials>(), It.IsAny<ShipmentEntity>()))
-                .Returns(GetDeliveredPackageTrackingInfo());
-
-            testObject.TrackShipment(shipment);
-
-            mock.Mock<IiParcelServiceGateway>()
-                .Verify(s => s.TrackShipment(It.IsAny<iParcelCredentials>(), shipment), Times.Once());
-        }
-
-        [Fact]
-        public void TrackShipment_ExtractsTrackingInfo_ForDeliveredShipment()
-        {
-            mock.Mock<IiParcelServiceGateway>()
-                .Setup(g => g.TrackShipment(It.IsAny<iParcelCredentials>(), It.IsAny<ShipmentEntity>()))
-                .Returns(GetDeliveredPackageTrackingInfo());
-
-            TrackingResult trackingResult = testObject.TrackShipment(shipment);
-
-            Assert.True(trackingResult.Summary.ToLower().Contains("<b>delivered</b> on 8/2"));
-        }
-
-        [Fact]
-        public void TrackShipment_ExtractsTrackingInfo_ForShipmentNotDelivered()
-        {
-            mock.Mock<IiParcelServiceGateway>()
-                .Setup(g => g.TrackShipment(It.IsAny<iParcelCredentials>(), It.IsAny<ShipmentEntity>()))
-                .Returns(GetUndeliveredPackageTrackingInfo());
-
-            TrackingResult trackingResult = testObject.TrackShipment(shipment);
-
-            Assert.Equal("<b>Package details received electronically from Seller</b>", trackingResult.Summary);
-        }
+	[UseCulture("en-US")]
+	public class iParcelShipmentTypeTest
+	{
+		private iParcelShipmentType testObject;
+		private Mock<IBestRateExcludedAccountRepository> bestRateExludedAccountRepositoryMock;
+		private ShipmentEntity shipment;
+		private AutoMock mock;
+
+		public iParcelShipmentTypeTest()
+		{
+			shipment = Create.Shipment(new OrderEntity()).AsIParcel(x => x.WithPackage()).Build();
+			mock = AutoMockExtensions.GetLooseThatReturnsMocks();
+
+			mock.Mock<ICarrierAccountRepository<IParcelAccountEntity, IIParcelAccountEntity>>()
+				.Setup(x => x.AccountsReadOnly)
+				.Returns(new[]
+				{
+								new IParcelAccountEntity { IParcelAccountID = 6 },
+								new IParcelAccountEntity { IParcelAccountID = 9 }
+				});
+
+			testObject = mock.Create<iParcelShipmentType>();
+			bestRateExludedAccountRepositoryMock = new Mock<IBestRateExcludedAccountRepository>();
+			bestRateExludedAccountRepositoryMock.Setup(r => r.GetAll()).Returns(new List<long>());
+		}
+
+		[Fact]
+		public void SupportsMultiplePackages_ReturnsTrue()
+		{
+			Assert.True(testObject.SupportsMultiplePackages);
+		}
+
+		[Fact]
+		public void TrackShipment_ThrowsArgumentNullException()
+		{
+			Assert.Throws<ArgumentNullException>(() => testObject.TrackShipment(null));
+		}
+
+		[Fact]
+		public void TrackShipment_ThrowsShippingException_WhenIParcelShipmentIsNull()
+		{
+			shipment = new ShipmentEntity();
+			Assert.Throws<ShippingException>(() => testObject.TrackShipment(shipment));
+		}
+
+		[Fact]
+		public void TrackShipment_ThrowsShippingException_WhenIParcelPackageListIsEmpty()
+		{
+			shipment.IParcel.Packages.Clear();
+
+			Assert.Throws<ShippingException>(() => testObject.TrackShipment(shipment));
+		}
+
+		[Fact]
+		public void TrackShipment_DelegatesToRepository()
+		{
+			mock.Mock<IiParcelServiceGateway>()
+				.Setup(g => g.TrackShipment(It.IsAny<iParcelCredentials>(), It.IsAny<ShipmentEntity>()))
+				.Returns(GetDeliveredPackageTrackingInfo());
+			shipment.IParcel.IParcelAccountID = 996;
+
+			testObject.TrackShipment(shipment);
+
+			mock.Mock<ICarrierAccountRepository<IParcelAccountEntity, IIParcelAccountEntity>>()
+				.Verify(r => r.GetAccountReadOnly(996), Times.Once());
+		}
+
+		[Fact]
+		public void TrackShipment_DelegatesToServiceGateway()
+		{
+			mock.Mock<IiParcelServiceGateway>()
+				.Setup(g => g.TrackShipment(It.IsAny<iParcelCredentials>(), It.IsAny<ShipmentEntity>()))
+				.Returns(GetDeliveredPackageTrackingInfo());
+
+			testObject.TrackShipment(shipment);
+
+			mock.Mock<IiParcelServiceGateway>()
+				.Verify(s => s.TrackShipment(It.IsAny<iParcelCredentials>(), shipment), Times.Once());
+		}
+
+		[Fact]
+		public void TrackShipment_ExtractsTrackingInfo_ForDeliveredShipment()
+		{
+			mock.Mock<IiParcelServiceGateway>()
+				.Setup(g => g.TrackShipment(It.IsAny<iParcelCredentials>(), It.IsAny<ShipmentEntity>()))
+				.Returns(GetDeliveredPackageTrackingInfo());
+
+			TrackingResult trackingResult = testObject.TrackShipment(shipment);
+
+			Assert.True(trackingResult.Summary.ToLower().Contains("<b>delivered</b> on 8/2"));
+		}
+
+		[Fact]
+		public void TrackShipment_ExtractsTrackingInfo_ForShipmentNotDelivered()
+		{
+			mock.Mock<IiParcelServiceGateway>()
+				.Setup(g => g.TrackShipment(It.IsAny<iParcelCredentials>(), It.IsAny<ShipmentEntity>()))
+				.Returns(GetUndeliveredPackageTrackingInfo());
+
+			TrackingResult trackingResult = testObject.TrackShipment(shipment);
+
+			Assert.Equal("<b>Package details received electronically from Seller</b>", trackingResult.Summary);
+		}
 
-        [Fact]
-        public void GetShippingBroker_ReturnsiParcelBestRateBroker_ForShipmentOriginatingInUS_WithDestinationInUK()
-        {
-            ShipmentEntity shipmentEntity = new ShipmentEntity { OriginOriginID = (int) ShipmentOriginSource.Other, OriginCountryCode = "US", ShipCountryCode = "UK" };
+		[Fact]
+		public void GetShippingBroker_ReturnsiParcelBestRateBroker_ForShipmentOriginatingInUS_WithDestinationInUK()
+		{
+			ShipmentEntity shipmentEntity = new ShipmentEntity { OriginOriginID = (int) ShipmentOriginSource.Other, OriginCountryCode = "US", ShipCountryCode = "UK" };
 
-            IBestRateShippingBroker broker = testObject.GetShippingBroker(shipmentEntity, bestRateExludedAccountRepositoryMock.Object);
+			IBestRateShippingBroker broker = testObject.GetShippingBroker(shipmentEntity, bestRateExludedAccountRepositoryMock.Object);
 
-            Assert.IsAssignableFrom<iParcelBestRateBroker>(broker);
-        }
+			Assert.IsAssignableFrom<iParcelBestRateBroker>(broker);
+		}
 
-        [Fact]
-        public void GetShippingBroker_ReturnsNullShippingBroker_ForShipmentOriginatingInUS_WithDestinationInUS()
-        {
-            ShipmentEntity shipmentEntity = new ShipmentEntity { OriginOriginID = (int) ShipmentOriginSource.Other, OriginCountryCode = "US", ShipCountryCode = "US" };
+		[Fact]
+		public void GetShippingBroker_ReturnsNullShippingBroker_ForShipmentOriginatingInUS_WithDestinationInUS()
+		{
+			ShipmentEntity shipmentEntity = new ShipmentEntity { OriginOriginID = (int) ShipmentOriginSource.Other, OriginCountryCode = "US", ShipCountryCode = "US" };
 
-            IBestRateShippingBroker broker = testObject.GetShippingBroker(shipmentEntity, bestRateExludedAccountRepositoryMock.Object);
+			IBestRateShippingBroker broker = testObject.GetShippingBroker(shipmentEntity, bestRateExludedAccountRepositoryMock.Object);
 
-            Assert.IsAssignableFrom<NullShippingBroker>(broker);
-        }
+			Assert.IsAssignableFrom<NullShippingBroker>(broker);
+		}
 
-        [Fact]
-        public void GetShippingBroker_ReturnsNullShippingBroker_ForShipmentOriginatingInUK_WithDestinationInRU()
-        {
-            ShipmentEntity shipmentEntity = new ShipmentEntity { OriginOriginID = (int) ShipmentOriginSource.Other, OriginCountryCode = "UK", ShipCountryCode = "RU" };
+		[Fact]
+		public void GetShippingBroker_ReturnsNullShippingBroker_ForShipmentOriginatingInUK_WithDestinationInRU()
+		{
+			ShipmentEntity shipmentEntity = new ShipmentEntity { OriginOriginID = (int) ShipmentOriginSource.Other, OriginCountryCode = "UK", ShipCountryCode = "RU" };
 
-            IBestRateShippingBroker broker = testObject.GetShippingBroker(shipmentEntity, bestRateExludedAccountRepositoryMock.Object);
+			IBestRateShippingBroker broker = testObject.GetShippingBroker(shipmentEntity, bestRateExludedAccountRepositoryMock.Object);
 
-            Assert.IsAssignableFrom<NullShippingBroker>(broker);
-        }
+			Assert.IsAssignableFrom<NullShippingBroker>(broker);
+		}
 
-        [Fact]
-        public void GetShippingBroker_ReturnsNullShippingBroker_ForShipmentOriginatingInUK_WithDestinationInUK()
-        {
-            ShipmentEntity shipmentEntity = new ShipmentEntity { OriginOriginID = (int) ShipmentOriginSource.Other, OriginCountryCode = "UK", ShipCountryCode = "UK" };
+		[Fact]
+		public void GetShippingBroker_ReturnsNullShippingBroker_ForShipmentOriginatingInUK_WithDestinationInUK()
+		{
+			ShipmentEntity shipmentEntity = new ShipmentEntity { OriginOriginID = (int) ShipmentOriginSource.Other, OriginCountryCode = "UK", ShipCountryCode = "UK" };
 
-            IBestRateShippingBroker broker = testObject.GetShippingBroker(shipmentEntity, bestRateExludedAccountRepositoryMock.Object);
+			IBestRateShippingBroker broker = testObject.GetShippingBroker(shipmentEntity, bestRateExludedAccountRepositoryMock.Object);
 
-            Assert.IsAssignableFrom<NullShippingBroker>(broker);
-        }
+			Assert.IsAssignableFrom<NullShippingBroker>(broker);
+		}
 
-        [Fact]
-        public void GetShippingBroker_ReturnsNullShippingBroker_ForShipmentOriginatingInUS_WithDestinationInUS_AndShipmentUsesAccountAddress()
-        {
-            ShipmentEntity shipmentEntity = new ShipmentEntity { OriginOriginID = (int) ShipmentOriginSource.Account, OriginCountryCode = "US", ShipCountryCode = "US" };
+		[Fact]
+		public void GetShippingBroker_ReturnsNullShippingBroker_ForShipmentOriginatingInUS_WithDestinationInUS_AndShipmentUsesAccountAddress()
+		{
+			ShipmentEntity shipmentEntity = new ShipmentEntity { OriginOriginID = (int) ShipmentOriginSource.Account, OriginCountryCode = "US", ShipCountryCode = "US" };
 
-            IBestRateShippingBroker broker = testObject.GetShippingBroker(shipmentEntity, bestRateExludedAccountRepositoryMock.Object);
+			IBestRateShippingBroker broker = testObject.GetShippingBroker(shipmentEntity, bestRateExludedAccountRepositoryMock.Object);
 
-            Assert.IsAssignableFrom<NullShippingBroker>(broker);
-        }
+			Assert.IsAssignableFrom<NullShippingBroker>(broker);
+		}
 
-        [Fact]
-        public void GetShippingBroker_ReturnsiParcelBestRateBroker_ForShipmentOriginatingInUK_WithDestinationInRU_AndShipmentUsesAccountAddress()
-        {
-            ShipmentEntity shipmentEntity = new ShipmentEntity { OriginOriginID = (int) ShipmentOriginSource.Account, OriginCountryCode = "UK", ShipCountryCode = "RU" };
+		[Fact]
+		public void GetShippingBroker_ReturnsiParcelBestRateBroker_ForShipmentOriginatingInUK_WithDestinationInRU_AndShipmentUsesAccountAddress()
+		{
+			ShipmentEntity shipmentEntity = new ShipmentEntity { OriginOriginID = (int) ShipmentOriginSource.Account, OriginCountryCode = "UK", ShipCountryCode = "RU" };
 
-            iParcelShipmentType testObject = mock.Create<iParcelShipmentType>();
+			iParcelShipmentType testObject = mock.Create<iParcelShipmentType>();
 
-            IBestRateShippingBroker broker = testObject.GetShippingBroker(shipmentEntity, bestRateExludedAccountRepositoryMock.Object);
+			IBestRateShippingBroker broker = testObject.GetShippingBroker(shipmentEntity, bestRateExludedAccountRepositoryMock.Object);
 
-            Assert.IsAssignableFrom<iParcelBestRateBroker>(broker);
-        }
+			Assert.IsAssignableFrom<iParcelBestRateBroker>(broker);
+		}
 
-        [Fact]
-        public void GetShippingBroker_ReturnsiParcelBestRateBroker_ForShipmentOriginatingInUK_WithDestinationInUK_AndShipmentUsesAccountAddress()
-        {
-            ShipmentEntity shipmentEntity = new ShipmentEntity { OriginOriginID = (int) ShipmentOriginSource.Account, OriginCountryCode = "UK", ShipCountryCode = "UK" };
+		[Fact]
+		public void GetShippingBroker_ReturnsiParcelBestRateBroker_ForShipmentOriginatingInUK_WithDestinationInUK_AndShipmentUsesAccountAddress()
+		{
+			ShipmentEntity shipmentEntity = new ShipmentEntity { OriginOriginID = (int) ShipmentOriginSource.Account, OriginCountryCode = "UK", ShipCountryCode = "UK" };
 
-            iParcelShipmentType testObject = mock.Create<iParcelShipmentType>();
+			iParcelShipmentType testObject = mock.Create<iParcelShipmentType>();
 
-            IBestRateShippingBroker broker = testObject.GetShippingBroker(shipmentEntity, bestRateExludedAccountRepositoryMock.Object);
+			IBestRateShippingBroker broker = testObject.GetShippingBroker(shipmentEntity, bestRateExludedAccountRepositoryMock.Object);
 
-            Assert.IsAssignableFrom<iParcelBestRateBroker>(broker);
-        }
+			Assert.IsAssignableFrom<iParcelBestRateBroker>(broker);
+		}
 
-        [Fact]
-        public void ConfigurePrimaryProfile_SetsAccountIDToZero_WithNoAccounts()
-        {
-            mock.Mock<ICarrierAccountRepository<IParcelAccountEntity, IIParcelAccountEntity>>()
-                .Setup(x => x.AccountsReadOnly)
-                .Returns(new List<IParcelAccountEntity>());
+		[Fact]
+		public void ConfigurePrimaryProfile_SetsAccountIDToZero_WithNoAccounts()
+		{
+			mock.Mock<ICarrierAccountRepository<IParcelAccountEntity, IIParcelAccountEntity>>()
+				.Setup(x => x.AccountsReadOnly)
+				.Returns(new List<IParcelAccountEntity>());
 
-            var profile = new ShippingProfileEntity { IParcel = new IParcelProfileEntity() };
-            var testObject = mock.Create<iParcelShipmentType>();
+			var profile = new ShippingProfileEntity { IParcel = new IParcelProfileEntity() };
+			var testObject = mock.Create<iParcelShipmentType>();
 
-            testObject.ConfigurePrimaryProfile(profile);
+			testObject.ConfigurePrimaryProfile(profile);
 
-            Assert.Equal(0, profile.IParcel.IParcelAccountID);
-        }
+			Assert.Equal(0, profile.IParcel.IParcelAccountID);
+		}
 
-        [Fact]
-        public void ConfigurePrimaryProfile_SetsAccountIDToFirstAccount_WithManyAccounts()
-        {
-            mock.Mock<ICarrierAccountRepository<IParcelAccountEntity, IIParcelAccountEntity>>()
-                .Setup(x => x.AccountsReadOnly)
-                .Returns(new[]
-                {
-                    new IParcelAccountEntity { IParcelAccountID = 6 },
-                    new IParcelAccountEntity { IParcelAccountID = 9 }
-                });
+		[Fact]
+		public void ConfigurePrimaryProfile_SetsAccountIDToFirstAccount_WithManyAccounts()
+		{
+			mock.Mock<ICarrierAccountRepository<IParcelAccountEntity, IIParcelAccountEntity>>()
+				.Setup(x => x.AccountsReadOnly)
+				.Returns(new[]
+				{
+					new IParcelAccountEntity { IParcelAccountID = 6 },
+					new IParcelAccountEntity { IParcelAccountID = 9 }
+				});
 
-            var profile = new ShippingProfileEntity { IParcel = new IParcelProfileEntity() };
-            var testObject = mock.Create<iParcelShipmentType>();
+			var profile = new ShippingProfileEntity { IParcel = new IParcelProfileEntity() };
+			var testObject = mock.Create<iParcelShipmentType>();
 
-            testObject.ConfigurePrimaryProfile(profile);
+			testObject.ConfigurePrimaryProfile(profile);
 
-            Assert.Equal(6, profile.IParcel.IParcelAccountID);
-        }
+			Assert.Equal(6, profile.IParcel.IParcelAccountID);
+		}
 
 
 
 
-        private DataSet GetUndeliveredPackageTrackingInfo()
-        {
-            DataSet trackingDataSet = new DataSet();
+		private DataSet GetUndeliveredPackageTrackingInfo()
+		{
+			DataSet trackingDataSet = new DataSet();
 
-            using (StringReader stringReader = new StringReader(GetUndeliveredPackageTrackingXml()))
-            {
-                trackingDataSet.ReadXml(stringReader, XmlReadMode.Auto);
-            }
+			using (StringReader stringReader = new StringReader(GetUndeliveredPackageTrackingXml()))
+			{
+				trackingDataSet.ReadXml(stringReader, XmlReadMode.Auto);
+			}
 
-            return trackingDataSet;
-        }
+			return trackingDataSet;
+		}
 
-        private DataSet GetDeliveredPackageTrackingInfo()
-        {
-            DataSet trackingDataSet = new DataSet();
+		private DataSet GetDeliveredPackageTrackingInfo()
+		{
+			DataSet trackingDataSet = new DataSet();
 
-            using (StringReader stringReader = new StringReader(GetDeliveredPackageTrackingXml()))
-            {
-                trackingDataSet.ReadXml(stringReader, XmlReadMode.Auto);
-            }
+			using (StringReader stringReader = new StringReader(GetDeliveredPackageTrackingXml()))
+			{
+				trackingDataSet.ReadXml(stringReader, XmlReadMode.Auto);
+			}
 
-            return trackingDataSet;
-        }
+			return trackingDataSet;
+		}
 
 
-        private DataSet GetRateResultsInfo()
-        {
-            using (DataSet trackingDataSet = new DataSet())
-            {
-                using (StringReader stringReader = new StringReader(GetValidRatesXml()))
-                {
-                    trackingDataSet.ReadXml(stringReader, XmlReadMode.Auto);
-                }
+		private DataSet GetRateResultsInfo()
+		{
+			using (DataSet trackingDataSet = new DataSet())
+			{
+				using (StringReader stringReader = new StringReader(GetValidRatesXml()))
+				{
+					trackingDataSet.ReadXml(stringReader, XmlReadMode.Auto);
+				}
 
-                return trackingDataSet;
-            }
-        }
+				return trackingDataSet;
+			}
+		}
 
 
-        private DataSet GetUnsuppportedRatesInfo()
-        {
-            using (DataSet trackingDataSet = new DataSet())
-            {
-                using (StringReader stringReader = new StringReader(GetRatesWithUnsupportedServiceTypesXml()))
-                {
-                    trackingDataSet.ReadXml(stringReader, XmlReadMode.Auto);
-                }
+		private DataSet GetUnsuppportedRatesInfo()
+		{
+			using (DataSet trackingDataSet = new DataSet())
+			{
+				using (StringReader stringReader = new StringReader(GetRatesWithUnsupportedServiceTypesXml()))
+				{
+					trackingDataSet.ReadXml(stringReader, XmlReadMode.Auto);
+				}
 
-                return trackingDataSet;
-            }
-        }
+				return trackingDataSet;
+			}
+		}
 
-        private string GetValidRatesXml()
-        {
-            return @"<?xml version=""1.0"" encoding=""utf-8""?>
+		private string GetValidRatesXml()
+		{
+			return @"<?xml version=""1.0"" encoding=""utf-8""?>
 <iParcelPackageResponse xmlns:xsi=""http://www.w3.org/2001/XMLSchema-instance"">
     <PackageInfo>
         <Reference>Order 144</Reference>
@@ -341,11 +343,11 @@ namespace ShipWorks.Tests.Shipping.Carriers.iParcel
         </PaymentMethods>
     </PackageInfo>
 </iParcelPackageResponse>";
-        }
+		}
 
-        private string GetRatesWithUnsupportedServiceTypesXml()
-        {
-            return @"<?xml version=""1.0"" encoding=""utf-8""?>
+		private string GetRatesWithUnsupportedServiceTypesXml()
+		{
+			return @"<?xml version=""1.0"" encoding=""utf-8""?>
 <iParcelPackageResponse xmlns:xsi=""http://www.w3.org/2001/XMLSchema-instance"">
     <PackageInfo>
         <Reference>Order 144</Reference>
@@ -501,11 +503,11 @@ namespace ShipWorks.Tests.Shipping.Carriers.iParcel
         </PaymentMethods>
     </PackageInfo>
 </iParcelPackageResponse>";
-        }
+		}
 
-        private string GetUndeliveredPackageTrackingXml()
-        {
-            return @"<iparcelTrackingResponse xmlns="""">
+		private string GetUndeliveredPackageTrackingXml()
+		{
+			return @"<iparcelTrackingResponse xmlns="""">
                         <PackageTrackingInfo>
                             <TrackingNumber>1216156584US</TrackingNumber>
                             <PackageDestinationLocation>
@@ -528,11 +530,11 @@ namespace ShipWorks.Tests.Shipping.Carriers.iParcel
                             </TrackingEventHistory>
                         </PackageTrackingInfo>
                     </iparcelTrackingResponse>";
-        }
+		}
 
-        private string GetDeliveredPackageTrackingXml()
-        {
-            return @"<?xml version=""1.0"" encoding=""utf-8""?>
+		private string GetDeliveredPackageTrackingXml()
+		{
+			return @"<?xml version=""1.0"" encoding=""utf-8""?>
 <iparcelTrackingResponse xmlns:xsi=""http://www.w3.org/2001/XMLSchema-instance"">
   <PackageTrackingInfo>
     <TrackingNumber>123456789</TrackingNumber>
@@ -633,7 +635,7 @@ PROCESS</EventCodeDesc>
     </TrackingEventHistory>
   </PackageTrackingInfo>
 </iparcelTrackingResponse>";
-        }
+		}
 
-    }
+	}
 }

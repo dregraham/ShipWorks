@@ -702,6 +702,10 @@
     <EmbeddedResource Include="Stores\Platforms\Amazon\TestCerts\pk-QKORKMU6UWH23ZR63Q3ET4F5XFZKN4SU.pem" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\CultureAttribute\CultureAttribute.csproj">
+      <Project>{2933CB4D-BD4C-446B-92BF-175517F650DE}</Project>
+      <Name>CultureAttribute</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Interapptive.Shared.Tests\Interapptive.Shared.Tests.csproj">
       <Project>{329fdd27-99c6-48d6-9205-280cfda3c735}</Project>
       <Name>Interapptive.Shared.Tests</Name>

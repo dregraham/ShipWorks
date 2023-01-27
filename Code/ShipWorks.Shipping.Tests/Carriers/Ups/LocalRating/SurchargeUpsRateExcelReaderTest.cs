@@ -8,163 +8,165 @@ using Syncfusion.XlsIO;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using CultureAttribute;
 using Xunit;
 
 namespace ShipWorks.Shipping.Tests.Carriers.UPS.LocalRating
 {
-    public class SurchargeUpsRateExcelReaderTest : IDisposable
-    {
-        readonly AutoMock mock;
-        readonly SurchargeUpsRateExcelReader testObject;
-        readonly ExcelEngine excelEngine;
+	[UseCulture("en-US")]
+	public class SurchargeUpsRateExcelReaderTest : IDisposable
+	{
+		readonly AutoMock mock;
+		readonly SurchargeUpsRateExcelReader testObject;
+		readonly ExcelEngine excelEngine;
 
-        public SurchargeUpsRateExcelReaderTest()
-        {
-            mock = AutoMockExtensions.GetLooseThatReturnsMocks();
-            testObject = mock.Create<SurchargeUpsRateExcelReader>();
-            excelEngine = new ExcelEngine();
-            excelEngine.Excel.DefaultVersion = ExcelVersion.Excel2013;
-        }
+		public SurchargeUpsRateExcelReaderTest()
+		{
+			mock = AutoMockExtensions.GetLooseThatReturnsMocks();
+			testObject = mock.Create<SurchargeUpsRateExcelReader>();
+			excelEngine = new ExcelEngine();
+			excelEngine.Excel.DefaultVersion = ExcelVersion.Excel2013;
+		}
 
-        [Fact]
-        public void Read_AddsValueAddWorksheetRatesToUpsLocalRateTable()
-        {
-            Mock<IUpsLocalRateTable> rateTable = mock.Mock<IUpsLocalRateTable>();
-            
-            IWorkbook workbook = excelEngine.Excel.Workbooks.Create(1);
-            IWorksheet worksheet = workbook.Worksheets[0];
+		[Fact]
+		public void Read_AddsValueAddWorksheetRatesToUpsLocalRateTable()
+		{
+			Mock<IUpsLocalRateTable> rateTable = mock.Mock<IUpsLocalRateTable>();
 
-            worksheet.Name = "Value Add";
-            worksheet.Range["A1"].Text = "Value Added Service";
-            worksheet.Range["B1"].Text = "Rate";
-            AddRow(worksheet, new[] { "No Signature", "2.00" });
+			IWorkbook workbook = excelEngine.Excel.Workbooks.Create(1);
+			IWorksheet worksheet = workbook.Worksheets[0];
 
-            testObject.Read(workbook.Worksheets, rateTable.Object);
-            
-            rateTable.Verify(r => r.ReplaceSurcharges(It.Is<IEnumerable<UpsRateSurchargeEntity>>(e => e.First().Amount == 2.00 && e.First().SurchargeType == (int)UpsSurchargeType.NoSignature)));
-        }
+			worksheet.Name = "Value Add";
+			worksheet.Range["A1"].Text = "Value Added Service";
+			worksheet.Range["B1"].Text = "Rate";
+			AddRow(worksheet, new[] { "No Signature", "2.00" });
 
-        [Fact]
-        public void Read_AddsSurchargesWorksheetRatesToUpsLocalRateTable()
-        {
-            Mock<IUpsLocalRateTable> rateTable = mock.Mock<IUpsLocalRateTable>();
+			testObject.Read(workbook.Worksheets, rateTable.Object);
 
-            IWorkbook workbook = excelEngine.Excel.Workbooks.Create(1);
-            IWorksheet worksheet = workbook.Worksheets[0];
+			rateTable.Verify(r => r.ReplaceSurcharges(It.Is<IEnumerable<UpsRateSurchargeEntity>>(e => e.First().Amount == 2.00 && e.First().SurchargeType == (int) UpsSurchargeType.NoSignature)));
+		}
 
-            worksheet.Name = "Surcharges";
-            worksheet.Range["A1"].Text = "Surcharge";
-            worksheet.Range["B1"].Text = "Rate";
-            AddRow(worksheet, new[] { "Large Package", "2.00" });
+		[Fact]
+		public void Read_AddsSurchargesWorksheetRatesToUpsLocalRateTable()
+		{
+			Mock<IUpsLocalRateTable> rateTable = mock.Mock<IUpsLocalRateTable>();
 
-            testObject.Read(workbook.Worksheets, rateTable.Object);
+			IWorkbook workbook = excelEngine.Excel.Workbooks.Create(1);
+			IWorksheet worksheet = workbook.Worksheets[0];
 
-            rateTable.Verify(r => r.ReplaceSurcharges(It.Is<IEnumerable<UpsRateSurchargeEntity>>(e => e.First().Amount == 2.00 && e.First().SurchargeType == (int)UpsSurchargeType.LargePackage)));
-        }
+			worksheet.Name = "Surcharges";
+			worksheet.Range["A1"].Text = "Surcharge";
+			worksheet.Range["B1"].Text = "Rate";
+			AddRow(worksheet, new[] { "Large Package", "2.00" });
+
+			testObject.Read(workbook.Worksheets, rateTable.Object);
+
+			rateTable.Verify(r => r.ReplaceSurcharges(It.Is<IEnumerable<UpsRateSurchargeEntity>>(e => e.First().Amount == 2.00 && e.First().SurchargeType == (int) UpsSurchargeType.LargePackage)));
+		}
 
 
-        [Fact]
-        public void Read_AddsSurchargesWorksheetRatesToUpsLocalRateTable_WhenSurchargeContainsDollarSigns()
-        {
-            Mock<IUpsLocalRateTable> rateTable = mock.Mock<IUpsLocalRateTable>();
+		[Fact]
+		public void Read_AddsSurchargesWorksheetRatesToUpsLocalRateTable_WhenSurchargeContainsDollarSigns()
+		{
+			Mock<IUpsLocalRateTable> rateTable = mock.Mock<IUpsLocalRateTable>();
 
-            IWorkbook workbook = excelEngine.Excel.Workbooks.Create(1);
-            IWorksheet worksheet = workbook.Worksheets[0];
+			IWorkbook workbook = excelEngine.Excel.Workbooks.Create(1);
+			IWorksheet worksheet = workbook.Worksheets[0];
 
-            worksheet.Name = "Surcharges";
-            worksheet.Range["A1"].Text = "Surcharge";
-            worksheet.Range["B1"].Text = "Rate";
-            AddRow(worksheet, new[] { "Large Package", "$2.00" });
+			worksheet.Name = "Surcharges";
+			worksheet.Range["A1"].Text = "Surcharge";
+			worksheet.Range["B1"].Text = "Rate";
+			AddRow(worksheet, new[] { "Large Package", "$2.00" });
 
-            testObject.Read(workbook.Worksheets, rateTable.Object);
+			testObject.Read(workbook.Worksheets, rateTable.Object);
 
-            rateTable.Verify(r => r.ReplaceSurcharges(It.Is<IEnumerable<UpsRateSurchargeEntity>>(e => e.First().Amount == 2.00 && e.First().SurchargeType == (int)UpsSurchargeType.LargePackage)));
-        }
+			rateTable.Verify(r => r.ReplaceSurcharges(It.Is<IEnumerable<UpsRateSurchargeEntity>>(e => e.First().Amount == 2.00 && e.First().SurchargeType == (int) UpsSurchargeType.LargePackage)));
+		}
 
-        [Fact]
-        public void Read_ThrowsUpsLocalRatingException_WhenSurchargeRateIsNotANumber()
-        {
-            Mock<IUpsLocalRateTable> rateTable = mock.Mock<IUpsLocalRateTable>();
+		[Fact]
+		public void Read_ThrowsUpsLocalRatingException_WhenSurchargeRateIsNotANumber()
+		{
+			Mock<IUpsLocalRateTable> rateTable = mock.Mock<IUpsLocalRateTable>();
 
-            IWorkbook workbook = excelEngine.Excel.Workbooks.Create(1);
-            IWorksheet worksheet = workbook.Worksheets[0];
+			IWorkbook workbook = excelEngine.Excel.Workbooks.Create(1);
+			IWorksheet worksheet = workbook.Worksheets[0];
 
-            worksheet.Name = "Value Add";
-            worksheet.Range["A1"].Text = "Value Added Service";
-            worksheet.Range["B1"].Text = "Rate";
-            AddRow(worksheet, new[] { "Large Package", "yes very" });
+			worksheet.Name = "Value Add";
+			worksheet.Range["A1"].Text = "Value Added Service";
+			worksheet.Range["B1"].Text = "Rate";
+			AddRow(worksheet, new[] { "Large Package", "yes very" });
 
-            Exception ex = Assert.Throws<UpsLocalRatingException>(() => testObject.Read(workbook.Worksheets, rateTable.Object));
-            Assert.Equal("The rate for Large Package \"yes very\" should be numeric.", ex.Message);
-        }
+			Exception ex = Assert.Throws<UpsLocalRatingException>(() => testObject.Read(workbook.Worksheets, rateTable.Object));
+			Assert.Equal("The rate for Large Package \"yes very\" should be numeric.", ex.Message);
+		}
 
-        [Fact]
-        public void Read_ThrowsUpsLocalRatingException_WhenSurchargeRateIsBlank()
-        {
-            Mock<IUpsLocalRateTable> rateTable = mock.Mock<IUpsLocalRateTable>();
+		[Fact]
+		public void Read_ThrowsUpsLocalRatingException_WhenSurchargeRateIsBlank()
+		{
+			Mock<IUpsLocalRateTable> rateTable = mock.Mock<IUpsLocalRateTable>();
 
-            IWorkbook workbook = excelEngine.Excel.Workbooks.Create(1);
-            IWorksheet worksheet = workbook.Worksheets[0];
+			IWorkbook workbook = excelEngine.Excel.Workbooks.Create(1);
+			IWorksheet worksheet = workbook.Worksheets[0];
 
-            worksheet.Name = "Value Add";
-            worksheet.Range["A1"].Text = "Value Added Service";
-            worksheet.Range["B1"].Text = "Rate";
-            AddRow(worksheet, new[] { "Large Package", "" });
+			worksheet.Name = "Value Add";
+			worksheet.Range["A1"].Text = "Value Added Service";
+			worksheet.Range["B1"].Text = "Rate";
+			AddRow(worksheet, new[] { "Large Package", "" });
 
-            Exception ex = Assert.Throws<UpsLocalRatingException>(() => testObject.Read(workbook.Worksheets, rateTable.Object));
-            Assert.Equal("The rate for Large Package is blank and should be numeric.", ex.Message);
-        }
+			Exception ex = Assert.Throws<UpsLocalRatingException>(() => testObject.Read(workbook.Worksheets, rateTable.Object));
+			Assert.Equal("The rate for Large Package is blank and should be numeric.", ex.Message);
+		}
 
-        [Fact]
-        public void Read_ThrowsUpsLocalRatingException_WhenSurchargeTypeDuplicated()
-        {
-            Mock<IUpsLocalRateTable> rateTable = mock.Mock<IUpsLocalRateTable>();
+		[Fact]
+		public void Read_ThrowsUpsLocalRatingException_WhenSurchargeTypeDuplicated()
+		{
+			Mock<IUpsLocalRateTable> rateTable = mock.Mock<IUpsLocalRateTable>();
 
-            IWorkbook workbook = excelEngine.Excel.Workbooks.Create(1);
-            IWorksheet worksheet = workbook.Worksheets[0];
+			IWorkbook workbook = excelEngine.Excel.Workbooks.Create(1);
+			IWorksheet worksheet = workbook.Worksheets[0];
 
-            worksheet.Name = "Value Add";
-            worksheet.Range["A1"].Text = "Value Added Service";
-            worksheet.Range["B1"].Text = "Rate";
-            AddRow(worksheet, new[] { "Large Package", "2.00" });
-            AddRow(worksheet, new[] { "Large Package", "2.00" });
-            
-            Exception ex = Assert.Throws<UpsLocalRatingException>(() => testObject.Read(workbook.Worksheets, rateTable.Object));
-            Assert.Equal("The surcharge Large Package was specified more than once.", ex.Message);
-        }
+			worksheet.Name = "Value Add";
+			worksheet.Range["A1"].Text = "Value Added Service";
+			worksheet.Range["B1"].Text = "Rate";
+			AddRow(worksheet, new[] { "Large Package", "2.00" });
+			AddRow(worksheet, new[] { "Large Package", "2.00" });
 
-        [Fact]
-        public void Read_ThrowsUpsLocalRatingException_WhenSurchargeTypeIsUnknown()
-        {
-            Mock<IUpsLocalRateTable> rateTable = mock.Mock<IUpsLocalRateTable>();
+			Exception ex = Assert.Throws<UpsLocalRatingException>(() => testObject.Read(workbook.Worksheets, rateTable.Object));
+			Assert.Equal("The surcharge Large Package was specified more than once.", ex.Message);
+		}
 
-            IWorkbook workbook = excelEngine.Excel.Workbooks.Create(1);
-            IWorksheet worksheet = workbook.Worksheets[0];
+		[Fact]
+		public void Read_ThrowsUpsLocalRatingException_WhenSurchargeTypeIsUnknown()
+		{
+			Mock<IUpsLocalRateTable> rateTable = mock.Mock<IUpsLocalRateTable>();
 
-            worksheet.Name = "Value Add";
-            worksheet.Range["A1"].Text = "Value Added Service";
-            worksheet.Range["B1"].Text = "Rate";
-            AddRow(worksheet, new[] { "unknown surcharge", "2.00" });
-            
-            Exception ex = Assert.Throws<UpsLocalRatingException>(() => testObject.Read(workbook.Worksheets, rateTable.Object));
-            Assert.Equal("Unknown Value Added Service description on tab \"Value Add\": \"unknown surcharge\"", ex.Message);
-        }
+			IWorkbook workbook = excelEngine.Excel.Workbooks.Create(1);
+			IWorksheet worksheet = workbook.Worksheets[0];
 
-        private void AddRow(IWorksheet workSheet, string[] values)
-        {
-            workSheet.InsertRow(workSheet.Rows.Length + 1);
-            IRange row = workSheet.Rows.Last();
+			worksheet.Name = "Value Add";
+			worksheet.Range["A1"].Text = "Value Added Service";
+			worksheet.Range["B1"].Text = "Rate";
+			AddRow(worksheet, new[] { "unknown surcharge", "2.00" });
 
-            for (int i = 0; i < values.Length; i++)
-            {
-                row.Cells[i].Text = values[i];
-            }
-        }
-        
-        public void Dispose()
-        {
-            mock.Dispose();
-            excelEngine.Dispose();
-        }
-    }
+			Exception ex = Assert.Throws<UpsLocalRatingException>(() => testObject.Read(workbook.Worksheets, rateTable.Object));
+			Assert.Equal("Unknown Value Added Service description on tab \"Value Add\": \"unknown surcharge\"", ex.Message);
+		}
+
+		private void AddRow(IWorksheet workSheet, string[] values)
+		{
+			workSheet.InsertRow(workSheet.Rows.Length + 1);
+			IRange row = workSheet.Rows.Last();
+
+			for (int i = 0; i < values.Length; i++)
+			{
+				row.Cells[i].Text = values[i];
+			}
+		}
+
+		public void Dispose()
+		{
+			mock.Dispose();
+			excelEngine.Dispose();
+		}
+	}
 }

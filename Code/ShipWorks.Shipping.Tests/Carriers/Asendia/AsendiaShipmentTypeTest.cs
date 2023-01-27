@@ -13,225 +13,227 @@ using ShipWorks.Tests.Shared.ExtensionMethods;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
+using CultureAttribute;
 using Xunit;
 
 namespace ShipWorks.Shipping.Tests.Carriers.Asendia
 {
-    public class AsendiaShipmentTypeTest : IDisposable
-    {
-        AutoMock mock;
+	[UseCulture("en-US")]
+	public class AsendiaShipmentTypeTest : IDisposable
+	{
+		AutoMock mock;
 
-        public AsendiaShipmentTypeTest()
-        {
-            mock = AutoMockExtensions.GetLooseThatReturnsMocks();
-        }
-        
-        [Fact]
-        public void ShipmentTypeCode_IsAsendia()
-        {
-            var testObject = mock.Create<AsendiaShipmentType>();
+		public AsendiaShipmentTypeTest()
+		{
+			mock = AutoMockExtensions.GetLooseThatReturnsMocks();
+		}
 
-            Assert.Equal(ShipmentTypeCode.Asendia, testObject.ShipmentTypeCode);
-        }
+		[Fact]
+		public void ShipmentTypeCode_IsAsendia()
+		{
+			var testObject = mock.Create<AsendiaShipmentType>();
 
-        [Fact]
-        public void ConfigurePrimaryProfile_SetsAsendiaProfileDefaults()
-        {
-            var repo = mock.Mock<ICarrierAccountRepository<AsendiaAccountEntity, IAsendiaAccountEntity>>();
-            repo.SetupGet(r => r.AccountsReadOnly).Returns(new[] { new AsendiaAccountEntity() { AsendiaAccountID = 123456789 } });
+			Assert.Equal(ShipmentTypeCode.Asendia, testObject.ShipmentTypeCode);
+		}
 
-            AsendiaShipmentType testObject = mock.Create<AsendiaShipmentType>();
+		[Fact]
+		public void ConfigurePrimaryProfile_SetsAsendiaProfileDefaults()
+		{
+			var repo = mock.Mock<ICarrierAccountRepository<AsendiaAccountEntity, IAsendiaAccountEntity>>();
+			repo.SetupGet(r => r.AccountsReadOnly).Returns(new[] { new AsendiaAccountEntity() { AsendiaAccountID = 123456789 } });
 
-            ShippingProfileEntity profile = new ShippingProfileEntity()
-            {
-                Asendia = new AsendiaProfileEntity()                
-            };
+			AsendiaShipmentType testObject = mock.Create<AsendiaShipmentType>();
 
-            testObject.ConfigurePrimaryProfile(profile);
-            PackageProfileEntity packageProfile = profile.Packages.Single();
+			ShippingProfileEntity profile = new ShippingProfileEntity()
+			{
+				Asendia = new AsendiaProfileEntity()
+			};
 
-            Assert.Equal(123456789, profile.Asendia.AsendiaAccountID);
-            Assert.Equal(AsendiaServiceType.EpaqSelectCustom, profile.Asendia.Service);
-            Assert.Equal((int) ShipEngineContentsType.Merchandise, profile.Asendia.Contents);
-            Assert.Equal((int) ShipEngineNonDeliveryType.ReturnToSender, profile.Asendia.NonDelivery);
-            Assert.False(profile.Asendia.NonMachinable);
-            Assert.Equal(0, packageProfile.Weight);
-            Assert.Equal(0, packageProfile.DimsProfileID);
-            Assert.Equal(0, packageProfile.DimsLength);
-            Assert.Equal(0, packageProfile.DimsWidth);
-            Assert.Equal(0, packageProfile.DimsHeight);
-            Assert.Equal(0, packageProfile.DimsWeight);
-            Assert.True(packageProfile.DimsAddWeight);
-        }
+			testObject.ConfigurePrimaryProfile(profile);
+			PackageProfileEntity packageProfile = profile.Packages.Single();
 
-        [Fact]
-        public void ConfigurePrimaryProfile_SetsAsendiaAccountIDToZero_WhenNoAccounts()
-        {
-            var repo = mock.Mock<ICarrierAccountRepository<AsendiaAccountEntity, IAsendiaAccountEntity>>();
-            repo.SetupGet(r => r.AccountsReadOnly).Returns(new AsendiaAccountEntity[0]);
+			Assert.Equal(123456789, profile.Asendia.AsendiaAccountID);
+			Assert.Equal(AsendiaServiceType.AsendiaPriorityTracked, profile.Asendia.Service);
+			Assert.Equal((int) ShipEngineContentsType.Merchandise, profile.Asendia.Contents);
+			Assert.Equal((int) ShipEngineNonDeliveryType.ReturnToSender, profile.Asendia.NonDelivery);
+			Assert.False(profile.Asendia.NonMachinable);
+			Assert.Equal(0, packageProfile.Weight);
+			Assert.Equal(0, packageProfile.DimsProfileID);
+			Assert.Equal(0, packageProfile.DimsLength);
+			Assert.Equal(0, packageProfile.DimsWidth);
+			Assert.Equal(0, packageProfile.DimsHeight);
+			Assert.Equal(0, packageProfile.DimsWeight);
+			Assert.True(packageProfile.DimsAddWeight);
+		}
 
-            AsendiaShipmentType testObject = mock.Create<AsendiaShipmentType>();
+		[Fact]
+		public void ConfigurePrimaryProfile_SetsAsendiaAccountIDToZero_WhenNoAccounts()
+		{
+			var repo = mock.Mock<ICarrierAccountRepository<AsendiaAccountEntity, IAsendiaAccountEntity>>();
+			repo.SetupGet(r => r.AccountsReadOnly).Returns(new AsendiaAccountEntity[0]);
 
-            ShippingProfileEntity profile = new ShippingProfileEntity()
-            {
-                Asendia = new AsendiaProfileEntity()
-            };
+			AsendiaShipmentType testObject = mock.Create<AsendiaShipmentType>();
 
-            testObject.ConfigurePrimaryProfile(profile);
+			ShippingProfileEntity profile = new ShippingProfileEntity()
+			{
+				Asendia = new AsendiaProfileEntity()
+			};
 
-            Assert.Equal(0, profile.Asendia.AsendiaAccountID);
-        }
+			testObject.ConfigurePrimaryProfile(profile);
 
-        [Fact]
-        public void ConfigurePrimaryProfile_SetsAsendiaAccountIDToFirstAccountID_WhenAccountsExist()
-        {
-            var repo = mock.Mock<ICarrierAccountRepository<AsendiaAccountEntity, IAsendiaAccountEntity>>();
-            repo.SetupGet(r => r.AccountsReadOnly).Returns(new[] { new AsendiaAccountEntity() { AsendiaAccountID = 123456789 }, new AsendiaAccountEntity() { AsendiaAccountID = 987654321 } });
+			Assert.Equal(0, profile.Asendia.AsendiaAccountID);
+		}
 
-            AsendiaShipmentType testObject = mock.Create<AsendiaShipmentType>();
+		[Fact]
+		public void ConfigurePrimaryProfile_SetsAsendiaAccountIDToFirstAccountID_WhenAccountsExist()
+		{
+			var repo = mock.Mock<ICarrierAccountRepository<AsendiaAccountEntity, IAsendiaAccountEntity>>();
+			repo.SetupGet(r => r.AccountsReadOnly).Returns(new[] { new AsendiaAccountEntity() { AsendiaAccountID = 123456789 }, new AsendiaAccountEntity() { AsendiaAccountID = 987654321 } });
 
-            ShippingProfileEntity profile = new ShippingProfileEntity()
-            {
-                Asendia = new AsendiaProfileEntity()
-            };
+			AsendiaShipmentType testObject = mock.Create<AsendiaShipmentType>();
 
-            testObject.ConfigurePrimaryProfile(profile);
+			ShippingProfileEntity profile = new ShippingProfileEntity()
+			{
+				Asendia = new AsendiaProfileEntity()
+			};
 
-            Assert.Equal(123456789, profile.Asendia.AsendiaAccountID);
-        }
+			testObject.ConfigurePrimaryProfile(profile);
 
-        [Fact]
-        public void TrackShipment_DelegatesTrackingToWebClient()
-        {
-            var testObject = mock.Create<AsendiaShipmentType>();
+			Assert.Equal(123456789, profile.Asendia.AsendiaAccountID);
+		}
 
-            var shipment = new ShipmentEntity()
-            {
-                Asendia = new AsendiaShipmentEntity()
-                {
-                    ShipEngineLabelID = "test"
-                }
-            };
+		[Fact]
+		public void TrackShipment_DelegatesTrackingToWebClient()
+		{
+			var testObject = mock.Create<AsendiaShipmentType>();
 
-            testObject.TrackShipment(shipment);
+			var shipment = new ShipmentEntity()
+			{
+				Asendia = new AsendiaShipmentEntity()
+				{
+					ShipEngineLabelID = "test"
+				}
+			};
 
-            mock.Mock<IShipEngineWebClient>().Verify(c => c.Track("test", ApiLogSource.Asendia), Times.Once);
-        }
+			testObject.TrackShipment(shipment);
 
-        [Fact]
-        public void TrackShipment_DelegatesTrackingInformationFromWebClient_ToTrackingResultFactory()
-        {
-            var testObject = mock.Create<AsendiaShipmentType>();
+			mock.Mock<IShipEngineWebClient>().Verify(c => c.Track("test", ApiLogSource.Asendia), Times.Once);
+		}
 
-            var shipment = new ShipmentEntity()
-            {
-                Asendia = new AsendiaShipmentEntity()
-                {
-                    ShipEngineLabelID = "test"
-                }
-            };
+		[Fact]
+		public void TrackShipment_DelegatesTrackingInformationFromWebClient_ToTrackingResultFactory()
+		{
+			var testObject = mock.Create<AsendiaShipmentType>();
 
-            var trackingInformation = new ShipWorks.Shipping.ShipEngine.DTOs.TrackingInformation();
+			var shipment = new ShipmentEntity()
+			{
+				Asendia = new AsendiaShipmentEntity()
+				{
+					ShipEngineLabelID = "test"
+				}
+			};
 
-            mock.Mock<IShipEngineWebClient>()
-                .Setup(c => c.Track(ParameterShorteners.AnyString, ApiLogSource.Asendia))
-                .Returns(Task.FromResult(trackingInformation));
+			var trackingInformation = new ShipWorks.Shipping.ShipEngine.DTOs.TrackingInformation();
 
-            testObject.TrackShipment(shipment);
+			mock.Mock<IShipEngineWebClient>()
+				.Setup(c => c.Track(ParameterShorteners.AnyString, ApiLogSource.Asendia))
+				.Returns(Task.FromResult(trackingInformation));
 
-            mock.Mock<IShipEngineTrackingResultFactory>().Verify(f => f.Create(trackingInformation));
-        }
+			testObject.TrackShipment(shipment);
 
-        [Fact]
-        public void TrackShipment_ReturnsTrackingResultCreatedByFactory()
-        {
-            var testObject = mock.Create<AsendiaShipmentType>();
+			mock.Mock<IShipEngineTrackingResultFactory>().Verify(f => f.Create(trackingInformation));
+		}
 
-            var shipment = new ShipmentEntity()
-            {
-                Asendia = new AsendiaShipmentEntity()
-                {
-                    ShipEngineLabelID = "test"
-                }
-            };
+		[Fact]
+		public void TrackShipment_ReturnsTrackingResultCreatedByFactory()
+		{
+			var testObject = mock.Create<AsendiaShipmentType>();
 
-            TrackingResult trackingResult = new TrackingResult();
+			var shipment = new ShipmentEntity()
+			{
+				Asendia = new AsendiaShipmentEntity()
+				{
+					ShipEngineLabelID = "test"
+				}
+			};
 
-            mock.Mock<IShipEngineTrackingResultFactory>()
-                .Setup(c => c.Create(It.IsAny<ShipWorks.Shipping.ShipEngine.DTOs.TrackingInformation>()))
-                .Returns(trackingResult);
+			TrackingResult trackingResult = new TrackingResult();
 
-            var testResult = testObject.TrackShipment(shipment);
+			mock.Mock<IShipEngineTrackingResultFactory>()
+				.Setup(c => c.Create(It.IsAny<ShipWorks.Shipping.ShipEngine.DTOs.TrackingInformation>()))
+				.Returns(trackingResult);
 
-            Assert.Equal(trackingResult, testResult);
-        }
+			var testResult = testObject.TrackShipment(shipment);
 
-        [Fact]
-        public void TrackShipment_ReturnsCannedResult_WhenExceptionIsThrown()
-        {
-            var testObject = mock.Create<AsendiaShipmentType>();
+			Assert.Equal(trackingResult, testResult);
+		}
 
-            var shipment = new ShipmentEntity()
-            {
-                TrackingNumber = "test",
-                Asendia = new AsendiaShipmentEntity()
-                {
-                    ShipEngineLabelID = "foo"
-                }
-            };
+		[Fact]
+		public void TrackShipment_ReturnsCannedResult_WhenExceptionIsThrown()
+		{
+			var testObject = mock.Create<AsendiaShipmentType>();
 
-            mock.Mock<IShipEngineTrackingResultFactory>()
-                .Setup(c => c.Create(It.IsAny<ShipWorks.Shipping.ShipEngine.DTOs.TrackingInformation>()))
-                .Throws(new Exception());
+			var shipment = new ShipmentEntity()
+			{
+				TrackingNumber = "test",
+				Asendia = new AsendiaShipmentEntity()
+				{
+					ShipEngineLabelID = "foo"
+				}
+			};
 
-            var testResult = testObject.TrackShipment(shipment);
-            string expectedSummary = $"<a href='http://tracking.asendiausa.com/t.aspx?p={shipment.TrackingNumber}' style='color:blue; background-color:white'>Click here to view tracking information online</a>";
+			mock.Mock<IShipEngineTrackingResultFactory>()
+				.Setup(c => c.Create(It.IsAny<ShipWorks.Shipping.ShipEngine.DTOs.TrackingInformation>()))
+				.Throws(new Exception());
 
-            Assert.Equal(expectedSummary, testResult.Summary);
-        }
+			var testResult = testObject.TrackShipment(shipment);
+			string expectedSummary = $"<a href='http://tracking.asendiausa.com/t.aspx?p={shipment.TrackingNumber}' style='color:blue; background-color:white'>Click here to view tracking information online</a>";
 
-        [Theory]
-        [InlineData(true, 9.99)]
-        [InlineData(false, 6.66)]
-        public void Insured_ReturnsInsuranceFromShipment(bool insured, decimal insuranceValue)
-        {
-            ShipmentEntity shipment = new ShipmentEntity
-            {
-                Insurance = !insured,
-                Asendia = new AsendiaShipmentEntity
-                {
-                    Insurance = insured,
-                    InsuranceValue = insuranceValue
-                }
-            };
+			Assert.Equal(expectedSummary, testResult.Summary);
+		}
 
-            var testObject = mock.Create<AsendiaShipmentType>();
-            ShipmentParcel parcel = testObject.GetParcelDetail(shipment, 0);
+		[Theory]
+		[InlineData(true, 9.99)]
+		[InlineData(false, 6.66)]
+		public void Insured_ReturnsInsuranceFromShipment(bool insured, decimal insuranceValue)
+		{
+			ShipmentEntity shipment = new ShipmentEntity
+			{
+				Insurance = !insured,
+				Asendia = new AsendiaShipmentEntity
+				{
+					Insurance = insured,
+					InsuranceValue = insuranceValue
+				}
+			};
 
-            Assert.Equal(insured, parcel.Insurance.Insured);
-            Assert.Equal(insuranceValue, parcel.Insurance.InsuranceValue);
-        }
+			var testObject = mock.Create<AsendiaShipmentType>();
+			ShipmentParcel parcel = testObject.GetParcelDetail(shipment, 0);
 
-        [Theory]
-        [InlineData("", true, "")]
-        [InlineData("foo", false, "")]
-        [InlineData("foo", true, "http://tracking.asendiausa.com/t.aspx?p=foo")]
-        public void GetCarrierTrackingUrl_ReturnsCorrectTrackingUrl(string trackingNumber, bool processed, string expectedUrl)
-        {
-            ShipmentEntity shipment = new ShipmentEntity
-            {
-                TrackingNumber = trackingNumber,
-                Processed = processed
-            };
+			Assert.Equal(insured, parcel.Insurance.Insured);
+			Assert.Equal(insuranceValue, parcel.Insurance.InsuranceValue);
+		}
 
-            var testObject = mock.Create<AsendiaShipmentType>();
-            var trackingUrl = testObject.GetCarrierTrackingUrl(shipment);
-            Assert.Equal(expectedUrl, trackingUrl);
-        }
+		[Theory]
+		[InlineData("", true, "")]
+		[InlineData("foo", false, "")]
+		[InlineData("foo", true, "http://tracking.asendiausa.com/t.aspx?p=foo")]
+		public void GetCarrierTrackingUrl_ReturnsCorrectTrackingUrl(string trackingNumber, bool processed, string expectedUrl)
+		{
+			ShipmentEntity shipment = new ShipmentEntity
+			{
+				TrackingNumber = trackingNumber,
+				Processed = processed
+			};
 
-        public void Dispose()
-        {
-            mock.Dispose();
-        }
-    }
+			var testObject = mock.Create<AsendiaShipmentType>();
+			var trackingUrl = testObject.GetCarrierTrackingUrl(shipment);
+			Assert.Equal(expectedUrl, trackingUrl);
+		}
+
+		public void Dispose()
+		{
+			mock.Dispose();
+		}
+	}
 }
