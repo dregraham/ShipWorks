@@ -1214,6 +1214,7 @@
           <Field Name="Phone" Type="string" MaxLength="25" FieldIndex="17" />
           <Field Name="PostalCode" Type="string" MaxLength="20" FieldIndex="15" />
           <Field Name="RowVersion" Type="byte[]" IsReadOnly="true" FieldIndex="1" />
+          <Field Name="ShipEngineCarrierID" Type="string" IsOptional="true" MaxLength="50" FieldIndex="24" />
           <Field Name="Signature" Type="string" MaxLength="2147483647" FieldIndex="21" />
           <Field Name="SignatureRelease" Type="string" MaxLength="10" FieldIndex="4" />
           <Field Name="SmartPostHubList" Type="string" MaxLength="2147483647" FieldIndex="6" />
@@ -4836,7 +4837,7 @@
       <Catalogs>
         <Catalog Name="ShipWorksLocal">
           <Schemas>
-            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2022-12-12T22:51:54.9869236Z">
+            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2023-01-25T14:20:04.5102974Z">
               <Tables>
                 <Table Name="Action">
                   <PkConstraintName Name="PK_Action" />
@@ -6180,6 +6181,7 @@
                     <Field Name="Signature" Ordinal="22" HasDefaultValue="true" DefaultValue="''" DbType="12" Length="2147483647" />
                     <Field Name="HubVersion" Ordinal="23" IsOptional="true" DbType="8" Precision="10" />
                     <Field Name="HubCarrierId" Ordinal="24" IsOptional="true" DbType="25" />
+                    <Field Name="ShipEngineCarrierID" Ordinal="25" IsOptional="true" DbType="12" Length="50" />
                   </Fields>
                 </Table>
                 <Table Name="FedExEndOfDayClose">
@@ -12508,6 +12510,7 @@
             <FieldMapping FieldName="Phone" TargetFieldName="Phone" />
             <FieldMapping FieldName="PostalCode" TargetFieldName="PostalCode" />
             <FieldMapping FieldName="RowVersion" TargetFieldName="RowVersion" />
+            <FieldMapping FieldName="ShipEngineCarrierID" TargetFieldName="ShipEngineCarrierID" />
             <FieldMapping FieldName="Signature" TargetFieldName="Signature" />
             <FieldMapping FieldName="SignatureRelease" TargetFieldName="SignatureRelease" />
             <FieldMapping FieldName="SmartPostHubList" TargetFieldName="SmartPostHubList" />

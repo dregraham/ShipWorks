@@ -11,6 +11,8 @@
 
         public static string DhlExpressAccountCreation => "v1/connections/carriers/dhl_express";
 
+        public static string FedExAccountCreation => "v1/connections/carriers/fedex";
+
         public static string DisconnectAmazonShippingAccount(string accountId) => $"v1/connections/carriers/amazon_shipping_us/{accountId}";
 
         public static string AsendiaAccountCreation => "v1/connections/carriers/asendia";

@@ -9442,6 +9442,11 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(FedExAccountFieldIndex.HubCarrierId);}
 		}
+		/// <summary>Creates a new FedExAccountEntity.ShipEngineCarrierID field instance</summary>
+		public static EntityField2 ShipEngineCarrierID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(FedExAccountFieldIndex.ShipEngineCarrierID);}
+		}
 	}
 
 	/// <summary>Field Creation Class for entity FedExEndOfDayCloseEntity</summary>

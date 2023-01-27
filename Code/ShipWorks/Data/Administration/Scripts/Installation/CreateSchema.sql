@@ -4950,7 +4950,8 @@ CREATE TABLE [dbo].[FedExAccount]
 [Letterhead] [nvarchar] (max) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL CONSTRAINT [DF_FedExAccount_Letterhead] DEFAULT (''),
 [Signature] [nvarchar] (max) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL CONSTRAINT [DF_FedExAccount_Signature] DEFAULT (''),
 [HubVersion] [int] NULL,
-[HubCarrierId] [uniqueidentifier] NULL
+[HubCarrierId] [uniqueidentifier] NULL,
+[ShipEngineCarrierId] [nvarchar] (50) NULL,
 )
 GO
 PRINT N'Creating primary key [PK_FedExAccount] on [dbo].[FedExAccount]'
