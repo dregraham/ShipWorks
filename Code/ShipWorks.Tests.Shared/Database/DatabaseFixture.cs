@@ -233,6 +233,8 @@ namespace ShipWorks.Tests.Shared.Database
         /// </remarks>
         public DataContext CreateDataContext(Action<AutoMock, ContainerBuilder> addExtraRegistrations)
         {
+            ShipWorksSession.Initialize(Guid.NewGuid());
+            DataPath.Initialize();
             AutoMock mock = AutoMockExtensions.GetLooseThatReturnsMocks();
 
             var container = ContainerInitializer.Initialize(builder =>
@@ -273,6 +275,7 @@ namespace ShipWorks.Tests.Shared.Database
                 service.InitializeForCurrentDatabase(ExecutionModeScope.Current);
             }
 
+            UserSession.InitializeForCurrentDatabase();
             // This initializes all the other dependencies
             UserSession.InitializeForCurrentSession(ExecutionModeScope.Current);
 
@@ -284,7 +287,6 @@ namespace ShipWorks.Tests.Shared.Database
 
             try
             {
-                DataPath.Initialize();
                 SqlSessionScope.ScopedSqlSession.Configuration.RefetchSettingsFile();
                 SqlSessionScope.ScopedSqlSession.Configuration.Save();
             }
@@ -348,8 +350,8 @@ DROP PROCEDURE [dbo].[GetDatabaseGuid]";
                 service.InitializeForCurrentDatabase(ExecutionModeScope.Current);
             }
 
-            // This initializes all the other dependencies
             UserSession.InitializeForCurrentDatabase();
+            // This initializes all the other dependencies
             UserSession.InitializeForCurrentSession(ExecutionModeScope.Current);
 
             SqlSessionScope.ScopedSqlSession.Configuration.RefetchSettingsFile();
