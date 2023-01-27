@@ -2,16 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using System.Windows.Forms;
-using Interapptive.Shared.ComponentRegistration;
-using Interapptive.Shared.Threading;
-using log4net;
-using ShipWorks.Carriers.Services;
-using ShipWorks.Common.Threading;
-using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Data.Model.EntityInterfaces;
-using ShipWorks.Shipping.ShipEngine;
-using ShipWorks.Shipping.ShipEngine.DTOs.CarrierAccount;
 
 namespace ShipWorks.Shipping.Carriers.FedEx
 {
@@ -90,23 +80,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
                 {
                     try
                     {
-                        var request = new FedExRegistrationRequest
-                        {
-                            Nickname = account.Email,
-                            AccountNumber = account.AccountNumber,
-                            Company = account.Company,
-                            FirstName = account.FirstName,
-                            LastName = account.LastName,
-                            Phone = account.Phone,
-                            Address1 = account.Street1,
-                            Address2 = account.Street2,
-                            City = account.City,
-                            State = account.StateProvCode,
-                            PostalCode = account.PostalCode,
-                            CountryCode = account.CountryCode,
-                            Email = account.Email,
-                            AgreeToEula = "true",
-                        };
+                        var request = new FedExRegistrationRequest(account);
 
                         var response = await shipEngineWebClient.ConnectFedExAccount(request).ConfigureAwait(false);
 
