@@ -122,9 +122,9 @@ namespace ShipWorks.Shipping.ShipEngine
 
                 return GenericResult.FromSuccess(connectAccountResult.Value.CarrierId);
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
-                return GenericResult.FromError<string>(ex.ToString()); ;
+                return GenericResult.FromError<string>($"An error occurred connecting FedEx account {fedExRequest.AccountNumber}: {ex.Message}");
             }
         }
 
