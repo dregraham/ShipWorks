@@ -244,7 +244,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Fims
         /// <param name="account"></param>
         public Task RegisterAccountAsync(EntityBase2 account)
         {
-            throw new NotImplementedException();
+            return Task.CompletedTask;
         }
     }
 }

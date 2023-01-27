@@ -122,9 +122,9 @@ namespace ShipWorks.Shipping.ShipEngine
 
                 return GenericResult.FromSuccess(connectAccountResult.Value.CarrierId);
             }
-            catch
+            catch(Exception ex)
             {
-                return GenericResult.FromError<string>("Exception"); ;
+                return GenericResult.FromError<string>(ex.ToString()); ;
             }
         }
 
@@ -527,7 +527,7 @@ namespace ShipWorks.Shipping.ShipEngine
                 var logEntry = logEntryFactory.GetLogEntry(logSource, logName, LogActionType.Other);
                 logEntry.LogRequest(request, client, "txt");
 
-                IRestResponse response = await client.ExecuteTaskAsync(request);//.ConfigureAwait(false);
+                IRestResponse response = await client.ExecuteTaskAsync(request).ConfigureAwait(false);
 
                 logEntry.LogResponse(response, "txt");
 

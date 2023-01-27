@@ -111,46 +111,46 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         [NDependIgnoreLongMethod]
         private async void OnStepNextAccountInfo(object sender, WizardStepEventArgs e)
         {
-            account.AccountNumber = accountNumber.Text;
-            account.SignatureRelease = "";
-
-            personControl.SaveToEntity(new PersonAdapter(account, string.Empty));
-
-            account.Phone = new string(account.Phone.Where(char.IsDigit).ToArray());
-
-            RequiredFieldChecker checker = new RequiredFieldChecker();
-            checker.Check("Account", account.AccountNumber);
-            checker.Check("Full Name", account.FirstName);
-            checker.Check("Company", account.Company);
-            checker.Check("Street Address", account.Street1);
-            checker.Check("City", account.City);
-
-            if (!string.IsNullOrWhiteSpace(account.CountryCode) &&
-                (account.CountryCode == "US" || account.CountryCode == "CA"))
-            {
-                checker.Check("State", account.StateProvCode);
-            }
-
-            checker.Check("Postal Code", account.PostalCode);
-            checker.Check("Email", account.Email);
-            checker.Check("Phone", account.Phone);
-            checker.Check("Website", account.Website);
-
-            if (!checker.Validate(this))
-            {
-                e.NextPage = CurrentPage;
-                return;
-            }
-
-            if (account.Phone.Length != 10)
-            {
-                e.NextPage = CurrentPage;
-                MessageHelper.ShowError(this, "The phone number must be 10 digits.");
-                return;
-            }
-
             try
             {
+                account.AccountNumber = accountNumber.Text;
+                account.SignatureRelease = "";
+
+                personControl.SaveToEntity(new PersonAdapter(account, string.Empty));
+
+                account.Phone = new string(account.Phone.Where(char.IsDigit).ToArray());
+
+                RequiredFieldChecker checker = new RequiredFieldChecker();
+                checker.Check("Account", account.AccountNumber);
+                checker.Check("Full Name", account.FirstName);
+                checker.Check("Company", account.Company);
+                checker.Check("Street Address", account.Street1);
+                checker.Check("City", account.City);
+
+                if (!string.IsNullOrWhiteSpace(account.CountryCode) &&
+                    (account.CountryCode == "US" || account.CountryCode == "CA"))
+                {
+                    checker.Check("State", account.StateProvCode);
+                }
+
+                checker.Check("Postal Code", account.PostalCode);
+                checker.Check("Email", account.Email);
+                checker.Check("Phone", account.Phone);
+                checker.Check("Website", account.Website);
+
+                if (!checker.Validate(this))
+                {
+                    e.NextPage = CurrentPage;
+                    return;
+                }
+
+                if (account.Phone.Length != 10)
+                {
+                    e.NextPage = CurrentPage;
+                    MessageHelper.ShowError(this, "The phone number must be 10 digits.");
+                    return;
+                }
+
                 Cursor.Current = Cursors.WaitCursor;
 
                 await RegisterAccount(account);
