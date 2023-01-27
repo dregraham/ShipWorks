@@ -17,8 +17,8 @@ using ShipWorks.Shipping.Editing.Rating;
 using ShipWorks.Shipping.Profiles;
 using ShipWorks.Shipping.Settings;
 using ShipWorks.Shipping.Settings.WizardPages;
-using ShipWorks.Shipping.ShipEngine.DTOs.CarrierAccount;
 using ShipWorks.Shipping.ShipEngine;
+using ShipWorks.Shipping.ShipEngine.DTOs.CarrierAccount;
 using ShipWorks.UI.Wizard;
 
 namespace ShipWorks.Shipping.Carriers.FedEx
@@ -181,23 +181,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
                 var webClient = lifetimeScope.Resolve<IShipEngineWebClient>();
 
                 // Response contains the ShipEngine carrier id
-                var response = await webClient.ConnectFedExAccount(new FedExRegistrationRequest
-                {
-                    Nickname = fedExAccount.Email,
-                    AccountNumber = fedExAccount.AccountNumber,
-                    Company = fedExAccount.Company,
-                    FirstName = fedExAccount.FirstName,
-                    LastName = fedExAccount.LastName,
-                    Phone = fedExAccount.Phone,
-                    Address1 = fedExAccount.Street1,
-                    Address2 = fedExAccount.Street2,
-                    City = fedExAccount.City,
-                    State = fedExAccount.StateProvCode,
-                    PostalCode = fedExAccount.PostalCode,
-                    CountryCode = fedExAccount.CountryCode,
-                    Email = fedExAccount.Email,
-                    AgreeToEula = "true"
-                });
+                var response = await webClient.ConnectFedExAccount(new FedExRegistrationRequest(fedExAccount));
 
                 if (response.Success)
                 {
