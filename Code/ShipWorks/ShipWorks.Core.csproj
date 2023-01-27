@@ -1351,6 +1351,7 @@
     <Compile Include="Stores\Platforms\ShipEngine\IPlatformOrderWebClient.cs" />
     <Compile Include="Stores\Platforms\ShipEngine\PlatformOrderWebClient.cs" />
     <Compile Include="Stores\Platforms\ShipEngine\PlatformDownloader.cs" />
+    <Compile Include="Stores\Platforms\Shopify\ShopifyPlatformDownloader.cs" />
     <Compile Include="Stores\Platforms\Shopify\WizardPages\ShopifyAssociateAccountPage.cs">
       <SubType>UserControl</SubType>
     </Compile>
