@@ -42,7 +42,7 @@ namespace ShipWorks.Shipping.Specs.ShippingPanel
         private readonly DataContext context;
         private readonly IMessenger messenger;
         private readonly ShippingPanelViewModel shippingPanelViewModel;
-        private Mock<SwsimV111> client;
+        private Mock<IExtendedSwsimV111> client;
         private Mock<ILicenseService> licenseService;
 
         public BestRateSteps(DatabaseFixture db)
@@ -53,7 +53,7 @@ namespace ShipWorks.Shipping.Specs.ShippingPanel
                 var uspsWebServiceFactory = mock.CreateMock<IUspsWebServiceFactory>();
 
                 uspsWebServiceFactory.Setup(x => x.Create(AnyString, It.IsAny<LogActionType>()))
-                    .Returns(client.Object);
+                    .Returns(client);
                 mock.Provide(uspsWebServiceFactory.Object);
                 mock.Provide<ISchedulerProvider>(new ImmediateSchedulerProvider());
 
@@ -158,9 +158,9 @@ namespace ShipWorks.Shipping.Specs.ShippingPanel
         /// <summary>
         /// Create a mocked version of ISwsimV111
         /// </summary>
-        private Mock<SwsimV111> CreateMockedUspsWebService(Autofac.Extras.Moq.AutoMock mock)
+        private Mock<IExtendedSwsimV111> CreateMockedUspsWebService(Autofac.Extras.Moq.AutoMock mock)
         {
-            var uspsClient = mock.CreateMock<SwsimV111>();
+            var uspsClient = mock.CreateMock<IExtendedSwsimV111>();
             uspsClient.Setup(x => x.GetAccountInfo(It.IsAny<Credentials>()))
                 .Returns(new AccountInfoResult(new AccountInfoV54
                 {

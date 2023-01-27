@@ -304,6 +304,9 @@ namespace ShipWorks.Tests.Shared.Database
         /// in an exception, the context may not be disposed properly in the test itself.</remarks>
         private DataContext CreateDataContextInternal(Action<IContainer> initializeContainer, Action<AutoMock> configureMock)
         {
+            ShipWorksSession.Initialize(Guid.NewGuid());
+            DataPath.Initialize();
+
             AutoMock mock = AutoMockExtensions.GetLooseThatReturnsMocks();
 
             initializeContainer(mock.Container);
@@ -346,11 +349,9 @@ DROP PROCEDURE [dbo].[GetDatabaseGuid]";
             }
 
             // This initializes all the other dependencies
+            UserSession.InitializeForCurrentDatabase();
             UserSession.InitializeForCurrentSession(ExecutionModeScope.Current);
 
-            ShipWorksSession.Initialize(Guid.NewGuid());
-
-            DataPath.Initialize();
             SqlSessionScope.ScopedSqlSession.Configuration.RefetchSettingsFile();
             SqlSessionScope.ScopedSqlSession.Configuration.Save();
 
