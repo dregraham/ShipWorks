@@ -1005,6 +1005,7 @@
     <Compile Include="Filters\Content\Conditions\Orders\VerifiedCondition.cs" />
     <Compile Include="Filters\Content\Conditions\Shipments\AccountCondition.cs" />
     <Compile Include="Filters\Content\Conditions\Shipments\TrackingStatusCondition.cs" />
+    <Compile Include="Carriers\Services\IFedExShipEngineMigrator.cs" />
     <Compile Include="Messaging\Messages\ChangeDimensionsMessage.cs" />
     <Compile Include="Messaging\Messages\Orders\OrderLookupUnverifyMessage.cs" />
     <Compile Include="Messaging\Messages\Orders\OrderVerifiedMessage.cs" />
