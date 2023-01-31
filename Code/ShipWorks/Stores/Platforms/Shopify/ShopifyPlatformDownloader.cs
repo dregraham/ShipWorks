@@ -17,6 +17,7 @@ using Newtonsoft.Json;
 using ShipWorks.Data;
 using ShipWorks.Data.Administration.Recovery;
 using ShipWorks.Data.Connection;
+using ShipWorks.Data.Model;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Communication;
 using ShipWorks.Stores.Content;
@@ -43,11 +44,15 @@ namespace ShipWorks.Stores.Platforms.Shopify
         {
         }
 
+
         protected override async Task<OrderEntity> CreateOrder(OrderSourceApiSalesOrder salesOrder)
         {
-            var shopifyOrderId = salesOrder.OrderNumber;
+            long shopifyOrderId = long.Parse(salesOrder.OrderId);
 
-            var result = await InstantiateOrder(long.Parse(shopifyOrderId)).ConfigureAwait(false);
+            GenericResult<OrderEntity> result = await InstantiateOrder(
+                    new ShopifyOrderIdentifier(shopifyOrderId),
+                    new[] { EntityType.OrderPaymentDetailEntity })
+                .ConfigureAwait(false);
             if (result.Failure)
             {
                 log.InfoFormat("Skipping order '{0}': {1}.", shopifyOrderId, result.Message);
@@ -55,6 +60,7 @@ namespace ShipWorks.Stores.Platforms.Shopify
             }
 
             var order = (ShopifyOrderEntity) result.Value;
+            order.ShopifyOrderID = shopifyOrderId;
             //TODO:
             //order.FulfillmentStatusCode=
             //order.PaymentStatusCode
@@ -73,6 +79,7 @@ namespace ShipWorks.Stores.Platforms.Shopify
         /// </remarks>
         protected override string GetOrderStatusString(OrderSourceApiSalesOrder salesOrder, string orderId)
         {
+            //TODO: analyse code in comment above and fix
             switch (salesOrder.Payment.PaymentStatus)
             {
                 case OrderSourcePaymentStatus.PaymentInProcess:

@@ -221,7 +221,8 @@ namespace ShipWorks.Stores.Platforms.ShipEngine
             order.BillEmail = order.ShipEmail;
 
             // Bill To
-            var billToFullName = PersonName.Parse(salesOrder.BillTo.Name ?? salesOrder.Buyer.Name ?? string.Empty);
+            var billName = string.IsNullOrWhiteSpace(salesOrder.BillTo.Name) ? (salesOrder.Buyer.Name ?? string.Empty): salesOrder.BillTo.Name;
+            var billToFullName = PersonName.Parse(billName);
             order.BillFirstName = billToFullName.First;
             order.BillMiddleName = billToFullName.Middle;
             order.BillLastName = billToFullName.LastWithSuffix;
