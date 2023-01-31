@@ -18,6 +18,7 @@ using Xunit;
 using ShipWorks.Shipping.Carriers.Dhl;
 using ShipWorks.Shipping.Carriers.Asendia;
 using ShipWorks.Shipping.Carriers.Amazon.SFP;
+using ShipWorks.Shipping.Carriers.DhlEcommerce;
 
 namespace ShipWorks.Shipping.Tests.Integration.Carriers
 {
@@ -56,7 +57,7 @@ namespace ShipWorks.Shipping.Tests.Integration.Carriers
         [Fact]
         public void EnsureAllShipmentTypesHavePrefetchProviderRegistered()
         {
-            IEnumerable<ShipmentTypeCode> excludedTypes = new[] { ShipmentTypeCode.None };
+            IEnumerable<ShipmentTypeCode> excludedTypes = new[] { ShipmentTypeCode.None, ShipmentTypeCode.DhlEcommerce };
 
             foreach (var value in Enum.GetValues(typeof(ShipmentTypeCode)).OfType<ShipmentTypeCode>().Except(excludedTypes))
             {

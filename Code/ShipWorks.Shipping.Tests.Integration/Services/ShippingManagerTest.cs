@@ -129,7 +129,15 @@ namespace ShipWorks.Shipping.Tests.Integration.Services
         {
             mock.Override<IDateTimeProvider>()
                 .Setup(x => x.Now)
-                .Returns(new DateTime(2015, 12, 28, 15, 30, 12));
+                .Returns(new DateTime(2015, 12, 28));
+
+            mock.Override<IDateTimeProvider>()
+                .Setup(x => x.UtcNow)
+                .Returns(new DateTime(2015, 12, 28));
+
+            mock.Override<IDateTimeProvider>()
+                .Setup(x => x.TimeZoneInfo)
+                .Returns(TimeZoneInfo.Local);
 
             ShipmentEntity shipment = CreateShipment(context.Order, mock.Container);
 

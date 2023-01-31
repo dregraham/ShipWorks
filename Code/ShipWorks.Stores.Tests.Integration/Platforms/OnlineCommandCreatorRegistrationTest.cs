@@ -25,6 +25,7 @@ using ShipWorks.Stores.Platforms.Newegg.OnlineUpdating;
 using ShipWorks.Stores.Platforms.Odbc.Upload;
 using ShipWorks.Stores.Platforms.OrderMotion.OnlineUpdating;
 using ShipWorks.Stores.Platforms.Overstock.OnlineUpdating;
+using ShipWorks.Stores.Platforms.Platform.OnlineUpdating;
 using ShipWorks.Stores.Platforms.ProStores.OnlineUpdating;
 using ShipWorks.Stores.Platforms.Rakuten.OnlineUpdating;
 using ShipWorks.Stores.Platforms.Sears.OnlineUpdating;
@@ -104,15 +105,19 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms
 
         private readonly Dictionary<StoreTypeCode, Type> specificUploaders = new Dictionary<StoreTypeCode, Type>
         {
+            { StoreTypeCode.Amazon, typeof(PlatformUpdateCommandCreator) },
             { StoreTypeCode.AmeriCommerce, typeof(AmeriCommerceOnlineUpdateCommandCreator) },
             { StoreTypeCode.Amosoft, typeof(GenericModuleOnlineUpdateCommandCreator) },
+            { StoreTypeCode.Api, typeof(PlatformUpdateCommandCreator) },
             { StoreTypeCode.BigCommerce, typeof(BigCommerceOnlineUpdateCommandCreator) },
             { StoreTypeCode.Bonanza, typeof(GenericModuleOnlineUpdateCommandCreator) },
             { StoreTypeCode.Brightpearl, typeof(GenericModuleOnlineUpdateCommandCreator) },
+            { StoreTypeCode.BrightpearlHub, typeof(PlatformUpdateCommandCreator) },
             { StoreTypeCode.BuyDotCom, typeof(BuyDotComOnlineUpdateCommandCreator) },
             { StoreTypeCode.Cart66Lite, typeof(GenericModuleOnlineUpdateCommandCreator) },
             { StoreTypeCode.Cart66Pro, typeof(GenericModuleOnlineUpdateCommandCreator) },
             { StoreTypeCode.ChannelAdvisor, typeof(ChannelAdvisorOnlineUpdateCommandCreator) },
+            { StoreTypeCode.ChannelAdvisorHub, typeof(PlatformUpdateCommandCreator) },
             { StoreTypeCode.ChannelSale, typeof(GenericModuleOnlineUpdateCommandCreator) },
             { StoreTypeCode.Choxi, typeof(GenericModuleOnlineUpdateCommandCreator) },
             { StoreTypeCode.ClickCartPro, typeof(GenericModuleOnlineUpdateCommandCreator) },
@@ -122,11 +127,12 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms
             { StoreTypeCode.CreLoaded, typeof(GenericModuleOnlineUpdateCommandCreator) },
             { StoreTypeCode.CsCart, typeof(GenericModuleOnlineUpdateCommandCreator) },
             { StoreTypeCode.Ebay, typeof(EbayOnlineUpdateCommandCreator) },
-            { StoreTypeCode.Etsy, typeof(EtsyOnlineUpdateCommandCreator) },
+            { StoreTypeCode.Etsy, typeof(PlatformUpdateCommandCreator) },
             { StoreTypeCode.Fortune3, typeof(GenericModuleOnlineUpdateCommandCreator) },
             { StoreTypeCode.GeekSeller, typeof(GenericModuleOnlineUpdateCommandCreator) },
             { StoreTypeCode.GenericModule, typeof(GenericModuleOnlineUpdateCommandCreator) },
             { StoreTypeCode.Groupon, typeof(GrouponOnlineUpdateCommandCreator) },
+            { StoreTypeCode.GrouponHub, typeof(PlatformUpdateCommandCreator) },
             { StoreTypeCode.InfiPlex, typeof(GenericModuleOnlineUpdateCommandCreator) },
             { StoreTypeCode.Infopia, typeof(InfopiaOnlineUpdateCommandCreator) },
             { StoreTypeCode.InstaStore, typeof(GenericModuleOnlineUpdateCommandCreator) },
@@ -171,7 +177,9 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms
             { StoreTypeCode.ThreeDCart, typeof(ThreeDCartOnlineUpdateCommandCreator) },
             { StoreTypeCode.VirtueMart, typeof(GenericModuleOnlineUpdateCommandCreator) },
             { StoreTypeCode.Volusion, typeof(VolusionOnlineUpdateCommandCreator) },
+            { StoreTypeCode.VolusionHub, typeof(PlatformUpdateCommandCreator) },
             { StoreTypeCode.Walmart, typeof(WalmartOnlineUpdateInstanceCommands) },
+            { StoreTypeCode.WalmartHub, typeof(PlatformUpdateCommandCreator) },
             { StoreTypeCode.WebShopManager, typeof(GenericModuleOnlineUpdateCommandCreator) },
             { StoreTypeCode.WooCommerce, typeof(GenericModuleOnlineUpdateCommandCreator) },
             { StoreTypeCode.WPeCommerce, typeof(GenericModuleOnlineUpdateCommandCreator) },

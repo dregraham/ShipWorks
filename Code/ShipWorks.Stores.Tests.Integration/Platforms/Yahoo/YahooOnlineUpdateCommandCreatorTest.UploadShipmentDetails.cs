@@ -19,7 +19,7 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.Yahoo
                 .Save();
 
             store = Modify.Store<YahooStoreEntity>(store)
-                .Set(x => x.TrackingUpdatePassword, "Foo")
+                .Set(x => x.TrackingUpdatePassword, "Rm9v")
                 .Set(x => x.YahooEmailAccountID, emailAccount.EmailAccountID)
                 .Save();
 

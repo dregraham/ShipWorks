@@ -33,6 +33,7 @@ namespace ShipWorks.Shipping.Tests.Integration.Carriers
                 {ShipmentTypeCode.UpsOnLineTools, typeof(WeekdaysOnlyShipmentDateManipulator)},
                 {ShipmentTypeCode.UpsWorldShip, typeof(WeekdaysOnlyShipmentDateManipulator)},
                 {ShipmentTypeCode.Usps, typeof(PostalShipmentDateManipulator)},
+                {ShipmentTypeCode.DhlEcommerce, typeof(WeekdaysOnlyShipmentDateManipulator)},
             };
         }
 

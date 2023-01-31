@@ -31,6 +31,7 @@ using ShipWorks.Stores.Platforms.Odbc.Download;
 using ShipWorks.Stores.Platforms.OrderMotion;
 using ShipWorks.Stores.Platforms.Overstock;
 using ShipWorks.Stores.Platforms.PayPal;
+using ShipWorks.Stores.Platforms.Platform;
 using ShipWorks.Stores.Platforms.ProStores;
 using ShipWorks.Stores.Platforms.Rakuten;
 using ShipWorks.Stores.Platforms.Sears;
@@ -111,11 +112,14 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms
 
         private readonly Dictionary<StoreTypeCode, Type> specificDownloaders = new Dictionary<StoreTypeCode, Type>
         {
-            //{ StoreTypeCode.Amazon, typeof(AmazonPlatformDownloader) },//TODO: add integration tests
+            { StoreTypeCode.Amazon, typeof(AmazonPlatformDownloader) },
+            { StoreTypeCode.Api, typeof(PlatformStoreDownloader) },
             { StoreTypeCode.AmeriCommerce, typeof(AmeriCommerceDownloader) },
             { StoreTypeCode.BigCommerce, typeof(BigCommerceDownloader) },
+            { StoreTypeCode.BrightpearlHub, typeof(PlatformStoreDownloader) },
             { StoreTypeCode.BuyDotCom, typeof(BuyDotComDownloader) },
             { StoreTypeCode.ChannelAdvisor, typeof(ChannelAdvisorDownloaderFactory) },
+            { StoreTypeCode.ChannelAdvisorHub, typeof(PlatformStoreDownloader) },
             { StoreTypeCode.ClickCartPro, typeof(ClickCartProDownloader) },
             { StoreTypeCode.CommerceInterface, typeof(CommerceInterfaceDownloader) },
             { StoreTypeCode.Ebay, typeof(EbayDownloader) },
@@ -123,6 +127,7 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms
             { StoreTypeCode.GenericFile, typeof(GenericFileDownloaderFactory) },
             { StoreTypeCode.GenericModule, typeof(GenericModuleDownloader) },
             { StoreTypeCode.Groupon, typeof(GrouponDownloader) },
+            { StoreTypeCode.GrouponHub, typeof(PlatformStoreDownloader) },
             { StoreTypeCode.Infopia, typeof(InfopiaDownloader) },
             { StoreTypeCode.LemonStand, typeof(LemonStandDownloader) },
             { StoreTypeCode.Magento, typeof(MagentoDownloaderFactory) },
@@ -142,7 +147,9 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms
             { StoreTypeCode.SparkPay, typeof(SparkPayDownloader) },
             { StoreTypeCode.ThreeDCart, typeof(ThreeDCartDownloaderFactory) },
             { StoreTypeCode.Volusion, typeof(VolusionDownloader) },
+            { StoreTypeCode.VolusionHub, typeof(PlatformStoreDownloader) },
             { StoreTypeCode.Walmart, typeof(WalmartDownloader) },
+            { StoreTypeCode.WalmartHub, typeof(PlatformStoreDownloader) },
             { StoreTypeCode.Yahoo, typeof(YahooDownloaderFactory) },
             { StoreTypeCode.Jet, typeof(JetDownloader) }
         };

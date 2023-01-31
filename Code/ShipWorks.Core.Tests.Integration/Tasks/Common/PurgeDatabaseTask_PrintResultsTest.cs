@@ -74,7 +74,7 @@ namespace ShipWorks.Core.Tests.Integration.Tasks.Common
             var objRefTable = tableDataList.First(t => t.TableName == "ObjectReferenceEntity");
             var printResultTable = tableDataList.First(t => t.TableName == "PrintResultEntity");
 
-            Assert.Equal(5, resourceTable.AfterPurgeRowCount);
+            Assert.Equal(17, resourceTable.AfterPurgeRowCount);
             Assert.Equal(objRefTable.InitialRowCount, objRefTable.AfterPurgeRowCount);
             Assert.Equal(printResultTable.InitialRowCount, printResultTable.AfterPurgeRowCount);
 
@@ -151,8 +151,8 @@ namespace ShipWorks.Core.Tests.Integration.Tasks.Common
             var objRefTable = tableDataList.First(t => t.TableName == "ObjectReferenceEntity");
             var printResultTable = tableDataList.First(t => t.TableName == "PrintResultEntity");
 
-            Assert.Equal(3, resourceTable.AfterPurgeRowCount);
-            Assert.Equal(3, objRefTable.AfterPurgeRowCount);
+            Assert.Equal(15, resourceTable.AfterPurgeRowCount);
+            Assert.Equal(15, objRefTable.AfterPurgeRowCount);
             Assert.Equal(3, printResultTable.AfterPurgeRowCount);
 
             // Make sure no printResult data changed

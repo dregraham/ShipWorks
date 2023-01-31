@@ -84,7 +84,7 @@ namespace ShipWorks.Shipping.Tests.Integration.Carriers.Ups.LocalRating
             testObject.GetRates(shipment);
 
             mock.Mock<ITrackedDurationEvent>().Verify(e => e.AddProperty("Results.Quantity", 1.ToString()));
-            mock.Mock<ITrackedDurationEvent>().Verify(e => e.AddProperty("Results.AvailableServices", "UPS Ground"));
+            mock.Mock<ITrackedDurationEvent>().Verify(e => e.AddProperty("Results.AvailableServices", "UPS® Ground"));
         }
 
         [Fact]
@@ -103,7 +103,7 @@ namespace ShipWorks.Shipping.Tests.Integration.Carriers.Ups.LocalRating
             testObject.GetRates(shipment);
 
             mock.Mock<ITrackedDurationEvent>().Verify(e => e.AddProperty("Results.Quantity", 3.ToString()));
-            mock.Mock<ITrackedDurationEvent>().Verify(e => e.AddProperty("Results.AvailableServices", "UPS Ground,UPS Next Day Air®,UPS 2nd Day Air A.M.®"));
+            mock.Mock<ITrackedDurationEvent>().Verify(e => e.AddProperty("Results.AvailableServices", "UPS® Ground,UPS Next Day Air®,UPS 2nd Day Air A.M.®"));
         }
 
         public void Dispose()

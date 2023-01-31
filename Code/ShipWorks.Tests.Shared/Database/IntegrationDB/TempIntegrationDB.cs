@@ -10,7 +10,7 @@ namespace ShipWorks.Tests.Shared.Database.IntegrationDB
         /// <summary>
         /// Initializes a new instance of the <see cref="TempIntegrationDB"/> class.
         /// </summary>
-        public TempIntegrationDB(string databaseName, string dataSource = @"(localdb)\v11.0")
+        public TempIntegrationDB(string databaseName, string dataSource = @"localhost")
             : this(databaseName, dataSource, true)
         {
         }
@@ -19,7 +19,7 @@ namespace ShipWorks.Tests.Shared.Database.IntegrationDB
         /// Initializes a new instance of the <see cref="TempIntegrationDB"/> class.
         /// It does NOT delete the existing db and it does NOT create a new db.
         /// </summary>
-        public TempIntegrationDB(string databaseName, string dataSource = @"(localdb)\v11.0", bool recreateDb = true)
+        public TempIntegrationDB(string databaseName, string dataSource = @"localhost", bool recreateDb = true)
             : base(databaseName, dataSource)
         {
             if (recreateDb)
