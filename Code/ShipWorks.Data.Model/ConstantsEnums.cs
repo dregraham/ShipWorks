@@ -4690,6 +4690,10 @@ namespace ShipWorks.Data.Model
 		FreightGuaranteeDate,
 		///<summary>CustomsRecipientTINType. </summary>
 		CustomsRecipientTINType,
+		///<summary>PayorCountryCode. </summary>
+		PayorCountryCode,
+		///<summary>PayorPostalCode. </summary>
+		PayorPostalCode,
 		/// <summary></summary>
 		AmountOfFields
 	}

@@ -10957,6 +10957,16 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(FedExShipmentFieldIndex.CustomsRecipientTINType);}
 		}
+		/// <summary>Creates a new FedExShipmentEntity.PayorCountryCode field instance</summary>
+		public static EntityField2 PayorCountryCode
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(FedExShipmentFieldIndex.PayorCountryCode);}
+		}
+		/// <summary>Creates a new FedExShipmentEntity.PayorPostalCode field instance</summary>
+		public static EntityField2 PayorPostalCode
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(FedExShipmentFieldIndex.PayorPostalCode);}
+		}
 	}
 
 	/// <summary>Field Creation Class for entity FilterEntity</summary>

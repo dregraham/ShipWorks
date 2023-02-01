@@ -2079,6 +2079,8 @@ CREATE TABLE [dbo].[FedExShipment]
 [PayorTransportType] [int] NOT NULL,
 [PayorTransportName] [nvarchar] (60) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [PayorTransportAccount] [varchar] (12) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+[PayorCountryCode] [nvarchar](2) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
+[PayorPostalCode] [nvarchar](10) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
 [PayorDutiesType] [int] NOT NULL,
 [PayorDutiesAccount] [varchar] (12) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [PayorDutiesName] [nvarchar] (60) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,

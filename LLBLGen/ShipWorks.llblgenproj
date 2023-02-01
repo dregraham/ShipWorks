@@ -1498,10 +1498,12 @@
           <Field Name="NonStandardContainer" Type="bool" FieldIndex="6" />
           <Field Name="OriginResidentialDetermination" Type="int" FieldIndex="109" />
           <Field Name="PackagingType" Type="int" FieldIndex="5" />
+          <Field Name="PayorCountryCode" Type="string" IsOptional="true" MaxLength="2" FieldIndex="164" />
           <Field Name="PayorDutiesAccount" Type="string" MaxLength="12" FieldIndex="15" />
           <Field Name="PayorDutiesCountryCode" Type="string" MaxLength="50" FieldIndex="17" />
           <Field Name="PayorDutiesName" Type="string" MaxLength="60" FieldIndex="16" />
           <Field Name="PayorDutiesType" Type="int" FieldIndex="14" />
+          <Field Name="PayorPostalCode" Type="string" IsOptional="true" MaxLength="10" FieldIndex="165" />
           <Field Name="PayorTransportAccount" Type="string" MaxLength="12" FieldIndex="13" />
           <Field Name="PayorTransportName" Type="string" MaxLength="60" FieldIndex="12" />
           <Field Name="PayorTransportType" Type="int" FieldIndex="11" />
@@ -4837,7 +4839,7 @@
       <Catalogs>
         <Catalog Name="ShipWorksLocal">
           <Schemas>
-            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2023-01-25T14:20:04.5102974Z">
+            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2023-01-27T20:52:49.1276634Z">
               <Tables>
                 <Table Name="Action">
                   <PkConstraintName Name="PK_Action" />
@@ -7048,6 +7050,8 @@
                     <Field Name="FreightGuaranteeType" Ordinal="162" DbType="8" Precision="10" />
                     <Field Name="FreightGuaranteeDate" Ordinal="163" DbType="4" />
                     <Field Name="CustomsRecipientTINType" Ordinal="164" IsOptional="true" DbType="8" Precision="10" />
+                    <Field Name="PayorCountryCode" Ordinal="165" IsOptional="true" DbType="12" Length="2" />
+                    <Field Name="PayorPostalCode" Ordinal="166" IsOptional="true" DbType="12" Length="10" />
                   </Fields>
                 </Table>
                 <Table Name="Filter">
@@ -12795,10 +12799,12 @@
             <FieldMapping FieldName="NonStandardContainer" TargetFieldName="NonStandardContainer" />
             <FieldMapping FieldName="OriginResidentialDetermination" TargetFieldName="OriginResidentialDetermination" />
             <FieldMapping FieldName="PackagingType" TargetFieldName="PackagingType" />
+            <FieldMapping FieldName="PayorCountryCode" TargetFieldName="PayorCountryCode" />
             <FieldMapping FieldName="PayorDutiesAccount" TargetFieldName="PayorDutiesAccount" />
             <FieldMapping FieldName="PayorDutiesCountryCode" TargetFieldName="PayorDutiesCountryCode" />
             <FieldMapping FieldName="PayorDutiesName" TargetFieldName="PayorDutiesName" />
             <FieldMapping FieldName="PayorDutiesType" TargetFieldName="PayorDutiesType" />
+            <FieldMapping FieldName="PayorPostalCode" TargetFieldName="PayorPostalCode" />
             <FieldMapping FieldName="PayorTransportAccount" TargetFieldName="PayorTransportAccount" />
             <FieldMapping FieldName="PayorTransportName" TargetFieldName="PayorTransportName" />
             <FieldMapping FieldName="PayorTransportType" TargetFieldName="PayorTransportType" />

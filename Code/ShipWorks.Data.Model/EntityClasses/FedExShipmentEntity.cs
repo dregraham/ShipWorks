@@ -709,6 +709,10 @@ namespace ShipWorks.Data.Model.EntityClasses
 			_fieldsCustomProperties.Add("FreightGuaranteeDate", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
 			_fieldsCustomProperties.Add("CustomsRecipientTINType", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+			_fieldsCustomProperties.Add("PayorCountryCode", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+			_fieldsCustomProperties.Add("PayorPostalCode", fieldHashtable);
 		}
 		#endregion
 
@@ -2616,6 +2620,28 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			get { return (Nullable<System.Int32>)GetValue((int)FedExShipmentFieldIndex.CustomsRecipientTINType, false); }
 			set	{ SetValue((int)FedExShipmentFieldIndex.CustomsRecipientTINType, value); }
+		}
+
+		/// <summary> The PayorCountryCode property of the Entity FedExShipment<br/><br/></summary>
+		/// <remarks>Mapped on  table field: "FedExShipment"."PayorCountryCode"<br/>
+		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 2<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		[DataMember]
+		public virtual System.String PayorCountryCode
+		{
+			get { return (System.String)GetValue((int)FedExShipmentFieldIndex.PayorCountryCode, true); }
+			set	{ SetValue((int)FedExShipmentFieldIndex.PayorCountryCode, value); }
+		}
+
+		/// <summary> The PayorPostalCode property of the Entity FedExShipment<br/><br/></summary>
+		/// <remarks>Mapped on  table field: "FedExShipment"."PayorPostalCode"<br/>
+		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 10<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		[DataMember]
+		public virtual System.String PayorPostalCode
+		{
+			get { return (System.String)GetValue((int)FedExShipmentFieldIndex.PayorPostalCode, true); }
+			set	{ SetValue((int)FedExShipmentFieldIndex.PayorPostalCode, value); }
 		}
 
 		/// <summary> Gets the EntityCollection with the related entities of type 'FedExPackageEntity' which are related to this entity via a relation of type '1:n'. If the EntityCollection hasn't been fetched yet, the collection returned will be empty.<br/><br/></summary>
