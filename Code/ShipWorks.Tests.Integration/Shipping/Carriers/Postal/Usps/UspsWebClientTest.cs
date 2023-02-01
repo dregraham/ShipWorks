@@ -123,7 +123,7 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.Postal.Usps
         public void RegisterAccount_IsSuccessful()
         {
             UspsRegistration registration = CreateRegistrationWithoutUsername();
-            registration.UserName = DateTime.UtcNow.Ticks.ToString();
+            registration.UserName = DateTime.UtcNow.Ticks.ToString().Substring(0, 14);
 
             UspsRegistrationResult registrationResult = testObject.RegisterAccount(registration);
 

@@ -27,6 +27,8 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.Postal
 
         public PostalPrototypeFixture()
         {
+            ShipWorksSession.Initialize(Guid.NewGuid());
+            DataPath.Initialize();
             ((log4net.Repository.Hierarchy.Hierarchy)LogManager.GetRepository()).Root.Level = Level.Error;
             ((log4net.Repository.Hierarchy.Hierarchy)LogManager.GetRepository()).RaiseConfigurationChanged(EventArgs.Empty);
 

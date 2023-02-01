@@ -174,7 +174,7 @@ namespace ShipWorks.Shipping.Tests.Integration.Services
                 .Select(s => s.Value);
 
             // Assert if new shipment types were added to make sure they get updated for insurance changing on shipment type change.
-            Assert.Equal(16, shipmentTypeCodes.Count());
+            Assert.Equal(17, shipmentTypeCodes.Count());
 
             foreach (ShipmentTypeCode startShipmentTypeCode in shipmentTypeCodes)
             {
@@ -333,7 +333,9 @@ namespace ShipWorks.Shipping.Tests.Integration.Services
                 case ShipmentTypeCode.AmazonSWA:
                     return Create.Shipment(context.Order).AsAmazonSWA(p => p.Set(es => es.Insurance, insured))
                         .Set(s => s.Insurance = true).Save();
-
+                case ShipmentTypeCode.DhlEcommerce:
+                    return Create.Shipment(context.Order).AsDhlEcommerce(p => p.Set(es => es.InsurancePennyOne, insured))
+                        .Set(s => s.Insurance = true).Save();
                 default:
                     return null;
             }

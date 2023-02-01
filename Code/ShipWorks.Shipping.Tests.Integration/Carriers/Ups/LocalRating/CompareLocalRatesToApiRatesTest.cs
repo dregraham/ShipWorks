@@ -9,6 +9,7 @@ using Interapptive.Shared.Collections;
 using Interapptive.Shared.Net;
 using Interapptive.Shared.Utility;
 using Moq;
+using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.Custom;
 using ShipWorks.Data.Model.EntityClasses;
@@ -47,6 +48,7 @@ namespace ShipWorks.Shipping.Tests.Integration.Carriers.Ups.LocalRating
         {
             this.output = output;
             InitializeDataContext(db);
+            LogSession.Initialize();
         }
 
         [Fact]
