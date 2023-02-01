@@ -346,6 +346,7 @@
     <Compile Include="Platforms\Overstock\Warehouse\OverstockWarehouseOrder.cs" />
     <Compile Include="Platforms\Overstock\Warehouse\OverstockWarehouseOrderFactory.cs" />
     <Compile Include="Platforms\Shopify\CreateOrderSourceResult.cs" />
+    <Compile Include="Platforms\Shopify\ShopifyAccountSettingsViewModel.cs" />
     <Compile Include="Platforms\Shopify\IShopifyAccountSettingsViewModel.cs" />
     <Compile Include="Platforms\Shopify\IShopifyCreateOrderSourceViewModel.cs" />
     <Compile Include="Platforms\Shopify\ShopifyCreateOrderSourceViewModel.cs" />
