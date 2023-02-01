@@ -63,7 +63,10 @@ namespace ShipWorks.Stores.Platforms.Shopify
             OpeningUrl = true;
             try
             {
-                var url = await hubOrderSourceClient.GetUpdateOrderSourceInitiateUrl(orderSourceName, store.OrderSourceID).ConfigureAwait(true);
+                var url = await hubOrderSourceClient.GetUpdateOrderSourceInitiateUrl(orderSourceName, store.OrderSourceID, new Dictionary<string, string>
+                {
+                    { "shopify_domain", store.ShopifyShopUrlName.ToString() }
+                }).ConfigureAwait(true);
                 webHelper.OpenUrl(url);
             }
             catch (Exception ex)
