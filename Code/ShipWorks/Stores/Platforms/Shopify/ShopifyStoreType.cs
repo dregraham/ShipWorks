@@ -157,8 +157,13 @@ namespace ShipWorks.Stores.Platforms.Shopify
         /// </summary>
         public override AccountSettingsControlBase CreateAccountSettingsControl()
         {
-            return new ShopifyAccountSettingsControl();
-        }
+	        using (var scope = IoC.BeginLifetimeScope())
+	        {
+		        var factory = scope.Resolve<IShopifyAccountSettingsControlFactory>();
+		        var control = factory.Create(Store);
+		        return control;
+	        }
+		}
 
         /// <summary>
         /// Indicates what columns are supported for this store type
