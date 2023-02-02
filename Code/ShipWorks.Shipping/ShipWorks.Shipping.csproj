@@ -718,7 +718,7 @@
     <Compile Include="Carriers\BestRate\BestRateRateHashingService.cs" />
     <Compile Include="Carriers\FedEx\FedExLabelService.cs" />
     <Compile Include="Carriers\FedEx\FedExRateHashingService.cs" />
-    <Compile Include="Carriers\FedEx\FedExRatingService.cs" />
+    <Compile Include="Carriers\FedEx\FedExShipEngineRatingClient.cs" />
     <Compile Include="Carriers\iParcel\iParcelLabelService.cs" />
     <Compile Include="Carriers\iParcel\iParcelRateHashingService.cs" />
     <Compile Include="Carriers\iParcel\iParcelRatingService.cs" />
