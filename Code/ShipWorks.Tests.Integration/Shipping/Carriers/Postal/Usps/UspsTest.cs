@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using Xunit;
 using ShipWorks.Data.Connection;
@@ -10,18 +9,23 @@ using ShipWorks.Shipping.Carriers.Postal.Usps.Express1.Net;
 using ShipWorks.Shipping.Carriers.Postal.WebTools;
 using ShipWorks.Shipping.Editing.Rating;
 using System.Data;
+using ShipWorks.Startup;
+using ShipWorks.Tests.Shared.Database;
 using Xunit.Abstractions;
 
 namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.Postal.Usps
 {
-    public class UspsTest : DataDrivenIntegrationTestBase
+    [Collection("Database collection")]
+    public class UspsTest : DataDrivenIntegrationTestBase, IDisposable
     {
         private readonly ITestOutputHelper output;
+        private readonly DataContext context;
 
-        public UspsTest(ITestOutputHelper output)
+        public UspsTest(ITestOutputHelper output, DatabaseFixture db)
         {
             this.output = output;
             justLabels = true;
+            context = db.CreateDataContext(x => ContainerInitializer.Initialize(x));
         }
 
         [ExcelData("DataSources\\Usps.xlsx", "Stamps")]
@@ -151,5 +155,7 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.Postal.Usps
                 }
             }
         }
+
+        public void Dispose() => context.Dispose();
     }
 }
