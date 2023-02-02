@@ -28,7 +28,7 @@ namespace ShipWorks.Stores.Platforms.Shopify
         private readonly IHubOrderSourceClient hubOrderSourceClient;
         private readonly IMessageHelper messageHelper;
         private readonly ILog log;
-        private readonly ShopifyHelper shopifyHelper;
+        
 		private bool openingUrl;
         private ShopifyStoreEntity store;
         private string OrderSourceName => store.StoreTypeCode.ToString().ToLowerInvariant();
@@ -36,12 +36,12 @@ namespace ShipWorks.Stores.Platforms.Shopify
         /// <summary>
         /// Constructor
         /// </summary>
-        public ShopifyCreateOrderSourceViewModel(IWebHelper webHelper, IHubOrderSourceClient hubOrderSourceClient, IMessageHelper messageHelper, Func<Type, ILog> logFactory, ShopifyHelper shopifyHelper)
+        public ShopifyCreateOrderSourceViewModel(IWebHelper webHelper, IHubOrderSourceClient hubOrderSourceClient, IMessageHelper messageHelper, Func<Type, ILog> logFactory)
         {
             this.webHelper = webHelper;
             this.hubOrderSourceClient = hubOrderSourceClient;
             this.messageHelper = messageHelper;
-            this.shopifyHelper = shopifyHelper;
+            
 			log = logFactory(typeof(ShopifyCreateOrderSourceViewModel));
 
             GetOrderSourceId = new RelayCommand(async () => await GetOrderSourceIdCommand().ConfigureAwait(true));
@@ -55,7 +55,7 @@ namespace ShipWorks.Stores.Platforms.Shopify
             OpeningUrl = true;
             try
             {
-                var parameters = new Dictionary<string, string> { { "shopify_domain", shopifyHelper.GetShopUrl(ShopifyShopUrlName) } };
+                var parameters = new Dictionary<string, string> { { "shopify_domain", ShopifyHelper.GetShopUrl(ShopifyShopUrlName) } };
                 var url = await hubOrderSourceClient.GetCreateOrderSourceInitiateUrl(OrderSourceName, store.InitialDownloadDays, parameters).ConfigureAwait(true);
                 webHelper.OpenUrl(url);
             }
@@ -172,7 +172,7 @@ namespace ShipWorks.Stores.Platforms.Shopify
                     return false;
                 }
 
-                if (createOrderSourceResult.Domain != shopifyHelper.GetShopUrl(ShopifyShopUrlName))
+                if (createOrderSourceResult.Domain != ShopifyHelper.GetShopUrl(ShopifyShopUrlName))
                 {
                     log.Error($"The provided token is not valid for shop `{ShopifyShopUrlName}`. It is created for ${createOrderSourceResult.Domain}");
                     return false;

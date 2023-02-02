@@ -1,8 +1,8 @@
 ﻿namespace ShipWorks.Stores.Platforms.Shopify
 {
-	public class ShopifyHelper
+	public static class ShopifyHelper
 	{
-		public string GetShopUrl(string shopifyShopUrlName)
+		public static string GetShopUrl(string shopifyShopUrlName)
 			=> $"{shopifyShopUrlName}.myshopify.com";
 
 	}
