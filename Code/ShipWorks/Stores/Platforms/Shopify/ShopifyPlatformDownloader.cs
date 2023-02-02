@@ -24,6 +24,7 @@ using ShipWorks.Stores.Content;
 using ShipWorks.Stores.Platforms.Amazon.DTO;
 using ShipWorks.Stores.Platforms.ShipEngine;
 using ShipWorks.Stores.Platforms.ShipEngine.Apollo;
+using ShipWorks.Stores.Platforms.Shopify.Enums;
 
 namespace ShipWorks.Stores.Platforms.Shopify
 {
@@ -60,12 +61,54 @@ namespace ShipWorks.Stores.Platforms.Shopify
             }
 
             var order = (ShopifyOrderEntity) result.Value;
-            order.ShopifyOrderID = shopifyOrderId;
-            //TODO:
-            //order.FulfillmentStatusCode=
-            //order.PaymentStatusCode
-            //order.WasPaid = salesOrder.Payment.PaymentStatus == OrderSourcePaymentStatus.Paid;
-            //order.WasShipped = salesOrder.Status == OrderSourceSalesOrderStatus.Completed;
+            //unshipped
+            //partial
+            //fulfilled
+            //restocked
+            //unknown
+            order.FulfillmentStatusCode = (int) ShopifyFulfillmentStatus.Unknown;
+            
+            //authorized
+            //pending
+            //paid
+            //abandoned
+            //refunded
+            //voided
+            //partially_refunded
+            //partially_paid
+            //unknown
+            order.PaymentStatusCode = (int) ShopifyPaymentStatus.Unknown;
+
+            switch (salesOrder.Status)
+            {
+                case OrderSourceSalesOrderStatus.AwaitingPayment:
+                    order.PaymentStatusCode = (int) ShopifyPaymentStatus.Pending; break;
+                case OrderSourceSalesOrderStatus.AwaitingShipment:
+                    order.FulfillmentStatusCode = (int) ShopifyFulfillmentStatus.Unshipped; break;
+                case OrderSourceSalesOrderStatus.Cancelled:
+                    order.PaymentStatusCode = (int) ShopifyPaymentStatus.Abandoned; break;
+                case OrderSourceSalesOrderStatus.Completed:
+                    order.FulfillmentStatusCode = (int) ShopifyFulfillmentStatus.Fulfilled; break;
+                    //statuses not mapped in platform:
+                    //case OrderSourceSalesOrderStatus.OnHold:
+                    //    order.FulfillmentStatusCode = (int) ShopifyFulfillmentStatus.Fulfilled; break;
+                    //case OrderSourceSalesOrderStatus.PendingFulfillment:
+                    //    order.FulfillmentStatusCode = (int) ShopifyFulfillmentStatus.Partial; break;
+            }
+
+            switch (salesOrder.Payment.PaymentStatus)
+            {
+                case OrderSourcePaymentStatus.AwaitingPayment:
+                    order.PaymentStatusCode = (int) ShopifyPaymentStatus.Pending; break;
+                case OrderSourcePaymentStatus.PaymentCancelled:
+                    order.PaymentStatusCode = (int) ShopifyPaymentStatus.Abandoned; break;
+                case OrderSourcePaymentStatus.PaymentFailed:
+                    order.PaymentStatusCode = (int) ShopifyPaymentStatus.Pending; break;
+                case OrderSourcePaymentStatus.PaymentInProcess:
+                    order.PaymentStatusCode = (int) ShopifyPaymentStatus.Authorized; break;
+                case OrderSourcePaymentStatus.Paid:
+                    order.PaymentStatusCode = (int) ShopifyPaymentStatus.Paid; break;
+            }
             return order;
         }
 
@@ -79,25 +122,19 @@ namespace ShipWorks.Stores.Platforms.Shopify
         /// </remarks>
         protected override string GetOrderStatusString(OrderSourceApiSalesOrder salesOrder, string orderId)
         {
-            //TODO: analyse code in comment above and fix
-            switch (salesOrder.Payment.PaymentStatus)
-            {
-                case OrderSourcePaymentStatus.PaymentInProcess:
-                    return "Payment Processing";
-            }
             switch (salesOrder.Status)
             {
-                case OrderSourceSalesOrderStatus.PendingFulfillment:
-                    return "Open";
-                case OrderSourceSalesOrderStatus.AwaitingShipment:
-                    return "Paid";
-                case OrderSourceSalesOrderStatus.Cancelled:
-                    return "Cancelled";
-                case OrderSourceSalesOrderStatus.Completed:
-                    //return "Shipped"; - ambigous: in platform, both  Completed and Shipped are mapped to Completed
-                    return "Completed";
                 case OrderSourceSalesOrderStatus.AwaitingPayment:
-                    return "Unpaid";
+                case OrderSourceSalesOrderStatus.PendingFulfillment:
+                case OrderSourceSalesOrderStatus.AwaitingShipment:
+                case OrderSourceSalesOrderStatus.OnHold:
+                    return EnumHelper.GetDescription(ShopifyStatus.Open);
+                case OrderSourceSalesOrderStatus.Cancelled:
+                    return EnumHelper.GetDescription(ShopifyStatus.Canceled);
+                case OrderSourceSalesOrderStatus.Completed:
+                    return EnumHelper.GetDescription(ShopifyStatus.Closed);
+                    //not mapped:
+                    //return EnumHelper.GetDescription(ShopifyStatus.Shipped);
             }
             log.Warn($"Encountered unmapped status of {salesOrder.Status} for orderId {orderId}.");
             return base.GetOrderStatusString(salesOrder, orderId);
