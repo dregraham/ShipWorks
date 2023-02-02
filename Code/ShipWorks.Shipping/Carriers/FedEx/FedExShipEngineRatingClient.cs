@@ -45,8 +45,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         /// </summary>
         public RateGroup GetRates(ShipmentEntity shipment)
         {
-
-            // We don't have any DHL eCommerce accounts, so let the user know they need an account.
+            // We don't have any FedEx accounts, so let the user know they need an account.
             if (!FedExAccountManager.AccountsReadOnly.Any())
             {
                 throw new ShippingException("An account is required to view FedEx rates.");
