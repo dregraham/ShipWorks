@@ -28,7 +28,8 @@ namespace ShipWorks.Stores.Platforms.Shopify
         private readonly IHubOrderSourceClient hubOrderSourceClient;
         private readonly IMessageHelper messageHelper;
         private readonly ILog log;
-        private bool openingUrl;
+        
+		private bool openingUrl;
         private ShopifyStoreEntity store;
         private string OrderSourceName => store.StoreTypeCode.ToString().ToLowerInvariant();
 
@@ -40,7 +41,8 @@ namespace ShipWorks.Stores.Platforms.Shopify
             this.webHelper = webHelper;
             this.hubOrderSourceClient = hubOrderSourceClient;
             this.messageHelper = messageHelper;
-            log = logFactory(typeof(ShopifyCreateOrderSourceViewModel));
+            
+			log = logFactory(typeof(ShopifyCreateOrderSourceViewModel));
 
             GetOrderSourceId = new RelayCommand(async () => await GetOrderSourceIdCommand().ConfigureAwait(true));
         }
@@ -53,7 +55,7 @@ namespace ShipWorks.Stores.Platforms.Shopify
             OpeningUrl = true;
             try
             {
-                var parameters = new Dictionary<string, string> { { "shopify_domain", ShopifyShopUrlName + ".myshopify.com" } };
+                var parameters = new Dictionary<string, string> { { "shopify_domain", ShopifyHelper.GetShopUrl(ShopifyShopUrlName) } };
                 var url = await hubOrderSourceClient.GetCreateOrderSourceInitiateUrl(OrderSourceName, store.InitialDownloadDays, parameters).ConfigureAwait(true);
                 webHelper.OpenUrl(url);
             }
@@ -170,7 +172,7 @@ namespace ShipWorks.Stores.Platforms.Shopify
                     return false;
                 }
 
-                if (createOrderSourceResult.Domain != ShopifyShopUrlName + ".myshopify.com")
+                if (createOrderSourceResult.Domain != ShopifyHelper.GetShopUrl(ShopifyShopUrlName))
                 {
                     log.Error($"The provided token is not valid for shop `{ShopifyShopUrlName}`. It is created for ${createOrderSourceResult.Domain}");
                     return false;

@@ -352,6 +352,7 @@
     <Compile Include="Platforms\Shopify\ShopifyCreateOrderSourceViewModel.cs" />
     <Compile Include="Platforms\Shopify\ShopifyDaysBackViewModel.cs" />
     <Compile Include="Platforms\Shopify\IShopifyDaysBackViewModel.cs" />
+    <Compile Include="Platforms\Shopify\ShopifyHelper.cs" />
     <Compile Include="Platforms\ThreeDCart\Warehouse\ThreeDCartStore.cs" />
     <Compile Include="Platforms\Rakuten\DTO\RakutenErrors.cs" />
     <Compile Include="Platforms\Rakuten\DTO\RakutenOrdersResponse.cs" />
