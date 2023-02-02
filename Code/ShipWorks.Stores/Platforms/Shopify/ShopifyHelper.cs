@@ -1,6 +1,6 @@
 ﻿namespace ShipWorks.Stores.Platforms.Shopify
 {
-	public class ShopifyExtension
+	public class ShopifyHelper
 	{
 		public string GetShopUrl(string shopifyShopUrlName)
 			=> $"{shopifyShopUrlName}.myshopify.com";
