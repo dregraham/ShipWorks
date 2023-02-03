@@ -2980,7 +2980,7 @@ GO
 PRINT N'Creating [dbo].[DhlEcommerceAccount]'
 GO
 CREATE TABLE [dbo].[DhlEcommerceAccount](
-	[DhlEcommerceAccountID] [bigint] IDENTITY(1106,1000) NOT NULL,
+	[DhlEcommerceAccountID] [bigint] IDENTITY(1108, 1000) NOT NULL,
 	[RowVersion] [timestamp] NOT NULL,
 	[ShipEngineCarrierId] [nvarchar](50) NOT NULL DEFAULT(('')),
 	[ClientId] [nvarchar](60) NOT NULL DEFAULT(('')),
@@ -5645,7 +5645,7 @@ PRINT N'Creating [dbo].[AmazonSWAAccount]'
 GO
 CREATE TABLE [dbo].[AmazonSWAAccount]
 (
-[AmazonSWAAccountID] [bigint] NOT NULL IDENTITY(1106, 1000),
+[AmazonSWAAccountID] [bigint] NOT NULL IDENTITY(1109, 1000),
 [RowVersion] [timestamp] NOT NULL,
 [ShipEngineCarrierId] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [Description] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
