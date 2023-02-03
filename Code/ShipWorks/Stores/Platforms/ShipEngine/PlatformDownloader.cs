@@ -440,8 +440,6 @@ namespace ShipWorks.Stores.Platforms.ShipEngine
             // only load order items on new orders
             if (order.IsNew)
             {
-                order.OrderNumber = await GetNextOrderNumberAsync().ConfigureAwait(false);
-
                 var giftNotes = GetGiftNotes(salesOrder);
                 IEnumerable<CouponCode> couponCodes = GetCouponCodes(salesOrder);
                 foreach (var fulfillment in salesOrder.RequestedFulfillments)
