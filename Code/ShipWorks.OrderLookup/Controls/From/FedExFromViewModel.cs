@@ -32,7 +32,7 @@ namespace ShipWorks.OrderLookup.Controls.From
         {
             // Don't give the user the option to have FedEx perform the address look up; the thought it that the shipper will know
             // what type of address they are shipping from, and it saves delays associated with a service call
-            ResidentialDeterminations = EnumHelper.GetEnumList<ResidentialDeterminationType>(t => t != ResidentialDeterminationType.FedExAddressLookup && t != ResidentialDeterminationType.FromAddressValidation)
+            ResidentialDeterminations = EnumHelper.GetEnumList<ResidentialDeterminationType>()
                 .ToDictionary(x => (int) x.Value, x => x.Description);
         }
 
