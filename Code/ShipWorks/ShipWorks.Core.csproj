@@ -1351,14 +1351,6 @@
     <Compile Include="Stores\Platforms\ShipEngine\IPlatformOrderWebClient.cs" />
     <Compile Include="Stores\Platforms\ShipEngine\PlatformOrderWebClient.cs" />
     <Compile Include="Stores\Platforms\ShipEngine\PlatformDownloader.cs" />
-    <Compile Include="Stores\Platforms\Shopify\IShopifyAccountSettingsControlFactory.cs" />
-    <Compile Include="Stores\Platforms\Shopify\ShopifyPlatformDownloader.cs" />
-    <Compile Include="Stores\Platforms\Shopify\WizardPages\ShopifyAssociateAccountPage.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Stores\Platforms\Shopify\WizardPages\ShopifyAssociateAccountPage.Designer.cs">
-      <DependentUpon>ShopifyAssociateAccountPage.cs</DependentUpon>
-    </Compile>
     <Compile Include="Stores\Services\IAmazonMwsToSpConverter.cs" />
     <Compile Include="Stores\Services\IAmazonOrderSourceIdFetcher.cs" />
     <Compile Include="UI\Controls\ValueCheckBox.cs">
@@ -4350,9 +4342,11 @@
     </Compile>
     <Compile Include="Stores\Platforms\Shopify\ShopifyWebClientRequestThrottle.cs" />
     <Compile Include="Stores\Platforms\Shopify\ShopifyWebClientThrottleWaitCancelException.cs" />
-    <Compile Include="Stores\Platforms\Shopify\WizardPages\ShopifyAssociateAccountPageOld.cs" />
-    <Compile Include="Stores\Platforms\Shopify\WizardPages\ShopifyAssociateAccountPageOld.Designer.cs">
-      <DependentUpon>ShopifyAssociateAccountPageOld.cs</DependentUpon>
+    <Compile Include="Stores\Platforms\Shopify\WizardPages\ShopifyAssociateAccountPage.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Stores\Platforms\Shopify\WizardPages\ShopifyAssociateAccountPage.Designer.cs">
+      <DependentUpon>ShopifyAssociateAccountPage.cs</DependentUpon>
     </Compile>
     <Compile Include="Stores\Platforms\SolidCommerce\SolidCommerceStoreType.cs" />
     <Compile Include="Stores\Platforms\ThreeDCart\AdvancedApi\IApiQueryProvider.cs" />
@@ -8797,9 +8791,6 @@
     <EmbeddedResource Include="Stores\Platforms\Magento\MagentoDownloadSettingsControl.resx">
       <DependentUpon>MagentoDownloadSettingsControl.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Stores\Platforms\Shopify\WizardPages\ShopifyAssociateAccountPage.resx">
-      <DependentUpon>ShopifyAssociateAccountPage.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="Stores\Platforms\Yahoo\EmailIntegration\WizardPages\YahooEmailAccountPage.resx">
       <DependentUpon>YahooEmailAccountPage.cs</DependentUpon>
     </EmbeddedResource>
@@ -8941,8 +8932,8 @@
     <EmbeddedResource Include="Stores\Platforms\Shopify\ShopifyStoreSettingsControl.resx">
       <DependentUpon>ShopifyStoreSettingsControl.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Stores\Platforms\Shopify\WizardPages\ShopifyAssociateAccountPageOld.resx">
-      <DependentUpon>ShopifyAssociateAccountPageOld.cs</DependentUpon>
+    <EmbeddedResource Include="Stores\Platforms\Shopify\WizardPages\ShopifyAssociateAccountPage.resx">
+      <DependentUpon>ShopifyAssociateAccountPage.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\StoreIcons.resx">
       <Generator>ResXFileCodeGenerator</Generator>
