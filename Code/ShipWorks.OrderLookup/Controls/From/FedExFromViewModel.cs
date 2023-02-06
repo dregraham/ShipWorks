@@ -30,9 +30,9 @@ namespace ShipWorks.OrderLookup.Controls.From
             ISchedulerProvider schedulerProvider,
             OrderLookupFieldLayoutProvider fieldLayoutProvider) : base(shipmentModel, shipmentTypeManager, carrierAccountRetrieverFactory, addressViewModel, schedulerProvider, fieldLayoutProvider)
         {
-            // Don't give the user the option to have FedEx perform the address look up; the thought it that the shipper will know
+            // Don't give the user the option to perform the address look up; the thought it that the shipper will know
             // what type of address they are shipping from, and it saves delays associated with a service call
-            ResidentialDeterminations = EnumHelper.GetEnumList<ResidentialDeterminationType>()
+            ResidentialDeterminations = EnumHelper.GetEnumList<ResidentialDeterminationType>(t => t != ResidentialDeterminationType.FromAddressValidation)
                 .ToDictionary(x => (int) x.Value, x => x.Description);
         }
 

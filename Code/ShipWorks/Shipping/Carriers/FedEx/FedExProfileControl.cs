@@ -69,6 +69,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             EnumHelper.BindComboBox<ResidentialDeterminationType>(residentialDetermination);
 
             EnumHelper.BindComboBox<ResidentialDeterminationType>(senderResidentialCombo);
+            // Don't give the user the option to perform the address look up; the thought it that the shipper will know
+            // what type of address they are shipping from, and it saves delays associated with a service call
+            EnumHelper.BindComboBox<ResidentialDeterminationType>(senderResidentialCombo, t => t != ResidentialDeterminationType.FromAddressValidation);
 
             EnumHelper.BindComboBox<FedExSmartPostIndicia>(smartIndicia);
             EnumHelper.BindComboBox<FedExSmartPostEndorsement>(smartEndorsement);
