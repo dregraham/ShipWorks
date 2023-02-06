@@ -346,10 +346,13 @@
     <Compile Include="Platforms\Overstock\Warehouse\OverstockWarehouseOrder.cs" />
     <Compile Include="Platforms\Overstock\Warehouse\OverstockWarehouseOrderFactory.cs" />
     <Compile Include="Platforms\Shopify\CreateOrderSourceResult.cs" />
+    <Compile Include="Platforms\Shopify\ShopifyAccountSettingsViewModel.cs" />
+    <Compile Include="Platforms\Shopify\IShopifyAccountSettingsViewModel.cs" />
     <Compile Include="Platforms\Shopify\IShopifyCreateOrderSourceViewModel.cs" />
     <Compile Include="Platforms\Shopify\ShopifyCreateOrderSourceViewModel.cs" />
     <Compile Include="Platforms\Shopify\ShopifyDaysBackViewModel.cs" />
     <Compile Include="Platforms\Shopify\IShopifyDaysBackViewModel.cs" />
+    <Compile Include="Platforms\Shopify\ShopifyHelper.cs" />
     <Compile Include="Platforms\ThreeDCart\Warehouse\ThreeDCartStore.cs" />
     <Compile Include="Platforms\Rakuten\DTO\RakutenErrors.cs" />
     <Compile Include="Platforms\Rakuten\DTO\RakutenOrdersResponse.cs" />

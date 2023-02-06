@@ -97,6 +97,10 @@ namespace ShipWorks.Stores.Platforms.Amazon
 
             var order = (AmazonOrderEntity) result.Value;
             order.AmazonOrderID = amazonOrderId;
+            if (order.IsNew)
+            {
+                order.OrderNumber = await GetNextOrderNumberAsync().ConfigureAwait(false);
+            }
 
             // Platform may provide this in the future, but this isn't MVP
             order.EarliestExpectedDeliveryDate = null;

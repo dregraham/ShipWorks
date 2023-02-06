@@ -21,7 +21,7 @@ namespace ShipWorks.Stores.Platforms.Etsy
     [Component]
     public class EtsyCreateOrderSourceViewModel : ViewModelBase, IEtsyCreateOrderSourceViewModel
     {
-        private const string orderSourceName = "etsy";
+        private const string orderSourceName = "etsy"; 
 
         private readonly IWebHelper webHelper;
         private readonly IHubOrderSourceClient hubOrderSourceClient;

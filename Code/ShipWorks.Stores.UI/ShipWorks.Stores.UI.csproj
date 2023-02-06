@@ -599,6 +599,19 @@
       <DependentUpon>RakutenStoreSetupControlHost.cs</DependentUpon>
     </Compile>
     <Compile Include="Platforms\Rakuten\RakutenStoreSetupControlViewModel.cs" />
+    <Compile Include="Platforms\Shopify\ShopifyAccountSettingsControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Platforms\Shopify\ShopifyAccountSettingsControl.Designer.cs">
+      <DependentUpon>ShopifyAccountSettingsControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Platforms\Shopify\ShopifyAccountSettingsMigrationControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Platforms\Shopify\ShopifyAccountSettingsMigrationControl.Designer.cs">
+      <DependentUpon>ShopifyAccountSettingsMigrationControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Platforms\Shopify\ShopifyAccountSettingsControlFactory.cs" />
     <Compile Include="Platforms\Shopify\ShopifyDaysBackWizardPage.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -876,6 +889,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Platforms\Rakuten\RakutenStoreSetupControlHost.resx">
       <DependentUpon>RakutenStoreSetupControlHost.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Platforms\Shopify\ShopifyAccountSettingsControl.resx">
+      <DependentUpon>ShopifyAccountSettingsControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Platforms\Shopify\ShopifyAccountSettingsMigrationControl.resx">
+      <DependentUpon>ShopifyAccountSettingsMigrationControl.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Platforms\Shopify\ShopifyCreateOrderSourceWizardPage.resx">
       <DependentUpon>ShopifyCreateOrderSourceWizardPage.cs</DependentUpon>
