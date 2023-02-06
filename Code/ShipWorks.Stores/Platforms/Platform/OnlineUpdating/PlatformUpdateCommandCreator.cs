@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Autofac.Features.Indexed;
+using Interapptive.Shared.Collections;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.UI;
 using Interapptive.Shared.Utility;
@@ -65,9 +66,12 @@ namespace ShipWorks.Stores.Platforms.Platform.OnlineUpdating
         /// </summary>
         public async Task OnUploadDetails(StoreEntity store, IMenuCommandExecutionContext context)
         {
-            var results = await ShipmentUploadCallback(store, context.SelectedKeys).ConfigureAwait(true);
-            var exceptions = results.Failure ? new[] { results.Exception } : Enumerable.Empty<Exception>();
+            var results = await context.SelectedKeys
+                .SelectWithProgress(messageHelper, "Upload Shipment Tracking", "ShipWorks is uploading shipment information.", "Updating order {0} of {1}...",
+                    orderID => ShipmentUploadCallback(store, new long[] {orderID}))
+                .ConfigureAwait(false);
 
+            var exceptions = results.Where(x => x.Failure).Select(x => x.Exception).Where(x => x != null);
             context.Complete(exceptions, MenuCommandResult.Error);
         }
 
