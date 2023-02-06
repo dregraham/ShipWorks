@@ -518,7 +518,6 @@
     <Compile Include="Platforms\Ebay\Warehouse\EbayWarehouseItem.cs" />
     <Compile Include="Platforms\Ebay\Warehouse\EbayWarehouseOrder.cs" />
     <Compile Include="Platforms\Ebay\Warehouse\EbayWarehouseOrderFactory.cs" />
-    <Compile Include="Platforms\Etsy\OnlineUpdating\EtsyOnlineUpdateCommandCreator.cs" />
     <Compile Include="Platforms\Etsy\OnlineUpdating\EtsyOnlineUpdater.cs" />
     <Compile Include="Platforms\Etsy\OnlineUpdating\EtsyUserInteraction.cs" />
     <Compile Include="Platforms\Etsy\OnlineUpdating\IEtsyUserInteraction.cs" />
