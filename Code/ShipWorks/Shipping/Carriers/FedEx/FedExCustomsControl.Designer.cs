@@ -138,11 +138,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             // 
             // sectionGeneral.ContentPanel
             // 
-            this.sectionGeneral.ContentPanel.Controls.Add(this.electronicExportInfo);
             this.sectionGeneral.ContentPanel.Controls.Add(this.recipientTaxID);
             this.sectionGeneral.ContentPanel.Controls.Add(this.customsRecipientTINType);
             this.sectionGeneral.ContentPanel.Controls.Add(this.filingOption);
-            this.sectionGeneral.ContentPanel.Controls.Add(this.electronicExportInfoLabel);
             this.sectionGeneral.ContentPanel.Controls.Add(this.labelRecipientTaxID);
             this.sectionGeneral.ContentPanel.Controls.Add(this.labelCustomsRecipientTINType);
             this.sectionGeneral.ContentPanel.Controls.Add(this.filingOptionLabel);
@@ -155,94 +153,8 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             // 
             // groupSelectedContent
             // 
-            this.groupSelectedContent.Controls.Add(this.unitPrice);
-            this.groupSelectedContent.Controls.Add(this.labelUnitPrice);
-            this.groupSelectedContent.Controls.Add(this.numberOfPieces);
-            this.groupSelectedContent.Controls.Add(this.labelNumberOfPieces);
-            this.groupSelectedContent.Size = new System.Drawing.Size(551, 244);
-            this.groupSelectedContent.Controls.SetChildIndex(this.labelNumberOfPieces, 0);
-            this.groupSelectedContent.Controls.SetChildIndex(this.numberOfPieces, 0);
-            this.groupSelectedContent.Controls.SetChildIndex(this.labelUnitPrice, 0);
-            this.groupSelectedContent.Controls.SetChildIndex(this.unitPrice, 0);
-            // 
-            // labelBrokerAccountHeading
-            // 
-            this.labelBrokerAccountHeading.AutoSize = true;
-            this.labelBrokerAccountHeading.BackColor = System.Drawing.Color.Transparent;
-            this.labelBrokerAccountHeading.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte) (0)));
-            this.labelBrokerAccountHeading.Location = new System.Drawing.Point(27, 31);
-            this.labelBrokerAccountHeading.Name = "labelBrokerAccountHeading";
-            this.labelBrokerAccountHeading.Size = new System.Drawing.Size(53, 13);
-            this.labelBrokerAccountHeading.TabIndex = 0;
-            this.labelBrokerAccountHeading.Text = "Account";
-            // 
-            // brokerAccount
-            // 
-            this.brokerAccount.Location = new System.Drawing.Point(102, 49);
-            this.fieldLengthProvider.SetMaxLengthSource(this.brokerAccount, ShipWorks.Data.Utility.EntityFieldLengthSource.FedExAccountNumber);
-            this.brokerAccount.Name = "brokerAccount";
-            this.brokerAccount.Size = new System.Drawing.Size(250, 21);
-            this.brokerAccount.TabIndex = 2;
-            // 
-            // labelBrokerAccount
-            // 
-            this.labelBrokerAccount.AutoSize = true;
-            this.labelBrokerAccount.BackColor = System.Drawing.Color.Transparent;
-            this.labelBrokerAccount.Location = new System.Drawing.Point(35, 52);
-            this.labelBrokerAccount.Name = "labelBrokerAccount";
-            this.labelBrokerAccount.Size = new System.Drawing.Size(61, 13);
-            this.labelBrokerAccount.TabIndex = 1;
-            this.labelBrokerAccount.Text = "Account #:";
-            // 
-            // brokerEnabled
-            // 
-            this.brokerEnabled.AutoSize = true;
-            this.brokerEnabled.BackColor = System.Drawing.Color.White;
-            this.brokerEnabled.Location = new System.Drawing.Point(11, 8);
-            this.brokerEnabled.Name = "brokerEnabled";
-            this.brokerEnabled.Size = new System.Drawing.Size(142, 17);
-            this.brokerEnabled.TabIndex = 0;
-            this.brokerEnabled.Text = "Use the following broker";
-            this.brokerEnabled.UseVisualStyleBackColor = false;
-            // 
-            // brokerControl
-            // 
-            this.brokerControl.AvailableFields = ((ShipWorks.Data.Controls.PersonFields) (((((((((ShipWorks.Data.Controls.PersonFields.Name | ShipWorks.Data.Controls.PersonFields.Company)
-            | ShipWorks.Data.Controls.PersonFields.Street)
-            | ShipWorks.Data.Controls.PersonFields.City)
-            | ShipWorks.Data.Controls.PersonFields.State)
-            | ShipWorks.Data.Controls.PersonFields.Postal)
-            | ShipWorks.Data.Controls.PersonFields.Country)
-            | ShipWorks.Data.Controls.PersonFields.Email)
-            | ShipWorks.Data.Controls.PersonFields.Phone)));
-            this.brokerControl.BackColor = System.Drawing.Color.White;
-            this.brokerControl.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (0)));
-            this.brokerControl.Location = new System.Drawing.Point(26, 69);
-            this.brokerControl.Name = "brokerControl";
-            this.brokerControl.Size = new System.Drawing.Size(337, 340);
-            this.brokerControl.TabIndex = 3;
-            // 
-            // sectionBroker
-            // 
-            this.sectionBroker.Anchor = ((System.Windows.Forms.AnchorStyles) (((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.sectionBroker.Collapsed = true;
-            // 
-            // sectionBroker.ContentPanel
-            // 
-            this.sectionBroker.ContentPanel.Controls.Add(this.brokerAccount);
-            this.sectionBroker.ContentPanel.Controls.Add(this.brokerEnabled);
-            this.sectionBroker.ContentPanel.Controls.Add(this.labelBrokerAccountHeading);
-            this.sectionBroker.ContentPanel.Controls.Add(this.brokerControl);
-            this.sectionBroker.ContentPanel.Controls.Add(this.labelBrokerAccount);
-            this.sectionBroker.ExpandedHeight = 438;
-            this.sectionBroker.ExtraText = "";
-            this.sectionBroker.Location = new System.Drawing.Point(6, 851);
-            this.sectionBroker.Name = "sectionBroker";
-            this.sectionBroker.SectionName = "International Broker";
-            this.sectionBroker.SettingsKey = "{4da9daec-f847-4177-b9fb-0f9bb5f1cdcc}";
-            this.sectionBroker.Size = new System.Drawing.Size(572, 24);
-            this.sectionBroker.TabIndex = 4;
+            this.groupSelectedContent.Size = new System.Drawing.Size(551, 200);
+            
             // 
             // admissibilityPackaging
             // 
@@ -626,6 +538,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             this.filingOption.PromptText = "(Multiple Values)";
             this.filingOption.Size = new System.Drawing.Size(145, 21);
             this.filingOption.TabIndex = 11;
+            #region Removed for FedEx Platform
             // 
             // electronicExportInfoLabel
             // 
@@ -637,6 +550,125 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             this.electronicExportInfoLabel.TabIndex = 12;
             this.electronicExportInfoLabel.Text = "AES/EEI Exemption:";
             this.electronicExportInfoLabel.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            // 
+            // electronicExportInfo
+            // 
+            this.electronicExportInfo.Location = new System.Drawing.Point(128, 140);
+            this.fieldLengthProvider.SetMaxLengthSource(this.electronicExportInfo, ShipWorks.Data.Utility.EntityFieldLengthSource.FedExCustomsAESEEI);
+            this.electronicExportInfo.Name = "electronicExportInfo";
+            this.electronicExportInfo.Size = new System.Drawing.Size(145, 21);
+            this.electronicExportInfo.TabIndex = 13;
+            // 
+            // labelNumberOfPieces
+            // 
+            this.labelNumberOfPieces.AutoSize = true;
+            this.labelNumberOfPieces.Location = new System.Drawing.Point(5, 190);
+            this.labelNumberOfPieces.Name = "labelNumberOfPieces";
+            this.labelNumberOfPieces.Size = new System.Drawing.Size(94, 13);
+            this.labelNumberOfPieces.TabIndex = 12;
+            this.labelNumberOfPieces.Text = "Number of Pieces:";
+            // 
+            // numberOfPieces
+            // 
+            this.numberOfPieces.Location = new System.Drawing.Point(105, 187);
+            this.numberOfPieces.Name = "numberOfPieces";
+            this.numberOfPieces.Size = new System.Drawing.Size(95, 21);
+            this.numberOfPieces.TabIndex = 13;
+            // 
+            // unitPrice
+            // 
+            this.unitPrice.Location = new System.Drawing.Point(105, 214);
+            this.unitPrice.Name = "unitPrice";
+            this.unitPrice.Size = new System.Drawing.Size(95, 21);
+            this.unitPrice.TabIndex = 15;
+            // 
+            // labelUnitPrice
+            // 
+            this.labelUnitPrice.AutoSize = true;
+            this.labelUnitPrice.Location = new System.Drawing.Point(43, 217);
+            this.labelUnitPrice.Name = "labelUnitPrice";
+            this.labelUnitPrice.Size = new System.Drawing.Size(56, 13);
+            this.labelUnitPrice.TabIndex = 14;
+            this.labelUnitPrice.Text = "Unit Price:";
+            // 
+            // labelBrokerAccountHeading
+            // 
+            this.labelBrokerAccountHeading.AutoSize = true;
+            this.labelBrokerAccountHeading.BackColor = System.Drawing.Color.Transparent;
+            this.labelBrokerAccountHeading.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte) (0)));
+            this.labelBrokerAccountHeading.Location = new System.Drawing.Point(27, 31);
+            this.labelBrokerAccountHeading.Name = "labelBrokerAccountHeading";
+            this.labelBrokerAccountHeading.Size = new System.Drawing.Size(53, 13);
+            this.labelBrokerAccountHeading.TabIndex = 0;
+            this.labelBrokerAccountHeading.Text = "Account";
+            // 
+            // brokerAccount
+            // 
+            this.brokerAccount.Location = new System.Drawing.Point(102, 49);
+            this.fieldLengthProvider.SetMaxLengthSource(this.brokerAccount, ShipWorks.Data.Utility.EntityFieldLengthSource.FedExAccountNumber);
+            this.brokerAccount.Name = "brokerAccount";
+            this.brokerAccount.Size = new System.Drawing.Size(250, 21);
+            this.brokerAccount.TabIndex = 2;
+            // 
+            // labelBrokerAccount
+            // 
+            this.labelBrokerAccount.AutoSize = true;
+            this.labelBrokerAccount.BackColor = System.Drawing.Color.Transparent;
+            this.labelBrokerAccount.Location = new System.Drawing.Point(35, 52);
+            this.labelBrokerAccount.Name = "labelBrokerAccount";
+            this.labelBrokerAccount.Size = new System.Drawing.Size(61, 13);
+            this.labelBrokerAccount.TabIndex = 1;
+            this.labelBrokerAccount.Text = "Account #:";
+            // 
+            // brokerEnabled
+            // 
+            this.brokerEnabled.AutoSize = true;
+            this.brokerEnabled.BackColor = System.Drawing.Color.White;
+            this.brokerEnabled.Location = new System.Drawing.Point(11, 8);
+            this.brokerEnabled.Name = "brokerEnabled";
+            this.brokerEnabled.Size = new System.Drawing.Size(142, 17);
+            this.brokerEnabled.TabIndex = 0;
+            this.brokerEnabled.Text = "Use the following broker";
+            this.brokerEnabled.UseVisualStyleBackColor = false;
+            // 
+            // brokerControl
+            // 
+            this.brokerControl.AvailableFields = ((ShipWorks.Data.Controls.PersonFields) (((((((((ShipWorks.Data.Controls.PersonFields.Name | ShipWorks.Data.Controls.PersonFields.Company)
+            | ShipWorks.Data.Controls.PersonFields.Street)
+            | ShipWorks.Data.Controls.PersonFields.City)
+            | ShipWorks.Data.Controls.PersonFields.State)
+            | ShipWorks.Data.Controls.PersonFields.Postal)
+            | ShipWorks.Data.Controls.PersonFields.Country)
+            | ShipWorks.Data.Controls.PersonFields.Email)
+            | ShipWorks.Data.Controls.PersonFields.Phone)));
+            this.brokerControl.BackColor = System.Drawing.Color.White;
+            this.brokerControl.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (0)));
+            this.brokerControl.Location = new System.Drawing.Point(26, 69);
+            this.brokerControl.Name = "brokerControl";
+            this.brokerControl.Size = new System.Drawing.Size(337, 340);
+            this.brokerControl.TabIndex = 3;
+            // 
+            // sectionBroker
+            // 
+            this.sectionBroker.Anchor = ((System.Windows.Forms.AnchorStyles) (((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.sectionBroker.Collapsed = true;
+            // 
+            // sectionBroker.ContentPanel
+            // 
+            this.sectionBroker.ContentPanel.Controls.Add(this.brokerAccount);
+            this.sectionBroker.ContentPanel.Controls.Add(this.brokerEnabled);
+            this.sectionBroker.ContentPanel.Controls.Add(this.labelBrokerAccountHeading);
+            this.sectionBroker.ContentPanel.Controls.Add(this.brokerControl);
+            this.sectionBroker.ContentPanel.Controls.Add(this.labelBrokerAccount);
+            this.sectionBroker.ExpandedHeight = 438;
+            this.sectionBroker.ExtraText = "";
+            this.sectionBroker.Location = new System.Drawing.Point(6, 851);
+            this.sectionBroker.Name = "sectionBroker";
+            this.sectionBroker.SectionName = "International Broker";
+            this.sectionBroker.SettingsKey = "{4da9daec-f847-4177-b9fb-0f9bb5f1cdcc}";
+            this.sectionBroker.Size = new System.Drawing.Size(572, 24);
+            this.sectionBroker.TabIndex = 4;
             // 
             // sectionNafta
             // 
@@ -759,59 +791,16 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             this.naftaNetCostMethod.PromptText = "(Multiple Values)";
             this.naftaNetCostMethod.Size = new System.Drawing.Size(243, 21);
             this.naftaNetCostMethod.TabIndex = 8;
-            // 
-            // electronicExportInfo
-            // 
-            this.electronicExportInfo.Location = new System.Drawing.Point(128, 140);
-            this.fieldLengthProvider.SetMaxLengthSource(this.electronicExportInfo, ShipWorks.Data.Utility.EntityFieldLengthSource.FedExCustomsAESEEI);
-            this.electronicExportInfo.Name = "electronicExportInfo";
-            this.electronicExportInfo.Size = new System.Drawing.Size(145, 21);
-            this.electronicExportInfo.TabIndex = 13;
-            // 
-            // labelNumberOfPieces
-            // 
-            this.labelNumberOfPieces.AutoSize = true;
-            this.labelNumberOfPieces.Location = new System.Drawing.Point(5, 190);
-            this.labelNumberOfPieces.Name = "labelNumberOfPieces";
-            this.labelNumberOfPieces.Size = new System.Drawing.Size(94, 13);
-            this.labelNumberOfPieces.TabIndex = 12;
-            this.labelNumberOfPieces.Text = "Number of Pieces:";
-            // 
-            // numberOfPieces
-            // 
-            this.numberOfPieces.Location = new System.Drawing.Point(105, 187);
-            this.numberOfPieces.Name = "numberOfPieces";
-            this.numberOfPieces.Size = new System.Drawing.Size(95, 21);
-            this.numberOfPieces.TabIndex = 13;
-            // 
-            // unitPrice
-            // 
-            this.unitPrice.Location = new System.Drawing.Point(105, 214);
-            this.unitPrice.Name = "unitPrice";
-            this.unitPrice.Size = new System.Drawing.Size(95, 21);
-            this.unitPrice.TabIndex = 15;
-            // 
-            // labelUnitPrice
-            // 
-            this.labelUnitPrice.AutoSize = true;
-            this.labelUnitPrice.Location = new System.Drawing.Point(43, 217);
-            this.labelUnitPrice.Name = "labelUnitPrice";
-            this.labelUnitPrice.Size = new System.Drawing.Size(56, 13);
-            this.labelUnitPrice.TabIndex = 14;
-            this.labelUnitPrice.Text = "Unit Price:";
+            #endregion
             // 
             // FedExCustomsControl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.Controls.Add(this.sectionNafta);
             this.Controls.Add(this.sectionCommercialInvoice);
-            this.Controls.Add(this.sectionBroker);
             this.Name = "FedExCustomsControl";
             this.Size = new System.Drawing.Size(581, 925);
-            this.Controls.SetChildIndex(this.sectionBroker, 0);
             this.Controls.SetChildIndex(this.sectionCommercialInvoice, 0);
-            this.Controls.SetChildIndex(this.sectionNafta, 0);
             this.Controls.SetChildIndex(this.sectionContents, 0);
             this.Controls.SetChildIndex(this.sectionGeneral, 0);
             ((System.ComponentModel.ISupportInitialize) (this.sectionContents.ContentPanel)).EndInit();

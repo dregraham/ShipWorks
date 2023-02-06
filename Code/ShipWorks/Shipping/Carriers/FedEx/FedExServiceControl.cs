@@ -7,6 +7,7 @@ using System.Windows.Forms;
 using Autofac;
 using Interapptive.Shared;
 using Interapptive.Shared.Business;
+using Interapptive.Shared.Business.Geography;
 using Interapptive.Shared.UI;
 using Interapptive.Shared.Utility;
 using ShipWorks.ApplicationCore;
@@ -21,6 +22,7 @@ using ShipWorks.Shipping.Editing;
 using ShipWorks.Shipping.Editing.Rating;
 using ShipWorks.Shipping.Settings.Origin;
 using ShipWorks.UI.Controls;
+using static ShipWorks.Data.Controls.PersonControl;
 
 namespace ShipWorks.Shipping.Carriers.FedEx
 {
@@ -91,6 +93,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
 
 
             cutoffDateDisplay.ShipmentType = ShipmentTypeCode;
+            EnsurePayorCountryInitialized();
         }
 
         /// <summary>
@@ -289,6 +292,8 @@ namespace ShipWorks.Shipping.Carriers.FedEx
                     payorTransport.ApplyMultiValue((FedExPayorType) shipment.FedEx.PayorTransportType);
                     transportAccount.ApplyMultiText(shipment.FedEx.PayorTransportAccount);
                     payorTransportName.ApplyMultiText(shipment.FedEx.PayorTransportName);
+                    payorCountry.ApplyMultiValue(Geography.GetCountryName(shipment.FedEx.PayorCountryCode ?? string.Empty));
+                    payorPostalCode.ApplyMultiText(shipment.FedEx.PayorPostalCode ?? string.Empty);
 
                     payorDuties.ApplyMultiValue((FedExPayorType) shipment.FedEx.PayorDutiesType);
                     dutiesAccount.ApplyMultiText(shipment.FedEx.PayorDutiesAccount);
@@ -471,6 +476,25 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         }
 
         /// <summary>
+        /// Ensure the control gets initialized one time
+        /// </summary>
+        private void EnsurePayorCountryInitialized()
+        {
+            if (payorCountry.DataSource != null)
+            {
+                return;
+            }
+
+            // Country drop down
+            payorCountry.DisplayMember = "Name";
+            payorCountry.ValueMember = "Name";
+            payorCountry.DataSource = new CountryBindingSource();
+
+            // Default to use
+            payorCountry.SelectedValue = Geography.GetCountryName("US");
+        }
+
+        /// <summary>
         /// Save the values in the control to the specified entities
         /// </summary>
         [NDependIgnoreLongMethod]
@@ -500,7 +524,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
 
                 fedexAccount.ReadMultiValue(v => shipment.FedEx.FedExAccountID = (long) v);
                 service.ReadMultiValue(v => { if (v != null) shipment.FedEx.Service = (int) v; });
-                dropoffType.ReadMultiValue(v => shipment.FedEx.DropoffType = (int) v);
+                dropoffType.ReadMultiValue(v => shipment.FedEx.DropoffType = v != null ? (int) v : 0);
                 returnsClearance.ReadMultiCheck(v => shipment.FedEx.ReturnsClearance = v);
                 thirdPartyConsignee.ReadMultiCheck(v => shipment.FedEx.ThirdPartyConsignee = v);
                 shipDate.ReadMultiDate(d => shipment.ShipDate = d.Date.ToUniversalTime());
@@ -517,6 +541,8 @@ namespace ShipWorks.Shipping.Carriers.FedEx
                 payorTransport.ReadMultiValue(v => shipment.FedEx.PayorTransportType = (int) v);
                 transportAccount.ReadMultiText(t => shipment.FedEx.PayorTransportAccount = t);
                 payorTransportName.ReadMultiText(t => shipment.FedEx.PayorTransportName = t);
+                payorCountry.ReadMultiValue(t => shipment.FedEx.PayorCountryCode = Geography.GetCountryCode((string) t));
+                payorPostalCode.ReadMultiText(t => shipment.FedEx.PayorPostalCode = t);
 
                 payorDuties.ReadMultiValue(v => shipment.FedEx.PayorDutiesType = (int) v);
                 dutiesAccount.ReadMultiText(t => shipment.FedEx.PayorDutiesAccount = t);

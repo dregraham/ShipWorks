@@ -165,6 +165,10 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             this.sectionFimsOptions = new ShipWorks.UI.Controls.CollapsibleGroupControl();
             this.fimsOptionsControl = new ShipWorks.Shipping.Carriers.FedEx.FimsOptionsControl();
             this.labelReturnsClearance = new System.Windows.Forms.Label();
+            this.payorCountry = new ShipWorks.UI.Controls.MultiValueComboBox();
+            this.labelPayorCountry = new System.Windows.Forms.Label();
+            this.payorPostalCode = new ShipWorks.UI.Controls.MultiValueTextBox();
+            this.labelPayorPostalCode = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.sectionRecipient)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.sectionRecipient.ContentPanel)).BeginInit();
             this.sectionRecipient.ContentPanel.SuspendLayout();
@@ -275,32 +279,6 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             this.sectionLabelOptions.Location = new System.Drawing.Point(3, 822);
             this.sectionLabelOptions.Size = new System.Drawing.Size(487, 24);
             this.sectionLabelOptions.TabIndex = 14;
-            //
-            // sectionHoldAtLocation
-            // 
-            this.sectionHoldAtLocation.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.sectionHoldAtLocation.Collapsed = true;
-            // 
-            // sectionHoldAtLocation.ContentPanel
-            // 
-            this.sectionHoldAtLocation.ContentPanel.Controls.Add(this.fedExHoldAtLocationControl);
-            this.sectionHoldAtLocation.ExpandedHeight = 176;
-            this.sectionHoldAtLocation.ExtraText = "";
-            this.sectionHoldAtLocation.Location = new System.Drawing.Point(3, 706);
-            this.sectionHoldAtLocation.Name = "sectionHoldAtLocation";
-            this.sectionHoldAtLocation.SectionName = "Hold at FedEx Location";
-            this.sectionHoldAtLocation.SettingsKey = "{9b529fd1-0bfb-4d24-8aa8-a856c930e196}";
-            this.sectionHoldAtLocation.Size = new System.Drawing.Size(487, 24);
-            this.sectionHoldAtLocation.TabIndex = 10;
-            // 
-            // fedExHoldAtLocationControl
-            // 
-            this.fedExHoldAtLocationControl.BackColor = System.Drawing.Color.White;
-            this.fedExHoldAtLocationControl.Location = new System.Drawing.Point(1, 4);
-            this.fedExHoldAtLocationControl.Name = "fedExHoldAtLocationControl";
-            this.fedExHoldAtLocationControl.Size = new System.Drawing.Size(392, 150);
-            this.fedExHoldAtLocationControl.TabIndex = 0;
             // 
             // sectionBilling
             // 
@@ -426,10 +404,14 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             this.panelPayorTransport.BackColor = System.Drawing.Color.White;
             this.panelPayorTransport.Controls.Add(this.payorTransport);
             this.panelPayorTransport.Controls.Add(this.labelPayorTransport);
+            this.panelPayorTransport.Controls.Add(this.payorCountry);
+            this.panelPayorTransport.Controls.Add(this.labelPayorCountry);
+            this.panelPayorTransport.Controls.Add(this.payorPostalCode);
+            this.panelPayorTransport.Controls.Add(this.labelPayorPostalCode);
             this.panelPayorTransport.Dock = System.Windows.Forms.DockStyle.Top;
             this.panelPayorTransport.Location = new System.Drawing.Point(0, 0);
             this.panelPayorTransport.Name = "panelPayorTransport";
-            this.panelPayorTransport.Size = new System.Drawing.Size(483, 32);
+            this.panelPayorTransport.Size = new System.Drawing.Size(483, 124);
             this.panelPayorTransport.TabIndex = 4;
             // 
             // payorTransport
@@ -452,6 +434,41 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             this.labelPayorTransport.Size = new System.Drawing.Size(108, 13);
             this.labelPayorTransport.TabIndex = 0;
             this.labelPayorTransport.Text = "Bill transportation to:";
+            // 
+            // payorCountry
+            // 
+            this.payorCountry.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.payorCountry.FormattingEnabled = true;
+            this.payorCountry.Location = new System.Drawing.Point(123, 33);
+            this.payorCountry.MaxDropDownItems = 20;
+            this.payorCountry.Name = "country";
+            this.payorCountry.PromptText = "(Multiple Values)";
+            this.payorCountry.Size = new System.Drawing.Size(173, 21);
+            this.payorCountry.TabIndex = 1;
+            // 
+            // labelPayorCountry
+            // 
+            this.labelPayorCountry.AutoSize = true;
+            this.labelPayorCountry.Location = new System.Drawing.Point(36, 36);
+            this.labelPayorCountry.Name = "labelPayorCountry";
+            this.labelPayorCountry.Size = new System.Drawing.Size(37, 13);
+            this.labelPayorCountry.Text = "Payor Country:";
+            // 
+            // postalCode
+            // 
+            this.payorPostalCode.Location = new System.Drawing.Point(123, 58);
+            this.fieldLengthProvider.SetMaxLengthSource(this.payorPostalCode, ShipWorks.Data.Utility.EntityFieldLengthSource.PersonPostal);
+            this.payorPostalCode.Name = "payorPostalCode";
+            this.payorPostalCode.Size = new System.Drawing.Size(173, 21);
+            this.payorPostalCode.TabIndex = 2;
+            // 
+            // labelPayorPostalCode
+            // 
+            this.labelPayorPostalCode.AutoSize = true;
+            this.labelPayorPostalCode.Location = new System.Drawing.Point(18, 61);
+            this.labelPayorPostalCode.Name = "labelPayorPostalCode";
+            this.labelPayorPostalCode.Size = new System.Drawing.Size(68, 13);
+            this.labelPayorPostalCode.Text = "Payor Postal Code:";
             // 
             // sectionFrom
             // 
@@ -773,28 +790,6 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             this.labelHomeInstructions.TabIndex = 1;
             this.labelHomeInstructions.Text = "Instructions:";
             // 
-            // sectionFreight
-            // 
-            this.sectionFreight.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.sectionFreight.ContentPanel.Controls.Add(this.fedExFreightContainerControl);
-            this.sectionFreight.ExtraText = "";
-            this.sectionFreight.Location = new System.Drawing.Point(3, 613);
-            this.sectionFreight.Name = "sectionFreight";
-            this.sectionFreight.SectionName = "Freight";
-            this.sectionFreight.SettingsKey = "{A7947F0F-9648-4443-A678-F67E7FCEE38C}";
-            this.sectionFreight.Size = new System.Drawing.Size(487, 88);
-            this.sectionFreight.TabIndex = 9;
-            // 
-            // fedExFreightContainerControl
-            // 
-            this.fedExFreightContainerControl.Location = new System.Drawing.Point(7, 5);
-            this.fedExFreightContainerControl.Margin = new System.Windows.Forms.Padding(0, 3, 3, 3);
-            this.fedExFreightContainerControl.Name = "fedExFreightContainerControl2";
-            this.fedExFreightContainerControl.Size = new System.Drawing.Size(469, 50);
-            this.fedExFreightContainerControl.TabIndex = 7;
-            this.fedExFreightContainerControl.Resize += OnFreightContainerControlResize;
-            // 
             // sectionOptions
             // 
             this.sectionOptions.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
@@ -803,8 +798,6 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             // 
             // sectionOptions.ContentPanel
             // 
-            this.sectionOptions.ContentPanel.Controls.Add(this.referenceShipmentIntegrity);
-            this.sectionOptions.ContentPanel.Controls.Add(this.labelShipmentIntegrity);
             this.sectionOptions.ContentPanel.Controls.Add(this.referencePO);
             this.sectionOptions.ContentPanel.Controls.Add(this.labelPO);
             this.sectionOptions.ContentPanel.Controls.Add(this.referenceInvoice);
@@ -813,7 +806,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             this.sectionOptions.ContentPanel.Controls.Add(this.labelReference);
             this.sectionOptions.ContentPanel.Controls.Add(this.signature);
             this.sectionOptions.ContentPanel.Controls.Add(this.labelSignature);
-            this.sectionOptions.ExpandedHeight = 172;
+            this.sectionOptions.ExpandedHeight = 140;
             this.sectionOptions.ExtraText = "";
             this.sectionOptions.Location = new System.Drawing.Point(3, 468);
             this.sectionOptions.Name = "sectionOptions";
@@ -821,26 +814,6 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             this.sectionOptions.SettingsKey = "{2740f860-1d14-453e-a511-8f62ad1e7dcc}";
             this.sectionOptions.Size = new System.Drawing.Size(487, 24);
             this.sectionOptions.TabIndex = 4;
-            // 
-            // referenceShipmentIntegrity
-            // 
-            this.referenceShipmentIntegrity.Location = new System.Drawing.Point(86, 116);
-            this.referenceShipmentIntegrity.MaxLength = 32767;
-            this.fieldLengthProvider.SetMaxLengthSource(this.referenceShipmentIntegrity, ShipWorks.Data.Utility.EntityFieldLengthSource.FedExReferenceShipmentIntegrity);
-            this.referenceShipmentIntegrity.Name = "referenceShipmentIntegrity";
-            this.referenceShipmentIntegrity.Size = new System.Drawing.Size(210, 21);
-            this.referenceShipmentIntegrity.TabIndex = 9;
-            this.referenceShipmentIntegrity.TokenSuggestionFactory = commonTokenSuggestionsFactory1;
-            // 
-            // labelShipmentIntegrity
-            // 
-            this.labelShipmentIntegrity.AutoSize = true;
-            this.labelShipmentIntegrity.BackColor = System.Drawing.Color.Transparent;
-            this.labelShipmentIntegrity.Location = new System.Drawing.Point(27, 118);
-            this.labelShipmentIntegrity.Name = "labelShipmentIntegrity";
-            this.labelShipmentIntegrity.Size = new System.Drawing.Size(53, 13);
-            this.labelShipmentIntegrity.TabIndex = 8;
-            this.labelShipmentIntegrity.Text = "Integrity:";
             // 
             // referencePO
             // 
@@ -923,512 +896,6 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             this.labelSignature.TabIndex = 0;
             this.labelSignature.Text = "Signature:";
             // 
-            // sectionEmail
-            // 
-            this.sectionEmail.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.sectionEmail.Collapsed = true;
-            this.sectionEmail.TabIndex = 7;
-            // 
-            // sectionEmail.ContentPanel
-            // 
-            this.sectionEmail.ContentPanel.Controls.Add(this.emailNotifyBrokerShip);
-            this.sectionEmail.ContentPanel.Controls.Add(this.emailNotifyBrokerDelivery);
-            this.sectionEmail.ContentPanel.Controls.Add(this.emailNotifyBrokerEstimatedDelivery);
-            this.sectionEmail.ContentPanel.Controls.Add(this.emailNotifyBrokerException);
-            this.sectionEmail.ContentPanel.Controls.Add(this.labelEmailBroker);
-            this.sectionEmail.ContentPanel.Controls.Add(this.emailNotifyMessage);
-            this.sectionEmail.ContentPanel.Controls.Add(this.labelPersonalMessage);
-            this.sectionEmail.ContentPanel.Controls.Add(this.kryptonBorderEdgeEmail2);
-            this.sectionEmail.ContentPanel.Controls.Add(this.emailNotifyOtherShip);
-            this.sectionEmail.ContentPanel.Controls.Add(this.emailNotifyOtherDelivery);
-            this.sectionEmail.ContentPanel.Controls.Add(this.emailNotifyOtherEstimatedDelivery);
-            this.sectionEmail.ContentPanel.Controls.Add(this.emailNotifyOtherException);
-            this.sectionEmail.ContentPanel.Controls.Add(this.emailNotifyRecipientShip);
-            this.sectionEmail.ContentPanel.Controls.Add(this.emailNotifyRecipientDelivery);
-            this.sectionEmail.ContentPanel.Controls.Add(this.emailNotifyRecipientEstimatedDelivery);
-            this.sectionEmail.ContentPanel.Controls.Add(this.emailNotifyRecipientException);
-            this.sectionEmail.ContentPanel.Controls.Add(this.emailNotifyOtherAddress);
-            this.sectionEmail.ContentPanel.Controls.Add(this.kryptonBorderEdgeEmail);
-            this.sectionEmail.ContentPanel.Controls.Add(this.labelEmailOther);
-            this.sectionEmail.ContentPanel.Controls.Add(this.labelEmailRecipient);
-            this.sectionEmail.ContentPanel.Controls.Add(this.labelEmailSender);
-            this.sectionEmail.ContentPanel.Controls.Add(this.emailNotifySenderShip);
-            this.sectionEmail.ContentPanel.Controls.Add(this.emailNotifySenderDelivery);
-            this.sectionEmail.ContentPanel.Controls.Add(this.emailNotifySenderEstimatedDelivery);
-            this.sectionEmail.ContentPanel.Controls.Add(this.emailNotifySenderException);
-            this.sectionEmail.ContentPanel.Controls.Add(this.labelEmailDelivery);
-            this.sectionEmail.ContentPanel.Controls.Add(this.labelEmailEstimatedDelivery);
-            this.sectionEmail.ContentPanel.Controls.Add(this.labelEmailException);
-            this.sectionEmail.ContentPanel.Controls.Add(this.labelEmailShip);
-            this.sectionEmail.ContentPanel.Controls.Add(this.labelEmailAddress);
-            this.sectionEmail.ContentPanel.Controls.Add(this.labelEmailInfo);
-            this.sectionEmail.ContentPanel.Controls.Add(this.picturEmailInfo);
-            this.sectionEmail.ContentPanel.Controls.Add(this.label4);
-            this.sectionEmail.ContentPanel.Controls.Add(this.kryptonBorderEdge1);
-            this.sectionEmail.ContentPanel.Controls.Add(this.kryptonBorderEdge2);
-            this.sectionEmail.ContentPanel.Controls.Add(this.label5);
-            this.sectionEmail.ContentPanel.Controls.Add(this.label6);
-            this.sectionEmail.ContentPanel.Controls.Add(this.label7);
-            this.sectionEmail.ContentPanel.Controls.Add(this.label8);
-            this.sectionEmail.ContentPanel.Controls.Add(this.label9);
-            this.sectionEmail.ContentPanel.Controls.Add(this.label10);
-            this.sectionEmail.ContentPanel.Controls.Add(this.label11);
-            this.sectionEmail.ContentPanel.Controls.Add(this.label12);
-            this.sectionEmail.ContentPanel.Controls.Add(this.pictureBox1);
-            this.sectionEmail.ExpandedHeight = 277;
-            this.sectionEmail.ExtraText = "";
-            this.sectionEmail.Location = new System.Drawing.Point(3, 555);
-            this.sectionEmail.Name = "sectionEmail";
-            this.sectionEmail.SectionName = "Email Notifications";
-            this.sectionEmail.SettingsKey = "{2a314180-f0db-4a03-ba4c-dcc418010bca}";
-            this.sectionEmail.Size = new System.Drawing.Size(487, 24);
-            // 
-            // emailNotifyBrokerShip
-            // 
-            this.emailNotifyBrokerShip.AutoSize = true;
-            this.emailNotifyBrokerShip.BackColor = System.Drawing.Color.White;
-            this.emailNotifyBrokerShip.Location = new System.Drawing.Point(221, 108);
-            this.emailNotifyBrokerShip.Name = "emailNotifyBrokerShip";
-            this.emailNotifyBrokerShip.Size = new System.Drawing.Size(15, 14);
-            this.emailNotifyBrokerShip.TabIndex = 7;
-            this.emailNotifyBrokerShip.UseVisualStyleBackColor = false;
-            // 
-            // emailNotifyBrokerDelivery
-            // 
-            this.emailNotifyBrokerDelivery.AutoSize = true;
-            this.emailNotifyBrokerDelivery.BackColor = System.Drawing.Color.White;
-            this.emailNotifyBrokerDelivery.Location = new System.Drawing.Point(321, 108);
-            this.emailNotifyBrokerDelivery.Name = "emailNotifyBrokerDelivery";
-            this.emailNotifyBrokerDelivery.Size = new System.Drawing.Size(15, 14);
-            this.emailNotifyBrokerDelivery.TabIndex = 9;
-            this.emailNotifyBrokerDelivery.UseVisualStyleBackColor = false;
-            // 
-            // emailNotifyBrokerEstimatedDelivery
-            // 
-            this.emailNotifyBrokerEstimatedDelivery.AutoSize = true;
-            this.emailNotifyBrokerEstimatedDelivery.BackColor = System.Drawing.Color.White;
-            this.emailNotifyBrokerEstimatedDelivery.Location = new System.Drawing.Point(395, 108);
-            this.emailNotifyBrokerEstimatedDelivery.Name = "emailNotifyBrokerEstimatedDelivery";
-            this.emailNotifyBrokerEstimatedDelivery.Size = new System.Drawing.Size(15, 14);
-            this.emailNotifyBrokerEstimatedDelivery.TabIndex = 10;
-            this.emailNotifyBrokerEstimatedDelivery.UseVisualStyleBackColor = false;
-            // 
-            // emailNotifyBrokerException
-            // 
-            this.emailNotifyBrokerException.AutoSize = true;
-            this.emailNotifyBrokerException.BackColor = System.Drawing.Color.White;
-            this.emailNotifyBrokerException.Location = new System.Drawing.Point(264, 108);
-            this.emailNotifyBrokerException.Name = "emailNotifyBrokerException";
-            this.emailNotifyBrokerException.Size = new System.Drawing.Size(15, 14);
-            this.emailNotifyBrokerException.TabIndex = 8;
-            this.emailNotifyBrokerException.UseVisualStyleBackColor = false;
-            // 
-            // labelEmailBroker
-            // 
-            this.labelEmailBroker.AutoSize = true;
-            this.labelEmailBroker.BackColor = System.Drawing.Color.White;
-            this.labelEmailBroker.Location = new System.Drawing.Point(14, 108);
-            this.labelEmailBroker.Name = "labelEmailBroker";
-            this.labelEmailBroker.Size = new System.Drawing.Size(38, 13);
-            this.labelEmailBroker.TabIndex = 26;
-            this.labelEmailBroker.Text = "Broker";
-            // 
-            // emailNotifyMessage
-            // 
-            this.emailNotifyMessage.Location = new System.Drawing.Point(17, 178);
-            this.emailNotifyMessage.MaxLength = 120;
-            this.fieldLengthProvider.SetMaxLengthSource(this.emailNotifyMessage, ShipWorks.Data.Utility.EntityFieldLengthSource.FedExEmailNotifyMessage);
-            this.emailNotifyMessage.Multiline = true;
-            this.emailNotifyMessage.Name = "emailNotifyMessage";
-            this.emailNotifyMessage.ScrollBars = System.Windows.Forms.ScrollBars.Both;
-            this.emailNotifyMessage.Size = new System.Drawing.Size(319, 61);
-            this.emailNotifyMessage.TabIndex = 16;
-            // 
-            // labelPersonalMessage
-            // 
-            this.labelPersonalMessage.AutoSize = true;
-            this.labelPersonalMessage.BackColor = System.Drawing.Color.White;
-            this.labelPersonalMessage.Location = new System.Drawing.Point(6, 162);
-            this.labelPersonalMessage.Name = "labelPersonalMessage";
-            this.labelPersonalMessage.Size = new System.Drawing.Size(144, 13);
-            this.labelPersonalMessage.TabIndex = 22;
-            this.labelPersonalMessage.Text = "Personal Message (Optional)";
-            // 
-            // kryptonBorderEdgeEmail2
-            // 
-            this.kryptonBorderEdgeEmail2.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.kryptonBorderEdgeEmail2.AutoSize = false;
-            this.kryptonBorderEdgeEmail2.BorderStyle = ComponentFactory.Krypton.Toolkit.PaletteBorderStyle.GridDataCellSheet;
-            this.kryptonBorderEdgeEmail2.Location = new System.Drawing.Point(9, 158);
-            this.kryptonBorderEdgeEmail2.Name = "kryptonBorderEdgeEmail2";
-            this.kryptonBorderEdgeEmail2.Size = new System.Drawing.Size(385, 1);
-            this.kryptonBorderEdgeEmail2.Text = "kryptonBorderEdge1";
-            // 
-            // emailNotifyOtherShip
-            // 
-            this.emailNotifyOtherShip.AutoSize = true;
-            this.emailNotifyOtherShip.BackColor = System.Drawing.Color.White;
-            this.emailNotifyOtherShip.Location = new System.Drawing.Point(221, 131);
-            this.emailNotifyOtherShip.Name = "emailNotifyOtherShip";
-            this.emailNotifyOtherShip.Size = new System.Drawing.Size(15, 14);
-            this.emailNotifyOtherShip.TabIndex = 12;
-            this.emailNotifyOtherShip.UseVisualStyleBackColor = false;
-            // 
-            // emailNotifyOtherDelivery
-            // 
-            this.emailNotifyOtherDelivery.AutoSize = true;
-            this.emailNotifyOtherDelivery.BackColor = System.Drawing.Color.White;
-            this.emailNotifyOtherDelivery.Location = new System.Drawing.Point(321, 131);
-            this.emailNotifyOtherDelivery.Name = "emailNotifyOtherDelivery";
-            this.emailNotifyOtherDelivery.Size = new System.Drawing.Size(15, 14);
-            this.emailNotifyOtherDelivery.TabIndex = 14;
-            this.emailNotifyOtherDelivery.UseVisualStyleBackColor = false;
-            // 
-            // emailNotifyOtherEstimatedDelivery
-            // 
-            this.emailNotifyOtherEstimatedDelivery.AutoSize = true;
-            this.emailNotifyOtherEstimatedDelivery.BackColor = System.Drawing.Color.White;
-            this.emailNotifyOtherEstimatedDelivery.Location = new System.Drawing.Point(395, 131);
-            this.emailNotifyOtherEstimatedDelivery.Name = "emailNotifyOtherEstimatedDelivery";
-            this.emailNotifyOtherEstimatedDelivery.Size = new System.Drawing.Size(15, 14);
-            this.emailNotifyOtherEstimatedDelivery.TabIndex = 15;
-            this.emailNotifyOtherEstimatedDelivery.UseVisualStyleBackColor = false;
-            // 
-            // emailNotifyOtherException
-            // 
-            this.emailNotifyOtherException.AutoSize = true;
-            this.emailNotifyOtherException.BackColor = System.Drawing.Color.White;
-            this.emailNotifyOtherException.Location = new System.Drawing.Point(264, 131);
-            this.emailNotifyOtherException.Name = "emailNotifyOtherException";
-            this.emailNotifyOtherException.Size = new System.Drawing.Size(15, 14);
-            this.emailNotifyOtherException.TabIndex = 13;
-            this.emailNotifyOtherException.UseVisualStyleBackColor = false;
-            // 
-            // emailNotifyRecipientShip
-            // 
-            this.emailNotifyRecipientShip.AutoSize = true;
-            this.emailNotifyRecipientShip.BackColor = System.Drawing.Color.White;
-            this.emailNotifyRecipientShip.Location = new System.Drawing.Point(221, 87);
-            this.emailNotifyRecipientShip.Name = "emailNotifyRecipientShip";
-            this.emailNotifyRecipientShip.Size = new System.Drawing.Size(15, 14);
-            this.emailNotifyRecipientShip.TabIndex = 3;
-            this.emailNotifyRecipientShip.UseVisualStyleBackColor = false;
-            // 
-            // emailNotifyRecipientDelivery
-            // 
-            this.emailNotifyRecipientDelivery.AutoSize = true;
-            this.emailNotifyRecipientDelivery.BackColor = System.Drawing.Color.White;
-            this.emailNotifyRecipientDelivery.Location = new System.Drawing.Point(321, 87);
-            this.emailNotifyRecipientDelivery.Name = "emailNotifyRecipientDelivery";
-            this.emailNotifyRecipientDelivery.Size = new System.Drawing.Size(15, 14);
-            this.emailNotifyRecipientDelivery.TabIndex = 5;
-            this.emailNotifyRecipientDelivery.UseVisualStyleBackColor = false;
-            // 
-            // emailNotifyRecipientEstimatedDelivery
-            // 
-            this.emailNotifyRecipientEstimatedDelivery.AutoSize = true;
-            this.emailNotifyRecipientEstimatedDelivery.BackColor = System.Drawing.Color.White;
-            this.emailNotifyRecipientEstimatedDelivery.Location = new System.Drawing.Point(395, 87);
-            this.emailNotifyRecipientEstimatedDelivery.Name = "emailNotifyRecipientEstimatedDelivery";
-            this.emailNotifyRecipientEstimatedDelivery.Size = new System.Drawing.Size(15, 14);
-            this.emailNotifyRecipientEstimatedDelivery.TabIndex = 5;
-            this.emailNotifyRecipientEstimatedDelivery.UseVisualStyleBackColor = false;
-            // 
-            // emailNotifyRecipientException
-            // 
-            this.emailNotifyRecipientException.AutoSize = true;
-            this.emailNotifyRecipientException.BackColor = System.Drawing.Color.White;
-            this.emailNotifyRecipientException.Location = new System.Drawing.Point(264, 87);
-            this.emailNotifyRecipientException.Name = "emailNotifyRecipientException";
-            this.emailNotifyRecipientException.Size = new System.Drawing.Size(15, 14);
-            this.emailNotifyRecipientException.TabIndex = 4;
-            this.emailNotifyRecipientException.UseVisualStyleBackColor = false;
-            // 
-            // emailNotifyOtherAddress
-            // 
-            this.emailNotifyOtherAddress.Location = new System.Drawing.Point(49, 128);
-            this.fieldLengthProvider.SetMaxLengthSource(this.emailNotifyOtherAddress, ShipWorks.Data.Utility.EntityFieldLengthSource.FedExEmailNotifyOtherAddress);
-            this.emailNotifyOtherAddress.Name = "emailNotifyOtherAddress";
-            this.emailNotifyOtherAddress.Size = new System.Drawing.Size(154, 21);
-            this.emailNotifyOtherAddress.TabIndex = 11;
-            // 
-            // kryptonBorderEdgeEmail
-            // 
-            this.kryptonBorderEdgeEmail.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.kryptonBorderEdgeEmail.AutoSize = false;
-            this.kryptonBorderEdgeEmail.BorderStyle = ComponentFactory.Krypton.Toolkit.PaletteBorderStyle.GridDataCellSheet;
-            this.kryptonBorderEdgeEmail.Location = new System.Drawing.Point(8, 59);
-            this.kryptonBorderEdgeEmail.Name = "kryptonBorderEdgeEmail";
-            this.kryptonBorderEdgeEmail.Size = new System.Drawing.Size(385, 1);
-            this.kryptonBorderEdgeEmail.Text = "kryptonBorderEdge1";
-            // 
-            // labelEmailOther
-            // 
-            this.labelEmailOther.AutoSize = true;
-            this.labelEmailOther.BackColor = System.Drawing.Color.White;
-            this.labelEmailOther.Location = new System.Drawing.Point(14, 131);
-            this.labelEmailOther.Name = "labelEmailOther";
-            this.labelEmailOther.Size = new System.Drawing.Size(35, 13);
-            this.labelEmailOther.TabIndex = 12;
-            this.labelEmailOther.Text = "Other";
-            // 
-            // labelEmailRecipient
-            // 
-            this.labelEmailRecipient.AutoSize = true;
-            this.labelEmailRecipient.BackColor = System.Drawing.Color.White;
-            this.labelEmailRecipient.Location = new System.Drawing.Point(14, 87);
-            this.labelEmailRecipient.Name = "labelEmailRecipient";
-            this.labelEmailRecipient.Size = new System.Drawing.Size(51, 13);
-            this.labelEmailRecipient.TabIndex = 10;
-            this.labelEmailRecipient.Text = "Recipient";
-            // 
-            // labelEmailSender
-            // 
-            this.labelEmailSender.AutoSize = true;
-            this.labelEmailSender.BackColor = System.Drawing.Color.White;
-            this.labelEmailSender.Location = new System.Drawing.Point(14, 67);
-            this.labelEmailSender.Name = "labelEmailSender";
-            this.labelEmailSender.Size = new System.Drawing.Size(41, 13);
-            this.labelEmailSender.TabIndex = 9;
-            this.labelEmailSender.Text = "Sender";
-            // 
-            // emailNotifySenderShip
-            // 
-            this.emailNotifySenderShip.AutoSize = true;
-            this.emailNotifySenderShip.BackColor = System.Drawing.Color.White;
-            this.emailNotifySenderShip.Location = new System.Drawing.Point(221, 66);
-            this.emailNotifySenderShip.Name = "emailNotifySenderShip";
-            this.emailNotifySenderShip.Size = new System.Drawing.Size(15, 14);
-            this.emailNotifySenderShip.TabIndex = 0;
-            this.emailNotifySenderShip.UseVisualStyleBackColor = false;
-            // 
-            // emailNotifySenderDelivery
-            // 
-            this.emailNotifySenderDelivery.AutoSize = true;
-            this.emailNotifySenderDelivery.BackColor = System.Drawing.Color.White;
-            this.emailNotifySenderDelivery.Location = new System.Drawing.Point(321, 66);
-            this.emailNotifySenderDelivery.Name = "emailNotifySenderDelivery";
-            this.emailNotifySenderDelivery.Size = new System.Drawing.Size(15, 14);
-            this.emailNotifySenderDelivery.TabIndex = 2;
-            this.emailNotifySenderDelivery.UseVisualStyleBackColor = false;
-            // 
-            // emailNotifySenderEstimatedDelivery
-            // 
-            this.emailNotifySenderEstimatedDelivery.AutoSize = true;
-            this.emailNotifySenderEstimatedDelivery.BackColor = System.Drawing.Color.White;
-            this.emailNotifySenderEstimatedDelivery.Location = new System.Drawing.Point(395, 66);
-            this.emailNotifySenderEstimatedDelivery.Name = "emailNotifySenderEstimatedDelivery";
-            this.emailNotifySenderEstimatedDelivery.Size = new System.Drawing.Size(15, 14);
-            this.emailNotifySenderEstimatedDelivery.TabIndex = 2;
-            this.emailNotifySenderEstimatedDelivery.UseVisualStyleBackColor = false;
-            // 
-            // emailNotifySenderException
-            // 
-            this.emailNotifySenderException.AutoSize = true;
-            this.emailNotifySenderException.BackColor = System.Drawing.Color.White;
-            this.emailNotifySenderException.Location = new System.Drawing.Point(264, 66);
-            this.emailNotifySenderException.Name = "emailNotifySenderException";
-            this.emailNotifySenderException.Size = new System.Drawing.Size(15, 14);
-            this.emailNotifySenderException.TabIndex = 1;
-            this.emailNotifySenderException.UseVisualStyleBackColor = false;
-            // 
-            // labelEmailDelivery
-            // 
-            this.labelEmailDelivery.AutoSize = true;
-            this.labelEmailDelivery.BackColor = System.Drawing.Color.White;
-            this.labelEmailDelivery.Location = new System.Drawing.Point(302, 42);
-            this.labelEmailDelivery.Name = "labelEmailDelivery";
-            this.labelEmailDelivery.Size = new System.Drawing.Size(46, 13);
-            this.labelEmailDelivery.TabIndex = 5;
-            this.labelEmailDelivery.Text = "Delivery";
-            // 
-            // labelEmailEstimatedDelivery
-            // 
-            this.labelEmailEstimatedDelivery.AutoSize = true;
-            this.labelEmailEstimatedDelivery.BackColor = System.Drawing.Color.White;
-            this.labelEmailEstimatedDelivery.Location = new System.Drawing.Point(356, 42);
-            this.labelEmailEstimatedDelivery.Name = "labelEmailEstimatedDelivery";
-            this.labelEmailEstimatedDelivery.Size = new System.Drawing.Size(96, 13);
-            this.labelEmailEstimatedDelivery.TabIndex = 5;
-            this.labelEmailEstimatedDelivery.Text = "Estimated Delivery";
-            // 
-            // labelEmailException
-            // 
-            this.labelEmailException.AutoSize = true;
-            this.labelEmailException.BackColor = System.Drawing.Color.White;
-            this.labelEmailException.Location = new System.Drawing.Point(246, 42);
-            this.labelEmailException.Name = "labelEmailException";
-            this.labelEmailException.Size = new System.Drawing.Size(54, 13);
-            this.labelEmailException.TabIndex = 4;
-            this.labelEmailException.Text = "Exception";
-            // 
-            // labelEmailShip
-            // 
-            this.labelEmailShip.AutoSize = true;
-            this.labelEmailShip.BackColor = System.Drawing.Color.White;
-            this.labelEmailShip.Location = new System.Drawing.Point(215, 42);
-            this.labelEmailShip.Name = "labelEmailShip";
-            this.labelEmailShip.Size = new System.Drawing.Size(27, 13);
-            this.labelEmailShip.TabIndex = 3;
-            this.labelEmailShip.Text = "Ship";
-            // 
-            // labelEmailAddress
-            // 
-            this.labelEmailAddress.AutoSize = true;
-            this.labelEmailAddress.BackColor = System.Drawing.Color.White;
-            this.labelEmailAddress.Location = new System.Drawing.Point(6, 42);
-            this.labelEmailAddress.Name = "labelEmailAddress";
-            this.labelEmailAddress.Size = new System.Drawing.Size(73, 13);
-            this.labelEmailAddress.TabIndex = 2;
-            this.labelEmailAddress.Text = "Email Address";
-            // 
-            // labelEmailInfo
-            // 
-            this.labelEmailInfo.BackColor = System.Drawing.Color.White;
-            this.labelEmailInfo.Location = new System.Drawing.Point(23, 7);
-            this.labelEmailInfo.Name = "labelEmailInfo";
-            this.labelEmailInfo.Size = new System.Drawing.Size(332, 29);
-            this.labelEmailInfo.TabIndex = 1;
-            this.labelEmailInfo.Text = "These settings are for email sent from FedEx.  This is separate from and in addit" +
-    "ion to any email configured to be sent by ShipWorks.";
-            // 
-            // picturEmailInfo
-            // 
-            this.picturEmailInfo.BackColor = System.Drawing.Color.White;
-            this.picturEmailInfo.Image = global::ShipWorks.Properties.Resources.information16;
-            this.picturEmailInfo.Location = new System.Drawing.Point(5, 8);
-            this.picturEmailInfo.Name = "picturEmailInfo";
-            this.picturEmailInfo.Size = new System.Drawing.Size(16, 16);
-            this.picturEmailInfo.SizeMode = System.Windows.Forms.PictureBoxSizeMode.AutoSize;
-            this.picturEmailInfo.TabIndex = 0;
-            this.picturEmailInfo.TabStop = false;
-            // 
-            // label4
-            // 
-            this.label4.AutoSize = true;
-            this.label4.BackColor = System.Drawing.Color.White;
-            this.label4.Location = new System.Drawing.Point(6, 162);
-            this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(144, 13);
-            this.label4.TabIndex = 22;
-            this.label4.Text = "Personal Message (Optional)";
-            // 
-            // kryptonBorderEdge1
-            // 
-            this.kryptonBorderEdge1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.kryptonBorderEdge1.AutoSize = false;
-            this.kryptonBorderEdge1.BorderStyle = ComponentFactory.Krypton.Toolkit.PaletteBorderStyle.GridDataCellSheet;
-            this.kryptonBorderEdge1.Location = new System.Drawing.Point(9, 158);
-            this.kryptonBorderEdge1.Name = "kryptonBorderEdge1";
-            this.kryptonBorderEdge1.Size = new System.Drawing.Size(385, 1);
-            this.kryptonBorderEdge1.Text = "kryptonBorderEdge1";
-            // 
-            // kryptonBorderEdge2
-            // 
-            this.kryptonBorderEdge2.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.kryptonBorderEdge2.AutoSize = false;
-            this.kryptonBorderEdge2.BorderStyle = ComponentFactory.Krypton.Toolkit.PaletteBorderStyle.GridDataCellSheet;
-            this.kryptonBorderEdge2.Location = new System.Drawing.Point(8, 59);
-            this.kryptonBorderEdge2.Name = "kryptonBorderEdge2";
-            this.kryptonBorderEdge2.Size = new System.Drawing.Size(385, 1);
-            this.kryptonBorderEdge2.Text = "kryptonBorderEdge1";
-            // 
-            // label5
-            // 
-            this.label5.AutoSize = true;
-            this.label5.BackColor = System.Drawing.Color.White;
-            this.label5.Location = new System.Drawing.Point(14, 131);
-            this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(35, 13);
-            this.label5.TabIndex = 12;
-            this.label5.Text = "Other";
-            // 
-            // label6
-            // 
-            this.label6.AutoSize = true;
-            this.label6.BackColor = System.Drawing.Color.White;
-            this.label6.Location = new System.Drawing.Point(14, 87);
-            this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(51, 13);
-            this.label6.TabIndex = 10;
-            this.label6.Text = "Recipient";
-            // 
-            // label7
-            // 
-            this.label7.AutoSize = true;
-            this.label7.BackColor = System.Drawing.Color.White;
-            this.label7.Location = new System.Drawing.Point(14, 67);
-            this.label7.Name = "label7";
-            this.label7.Size = new System.Drawing.Size(41, 13);
-            this.label7.TabIndex = 9;
-            this.label7.Text = "Sender";
-            // 
-            // label8
-            // 
-            this.label8.AutoSize = true;
-            this.label8.BackColor = System.Drawing.Color.White;
-            this.label8.Location = new System.Drawing.Point(302, 42);
-            this.label8.Name = "label8";
-            this.label8.Size = new System.Drawing.Size(46, 13);
-            this.label8.TabIndex = 5;
-            this.label8.Text = "Delivery";
-            // 
-            // label9
-            // 
-            this.label9.AutoSize = true;
-            this.label9.BackColor = System.Drawing.Color.White;
-            this.label9.Location = new System.Drawing.Point(246, 42);
-            this.label9.Name = "label9";
-            this.label9.Size = new System.Drawing.Size(54, 13);
-            this.label9.TabIndex = 4;
-            this.label9.Text = "Exception";
-            // 
-            // label10
-            // 
-            this.label10.AutoSize = true;
-            this.label10.BackColor = System.Drawing.Color.White;
-            this.label10.Location = new System.Drawing.Point(215, 42);
-            this.label10.Name = "label10";
-            this.label10.Size = new System.Drawing.Size(27, 13);
-            this.label10.TabIndex = 3;
-            this.label10.Text = "Ship";
-            // 
-            // label11
-            // 
-            this.label11.AutoSize = true;
-            this.label11.BackColor = System.Drawing.Color.White;
-            this.label11.Location = new System.Drawing.Point(6, 42);
-            this.label11.Name = "label11";
-            this.label11.Size = new System.Drawing.Size(73, 13);
-            this.label11.TabIndex = 2;
-            this.label11.Text = "Email Address";
-            // 
-            // label12
-            // 
-            this.label12.BackColor = System.Drawing.Color.White;
-            this.label12.Location = new System.Drawing.Point(23, 7);
-            this.label12.Name = "label12";
-            this.label12.Size = new System.Drawing.Size(332, 29);
-            this.label12.TabIndex = 1;
-            this.label12.Text = "These settings are for email sent from FedEx.  This is separate from and in addit" +
-    "ion to any email configured to be sent by ShipWorks.";
-            // 
-            // pictureBox1
-            // 
-            this.pictureBox1.BackColor = System.Drawing.Color.White;
-            this.pictureBox1.Image = global::ShipWorks.Properties.Resources.information16;
-            this.pictureBox1.Location = new System.Drawing.Point(5, 8);
-            this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Size = new System.Drawing.Size(16, 16);
-            this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.AutoSize;
-            this.pictureBox1.TabIndex = 0;
-            this.pictureBox1.TabStop = false;
-            // 
             // sectionCOD
             // 
             this.sectionCOD.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
@@ -1437,17 +904,13 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             // 
             // sectionCOD.ContentPanel
             // 
-            this.sectionCOD.ContentPanel.Controls.Add(this.taxInfoLabel);
-            this.sectionCOD.ContentPanel.Controls.Add(this.codTaxId);
-            this.sectionCOD.ContentPanel.Controls.Add(this.CodTINLabel);
-            this.sectionCOD.ContentPanel.Controls.Add(this.codOrigin);
             this.sectionCOD.ContentPanel.Controls.Add(this.codAddFreight);
             this.sectionCOD.ContentPanel.Controls.Add(this.codPaymentType);
             this.sectionCOD.ContentPanel.Controls.Add(this.labelCodPayment);
             this.sectionCOD.ContentPanel.Controls.Add(this.codAmount);
             this.sectionCOD.ContentPanel.Controls.Add(this.labelCodAmount);
             this.sectionCOD.ContentPanel.Controls.Add(this.codEnabled);
-            this.sectionCOD.ExpandedHeight = 543;
+            this.sectionCOD.ExpandedHeight = 125;
             this.sectionCOD.ExtraText = "";
             this.sectionCOD.Location = new System.Drawing.Point(3, 735);
             this.sectionCOD.Name = "sectionCOD";
@@ -1455,68 +918,6 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             this.sectionCOD.SettingsKey = "{c15e50fb-864c-415f-a752-ddfcc1c1e315}";
             this.sectionCOD.Size = new System.Drawing.Size(487, 24);
             this.sectionCOD.TabIndex = 11;
-            // 
-            // taxInfoLabel
-            // 
-            this.taxInfoLabel.AutoSize = true;
-            this.taxInfoLabel.BackColor = System.Drawing.Color.White;
-            this.taxInfoLabel.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold);
-            this.taxInfoLabel.Location = new System.Drawing.Point(33, 416);
-            this.taxInfoLabel.Name = "taxInfoLabel";
-            this.taxInfoLabel.Size = new System.Drawing.Size(99, 13);
-            this.taxInfoLabel.TabIndex = 15;
-            this.taxInfoLabel.Text = "Tax Information";
-            // 
-            // codTaxId
-            // 
-            this.codTaxId.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.codTaxId.Location = new System.Drawing.Point(109, 436);
-            this.codTaxId.Name = "codTaxId";
-            this.codTaxId.Size = new System.Drawing.Size(276, 21);
-            this.codTaxId.TabIndex = 14;
-            // 
-            // CodTINLabel
-            // 
-            this.CodTINLabel.AutoSize = true;
-            this.CodTINLabel.BackColor = System.Drawing.Color.White;
-            this.CodTINLabel.Location = new System.Drawing.Point(56, 439);
-            this.CodTINLabel.Name = "CodTINLabel";
-            this.CodTINLabel.Size = new System.Drawing.Size(43, 13);
-            this.CodTINLabel.TabIndex = 13;
-            this.CodTINLabel.Text = "Tax ID:";
-            // 
-            // codOrigin
-            // 
-            this.codOrigin.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.codOrigin.AvailableFields = ((ShipWorks.Data.Controls.PersonFields)((((((((ShipWorks.Data.Controls.PersonFields.Name | ShipWorks.Data.Controls.PersonFields.Company) 
-            | ShipWorks.Data.Controls.PersonFields.Street) 
-            | ShipWorks.Data.Controls.PersonFields.City) 
-            | ShipWorks.Data.Controls.PersonFields.State) 
-            | ShipWorks.Data.Controls.PersonFields.Postal) 
-            | ShipWorks.Data.Controls.PersonFields.Residential) 
-            | ShipWorks.Data.Controls.PersonFields.Phone)));
-            this.codOrigin.BackColor = System.Drawing.Color.Transparent;
-            this.codOrigin.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.codOrigin.Location = new System.Drawing.Point(28, 86);
-            this.codOrigin.Margin = new System.Windows.Forms.Padding(3, 5, 3, 3);
-            this.codOrigin.Name = "codOrigin";
-            this.codOrigin.OriginLabel = "Return To";
-            this.codOrigin.Size = new System.Drawing.Size(372, 323);
-            this.codOrigin.TabIndex = 4;
-            this.codOrigin.OriginChanged += new System.EventHandler(this.OnCodOriginChanged);
-            // 
-            // codAddFreight
-            // 
-            this.codAddFreight.AutoSize = true;
-            this.codAddFreight.BackColor = System.Drawing.Color.White;
-            this.codAddFreight.Location = new System.Drawing.Point(186, 32);
-            this.codAddFreight.Name = "codAddFreight";
-            this.codAddFreight.Size = new System.Drawing.Size(114, 17);
-            this.codAddFreight.TabIndex = 2;
-            this.codAddFreight.Text = "Add shipment cost";
-            this.codAddFreight.UseVisualStyleBackColor = false;
             // 
             // codPaymentType
             // 
@@ -1573,6 +974,17 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             this.codEnabled.Text = "C.O.D. (Collect on Delivery)";
             this.codEnabled.UseVisualStyleBackColor = false;
             this.codEnabled.CheckedChanged += new System.EventHandler(this.OnRateCriteriaChanged);
+            // 
+            // codAddFreight
+            // 
+            this.codAddFreight.AutoSize = true;
+            this.codAddFreight.BackColor = System.Drawing.Color.White;
+            this.codAddFreight.Location = new System.Drawing.Point(186, 32);
+            this.codAddFreight.Name = "codAddFreight";
+            this.codAddFreight.Size = new System.Drawing.Size(114, 17);
+            this.codAddFreight.TabIndex = 2;
+            this.codAddFreight.Text = "Add shipment cost";
+            this.codAddFreight.UseVisualStyleBackColor = false;
             // 
             // panelTrademarkInfo
             // 
@@ -1790,13 +1202,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             // 
             // sectionServiceOptions.ContentPanel
             // 
-            this.sectionServiceOptions.ContentPanel.Controls.Add(this.returnsClearance);
-            this.sectionServiceOptions.ContentPanel.Controls.Add(this.returnsClearanceLabel);
-            this.sectionServiceOptions.ContentPanel.Controls.Add(this.labelDropoffType);
-            this.sectionServiceOptions.ContentPanel.Controls.Add(this.dropoffType);
             this.sectionServiceOptions.ContentPanel.Controls.Add(this.thirdPartyConsignee);
             this.sectionServiceOptions.ContentPanel.Controls.Add(this.consigneeLabel);
-            this.sectionServiceOptions.ExpandedHeight = 104;
+            this.sectionServiceOptions.ExpandedHeight = 60;
             this.sectionServiceOptions.ExtraText = "";
             this.sectionServiceOptions.Location = new System.Drawing.Point(3, 793);
             this.sectionServiceOptions.Name = "sectionServiceOptions";
@@ -1804,6 +1212,688 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             this.sectionServiceOptions.SettingsKey = "{e4ccd963-eb98-4d6a-880f-1a3e236ce413}";
             this.sectionServiceOptions.Size = new System.Drawing.Size(487, 24);
             this.sectionServiceOptions.TabIndex = 13;
+            // 
+            // thirdPartyConsignee
+            // 
+            this.thirdPartyConsignee.AutoSize = true;
+            this.thirdPartyConsignee.BackColor = System.Drawing.Color.Transparent;
+            this.thirdPartyConsignee.Location = new System.Drawing.Point(106, 5);
+            this.thirdPartyConsignee.Name = "thirdPartyConsignee";
+            this.thirdPartyConsignee.Size = new System.Drawing.Size(79, 17);
+            this.thirdPartyConsignee.TabIndex = 66;
+            this.thirdPartyConsignee.Text = "Third Party";
+            this.thirdPartyConsignee.UseVisualStyleBackColor = false;
+            // 
+            // consigneeLabel
+            // 
+            this.consigneeLabel.AutoSize = true;
+            this.consigneeLabel.BackColor = System.Drawing.Color.Transparent;
+            this.consigneeLabel.Location = new System.Drawing.Point(41, 5);
+            this.consigneeLabel.Name = "consigneeLabel";
+            this.consigneeLabel.Size = new System.Drawing.Size(61, 13);
+            this.consigneeLabel.TabIndex = 6;
+            this.consigneeLabel.Text = "Consignee:";
+            // 
+            // sectionFimsOptions
+            // 
+            this.sectionFimsOptions.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            // 
+            // sectionFimsOptions.ContentPanel
+            // 
+            this.sectionFimsOptions.ContentPanel.Controls.Add(this.fimsOptionsControl);
+            this.sectionFimsOptions.ExtraText = "";
+            this.sectionFimsOptions.Location = new System.Drawing.Point(3, 851);
+            this.sectionFimsOptions.Name = "sectionFimsOptions";
+            this.sectionFimsOptions.SectionName = "FIMS Options";
+            this.sectionFimsOptions.SettingsKey = "{e87cbd40-e049-4cdf-adbd-d2daa1720fcf}";
+            this.sectionFimsOptions.Size = new System.Drawing.Size(487, 99);
+            this.sectionFimsOptions.TabIndex = 15;
+            // 
+            // fimsOptionsControl
+            // 
+            this.fimsOptionsControl.AutoSize = true;
+            this.fimsOptionsControl.BackColor = System.Drawing.Color.Transparent;
+            this.fimsOptionsControl.Location = new System.Drawing.Point(27, 5);
+            this.fimsOptionsControl.Name = "fimsOptionsControl";
+            this.fimsOptionsControl.Size = new System.Drawing.Size(279, 59);
+            this.fimsOptionsControl.TabIndex = 0;
+            // 
+            // labelReturnsClearance
+            // 
+            this.labelReturnsClearance.AutoSize = true;
+            this.labelReturnsClearance.BackColor = System.Drawing.Color.Transparent;
+            this.labelReturnsClearance.Location = new System.Drawing.Point(2, 33);
+            this.labelReturnsClearance.Name = "labelReturnsClearance";
+            this.labelReturnsClearance.Size = new System.Drawing.Size(100, 13);
+            this.labelReturnsClearance.TabIndex = 64;
+            this.labelReturnsClearance.Text = "Returns Clearance:";
+            #region Removed For FedEx Platform
+            // 
+            // referenceShipmentIntegrity
+            // 
+            this.referenceShipmentIntegrity.Location = new System.Drawing.Point(86, 116);
+            this.referenceShipmentIntegrity.MaxLength = 32767;
+            this.fieldLengthProvider.SetMaxLengthSource(this.referenceShipmentIntegrity, ShipWorks.Data.Utility.EntityFieldLengthSource.FedExReferenceShipmentIntegrity);
+            this.referenceShipmentIntegrity.Name = "referenceShipmentIntegrity";
+            this.referenceShipmentIntegrity.Size = new System.Drawing.Size(210, 21);
+            this.referenceShipmentIntegrity.TabIndex = 9;
+            this.referenceShipmentIntegrity.TokenSuggestionFactory = commonTokenSuggestionsFactory1;
+            // 
+            // labelShipmentIntegrity
+            // 
+            this.labelShipmentIntegrity.AutoSize = true;
+            this.labelShipmentIntegrity.BackColor = System.Drawing.Color.Transparent;
+            this.labelShipmentIntegrity.Location = new System.Drawing.Point(27, 118);
+            this.labelShipmentIntegrity.Name = "labelShipmentIntegrity";
+            this.labelShipmentIntegrity.Size = new System.Drawing.Size(53, 13);
+            this.labelShipmentIntegrity.TabIndex = 8;
+            this.labelShipmentIntegrity.Text = "Integrity:";
+            // 
+            // sectionEmail
+            // 
+            this.sectionEmail.Anchor = ((System.Windows.Forms.AnchorStyles) (((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.sectionEmail.Collapsed = true;
+            this.sectionEmail.TabIndex = 7;
+            // 
+            // sectionEmail.ContentPanel
+            // 
+            this.sectionEmail.ContentPanel.Controls.Add(this.emailNotifyBrokerShip);
+            this.sectionEmail.ContentPanel.Controls.Add(this.emailNotifyBrokerDelivery);
+            this.sectionEmail.ContentPanel.Controls.Add(this.emailNotifyBrokerEstimatedDelivery);
+            this.sectionEmail.ContentPanel.Controls.Add(this.emailNotifyBrokerException);
+            this.sectionEmail.ContentPanel.Controls.Add(this.labelEmailBroker);
+            this.sectionEmail.ContentPanel.Controls.Add(this.emailNotifyMessage);
+            this.sectionEmail.ContentPanel.Controls.Add(this.labelPersonalMessage);
+            this.sectionEmail.ContentPanel.Controls.Add(this.kryptonBorderEdgeEmail2);
+            this.sectionEmail.ContentPanel.Controls.Add(this.emailNotifyOtherShip);
+            this.sectionEmail.ContentPanel.Controls.Add(this.emailNotifyOtherDelivery);
+            this.sectionEmail.ContentPanel.Controls.Add(this.emailNotifyOtherEstimatedDelivery);
+            this.sectionEmail.ContentPanel.Controls.Add(this.emailNotifyOtherException);
+            this.sectionEmail.ContentPanel.Controls.Add(this.emailNotifyRecipientShip);
+            this.sectionEmail.ContentPanel.Controls.Add(this.emailNotifyRecipientDelivery);
+            this.sectionEmail.ContentPanel.Controls.Add(this.emailNotifyRecipientEstimatedDelivery);
+            this.sectionEmail.ContentPanel.Controls.Add(this.emailNotifyRecipientException);
+            this.sectionEmail.ContentPanel.Controls.Add(this.emailNotifyOtherAddress);
+            this.sectionEmail.ContentPanel.Controls.Add(this.kryptonBorderEdgeEmail);
+            this.sectionEmail.ContentPanel.Controls.Add(this.labelEmailOther);
+            this.sectionEmail.ContentPanel.Controls.Add(this.labelEmailRecipient);
+            this.sectionEmail.ContentPanel.Controls.Add(this.labelEmailSender);
+            this.sectionEmail.ContentPanel.Controls.Add(this.emailNotifySenderShip);
+            this.sectionEmail.ContentPanel.Controls.Add(this.emailNotifySenderDelivery);
+            this.sectionEmail.ContentPanel.Controls.Add(this.emailNotifySenderEstimatedDelivery);
+            this.sectionEmail.ContentPanel.Controls.Add(this.emailNotifySenderException);
+            this.sectionEmail.ContentPanel.Controls.Add(this.labelEmailDelivery);
+            this.sectionEmail.ContentPanel.Controls.Add(this.labelEmailEstimatedDelivery);
+            this.sectionEmail.ContentPanel.Controls.Add(this.labelEmailException);
+            this.sectionEmail.ContentPanel.Controls.Add(this.labelEmailShip);
+            this.sectionEmail.ContentPanel.Controls.Add(this.labelEmailAddress);
+            this.sectionEmail.ContentPanel.Controls.Add(this.labelEmailInfo);
+            this.sectionEmail.ContentPanel.Controls.Add(this.picturEmailInfo);
+            this.sectionEmail.ContentPanel.Controls.Add(this.label4);
+            this.sectionEmail.ContentPanel.Controls.Add(this.kryptonBorderEdge1);
+            this.sectionEmail.ContentPanel.Controls.Add(this.kryptonBorderEdge2);
+            this.sectionEmail.ContentPanel.Controls.Add(this.label5);
+            this.sectionEmail.ContentPanel.Controls.Add(this.label6);
+            this.sectionEmail.ContentPanel.Controls.Add(this.label7);
+            this.sectionEmail.ContentPanel.Controls.Add(this.label8);
+            this.sectionEmail.ContentPanel.Controls.Add(this.label9);
+            this.sectionEmail.ContentPanel.Controls.Add(this.label10);
+            this.sectionEmail.ContentPanel.Controls.Add(this.label11);
+            this.sectionEmail.ContentPanel.Controls.Add(this.label12);
+            this.sectionEmail.ContentPanel.Controls.Add(this.pictureBox1);
+            this.sectionEmail.ExpandedHeight = 277;
+            this.sectionEmail.ExtraText = "";
+            this.sectionEmail.Location = new System.Drawing.Point(3, 555);
+            this.sectionEmail.Name = "sectionEmail";
+            this.sectionEmail.SectionName = "Email Notifications";
+            this.sectionEmail.SettingsKey = "{2a314180-f0db-4a03-ba4c-dcc418010bca}";
+            this.sectionEmail.Size = new System.Drawing.Size(487, 24);
+            // 
+            // emailNotifyBrokerShip
+            // 
+            this.emailNotifyBrokerShip.AutoSize = true;
+            this.emailNotifyBrokerShip.BackColor = System.Drawing.Color.White;
+            this.emailNotifyBrokerShip.Location = new System.Drawing.Point(221, 108);
+            this.emailNotifyBrokerShip.Name = "emailNotifyBrokerShip";
+            this.emailNotifyBrokerShip.Size = new System.Drawing.Size(15, 14);
+            this.emailNotifyBrokerShip.TabIndex = 7;
+            this.emailNotifyBrokerShip.UseVisualStyleBackColor = false;
+            // 
+            // emailNotifyBrokerDelivery
+            // 
+            this.emailNotifyBrokerDelivery.AutoSize = true;
+            this.emailNotifyBrokerDelivery.BackColor = System.Drawing.Color.White;
+            this.emailNotifyBrokerDelivery.Location = new System.Drawing.Point(321, 108);
+            this.emailNotifyBrokerDelivery.Name = "emailNotifyBrokerDelivery";
+            this.emailNotifyBrokerDelivery.Size = new System.Drawing.Size(15, 14);
+            this.emailNotifyBrokerDelivery.TabIndex = 9;
+            this.emailNotifyBrokerDelivery.UseVisualStyleBackColor = false;
+            // 
+            // emailNotifyBrokerEstimatedDelivery
+            // 
+            this.emailNotifyBrokerEstimatedDelivery.AutoSize = true;
+            this.emailNotifyBrokerEstimatedDelivery.BackColor = System.Drawing.Color.White;
+            this.emailNotifyBrokerEstimatedDelivery.Location = new System.Drawing.Point(395, 108);
+            this.emailNotifyBrokerEstimatedDelivery.Name = "emailNotifyBrokerEstimatedDelivery";
+            this.emailNotifyBrokerEstimatedDelivery.Size = new System.Drawing.Size(15, 14);
+            this.emailNotifyBrokerEstimatedDelivery.TabIndex = 10;
+            this.emailNotifyBrokerEstimatedDelivery.UseVisualStyleBackColor = false;
+            // 
+            // emailNotifyBrokerException
+            // 
+            this.emailNotifyBrokerException.AutoSize = true;
+            this.emailNotifyBrokerException.BackColor = System.Drawing.Color.White;
+            this.emailNotifyBrokerException.Location = new System.Drawing.Point(264, 108);
+            this.emailNotifyBrokerException.Name = "emailNotifyBrokerException";
+            this.emailNotifyBrokerException.Size = new System.Drawing.Size(15, 14);
+            this.emailNotifyBrokerException.TabIndex = 8;
+            this.emailNotifyBrokerException.UseVisualStyleBackColor = false;
+            // 
+            // labelEmailBroker
+            // 
+            this.labelEmailBroker.AutoSize = true;
+            this.labelEmailBroker.BackColor = System.Drawing.Color.White;
+            this.labelEmailBroker.Location = new System.Drawing.Point(14, 108);
+            this.labelEmailBroker.Name = "labelEmailBroker";
+            this.labelEmailBroker.Size = new System.Drawing.Size(38, 13);
+            this.labelEmailBroker.TabIndex = 26;
+            this.labelEmailBroker.Text = "Broker";
+            // 
+            // emailNotifyMessage
+            // 
+            this.emailNotifyMessage.Location = new System.Drawing.Point(17, 178);
+            this.emailNotifyMessage.MaxLength = 120;
+            this.fieldLengthProvider.SetMaxLengthSource(this.emailNotifyMessage, ShipWorks.Data.Utility.EntityFieldLengthSource.FedExEmailNotifyMessage);
+            this.emailNotifyMessage.Multiline = true;
+            this.emailNotifyMessage.Name = "emailNotifyMessage";
+            this.emailNotifyMessage.ScrollBars = System.Windows.Forms.ScrollBars.Both;
+            this.emailNotifyMessage.Size = new System.Drawing.Size(319, 61);
+            this.emailNotifyMessage.TabIndex = 16;
+            // 
+            // labelPersonalMessage
+            // 
+            this.labelPersonalMessage.AutoSize = true;
+            this.labelPersonalMessage.BackColor = System.Drawing.Color.White;
+            this.labelPersonalMessage.Location = new System.Drawing.Point(6, 162);
+            this.labelPersonalMessage.Name = "labelPersonalMessage";
+            this.labelPersonalMessage.Size = new System.Drawing.Size(144, 13);
+            this.labelPersonalMessage.TabIndex = 22;
+            this.labelPersonalMessage.Text = "Personal Message (Optional)";
+            // 
+            // kryptonBorderEdgeEmail2
+            // 
+            this.kryptonBorderEdgeEmail2.Anchor = ((System.Windows.Forms.AnchorStyles) (((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.kryptonBorderEdgeEmail2.AutoSize = false;
+            this.kryptonBorderEdgeEmail2.BorderStyle = ComponentFactory.Krypton.Toolkit.PaletteBorderStyle.GridDataCellSheet;
+            this.kryptonBorderEdgeEmail2.Location = new System.Drawing.Point(9, 158);
+            this.kryptonBorderEdgeEmail2.Name = "kryptonBorderEdgeEmail2";
+            this.kryptonBorderEdgeEmail2.Size = new System.Drawing.Size(385, 1);
+            this.kryptonBorderEdgeEmail2.Text = "kryptonBorderEdge1";
+            // 
+            // emailNotifyOtherShip
+            // 
+            this.emailNotifyOtherShip.AutoSize = true;
+            this.emailNotifyOtherShip.BackColor = System.Drawing.Color.White;
+            this.emailNotifyOtherShip.Location = new System.Drawing.Point(221, 131);
+            this.emailNotifyOtherShip.Name = "emailNotifyOtherShip";
+            this.emailNotifyOtherShip.Size = new System.Drawing.Size(15, 14);
+            this.emailNotifyOtherShip.TabIndex = 12;
+            this.emailNotifyOtherShip.UseVisualStyleBackColor = false;
+            // 
+            // emailNotifyOtherDelivery
+            // 
+            this.emailNotifyOtherDelivery.AutoSize = true;
+            this.emailNotifyOtherDelivery.BackColor = System.Drawing.Color.White;
+            this.emailNotifyOtherDelivery.Location = new System.Drawing.Point(321, 131);
+            this.emailNotifyOtherDelivery.Name = "emailNotifyOtherDelivery";
+            this.emailNotifyOtherDelivery.Size = new System.Drawing.Size(15, 14);
+            this.emailNotifyOtherDelivery.TabIndex = 14;
+            this.emailNotifyOtherDelivery.UseVisualStyleBackColor = false;
+            // 
+            // emailNotifyOtherEstimatedDelivery
+            // 
+            this.emailNotifyOtherEstimatedDelivery.AutoSize = true;
+            this.emailNotifyOtherEstimatedDelivery.BackColor = System.Drawing.Color.White;
+            this.emailNotifyOtherEstimatedDelivery.Location = new System.Drawing.Point(395, 131);
+            this.emailNotifyOtherEstimatedDelivery.Name = "emailNotifyOtherEstimatedDelivery";
+            this.emailNotifyOtherEstimatedDelivery.Size = new System.Drawing.Size(15, 14);
+            this.emailNotifyOtherEstimatedDelivery.TabIndex = 15;
+            this.emailNotifyOtherEstimatedDelivery.UseVisualStyleBackColor = false;
+            // 
+            // emailNotifyOtherException
+            // 
+            this.emailNotifyOtherException.AutoSize = true;
+            this.emailNotifyOtherException.BackColor = System.Drawing.Color.White;
+            this.emailNotifyOtherException.Location = new System.Drawing.Point(264, 131);
+            this.emailNotifyOtherException.Name = "emailNotifyOtherException";
+            this.emailNotifyOtherException.Size = new System.Drawing.Size(15, 14);
+            this.emailNotifyOtherException.TabIndex = 13;
+            this.emailNotifyOtherException.UseVisualStyleBackColor = false;
+            // 
+            // emailNotifyRecipientShip
+            // 
+            this.emailNotifyRecipientShip.AutoSize = true;
+            this.emailNotifyRecipientShip.BackColor = System.Drawing.Color.White;
+            this.emailNotifyRecipientShip.Location = new System.Drawing.Point(221, 87);
+            this.emailNotifyRecipientShip.Name = "emailNotifyRecipientShip";
+            this.emailNotifyRecipientShip.Size = new System.Drawing.Size(15, 14);
+            this.emailNotifyRecipientShip.TabIndex = 3;
+            this.emailNotifyRecipientShip.UseVisualStyleBackColor = false;
+            // 
+            // emailNotifyRecipientDelivery
+            // 
+            this.emailNotifyRecipientDelivery.AutoSize = true;
+            this.emailNotifyRecipientDelivery.BackColor = System.Drawing.Color.White;
+            this.emailNotifyRecipientDelivery.Location = new System.Drawing.Point(321, 87);
+            this.emailNotifyRecipientDelivery.Name = "emailNotifyRecipientDelivery";
+            this.emailNotifyRecipientDelivery.Size = new System.Drawing.Size(15, 14);
+            this.emailNotifyRecipientDelivery.TabIndex = 5;
+            this.emailNotifyRecipientDelivery.UseVisualStyleBackColor = false;
+            // 
+            // emailNotifyRecipientEstimatedDelivery
+            // 
+            this.emailNotifyRecipientEstimatedDelivery.AutoSize = true;
+            this.emailNotifyRecipientEstimatedDelivery.BackColor = System.Drawing.Color.White;
+            this.emailNotifyRecipientEstimatedDelivery.Location = new System.Drawing.Point(395, 87);
+            this.emailNotifyRecipientEstimatedDelivery.Name = "emailNotifyRecipientEstimatedDelivery";
+            this.emailNotifyRecipientEstimatedDelivery.Size = new System.Drawing.Size(15, 14);
+            this.emailNotifyRecipientEstimatedDelivery.TabIndex = 5;
+            this.emailNotifyRecipientEstimatedDelivery.UseVisualStyleBackColor = false;
+            // 
+            // emailNotifyRecipientException
+            // 
+            this.emailNotifyRecipientException.AutoSize = true;
+            this.emailNotifyRecipientException.BackColor = System.Drawing.Color.White;
+            this.emailNotifyRecipientException.Location = new System.Drawing.Point(264, 87);
+            this.emailNotifyRecipientException.Name = "emailNotifyRecipientException";
+            this.emailNotifyRecipientException.Size = new System.Drawing.Size(15, 14);
+            this.emailNotifyRecipientException.TabIndex = 4;
+            this.emailNotifyRecipientException.UseVisualStyleBackColor = false;
+            // 
+            // emailNotifyOtherAddress
+            // 
+            this.emailNotifyOtherAddress.Location = new System.Drawing.Point(49, 128);
+            this.fieldLengthProvider.SetMaxLengthSource(this.emailNotifyOtherAddress, ShipWorks.Data.Utility.EntityFieldLengthSource.FedExEmailNotifyOtherAddress);
+            this.emailNotifyOtherAddress.Name = "emailNotifyOtherAddress";
+            this.emailNotifyOtherAddress.Size = new System.Drawing.Size(154, 21);
+            this.emailNotifyOtherAddress.TabIndex = 11;
+            // 
+            // kryptonBorderEdgeEmail
+            // 
+            this.kryptonBorderEdgeEmail.Anchor = ((System.Windows.Forms.AnchorStyles) (((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.kryptonBorderEdgeEmail.AutoSize = false;
+            this.kryptonBorderEdgeEmail.BorderStyle = ComponentFactory.Krypton.Toolkit.PaletteBorderStyle.GridDataCellSheet;
+            this.kryptonBorderEdgeEmail.Location = new System.Drawing.Point(8, 59);
+            this.kryptonBorderEdgeEmail.Name = "kryptonBorderEdgeEmail";
+            this.kryptonBorderEdgeEmail.Size = new System.Drawing.Size(385, 1);
+            this.kryptonBorderEdgeEmail.Text = "kryptonBorderEdge1";
+            // 
+            // labelEmailOther
+            // 
+            this.labelEmailOther.AutoSize = true;
+            this.labelEmailOther.BackColor = System.Drawing.Color.White;
+            this.labelEmailOther.Location = new System.Drawing.Point(14, 131);
+            this.labelEmailOther.Name = "labelEmailOther";
+            this.labelEmailOther.Size = new System.Drawing.Size(35, 13);
+            this.labelEmailOther.TabIndex = 12;
+            this.labelEmailOther.Text = "Other";
+            // 
+            // labelEmailRecipient
+            // 
+            this.labelEmailRecipient.AutoSize = true;
+            this.labelEmailRecipient.BackColor = System.Drawing.Color.White;
+            this.labelEmailRecipient.Location = new System.Drawing.Point(14, 87);
+            this.labelEmailRecipient.Name = "labelEmailRecipient";
+            this.labelEmailRecipient.Size = new System.Drawing.Size(51, 13);
+            this.labelEmailRecipient.TabIndex = 10;
+            this.labelEmailRecipient.Text = "Recipient";
+            // 
+            // labelEmailSender
+            // 
+            this.labelEmailSender.AutoSize = true;
+            this.labelEmailSender.BackColor = System.Drawing.Color.White;
+            this.labelEmailSender.Location = new System.Drawing.Point(14, 67);
+            this.labelEmailSender.Name = "labelEmailSender";
+            this.labelEmailSender.Size = new System.Drawing.Size(41, 13);
+            this.labelEmailSender.TabIndex = 9;
+            this.labelEmailSender.Text = "Sender";
+            // 
+            // emailNotifySenderShip
+            // 
+            this.emailNotifySenderShip.AutoSize = true;
+            this.emailNotifySenderShip.BackColor = System.Drawing.Color.White;
+            this.emailNotifySenderShip.Location = new System.Drawing.Point(221, 66);
+            this.emailNotifySenderShip.Name = "emailNotifySenderShip";
+            this.emailNotifySenderShip.Size = new System.Drawing.Size(15, 14);
+            this.emailNotifySenderShip.TabIndex = 0;
+            this.emailNotifySenderShip.UseVisualStyleBackColor = false;
+            // 
+            // emailNotifySenderDelivery
+            // 
+            this.emailNotifySenderDelivery.AutoSize = true;
+            this.emailNotifySenderDelivery.BackColor = System.Drawing.Color.White;
+            this.emailNotifySenderDelivery.Location = new System.Drawing.Point(321, 66);
+            this.emailNotifySenderDelivery.Name = "emailNotifySenderDelivery";
+            this.emailNotifySenderDelivery.Size = new System.Drawing.Size(15, 14);
+            this.emailNotifySenderDelivery.TabIndex = 2;
+            this.emailNotifySenderDelivery.UseVisualStyleBackColor = false;
+            // 
+            // emailNotifySenderEstimatedDelivery
+            // 
+            this.emailNotifySenderEstimatedDelivery.AutoSize = true;
+            this.emailNotifySenderEstimatedDelivery.BackColor = System.Drawing.Color.White;
+            this.emailNotifySenderEstimatedDelivery.Location = new System.Drawing.Point(395, 66);
+            this.emailNotifySenderEstimatedDelivery.Name = "emailNotifySenderEstimatedDelivery";
+            this.emailNotifySenderEstimatedDelivery.Size = new System.Drawing.Size(15, 14);
+            this.emailNotifySenderEstimatedDelivery.TabIndex = 2;
+            this.emailNotifySenderEstimatedDelivery.UseVisualStyleBackColor = false;
+            // 
+            // emailNotifySenderException
+            // 
+            this.emailNotifySenderException.AutoSize = true;
+            this.emailNotifySenderException.BackColor = System.Drawing.Color.White;
+            this.emailNotifySenderException.Location = new System.Drawing.Point(264, 66);
+            this.emailNotifySenderException.Name = "emailNotifySenderException";
+            this.emailNotifySenderException.Size = new System.Drawing.Size(15, 14);
+            this.emailNotifySenderException.TabIndex = 1;
+            this.emailNotifySenderException.UseVisualStyleBackColor = false;
+            // 
+            // labelEmailDelivery
+            // 
+            this.labelEmailDelivery.AutoSize = true;
+            this.labelEmailDelivery.BackColor = System.Drawing.Color.White;
+            this.labelEmailDelivery.Location = new System.Drawing.Point(302, 42);
+            this.labelEmailDelivery.Name = "labelEmailDelivery";
+            this.labelEmailDelivery.Size = new System.Drawing.Size(46, 13);
+            this.labelEmailDelivery.TabIndex = 5;
+            this.labelEmailDelivery.Text = "Delivery";
+            // 
+            // labelEmailEstimatedDelivery
+            // 
+            this.labelEmailEstimatedDelivery.AutoSize = true;
+            this.labelEmailEstimatedDelivery.BackColor = System.Drawing.Color.White;
+            this.labelEmailEstimatedDelivery.Location = new System.Drawing.Point(356, 42);
+            this.labelEmailEstimatedDelivery.Name = "labelEmailEstimatedDelivery";
+            this.labelEmailEstimatedDelivery.Size = new System.Drawing.Size(96, 13);
+            this.labelEmailEstimatedDelivery.TabIndex = 5;
+            this.labelEmailEstimatedDelivery.Text = "Estimated Delivery";
+            // 
+            // labelEmailException
+            // 
+            this.labelEmailException.AutoSize = true;
+            this.labelEmailException.BackColor = System.Drawing.Color.White;
+            this.labelEmailException.Location = new System.Drawing.Point(246, 42);
+            this.labelEmailException.Name = "labelEmailException";
+            this.labelEmailException.Size = new System.Drawing.Size(54, 13);
+            this.labelEmailException.TabIndex = 4;
+            this.labelEmailException.Text = "Exception";
+            // 
+            // labelEmailShip
+            // 
+            this.labelEmailShip.AutoSize = true;
+            this.labelEmailShip.BackColor = System.Drawing.Color.White;
+            this.labelEmailShip.Location = new System.Drawing.Point(215, 42);
+            this.labelEmailShip.Name = "labelEmailShip";
+            this.labelEmailShip.Size = new System.Drawing.Size(27, 13);
+            this.labelEmailShip.TabIndex = 3;
+            this.labelEmailShip.Text = "Ship";
+            // 
+            // labelEmailAddress
+            // 
+            this.labelEmailAddress.AutoSize = true;
+            this.labelEmailAddress.BackColor = System.Drawing.Color.White;
+            this.labelEmailAddress.Location = new System.Drawing.Point(6, 42);
+            this.labelEmailAddress.Name = "labelEmailAddress";
+            this.labelEmailAddress.Size = new System.Drawing.Size(73, 13);
+            this.labelEmailAddress.TabIndex = 2;
+            this.labelEmailAddress.Text = "Email Address";
+            // 
+            // labelEmailInfo
+            // 
+            this.labelEmailInfo.BackColor = System.Drawing.Color.White;
+            this.labelEmailInfo.Location = new System.Drawing.Point(23, 7);
+            this.labelEmailInfo.Name = "labelEmailInfo";
+            this.labelEmailInfo.Size = new System.Drawing.Size(332, 29);
+            this.labelEmailInfo.TabIndex = 1;
+            this.labelEmailInfo.Text = "These settings are for email sent from FedEx.  This is separate from and in addit" +
+    "ion to any email configured to be sent by ShipWorks.";
+            // 
+            // picturEmailInfo
+            // 
+            this.picturEmailInfo.BackColor = System.Drawing.Color.White;
+            this.picturEmailInfo.Image = global::ShipWorks.Properties.Resources.information16;
+            this.picturEmailInfo.Location = new System.Drawing.Point(5, 8);
+            this.picturEmailInfo.Name = "picturEmailInfo";
+            this.picturEmailInfo.Size = new System.Drawing.Size(16, 16);
+            this.picturEmailInfo.SizeMode = System.Windows.Forms.PictureBoxSizeMode.AutoSize;
+            this.picturEmailInfo.TabIndex = 0;
+            this.picturEmailInfo.TabStop = false;
+            // 
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.BackColor = System.Drawing.Color.White;
+            this.label4.Location = new System.Drawing.Point(6, 162);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(144, 13);
+            this.label4.TabIndex = 22;
+            this.label4.Text = "Personal Message (Optional)";
+            // 
+            // kryptonBorderEdge1
+            // 
+            this.kryptonBorderEdge1.Anchor = ((System.Windows.Forms.AnchorStyles) (((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.kryptonBorderEdge1.AutoSize = false;
+            this.kryptonBorderEdge1.BorderStyle = ComponentFactory.Krypton.Toolkit.PaletteBorderStyle.GridDataCellSheet;
+            this.kryptonBorderEdge1.Location = new System.Drawing.Point(9, 158);
+            this.kryptonBorderEdge1.Name = "kryptonBorderEdge1";
+            this.kryptonBorderEdge1.Size = new System.Drawing.Size(385, 1);
+            this.kryptonBorderEdge1.Text = "kryptonBorderEdge1";
+            // 
+            // kryptonBorderEdge2
+            // 
+            this.kryptonBorderEdge2.Anchor = ((System.Windows.Forms.AnchorStyles) (((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.kryptonBorderEdge2.AutoSize = false;
+            this.kryptonBorderEdge2.BorderStyle = ComponentFactory.Krypton.Toolkit.PaletteBorderStyle.GridDataCellSheet;
+            this.kryptonBorderEdge2.Location = new System.Drawing.Point(8, 59);
+            this.kryptonBorderEdge2.Name = "kryptonBorderEdge2";
+            this.kryptonBorderEdge2.Size = new System.Drawing.Size(385, 1);
+            this.kryptonBorderEdge2.Text = "kryptonBorderEdge1";
+            // 
+            // label5
+            // 
+            this.label5.AutoSize = true;
+            this.label5.BackColor = System.Drawing.Color.White;
+            this.label5.Location = new System.Drawing.Point(14, 131);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(35, 13);
+            this.label5.TabIndex = 12;
+            this.label5.Text = "Other";
+            // 
+            // label6
+            // 
+            this.label6.AutoSize = true;
+            this.label6.BackColor = System.Drawing.Color.White;
+            this.label6.Location = new System.Drawing.Point(14, 87);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(51, 13);
+            this.label6.TabIndex = 10;
+            this.label6.Text = "Recipient";
+            // 
+            // label7
+            // 
+            this.label7.AutoSize = true;
+            this.label7.BackColor = System.Drawing.Color.White;
+            this.label7.Location = new System.Drawing.Point(14, 67);
+            this.label7.Name = "label7";
+            this.label7.Size = new System.Drawing.Size(41, 13);
+            this.label7.TabIndex = 9;
+            this.label7.Text = "Sender";
+            // 
+            // label8
+            // 
+            this.label8.AutoSize = true;
+            this.label8.BackColor = System.Drawing.Color.White;
+            this.label8.Location = new System.Drawing.Point(302, 42);
+            this.label8.Name = "label8";
+            this.label8.Size = new System.Drawing.Size(46, 13);
+            this.label8.TabIndex = 5;
+            this.label8.Text = "Delivery";
+            // 
+            // label9
+            // 
+            this.label9.AutoSize = true;
+            this.label9.BackColor = System.Drawing.Color.White;
+            this.label9.Location = new System.Drawing.Point(246, 42);
+            this.label9.Name = "label9";
+            this.label9.Size = new System.Drawing.Size(54, 13);
+            this.label9.TabIndex = 4;
+            this.label9.Text = "Exception";
+            // 
+            // label10
+            // 
+            this.label10.AutoSize = true;
+            this.label10.BackColor = System.Drawing.Color.White;
+            this.label10.Location = new System.Drawing.Point(215, 42);
+            this.label10.Name = "label10";
+            this.label10.Size = new System.Drawing.Size(27, 13);
+            this.label10.TabIndex = 3;
+            this.label10.Text = "Ship";
+            // 
+            // label11
+            // 
+            this.label11.AutoSize = true;
+            this.label11.BackColor = System.Drawing.Color.White;
+            this.label11.Location = new System.Drawing.Point(6, 42);
+            this.label11.Name = "label11";
+            this.label11.Size = new System.Drawing.Size(73, 13);
+            this.label11.TabIndex = 2;
+            this.label11.Text = "Email Address";
+            // 
+            // label12
+            // 
+            this.label12.BackColor = System.Drawing.Color.White;
+            this.label12.Location = new System.Drawing.Point(23, 7);
+            this.label12.Name = "label12";
+            this.label12.Size = new System.Drawing.Size(332, 29);
+            this.label12.TabIndex = 1;
+            this.label12.Text = "These settings are for email sent from FedEx.  This is separate from and in addit" +
+    "ion to any email configured to be sent by ShipWorks.";
+            // 
+            // pictureBox1
+            // 
+            this.pictureBox1.BackColor = System.Drawing.Color.White;
+            this.pictureBox1.Image = global::ShipWorks.Properties.Resources.information16;
+            this.pictureBox1.Location = new System.Drawing.Point(5, 8);
+            this.pictureBox1.Name = "pictureBox1";
+            this.pictureBox1.Size = new System.Drawing.Size(16, 16);
+            this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.AutoSize;
+            this.pictureBox1.TabIndex = 0;
+            this.pictureBox1.TabStop = false;
+            //
+            // sectionHoldAtLocation
+            // 
+            this.sectionHoldAtLocation.Anchor = ((System.Windows.Forms.AnchorStyles) (((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.sectionHoldAtLocation.Collapsed = true;
+            // 
+            // sectionHoldAtLocation.ContentPanel
+            // 
+            this.sectionHoldAtLocation.ContentPanel.Controls.Add(this.fedExHoldAtLocationControl);
+            this.sectionHoldAtLocation.ExpandedHeight = 176;
+            this.sectionHoldAtLocation.ExtraText = "";
+            this.sectionHoldAtLocation.Location = new System.Drawing.Point(3, 706);
+            this.sectionHoldAtLocation.Name = "sectionHoldAtLocation";
+            this.sectionHoldAtLocation.SectionName = "Hold at FedEx Location";
+            this.sectionHoldAtLocation.SettingsKey = "{9b529fd1-0bfb-4d24-8aa8-a856c930e196}";
+            this.sectionHoldAtLocation.Size = new System.Drawing.Size(487, 24);
+            this.sectionHoldAtLocation.TabIndex = 10;
+            // 
+            // fedExHoldAtLocationControl
+            // 
+            this.fedExHoldAtLocationControl.BackColor = System.Drawing.Color.White;
+            this.fedExHoldAtLocationControl.Location = new System.Drawing.Point(1, 4);
+            this.fedExHoldAtLocationControl.Name = "fedExHoldAtLocationControl";
+            this.fedExHoldAtLocationControl.Size = new System.Drawing.Size(392, 150);
+            this.fedExHoldAtLocationControl.TabIndex = 0;
+            // 
+            // sectionFreight
+            // 
+            this.sectionFreight.Anchor = ((System.Windows.Forms.AnchorStyles) (((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.sectionFreight.ContentPanel.Controls.Add(this.fedExFreightContainerControl);
+            this.sectionFreight.ExtraText = "";
+            this.sectionFreight.Location = new System.Drawing.Point(3, 613);
+            this.sectionFreight.Name = "sectionFreight";
+            this.sectionFreight.SectionName = "Freight";
+            this.sectionFreight.SettingsKey = "{A7947F0F-9648-4443-A678-F67E7FCEE38C}";
+            this.sectionFreight.Size = new System.Drawing.Size(487, 88);
+            this.sectionFreight.TabIndex = 9;
+            // 
+            // fedExFreightContainerControl
+            // 
+            this.fedExFreightContainerControl.Location = new System.Drawing.Point(7, 5);
+            this.fedExFreightContainerControl.Margin = new System.Windows.Forms.Padding(0, 3, 3, 3);
+            this.fedExFreightContainerControl.Name = "fedExFreightContainerControl2";
+            this.fedExFreightContainerControl.Size = new System.Drawing.Size(469, 50);
+            this.fedExFreightContainerControl.TabIndex = 7;
+            this.fedExFreightContainerControl.Resize += OnFreightContainerControlResize;
+            // 
+            // codOrigin
+            // 
+            this.codOrigin.Anchor = ((System.Windows.Forms.AnchorStyles) (((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.codOrigin.AvailableFields = ((ShipWorks.Data.Controls.PersonFields) ((((((((ShipWorks.Data.Controls.PersonFields.Name | ShipWorks.Data.Controls.PersonFields.Company)
+            | ShipWorks.Data.Controls.PersonFields.Street)
+            | ShipWorks.Data.Controls.PersonFields.City)
+            | ShipWorks.Data.Controls.PersonFields.State)
+            | ShipWorks.Data.Controls.PersonFields.Postal)
+            | ShipWorks.Data.Controls.PersonFields.Residential)
+            | ShipWorks.Data.Controls.PersonFields.Phone)));
+            this.codOrigin.BackColor = System.Drawing.Color.Transparent;
+            this.codOrigin.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (0)));
+            this.codOrigin.Location = new System.Drawing.Point(28, 86);
+            this.codOrigin.Margin = new System.Windows.Forms.Padding(3, 5, 3, 3);
+            this.codOrigin.Name = "codOrigin";
+            this.codOrigin.OriginLabel = "Return To";
+            this.codOrigin.Size = new System.Drawing.Size(372, 323);
+            this.codOrigin.TabIndex = 4;
+            this.codOrigin.OriginChanged += new System.EventHandler(this.OnCodOriginChanged);
+            // 
+            // taxInfoLabel
+            // 
+            this.taxInfoLabel.AutoSize = true;
+            this.taxInfoLabel.BackColor = System.Drawing.Color.White;
+            this.taxInfoLabel.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold);
+            this.taxInfoLabel.Location = new System.Drawing.Point(33, 416);
+            this.taxInfoLabel.Name = "taxInfoLabel";
+            this.taxInfoLabel.Size = new System.Drawing.Size(99, 13);
+            this.taxInfoLabel.TabIndex = 15;
+            this.taxInfoLabel.Text = "Tax Information";
+            // 
+            // codTaxId
+            // 
+            this.codTaxId.Anchor = ((System.Windows.Forms.AnchorStyles) (((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.codTaxId.Location = new System.Drawing.Point(109, 436);
+            this.codTaxId.Name = "codTaxId";
+            this.codTaxId.Size = new System.Drawing.Size(276, 21);
+            this.codTaxId.TabIndex = 14;
+            // 
+            // CodTINLabel
+            // 
+            this.CodTINLabel.AutoSize = true;
+            this.CodTINLabel.BackColor = System.Drawing.Color.White;
+            this.CodTINLabel.Location = new System.Drawing.Point(56, 439);
+            this.CodTINLabel.Name = "CodTINLabel";
+            this.CodTINLabel.Size = new System.Drawing.Size(43, 13);
+            this.CodTINLabel.TabIndex = 13;
+            this.CodTINLabel.Text = "Tax ID:";
             // 
             // returnsClearance
             // 
@@ -1845,62 +1935,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             this.dropoffType.PromptText = "(Multiple Values)";
             this.dropoffType.Size = new System.Drawing.Size(175, 21);
             this.dropoffType.TabIndex = 62;
-            // 
-            // thirdPartyConsignee
-            // 
-            this.thirdPartyConsignee.AutoSize = true;
-            this.thirdPartyConsignee.BackColor = System.Drawing.Color.Transparent;
-            this.thirdPartyConsignee.Location = new System.Drawing.Point(106, 56);
-            this.thirdPartyConsignee.Name = "thirdPartyConsignee";
-            this.thirdPartyConsignee.Size = new System.Drawing.Size(79, 17);
-            this.thirdPartyConsignee.TabIndex = 66;
-            this.thirdPartyConsignee.Text = "Third Party";
-            this.thirdPartyConsignee.UseVisualStyleBackColor = false;
-            // 
-            // consigneeLabel
-            // 
-            this.consigneeLabel.AutoSize = true;
-            this.consigneeLabel.BackColor = System.Drawing.Color.Transparent;
-            this.consigneeLabel.Location = new System.Drawing.Point(41, 56);
-            this.consigneeLabel.Name = "consigneeLabel";
-            this.consigneeLabel.Size = new System.Drawing.Size(61, 13);
-            this.consigneeLabel.TabIndex = 6;
-            this.consigneeLabel.Text = "Consignee:";
-            // 
-            // sectionFimsOptions
-            // 
-            this.sectionFimsOptions.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            // 
-            // sectionFimsOptions.ContentPanel
-            // 
-            this.sectionFimsOptions.ContentPanel.Controls.Add(this.fimsOptionsControl);
-            this.sectionFimsOptions.ExtraText = "";
-            this.sectionFimsOptions.Location = new System.Drawing.Point(3, 851);
-            this.sectionFimsOptions.Name = "sectionFimsOptions";
-            this.sectionFimsOptions.SectionName = "FIMS Options";
-            this.sectionFimsOptions.SettingsKey = "{e87cbd40-e049-4cdf-adbd-d2daa1720fcf}";
-            this.sectionFimsOptions.Size = new System.Drawing.Size(487, 99);
-            this.sectionFimsOptions.TabIndex = 15;
-            // 
-            // fimsOptionsControl
-            // 
-            this.fimsOptionsControl.AutoSize = true;
-            this.fimsOptionsControl.BackColor = System.Drawing.Color.Transparent;
-            this.fimsOptionsControl.Location = new System.Drawing.Point(27, 5);
-            this.fimsOptionsControl.Name = "fimsOptionsControl";
-            this.fimsOptionsControl.Size = new System.Drawing.Size(279, 59);
-            this.fimsOptionsControl.TabIndex = 0;
-            // 
-            // labelReturnsClearance
-            // 
-            this.labelReturnsClearance.AutoSize = true;
-            this.labelReturnsClearance.BackColor = System.Drawing.Color.Transparent;
-            this.labelReturnsClearance.Location = new System.Drawing.Point(2, 33);
-            this.labelReturnsClearance.Name = "labelReturnsClearance";
-            this.labelReturnsClearance.Size = new System.Drawing.Size(100, 13);
-            this.labelReturnsClearance.TabIndex = 64;
-            this.labelReturnsClearance.Text = "Returns Clearance:";
+            #endregion
             //
             // FedExServiceControl
             //
@@ -1913,10 +1948,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             this.Controls.Add(this.sectionOptions);
             this.Controls.Add(this.sectionSmartPost);
             this.Controls.Add(this.sectionBilling);
-            this.Controls.Add(this.sectionEmail);
             this.Controls.Add(this.sectionHomeDelivery);
-            this.Controls.Add(this.sectionFreight);
-            this.Controls.Add(this.sectionHoldAtLocation);
             this.Controls.Add(this.sectionCOD);
             this.Controls.Add(this.sectionServiceOptions);
             this.Controls.Add(this.sectionFimsOptions);
@@ -1927,10 +1959,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             this.Controls.SetChildIndex(this.sectionServiceOptions, 0);
             this.Controls.SetChildIndex(this.sectionReturns, 0);
             this.Controls.SetChildIndex(this.sectionCOD, 0);
-            this.Controls.SetChildIndex(this.sectionHoldAtLocation, 0);
-            this.Controls.SetChildIndex(this.sectionFreight, 0);
             this.Controls.SetChildIndex(this.sectionHomeDelivery, 0);
-            this.Controls.SetChildIndex(this.sectionEmail, 0);
             this.Controls.SetChildIndex(this.sectionBilling, 0);
             this.Controls.SetChildIndex(this.sectionSmartPost, 0);
             this.Controls.SetChildIndex(this.sectionOptions, 0);
@@ -2033,6 +2062,10 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         private FedExPackageControl packageControl;
         private System.Windows.Forms.Label labelPayorTransport;
         private ShipWorks.UI.Controls.MultiValueComboBox payorTransport;
+        private ShipWorks.UI.Controls.MultiValueComboBox payorCountry;
+        private System.Windows.Forms.Label labelPayorCountry;
+        private ShipWorks.UI.Controls.MultiValueTextBox payorPostalCode;
+        private System.Windows.Forms.Label labelPayorPostalCode;
         private System.Windows.Forms.Label labelTransportAccount;
         private System.Windows.Forms.Label labelPayorDuties;
         private System.Windows.Forms.Panel panelPayorDuties;
