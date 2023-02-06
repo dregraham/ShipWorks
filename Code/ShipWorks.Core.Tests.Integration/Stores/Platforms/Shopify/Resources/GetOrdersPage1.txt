@@ -80,7 +80,7 @@
 			"variant_inventory_management": null,
 			"properties": [],
 			"product_exists": true,
-			"fulfillable_quantity": 0,
+			"fulfillable_quantity": 1,
 			"total_discount": "0.00",
 			"fulfillment_status": "fulfilled",
 			"tax_lines": [{
@@ -164,7 +164,7 @@
 				"variant_inventory_management": null,
 				"properties": [],
 				"product_exists": true,
-				"fulfillable_quantity": 0,
+				"fulfillable_quantity": 1,
 				"total_discount": "0.00",
 				"fulfillment_status": "fulfilled",
 				"tax_lines": [{
@@ -301,7 +301,7 @@
 			"variant_inventory_management": null,
 			"properties": [],
 			"product_exists": true,
-			"fulfillable_quantity": 0,
+			"fulfillable_quantity": 1,
 			"total_discount": "0.00",
 			"fulfillment_status": "fulfilled",
 			"tax_lines": [{
@@ -334,7 +334,7 @@
 			"variant_inventory_management": "shopify",
 			"properties": [],
 			"product_exists": true,
-			"fulfillable_quantity": 0,
+			"fulfillable_quantity": 1,
 			"total_discount": "0.00",
 			"fulfillment_status": "fulfilled",
 			"tax_lines": [{
@@ -367,7 +367,7 @@
 			"variant_inventory_management": null,
 			"properties": [],
 			"product_exists": true,
-			"fulfillable_quantity": 0,
+			"fulfillable_quantity": 1,
 			"total_discount": "0.00",
 			"fulfillment_status": "fulfilled",
 			"tax_lines": [{
@@ -417,7 +417,7 @@
 				"variant_inventory_management": null,
 				"properties": [],
 				"product_exists": true,
-				"fulfillable_quantity": 0,
+				"fulfillable_quantity": 1,
 				"total_discount": "0.00",
 				"fulfillment_status": "fulfilled",
 				"tax_lines": [{
@@ -450,7 +450,7 @@
 				"variant_inventory_management": "shopify",
 				"properties": [],
 				"product_exists": true,
-				"fulfillable_quantity": 0,
+				"fulfillable_quantity": 1,
 				"total_discount": "0.00",
 				"fulfillment_status": "fulfilled",
 				"tax_lines": [{
@@ -483,7 +483,7 @@
 				"variant_inventory_management": null,
 				"properties": [],
 				"product_exists": true,
-				"fulfillable_quantity": 0,
+				"fulfillable_quantity": 1,
 				"total_discount": "0.00",
 				"fulfillment_status": "fulfilled",
 				"tax_lines": [{
