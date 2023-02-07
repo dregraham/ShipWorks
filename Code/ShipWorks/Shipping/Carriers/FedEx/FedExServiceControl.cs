@@ -704,32 +704,6 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         }
 
         /// <summary>
-        /// Synchronizes the selected rate in the rate control.
-        /// </summary>
-        public override void SyncSelectedRate()
-        {
-            if (!service.MultiValued && service.SelectedValue != null)
-            {
-                FedExServiceType serviceType = (FedExServiceType) service.SelectedValue;
-                RateResult matchingRate = RateControl.RateGroup.Rates.FirstOrDefault(r =>
-                {
-                    if (r.Tag == null || r.ShipmentType != ShipmentTypeCode.FedEx)
-                    {
-                        return false;
-                    }
-
-                    return ((FedExRateSelection) r.OriginalTag).ServiceType == serviceType;
-                });
-
-                RateControl.SelectRate(matchingRate);
-            }
-            else
-            {
-                RateControl.ClearSelection();
-            }
-        }
-
-        /// <summary>
         /// Update the available choices for packaging type
         /// </summary>
         private void UpdatePackagingChoices(FedExServiceType? serviceType)
@@ -922,14 +896,17 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         /// </summary>
         public override void OnRateSelected(object sender, RateSelectedEventArgs e)
         {
-            int oldIndex = service.SelectedIndex;
+            var oldIndex = service.SelectedIndex;
 
-            FedExRateSelection rate = e.Rate.OriginalTag as FedExRateSelection;
+            var isFedExServiceType = EnumHelper.TryGetEnumByApiValue(e.Rate.OriginalTag.ToString(), out FedExServiceType? serviceType);
 
-            service.SelectedValue = rate?.ServiceType;
-            if (service.SelectedIndex == -1 && oldIndex != -1)
+            if (isFedExServiceType)
             {
-                service.SelectedIndex = oldIndex;
+                service.SelectedValue = serviceType;
+                if (service.SelectedIndex == -1 && oldIndex != -1)
+                {
+                    service.SelectedIndex = oldIndex;
+                }
             }
         }
 
