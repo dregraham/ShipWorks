@@ -117,12 +117,14 @@
                 Grid.Row="5"
                 Grid.Column="0"
                 Style="{StaticResource FieldLabel}"
-                Text="AES/EEI Exemption" />
+                Text="AES/EEI Exemption" 
+                Visibility="Collapsed"/>
             <TextBox
                 Grid.Row="5"
                 Grid.Column="1"
                 Text="{Binding ShipmentModel.ShipmentAdapter.Shipment.FedEx.CustomsAESEEI, UpdateSourceTrigger=PropertyChanged}"
-                Style="{StaticResource FormTextBox}" />
+                Style="{StaticResource FormTextBox}" 
+                Visibility="Collapsed"/>
             
         </Grid>
         

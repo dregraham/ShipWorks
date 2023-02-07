@@ -66,11 +66,13 @@
             Grid.Column="0"
             Margin="0"
             Style="{StaticResource FieldLabel}"
-            Text="Integrity" />
+            Text="Integrity" 
+            Visibility="Collapsed"/>
         <ui:TokenTextBox
             Grid.Row="3"
             Grid.Column="1"
             Margin="10,0,0,0"
-            Text="{Binding ShipmentModel.ShipmentAdapter.Shipment.FedEx.ReferenceShipmentIntegrity}" />
+            Text="{Binding ShipmentModel.ShipmentAdapter.Shipment.FedEx.ReferenceShipmentIntegrity}" 
+            Visibility="Collapsed"/>
     </Grid>
 </UserControl>

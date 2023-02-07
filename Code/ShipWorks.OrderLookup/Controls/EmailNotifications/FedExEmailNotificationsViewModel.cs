@@ -10,7 +10,6 @@ namespace ShipWorks.OrderLookup.Controls.EmailNotifications
     /// <summary>
     /// View model for the FedExEmailNotificationsControl
     /// </summary>
-    [KeyedComponent(typeof(IEmailNotificationsViewModel), ShipmentTypeCode.FedEx)]
     [WpfView(typeof(FedExEmailNotificationsControl))]
     public class FedExEmailNotificationsViewModel : OrderLookupViewModelBase, IEmailNotificationsViewModel
     {
