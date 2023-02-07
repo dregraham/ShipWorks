@@ -19,7 +19,7 @@ namespace ShipWorks.Tests.Shared.Database.IntegrationDB
         /// <summary>
         /// Initializes a new instance of the <see cref="IntegrationDB"/> class.
         /// </summary>
-        public IntegrationDB(string databaseName, string dataSource = @"(localdb)\v11.0")
+        public IntegrationDB(string databaseName, string dataSource = @"localhost")
         {
             this.databaseName = databaseName;
             this.dataSource = dataSource;
