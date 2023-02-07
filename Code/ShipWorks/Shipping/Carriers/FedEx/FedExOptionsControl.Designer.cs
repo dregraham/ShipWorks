@@ -36,6 +36,37 @@
             this.requestedLabelFormat = new ShipWorks.Shipping.Editing.RequestedLabelFormatOptionControl();
             this.SuspendLayout();
             // 
+            // labelLabels
+            // 
+            this.labelLabels.AutoSize = true;
+            this.labelLabels.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.labelLabels.Location = new System.Drawing.Point(2, 2);
+            this.labelLabels.Name = "labelLabels";
+            this.labelLabels.Size = new System.Drawing.Size(43, 13);
+            this.labelLabels.TabIndex = 0;
+            this.labelLabels.Text = "Labels";
+            // 
+            // requestedLabelFormat
+            // 
+            this.requestedLabelFormat.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.requestedLabelFormat.Font = new System.Drawing.Font("Tahoma", 8.25F);
+            this.requestedLabelFormat.Location = new System.Drawing.Point(19, 22);
+            this.requestedLabelFormat.Name = "requestedLabelFormat";
+            this.requestedLabelFormat.Size = new System.Drawing.Size(340, 25);
+            this.requestedLabelFormat.TabIndex = 59;
+            #region Removed For FedEx Platform
+            // 
+            // maskAccountNumber
+            // 
+            this.maskAccountNumber.AutoSize = true;
+            this.maskAccountNumber.Location = new System.Drawing.Point(21, 22);
+            this.maskAccountNumber.Name = "maskAccountNumber";
+            this.maskAccountNumber.Size = new System.Drawing.Size(207, 17);
+            this.maskAccountNumber.TabIndex = 1;
+            this.maskAccountNumber.Text = "Mask FedEx account number on label.";
+            this.maskAccountNumber.UseVisualStyleBackColor = true;
+            // 
             // thermalDocTabType
             // 
             this.thermalDocTabType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
@@ -63,50 +94,17 @@
             this.thermalDocTab.TabIndex = 5;
             this.thermalDocTab.Text = "My label stock has a doc-tab.";
             this.thermalDocTab.UseVisualStyleBackColor = true;
-            // 
-            // labelLabels
-            // 
-            this.labelLabels.AutoSize = true;
-            this.labelLabels.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.labelLabels.Location = new System.Drawing.Point(2, 2);
-            this.labelLabels.Name = "labelLabels";
-            this.labelLabels.Size = new System.Drawing.Size(43, 13);
-            this.labelLabels.TabIndex = 0;
-            this.labelLabels.Text = "Labels";
-            // 
-            // maskAccountNumber
-            // 
-            this.maskAccountNumber.AutoSize = true;
-            this.maskAccountNumber.Location = new System.Drawing.Point(21, 22);
-            this.maskAccountNumber.Name = "maskAccountNumber";
-            this.maskAccountNumber.Size = new System.Drawing.Size(207, 17);
-            this.maskAccountNumber.TabIndex = 1;
-            this.maskAccountNumber.Text = "Mask FedEx account number on label.";
-            this.maskAccountNumber.UseVisualStyleBackColor = true;
-            // 
-            // requestedLabelFormat
-            // 
-            this.requestedLabelFormat.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.requestedLabelFormat.Font = new System.Drawing.Font("Tahoma", 8.25F);
-            this.requestedLabelFormat.Location = new System.Drawing.Point(19, 43);
-            this.requestedLabelFormat.Name = "requestedLabelFormat";
-            this.requestedLabelFormat.Size = new System.Drawing.Size(340, 25);
-            this.requestedLabelFormat.TabIndex = 59;
+            #endregion
             // 
             // FedExOptionsControl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.Controls.Add(this.requestedLabelFormat);
-            this.Controls.Add(this.thermalDocTabType);
-            this.Controls.Add(this.labelThermalDocTabType);
-            this.Controls.Add(this.thermalDocTab);
             this.Controls.Add(this.labelLabels);
-            this.Controls.Add(this.maskAccountNumber);
             this.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.Name = "FedExOptionsControl";
-            this.Size = new System.Drawing.Size(409, 116);
+            this.Size = new System.Drawing.Size(409, 45);
             this.ResumeLayout(false);
             this.PerformLayout();
 
