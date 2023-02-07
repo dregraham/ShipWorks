@@ -134,7 +134,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
                 options.BillToPostalCode = shipment.FedEx.PayorPostalCode;
             }
 
-            if(shipment.FedEx.CodAmount > 0)
+            if(shipment.FedEx.CodEnabled && shipment.FedEx.CodAmount > 0)
             {
                 var paymentType = (FedExCodPaymentType) shipment.FedEx.CodPaymentType;
                 var currencyType = (CurrencyType) shipment.FedEx.Currency;
