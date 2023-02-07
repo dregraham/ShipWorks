@@ -292,7 +292,8 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.Postal
                     shipmentCustomsItem.HarmonizedCode = Trim(sci.Attribute("HarmonizedCode").Value, 6);
                     shipmentCustomsItem.NumberOfPieces = Convert.ToInt16(sci.Attribute("NumberOfPieces").Value);
                     shipmentCustomsItem.UnitPriceAmount = Convert.ToDecimal(sci.Attribute("UnitPriceAmount").Value);
-                    
+                    shipmentCustomsItem.SKU = Trim(sci.Attribute("SKU").Value, 60);
+
                     shipment.CustomsItems.Add(shipmentCustomsItem);
                 }
             }
