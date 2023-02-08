@@ -82,5 +82,19 @@ namespace Interapptive.Shared.Utility
                 value :
                 valueIfNotSafe >= safeMinDateTime ? valueIfNotSafe : safeMinDateTime;
         }
+
+        public static DateTime ToUniversalTime(this DateTime value, TimeZoneInfo timeZoneInfo)
+        {
+            if (value.Kind == DateTimeKind.Utc)
+            {
+                return value;
+            }
+            var valueWithoutKind = new DateTime(value.Ticks, DateTimeKind.Unspecified);
+            if (timeZoneInfo.IsAmbiguousTime(valueWithoutKind))
+            {
+                return value;
+            }
+            return TimeZoneInfo.ConvertTimeToUtc(valueWithoutKind, timeZoneInfo);
+        }
     }
 }

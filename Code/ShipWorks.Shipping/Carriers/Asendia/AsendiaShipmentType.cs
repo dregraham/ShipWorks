@@ -82,7 +82,7 @@ namespace ShipWorks.Shipping.Carriers.Asendia
             }
 
             AsendiaShipmentEntity asendiaShipment = shipment.Asendia;
-            asendiaShipment.Service = AsendiaServiceType.AsendiaPriorityTracked;
+            asendiaShipment.Service = AsendiaServiceType.EpaqSelectCustom;
             asendiaShipment.RequestedLabelFormat = (int) ThermalLanguage.None;
             asendiaShipment.Contents = (int) ShipEngineContentsType.Merchandise;
             asendiaShipment.NonDelivery = (int) ShipEngineNonDeliveryType.ReturnToSender;
@@ -267,7 +267,7 @@ namespace ShipWorks.Shipping.Carriers.Asendia
                 accountRepository.AccountsReadOnly.First().AsendiaAccountID :
                 0;
 
-            asendia.Service = (int) AsendiaServiceType.AsendiaPriorityTracked;
+            asendia.Service = AsendiaServiceType.EpaqSelectCustom;
             asendia.Contents = (int) ShipEngineContentsType.Merchandise;
             asendia.NonDelivery = (int) ShipEngineNonDeliveryType.ReturnToSender;
             asendia.CustomsRecipientTin = string.Empty;

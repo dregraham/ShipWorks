@@ -40,12 +40,12 @@ namespace ShipWorks.ApplicationCore.Licensing.Warehouse
         /// Make an authenticated request
         /// </summary>
         public Task<GenericResult<IRestResponse>> MakeRequest(IRestRequest restRequest, string logName)
-            => MakeRequest(restRequest, logName, ApiLogSource.ShipWorksWarehouse);
+            => MakeRequest(restRequest, logName, ApiLogSource.ShipWorksWarehouse, CancellationToken.None);
 
         /// <summary>
         /// Make an authenticated request
         /// </summary>
-        public async Task<GenericResult<IRestResponse>> MakeRequest(IRestRequest restRequest, string logName, ApiLogSource apiLogSource)
+        public async Task<GenericResult<IRestResponse>> MakeRequest(IRestRequest restRequest, string logName, ApiLogSource apiLogSource, CancellationToken cancellationToken)
         {
             ApiLogEntry logEntry = new ApiLogEntry(apiLogSource, logName);
             IRestResponse restResponse = null;
@@ -74,10 +74,10 @@ namespace ShipWorks.ApplicationCore.Licensing.Warehouse
                     .AddHeader("Authorization", $"Bearer {authenticationToken}")
                     .AddHeader("warehouse-id", configurationData.FetchReadOnly().WarehouseID);
 
-                restResponse = await restClient.ExecuteTaskAsync(restRequest).ConfigureAwait(false);
+                restResponse = await restClient.ExecuteTaskAsync(restRequest, cancellationToken).ConfigureAwait(false);
                 logEntry.LogResponse(restResponse, "json");
 
-                if (restResponse.StatusCode == HttpStatusCode.OK)
+                if (restResponse.StatusCode == HttpStatusCode.OK || restResponse.StatusCode == HttpStatusCode.NoContent)
                 {
                     return GenericResult.FromSuccess(restResponse);
                 }
@@ -92,7 +92,7 @@ namespace ShipWorks.ApplicationCore.Licensing.Warehouse
                         return GenericResult.FromError<IRestResponse>("Unable to obtain a valid token from redirectToken.");
                     }
 
-                    restResponse = await ResendAction(restRequest, restClient, redirectTokenResult, CancellationToken.None);
+                    restResponse = await ResendAction(restRequest, restClient, redirectTokenResult, cancellationToken);
                 }
 
                 if (restResponse.StatusCode == HttpStatusCode.OK)

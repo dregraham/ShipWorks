@@ -25,7 +25,6 @@ namespace ShipWorks.Data.Administration.Recovery
             Justification = "It is not a problem if each closed class gets its own logger")]
         private static readonly ILog log = LogManager.GetLogger("SqlAdapterRetry<TException>");
 
-        private readonly object lockObject = new object();
         private readonly int retries = 5;
         private readonly int deadlockPriority = -5;
         private readonly string commandDescription = string.Empty;

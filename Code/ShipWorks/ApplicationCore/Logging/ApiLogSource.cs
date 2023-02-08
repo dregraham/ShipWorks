@@ -155,5 +155,6 @@ namespace ShipWorks.ApplicationCore.Logging
 
         [ApiPrivateLogSource]
         DhlEcommerce,
+        Platform,//ShipEngine Platform
     }
 }
