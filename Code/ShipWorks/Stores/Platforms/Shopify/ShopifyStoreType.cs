@@ -60,17 +60,6 @@ namespace ShipWorks.Stores.Platforms.Shopify
         }
 
         /// <summary>
-        /// Initial download policy of the store
-        /// </summary>
-        public override InitialDownloadPolicy InitialDownloadPolicy
-        {
-            get
-            {
-                return new InitialDownloadPolicy(InitialDownloadRestrictionType.DaysBack);
-            }
-        }
-
-        /// <summary>
         /// Creates a new instance of an Shopify store entity
         /// </summary>
         public override StoreEntity CreateStoreInstance()
