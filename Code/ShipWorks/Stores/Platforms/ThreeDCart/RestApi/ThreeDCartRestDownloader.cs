@@ -176,7 +176,7 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart.RestApi
             }
             else if (!string.IsNullOrWhiteSpace(invoiceNumberPrefix) &&
                      threeDCartStore.OrderIDUpgradeFixDate.HasValue &&
-                     threeDCartStore.OrderIDUpgradeFixDate.Value > DateTimeUtility.ConvertTimeToUtcForTimeZone(order.OrderDate, threeDCartStore.StoreTimeZone))
+                     threeDCartStore.OrderIDUpgradeFixDate.Value > order.OrderDate.ToUniversalTime(threeDCartStore.StoreTimeZone))
             {
                 // 3dcart allows you to add a prefix to the invoice number.
                 // The legacy order importer stripped the prefix, so we'll do that here too.
@@ -271,7 +271,7 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart.RestApi
                 order.OrderTotal = threeDCartOrder.OrderAmount;
             }
 
-            order.OnlineLastModified = DateTimeUtility.ConvertTimeToUtcForTimeZone(threeDCartOrder.LastUpdate, threeDCartStore.StoreTimeZone);
+            order.OnlineLastModified = threeDCartOrder.LastUpdate.ToUniversalTime(threeDCartStore.StoreTimeZone);
             order.OnlineStatusCode = threeDCartOrder.OrderStatusID;
             order.OnlineStatus = EnumHelper.GetDescription((Enums.ThreeDCartOrderStatus) threeDCartOrder.OrderStatusID);
 
@@ -298,7 +298,7 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart.RestApi
                 }
 
                 order.RequestedShipping = threeDCartShipment.ShipmentMethodName;
-                order.OrderDate = DateTimeUtility.ConvertTimeToUtcForTimeZone(threeDCartOrder.OrderDate, threeDCartStore.StoreTimeZone);
+                order.OrderDate = threeDCartOrder.OrderDate.ToUniversalTime(threeDCartStore.StoreTimeZone);
 
                 LoadItems(order, threeDCartOrder, threeDCartShipment);
 

@@ -5,6 +5,7 @@ using Interapptive.Shared.UI;
 using Interapptive.Shared.Utility;
 using log4net;
 using SD.LLBLGen.Pro.ORMSupportClasses;
+using ShipWorks.ApplicationCore;
 using ShipWorks.Data;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
@@ -120,19 +121,6 @@ namespace ShipWorks.Stores.Platforms.Etsy
         }
 
         /// <summary>
-        /// Create the pages to be displayed in the Add Store Wizard
-        /// </summary>
-        /// <param name="scope"></param>
-        public override List<WizardPage> CreateAddStoreWizardPages(ILifetimeScope scope)
-        {
-            List<WizardPage> pages = new List<WizardPage>();
-
-            pages.Add(new WizardPages.EtsyAssociateAccountPage());
-
-            return pages;
-        }
-
-        /// <summary>
         /// Create the control used to configured the actions for online update after shipping
         /// </summary>
         public override OnlineUpdateActionControlBase CreateAddStoreWizardOnlineUpdateActionControl()
@@ -145,9 +133,12 @@ namespace ShipWorks.Stores.Platforms.Etsy
         /// </summary>
         public override AccountSettingsControlBase CreateAccountSettingsControl()
         {
-            var control = new EtsyAccountSettingsControl();
-
-            return control;
+            using (var scope = IoC.BeginLifetimeScope())
+            {
+                var factory = scope.Resolve<IEtsyAccountSettingsControlFactory>();
+                var control = factory.Create(Store);
+                return control;
+            }
         }
 
         /// <summary>
@@ -218,17 +209,6 @@ namespace ShipWorks.Stores.Platforms.Etsy
             get
             {
                 return EtsyStore.EtsyShopID.ToString();
-            }
-        }
-
-        /// <summary>
-        /// Initial download policy of the store
-        /// </summary>
-        public override InitialDownloadPolicy InitialDownloadPolicy
-        {
-            get
-            {
-                return new InitialDownloadPolicy(InitialDownloadRestrictionType.DaysBack);
             }
         }
     }

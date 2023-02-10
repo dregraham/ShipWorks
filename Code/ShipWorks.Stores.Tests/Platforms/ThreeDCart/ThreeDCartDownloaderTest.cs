@@ -43,7 +43,7 @@ namespace ShipWorks.Stores.Tests.Platforms.ThreeDCart
             ThreeDCartStoreEntity store = new ThreeDCartStoreEntity
             {
                 TypeCode = (int) StoreTypeCode.ThreeDCart,
-                StoreTimeZone = TimeZoneInfo.Utc,
+                TimeZoneID = "Central Standard Time",
                 StoreUrl = "http://www.shipworks.com"
             };
 

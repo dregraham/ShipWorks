@@ -5,6 +5,7 @@ using Interapptive.Shared.Utility;
 using Moq;
 using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Shipping.Carriers.OnTrac;
+using ShipWorks.Shipping.Carriers.OnTrac.Net;
 using ShipWorks.Shipping.Carriers.OnTrac.Net.Track;
 using ShipWorks.Shipping.Carriers.OnTrac.Schemas.TrackingResponse;
 using ShipWorks.Shipping.Tracking;
@@ -23,6 +24,8 @@ namespace ShipWorks.Tests.Shipping.Carriers.OnTrac.Tracking
 
         public OnTracTrackingRequestTest()
         {
+            OnTracRequest.UseTestServer = true;
+
             //Setup mock object that holds response from request
             mockedHttpResponseReader = new Mock<IHttpResponseReader>();
 

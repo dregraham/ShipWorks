@@ -32,6 +32,9 @@ namespace ShipWorks.Stores.Tests.Orders.Archive
             mock.Mock<IDateTimeProvider>()
                 .SetupGet(x => x.Now)
                 .Returns(new DateTime(2018, 3, 14, 12, 30, 00));
+            mock.Mock<IDateTimeProvider>()
+                .SetupGet(x => x.TimeZoneInfo)
+                .Returns(TimeZoneInfo.FindSystemTimeZoneById("Central Standard Time"));//StLouis time zone
 
             testObject = mock.Create<OrderArchiveViewModel>();
         }

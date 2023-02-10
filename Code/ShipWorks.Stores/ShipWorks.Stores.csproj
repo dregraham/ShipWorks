@@ -294,6 +294,12 @@
     <Compile Include="Platforms\ChannelAdvisorHub\ChannelAdvisorHubStoreType.cs" />
     <Compile Include="Platforms\ChannelAdvisor\DTO\ChannelAdvisorProductList.cs" />
     <Compile Include="Platforms\Ebay\Warehouse\EbayStoreDtoFactory.cs" />
+    <Compile Include="Platforms\Etsy\EtsyAccountSettingsViewModel.cs" />
+    <Compile Include="Platforms\Etsy\EtsyCreateOrderSourceViewModel.cs" />
+    <Compile Include="Platforms\Etsy\EtsyDaysBackViewModel.cs" />
+    <Compile Include="Platforms\Etsy\IEtsyAccountSettingsViewModel.cs" />
+    <Compile Include="Platforms\Etsy\IEtsyCreateOrderSourceViewModel.cs" />
+    <Compile Include="Platforms\Etsy\IEtsyDaysBackViewModel.cs" />
     <Compile Include="Platforms\GenericFile\Warehouse\GenericFileStoreDtoFactory.cs" />
     <Compile Include="Platforms\GenericModule\CoreExtensions\Filters\Orders\GenericModuleOrderSourceCondition.cs" />
     <Compile Include="Platforms\GrouponHub\GrouponHubStoreType.cs" />
@@ -306,7 +312,7 @@
     <Compile Include="Platforms\Odbc\Mapping\RefreshingOdbcStore.cs" />
     <Compile Include="Platforms\Platform\CoreExtensions\Actions\PlatformShipmentUploadTask.cs" />
     <Compile Include="Platforms\Platform\HubOrderSourceClient.cs" />
-    <Compile Include="Platforms\Platform\OnlineUpdating\PlatformOnlineUpdateCommandCreator.cs" />
+    <Compile Include="Platforms\Platform\OnlineUpdating\PlatformUpdateCommandCreator.cs" />
     <Compile Include="Platforms\Platform\PlatformStoreDownloader.cs" />
     <Compile Include="Platforms\Platform\PlatformStoreSetup.cs" />
     <Compile Include="Platforms\Platform\PlatformWarehouseOrderFactory.cs" />
@@ -512,7 +518,6 @@
     <Compile Include="Platforms\Ebay\Warehouse\EbayWarehouseItem.cs" />
     <Compile Include="Platforms\Ebay\Warehouse\EbayWarehouseOrder.cs" />
     <Compile Include="Platforms\Ebay\Warehouse\EbayWarehouseOrderFactory.cs" />
-    <Compile Include="Platforms\Etsy\OnlineUpdating\EtsyOnlineUpdateCommandCreator.cs" />
     <Compile Include="Platforms\Etsy\OnlineUpdating\EtsyOnlineUpdater.cs" />
     <Compile Include="Platforms\Etsy\OnlineUpdating\EtsyUserInteraction.cs" />
     <Compile Include="Platforms\Etsy\OnlineUpdating\IEtsyUserInteraction.cs" />
