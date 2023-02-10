@@ -1746,6 +1746,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 			this.AddElementFieldInfo("FedExShipmentEntity", "CustomsRecipientTINType", typeof(Nullable<System.Int32>), false, false, false, true,  (int)FedExShipmentFieldIndex.CustomsRecipientTINType, 0, 0, 10);
 			this.AddElementFieldInfo("FedExShipmentEntity", "PayorCountryCode", typeof(System.String), false, false, false, true,  (int)FedExShipmentFieldIndex.PayorCountryCode, 2, 0, 0);
 			this.AddElementFieldInfo("FedExShipmentEntity", "PayorPostalCode", typeof(System.String), false, false, false, true,  (int)FedExShipmentFieldIndex.PayorPostalCode, 10, 0, 0);
+			this.AddElementFieldInfo("FedExShipmentEntity", "ShipEngineLabelId", typeof(System.String), false, false, false, true,  (int)FedExShipmentFieldIndex.ShipEngineLabelId, 50, 0, 0);
 		}
 		/// <summary>Inits FilterEntity's FieldInfo objects</summary>
 		private void InitFilterEntityInfos()
