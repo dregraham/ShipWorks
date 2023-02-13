@@ -41,7 +41,6 @@ namespace ShipWorks.Stores.Platforms.Etsy.OnlineUpdating
             webClient = createWebClient(store);
         }
 
-
         /// <summary>
         /// Uploads the shipment details.
         /// </summary>
