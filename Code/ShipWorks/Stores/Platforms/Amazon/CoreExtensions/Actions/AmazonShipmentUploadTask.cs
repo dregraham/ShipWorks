@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Autofac.Features.Indexed;
@@ -9,6 +10,7 @@ using ShipWorks.Actions.Tasks.Common;
 using ShipWorks.Actions.Tasks.Common.Editors;
 using ShipWorks.Data.Model;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Stores.Platforms.Platform;
 using ShipWorks.Stores.Platforms.Platform.OnlineUpdating;
 
 namespace ShipWorks.Stores.Platforms.Amazon.CoreExtensions.Actions
@@ -86,20 +88,20 @@ namespace ShipWorks.Stores.Platforms.Amazon.CoreExtensions.Actions
                 context.ConsumingPostponed();
 
                 // Upload the details, first starting with all the postponed input, plus the current input
-                await UpdloadShipmentDetails(store, postponedKeys.Concat(inputKeys)).ConfigureAwait(false);
+                await UploadShipmentDetails(store, postponedKeys.Concat(inputKeys)).ConfigureAwait(false);
             }
         }
 
         /// <summary>
         /// Run the batched up (already combined from postponed tasks, if any) input keys through the task
         /// </summary>
-        private async Task UpdloadShipmentDetails(AmazonStoreEntity store, IEnumerable<long> shipmentKeys)
+        private async Task UploadShipmentDetails(AmazonStoreEntity store, IEnumerable<long> shipmentKeys)
         {
             try
             {
                 await onlineUpdater.UploadShipmentDetails(store, shipmentKeys).ConfigureAwait(false);
             }
-            catch (AmazonException ex)
+            catch (Exception ex) when (ex is PlatformStoreException || ex is AmazonException)
             {
                 throw new ActionTaskRunException(ex.Message, ex);
             }

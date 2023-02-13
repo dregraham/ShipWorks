@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -23,7 +24,7 @@ namespace Interapptive.Shared.Security.SecureTextVersions
         /// </summary>
         private string KeyCachePrefix => $"V{Version}";
 
-        protected static Dictionary<string, (byte[] key, byte[] salt)> keyCache = new Dictionary<string, (byte[] key, byte[] salt)>();
+        protected static ConcurrentDictionary<string, (byte[] key, byte[] salt)> keyCache = new ConcurrentDictionary<string, (byte[] key, byte[] salt)>();
 
         protected readonly ILog log;
 
@@ -133,7 +134,7 @@ namespace Interapptive.Shared.Security.SecureTextVersions
 
             derivedKey = DeriveKey(password, salt, iterations, blockSize, parallelismFactor, keyLength);
 
-            keyCache.Add(cacheIndex, (derivedKey, salt));
+            keyCache.TryAdd(cacheIndex, (derivedKey, salt));
 
             return (derivedKey, salt);
         }
@@ -143,7 +144,7 @@ namespace Interapptive.Shared.Security.SecureTextVersions
         /// </summary>
         public void ClearCache()
         {
-            keyCache = new Dictionary<string, (byte[] key, byte[] salt)>();
+            keyCache = new ConcurrentDictionary<string, (byte[] key, byte[] salt)>();
         }
 
         /// <summary>

@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
+using Autofac.Features.Indexed;
 using Interapptive.Shared.Utility;
 using ShipWorks.Actions;
 using ShipWorks.Actions.Tasks;
@@ -8,7 +10,10 @@ using ShipWorks.Actions.Tasks.Common;
 using ShipWorks.Actions.Tasks.Common.Editors;
 using ShipWorks.Data.Model;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Stores.Platforms.Amazon;
 using ShipWorks.Stores.Platforms.Etsy.OnlineUpdating;
+using ShipWorks.Stores.Platforms.Platform;
+using ShipWorks.Stores.Platforms.Platform.OnlineUpdating;
 
 namespace ShipWorks.Stores.Platforms.Etsy.CoreExtensions.Actions
 {
@@ -18,15 +23,14 @@ namespace ShipWorks.Stores.Platforms.Etsy.CoreExtensions.Actions
     [ActionTask("Upload shipment details", "EtsyShipmentUploadTask", ActionTaskCategory.UpdateOnline)]
     public class EtsyShipmentUploadTask : StoreInstanceTaskBase
     {
-        const long maxBatchSize = 300;
-        private readonly Func<EtsyStoreEntity, IEtsyOnlineUpdater> createOnlineUpdater;
+        protected readonly IPlatformOnlineUpdater onlineUpdater;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public EtsyShipmentUploadTask(Func<EtsyStoreEntity, IEtsyOnlineUpdater> createOnlineUpdater)
+        public EtsyShipmentUploadTask(IIndex<StoreTypeCode, IPlatformOnlineUpdater> platformOnlineUpdaterIndex)
         {
-            this.createOnlineUpdater = createOnlineUpdater;
+            this.onlineUpdater = platformOnlineUpdaterIndex[StoreTypeCode.Etsy];
         }
 
         /// <summary>
@@ -56,6 +60,7 @@ namespace ShipWorks.Stores.Platforms.Etsy.CoreExtensions.Actions
 
         /// <summary>
         /// Run the task
+        /// TODO: copied from Amazon, should be extracted to common base
         /// </summary>
         public override async Task RunAsync(List<long> inputKeys, IActionStepContext context)
         {
@@ -73,19 +78,18 @@ namespace ShipWorks.Stores.Platforms.Etsy.CoreExtensions.Actions
                 throw new ActionTaskRunException("The store configured for the task has been deleted.");
             }
 
-            var updater = createOnlineUpdater(store);
+            await UploadShipmentDetails(store, inputKeys).ConfigureAwait(false);
+        }
 
-            foreach (var shipmentID in inputKeys)
+        private async Task UploadShipmentDetails(StoreEntity store, IEnumerable<long> shipmentKeys)
+        {
+            try
             {
-                // Upload the details, first starting with all the postponed input, plus the current input
-                try
-                {
-                    await updater.UploadShipmentDetails(shipmentID, context.CommitWork).ConfigureAwait(false);
-                }
-                catch (EtsyException ex)
-                {
-                    throw new ActionTaskRunException(ex.Message, ex);
-                }
+                await onlineUpdater.UploadShipmentDetails(store, shipmentKeys).ConfigureAwait(false);
+            }
+            catch (PlatformStoreException ex)
+            {
+                throw new ActionTaskRunException(ex.Message, ex);
             }
         }
     }

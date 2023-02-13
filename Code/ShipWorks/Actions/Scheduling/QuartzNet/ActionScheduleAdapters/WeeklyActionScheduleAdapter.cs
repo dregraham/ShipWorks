@@ -1,4 +1,5 @@
-﻿using Quartz;
+﻿using Interapptive.Shared.Utility;
+using Quartz;
 using Quartz.Impl.Calendar;
 using ShipWorks.Actions.Scheduling.ActionSchedules;
 using System;
@@ -9,6 +10,12 @@ namespace ShipWorks.Actions.Scheduling.QuartzNet.ActionScheduleAdapters
 {
     public class WeeklyActionScheduleAdapter : ActionScheduleAdapter<WeeklyActionSchedule>
     {
+        private readonly IDateTimeProvider dateTimeProvider;
+
+        public WeeklyActionScheduleAdapter(IDateTimeProvider dateTimeProvider)
+        {
+            this.dateTimeProvider = dateTimeProvider;
+        }
         public override QuartzActionSchedule Adapt(WeeklyActionSchedule schedule)
         {
             return new QuartzActionSchedule
@@ -17,7 +24,7 @@ namespace ShipWorks.Actions.Scheduling.QuartzNet.ActionScheduleAdapters
                     CalendarIntervalScheduleBuilder.Create()
                         .PreserveHourOfDayAcrossDaylightSavings(true)
                         .WithIntervalInDays(1)
-                        .InTimeZone(TimeZoneInfo.Local),
+                        .InTimeZone(dateTimeProvider.TimeZoneInfo),
 
                 Calendar =
                     new IntervalCalendar

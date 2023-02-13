@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Threading;
+using System.Threading.Tasks;
 using Autofac.Extras.Moq;
 using Interapptive.Shared.Utility;
 using Moq;
@@ -38,10 +39,10 @@ namespace ShipWorks.Tests.Stores.Platforms.ShipEngine
 
             var response = GenericResult.FromSuccess(restResponse);
             
-            warehouseRequestClient.Setup(x => x.MakeRequest(It.IsAny<IRestRequest>(), It.IsAny<string>(), ApiLogSource.Amazon))
+            warehouseRequestClient.Setup(x => x.MakeRequest(It.IsAny<IRestRequest>(), It.IsAny<string>(), ApiLogSource.Amazon, It.IsAny<CancellationToken>()))
                 .ReturnsAsync(response);
 
-            var result = await platformOrderWebClient.GetOrders(string.Empty, string.Empty);
+            var result = await platformOrderWebClient.GetOrders(string.Empty, string.Empty, CancellationToken.None);
 
             Assert.NotNull(result);
             Assert.NotNull(result.Orders.ContinuationToken);

@@ -8,7 +8,7 @@ namespace ShipWorks.Stores.Warehouse.StoreData
     /// Amazon store credentials needed for downloading
     /// </summary>
     [Obfuscation(Exclude = true, ApplyToMembers = true, StripAfterObfuscation = false)]
-    public class AmazonStore : Store
+    public class AmazonStore : ShipEngineStore
     {
         /// <summary>
         /// The date to start downloading orders from
@@ -48,22 +48,5 @@ namespace ShipWorks.Stores.Warehouse.StoreData
         /// </summary>
         [JsonProperty("amazonVats")]
         public bool AmazonVATS { get; set; }
-
-        /// <summary>
-        /// The platform order source id 
-        /// </summary>
-        [JsonProperty("orderSourceId")]
-        public string OrderSourceID { get; set; }
-
-        /// <summary>
-        /// The platform account id (Account Service AccountId)
-        /// </summary>
-        public string PlatformAccountId { get; set; }
-
-        /// <summary>
-        /// The platform continuation token
-        /// </summary>
-        [JsonProperty("continuationToken")]
-        public string ContinuationToken { get; set; }
     }
 }

@@ -29,6 +29,24 @@ namespace Interapptive.Shared.ComponentRegistration.Ordering
         }
 
         /// <summary>
+        /// Returns an <see cref="IEnumerable{T}"/> which is assumed to be unordered
+        /// as an <see cref="IOrderedEnumerable{T}"/>.
+        /// </summary>
+        public static IOrderedEnumerable<TService> SortByOrder<TService>(this IEnumerable<TService> unordered)
+        {
+            return new AlreadyOrderedEnumerable<TService>(unordered.OrderBy(u => GetSortOrder(u)));
+        }
+
+        /// <summary>
+        /// Gets the sort order of the object. If no Ordered Attribute, return MaxValue (Order.Unordered)
+        /// </summary>
+        private static int GetSortOrder(Object x)
+        {
+            OrderAttribute order = (OrderAttribute) Attribute.GetCustomAttribute(x.GetType(), typeof(OrderAttribute));
+            return order?.Order ?? Order.Unordered;
+        }
+
+        /// <summary>
         /// Retrieves ordered services from the context.
         /// </summary>
         /// <typeparam name="TService">The type of service to which the results will be cast.</typeparam>

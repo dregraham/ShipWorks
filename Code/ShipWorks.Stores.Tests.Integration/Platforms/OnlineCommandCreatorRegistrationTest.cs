@@ -25,6 +25,7 @@ using ShipWorks.Stores.Platforms.Newegg.OnlineUpdating;
 using ShipWorks.Stores.Platforms.Odbc.Upload;
 using ShipWorks.Stores.Platforms.OrderMotion.OnlineUpdating;
 using ShipWorks.Stores.Platforms.Overstock.OnlineUpdating;
+using ShipWorks.Stores.Platforms.Platform.OnlineUpdating;
 using ShipWorks.Stores.Platforms.ProStores.OnlineUpdating;
 using ShipWorks.Stores.Platforms.Rakuten.OnlineUpdating;
 using ShipWorks.Stores.Platforms.Sears.OnlineUpdating;
@@ -122,7 +123,7 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms
             { StoreTypeCode.CreLoaded, typeof(GenericModuleOnlineUpdateCommandCreator) },
             { StoreTypeCode.CsCart, typeof(GenericModuleOnlineUpdateCommandCreator) },
             { StoreTypeCode.Ebay, typeof(EbayOnlineUpdateCommandCreator) },
-            { StoreTypeCode.Etsy, typeof(EtsyOnlineUpdateCommandCreator) },
+            { StoreTypeCode.Etsy, typeof(PlatformUpdateCommandCreator) },
             { StoreTypeCode.Fortune3, typeof(GenericModuleOnlineUpdateCommandCreator) },
             { StoreTypeCode.GeekSeller, typeof(GenericModuleOnlineUpdateCommandCreator) },
             { StoreTypeCode.GenericModule, typeof(GenericModuleOnlineUpdateCommandCreator) },

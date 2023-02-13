@@ -1462,6 +1462,11 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(AmazonStoreFieldIndex.PlatformAmazonCarrierID);}
 		}
+		/// <summary>Creates a new AmazonStoreEntity.ContinuationToken field instance</summary>
+		public static EntityField2 ContinuationToken
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(AmazonStoreFieldIndex.ContinuationToken);}
+		}
 		/// <summary>Creates a new AmazonStoreEntity.ShouldMigrate field instance</summary>
 		public static EntityField2 ShouldMigrate
 		{
@@ -1561,11 +1566,6 @@ namespace ShipWorks.Data.Model.HelperClasses
 		public static EntityField2 AmazonVATS
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(AmazonStoreFieldIndex.AmazonVATS);}
-		}
-		/// <summary>Creates a new AmazonStoreEntity.ContinuationToken field instance</summary>
-		public static EntityField2 ContinuationToken
-		{
-			get { return (EntityField2)EntityFieldFactory.Create(AmazonStoreFieldIndex.ContinuationToken);}
 		}
 	}
 
@@ -1926,6 +1926,11 @@ namespace ShipWorks.Data.Model.HelperClasses
 		public static EntityField2 PlatformAmazonCarrierID
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(AmeriCommerceStoreFieldIndex.PlatformAmazonCarrierID);}
+		}
+		/// <summary>Creates a new AmeriCommerceStoreEntity.ContinuationToken field instance</summary>
+		public static EntityField2 ContinuationToken
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(AmeriCommerceStoreFieldIndex.ContinuationToken);}
 		}
 		/// <summary>Creates a new AmeriCommerceStoreEntity.ShouldMigrate field instance</summary>
 		public static EntityField2 ShouldMigrate
@@ -2852,6 +2857,11 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(BigCommerceStoreFieldIndex.PlatformAmazonCarrierID);}
 		}
+		/// <summary>Creates a new BigCommerceStoreEntity.ContinuationToken field instance</summary>
+		public static EntityField2 ContinuationToken
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(BigCommerceStoreFieldIndex.ContinuationToken);}
+		}
 		/// <summary>Creates a new BigCommerceStoreEntity.ShouldMigrate field instance</summary>
 		public static EntityField2 ShouldMigrate
 		{
@@ -3321,6 +3331,11 @@ namespace ShipWorks.Data.Model.HelperClasses
 		public static EntityField2 PlatformAmazonCarrierID
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(BuyDotComStoreFieldIndex.PlatformAmazonCarrierID);}
+		}
+		/// <summary>Creates a new BuyDotComStoreEntity.ContinuationToken field instance</summary>
+		public static EntityField2 ContinuationToken
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(BuyDotComStoreFieldIndex.ContinuationToken);}
 		}
 		/// <summary>Creates a new BuyDotComStoreEntity.ShouldMigrate field instance</summary>
 		public static EntityField2 ShouldMigrate
@@ -4316,6 +4331,11 @@ namespace ShipWorks.Data.Model.HelperClasses
 		public static EntityField2 PlatformAmazonCarrierID
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(ChannelAdvisorStoreFieldIndex.PlatformAmazonCarrierID);}
+		}
+		/// <summary>Creates a new ChannelAdvisorStoreEntity.ContinuationToken field instance</summary>
+		public static EntityField2 ContinuationToken
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ChannelAdvisorStoreFieldIndex.ContinuationToken);}
 		}
 		/// <summary>Creates a new ChannelAdvisorStoreEntity.ShouldMigrate field instance</summary>
 		public static EntityField2 ShouldMigrate
@@ -7697,6 +7717,11 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(EbayStoreFieldIndex.PlatformAmazonCarrierID);}
 		}
+		/// <summary>Creates a new EbayStoreEntity.ContinuationToken field instance</summary>
+		public static EntityField2 ContinuationToken
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(EbayStoreFieldIndex.ContinuationToken);}
+		}
 		/// <summary>Creates a new EbayStoreEntity.ShouldMigrate field instance</summary>
 		public static EntityField2 ShouldMigrate
 		{
@@ -9251,6 +9276,11 @@ namespace ShipWorks.Data.Model.HelperClasses
 		public static EntityField2 PlatformAmazonCarrierID
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(EtsyStoreFieldIndex.PlatformAmazonCarrierID);}
+		}
+		/// <summary>Creates a new EtsyStoreEntity.ContinuationToken field instance</summary>
+		public static EntityField2 ContinuationToken
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(EtsyStoreFieldIndex.ContinuationToken);}
 		}
 		/// <summary>Creates a new EtsyStoreEntity.ShouldMigrate field instance</summary>
 		public static EntityField2 ShouldMigrate
@@ -11442,6 +11472,11 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(GenericFileStoreFieldIndex.PlatformAmazonCarrierID);}
 		}
+		/// <summary>Creates a new GenericFileStoreEntity.ContinuationToken field instance</summary>
+		public static EntityField2 ContinuationToken
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(GenericFileStoreFieldIndex.ContinuationToken);}
+		}
 		/// <summary>Creates a new GenericFileStoreEntity.ShouldMigrate field instance</summary>
 		public static EntityField2 ShouldMigrate
 		{
@@ -12431,6 +12466,11 @@ namespace ShipWorks.Data.Model.HelperClasses
 		public static EntityField2 PlatformAmazonCarrierID
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(GenericModuleStoreFieldIndex.PlatformAmazonCarrierID);}
+		}
+		/// <summary>Creates a new GenericModuleStoreEntity.ContinuationToken field instance</summary>
+		public static EntityField2 ContinuationToken
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(GenericModuleStoreFieldIndex.ContinuationToken);}
 		}
 		/// <summary>Creates a new GenericModuleStoreEntity.ShouldMigrate field instance</summary>
 		public static EntityField2 ShouldMigrate
@@ -13582,6 +13622,11 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(GrouponStoreFieldIndex.PlatformAmazonCarrierID);}
 		}
+		/// <summary>Creates a new GrouponStoreEntity.ContinuationToken field instance</summary>
+		public static EntityField2 ContinuationToken
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(GrouponStoreFieldIndex.ContinuationToken);}
+		}
 		/// <summary>Creates a new GrouponStoreEntity.ShouldMigrate field instance</summary>
 		public static EntityField2 ShouldMigrate
 		{
@@ -13996,6 +14041,11 @@ namespace ShipWorks.Data.Model.HelperClasses
 		public static EntityField2 PlatformAmazonCarrierID
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(InfopiaStoreFieldIndex.PlatformAmazonCarrierID);}
+		}
+		/// <summary>Creates a new InfopiaStoreEntity.ContinuationToken field instance</summary>
+		public static EntityField2 ContinuationToken
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(InfopiaStoreFieldIndex.ContinuationToken);}
 		}
 		/// <summary>Creates a new InfopiaStoreEntity.ShouldMigrate field instance</summary>
 		public static EntityField2 ShouldMigrate
@@ -15247,6 +15297,11 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(JetStoreFieldIndex.PlatformAmazonCarrierID);}
 		}
+		/// <summary>Creates a new JetStoreEntity.ContinuationToken field instance</summary>
+		public static EntityField2 ContinuationToken
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(JetStoreFieldIndex.ContinuationToken);}
+		}
 		/// <summary>Creates a new JetStoreEntity.ShouldMigrate field instance</summary>
 		public static EntityField2 ShouldMigrate
 		{
@@ -16237,6 +16292,11 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(LemonStandStoreFieldIndex.PlatformAmazonCarrierID);}
 		}
+		/// <summary>Creates a new LemonStandStoreEntity.ContinuationToken field instance</summary>
+		public static EntityField2 ContinuationToken
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(LemonStandStoreFieldIndex.ContinuationToken);}
+		}
 		/// <summary>Creates a new LemonStandStoreEntity.ShouldMigrate field instance</summary>
 		public static EntityField2 ShouldMigrate
 		{
@@ -16986,6 +17046,11 @@ namespace ShipWorks.Data.Model.HelperClasses
 		public static EntityField2 PlatformAmazonCarrierID
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(MagentoStoreFieldIndex.PlatformAmazonCarrierID);}
+		}
+		/// <summary>Creates a new MagentoStoreEntity.ContinuationToken field instance</summary>
+		public static EntityField2 ContinuationToken
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(MagentoStoreFieldIndex.ContinuationToken);}
 		}
 		/// <summary>Creates a new MagentoStoreEntity.ShouldMigrate field instance</summary>
 		public static EntityField2 ShouldMigrate
@@ -17847,6 +17912,11 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(MarketplaceAdvisorStoreFieldIndex.PlatformAmazonCarrierID);}
 		}
+		/// <summary>Creates a new MarketplaceAdvisorStoreEntity.ContinuationToken field instance</summary>
+		public static EntityField2 ContinuationToken
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(MarketplaceAdvisorStoreFieldIndex.ContinuationToken);}
+		}
 		/// <summary>Creates a new MarketplaceAdvisorStoreEntity.ShouldMigrate field instance</summary>
 		public static EntityField2 ShouldMigrate
 		{
@@ -18126,6 +18196,11 @@ namespace ShipWorks.Data.Model.HelperClasses
 		public static EntityField2 PlatformAmazonCarrierID
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(MivaStoreFieldIndex.PlatformAmazonCarrierID);}
+		}
+		/// <summary>Creates a new MivaStoreEntity.ContinuationToken field instance</summary>
+		public static EntityField2 ContinuationToken
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(MivaStoreFieldIndex.ContinuationToken);}
 		}
 		/// <summary>Creates a new MivaStoreEntity.ShouldMigrate field instance</summary>
 		public static EntityField2 ShouldMigrate
@@ -18981,6 +19056,11 @@ namespace ShipWorks.Data.Model.HelperClasses
 		public static EntityField2 PlatformAmazonCarrierID
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(NetworkSolutionsStoreFieldIndex.PlatformAmazonCarrierID);}
+		}
+		/// <summary>Creates a new NetworkSolutionsStoreEntity.ContinuationToken field instance</summary>
+		public static EntityField2 ContinuationToken
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(NetworkSolutionsStoreFieldIndex.ContinuationToken);}
 		}
 		/// <summary>Creates a new NetworkSolutionsStoreEntity.ShouldMigrate field instance</summary>
 		public static EntityField2 ShouldMigrate
@@ -19912,6 +19992,11 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(NeweggStoreFieldIndex.PlatformAmazonCarrierID);}
 		}
+		/// <summary>Creates a new NeweggStoreEntity.ContinuationToken field instance</summary>
+		public static EntityField2 ContinuationToken
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(NeweggStoreFieldIndex.ContinuationToken);}
+		}
 		/// <summary>Creates a new NeweggStoreEntity.ShouldMigrate field instance</summary>
 		public static EntityField2 ShouldMigrate
 		{
@@ -20241,6 +20326,11 @@ namespace ShipWorks.Data.Model.HelperClasses
 		public static EntityField2 PlatformAmazonCarrierID
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(OdbcStoreFieldIndex.PlatformAmazonCarrierID);}
+		}
+		/// <summary>Creates a new OdbcStoreEntity.ContinuationToken field instance</summary>
+		public static EntityField2 ContinuationToken
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(OdbcStoreFieldIndex.ContinuationToken);}
 		}
 		/// <summary>Creates a new OdbcStoreEntity.ShouldMigrate field instance</summary>
 		public static EntityField2 ShouldMigrate
@@ -22022,6 +22112,11 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(OrderMotionStoreFieldIndex.PlatformAmazonCarrierID);}
 		}
+		/// <summary>Creates a new OrderMotionStoreEntity.ContinuationToken field instance</summary>
+		public static EntityField2 ContinuationToken
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(OrderMotionStoreFieldIndex.ContinuationToken);}
+		}
 		/// <summary>Creates a new OrderMotionStoreEntity.ShouldMigrate field instance</summary>
 		public static EntityField2 ShouldMigrate
 		{
@@ -23067,6 +23162,11 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(OverstockStoreFieldIndex.PlatformAmazonCarrierID);}
 		}
+		/// <summary>Creates a new OverstockStoreEntity.ContinuationToken field instance</summary>
+		public static EntityField2 ContinuationToken
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(OverstockStoreFieldIndex.ContinuationToken);}
+		}
 		/// <summary>Creates a new OverstockStoreEntity.ShouldMigrate field instance</summary>
 		public static EntityField2 ShouldMigrate
 		{
@@ -23846,6 +23946,11 @@ namespace ShipWorks.Data.Model.HelperClasses
 		public static EntityField2 PlatformAmazonCarrierID
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(PayPalStoreFieldIndex.PlatformAmazonCarrierID);}
+		}
+		/// <summary>Creates a new PayPalStoreEntity.ContinuationToken field instance</summary>
+		public static EntityField2 ContinuationToken
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(PayPalStoreFieldIndex.ContinuationToken);}
 		}
 		/// <summary>Creates a new PayPalStoreEntity.ShouldMigrate field instance</summary>
 		public static EntityField2 ShouldMigrate
@@ -25407,6 +25512,11 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(ProStoresStoreFieldIndex.PlatformAmazonCarrierID);}
 		}
+		/// <summary>Creates a new ProStoresStoreEntity.ContinuationToken field instance</summary>
+		public static EntityField2 ContinuationToken
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ProStoresStoreFieldIndex.ContinuationToken);}
+		}
 		/// <summary>Creates a new ProStoresStoreEntity.ShouldMigrate field instance</summary>
 		public static EntityField2 ShouldMigrate
 		{
@@ -26191,6 +26301,11 @@ namespace ShipWorks.Data.Model.HelperClasses
 		public static EntityField2 PlatformAmazonCarrierID
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(RakutenStoreFieldIndex.PlatformAmazonCarrierID);}
+		}
+		/// <summary>Creates a new RakutenStoreEntity.ContinuationToken field instance</summary>
+		public static EntityField2 ContinuationToken
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(RakutenStoreFieldIndex.ContinuationToken);}
 		}
 		/// <summary>Creates a new RakutenStoreEntity.ShouldMigrate field instance</summary>
 		public static EntityField2 ShouldMigrate
@@ -27236,6 +27351,11 @@ namespace ShipWorks.Data.Model.HelperClasses
 		public static EntityField2 PlatformAmazonCarrierID
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(SearsStoreFieldIndex.PlatformAmazonCarrierID);}
+		}
+		/// <summary>Creates a new SearsStoreEntity.ContinuationToken field instance</summary>
+		public static EntityField2 ContinuationToken
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(SearsStoreFieldIndex.ContinuationToken);}
 		}
 		/// <summary>Creates a new SearsStoreEntity.ShouldMigrate field instance</summary>
 		public static EntityField2 ShouldMigrate
@@ -29552,6 +29672,11 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(ShopifyStoreFieldIndex.PlatformAmazonCarrierID);}
 		}
+		/// <summary>Creates a new ShopifyStoreEntity.ContinuationToken field instance</summary>
+		public static EntityField2 ContinuationToken
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ShopifyStoreFieldIndex.ContinuationToken);}
+		}
 		/// <summary>Creates a new ShopifyStoreEntity.ShouldMigrate field instance</summary>
 		public static EntityField2 ShouldMigrate
 		{
@@ -29791,6 +29916,11 @@ namespace ShipWorks.Data.Model.HelperClasses
 		public static EntityField2 PlatformAmazonCarrierID
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(ShopSiteStoreFieldIndex.PlatformAmazonCarrierID);}
+		}
+		/// <summary>Creates a new ShopSiteStoreEntity.ContinuationToken field instance</summary>
+		public static EntityField2 ContinuationToken
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ShopSiteStoreFieldIndex.ContinuationToken);}
 		}
 		/// <summary>Creates a new ShopSiteStoreEntity.ShouldMigrate field instance</summary>
 		public static EntityField2 ShouldMigrate
@@ -30087,6 +30217,11 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(SparkPayStoreFieldIndex.PlatformAmazonCarrierID);}
 		}
+		/// <summary>Creates a new SparkPayStoreEntity.ContinuationToken field instance</summary>
+		public static EntityField2 ContinuationToken
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(SparkPayStoreFieldIndex.ContinuationToken);}
+		}
 		/// <summary>Creates a new SparkPayStoreEntity.ShouldMigrate field instance</summary>
 		public static EntityField2 ShouldMigrate
 		{
@@ -30336,6 +30471,11 @@ namespace ShipWorks.Data.Model.HelperClasses
 		public static EntityField2 PlatformAmazonCarrierID
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(StoreFieldIndex.PlatformAmazonCarrierID);}
+		}
+		/// <summary>Creates a new StoreEntity.ContinuationToken field instance</summary>
+		public static EntityField2 ContinuationToken
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(StoreFieldIndex.ContinuationToken);}
 		}
 		/// <summary>Creates a new StoreEntity.ShouldMigrate field instance</summary>
 		public static EntityField2 ShouldMigrate
@@ -31526,6 +31666,11 @@ namespace ShipWorks.Data.Model.HelperClasses
 		public static EntityField2 PlatformAmazonCarrierID
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(ThreeDCartStoreFieldIndex.PlatformAmazonCarrierID);}
+		}
+		/// <summary>Creates a new ThreeDCartStoreEntity.ContinuationToken field instance</summary>
+		public static EntityField2 ContinuationToken
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ThreeDCartStoreFieldIndex.ContinuationToken);}
 		}
 		/// <summary>Creates a new ThreeDCartStoreEntity.ShouldMigrate field instance</summary>
 		public static EntityField2 ShouldMigrate
@@ -33427,6 +33572,11 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(VolusionStoreFieldIndex.PlatformAmazonCarrierID);}
 		}
+		/// <summary>Creates a new VolusionStoreEntity.ContinuationToken field instance</summary>
+		public static EntityField2 ContinuationToken
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(VolusionStoreFieldIndex.ContinuationToken);}
+		}
 		/// <summary>Creates a new VolusionStoreEntity.ShouldMigrate field instance</summary>
 		public static EntityField2 ShouldMigrate
 		{
@@ -34401,6 +34551,11 @@ namespace ShipWorks.Data.Model.HelperClasses
 		public static EntityField2 PlatformAmazonCarrierID
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(WalmartStoreFieldIndex.PlatformAmazonCarrierID);}
+		}
+		/// <summary>Creates a new WalmartStoreEntity.ContinuationToken field instance</summary>
+		public static EntityField2 ContinuationToken
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(WalmartStoreFieldIndex.ContinuationToken);}
 		}
 		/// <summary>Creates a new WalmartStoreEntity.ShouldMigrate field instance</summary>
 		public static EntityField2 ShouldMigrate
@@ -36066,6 +36221,11 @@ namespace ShipWorks.Data.Model.HelperClasses
 		public static EntityField2 PlatformAmazonCarrierID
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(YahooStoreFieldIndex.PlatformAmazonCarrierID);}
+		}
+		/// <summary>Creates a new YahooStoreEntity.ContinuationToken field instance</summary>
+		public static EntityField2 ContinuationToken
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(YahooStoreFieldIndex.ContinuationToken);}
 		}
 		/// <summary>Creates a new YahooStoreEntity.ShouldMigrate field instance</summary>
 		public static EntityField2 ShouldMigrate

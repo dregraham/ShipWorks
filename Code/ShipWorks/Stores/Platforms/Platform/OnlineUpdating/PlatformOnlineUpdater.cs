@@ -26,6 +26,7 @@ namespace ShipWorks.Stores.Platforms.Platform.OnlineUpdating
     [KeyedComponent(typeof(IPlatformOnlineUpdater), StoreTypeCode.ChannelAdvisorHub)]
     [KeyedComponent(typeof(IPlatformOnlineUpdater), StoreTypeCode.VolusionHub)]
     [KeyedComponent(typeof(IPlatformOnlineUpdater), StoreTypeCode.GrouponHub)]
+    [KeyedComponent(typeof(IPlatformOnlineUpdater), StoreTypeCode.Etsy)]
     public class PlatformOnlineUpdater : IPlatformOnlineUpdater
     {
         // Logger

@@ -33,5 +33,10 @@ namespace Interapptive.Shared.Utility
         /// Gets the current date, with time set to 00:00:00
         /// </summary>
         DateTime Today { get; }
+     
+        /// <summary>
+        /// Gets the instance of local   TimeZoneInfo
+        /// </summary>
+        TimeZoneInfo TimeZoneInfo { get; }
     }
 }

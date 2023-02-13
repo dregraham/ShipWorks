@@ -62,6 +62,9 @@ namespace ShipWorks.Stores.Platforms.Etsy
         /// associate any store-specific download properties/metrics.</param>
         protected override async Task Download(TrackedDurationEvent trackedDurationEvent)
         {
+            var upgradeErrorMessage = "Please update your Etsy credentials in Manage > Stores by March 31, 2023. Visit support.shipworks.com for detailed information.";
+            var communicationErrorMessage = "Unable to connect to Etsy. Please update your Etsy credentials in Manage > Stores.";
+
             try
             {
                 Progress.Detail = "Checking for shipped orders...";
@@ -73,14 +76,12 @@ namespace ShipWorks.Stores.Platforms.Etsy
                 Progress.Detail = "Checking for new orders...";
                 await DownloadNewOrders().ConfigureAwait(false);
             }
-            catch (EtsyException ex)
+            catch (Exception ex)
             {
-                throw new DownloadException(ex.Message, ex);
+                throw new DownloadException(communicationErrorMessage, ex);
             }
-            catch (SqlForeignKeyException ex)
-            {
-                throw new DownloadException(ex.Message, ex);
-            }
+
+            throw new DownloadException(upgradeErrorMessage);
         }
 
         /// <summary>
