@@ -447,6 +447,8 @@ namespace ShipWorks.Stores.Platforms.ShipEngine
                     LoadOrderItems(fulfillment, order, giftNotes, couponCodes);
                 }
 
+                AddAdjustments(salesOrder, order);
+
                 AddTaxes(salesOrder, order);
 
                 // update the total
@@ -461,14 +463,28 @@ namespace ShipWorks.Stores.Platforms.ShipEngine
             await retryAdapter.ExecuteWithRetryAsync(() => SaveDownloadedOrder(order)).ConfigureAwait(false);
         }
 
+        private void AddAdjustments(OrderSourceApiSalesOrder salesOrder, OrderEntity order)
+        {
+            foreach (var orderAdjustment in salesOrder.Payment.Adjustments)
+            {
+                AddToCharge(order, orderAdjustment.Description, orderAdjustment.Description, orderAdjustment.Amount);
+            }
+
+            foreach (var orderShippingCharge in salesOrder.Payment.ShippingCharges)
+            {
+                AddToCharge(order, "SHIPPING", orderShippingCharge.Description.Replace(" price", string.Empty), orderShippingCharge.Amount);
+            }
+        }
+
         protected virtual void AddTaxes(OrderSourceApiSalesOrder salesOrder, OrderEntity order)
         {
-            var totalTax = salesOrder.RequestedFulfillments?
+            var itemTaxes = salesOrder.RequestedFulfillments?
                 .SelectMany(f => f.Items)?
                 .SelectMany(i => i.Taxes)?
                 .Sum(t => t.Amount) ?? 0;
+            var orderTaxes = salesOrder.Payment.Taxes.Sum(t => t.Amount);
 
-            AddToCharge(order, "Tax", "Tax", totalTax);
+            AddToCharge(order, "Tax", "Tax", itemTaxes + orderTaxes);
         }
     }
 }
