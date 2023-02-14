@@ -44,6 +44,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
     /// FedEx implementation of ShipmentType
     /// </summary>
     [Component(RegistrationType.SpecificService, Service = typeof(ICustomsRequired))]
+    [KeyedComponent(typeof(ShipmentType), ShipmentTypeCode.FedEx, SingleInstance = true)]
     public class FedExShipmentType : ShipmentType, ICustomsRequired
     {
         private readonly IExcludedServiceTypeRepository excludedServiceTypeRepository;
@@ -436,6 +437,8 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             package.Weight = shipment.ContentWeight;
 
             shipment.FedEx.RequestedLabelFormat = (int) ThermalLanguage.None;
+
+            shipment.FedEx.ShipEngineLabelId = string.Empty;
 
             base.ConfigureNewShipment(shipment);
         }

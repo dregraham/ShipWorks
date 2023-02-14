@@ -10997,6 +10997,11 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(FedExShipmentFieldIndex.PayorPostalCode);}
 		}
+		/// <summary>Creates a new FedExShipmentEntity.ShipEngineLabelId field instance</summary>
+		public static EntityField2 ShipEngineLabelId
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(FedExShipmentFieldIndex.ShipEngineLabelId);}
+		}
 	}
 
 	/// <summary>Field Creation Class for entity FilterEntity</summary>

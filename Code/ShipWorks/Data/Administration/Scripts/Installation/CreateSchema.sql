@@ -2230,7 +2230,8 @@ CREATE TABLE [dbo].[FedExShipment]
 [FreightSpecialServices] [int] NOT NULL,
 [FreightGuaranteeType] [int] NOT NULL,
 [FreightGuaranteeDate] [datetime] NOT NULL,
-[CustomsRecipientTINType] [int] NULL
+[CustomsRecipientTINType] [int] NULL,
+[ShipEngineLabelId] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NULL
 )
 GO
 PRINT N'Creating primary key [PK_FedExShipment] on [dbo].[FedExShipment]'
@@ -4953,7 +4954,7 @@ CREATE TABLE [dbo].[FedExAccount]
 [Signature] [nvarchar] (max) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL CONSTRAINT [DF_FedExAccount_Signature] DEFAULT (''),
 [HubVersion] [int] NULL,
 [HubCarrierId] [uniqueidentifier] NULL,
-[ShipEngineCarrierId] [nvarchar] (50) NULL,
+[ShipEngineCarrierID] [nvarchar] (50) NULL
 )
 GO
 PRINT N'Creating primary key [PK_FedExAccount] on [dbo].[FedExAccount]'
