@@ -1566,7 +1566,7 @@ namespace ShipWorks.Data.Model
 		/// <summary>Inits FedExProfileEntity's mappings</summary>
 		private void InitFedExProfileEntityMappings()
 		{
-			this.AddElementMapping("FedExProfileEntity", @"ShipWorksLocal", @"dbo", "FedExProfile", 41, 0);
+			this.AddElementMapping("FedExProfileEntity", @"ShipWorksLocal", @"dbo", "FedExProfile", 43, 0);
 			this.AddElementFieldMapping("FedExProfileEntity", "ShippingProfileID", "ShippingProfileID", false, "BigInt", 0, 19, 0, false, "", null, typeof(System.Int64), 0);
 			this.AddElementFieldMapping("FedExProfileEntity", "FedExAccountID", "FedExAccountID", true, "BigInt", 0, 19, 0, false, "", null, typeof(System.Int64), 1);
 			this.AddElementFieldMapping("FedExProfileEntity", "Service", "Service", true, "Int", 0, 10, 0, false, "", null, typeof(System.Int32), 2);
@@ -1608,6 +1608,8 @@ namespace ShipWorks.Data.Model
 			this.AddElementFieldMapping("FedExProfileEntity", "FileElectronically", "FileElectronically", true, "Bit", 0, 0, 0, false, "", null, typeof(System.Boolean), 38);
 			this.AddElementFieldMapping("FedExProfileEntity", "CustomsRecipientTIN", "CustomsRecipientTIN", true, "NVarChar", 24, 0, 0, false, "", null, typeof(System.String), 39);
 			this.AddElementFieldMapping("FedExProfileEntity", "CustomsRecipientTINType", "CustomsRecipientTINType", true, "Int", 0, 10, 0, false, "", null, typeof(System.Int32), 40);
+			this.AddElementFieldMapping("FedExProfileEntity", "PayorCountryCode", "PayorCountryCode", true, "NVarChar", 2, 0, 0, false, "", null, typeof(System.String), 41);
+			this.AddElementFieldMapping("FedExProfileEntity", "PayorPostalCode", "PayorPostalCode", true, "NVarChar", 10, 0, 0, false, "", null, typeof(System.String), 42);
 		}
 
 		/// <summary>Inits FedExProfilePackageEntity's mappings</summary>

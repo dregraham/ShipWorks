@@ -1539,6 +1539,8 @@ namespace ShipWorks.Data.Model.HelperClasses
 			this.AddElementFieldInfo("FedExProfileEntity", "FileElectronically", typeof(Nullable<System.Boolean>), false, false, false, true,  (int)FedExProfileFieldIndex.FileElectronically, 0, 0, 0);
 			this.AddElementFieldInfo("FedExProfileEntity", "CustomsRecipientTIN", typeof(System.String), false, false, false, true,  (int)FedExProfileFieldIndex.CustomsRecipientTIN, 24, 0, 0);
 			this.AddElementFieldInfo("FedExProfileEntity", "CustomsRecipientTINType", typeof(Nullable<System.Int32>), false, false, false, true,  (int)FedExProfileFieldIndex.CustomsRecipientTINType, 0, 0, 10);
+			this.AddElementFieldInfo("FedExProfileEntity", "PayorCountryCode", typeof(System.String), false, false, false, true,  (int)FedExProfileFieldIndex.PayorCountryCode, 2, 0, 0);
+			this.AddElementFieldInfo("FedExProfileEntity", "PayorPostalCode", typeof(System.String), false, false, false, true,  (int)FedExProfileFieldIndex.PayorPostalCode, 10, 0, 0);
 		}
 		/// <summary>Inits FedExProfilePackageEntity's FieldInfo objects</summary>
 		private void InitFedExProfilePackageEntityInfos()

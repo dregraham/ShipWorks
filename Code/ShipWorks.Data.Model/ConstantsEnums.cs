@@ -4284,6 +4284,10 @@ namespace ShipWorks.Data.Model
 		CustomsRecipientTIN,
 		///<summary>CustomsRecipientTINType. </summary>
 		CustomsRecipientTINType,
+		///<summary>PayorCountryCode. </summary>
+		PayorCountryCode,
+		///<summary>PayorPostalCode. </summary>
+		PayorPostalCode,
 		/// <summary></summary>
 		AmountOfFields
 	}
