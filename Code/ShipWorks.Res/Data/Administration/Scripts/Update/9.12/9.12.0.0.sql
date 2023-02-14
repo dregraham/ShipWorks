@@ -1,4 +1,4 @@
-﻿PRINT N'Altering [dbo].[Store]'
+﻿﻿PRINT N'Altering [dbo].[Store]'
 GO
 
 IF COL_LENGTH(N'[dbo].[Store]', N'ContinuationToken') IS NULL
