@@ -346,7 +346,6 @@
           <Field Name="AmazonVATS" Type="bool" FieldIndex="17" />
           <Field Name="AuthToken" Type="string" MaxLength="100" FieldIndex="7" />
           <Field Name="Certificate" Type="byte[]" IsOptional="true" MaxLength="2048" FieldIndex="11" />
-          <Field Name="ContinuationToken" Type="string" IsOptional="true" MaxLength="2048" FieldIndex="18" />
           <Field Name="Cookie" Type="string" MaxLength="2147483647" FieldIndex="8" />
           <Field Name="CookieExpires" Type="datetime" FieldIndex="9" />
           <Field Name="CookieWaitUntil" Type="datetime" FieldIndex="10" />
@@ -3132,6 +3131,7 @@
           <Field Name="City" Type="string" MaxLength="50" FieldIndex="12" />
           <Field Name="Company" Type="string" MaxLength="60" FieldIndex="8" />
           <Field Name="ComputerDownloadPolicy" Type="string" MaxLength="2147483647" FieldIndex="25" />
+          <Field Name="ContinuationToken" Type="string" IsOptional="true" MaxLength="2048" FieldIndex="37" />
           <Field Name="CountryCode" Type="string" MaxLength="50" FieldIndex="15" />
           <Field Name="DefaultEmailAccountID" Type="long" FieldIndex="26" />
           <Field Name="DomesticAddressValidationSetting" Type="AddressValidationStoreSettingType" FieldIndex="23" />
@@ -4840,7 +4840,7 @@
       <Catalogs>
         <Catalog Name="ShipWorksLocal">
           <Schemas>
-            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2023-02-08T20:24:07.1928856Z">
+            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2023-02-14T05:47:52.3930486Z">
               <Tables>
                 <Table Name="Action">
                   <PkConstraintName Name="PK_Action" />
@@ -5071,7 +5071,6 @@
                     <Field Name="ExcludeFBA" Ordinal="17" DbType="2" />
                     <Field Name="DomainName" Ordinal="18" DbType="12" Length="50" />
                     <Field Name="AmazonVATS" Ordinal="19" DbType="2" />
-                    <Field Name="ContinuationToken" Ordinal="20" IsOptional="true" DbType="12" Length="2048" />
                   </Fields>
                 </Table>
                 <Table Name="AmazonSWAAccount">
@@ -6184,7 +6183,7 @@
                     <Field Name="Signature" Ordinal="22" HasDefaultValue="true" DefaultValue="''" DbType="12" Length="2147483647" />
                     <Field Name="HubVersion" Ordinal="23" IsOptional="true" DbType="8" Precision="10" />
                     <Field Name="HubCarrierId" Ordinal="24" IsOptional="true" DbType="25" />
-                    <Field Name="ShipEngineCarrierID" Ordinal="25" IsOptional="true" DbType="12" Length="50" />
+                    <Field Name="ShipEngineCarrierId" Ordinal="25" IsOptional="true" DbType="12" Length="50" />
                   </Fields>
                 </Table>
                 <Table Name="FedExEndOfDayClose">
@@ -9250,6 +9249,7 @@
                     <Field Name="OrderSourceID" Ordinal="36" IsOptional="true" DbType="12" Length="50" />
                     <Field Name="PlatformAmazonCarrierID" Ordinal="37" IsOptional="true" DbType="12" Length="100" />
                     <Field Name="ShouldMigrate" Ordinal="38" DbType="2" />
+                    <Field Name="ContinuationToken" Ordinal="39" IsOptional="true" DbType="12" Length="2048" />
                   </Fields>
                 </Table>
                 <Table Name="SystemData">
@@ -11636,7 +11636,6 @@
             <FieldMapping FieldName="AmazonVATS" TargetFieldName="AmazonVATS" />
             <FieldMapping FieldName="AuthToken" TargetFieldName="AuthToken" />
             <FieldMapping FieldName="Certificate" TargetFieldName="Certificate" />
-            <FieldMapping FieldName="ContinuationToken" TargetFieldName="ContinuationToken" />
             <FieldMapping FieldName="Cookie" TargetFieldName="Cookie" />
             <FieldMapping FieldName="CookieExpires" TargetFieldName="CookieExpires" />
             <FieldMapping FieldName="CookieWaitUntil" TargetFieldName="CookieWaitUntil" />
@@ -12516,7 +12515,7 @@
             <FieldMapping FieldName="Phone" TargetFieldName="Phone" />
             <FieldMapping FieldName="PostalCode" TargetFieldName="PostalCode" />
             <FieldMapping FieldName="RowVersion" TargetFieldName="RowVersion" />
-            <FieldMapping FieldName="ShipEngineCarrierID" TargetFieldName="ShipEngineCarrierID" />
+            <FieldMapping FieldName="ShipEngineCarrierID" TargetFieldName="ShipEngineCarrierId" />
             <FieldMapping FieldName="Signature" TargetFieldName="Signature" />
             <FieldMapping FieldName="SignatureRelease" TargetFieldName="SignatureRelease" />
             <FieldMapping FieldName="SmartPostHubList" TargetFieldName="SmartPostHubList" />
@@ -14475,6 +14474,7 @@
             <FieldMapping FieldName="City" TargetFieldName="City" />
             <FieldMapping FieldName="Company" TargetFieldName="Company" />
             <FieldMapping FieldName="ComputerDownloadPolicy" TargetFieldName="ComputerDownloadPolicy" />
+            <FieldMapping FieldName="ContinuationToken" TargetFieldName="ContinuationToken" />
             <FieldMapping FieldName="CountryCode" TargetFieldName="CountryCode" />
             <FieldMapping FieldName="DefaultEmailAccountID" TargetFieldName="DefaultEmailAccountID" />
             <FieldMapping FieldName="DomesticAddressValidationSetting" TargetFieldName="DomesticAddressValidationSetting" />
