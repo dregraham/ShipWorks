@@ -1495,7 +1495,7 @@ namespace ShipWorks.Data.Model
 			this.AddElementFieldMapping("FedExAccountEntity", "Signature", "Signature", false, "NVarChar", 2147483647, 0, 0, false, "", null, typeof(System.String), 21);
 			this.AddElementFieldMapping("FedExAccountEntity", "HubVersion", "HubVersion", true, "Int", 0, 10, 0, false, "", null, typeof(System.Int32), 22);
 			this.AddElementFieldMapping("FedExAccountEntity", "HubCarrierId", "HubCarrierId", true, "UniqueIdentifier", 0, 0, 0, false, "", null, typeof(System.Guid), 23);
-			this.AddElementFieldMapping("FedExAccountEntity", "ShipEngineCarrierID", "ShipEngineCarrierId", true, "NVarChar", 50, 0, 0, false, "", null, typeof(System.String), 24);
+			this.AddElementFieldMapping("FedExAccountEntity", "ShipEngineCarrierID", "ShipEngineCarrierID", true, "NVarChar", 50, 0, 0, false, "", null, typeof(System.String), 24);
 		}
 
 		/// <summary>Inits FedExEndOfDayCloseEntity's mappings</summary>
