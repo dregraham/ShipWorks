@@ -1,4 +1,4 @@
-﻿﻿PRINT N'ALTERING [dbo].[FedExShipment]'
+﻿PRINT N'ALTERING [dbo].[FedExShipment]'
 GO
 
 IF COL_LENGTH(N'[dbo].[FedExShipment]', N'ShipEngineLabelId') IS NULL
