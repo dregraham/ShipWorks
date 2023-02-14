@@ -113,7 +113,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         {
             try
             {
-                account.AccountNumber = accountNumber.Text;
+                account.AccountNumber = accountNumber.Text.Trim();
                 account.SignatureRelease = "";
 
                 personControl.SaveToEntity(new PersonAdapter(account, string.Empty));
