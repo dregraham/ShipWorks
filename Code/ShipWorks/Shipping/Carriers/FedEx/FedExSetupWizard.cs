@@ -187,6 +187,10 @@ namespace ShipWorks.Shipping.Carriers.FedEx
                 {
                     fedExAccount.ShipEngineCarrierID = response.Value;
                 }
+                else
+                {
+                    throw new FedExException("Failed to register the FedEx account.");
+                }
             }
         }
 
