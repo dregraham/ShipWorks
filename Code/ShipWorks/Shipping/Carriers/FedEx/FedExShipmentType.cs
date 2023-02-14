@@ -860,6 +860,19 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         }
 
         /// <summary>
+        /// Convert a string value of service type to a FedExServiceType
+        /// </summary>
+        public static FedExServiceType? ConvertToServiceType(string serviceType)
+        {
+            if (EnumHelper.TryGetEnumByApiValue(serviceType, out FedExServiceType? serviceTypeParsed))
+            {
+                return serviceTypeParsed;
+            }
+
+            return null;
+        }
+
+        /// <summary>
         /// Gets an instance to the best rate shipping broker for the FedEx shipment type based on the shipment configuration.
         /// </summary>
         /// <param name="shipment">The shipment.</param>
