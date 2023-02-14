@@ -27,6 +27,7 @@ using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Data.Utility;
 using ShipWorks.Stores.Platforms.Amazon;
+using ShipWorks.Stores.Platforms.Etsy;
 using ShipWorks.Users;
 using ShipWorks.Users.Audit;
 using ShipWorks.Users.Security;
@@ -508,11 +509,11 @@ namespace ShipWorks.Stores.Communication
                                 downloadLog = CreateDownloadLog(store, initiatedBy);
 
                                 // Create the downloader
-                                // TODO: Once all Amazon stores have moved onto the new provider this can be removed and resolved as before
-                                if (store.StoreTypeCode == StoreTypeCode.Amazon &&
-                                    !string.IsNullOrEmpty(store.OrderSourceID))
+                                // TODO: Once all Etsy stores have moved onto the new provider this can be removed and resolved as before
+                                if ((store.StoreTypeCode == StoreTypeCode.Etsy) &&
+                                    store.IsPlatformOrderSource)
                                 {
-                                    downloader = lifetimeScope.Resolve<AmazonPlatformDownloader>(TypedParameter.From(store));
+                                    downloader = lifetimeScope.Resolve<EtsyPlatformDownloader>(TypedParameter.From(store));
                                 }
                                 else
                                 {

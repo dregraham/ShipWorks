@@ -104,5 +104,10 @@ namespace ShipWorks.Data.Model.EntityClasses
             get { return (StoreTypeCode) TypeCode; }
             set { TypeCode = (int) value; }
         }
+
+        /// <summary>
+        /// Order source is integrated through ShipEngine Platform (Amazon or Etsy)
+        /// </summary>
+        public bool IsPlatformOrderSource => !string.IsNullOrEmpty(OrderSourceID);
     }
 }

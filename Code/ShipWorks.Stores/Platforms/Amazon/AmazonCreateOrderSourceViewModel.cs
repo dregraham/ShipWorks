@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
@@ -11,6 +12,7 @@ using Interapptive.Shared.UI;
 using Interapptive.Shared.Utility;
 using log4net;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Stores.Platforms.AmeriCommerce.WebServices;
 using ShipWorks.Stores.Platforms.Platform;
 
 namespace ShipWorks.Stores.Platforms.Amazon
@@ -51,7 +53,7 @@ namespace ShipWorks.Stores.Platforms.Amazon
             OpeningUrl = true;
             try
             {
-                var url = await hubOrderSourceClient.GetCreateOrderSourceInitiateUrl(orderSourceName, store.AmazonApiRegion, store.InitialDownloadDays).ConfigureAwait(true);
+                var url = await hubOrderSourceClient.GetCreateOrderSourceInitiateUrl(orderSourceName, store.InitialDownloadDays, new Dictionary<string, string> { { "ApiRegion", store.AmazonApiRegion } }).ConfigureAwait(true);
                 webHelper.OpenUrl(url);
             }
             catch(ObjectDisposedException ex)

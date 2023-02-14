@@ -3,7 +3,8 @@ using ShipWorks.Actions.Scheduling.ActionSchedules;
 using ShipWorks.Actions.Scheduling.QuartzNet.ActionScheduleAdapters;
 using System;
 using System.Linq;
-
+using ShipWorks.Tests.Shared;
+using Interapptive.Shared.Utility;
 
 namespace ShipWorks.Tests.Actions.Scheduling.QuartzNet.ActionScheduleAdapters
 {
@@ -12,12 +13,15 @@ namespace ShipWorks.Tests.Actions.Scheduling.QuartzNet.ActionScheduleAdapters
 
         private readonly TimeSpan ThreeWeeks = new TimeSpan(21, 0, 0, 0);
         private readonly TimeSpan OneHour = new TimeSpan(0, 1, 0, 0);
-
-        WeeklyActionScheduleAdapter target;
+        private readonly TimeZoneInfo stLouisTimeZoneInfo;
+        readonly WeeklyActionScheduleAdapter target;
 
         public WeeklyActionScheduleAdapterTests()
         {
-            target = new WeeklyActionScheduleAdapter();
+            stLouisTimeZoneInfo = TimeZoneInfo.FindSystemTimeZoneById("Central Standard Time");
+            var autoMock = AutoMockExtensions.GetLooseThatReturnsMocks();
+            autoMock.Mock<IDateTimeProvider>().SetupGet(x => x.TimeZoneInfo).Returns(stLouisTimeZoneInfo);//StLouis time zone
+            target = autoMock.Create<WeeklyActionScheduleAdapter>();
         }
 
 
@@ -25,7 +29,7 @@ namespace ShipWorks.Tests.Actions.Scheduling.QuartzNet.ActionScheduleAdapters
         public void FiresAtStartTimeOfDay()
         {
             var schedule = new WeeklyActionSchedule {
-                StartDateTimeInUtc = DateTime.Parse("6/3/2013 03:31Z").ToUniversalTime(),
+                StartDateTimeInUtc = DateTime.Parse("6/3/2013 03:31Z").ToUniversalTime(stLouisTimeZoneInfo),
                 FrequencyInWeeks = 2,
                 ExecuteOnDays = { DayOfWeek.Monday }
             };
@@ -41,7 +45,7 @@ namespace ShipWorks.Tests.Actions.Scheduling.QuartzNet.ActionScheduleAdapters
         public void FiresOnSpecifiedLocalDays()
         {
             var schedule = new WeeklyActionSchedule {
-                StartDateTimeInUtc = DateTime.Parse("6/3/2013Z").ToUniversalTime(),     //Sunday local, Monday UTC
+                StartDateTimeInUtc = DateTime.Parse("6/3/2013Z").ToUniversalTime(stLouisTimeZoneInfo),     //Sunday local, Monday UTC
                 FrequencyInWeeks = 1,
                 ExecuteOnDays = { DayOfWeek.Monday, DayOfWeek.Wednesday }
             };
@@ -58,7 +62,7 @@ namespace ShipWorks.Tests.Actions.Scheduling.QuartzNet.ActionScheduleAdapters
         {
             var schedule = new WeeklyActionSchedule
             {
-                StartDateTimeInUtc = DateTime.Parse("6/3/2013 03:31Z").ToUniversalTime(),
+                StartDateTimeInUtc = DateTime.Parse("6/3/2013 03:31Z").ToUniversalTime(stLouisTimeZoneInfo),
                 FrequencyInWeeks = 3,
                 ExecuteOnDays = { DayOfWeek.Wednesday }
             };
@@ -77,7 +81,7 @@ namespace ShipWorks.Tests.Actions.Scheduling.QuartzNet.ActionScheduleAdapters
         {
             var schedule = new WeeklyActionSchedule
             {
-                StartDateTimeInUtc = DateTime.Parse("10/1/2015 03:31Z").ToUniversalTime(),
+                StartDateTimeInUtc = DateTime.Parse("10/1/2015 03:31Z").ToUniversalTime(stLouisTimeZoneInfo),
                 FrequencyInWeeks = 3,
                 ExecuteOnDays = { DayOfWeek.Wednesday }
             };
@@ -99,7 +103,7 @@ namespace ShipWorks.Tests.Actions.Scheduling.QuartzNet.ActionScheduleAdapters
         {
             var schedule = new WeeklyActionSchedule
             {
-                StartDateTimeInUtc = DateTime.Parse("2/1/2015 03:31Z").ToUniversalTime(),
+                StartDateTimeInUtc = DateTime.Parse("2/1/2015 03:31Z").ToUniversalTime(stLouisTimeZoneInfo),
                 FrequencyInWeeks = 3,
                 ExecuteOnDays = { DayOfWeek.Wednesday }
             };

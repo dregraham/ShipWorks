@@ -587,6 +587,12 @@
     <Compile Include="Actions\ActionTaskChangingEventArgs.cs" />
     <Compile Include="Actions\Tasks\ActionTaskCategory.cs" />
     <Compile Include="Actions\Tasks\ActionTaskFactory.cs" />
+    <Compile Include="Actions\Tasks\Common\Editors\DeprecatedTaskEditor.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Actions\Tasks\Common\Editors\DeprecatedTaskEditor.Designer.cs">
+      <DependentUpon>DeprecatedTaskEditor.cs</DependentUpon>
+    </Compile>
     <Compile Include="Actions\Tasks\IActionTaskFactory.cs" />
     <Compile Include="Actions\Tasks\ActionTaskFlowInfoControl.cs">
       <SubType>UserControl</SubType>
@@ -805,6 +811,7 @@
     <Compile Include="ApplicationCore\Licensing\FeatureRestrictions\DhlEcommerce\DhlEcommerceMaxRestriction.cs" />
     <Compile Include="ApplicationCore\Licensing\TrialDetails.cs" />
     <Compile Include="ApplicationCore\Licensing\Warehouse\DTO\MessagesResponse.cs" />
+    <Compile Include="ApplicationCore\Licensing\Warehouse\DTO\ShipEngineStore.cs" />
     <Compile Include="ApplicationCore\Licensing\Warehouse\DTO\SqlConfigChangedDto.cs" />
     <Compile Include="ApplicationCore\Licensing\Warehouse\Messages\HubMessageRetriever.cs" />
     <Compile Include="ApplicationCore\Licensing\Warehouse\Messages\HubMessagesControl.xaml.cs">
@@ -1335,6 +1342,8 @@
     <Compile Include="Stores\Platforms\Amazon\DTO\GiftNote.cs" />
     <Compile Include="Stores\Platforms\Amazon\OnlineUpdating\AmazonBulkOnlineUpdater.cs" />
     <Compile Include="Stores\Platforms\Amazon\OnlineUpdating\DTO\AmazonBulkUploadShipmentsRequest.cs" />
+    <Compile Include="Stores\Platforms\Etsy\EtsyPlatformDownloader.cs" />
+    <Compile Include="Stores\Platforms\Etsy\IEtsyAccountSettingsControlFactory.cs" />
     <Compile Include="Stores\Platforms\Platform\IHubOrderSourceClient.cs" />
     <Compile Include="Stores\Platforms\Platform\OnlineUpdating\IPlatformOnlineUpdater.cs" />
     <Compile Include="Stores\Platforms\Platform\OnlineUpdating\PlatformBulkOnlineUpdater.cs" />
@@ -1346,6 +1355,7 @@
     <Compile Include="Stores\Platforms\ShipEngine\Apollo\PlatformUnitConverter.cs" />
     <Compile Include="Stores\Platforms\ShipEngine\IPlatformOrderWebClient.cs" />
     <Compile Include="Stores\Platforms\ShipEngine\PlatformOrderWebClient.cs" />
+    <Compile Include="Stores\Platforms\ShipEngine\PlatformDownloader.cs" />
     <Compile Include="Stores\Services\IAmazonMwsToSpConverter.cs" />
     <Compile Include="Stores\Services\IAmazonOrderSourceIdFetcher.cs" />
     <Compile Include="UI\Controls\ValueCheckBox.cs">
@@ -1745,6 +1755,10 @@
     <Compile Include="Warehouse\Orders\IWarehouseOrderClient.cs" />
     <Compile Include="Warehouse\Orders\IWarehouseOrderFactory.cs" />
     <Compile Include="Warehouse\Orders\WarehouseOrderFactory.cs" />
+    <EmbeddedResource Include="Actions\Tasks\Common\Editors\DeprecatedTaskEditor.resx">
+      <DependentUpon>DeprecatedTaskEditor.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
     <EmbeddedResource Include="Actions\Tasks\Common\Editors\CreateLabelTaskEditor.resx">
       <DependentUpon>CreateLabelTaskEditor.cs</DependentUpon>
     </EmbeddedResource>
@@ -4095,19 +4109,12 @@
     <Compile Include="Stores\Platforms\SureDone\SureDoneStoreType.cs" />
     <Compile Include="Stores\Platforms\WooCommerce\WooCommerceStoreType.cs" />
     <Compile Include="Stores\Platforms\Amazon\AmazonApi.cs" />
-    <Compile Include="Stores\Platforms\Amazon\AmazonMwsAccountSettingsControl.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Stores\Platforms\Amazon\AmazonMwsAccountSettingsControl.Designer.cs">
-      <DependentUpon>AmazonMwsAccountSettingsControl.cs</DependentUpon>
-    </Compile>
     <Compile Include="Stores\Platforms\Amazon\AmazonCountryControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="Stores\Platforms\Amazon\AmazonCountryControl.Designer.cs">
       <DependentUpon>AmazonCountryControl.cs</DependentUpon>
     </Compile>
-    <Compile Include="Stores\Platforms\Amazon\AmazonMwsDownloader.cs" />
     <Compile Include="Stores\Platforms\Amazon\CoreExtensions\Filters\AmazonFulfillmentChannelCondition.cs" />
     <Compile Include="Stores\Platforms\Amazon\Mws\AmazonMwsFeedRequestSubmitter.cs" />
     <Compile Include="Stores\Platforms\Amazon\Mws\AmazonMwsActivity.cs" />
@@ -4140,12 +4147,6 @@
     </Compile>
     <Compile Include="Stores\Platforms\Amazon\WizardPages\AmazonInitialSettingsPage.Designer.cs">
       <DependentUpon>AmazonInitialSettingsPage.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Stores\Platforms\Amazon\WizardPages\AmazonMwsPage.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Stores\Platforms\Amazon\WizardPages\AmazonMwsPage.Designer.cs">
-      <DependentUpon>AmazonMwsPage.cs</DependentUpon>
     </Compile>
     <Compile Include="Stores\Platforms\Amazon\WizardPages\AmazonMwsDownloadCriteriaPage.cs">
       <SubType>UserControl</SubType>
@@ -4253,12 +4254,6 @@
     <Compile Include="Stores\Platforms\Ebay\Shipping\GlobalShippingProgram\Rules\SelectedShippingMethodRule.cs" />
     <Compile Include="Stores\Platforms\Etsy\CoreExtensions\Actions\EtsyShipmentUploadTask.cs" />
     <Compile Include="Stores\Platforms\Etsy\CoreExtensions\Actions\EtsyUploadTask.cs" />
-    <Compile Include="Stores\Platforms\Etsy\CoreExtensions\Actions\EtsyUploadTaskEditor.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Stores\Platforms\Etsy\CoreExtensions\Actions\EtsyUploadTaskEditor.Designer.cs">
-      <DependentUpon>EtsyUploadTaskEditor.cs</DependentUpon>
-    </Compile>
     <Compile Include="Stores\Platforms\Etsy\CoreExtensions\Filters\EtsyWasPaidCondition.cs" />
     <Compile Include="Stores\Platforms\Etsy\CoreExtensions\Filters\EtsyWasShippedCondition.cs" />
     <Compile Include="Stores\Platforms\Etsy\Dialog\GetCommentTokenDlg.cs">
@@ -4277,12 +4272,6 @@
     <Compile Include="Stores\Platforms\Etsy\EtsyOrderStatusUtility.cs" />
     <Compile Include="Stores\Platforms\Etsy\EtsyTokenUtility.cs" />
     <Compile Include="Stores\Platforms\Etsy\EtsyEndpoints.cs" />
-    <Compile Include="Stores\Platforms\Etsy\WizardPages\EtsyOnlineShipmentUpdateActionControl.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Stores\Platforms\Etsy\WizardPages\EtsyOnlineShipmentUpdateActionControl.Designer.cs">
-      <DependentUpon>EtsyOnlineShipmentUpdateActionControl.cs</DependentUpon>
-    </Compile>
     <Compile Include="Stores\Platforms\OrderDesk\OrderDeskStoreType.cs" />
     <Compile Include="Stores\Platforms\Newegg\Enums\NeweggOrderType.cs" />
     <Compile Include="Stores\Platforms\Newegg\Net\PageCalculator.cs" />
@@ -8867,9 +8856,6 @@
     <EmbeddedResource Include="Stores\Management\StoreAddressControl.resx">
       <DependentUpon>StoreAddressControl.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Stores\Platforms\Amazon\AmazonMwsAccountSettingsControl.resx">
-      <DependentUpon>AmazonMwsAccountSettingsControl.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="Stores\Platforms\Amazon\AmazonCountryControl.resx">
       <DependentUpon>AmazonCountryControl.cs</DependentUpon>
     </EmbeddedResource>
@@ -8881,9 +8867,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Stores\Platforms\Amazon\WizardPages\AmazonInitialSettingsPage.resx">
       <DependentUpon>AmazonInitialSettingsPage.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Stores\Platforms\Amazon\WizardPages\AmazonMwsPage.resx">
-      <DependentUpon>AmazonMwsPage.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Stores\Platforms\Amazon\WizardPages\AmazonMwsDownloadCriteriaPage.resx">
       <DependentUpon>AmazonMwsDownloadCriteriaPage.cs</DependentUpon>
@@ -8909,17 +8892,11 @@
     <EmbeddedResource Include="Stores\Platforms\ChannelSale\WizardPages\ChannelSaleWizardPage.resx">
       <DependentUpon>ChannelSaleWizardPage.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Stores\Platforms\Etsy\CoreExtensions\Actions\EtsyUploadTaskEditor.resx">
-      <DependentUpon>EtsyUploadTaskEditor.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="Stores\Platforms\Etsy\Dialog\GetCommentTokenDlg.resx">
       <DependentUpon>GetCommentTokenDlg.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Stores\Platforms\Etsy\EtsyAccountSettingsControl.resx">
       <DependentUpon>EtsyAccountSettingsControl.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Stores\Platforms\Etsy\WizardPages\EtsyOnlineShipmentUpdateActionControl.resx">
-      <DependentUpon>EtsyOnlineShipmentUpdateActionControl.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Stores\Platforms\Groupon\GrouponAccountSettingsControl.resx">
       <DependentUpon>GrouponAccountSettingsControl.cs</DependentUpon>

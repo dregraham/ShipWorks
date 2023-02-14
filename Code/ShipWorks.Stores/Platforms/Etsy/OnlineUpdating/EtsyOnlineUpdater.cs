@@ -16,6 +16,7 @@ using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.Custom;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping;
+using ShipWorks.Shipping.Carriers.Api;
 using ShipWorks.Shipping.Carriers.Postal;
 using ShipWorks.Stores.Orders.Combine;
 using ShipWorks.Templates.Tokens;
@@ -26,10 +27,10 @@ namespace ShipWorks.Stores.Platforms.Etsy.OnlineUpdating
     /// Updates payment and tracking information to Etsy.
     /// </summary>
     [Component]
-    public class EtsyOnlineUpdater : IEtsyOnlineUpdater
+    [KeyedComponent(typeof(IOnlineUpdater), StoreTypeCode.Etsy)]
+    public class EtsyOnlineUpdater : IEtsyOnlineUpdater, IOnlineUpdater
     {
         static readonly ILog log = LogManager.GetLogger(typeof(EtsyOnlineUpdater));
-        private readonly EtsyStoreEntity etsyStore;
         private readonly IEtsyWebClient webClient;
 
         /// <summary>
@@ -37,130 +38,14 @@ namespace ShipWorks.Stores.Platforms.Etsy.OnlineUpdating
         /// </summary>
         public EtsyOnlineUpdater(EtsyStoreEntity store, Func<EtsyStoreEntity, IEtsyWebClient> createWebClient)
         {
-            etsyStore = store;
             webClient = createWebClient(store);
-        }
-
-        /// <summary>
-        /// Given shipmentID, send comment, markAsPad, and markAsShipped as applicable
-        /// </summary>
-        public async Task UpdateOnlineStatus(long shipmentID, bool? markAsPaid, bool? markAsShipped, string comment, UnitOfWork2 unitOfWork)
-        {
-            ShipmentEntity shipment = ShippingManager.GetShipment(shipmentID);
-
-            if (shipment == null)
-            {
-                log.InfoFormat("Not uploading tracking number for shipment {0}, shipment was deleted.", shipmentID);
-                return;
-            }
-
-            await UpdateOnlineStatus(shipment, markAsPaid, markAsShipped, comment, unitOfWork).ConfigureAwait(false);
-        }
-
-        /// <summary>
-        /// Update the online status of the given shipment
-        /// </summary>
-        public async Task UpdateOnlineStatus(ShipmentEntity shipment, bool? markAsPaid, bool? markAsShipped, string comment)
-        {
-            UnitOfWork2 unitOfWork = new ManagedConnectionUnitOfWork2();
-
-            await UpdateOnlineStatus(shipment, markAsPaid, markAsShipped, comment, unitOfWork).ConfigureAwait(false);
-
-            using (SqlAdapter adapter = new SqlAdapter(true))
-            {
-                unitOfWork.Commit(adapter);
-                adapter.Commit();
-            }
-        }
-
-        /// <summary>
-        /// Upload the online status of the shipment
-        /// </summary>
-        public async Task UpdateOnlineStatus(ShipmentEntity shipment, bool? markAsPaid, bool? markAsShipped, string comment, UnitOfWork2 unitOfWork)
-        {
-            if (shipment == null)
-            {
-                log.Info("Not uploading tracking number since shipment is null.");
-                return;
-            }
-
-            EtsyOrderEntity order = shipment.Order as EtsyOrderEntity;
-            if (order == null)
-            {
-                log.Error("shipment not associated with order in EtsyOnlineUpdater.UploadStatusAndComment");
-                throw new EtsyException("Shipment not associated with order");
-            }
-
-            // The comment is tokenizable
-            string processedComment = string.IsNullOrEmpty(comment) ? string.Empty : TemplateTokenProcessor.ProcessTokens(comment, shipment.ShipmentID);
-
-            await UpdateOnlineStatus(order, markAsPaid, markAsShipped, processedComment, unitOfWork).ConfigureAwait(false);
-        }
-
-        /// <summary>
-        /// Update the online status of the given order
-        /// </summary>
-        public async Task UpdateOnlineStatus(EtsyOrderEntity order, bool? markAsPaid, bool? markAsShipped)
-        {
-            UnitOfWork2 unitOfWork = new ManagedConnectionUnitOfWork2();
-
-            await UpdateOnlineStatus(order, markAsPaid, markAsShipped, "", unitOfWork).ConfigureAwait(false);
-
-            using (SqlAdapter adapter = new SqlAdapter(true))
-            {
-                unitOfWork.Commit(adapter);
-                adapter.Commit();
-            }
-        }
-
-        /// <summary>
-        /// Update the online status of the given order
-        /// </summary>
-        private async Task UpdateOnlineStatus(EtsyOrderEntity order, bool? markAsPaid, bool? markAsShipped, string processedComment, UnitOfWork2 unitOfWork)
-        {
-            MethodConditions.EnsureArgumentIsNotNull(order, nameof(order));
-            MethodConditions.EnsureArgumentIsNotNull(unitOfWork, nameof(unitOfWork));
-
-            if (order.IsManual && !order.CombineSplitStatus.IsCombined())
-            {
-                log.InfoFormat("Not uploading tracking number since order {0} is manual.", order.OrderID);
-                return;
-            }
-
-            using (ILifetimeScope scope = IoC.BeginLifetimeScope())
-            {
-                ICombineOrderNumberSearchProvider combinedOrderNumber = scope.Resolve<ICombineOrderNumberSearchProvider>();
-
-                IEnumerable<long> orderNumbers = await combinedOrderNumber.GetOrderIdentifiers(order).ConfigureAwait(false);
-                var exceptions = new List<Exception>();
-
-                foreach (long orderNumber in orderNumbers)
-                {
-                    try
-                    {
-                        webClient.UploadStatusDetails(orderNumber, processedComment, markAsPaid, markAsShipped);
-                    }
-                    catch (EtsyException ex)
-                    {
-                        if (!TryManageException(order, unitOfWork, ex))
-                        {
-                            exceptions.Add(ex);
-                        }
-                    }
-                }
-
-                exceptions.ThrowExceptions((msg, ex) => new EtsyException(msg, ex));
-            }
-
-            // Then update the status in our local database
-            EtsyOrderStatusUtility.UpdateOrderStatus(order, markAsPaid, markAsShipped, unitOfWork);
         }
 
         /// <summary>
         /// Uploads the shipment details.
         /// </summary>
         /// <param name="shipmentID">The shipment ID.</param>
-        public async Task UploadShipmentDetails(long shipmentID, UnitOfWork2 unitOfWork)
+        public async Task UploadShipmentDetails(EtsyStoreEntity store, long shipmentID, UnitOfWork2 unitOfWork)
         {
             ShipmentEntity shipment = ShippingManager.GetShipment(shipmentID);
 
@@ -179,13 +64,13 @@ namespace ShipWorks.Stores.Platforms.Etsy.OnlineUpdating
                 throw new EtsyException("Shipment not associated with order");
             }
 
-            await UploadShipmentDetails(order, shipment, unitOfWork).ConfigureAwait(false);
+            await UploadShipmentDetails(store, order, shipment, unitOfWork).ConfigureAwait(false);
         }
 
         /// <summary>
         /// Uploads the shipment details.
         /// </summary>
-        public async Task UploadShipmentDetails(long orderID)
+        public async Task UploadShipmentDetails(EtsyStoreEntity store, long orderID)
         {
             EtsyOrderEntity order = (EtsyOrderEntity) DataProvider.GetEntity(orderID);
 
@@ -210,7 +95,7 @@ namespace ShipWorks.Stores.Platforms.Etsy.OnlineUpdating
 
             UnitOfWork2 unitOfWork = new ManagedConnectionUnitOfWork2();
 
-            await UploadShipmentDetails(order, shipment, unitOfWork).ConfigureAwait(false);
+            await UploadShipmentDetails(store, order, shipment, unitOfWork).ConfigureAwait(false);
 
             using (SqlAdapter adapter = new SqlAdapter(true))
             {
@@ -225,7 +110,7 @@ namespace ShipWorks.Stores.Platforms.Etsy.OnlineUpdating
         /// <param name="order">The order.</param>
         /// <param name="shipment">The shipment.</param>
         /// <param name="unitOfWork">The unit of work.</param>
-        private async Task UploadShipmentDetails(EtsyOrderEntity order, ShipmentEntity shipment, UnitOfWork2 unitOfWork)
+        private async Task UploadShipmentDetails(EtsyStoreEntity etsyStore, EtsyOrderEntity order, ShipmentEntity shipment, UnitOfWork2 unitOfWork)
         {
             ShippingManager.EnsureShipmentLoaded(shipment);
 
@@ -319,6 +204,29 @@ namespace ShipWorks.Stores.Platforms.Etsy.OnlineUpdating
                     return "none";
                 default:
                     return "other";
+            }
+        }
+
+        /// <summary>
+        /// Uploads shipment details for a particular shipment
+        /// </summary>
+        public async Task UploadShipmentDetails(StoreEntity store, List<ShipmentEntity> shipments)
+        {
+            foreach (var shipment in shipments)
+            {
+                bool? markAsPaid = null;//TODO: how to get status?
+                bool? markAsShipped = null;
+                string comment = string.Empty;
+
+                UnitOfWork2 unitOfWork = new ManagedConnectionUnitOfWork2();
+
+                await UploadShipmentDetails((EtsyStoreEntity) store, (EtsyOrderEntity) shipment.Order, shipment, unitOfWork).ConfigureAwait(false);
+
+                using (SqlAdapter adapter = new SqlAdapter(true))
+                {
+                    unitOfWork.Commit(adapter);
+                    adapter.Commit();
+                }
             }
         }
     }

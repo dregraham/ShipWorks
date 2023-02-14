@@ -25,6 +25,7 @@ namespace ShipWorks.Shipping.Tests.Carriers
         public void Manipulate_SetsDate_Properly(bool processed, string shipDateText, string nowText, string expectedText)
         {
             mock.Mock<IDateTimeProvider>().SetupGet(x => x.Now).Returns(DateTime.Parse(nowText));
+            mock.Mock<IDateTimeProvider>().SetupGet(x => x.TimeZoneInfo).Returns(TimeZoneInfo.FindSystemTimeZoneById("Central Standard Time"));//StLouis time zone
 
             var shipment = new ShipmentEntity
             {

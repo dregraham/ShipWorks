@@ -25,6 +25,7 @@ namespace ShipWorks.Stores.Orders.Archive
     public class OrderArchiveViewModel : IOrderArchiveViewModel, INotifyPropertyChanged
     {
         private readonly IAsyncMessageHelper messageHelper;
+        private readonly IDateTimeProvider dateTimeProvider;
         private readonly IOrderArchiveDialog archiveOrdersDialog;
         private readonly PropertyChangedHandler handler;
         private readonly IOrderArchiveDataAccess dataAccess;
@@ -48,6 +49,7 @@ namespace ShipWorks.Stores.Orders.Archive
             this.dataAccess = dataAccess;
             this.archiveOrdersDialog = archiveOrdersDialog;
             this.messageHelper = messageHelper;
+            this.dateTimeProvider = dateTimeProvider;
 
             handler = new PropertyChangedHandler(this, () => PropertyChanged);
             handler.Where(x => x == nameof(ArchiveDate))
@@ -148,7 +150,7 @@ namespace ShipWorks.Stores.Orders.Archive
             return messageHelper
                 .ShowDialog(() => SetupDialog())
                 .Bind(x => x == true ?
-                    Task.FromResult(ArchiveDate.ToUniversalTime()) :
+                    Task.FromResult(ArchiveDate.ToUniversalTime(dateTimeProvider.TimeZoneInfo)) :
                     Task.FromException<DateTime>(Error.Canceled));
         }
 

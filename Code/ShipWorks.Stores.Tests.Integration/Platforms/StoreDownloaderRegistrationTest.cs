@@ -111,7 +111,7 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms
 
         private readonly Dictionary<StoreTypeCode, Type> specificDownloaders = new Dictionary<StoreTypeCode, Type>
         {
-            { StoreTypeCode.Amazon, typeof(AmazonMwsDownloader) },
+            //{ StoreTypeCode.Amazon, typeof(AmazonPlatformDownloader) },//TODO: add integration tests
             { StoreTypeCode.AmeriCommerce, typeof(AmeriCommerceDownloader) },
             { StoreTypeCode.BigCommerce, typeof(BigCommerceDownloader) },
             { StoreTypeCode.BuyDotCom, typeof(BuyDotComDownloader) },

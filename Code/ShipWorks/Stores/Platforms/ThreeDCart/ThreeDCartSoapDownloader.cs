@@ -374,14 +374,12 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart
 
             TimeSpan orderTimeTimeSpan = new TimeSpan(orderTime.Hour, orderTime.Minute, orderTime.Second);
             DateTime storeDateTimeConversion = orderDay.Add(orderTimeTimeSpan);
-            order.OrderDate = DateTimeUtility.ConvertTimeToUtcForTimeZone(storeDateTimeConversion,
-                                                                          threeDCartStore.StoreTimeZone);
+            order.OrderDate = storeDateTimeConversion.ToUniversalTime(threeDCartStore.StoreTimeZone);
 
             // Set OnlineLastModified to their last modified date
             // Convert to UTC based on the store's time zone.
             storeDateTimeConversion = DateTime.Parse(XPathUtility.Evaluate(xmlOrderXPath, "./LastUpdate", ""));
-            order.OnlineLastModified = DateTimeUtility.ConvertTimeToUtcForTimeZone(storeDateTimeConversion,
-                                                                          threeDCartStore.StoreTimeZone);
+            order.OnlineLastModified = storeDateTimeConversion.ToUniversalTime(threeDCartStore.StoreTimeZone);
 
             //Load Online Status
             LoadStatus(order, xmlOrderXPath);

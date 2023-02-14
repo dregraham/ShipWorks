@@ -1,5 +1,6 @@
 ﻿using Interapptive.Shared.Threading;
 using ShipWorks.Stores.Platforms.ShipEngine.Apollo;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace ShipWorks.Stores.Platforms.ShipEngine
@@ -9,7 +10,7 @@ namespace ShipWorks.Stores.Platforms.ShipEngine
         /// <summary>
         /// Executes a request for more orders
         /// </summary>
-        Task<GetOrdersDTO> GetOrders(string orderSourceId, string continuationToken);
+        Task<GetOrdersDTO> GetOrders(string orderSourceId, string continuationToken, CancellationToken cancellationToken);
 
         /// <summary>
         /// Progress reporter that will be used for requests
