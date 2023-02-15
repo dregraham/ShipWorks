@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Linq;
+using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 using Interapptive.Shared.Business;
@@ -46,12 +47,9 @@ namespace ShipWorks.Stores.Platforms.ShipEngine
             var itemNotes = new List<GiftNote>();
             if (salesOrder.Notes != null)
             {
-                foreach (var note in salesOrder.Notes)
+                foreach (var note in salesOrder.Notes.Where(n => n.Text.HasValue() && n.Type == OrderSourceNoteType.GiftMessage))
                 {
-                    if (note.Type == OrderSourceNoteType.GiftMessage)
-                    {
-                        itemNotes.Add(GiftNote.FromOrderSourceNote(note));
-                    }
+                    itemNotes.Add(GiftNote.FromOrderSourceNote(note));
                 }
             }
 
@@ -450,6 +448,7 @@ namespace ShipWorks.Stores.Platforms.ShipEngine
                 AddAdjustments(salesOrder, order);
 
                 AddTaxes(salesOrder, order);
+                AddNotes(salesOrder, giftNotes, order);
 
                 // update the total
                 var calculatedTotal = OrderUtility.CalculateTotal(order);
@@ -463,6 +462,54 @@ namespace ShipWorks.Stores.Platforms.ShipEngine
             await retryAdapter.ExecuteWithRetryAsync(() => SaveDownloadedOrder(order)).ConfigureAwait(false);
         }
 
+        /// <summary>
+        /// Adds notes to order entity
+        /// </summary>
+        private async Task AddNotes(OrderSourceApiSalesOrder salesOrder, List<GiftNote> giftNotes, OrderEntity order)
+        {
+            var notes = salesOrder.Notes.Where(n => n.Type != OrderSourceNoteType.GiftMessage);
+            foreach (var note in notes)
+            {
+                string noteText = FormatNoteText(note.Text, note.Type);
+                var visibility = note.Type == OrderSourceNoteType.InternalNotes ? 
+                    NoteVisibility.Internal : NoteVisibility.Public;
+
+                await InstantiateNote(order, noteText, order.OrderDate, visibility).ConfigureAwait(false);
+            }
+
+            foreach(var note in giftNotes.Where(n=>n.OrderItemId.IsNullOrWhiteSpace()))
+            {
+                var noteText = FormatNoteText(note.Message, OrderSourceNoteType.GiftMessage);
+                await InstantiateNote(order, noteText, order.OrderDate, NoteVisibility.Public).ConfigureAwait(false);
+            }
+        }
+
+        private string FormatNoteText(string text, OrderSourceNoteType noteType)
+        {
+            text = WebUtility.HtmlDecode(text);
+            return $"{GetNotePreface(noteType)}{text}";
+        }
+
+        private string GetNotePreface(OrderSourceNoteType noteType)
+        {
+            switch (noteType)
+            {
+                case OrderSourceNoteType.GiftMessage:
+                    return "Gift Message: ";
+                case OrderSourceNoteType.NotesToBuyer:
+                    return "To Buyer: ";
+                case OrderSourceNoteType.NotesFromBuyer:
+                    return "From Buyer: ";
+                case OrderSourceNoteType.InternalNotes:
+                    return "Internal: ";
+                default:
+                    return string.Empty;
+            }
+        }
+
+        /// <summary>
+        /// Adds order adjustment charges to order entity
+        /// </summary>
         private void AddAdjustments(OrderSourceApiSalesOrder salesOrder, OrderEntity order)
         {
             foreach (var orderAdjustment in salesOrder.Payment.Adjustments)
@@ -476,6 +523,9 @@ namespace ShipWorks.Stores.Platforms.ShipEngine
             }
         }
 
+        /// <summary>
+        /// Adds taxes to order entity
+        /// </summary>
         protected virtual void AddTaxes(OrderSourceApiSalesOrder salesOrder, OrderEntity order)
         {
             var itemTaxes = salesOrder.RequestedFulfillments?
