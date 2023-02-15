@@ -484,12 +484,18 @@ namespace ShipWorks.Stores.Platforms.ShipEngine
             }
         }
 
+        /// <summary>
+        /// Format the note to save
+        /// </summary>
         private string FormatNoteText(string text, OrderSourceNoteType noteType)
         {
             text = WebUtility.HtmlDecode(text);
             return $"{GetNotePreface(noteType)}{text}";
         }
 
+        /// <summary>
+        /// Get the note preface based on note type
+        /// </summary>
         private string GetNotePreface(OrderSourceNoteType noteType)
         {
             switch (noteType)
@@ -534,6 +540,12 @@ namespace ShipWorks.Stores.Platforms.ShipEngine
                 .Sum(t => t.Amount) ?? 0;
             var orderTaxes = salesOrder.Payment.Taxes.Sum(t => t.Amount);
 
+            // Josh Flanagan said that "one of our guiding principles is to not do aggregation within the integration.
+            // if details are provided at the item level, we should expose them at the item level. if they are only
+            // available at the order level, that is what we will expose. so you should definitely account for that
+            // as a consumer of this data"
+            // In other words, we shouldn't have data that is both at the item level and order level. If we find that we
+            // do, it would be worth bringing up to platform.
             AddToCharge(order, "Tax", "Tax", itemTaxes + orderTaxes);
         }
     }
