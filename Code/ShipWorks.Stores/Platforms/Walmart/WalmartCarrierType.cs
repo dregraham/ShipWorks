@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Reflection;
 using System.Text;
@@ -18,51 +19,67 @@ namespace ShipWorks.Stores.Platforms.Walmart
     {
 
         [ApiValue("UPS")]
+        [Description("UPS")]
         UPS,
 
         [ApiValue("USPS")]
+        [Description("USPS")]
         USPS,
 
         [ApiValue("FedEx")]
+        [Description("FedEx")]
         FedEx,
 
         [ApiValue("Airborne")]
+        [Description("Airborne")]
         Airborne,
 
         [ApiValue("OnTrac")]
+        [Description("OnTrac")]
         OnTrac,
 
         [ApiValue("DHL")]
+        [Description("DHL")]
         DHL,
 
         [ApiValue("NG")]
+        [Description("NG")]
         NG,
 
         [ApiValue("LS")]
+        [Description("LS")]
         LS,
 
         [ApiValue("UDS")]
+        [Description("UDS")]
         UDS,
 
         [ApiValue("UPSMI")]
+        [Description("UPSMI")]
         UPSMI,
 
         [ApiValue("FDX")]
+        [Description("FDX")]
         FDX,
 
         [ApiValue("PILOT")]
+        [Description("PILOT")]
         PILOT,
 
         [ApiValue("ESTES")]
+        [Description("ESTES")]
         ESTES,
 
         [ApiValue("SAIA")]
+        [Description("SAIA")]
         SAIA,
 
         [ApiValue("DHL Ecommerce - US")]
+        [Description("DHL Ecommerce - US")]
         DHL_Ecommerce_US,
 
         [ApiValue("TForce Freight")]
+        [Description("TForce Freight")]
         TForceFreight
     }
 }

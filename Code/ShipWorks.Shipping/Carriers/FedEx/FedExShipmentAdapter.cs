@@ -131,7 +131,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         /// </summary>
         protected override int? GetServiceTypeAsIntFromTag(object tag)
         {
-            var service = FedExShipmentType.ConvertToServiceType(tag.ToString());
+            var service = FedExShipmentType.ConvertToServiceType(tag);
 
             return service.HasValue ? (int?) service.Value : base.GetServiceTypeAsIntFromTag(tag);
         }

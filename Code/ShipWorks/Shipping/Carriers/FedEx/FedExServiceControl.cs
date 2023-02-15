@@ -718,7 +718,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
                         return false;
                     }
 
-                    var serviceType = FedExShipmentType.ConvertToServiceType(r.OriginalTag.ToString());
+                    var serviceType = FedExShipmentType.ConvertToServiceType(r.OriginalTag);
 
                     return serviceType == selectedServiceType;
                 });
@@ -926,7 +926,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         {
             int oldIndex = service.SelectedIndex;
 
-            var serviceType = FedExShipmentType.ConvertToServiceType(e.Rate.OriginalTag.ToString());
+            var serviceType = FedExShipmentType.ConvertToServiceType(e.Rate.OriginalTag);
 
             service.SelectedValue = serviceType;
             if (service.SelectedIndex == -1 && oldIndex != -1)

@@ -36,6 +36,7 @@ using ShipWorks.Shipping.Services;
 using ShipWorks.Shipping.Settings;
 using ShipWorks.Shipping.Settings.Origin;
 using ShipWorks.Shipping.Tracking;
+using ShipWorks.Stores.Platforms.Amazon.WebServices.Associates;
 using ShipWorks.Templates.Processing.TemplateXml.ElementOutlines;
 
 namespace ShipWorks.Shipping.Carriers.FedEx
@@ -867,8 +868,19 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         /// <summary>
         /// Convert a string value of service type to a FedExServiceType
         /// </summary>
-        public static FedExServiceType? ConvertToServiceType(string serviceType)
+        public static FedExServiceType? ConvertToServiceType(object tag)
         {
+            switch (tag)
+            {
+                case null:
+                    return null;
+                case FedExRateSelection fedExRateSelection:
+                    return fedExRateSelection.ServiceType;
+                case FedExServiceType fedExServiceType:
+                    return fedExServiceType;
+            }
+
+            var serviceType = tag.ToString();
             if (EnumHelper.TryGetEnumByApiValue(serviceType, out FedExServiceType? serviceTypeParsed))
             {
                 return serviceTypeParsed;
