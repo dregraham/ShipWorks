@@ -29,7 +29,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
     [KeyedComponent(typeof(IShipmentTypeSetupWizard), ShipmentTypeCode.FedEx)]
     public partial class FedExSetupWizard : WizardForm, IShipmentTypeSetupWizard
     {
-        FedExAccountEntity account;
+        private readonly FedExAccountEntity account;
 
         /// <summary>
         /// Constructor
@@ -42,7 +42,6 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         }
 
         /// <summary>
-
         /// Initialization
         /// </summary>
         private void OnLoad(object sender, EventArgs e)
@@ -109,7 +108,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         /// Stepping next from the account information page
         /// </summary>
         [NDependIgnoreLongMethod]
-        private async void OnStepNextAccountInfo(object sender, WizardStepEventArgs e)
+        private void OnStepNextAccountInfo(object sender, WizardStepEventArgs e)
         {
             try
             {
@@ -153,7 +152,26 @@ namespace ShipWorks.Shipping.Carriers.FedEx
 
                 Cursor.Current = Cursors.WaitCursor;
 
-                await RegisterAccount(account);
+                // This is necessary because .Wait() causes the exception to be caught by the .NET runtime, then
+                // rethrown. That's normally fine, but in ShipWorks any exceptions caught by the runtime causes
+                // ShipWorks to close, so we have to work around that.
+                FedExException registrationException = null;
+                Task.Run(async () =>
+                {
+                    try
+                    {
+                        await RegisterAccount(account);
+                    }
+                    catch (FedExException ex)
+                    {
+                        registrationException = ex;
+                    }
+                }).Wait();
+
+                if (registrationException != null)
+                {
+                    throw registrationException;
+                }
 
                 account.Description = FedExAccountManager.GetDefaultDescription(account);
 
@@ -181,7 +199,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
                 var webClient = lifetimeScope.Resolve<IShipEngineWebClient>();
 
                 // Response contains the ShipEngine carrier id
-                var response = await webClient.ConnectFedExAccount(new FedExRegistrationRequest(fedExAccount));
+                var response = await webClient.ConnectFedExAccount(new FedExRegistrationRequest(fedExAccount)).ConfigureAwait(false);
 
                 if (response.Success)
                 {
@@ -189,7 +207,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
                 }
                 else
                 {
-                    throw new FedExException("Failed to register the FedEx account.");
+                    throw new FedExException($"Failed to register the FedEx account: {response.Message}");
                 }
             }
         }
