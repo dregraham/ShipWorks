@@ -150,6 +150,8 @@ namespace ShipWorks.Shipping.Carriers.FedEx
                     return;
                 }
 
+                account.Description = FedExAccountManager.GetDefaultDescription(account);
+
                 Cursor.Current = Cursors.WaitCursor;
 
                 // This is necessary because .Wait() causes the exception to be caught by the .NET runtime, then
@@ -172,8 +174,6 @@ namespace ShipWorks.Shipping.Carriers.FedEx
                 {
                     throw registrationException;
                 }
-
-                account.Description = FedExAccountManager.GetDefaultDescription(account);
 
                 // Save now so it shows up in the settings section
                 if (account.IsNew)
