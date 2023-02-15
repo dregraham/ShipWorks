@@ -1301,8 +1301,10 @@
           <Field Name="NonStandardContainer" Type="bool" IsOptional="true" FieldIndex="5" />
           <Field Name="OriginResidentialDetermination" Type="int" IsOptional="true" FieldIndex="28" />
           <Field Name="PackagingType" Type="int" IsOptional="true" FieldIndex="4" />
+          <Field Name="PayorCountryCode" Type="string" IsOptional="true" MaxLength="2" FieldIndex="41" />
           <Field Name="PayorDutiesAccount" Type="string" IsOptional="true" MaxLength="12" FieldIndex="13" />
           <Field Name="PayorDutiesType" Type="int" IsOptional="true" FieldIndex="12" />
+          <Field Name="PayorPostalCode" Type="string" IsOptional="true" MaxLength="10" FieldIndex="42" />
           <Field Name="PayorTransportAccount" Type="string" IsOptional="true" MaxLength="12" FieldIndex="11" />
           <Field Name="PayorTransportName" Type="string" IsOptional="true" MaxLength="60" FieldIndex="29" />
           <Field Name="PayorTransportType" Type="int" IsOptional="true" FieldIndex="10" />
@@ -6293,6 +6295,8 @@
                     <Field Name="FileElectronically" Ordinal="39" IsOptional="true" DbType="2" />
                     <Field Name="CustomsRecipientTIN" Ordinal="40" IsOptional="true" DbType="12" Length="24" />
                     <Field Name="CustomsRecipientTINType" Ordinal="41" IsOptional="true" DbType="8" Precision="10" />
+                    <Field Name="PayorCountryCode" Ordinal="42" IsOptional="true" DbType="12" Length="2" />
+                    <Field Name="PayorPostalCode" Ordinal="43" IsOptional="true" DbType="12" Length="10" />
                   </Fields>
                 </Table>
                 <Table Name="FedExProfilePackage">
@@ -12603,8 +12607,10 @@
             <FieldMapping FieldName="NonStandardContainer" TargetFieldName="NonStandardContainer" />
             <FieldMapping FieldName="OriginResidentialDetermination" TargetFieldName="OriginResidentialDetermination" />
             <FieldMapping FieldName="PackagingType" TargetFieldName="PackagingType" />
+            <FieldMapping FieldName="PayorCountryCode" TargetFieldName="PayorCountryCode" />
             <FieldMapping FieldName="PayorDutiesAccount" TargetFieldName="PayorDutiesAccount" />
             <FieldMapping FieldName="PayorDutiesType" TargetFieldName="PayorDutiesType" />
+            <FieldMapping FieldName="PayorPostalCode" TargetFieldName="PayorPostalCode" />
             <FieldMapping FieldName="PayorTransportAccount" TargetFieldName="PayorTransportAccount" />
             <FieldMapping FieldName="PayorTransportName" TargetFieldName="PayorTransportName" />
             <FieldMapping FieldName="PayorTransportType" TargetFieldName="PayorTransportType" />

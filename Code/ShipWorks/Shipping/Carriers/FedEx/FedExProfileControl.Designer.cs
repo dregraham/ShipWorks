@@ -76,7 +76,10 @@
             this.tabControl = new System.Windows.Forms.TabControl();
             this.tabPageSettings = new System.Windows.Forms.TabPage();
             this.panel1 = new System.Windows.Forms.Panel();
+            this.smartHubIDState = new System.Windows.Forms.CheckBox();
+            this.smartHubID = new ShipWorks.UI.Controls.MultiValueComboBox();
             this.returnType = new ShipWorks.UI.Controls.MultiValueComboBox();
+            this.labelSmartHubID = new System.Windows.Forms.Label();
             this.saturdayReturn = new System.Windows.Forms.CheckBox();
             this.labelReturnType = new System.Windows.Forms.Label();
             this.saturdayReturnState = new System.Windows.Forms.CheckBox();
@@ -161,9 +164,6 @@
             this.insuranceState = new System.Windows.Forms.CheckBox();
             this.kryptonBorderEdge10 = new ComponentFactory.Krypton.Toolkit.KryptonBorderEdge();
             this.groupSmartPost = new System.Windows.Forms.GroupBox();
-            this.smartHubIDState = new System.Windows.Forms.CheckBox();
-            this.smartHubID = new ShipWorks.UI.Controls.MultiValueComboBox();
-            this.labelSmartHubID = new System.Windows.Forms.Label();
             this.smartIndicia = new ShipWorks.UI.Controls.MultiValueComboBox();
             this.labelSmartEndicia = new System.Windows.Forms.Label();
             this.kryptonBorderEdge8 = new ComponentFactory.Krypton.Toolkit.KryptonBorderEdge();
@@ -185,6 +185,12 @@
             this.labelInvoice = new System.Windows.Forms.Label();
             this.kryptonBorderEdge4 = new ComponentFactory.Krypton.Toolkit.KryptonBorderEdge();
             this.groupBilling = new System.Windows.Forms.GroupBox();
+            this.payorPostalCode = new ShipWorks.UI.Controls.MultiValueTextBox();
+            this.labelPayorPostalCode = new System.Windows.Forms.Label();
+            this.payorPostalCodeState = new System.Windows.Forms.CheckBox();
+            this.payorCountryCode = new ShipWorks.UI.Controls.MultiValueTextBox();
+            this.labelPayorCountryCode = new System.Windows.Forms.Label();
+            this.payorCountryCodeState = new System.Windows.Forms.CheckBox();
             this.dutiesAccount = new ShipWorks.UI.Controls.MultiValueTextBox();
             this.labelDutiesAccount = new System.Windows.Forms.Label();
             this.payorDuties = new ShipWorks.UI.Controls.MultiValueComboBox();
@@ -264,7 +270,7 @@
             this.groupBoxFrom.Controls.Add(this.senderState);
             this.groupBoxFrom.Location = new System.Drawing.Point(6, 6);
             this.groupBoxFrom.Name = "groupBoxFrom";
-            this.groupBoxFrom.Size = new System.Drawing.Size(656, 99);
+            this.groupBoxFrom.Size = new System.Drawing.Size(1343, 99);
             this.groupBoxFrom.TabIndex = 0;
             this.groupBoxFrom.TabStop = false;
             this.groupBoxFrom.Text = "From";
@@ -384,13 +390,19 @@
             this.groupShipment.Controls.Add(this.kryptonBorderEdge);
             this.groupShipment.Controls.Add(this.labelService);
             this.groupShipment.Controls.Add(this.labelPackaging);
+            this.groupShipment.Controls.Add(this.dropoffType);
             this.groupShipment.Controls.Add(this.packaging);
+            this.groupShipment.Controls.Add(this.dropoffTypeState);
             this.groupShipment.Controls.Add(this.service);
+            this.groupShipment.Controls.Add(this.labelDropoffType);
             this.groupShipment.Controls.Add(this.packagingState);
             this.groupShipment.Controls.Add(this.serviceState);
+            this.groupShipment.Controls.Add(this.saturdayState);
+            this.groupShipment.Controls.Add(this.labelSaturday);
+            this.groupShipment.Controls.Add(this.saturdayDelivery);
             this.groupShipment.Location = new System.Drawing.Point(6, 167);
             this.groupShipment.Name = "groupShipment";
-            this.groupShipment.Size = new System.Drawing.Size(656, 101);
+            this.groupShipment.Size = new System.Drawing.Size(1343, 139);
             this.groupShipment.TabIndex = 2;
             this.groupShipment.TabStop = false;
             this.groupShipment.Text = "Shipment";
@@ -445,7 +457,7 @@
             this.kryptonBorderEdge.BorderStyle = ComponentFactory.Krypton.Toolkit.PaletteBorderStyle.GridDataCellSheet;
             this.kryptonBorderEdge.Location = new System.Drawing.Point(29, 18);
             this.kryptonBorderEdge.Name = "kryptonBorderEdge";
-            this.kryptonBorderEdge.Size = new System.Drawing.Size(1, 73);
+            this.kryptonBorderEdge.Size = new System.Drawing.Size(1, 111);
             this.kryptonBorderEdge.Text = "kryptonBorderEdge1";
             // 
             // labelService
@@ -517,7 +529,7 @@
             // saturdayDelivery
             // 
             this.saturdayDelivery.AutoSize = true;
-            this.saturdayDelivery.Location = new System.Drawing.Point(82, 216);
+            this.saturdayDelivery.Location = new System.Drawing.Point(110, 91);
             this.saturdayDelivery.Name = "saturdayDelivery";
             this.saturdayDelivery.Size = new System.Drawing.Size(112, 17);
             this.saturdayDelivery.TabIndex = 8;
@@ -528,7 +540,7 @@
             // 
             this.labelSaturday.AutoSize = true;
             this.labelSaturday.BackColor = System.Drawing.Color.Transparent;
-            this.labelSaturday.Location = new System.Drawing.Point(21, 217);
+            this.labelSaturday.Location = new System.Drawing.Point(49, 92);
             this.labelSaturday.Name = "labelSaturday";
             this.labelSaturday.Size = new System.Drawing.Size(55, 13);
             this.labelSaturday.TabIndex = 54;
@@ -539,7 +551,7 @@
             this.saturdayState.AutoSize = true;
             this.saturdayState.Checked = true;
             this.saturdayState.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.saturdayState.Location = new System.Drawing.Point(-19, 217);
+            this.saturdayState.Location = new System.Drawing.Point(9, 92);
             this.saturdayState.Name = "saturdayState";
             this.saturdayState.Size = new System.Drawing.Size(15, 14);
             this.saturdayState.TabIndex = 7;
@@ -582,7 +594,7 @@
             // 
             this.labelDropoffType.AutoSize = true;
             this.labelDropoffType.BackColor = System.Drawing.Color.Transparent;
-            this.labelDropoffType.Location = new System.Drawing.Point(28, 242);
+            this.labelDropoffType.Location = new System.Drawing.Point(56, 117);
             this.labelDropoffType.Name = "labelDropoffType";
             this.labelDropoffType.Size = new System.Drawing.Size(48, 13);
             this.labelDropoffType.TabIndex = 57;
@@ -592,7 +604,7 @@
             // 
             this.dropoffType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.dropoffType.FormattingEnabled = true;
-            this.dropoffType.Location = new System.Drawing.Point(82, 239);
+            this.dropoffType.Location = new System.Drawing.Point(110, 114);
             this.dropoffType.Name = "dropoffType";
             this.dropoffType.PromptText = "(Multiple Values)";
             this.dropoffType.Size = new System.Drawing.Size(173, 21);
@@ -603,7 +615,7 @@
             this.dropoffTypeState.AutoSize = true;
             this.dropoffTypeState.Checked = true;
             this.dropoffTypeState.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.dropoffTypeState.Location = new System.Drawing.Point(-19, 242);
+            this.dropoffTypeState.Location = new System.Drawing.Point(9, 117);
             this.dropoffTypeState.Name = "dropoffTypeState";
             this.dropoffTypeState.Size = new System.Drawing.Size(15, 14);
             this.dropoffTypeState.TabIndex = 5;
@@ -683,7 +695,7 @@
             this.tabControl.Location = new System.Drawing.Point(0, 0);
             this.tabControl.Name = "tabControl";
             this.tabControl.SelectedIndex = 0;
-            this.tabControl.Size = new System.Drawing.Size(570, 1150);
+            this.tabControl.Size = new System.Drawing.Size(1257, 1150);
             this.tabControl.TabIndex = 0;
             // 
             // tabPageSettings
@@ -703,45 +715,61 @@
             this.tabPageSettings.Location = new System.Drawing.Point(4, 22);
             this.tabPageSettings.Name = "tabPageSettings";
             this.tabPageSettings.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPageSettings.Size = new System.Drawing.Size(562, 1124);
+            this.tabPageSettings.Size = new System.Drawing.Size(1249, 1124);
             this.tabPageSettings.TabIndex = 0;
             this.tabPageSettings.Text = "Settings";
             this.tabPageSettings.UseVisualStyleBackColor = true;
             // 
             // panel1
             // 
+            this.panel1.Controls.Add(this.smartHubIDState);
+            this.panel1.Controls.Add(this.smartHubID);
             this.panel1.Controls.Add(this.returnType);
+            this.panel1.Controls.Add(this.labelSmartHubID);
             this.panel1.Controls.Add(this.saturdayReturn);
             this.panel1.Controls.Add(this.labelReturnType);
             this.panel1.Controls.Add(this.saturdayReturnState);
-            this.panel1.Controls.Add(this.dropoffType);
-            this.panel1.Controls.Add(this.dropoffTypeState);
-            this.panel1.Controls.Add(this.labelDropoffType);
             this.panel1.Controls.Add(this.smartConfirmation);
             this.panel1.Controls.Add(this.labelReturnsClearance);
             this.panel1.Controls.Add(this.returnTypeState);
             this.panel1.Controls.Add(this.rmaReason);
-            this.panel1.Controls.Add(this.smartEndorsement);
             this.panel1.Controls.Add(this.labelRmaReason);
-            this.panel1.Controls.Add(this.saturdayDelivery);
             this.panel1.Controls.Add(this.returnsClearance);
             this.panel1.Controls.Add(this.rmaReasonState);
-            this.panel1.Controls.Add(this.labelSmartAncillary);
-            this.panel1.Controls.Add(this.labelSaturday);
             this.panel1.Controls.Add(this.returnsClearanceState);
             this.panel1.Controls.Add(this.labelSmartConfirmation);
-            this.panel1.Controls.Add(this.saturdayState);
             this.panel1.Controls.Add(this.smartManifestID);
             this.panel1.Controls.Add(this.groupEmail);
             this.panel1.Controls.Add(this.labelSmartManifestID);
             this.panel1.Controls.Add(this.smartManifestIDState);
-            this.panel1.Controls.Add(this.smartEndoresmentState);
             this.panel1.Controls.Add(this.smartConfirmationState);
-            this.panel1.Location = new System.Drawing.Point(426, 0);
+            this.panel1.Location = new System.Drawing.Point(649, 0);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(200, 1030);
+            this.panel1.Size = new System.Drawing.Size(434, 1030);
             this.panel1.TabIndex = 11;
             this.panel1.Visible = false;
+            // 
+            // smartHubIDState
+            // 
+            this.smartHubIDState.AutoSize = true;
+            this.smartHubIDState.Checked = true;
+            this.smartHubIDState.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.smartHubIDState.Location = new System.Drawing.Point(30, 626);
+            this.smartHubIDState.Name = "smartHubIDState";
+            this.smartHubIDState.Size = new System.Drawing.Size(15, 14);
+            this.smartHubIDState.TabIndex = 0;
+            this.smartHubIDState.Tag = "";
+            this.smartHubIDState.UseVisualStyleBackColor = true;
+            // 
+            // smartHubID
+            // 
+            this.smartHubID.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.smartHubID.FormattingEnabled = true;
+            this.smartHubID.Location = new System.Drawing.Point(134, 623);
+            this.smartHubID.Name = "smartHubID";
+            this.smartHubID.PromptText = "(Multiple Values)";
+            this.smartHubID.Size = new System.Drawing.Size(173, 21);
+            this.smartHubID.TabIndex = 1;
             // 
             // returnType
             // 
@@ -752,6 +780,16 @@
             this.returnType.PromptText = "(Multiple Values)";
             this.returnType.Size = new System.Drawing.Size(207, 21);
             this.returnType.TabIndex = 8;
+            // 
+            // labelSmartHubID
+            // 
+            this.labelSmartHubID.AutoSize = true;
+            this.labelSmartHubID.BackColor = System.Drawing.Color.Transparent;
+            this.labelSmartHubID.Location = new System.Drawing.Point(84, 627);
+            this.labelSmartHubID.Name = "labelSmartHubID";
+            this.labelSmartHubID.Size = new System.Drawing.Size(44, 13);
+            this.labelSmartHubID.TabIndex = 88;
+            this.labelSmartHubID.Text = "Hub ID:";
             // 
             // saturdayReturn
             // 
@@ -820,7 +858,7 @@
             // 
             this.smartEndorsement.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.smartEndorsement.FormattingEnabled = true;
-            this.smartEndorsement.Location = new System.Drawing.Point(134, 548);
+            this.smartEndorsement.Location = new System.Drawing.Point(113, 43);
             this.smartEndorsement.Name = "smartEndorsement";
             this.smartEndorsement.PromptText = "(Multiple Values)";
             this.smartEndorsement.Size = new System.Drawing.Size(173, 21);
@@ -852,7 +890,7 @@
             // 
             this.labelSmartAncillary.AutoSize = true;
             this.labelSmartAncillary.BackColor = System.Drawing.Color.Transparent;
-            this.labelSmartAncillary.Location = new System.Drawing.Point(77, 552);
+            this.labelSmartAncillary.Location = new System.Drawing.Point(56, 47);
             this.labelSmartAncillary.Name = "labelSmartAncillary";
             this.labelSmartAncillary.Size = new System.Drawing.Size(51, 13);
             this.labelSmartAncillary.TabIndex = 84;
@@ -922,7 +960,7 @@
             this.groupEmail.Controls.Add(this.picturEmailInfo);
             this.groupEmail.Location = new System.Drawing.Point(31, 657);
             this.groupEmail.Name = "groupEmail";
-            this.groupEmail.Size = new System.Drawing.Size(380, 264);
+            this.groupEmail.Size = new System.Drawing.Size(614, 264);
             this.groupEmail.TabIndex = 8;
             this.groupEmail.TabStop = false;
             this.groupEmail.Text = "Email Notifications";
@@ -1117,7 +1155,7 @@
             this.kryptonBorderEdgeEmail2.BorderStyle = ComponentFactory.Krypton.Toolkit.PaletteBorderStyle.GridDataCellSheet;
             this.kryptonBorderEdgeEmail2.Location = new System.Drawing.Point(51, 170);
             this.kryptonBorderEdgeEmail2.Name = "kryptonBorderEdgeEmail2";
-            this.kryptonBorderEdgeEmail2.Size = new System.Drawing.Size(325, 1);
+            this.kryptonBorderEdgeEmail2.Size = new System.Drawing.Size(559, 1);
             this.kryptonBorderEdgeEmail2.Text = "kryptonBorderEdge1";
             // 
             // emailNotifyOtherShip
@@ -1196,7 +1234,7 @@
             this.kryptonBorderEdgeEmail.BorderStyle = ComponentFactory.Krypton.Toolkit.PaletteBorderStyle.GridDataCellSheet;
             this.kryptonBorderEdgeEmail.Location = new System.Drawing.Point(50, 73);
             this.kryptonBorderEdgeEmail.Name = "kryptonBorderEdgeEmail";
-            this.kryptonBorderEdgeEmail.Size = new System.Drawing.Size(325, 1);
+            this.kryptonBorderEdgeEmail.Size = new System.Drawing.Size(559, 1);
             this.kryptonBorderEdgeEmail.Text = "kryptonBorderEdge1";
             // 
             // labelEmailOther
@@ -1347,7 +1385,7 @@
             this.smartEndoresmentState.AutoSize = true;
             this.smartEndoresmentState.Checked = true;
             this.smartEndoresmentState.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.smartEndoresmentState.Location = new System.Drawing.Point(30, 552);
+            this.smartEndoresmentState.Location = new System.Drawing.Point(9, 47);
             this.smartEndoresmentState.Name = "smartEndoresmentState";
             this.smartEndoresmentState.Size = new System.Drawing.Size(15, 14);
             this.smartEndoresmentState.TabIndex = 4;
@@ -1374,9 +1412,9 @@
             this.groupFIMS.Controls.Add(this.referenceFIMS);
             this.groupFIMS.Controls.Add(this.referenceFimsState);
             this.groupFIMS.Controls.Add(this.kryptonBorderEdge12);
-            this.groupFIMS.Location = new System.Drawing.Point(6, 972);
+            this.groupFIMS.Location = new System.Drawing.Point(6, 1046);
             this.groupFIMS.Name = "groupFIMS";
-            this.groupFIMS.Size = new System.Drawing.Size(656, 58);
+            this.groupFIMS.Size = new System.Drawing.Size(1343, 58);
             this.groupFIMS.TabIndex = 10;
             this.groupFIMS.TabStop = false;
             this.groupFIMS.Text = "Fims Options";
@@ -1430,9 +1468,9 @@
             this.groupLabels.Controls.Add(this.requestedLabelFormat);
             this.groupLabels.Controls.Add(this.requestedLabelFormatState);
             this.groupLabels.Controls.Add(this.kryptonBorderEdge11);
-            this.groupLabels.Location = new System.Drawing.Point(6, 274);
+            this.groupLabels.Location = new System.Drawing.Point(6, 312);
             this.groupLabels.Name = "groupLabels";
-            this.groupLabels.Size = new System.Drawing.Size(656, 58);
+            this.groupLabels.Size = new System.Drawing.Size(1343, 58);
             this.groupLabels.TabIndex = 3;
             this.groupLabels.TabStop = false;
             this.groupLabels.Text = "Labels";
@@ -1484,9 +1522,9 @@
             this.groupReturns.Controls.Add(this.applyReturnProfile);
             this.groupReturns.Controls.Add(this.returnProfileID);
             this.groupReturns.Controls.Add(this.returnProfileIDLabel);
-            this.groupReturns.Location = new System.Drawing.Point(6, 828);
+            this.groupReturns.Location = new System.Drawing.Point(6, 902);
             this.groupReturns.Name = "groupReturns";
-            this.groupReturns.Size = new System.Drawing.Size(656, 138);
+            this.groupReturns.Size = new System.Drawing.Size(1343, 138);
             this.groupReturns.TabIndex = 9;
             this.groupReturns.TabStop = false;
             this.groupReturns.Text = "Returns";
@@ -1647,9 +1685,9 @@
             this.groupInsurance.Controls.Add(this.insuranceControl);
             this.groupInsurance.Controls.Add(this.insuranceState);
             this.groupInsurance.Controls.Add(this.kryptonBorderEdge10);
-            this.groupInsurance.Location = new System.Drawing.Point(6, 338);
+            this.groupInsurance.Location = new System.Drawing.Point(6, 376);
             this.groupInsurance.Name = "groupInsurance";
-            this.groupInsurance.Size = new System.Drawing.Size(656, 82);
+            this.groupInsurance.Size = new System.Drawing.Size(1343, 82);
             this.groupInsurance.TabIndex = 4;
             this.groupInsurance.TabStop = false;
             this.groupInsurance.Text = "Insurance";
@@ -1688,57 +1726,25 @@
             // 
             this.groupSmartPost.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.groupSmartPost.Controls.Add(this.smartHubIDState);
-            this.groupSmartPost.Controls.Add(this.smartHubID);
-            this.groupSmartPost.Controls.Add(this.labelSmartHubID);
             this.groupSmartPost.Controls.Add(this.smartIndicia);
             this.groupSmartPost.Controls.Add(this.labelSmartEndicia);
             this.groupSmartPost.Controls.Add(this.kryptonBorderEdge8);
             this.groupSmartPost.Controls.Add(this.smartIndiciaState);
-            this.groupSmartPost.Location = new System.Drawing.Point(6, 599);
+            this.groupSmartPost.Controls.Add(this.smartEndoresmentState);
+            this.groupSmartPost.Controls.Add(this.labelSmartAncillary);
+            this.groupSmartPost.Controls.Add(this.smartEndorsement);
+            this.groupSmartPost.Location = new System.Drawing.Point(6, 637);
             this.groupSmartPost.Name = "groupSmartPost";
-            this.groupSmartPost.Size = new System.Drawing.Size(656, 85);
+            this.groupSmartPost.Size = new System.Drawing.Size(1343, 72);
             this.groupSmartPost.TabIndex = 6;
             this.groupSmartPost.TabStop = false;
             this.groupSmartPost.Text = "SmartPost";
-            // 
-            // smartHubIDState
-            // 
-            this.smartHubIDState.AutoSize = true;
-            this.smartHubIDState.Checked = true;
-            this.smartHubIDState.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.smartHubIDState.Location = new System.Drawing.Point(9, 26);
-            this.smartHubIDState.Name = "smartHubIDState";
-            this.smartHubIDState.Size = new System.Drawing.Size(15, 14);
-            this.smartHubIDState.TabIndex = 0;
-            this.smartHubIDState.Tag = "";
-            this.smartHubIDState.UseVisualStyleBackColor = true;
-            // 
-            // smartHubID
-            // 
-            this.smartHubID.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.smartHubID.FormattingEnabled = true;
-            this.smartHubID.Location = new System.Drawing.Point(113, 23);
-            this.smartHubID.Name = "smartHubID";
-            this.smartHubID.PromptText = "(Multiple Values)";
-            this.smartHubID.Size = new System.Drawing.Size(173, 21);
-            this.smartHubID.TabIndex = 1;
-            // 
-            // labelSmartHubID
-            // 
-            this.labelSmartHubID.AutoSize = true;
-            this.labelSmartHubID.BackColor = System.Drawing.Color.Transparent;
-            this.labelSmartHubID.Location = new System.Drawing.Point(63, 27);
-            this.labelSmartHubID.Name = "labelSmartHubID";
-            this.labelSmartHubID.Size = new System.Drawing.Size(44, 13);
-            this.labelSmartHubID.TabIndex = 88;
-            this.labelSmartHubID.Text = "Hub ID:";
             // 
             // smartIndicia
             // 
             this.smartIndicia.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.smartIndicia.FormattingEnabled = true;
-            this.smartIndicia.Location = new System.Drawing.Point(113, 50);
+            this.smartIndicia.Location = new System.Drawing.Point(113, 16);
             this.smartIndicia.Name = "smartIndicia";
             this.smartIndicia.PromptText = "(Multiple Values)";
             this.smartIndicia.Size = new System.Drawing.Size(173, 21);
@@ -1748,7 +1754,7 @@
             // 
             this.labelSmartEndicia.AutoSize = true;
             this.labelSmartEndicia.BackColor = System.Drawing.Color.Transparent;
-            this.labelSmartEndicia.Location = new System.Drawing.Point(65, 53);
+            this.labelSmartEndicia.Location = new System.Drawing.Point(65, 19);
             this.labelSmartEndicia.Name = "labelSmartEndicia";
             this.labelSmartEndicia.Size = new System.Drawing.Size(42, 13);
             this.labelSmartEndicia.TabIndex = 83;
@@ -1762,7 +1768,7 @@
             this.kryptonBorderEdge8.BorderStyle = ComponentFactory.Krypton.Toolkit.PaletteBorderStyle.GridDataCellSheet;
             this.kryptonBorderEdge8.Location = new System.Drawing.Point(29, 21);
             this.kryptonBorderEdge8.Name = "kryptonBorderEdge8";
-            this.kryptonBorderEdge8.Size = new System.Drawing.Size(1, 54);
+            this.kryptonBorderEdge8.Size = new System.Drawing.Size(1, 41);
             this.kryptonBorderEdge8.Text = "kryptonBorderEdge1";
             // 
             // smartIndiciaState
@@ -1770,7 +1776,7 @@
             this.smartIndiciaState.AutoSize = true;
             this.smartIndiciaState.Checked = true;
             this.smartIndiciaState.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.smartIndiciaState.Location = new System.Drawing.Point(9, 54);
+            this.smartIndiciaState.Location = new System.Drawing.Point(9, 20);
             this.smartIndiciaState.Name = "smartIndiciaState";
             this.smartIndiciaState.Size = new System.Drawing.Size(15, 14);
             this.smartIndiciaState.TabIndex = 2;
@@ -1787,7 +1793,7 @@
             this.groupTo.Controls.Add(this.residentialState);
             this.groupTo.Location = new System.Drawing.Point(6, 110);
             this.groupTo.Name = "groupTo";
-            this.groupTo.Size = new System.Drawing.Size(656, 52);
+            this.groupTo.Size = new System.Drawing.Size(1343, 52);
             this.groupTo.TabIndex = 1;
             this.groupTo.TabStop = false;
             this.groupTo.Text = "To";
@@ -1853,9 +1859,9 @@
             this.groupOptions.Controls.Add(this.signature);
             this.groupOptions.Controls.Add(this.referenceCustomer);
             this.groupOptions.Controls.Add(this.labelReference);
-            this.groupOptions.Location = new System.Drawing.Point(6, 426);
+            this.groupOptions.Location = new System.Drawing.Point(6, 464);
             this.groupOptions.Name = "groupOptions";
-            this.groupOptions.Size = new System.Drawing.Size(656, 167);
+            this.groupOptions.Size = new System.Drawing.Size(1343, 167);
             this.groupOptions.TabIndex = 5;
             this.groupOptions.TabStop = false;
             this.groupOptions.Text = "Options";
@@ -1971,6 +1977,12 @@
             // 
             this.groupBilling.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+            this.groupBilling.Controls.Add(this.payorPostalCode);
+            this.groupBilling.Controls.Add(this.labelPayorPostalCode);
+            this.groupBilling.Controls.Add(this.payorPostalCodeState);
+            this.groupBilling.Controls.Add(this.payorCountryCode);
+            this.groupBilling.Controls.Add(this.labelPayorCountryCode);
+            this.groupBilling.Controls.Add(this.payorCountryCodeState);
             this.groupBilling.Controls.Add(this.dutiesAccount);
             this.groupBilling.Controls.Add(this.labelDutiesAccount);
             this.groupBilling.Controls.Add(this.payorDuties);
@@ -1984,16 +1996,76 @@
             this.groupBilling.Controls.Add(this.payorTransportTypeState);
             this.groupBilling.Controls.Add(this.payorTransport);
             this.groupBilling.Controls.Add(this.labelPayorTransport);
-            this.groupBilling.Location = new System.Drawing.Point(6, 690);
+            this.groupBilling.Location = new System.Drawing.Point(6, 716);
             this.groupBilling.Name = "groupBilling";
-            this.groupBilling.Size = new System.Drawing.Size(656, 132);
+            this.groupBilling.Size = new System.Drawing.Size(1343, 180);
             this.groupBilling.TabIndex = 7;
             this.groupBilling.TabStop = false;
             this.groupBilling.Text = "Billing";
             // 
+            // payorPostalCode
+            // 
+            this.payorPostalCode.Location = new System.Drawing.Point(159, 74);
+            this.fieldLengthProvider.SetMaxLengthSource(this.payorPostalCode, ShipWorks.Data.Utility.EntityFieldLengthSource.FedExAccountNumber);
+            this.payorPostalCode.Name = "payorPostalCode";
+            this.payorPostalCode.Size = new System.Drawing.Size(173, 21);
+            this.payorPostalCode.TabIndex = 21;
+            // 
+            // labelPayorPostalCode
+            // 
+            this.labelPayorPostalCode.AutoSize = true;
+            this.labelPayorPostalCode.BackColor = System.Drawing.Color.White;
+            this.labelPayorPostalCode.Location = new System.Drawing.Point(52, 77);
+            this.labelPayorPostalCode.Name = "labelPayorPostalCode";
+            this.labelPayorPostalCode.Size = new System.Drawing.Size(99, 13);
+            this.labelPayorPostalCode.TabIndex = 22;
+            this.labelPayorPostalCode.Text = "Payor Postal Code:";
+            // 
+            // payorPostalCodeState
+            // 
+            this.payorPostalCodeState.AutoSize = true;
+            this.payorPostalCodeState.Checked = true;
+            this.payorPostalCodeState.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.payorPostalCodeState.Location = new System.Drawing.Point(9, 77);
+            this.payorPostalCodeState.Name = "payorPostalCodeState";
+            this.payorPostalCodeState.Size = new System.Drawing.Size(15, 14);
+            this.payorPostalCodeState.TabIndex = 20;
+            this.payorPostalCodeState.Tag = "";
+            this.payorPostalCodeState.UseVisualStyleBackColor = true;
+            // 
+            // payorCountryCode
+            // 
+            this.payorCountryCode.Location = new System.Drawing.Point(159, 47);
+            this.fieldLengthProvider.SetMaxLengthSource(this.payorCountryCode, ShipWorks.Data.Utility.EntityFieldLengthSource.FedExAccountNumber);
+            this.payorCountryCode.Name = "payorCountryCode";
+            this.payorCountryCode.Size = new System.Drawing.Size(173, 21);
+            this.payorCountryCode.TabIndex = 18;
+            // 
+            // labelPayorCountryCode
+            // 
+            this.labelPayorCountryCode.AutoSize = true;
+            this.labelPayorCountryCode.BackColor = System.Drawing.Color.White;
+            this.labelPayorCountryCode.Location = new System.Drawing.Point(44, 50);
+            this.labelPayorCountryCode.Name = "labelPayorCountryCode";
+            this.labelPayorCountryCode.Size = new System.Drawing.Size(109, 13);
+            this.labelPayorCountryCode.TabIndex = 19;
+            this.labelPayorCountryCode.Text = "Payor Country Code:";
+            // 
+            // payorCountryCodeState
+            // 
+            this.payorCountryCodeState.AutoSize = true;
+            this.payorCountryCodeState.Checked = true;
+            this.payorCountryCodeState.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.payorCountryCodeState.Location = new System.Drawing.Point(9, 50);
+            this.payorCountryCodeState.Name = "payorCountryCodeState";
+            this.payorCountryCodeState.Size = new System.Drawing.Size(15, 14);
+            this.payorCountryCodeState.TabIndex = 17;
+            this.payorCountryCodeState.Tag = "";
+            this.payorCountryCodeState.UseVisualStyleBackColor = true;
+            // 
             // dutiesAccount
             // 
-            this.dutiesAccount.Location = new System.Drawing.Point(159, 100);
+            this.dutiesAccount.Location = new System.Drawing.Point(159, 155);
             this.fieldLengthProvider.SetMaxLengthSource(this.dutiesAccount, ShipWorks.Data.Utility.EntityFieldLengthSource.FedExAccountNumber);
             this.dutiesAccount.Name = "dutiesAccount";
             this.dutiesAccount.Size = new System.Drawing.Size(173, 21);
@@ -2003,7 +2075,7 @@
             // 
             this.labelDutiesAccount.AutoSize = true;
             this.labelDutiesAccount.BackColor = System.Drawing.Color.White;
-            this.labelDutiesAccount.Location = new System.Drawing.Point(92, 103);
+            this.labelDutiesAccount.Location = new System.Drawing.Point(92, 158);
             this.labelDutiesAccount.Name = "labelDutiesAccount";
             this.labelDutiesAccount.Size = new System.Drawing.Size(61, 13);
             this.labelDutiesAccount.TabIndex = 15;
@@ -2013,7 +2085,7 @@
             // 
             this.payorDuties.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.payorDuties.FormattingEnabled = true;
-            this.payorDuties.Location = new System.Drawing.Point(159, 73);
+            this.payorDuties.Location = new System.Drawing.Point(159, 128);
             this.payorDuties.Name = "payorDuties";
             this.payorDuties.PromptText = "(Multiple Values)";
             this.payorDuties.Size = new System.Drawing.Size(173, 21);
@@ -2023,7 +2095,7 @@
             // 
             this.labelPayorDuties.AutoSize = true;
             this.labelPayorDuties.BackColor = System.Drawing.Color.White;
-            this.labelPayorDuties.Location = new System.Drawing.Point(60, 76);
+            this.labelPayorDuties.Location = new System.Drawing.Point(60, 131);
             this.labelPayorDuties.Name = "labelPayorDuties";
             this.labelPayorDuties.Size = new System.Drawing.Size(93, 13);
             this.labelPayorDuties.TabIndex = 13;
@@ -2031,7 +2103,7 @@
             // 
             // transportAccount
             // 
-            this.transportAccount.Location = new System.Drawing.Point(159, 46);
+            this.transportAccount.Location = new System.Drawing.Point(159, 101);
             this.fieldLengthProvider.SetMaxLengthSource(this.transportAccount, ShipWorks.Data.Utility.EntityFieldLengthSource.FedExAccountNumber);
             this.transportAccount.Name = "transportAccount";
             this.transportAccount.Size = new System.Drawing.Size(173, 21);
@@ -2041,7 +2113,7 @@
             // 
             this.labelTransportAccount.AutoSize = true;
             this.labelTransportAccount.BackColor = System.Drawing.Color.White;
-            this.labelTransportAccount.Location = new System.Drawing.Point(92, 49);
+            this.labelTransportAccount.Location = new System.Drawing.Point(92, 104);
             this.labelTransportAccount.Name = "labelTransportAccount";
             this.labelTransportAccount.Size = new System.Drawing.Size(61, 13);
             this.labelTransportAccount.TabIndex = 11;
@@ -2052,7 +2124,7 @@
             this.payorDutiesAccountState.AutoSize = true;
             this.payorDutiesAccountState.Checked = true;
             this.payorDutiesAccountState.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.payorDutiesAccountState.Location = new System.Drawing.Point(9, 103);
+            this.payorDutiesAccountState.Location = new System.Drawing.Point(9, 158);
             this.payorDutiesAccountState.Name = "payorDutiesAccountState";
             this.payorDutiesAccountState.Size = new System.Drawing.Size(15, 14);
             this.payorDutiesAccountState.TabIndex = 6;
@@ -2064,7 +2136,7 @@
             this.payorDutiesTypeState.AutoSize = true;
             this.payorDutiesTypeState.Checked = true;
             this.payorDutiesTypeState.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.payorDutiesTypeState.Location = new System.Drawing.Point(9, 76);
+            this.payorDutiesTypeState.Location = new System.Drawing.Point(9, 131);
             this.payorDutiesTypeState.Name = "payorDutiesTypeState";
             this.payorDutiesTypeState.Size = new System.Drawing.Size(15, 14);
             this.payorDutiesTypeState.TabIndex = 4;
@@ -2077,9 +2149,9 @@
             | System.Windows.Forms.AnchorStyles.Left)));
             this.kryptonBorderEdge3.AutoSize = false;
             this.kryptonBorderEdge3.BorderStyle = ComponentFactory.Krypton.Toolkit.PaletteBorderStyle.GridDataCellSheet;
-            this.kryptonBorderEdge3.Location = new System.Drawing.Point(29, 21);
+            this.kryptonBorderEdge3.Location = new System.Drawing.Point(29, 57);
             this.kryptonBorderEdge3.Name = "kryptonBorderEdge3";
-            this.kryptonBorderEdge3.Size = new System.Drawing.Size(1, 100);
+            this.kryptonBorderEdge3.Size = new System.Drawing.Size(1, 148);
             this.kryptonBorderEdge3.Text = "kryptonBorderEdge1";
             // 
             // payorTransportAccountState
@@ -2087,7 +2159,7 @@
             this.payorTransportAccountState.AutoSize = true;
             this.payorTransportAccountState.Checked = true;
             this.payorTransportAccountState.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.payorTransportAccountState.Location = new System.Drawing.Point(9, 49);
+            this.payorTransportAccountState.Location = new System.Drawing.Point(9, 104);
             this.payorTransportAccountState.Name = "payorTransportAccountState";
             this.payorTransportAccountState.Size = new System.Drawing.Size(15, 14);
             this.payorTransportAccountState.TabIndex = 2;
@@ -2134,7 +2206,7 @@
             this.tabPagePackages.Location = new System.Drawing.Point(4, 22);
             this.tabPagePackages.Name = "tabPagePackages";
             this.tabPagePackages.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPagePackages.Size = new System.Drawing.Size(562, 1124);
+            this.tabPagePackages.Size = new System.Drawing.Size(1249, 1124);
             this.tabPagePackages.TabIndex = 1;
             this.tabPagePackages.Text = "Packages";
             this.tabPagePackages.UseVisualStyleBackColor = true;
@@ -2225,7 +2297,7 @@
             this.tabPageCustoms.Controls.Add(this.groupBoxCustomsRecipientTIN);
             this.tabPageCustoms.Location = new System.Drawing.Point(4, 22);
             this.tabPageCustoms.Name = "tabPageCustoms";
-            this.tabPageCustoms.Size = new System.Drawing.Size(562, 1124);
+            this.tabPageCustoms.Size = new System.Drawing.Size(1249, 1124);
             this.tabPageCustoms.TabIndex = 2;
             this.tabPageCustoms.Text = "Customs";
             this.tabPageCustoms.UseVisualStyleBackColor = true;
@@ -2416,7 +2488,7 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.Controls.Add(this.tabControl);
             this.Name = "FedExProfileControl";
-            this.Size = new System.Drawing.Size(570, 1150);
+            this.Size = new System.Drawing.Size(1257, 1150);
             this.groupBoxFrom.ResumeLayout(false);
             this.groupBoxFrom.PerformLayout();
             this.groupShipment.ResumeLayout(false);
@@ -2649,5 +2721,11 @@
         private System.Windows.Forms.CheckBox fileElectronically;
         private ComponentFactory.Krypton.Toolkit.KryptonBorderEdge kryptonBorderEdge13;
         private System.Windows.Forms.Panel panel1;
+        private UI.Controls.MultiValueTextBox payorPostalCode;
+        private System.Windows.Forms.Label labelPayorPostalCode;
+        private System.Windows.Forms.CheckBox payorPostalCodeState;
+        private UI.Controls.MultiValueTextBox payorCountryCode;
+        private System.Windows.Forms.Label labelPayorCountryCode;
+        private System.Windows.Forms.CheckBox payorCountryCodeState;
     }
 }

@@ -503,6 +503,8 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             profile.FedEx.PayorTransportAccount = "";
             profile.FedEx.PayorDutiesType = (int) FedExPayorType.Recipient;
             profile.FedEx.PayorDutiesAccount = "";
+            profile.FedEx.PayorCountryCode = "";
+            profile.FedEx.PayorPostalCode = "";
 
             profile.FedEx.SaturdayDelivery = false;
 
