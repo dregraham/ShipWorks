@@ -44,6 +44,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
     /// FedEx implementation of ShipmentType
     /// </summary>
     [Component(RegistrationType.SpecificService, Service = typeof(ICustomsRequired))]
+    [KeyedComponent(typeof(ShipmentType), ShipmentTypeCode.FedEx, SingleInstance = true)]
     public class FedExShipmentType : ShipmentType, ICustomsRequired
     {
         private readonly IExcludedServiceTypeRepository excludedServiceTypeRepository;
@@ -436,6 +437,8 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             package.Weight = shipment.ContentWeight;
 
             shipment.FedEx.RequestedLabelFormat = (int) ThermalLanguage.None;
+
+            shipment.FedEx.ShipEngineLabelId = string.Empty;
 
             base.ConfigureNewShipment(shipment);
         }
@@ -859,6 +862,19 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             }
 
             return string.Equals(originCountryCode, destinationCountryCode, StringComparison.OrdinalIgnoreCase);
+        }
+
+        /// <summary>
+        /// Convert a string value of service type to a FedExServiceType
+        /// </summary>
+        public static FedExServiceType? ConvertToServiceType(string serviceType)
+        {
+            if (EnumHelper.TryGetEnumByApiValue(serviceType, out FedExServiceType? serviceTypeParsed))
+            {
+                return serviceTypeParsed;
+            }
+
+            return null;
         }
 
         /// <summary>

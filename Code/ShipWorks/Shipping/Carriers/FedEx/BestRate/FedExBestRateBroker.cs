@@ -133,7 +133,8 @@ namespace ShipWorks.Shipping.Carriers.FedEx.BestRate
         /// <returns></returns>
         protected override int GetServiceTypeFromTag(object tag)
         {
-            return (int) ((FedExRateSelection) tag).ServiceType;
+            var service = FedExShipmentType.ConvertToServiceType(tag.ToString());
+            return (int) (service ?? FedExServiceType.FedExGround);
         }
 
         /// <summary>

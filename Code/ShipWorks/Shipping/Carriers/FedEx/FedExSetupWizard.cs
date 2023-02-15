@@ -113,7 +113,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         {
             try
             {
-                account.AccountNumber = accountNumber.Text;
+                account.AccountNumber = accountNumber.Text.Trim();
                 account.SignatureRelease = "";
 
                 personControl.SaveToEntity(new PersonAdapter(account, string.Empty));
@@ -186,6 +186,10 @@ namespace ShipWorks.Shipping.Carriers.FedEx
                 if (response.Success)
                 {
                     fedExAccount.ShipEngineCarrierID = response.Value;
+                }
+                else
+                {
+                    throw new FedExException("Failed to register the FedEx account.");
                 }
             }
         }

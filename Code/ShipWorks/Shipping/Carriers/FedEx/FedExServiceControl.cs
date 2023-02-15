@@ -704,6 +704,34 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         }
 
         /// <summary>
+        /// Synchronizes the selected rate in the rate control.
+        /// </summary>
+        public override void SyncSelectedRate()
+        {
+            if (!service.MultiValued && service.SelectedValue != null)
+            {
+                FedExServiceType selectedServiceType = (FedExServiceType) service.SelectedValue;
+                RateResult matchingRate = RateControl.RateGroup.Rates.FirstOrDefault(r =>
+                {
+                    if (r.Tag == null || r.ShipmentType != ShipmentTypeCode.FedEx)
+                    {
+                        return false;
+                    }
+
+                    var serviceType = FedExShipmentType.ConvertToServiceType(r.OriginalTag.ToString());
+
+                    return serviceType == selectedServiceType;
+                });
+
+                RateControl.SelectRate(matchingRate);
+            }
+            else
+            {
+                RateControl.ClearSelection();
+            }
+        }
+
+        /// <summary>
         /// Update the available choices for packaging type
         /// </summary>
         private void UpdatePackagingChoices(FedExServiceType? serviceType)
@@ -896,17 +924,14 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         /// </summary>
         public override void OnRateSelected(object sender, RateSelectedEventArgs e)
         {
-            var oldIndex = service.SelectedIndex;
+            int oldIndex = service.SelectedIndex;
 
-            var isFedExServiceType = EnumHelper.TryGetEnumByApiValue(e.Rate.OriginalTag.ToString(), out FedExServiceType? serviceType);
+            var serviceType = FedExShipmentType.ConvertToServiceType(e.Rate.OriginalTag.ToString());
 
-            if (isFedExServiceType)
+            service.SelectedValue = serviceType;
+            if (service.SelectedIndex == -1 && oldIndex != -1)
             {
-                service.SelectedValue = serviceType;
-                if (service.SelectedIndex == -1 && oldIndex != -1)
-                {
-                    service.SelectedIndex = oldIndex;
-                }
+                service.SelectedIndex = oldIndex;
             }
         }
 

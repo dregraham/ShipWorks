@@ -4710,6 +4710,8 @@ namespace ShipWorks.Data.Model
 		PayorCountryCode,
 		///<summary>PayorPostalCode. </summary>
 		PayorPostalCode,
+		///<summary>ShipEngineLabelId. </summary>
+		ShipEngineLabelId,
 		/// <summary></summary>
 		AmountOfFields
 	}
