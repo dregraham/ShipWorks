@@ -1009,16 +1009,6 @@ namespace ShipWorks.Shipping.Carriers.FedEx
     "sion.\r\n";
             this.linkTrademarkInfo.Click += new System.EventHandler(this.OnLinkTrademarkInfo);
             // 
-            // smartManifestID
-            // 
-            this.smartManifestID.Location = new System.Drawing.Point(87, 119);
-            this.smartManifestID.MaxLength = 32767;
-            this.fieldLengthProvider.SetMaxLengthSource(this.smartManifestID, ShipWorks.Data.Utility.EntityFieldLengthSource.FedExSmartPostCustomerManifest);
-            this.smartManifestID.Name = "smartManifestID";
-            this.smartManifestID.Size = new System.Drawing.Size(222, 21);
-            this.smartManifestID.TabIndex = 9;
-            this.smartManifestID.TokenSuggestionFactory = commonTokenSuggestionsFactory5;
-            // 
             // sectionSmartPost
             // 
             this.sectionSmartPost.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
@@ -1027,68 +1017,18 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             // 
             // sectionSmartPost.ContentPanel
             // 
-            this.sectionSmartPost.ContentPanel.Controls.Add(this.infotipSmartPostConfirmation);
-            this.sectionSmartPost.ContentPanel.Controls.Add(this.smartHubID);
-            this.sectionSmartPost.ContentPanel.Controls.Add(this.labelSmartHubID);
-            this.sectionSmartPost.ContentPanel.Controls.Add(this.smartConfirmation);
             this.sectionSmartPost.ContentPanel.Controls.Add(this.smartEndorsement);
             this.sectionSmartPost.ContentPanel.Controls.Add(this.smartIndicia);
             this.sectionSmartPost.ContentPanel.Controls.Add(this.labelSmartAncillary);
             this.sectionSmartPost.ContentPanel.Controls.Add(this.labelSmartEndicia);
-            this.sectionSmartPost.ContentPanel.Controls.Add(this.labelSmartConfirmation);
-            this.sectionSmartPost.ContentPanel.Controls.Add(this.smartManifestID);
-            this.sectionSmartPost.ContentPanel.Controls.Add(this.labelSmartManifestID);
-            this.sectionSmartPost.ExpandedHeight = 174;
+            this.sectionSmartPost.ExpandedHeight = 136;
             this.sectionSmartPost.ExtraText = "";
             this.sectionSmartPost.Location = new System.Drawing.Point(3, 497);
             this.sectionSmartPost.Name = "sectionSmartPost";
-            this.sectionSmartPost.SectionName = "FedEx SmartPost®";
+            this.sectionSmartPost.SectionName = "FedEx Ground® Economy";
             this.sectionSmartPost.SettingsKey = "{37cbefe5-8feb-4b9c-945f-970382580a52}";
             this.sectionSmartPost.Size = new System.Drawing.Size(487, 24);
             this.sectionSmartPost.TabIndex = 5;
-            // 
-            // infotipSmartPostConfirmation
-            // 
-            this.infotipSmartPostConfirmation.Caption = "Delivery Confirmation is always used when Indicia is Parcel Select.  This option " +
-    "only affects the other Indicia types.";
-            this.infotipSmartPostConfirmation.Location = new System.Drawing.Point(242, 96);
-            this.infotipSmartPostConfirmation.Name = "infotipSmartPostConfirmation";
-            this.infotipSmartPostConfirmation.Size = new System.Drawing.Size(12, 12);
-            this.infotipSmartPostConfirmation.TabIndex = 99;
-            this.infotipSmartPostConfirmation.Title = "SmartPost Delivery Confirmation";
-            // 
-            // smartHubID
-            // 
-            this.smartHubID.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.smartHubID.FormattingEnabled = true;
-            this.smartHubID.Location = new System.Drawing.Point(87, 8);
-            this.smartHubID.Name = "smartHubID";
-            this.smartHubID.PromptText = "(Multiple Values)";
-            this.smartHubID.Size = new System.Drawing.Size(225, 21);
-            this.smartHubID.TabIndex = 1;
-            this.smartHubID.SelectedIndexChanged += new System.EventHandler(this.OnRateCriteriaChanged);
-            // 
-            // labelSmartHubID
-            // 
-            this.labelSmartHubID.AutoSize = true;
-            this.labelSmartHubID.BackColor = System.Drawing.Color.Transparent;
-            this.labelSmartHubID.Location = new System.Drawing.Point(37, 11);
-            this.labelSmartHubID.Name = "labelSmartHubID";
-            this.labelSmartHubID.Size = new System.Drawing.Size(44, 13);
-            this.labelSmartHubID.TabIndex = 0;
-            this.labelSmartHubID.Text = "Hub ID:";
-            // 
-            // smartConfirmation
-            // 
-            this.smartConfirmation.AutoSize = true;
-            this.smartConfirmation.BackColor = System.Drawing.Color.White;
-            this.smartConfirmation.Location = new System.Drawing.Point(87, 94);
-            this.smartConfirmation.Name = "smartConfirmation";
-            this.smartConfirmation.Size = new System.Drawing.Size(157, 17);
-            this.smartConfirmation.TabIndex = 7;
-            this.smartConfirmation.Text = "USPS Delivery Confirmation";
-            this.smartConfirmation.UseVisualStyleBackColor = false;
-            this.smartConfirmation.CheckedChanged += new System.EventHandler(this.OnRateCriteriaChanged);
             // 
             // smartEndorsement
             // 
@@ -1108,7 +1048,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             this.smartIndicia.Location = new System.Drawing.Point(87, 37);
             this.smartIndicia.Name = "smartIndicia";
             this.smartIndicia.PromptText = "(Multiple Values)";
-            this.smartIndicia.Size = new System.Drawing.Size(225, 21);
+            this.smartIndicia.Size = new System.Drawing.Size(275, 21);
             this.smartIndicia.TabIndex = 3;
             this.smartIndicia.SelectedIndexChanged += new System.EventHandler(this.OnChangeSmartPostIndicia);
             // 
@@ -1131,26 +1071,6 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             this.labelSmartEndicia.Size = new System.Drawing.Size(42, 13);
             this.labelSmartEndicia.TabIndex = 2;
             this.labelSmartEndicia.Text = "Indicia:";
-            // 
-            // labelSmartConfirmation
-            // 
-            this.labelSmartConfirmation.AutoSize = true;
-            this.labelSmartConfirmation.BackColor = System.Drawing.Color.Transparent;
-            this.labelSmartConfirmation.Location = new System.Drawing.Point(9, 95);
-            this.labelSmartConfirmation.Name = "labelSmartConfirmation";
-            this.labelSmartConfirmation.Size = new System.Drawing.Size(72, 13);
-            this.labelSmartConfirmation.TabIndex = 6;
-            this.labelSmartConfirmation.Text = "Confirmation:";
-            // 
-            // labelSmartManifestID
-            // 
-            this.labelSmartManifestID.AutoSize = true;
-            this.labelSmartManifestID.BackColor = System.Drawing.Color.Transparent;
-            this.labelSmartManifestID.Location = new System.Drawing.Point(15, 122);
-            this.labelSmartManifestID.Name = "labelSmartManifestID";
-            this.labelSmartManifestID.Size = new System.Drawing.Size(66, 13);
-            this.labelSmartManifestID.TabIndex = 8;
-            this.labelSmartManifestID.Text = "Manifest ID:";
             // 
             // sectionPackageDetails
             // 
@@ -1935,6 +1855,79 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             this.dropoffType.PromptText = "(Multiple Values)";
             this.dropoffType.Size = new System.Drawing.Size(175, 21);
             this.dropoffType.TabIndex = 62;
+            // 
+            // smartConfirmation
+            // 
+            this.smartConfirmation.AutoSize = true;
+            this.smartConfirmation.BackColor = System.Drawing.Color.White;
+            this.smartConfirmation.Location = new System.Drawing.Point(87, 94);
+            this.smartConfirmation.Name = "smartConfirmation";
+            this.smartConfirmation.Size = new System.Drawing.Size(157, 17);
+            this.smartConfirmation.TabIndex = 7;
+            this.smartConfirmation.Text = "USPS Delivery Confirmation";
+            this.smartConfirmation.UseVisualStyleBackColor = false;
+            this.smartConfirmation.CheckedChanged += new System.EventHandler(this.OnRateCriteriaChanged);
+            // 
+            // labelSmartConfirmation
+            // 
+            this.labelSmartConfirmation.AutoSize = true;
+            this.labelSmartConfirmation.BackColor = System.Drawing.Color.Transparent;
+            this.labelSmartConfirmation.Location = new System.Drawing.Point(9, 95);
+            this.labelSmartConfirmation.Name = "labelSmartConfirmation";
+            this.labelSmartConfirmation.Size = new System.Drawing.Size(72, 13);
+            this.labelSmartConfirmation.TabIndex = 6;
+            this.labelSmartConfirmation.Text = "Confirmation:";
+            // 
+            // smartManifestID
+            // 
+            this.smartManifestID.Location = new System.Drawing.Point(87, 119);
+            this.smartManifestID.MaxLength = 32767;
+            this.fieldLengthProvider.SetMaxLengthSource(this.smartManifestID, ShipWorks.Data.Utility.EntityFieldLengthSource.FedExSmartPostCustomerManifest);
+            this.smartManifestID.Name = "smartManifestID";
+            this.smartManifestID.Size = new System.Drawing.Size(222, 21);
+            this.smartManifestID.TabIndex = 9;
+            this.smartManifestID.TokenSuggestionFactory = commonTokenSuggestionsFactory5;
+            // 
+            // labelSmartManifestID
+            // 
+            this.labelSmartManifestID.AutoSize = true;
+            this.labelSmartManifestID.BackColor = System.Drawing.Color.Transparent;
+            this.labelSmartManifestID.Location = new System.Drawing.Point(15, 122);
+            this.labelSmartManifestID.Name = "labelSmartManifestID";
+            this.labelSmartManifestID.Size = new System.Drawing.Size(66, 13);
+            this.labelSmartManifestID.TabIndex = 8;
+            this.labelSmartManifestID.Text = "Manifest ID:";
+            // 
+            // infotipSmartPostConfirmation
+            // 
+            this.infotipSmartPostConfirmation.Caption = "Delivery Confirmation is always used when Indicia is Parcel Select.  This option " +
+    "only affects the other Indicia types.";
+            this.infotipSmartPostConfirmation.Location = new System.Drawing.Point(242, 96);
+            this.infotipSmartPostConfirmation.Name = "infotipSmartPostConfirmation";
+            this.infotipSmartPostConfirmation.Size = new System.Drawing.Size(12, 12);
+            this.infotipSmartPostConfirmation.TabIndex = 99;
+            this.infotipSmartPostConfirmation.Title = "SmartPost Delivery Confirmation";
+            // 
+            // smartHubID
+            // 
+            this.smartHubID.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.smartHubID.FormattingEnabled = true;
+            this.smartHubID.Location = new System.Drawing.Point(87, 8);
+            this.smartHubID.Name = "smartHubID";
+            this.smartHubID.PromptText = "(Multiple Values)";
+            this.smartHubID.Size = new System.Drawing.Size(225, 21);
+            this.smartHubID.TabIndex = 1;
+            this.smartHubID.SelectedIndexChanged += new System.EventHandler(this.OnRateCriteriaChanged);
+            // 
+            // labelSmartHubID
+            // 
+            this.labelSmartHubID.AutoSize = true;
+            this.labelSmartHubID.BackColor = System.Drawing.Color.Transparent;
+            this.labelSmartHubID.Location = new System.Drawing.Point(37, 11);
+            this.labelSmartHubID.Name = "labelSmartHubID";
+            this.labelSmartHubID.Size = new System.Drawing.Size(44, 13);
+            this.labelSmartHubID.TabIndex = 0;
+            this.labelSmartHubID.Text = "Hub ID:";
             #endregion
             //
             // FedExServiceControl

@@ -23,7 +23,7 @@ namespace ShipWorks.Shipping.ShipEngine.DTOs.CarrierAccount
         /// </summary>
         public FedExRegistrationRequest(FedExAccountEntity account)
         {
-            Nickname = account.Email;
+            Nickname = account.Description;
             AccountNumber = account.AccountNumber;
             Company = account.Company;
             FirstName = account.FirstName;

@@ -106,7 +106,10 @@ namespace ShipWorks.Shipping.ShipEngine
             try
             {
                 // Check to see if the carrier already exists in ShipEngine
-                var existingShipEngineCarrierIdResult = await GetCarrierId(fedExRequest.AccountNumber).ConfigureAwait(false);
+                // We're using the nickname as a secondary check here because of the multiple SmartPost Hub accounts that will have the same account number
+                // There is a chance this could give a false negative (Nickname changed etc..), but in those cases we'll create brand new Engine carriers
+                // which hopefully wont cause any problems
+                var existingShipEngineCarrierIdResult = await GetCarrierId(c => c.AccountNumber == fedExRequest.AccountNumber && c.Nickname == fedExRequest.Nickname).ConfigureAwait(false);
                 if (existingShipEngineCarrierIdResult.Success)
                 {
                     return existingShipEngineCarrierIdResult;
@@ -125,6 +128,35 @@ namespace ShipWorks.Shipping.ShipEngine
             catch (Exception ex)
             {
                 return GenericResult.FromError<string>($"An error occurred connecting FedEx account {fedExRequest.AccountNumber}: {ex.Message}");
+            }
+        }
+
+        /// <summary>
+        /// Update a FedEx accounts settings
+        /// </summary>
+        public async Task<Result> UpdateFedExAccount(IFedExAccountEntity fedExAccount)
+        {
+            try
+            {
+                var request = new UpdateFedExSettingsRequest(fedExAccount);
+
+                var updateAccountResult = await MakeRequest<ConnectAccountResponseDTO>(
+                    ShipEngineEndpoints.FedExAccountUpdate(fedExAccount.ShipEngineCarrierID),
+                    Method.PUT,
+                    request,
+                    "UpdateFedExAccount",
+                    new List<HttpStatusCode> { HttpStatusCode.NoContent });
+
+                if (updateAccountResult.Failure)
+                {
+                    return Result.FromError(updateAccountResult.Message);
+                }
+
+                return Result.FromSuccess();
+            }
+            catch (Exception ex)
+            {
+                return Result.FromError($"An error occurred updating FedEx account {fedExAccount.AccountNumber}: {ex.Message}");
             }
         }
 
@@ -220,7 +252,12 @@ namespace ShipWorks.Shipping.ShipEngine
         /// <summary>
         /// Get the CarrierId for the given accountNumber
         /// </summary>
-        private async Task<GenericResult<string>> GetCarrierId(string accountNumber)
+        private async Task<GenericResult<string>> GetCarrierId(string accountNumber) => await GetCarrierId(c => c.AccountNumber == accountNumber);
+
+        /// <summary>
+        /// Get the CarrierId with the given account equality check
+        /// </summary>
+        private async Task<GenericResult<string>> GetCarrierId(Func<Carrier, bool> equalityCheck)
         {
             var response = await MakeRequest<CarrierListResponse>(ShipEngineEndpoints.ListCarriers, Method.GET, null, "ListCarriers");
 
@@ -229,7 +266,7 @@ namespace ShipWorks.Shipping.ShipEngine
                 return GenericResult.FromError<string>(response.Message);
             }
 
-            var carrierId = response.Value?.Carriers?.FirstOrDefault(c => c.AccountNumber == accountNumber)?.CarrierId ?? string.Empty;
+            var carrierId = response.Value?.Carriers?.FirstOrDefault(equalityCheck)?.CarrierId ?? string.Empty;
 
             if (!carrierId.IsNullOrWhiteSpace())
             {

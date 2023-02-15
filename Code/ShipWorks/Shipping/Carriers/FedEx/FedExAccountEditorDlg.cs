@@ -9,6 +9,7 @@ using ShipWorks.ApplicationCore;
 using ShipWorks.Data.Model;
 using ShipWorks.Shipping.Carriers.Api;
 using ShipWorks.Shipping.Carriers.FedEx.Api;
+using ShipWorks.Shipping.ShipEngine;
 
 namespace ShipWorks.Shipping.Carriers.FedEx
 {
@@ -60,13 +61,25 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         /// <summary>
         /// User is ready to save the changes
         /// </summary>
-        private void OnOK(object sender, EventArgs e)
+        private async void OnOK(object sender, EventArgs e)
         {
             personControl.SaveToEntity();
 
             try
             {
                 settingsControl.SaveToAccount(account);
+                using (var scope = IoC.BeginLifetimeScope())
+                {
+                    var shipEngineWebClient = scope.Resolve<IShipEngineWebClient>();
+
+                    var result = await shipEngineWebClient.UpdateFedExAccount(account);
+
+                    if (!result.Success)
+                    {
+                        MessageHelper.ShowError(this, result.Exception.Message);
+                        return;
+                    }
+                }
             }
             catch (CarrierException ex)
             {
@@ -95,39 +108,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
                 account.Description = FedExAccountManager.GetDefaultDescription(account);
             }
 
-            try
-            {
-                // Upload the images if the fields have been changed
-                if (account.Fields[(int) FedExAccountFieldIndex.Letterhead].IsChanged ||
-                    account.Fields[(int) FedExAccountFieldIndex.Signature].IsChanged)
-                {
-                    try
-                    {
-                        using (ILifetimeScope scope = IoC.BeginLifetimeScope())
-                        {
-                            var clerk = scope.Resolve<IFedExShippingClerkFactory>().Create(null);
-                            clerk.PerformUploadImages(account);
-                        }
-                        FedExAccountManager.SaveAccount(account);
-                        DialogResult = DialogResult.OK;
-                    }
-                    catch (FedExApiCarrierException ex)
-                    {
-                        MessageHelper.ShowError(this, ex.Message);
-                    }
-                }
-                else
-                {
-                    FedExAccountManager.SaveAccount(account);
-                    DialogResult = DialogResult.OK;
-                }
-            }
-            catch (ORMConcurrencyException)
-            {
-                MessageHelper.ShowError(this, "Your changes cannot be saved because another user has deleted the shipper.");
-
-                DialogResult = DialogResult.Abort;
-            }
+            DialogResult = DialogResult.OK;
         }
 
         /// <summary>

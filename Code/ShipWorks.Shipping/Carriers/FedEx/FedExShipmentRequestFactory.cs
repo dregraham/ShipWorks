@@ -78,11 +78,14 @@ namespace ShipWorks.Shipping.Carriers.FedEx
                 }
             }
 
+            if (shipment.FedEx.Service == (int) FedExServiceType.SmartPost)
+            {
+                labelRequest.Shipment.ServiceCode = EnumHelper.GetApiValue((FedExSmartPostIndicia) shipment.FedEx.SmartPostIndicia);
+            }
+
             var confirmationType = (FedExSignatureType) shipment.FedEx.Signature;
             labelRequest.Shipment.Confirmation = signatureMap[confirmationType];
 
-            //TODO: Hold At Location
-            //TODO: Specify Doc Tabs for thermal labels
 
             return labelRequest;
         }
@@ -96,7 +99,6 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         {
             var req = base.CreateReturnLabelRequest(shipment);
             req.RmaNumber = shipment.FedEx.RmaNumber;
-            //TODO: Return Saturday Pickup
             return req;
         }
 
@@ -153,6 +155,12 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             options.ThirdPartyConsignee = shipment.FedEx.ThirdPartyConsignee;
             options.NonMachinable = shipment.FedEx.NonStandardContainer;
 
+            var smartpostEndorsement = (FedExSmartPostEndorsement) shipment.FedEx.SmartPostEndorsement;
+            if (shipment.FedEx.Service == (int) FedExServiceType.SmartPost && smartpostEndorsement != FedExSmartPostEndorsement.None)
+            {
+                options.AncillaryEndorsement = EnumHelper.GetApiValue(smartpostEndorsement);
+            }
+            
             return options;
         }
 

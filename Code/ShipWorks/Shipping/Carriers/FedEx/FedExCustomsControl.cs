@@ -251,8 +251,8 @@ namespace ShipWorks.Shipping.Carriers.FedEx
 
                 commercialInvoice.ReadMultiCheck(c => shipment.FedEx.CommercialInvoice = c);
                 electronicTradeDocuments.ReadMultiCheck(c => shipment.FedEx.CommercialInvoiceFileElectronically = c);
-                ciTermsOfSale.ReadMultiValue(v => shipment.FedEx.CommercialInvoiceTermsOfSale = (int) v);
-                ciPurpose.ReadMultiValue(v => shipment.FedEx.CommercialInvoicePurpose = (int) v);
+                ciTermsOfSale.ReadMultiValue(v => shipment.FedEx.CommercialInvoiceTermsOfSale = (int) (v ?? FedExTermsOfSale.FOB_or_FCA));
+                ciPurpose.ReadMultiValue(v => shipment.FedEx.CommercialInvoicePurpose = (int) (v ?? FedExCommercialInvoicePurpose.Sold));
                 ciComments.ReadMultiText(t => shipment.FedEx.CommercialInvoiceComments = t);
                 ciFreight.ReadMultiAmount(a => shipment.FedEx.CommercialInvoiceFreight = a);
                 ciInsurance.ReadMultiAmount(a => shipment.FedEx.CommercialInvoiceInsurance = a);

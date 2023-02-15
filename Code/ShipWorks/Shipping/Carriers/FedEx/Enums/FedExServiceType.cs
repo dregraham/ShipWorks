@@ -70,7 +70,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Enums
         [ApiValue("fedex_international_economy_freight")]
         InternationalEconomyFreight = 14,
 
-        [Description("FedEx SmartPost®")]
+        [Description("FedEx Ground® Economy")]
         SmartPost = 15,
 
         [Description("FedEx Europe First International Priority®")]

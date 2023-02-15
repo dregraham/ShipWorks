@@ -61,6 +61,7 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
             HubVersion = source.HubVersion;
             HubCarrierId = source.HubCarrierId;
             ShipEngineCarrierID = source.ShipEngineCarrierID;
+            SmartPostHub = source.SmartPostHub;
             
             
             
@@ -219,6 +220,12 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
         /// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 50<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
         public System.String ShipEngineCarrierID { get; }
+        /// <summary> The SmartPostHub property of the Entity FedExAccount<br/><br/>
+        /// </summary>
+        /// <remarks>Mapped on table field: "FedExAccount"."SmartPostHub"<br/>
+        /// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
+        /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+        public System.Int32 SmartPostHub { get; }
         
         
         

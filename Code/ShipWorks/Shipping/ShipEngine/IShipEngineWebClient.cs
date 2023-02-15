@@ -32,6 +32,11 @@ namespace ShipWorks.Shipping.ShipEngine
         Task<GenericResult<string>> ConnectFedExAccount(FedExRegistrationRequest fedExRequest);
 
         /// <summary>
+        /// Update a FedEx accounts settings
+        /// </summary>
+        Task<Result> UpdateFedExAccount(IFedExAccountEntity fedExAccount);
+
+        /// <summary>
         /// Connects the given Asendia account to the users ShipEngine account
         /// </summary>
         /// <returns>The CarrierId</returns>

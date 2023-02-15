@@ -291,7 +291,7 @@ namespace ShipWorks.Shipping.Profiles
             {
                 if (active)
                 {
-                    if (comboBox.SelectedIndex < 0)
+                    if (comboBox.SelectedIndex < 0 && comboBox.Items.Count > 0)
                     {
                         comboBox.SelectedIndex = 0;
                     }

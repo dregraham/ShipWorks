@@ -1031,7 +1031,7 @@ CREATE TABLE [dbo].[Store]
 [ManagedInHub] [bit] NOT NULL CONSTRAINT [DF_Store_ManagedInHub] DEFAULT (0),
 [OrderSourceID] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
 [PlatformAmazonCarrierID] [nvarchar] (100) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
-[ShouldMigrate] [bit] NOT NULL, 
+[ShouldMigrate] [bit] NOT NULL,
 [ContinuationToken] [nvarchar] (2048) NULL
 )
 GO
@@ -3008,7 +3008,7 @@ CREATE TABLE [dbo].[DhlEcommerceAccount](
 	[Phone] [nvarchar](26) NOT NULL DEFAULT(('')),
 	[Email] [nvarchar](100) NOT NULL DEFAULT(('')),
 	[CreatedDate] [datetime] NOT NULL
- CONSTRAINT [PK_PostalDhlEcommerceAccount] PRIMARY KEY CLUSTERED 
+ CONSTRAINT [PK_PostalDhlEcommerceAccount] PRIMARY KEY CLUSTERED
 (
 	[DhlEcommerceAccountID] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
@@ -3049,7 +3049,7 @@ CREATE TABLE [dbo].[DhlEcommerceShipment](
 	[InsuranceValue] [money] NOT NULL CONSTRAINT [DF_DhlEcommerceShipment_InsuranceValue] DEFAULT ((0)),
 	[InsurancePennyOne] [bit] NOT NULL CONSTRAINT [DF_DhlEcommerceShipment_InsurancePennyOne] DEFAULT ((0)),
 	[AncillaryEndorsement] [int] NOT NULL CONSTRAINT [DF_DhlEcommerceShipment_AncillaryEndorsement] DEFAULT ((0))
- CONSTRAINT [PK_DhlEcommerceShipment] PRIMARY KEY CLUSTERED 
+ CONSTRAINT [PK_DhlEcommerceShipment] PRIMARY KEY CLUSTERED
 (
 	[ShipmentID] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
@@ -3077,8 +3077,8 @@ CREATE TABLE [dbo].[DhlEcommerceProfile](
 	[CustomsTinIssuingAuthority] [nvarchar](2) NULL,
 	[PackagingType] [int] NULL,
 	[Reference1] [nvarchar](300) NULL,
-	[AncillaryEndorsement] [int] NULL 
- CONSTRAINT [PK_DhlEcommerceProfile] PRIMARY KEY CLUSTERED 
+	[AncillaryEndorsement] [int] NULL
+ CONSTRAINT [PK_DhlEcommerceProfile] PRIMARY KEY CLUSTERED
 (
 	[ShippingProfileID] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
@@ -3100,7 +3100,7 @@ CREATE TABLE [dbo].[ShipEngineManifest](
 	[SubmissionID] [varchar](255) NOT NULL,
 	[CarrierID] [varchar](50) NOT NULL,
 	[ManifestUrl] [varchar](2048) NOT NULL
- CONSTRAINT [PK_ShipEngineManifest] PRIMARY KEY CLUSTERED 
+ CONSTRAINT [PK_ShipEngineManifest] PRIMARY KEY CLUSTERED
 (
 	[ShipEngineManifestID] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
@@ -4956,7 +4956,8 @@ CREATE TABLE [dbo].[FedExAccount]
 [Signature] [nvarchar] (max) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL CONSTRAINT [DF_FedExAccount_Signature] DEFAULT (''),
 [HubVersion] [int] NULL,
 [HubCarrierId] [uniqueidentifier] NULL,
-[ShipEngineCarrierID] [nvarchar] (50) NULL
+[ShipEngineCarrierId] [nvarchar] (50) NULL,
+[SmartPostHub] [int] NOT NULL DEFAULT (0),
 )
 GO
 PRINT N'Creating primary key [PK_FedExAccount] on [dbo].[FedExAccount]'

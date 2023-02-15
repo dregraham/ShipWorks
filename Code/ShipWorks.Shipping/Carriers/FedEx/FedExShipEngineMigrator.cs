@@ -3,13 +3,17 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Xml.Linq;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Threading;
+using Interapptive.Shared.Utility;
 using log4net;
 using ShipWorks.Carriers.Services;
 using ShipWorks.Common.Threading;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
+using ShipWorks.Shipping.Carriers.FedEx.Enums;
+using ShipWorks.Shipping.Profiles;
 using ShipWorks.Shipping.ShipEngine;
 using ShipWorks.Shipping.ShipEngine.DTOs.CarrierAccount;
 
@@ -90,18 +94,15 @@ namespace ShipWorks.Shipping.Carriers.FedEx
                 {
                     try
                     {
-                        var request = new FedExRegistrationRequest(account);
-
-                        var response = await shipEngineWebClient.ConnectFedExAccount(request).ConfigureAwait(false);
-
-                        if (response.Success)
+                        var smartPostHubs = XElement.Parse(account.SmartPostHubList).Descendants("HubID").Select(n => (int) n).ToArray();
+                        if (smartPostHubs.Length > 0)
                         {
-                            account.ShipEngineCarrierID = response.Value;
-                            accountRepo.Save(account);
+                            accountsFailed = await MigrateSmartPostAccounts(account, smartPostHubs);
                         }
                         else
                         {
-                            throw response.Exception;
+                            await ConnectAccountToEngine(account);
+                            accountRepo.Save(account);
                         }
                     }
                     catch (Exception ex)
@@ -121,7 +122,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
 
                 if (accountsFailed)
                 {
-                    accountProgress.Failed(new Exception("Some accounts failed to migrate. See the log for details."));
+                    accountProgress.Failed(new Exception("Some accounts encountered issues migrating. See the log for details."));
                 }
                 else
                 {
@@ -133,6 +134,105 @@ namespace ShipWorks.Shipping.Carriers.FedEx
                 log.Error($"Migrating FedEx accounts to ShipEngine failed: {ex.Message}", ex);
                 accountProgress.Detail = "Done";
                 accountProgress.Failed(ex);
+            }
+        }
+
+        /// <summary>
+        /// Create a new account for each SmartPost hub and migrate them to Engine
+        /// </summary>
+        private async Task<bool> MigrateSmartPostAccounts(FedExAccountEntity account, int[] hubs)
+        {
+            bool hubsFailed = false;
+
+            //Migrate the existing account with the first hub
+            try
+            {
+                var firstHub = hubs.First();
+                account.SmartPostHub = firstHub;
+                await ConnectAccountToEngine(account);
+                await MigrateSmartPostHub(account);
+
+                accountRepo.Save(account);
+            }
+            catch (Exception ex)
+            {
+                log.Error($"Failed to create a new FedEx smart post hub account for account: {account.FedExAccountID}, Hub: {account.SmartPostHub}", ex);
+                hubsFailed = true;
+            }
+
+            if (hubs.Length > 1)
+            {
+                //Create new accounts for each other Hub 
+                foreach (var hub in hubs.Skip(1))
+                {
+                    var newAccount = new FedExAccountEntity(account.Fields.CloneAsDirty());
+
+                    newAccount.InitializeNullsToDefault();
+                    //Set the accountId to 0 so the PK gets incremented correctly
+                    newAccount.FedExAccountID = 0;
+
+                    try
+                    {
+                        newAccount.SmartPostHub = hub;
+                        var hubDescription = $" Hub: {EnumHelper.GetDescription((FedExSmartPostHub) hub)}";
+
+                        if (FedExAccountManager.GetDefaultDescription(newAccount) == newAccount.Description)
+                        {
+                            var descriptionParts = newAccount.Description.Split(',').Take(2).ToList();
+                            descriptionParts.Add(hubDescription);
+                            newAccount.Description = string.Join(",", descriptionParts);
+                        }
+                        else
+                        {
+                            newAccount.Description = newAccount.Description + $",{hubDescription}";
+                        }
+
+                        newAccount.SmartPostHubList = $"<Root><HubID>{hub}</HubID></Root>";
+
+                        await ConnectAccountToEngine(newAccount);
+                        await MigrateSmartPostHub(newAccount);
+
+                        accountRepo.Save(newAccount);
+                    }
+                    catch (Exception ex)
+                    {
+                        log.Error($"Failed to create a new FedEx smart post hub account for account: {newAccount.FedExAccountID}, Hub: {newAccount.SmartPostHub}", ex);
+                        hubsFailed = true;
+                    }
+                }
+            }
+
+            return hubsFailed;
+        }
+
+        /// <summary>
+        /// Migrate a SmartPost Hub setting to Engine
+        /// </summary>
+        private async Task MigrateSmartPostHub(FedExAccountEntity account)
+        {
+            var updateResponse = await shipEngineWebClient.UpdateFedExAccount(account);
+
+            if (!updateResponse.Success)
+            {
+                throw updateResponse.Exception;
+            }
+        }
+
+        /// <summary>
+        /// Connect a FedEx account to Engine
+        /// </summary>
+        private async Task ConnectAccountToEngine(FedExAccountEntity account)
+        {
+            var request = new FedExRegistrationRequest(account);
+            var response = await shipEngineWebClient.ConnectFedExAccount(request).ConfigureAwait(false);
+
+            if (response.Success)
+            {
+                account.ShipEngineCarrierID = response.Value;
+            }
+            else
+            {
+                throw response.Exception;
             }
         }
     }
