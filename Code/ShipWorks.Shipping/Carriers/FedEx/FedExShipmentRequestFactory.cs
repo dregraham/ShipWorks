@@ -137,7 +137,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             if(shipment.FedEx.CodEnabled && shipment.FedEx.CodAmount > 0)
             {
                 var paymentType = (FedExCodPaymentType) shipment.FedEx.CodPaymentType;
-                var currencyType = shipment.FedEx.Currency.HasValue ? (CurrencyType) shipment.FedEx.Currency : default;
+                var currencyType = shipment.FedEx.Currency.HasValue ? (CurrencyType) shipment.FedEx.Currency : CurrencyType.USD;
 
                 options.CollectOnDelivery = new CollectOnDeliveryAdvancedOption
                 {
