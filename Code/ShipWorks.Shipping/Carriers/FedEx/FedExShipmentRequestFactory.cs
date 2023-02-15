@@ -1,19 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Interapptive.Shared.Business.Geography;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Enums;
 using Interapptive.Shared.Utility;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
+using ShipWorks.Shipping.Carriers.FedEx.Api;
 using ShipWorks.Shipping.Carriers.FedEx.Enums;
-using ShipWorks.Shipping.Carriers.UPS;
 using ShipWorks.Shipping.ShipEngine;
 using ShipWorks.Shipping.ShipEngine.DTOs;
-using ShipWorks.Stores.Platforms.PayPal.WebServices;
 using static ShipWorks.Shipping.ShipEngine.DTOs.MoneyDTO;
 
 namespace ShipWorks.Shipping.Carriers.FedEx
@@ -26,7 +21,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
     {
         private readonly IFedExAccountRepository accountRepository;
         private readonly IShipEngineRequestFactory shipmentElementFactory;
-
+        private readonly IFedExShipmentTokenProcessor tokenProcessor;
         private readonly Dictionary<FedExCodPaymentType, PaymentTypeEnum> paymentTypeMap = new Dictionary<FedExCodPaymentType, PaymentTypeEnum>
         {
             { FedExCodPaymentType.Any, PaymentTypeEnum.Any },
@@ -53,11 +48,13 @@ namespace ShipWorks.Shipping.Carriers.FedEx
 
         public FedExShipmentRequestFactory(IFedExAccountRepository accountRepository,
            IShipEngineRequestFactory shipmentElementFactory,
-           IShipmentTypeManager shipmentTypeManager)
+           IShipmentTypeManager shipmentTypeManager,
+           IFedExShipmentTokenProcessor tokenProcessor)
            : base(shipmentElementFactory, shipmentTypeManager)
         {
             this.accountRepository = accountRepository;
             this.shipmentElementFactory = shipmentElementFactory;
+            this.tokenProcessor = tokenProcessor;
         }
 
         /// <summary>
@@ -70,11 +67,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             var labelRequest = base.CreatePurchaseLabelRequest(shipment);
             if (labelRequest.Shipment.Packages.Any())
             {
-                foreach(var package in labelRequest.Shipment.Packages)
+                foreach (var package in labelRequest.Shipment.Packages)
                 {
-                    package.LabelMessages.Reference1 = shipment.FedEx.ReferenceCustomer;
-                    package.LabelMessages.Reference2 = shipment.FedEx.ReferenceInvoice;
-                    package.LabelMessages.Reference3 = shipment.FedEx.ReferencePO;
+                    package.LabelMessages.Reference1 = TokenizeField(shipment.FedEx.ReferenceCustomer, shipment);
+                    package.LabelMessages.Reference2 = TokenizeField(shipment.FedEx.ReferenceInvoice, shipment);
+                    package.LabelMessages.Reference3 = TokenizeField(shipment.FedEx.ReferencePO, shipment);
                 }
             }
 
@@ -114,7 +111,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         /// Creates the FedEx advanced options node
         /// </summary>
         protected override AdvancedOptions CreateAdvancedOptions(ShipmentEntity shipment)
-        {            
+        {
             var options = new AdvancedOptions()
             {
                 ContainsAlcohol = shipment.FedEx.Packages.Any(p => p.ContainsAlcohol),
@@ -128,7 +125,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
 
             var billToType = (FedExPayorType) shipment.FedEx.PayorTransportType;
 
-            if(billToType != FedExPayorType.Sender)
+            if (billToType != FedExPayorType.Sender)
             {
                 options.BillToParty = billToType == FedExPayorType.ThirdParty ? AdvancedOptions.BillToPartyEnum.Thirdparty : AdvancedOptions.BillToPartyEnum.Recipient;
                 options.BillToAccount = shipment.FedEx.PayorTransportAccount;
@@ -136,7 +133,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
                 options.BillToPostalCode = shipment.FedEx.PayorPostalCode;
             }
 
-            if(shipment.FedEx.CodEnabled && shipment.FedEx.CodAmount > 0)
+            if (shipment.FedEx.CodEnabled && shipment.FedEx.CodAmount > 0)
             {
                 var paymentType = (FedExCodPaymentType) shipment.FedEx.CodPaymentType;
                 var currencyType = shipment.FedEx.Currency.HasValue ? (CurrencyType) shipment.FedEx.Currency : CurrencyType.USD;
@@ -235,6 +232,27 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             //TODO: B13AFiling Option for international CA shipments
 
             return new List<TaxIdentifier>();
+        }
+
+        /// <summary>
+        /// Convert tokens to their values
+        /// </summary>
+        private string TokenizeField(string field, IShipmentEntity shipment)
+        {
+            string processedValue = tokenProcessor.ProcessTokens(field, shipment);
+
+            if (string.IsNullOrEmpty(processedValue))
+            {
+                return null;
+            }
+
+            if (processedValue.Length > 30)
+            {
+                // FedEx sends back a confusing error message when this occurs, so be proactive and show the user a friendlier error message
+                throw new FedExException(string.Format("FedEx does not allow references to exceed 30 characters in length. The reference value of \"{0}\" will exceed the 30 character limit. Please shorten the value and try again.", processedValue));
+            }
+
+            return processedValue;
         }
     }
 }
