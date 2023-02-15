@@ -26,18 +26,28 @@ namespace ShipWorks.Stores.Platforms.Amazon.DTO
         public static GiftNote FromOrderSourceNote(OrderSourceNote orderSourceNote)
         {
             var itemNote = new GiftNote();
-            var messageParts = orderSourceNote.Text.Split('\n');
-            itemNote.ASIN = ParseNoteTextProperty("ASIN:", messageParts);
-            itemNote.SKU = ParseNoteTextProperty("SKU:", messageParts);
-            itemNote.OrderItemId = ParseNoteTextProperty("OrderItemId:", messageParts);
-            itemNote.GiftWrapLevel = ParseNoteTextProperty("Gift Wrap Level:", messageParts);
-            var fee = ParseNoteTextProperty("Fee:", messageParts);
-            if (fee.HasValue() && decimal.TryParse(fee, out decimal parsedFee))
+            // Amazon orders are in a format like:
+            // "OrderItemId:123\nASIN:ASSDFSDFA\n..."
+            // If it isn't in that format, return the message as text
+            if(orderSourceNote.Text.Contains($"{'\n'}OrderItemId:"))
             {
-                itemNote.Fee = parsedFee;
-            }
+                var messageParts = orderSourceNote.Text.Split('\n');
+                itemNote.ASIN = ParseNoteTextProperty("ASIN:", messageParts);
+                itemNote.SKU = ParseNoteTextProperty("SKU:", messageParts);
+                itemNote.OrderItemId = ParseNoteTextProperty("OrderItemId:", messageParts);
+                itemNote.GiftWrapLevel = ParseNoteTextProperty("Gift Wrap Level:", messageParts);
+                var fee = ParseNoteTextProperty("Fee:", messageParts);
+                if (fee.HasValue() && decimal.TryParse(fee, out decimal parsedFee))
+                {
+                    itemNote.Fee = parsedFee;
+                }
 
-            itemNote.Message = ParseNoteMessageProperty(messageParts);
+                itemNote.Message = ParseNoteMessageProperty(messageParts);
+            }
+            else
+            {
+                itemNote.Message = orderSourceNote.Text;
+            }
 
             return itemNote;
         }
