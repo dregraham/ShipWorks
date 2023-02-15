@@ -65,6 +65,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             // If this isn't a ShipEngine shipment, void the old way
             if (!shipment.FedEx.ShipEngineLabelId.HasValue())
             {
+                log.Info("Voiding FedEx shipment with no ShipEngineLabelId");
                 var shippingClerk = shippingClerkFactory.Create(shipment);
 
                 try
