@@ -1219,8 +1219,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             List<FedExShipmentEntity> fedExShipments =
                 LoadedShipments.Where(shipment => shipment.FedEx != null).Select(shipment => shipment.FedEx).ToList();
 
-            if (format == ThermalLanguage.EPL &&
-                fedExShipments.Any(fedExShipment => FedExUtility.IsFimsService((FedExServiceType) fedExShipment.Service)))
+            if (format == ThermalLanguage.EPL)
             {
                 return false;
             }

@@ -11,6 +11,7 @@ using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Utility;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.ApplicationCore;
+using ShipWorks.Common.IO.Hardware.Printers;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Shipping.Carriers.FedEx.Api.Enums;
@@ -46,6 +47,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             {
                 packagesCount.Items.Add(i);
             }
+
+            // ShipEngine does not support EPL
+            requestedLabelFormat.ExcludeFormats(ThermalLanguage.EPL);
         }
 
         /// <summary>
