@@ -411,7 +411,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             this.panelPayorTransport.Dock = System.Windows.Forms.DockStyle.Top;
             this.panelPayorTransport.Location = new System.Drawing.Point(0, 0);
             this.panelPayorTransport.Name = "panelPayorTransport";
-            this.panelPayorTransport.Size = new System.Drawing.Size(483, 124);
+            this.panelPayorTransport.Size = new System.Drawing.Size(483, 85);
             this.panelPayorTransport.TabIndex = 4;
             // 
             // payorTransport

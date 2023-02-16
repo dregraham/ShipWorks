@@ -18,8 +18,6 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         public FedExReturnsControl()
         {
             InitializeComponent();
-
-            EnumHelper.BindComboBox<FedExReturnType>(returnService);
         }
 
         /// <summary>
@@ -35,10 +33,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
                 {
                     FedExShipmentEntity fedEx = shipment.FedEx;
 
-                    returnService.ApplyMultiValue((FedExReturnType) fedEx.ReturnType);
                     rmaNumber.ApplyMultiText(fedEx.RmaNumber);
-                    rmaReason.ApplyMultiText(fedEx.RmaReason);
-                    saturdayPickup.ApplyMultiCheck(fedEx.ReturnSaturdayPickup);
                 }
             }
         }
@@ -56,10 +51,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
                 {
                     FedExShipmentEntity fedEx = shipment.FedEx;
 
-                    returnService.ReadMultiValue(v => fedEx.ReturnType = (int) v);
                     rmaNumber.ReadMultiText(t => fedEx.RmaNumber = t);
-                    rmaReason.ReadMultiText(t => fedEx.RmaReason = t);
-                    saturdayPickup.ReadMultiCheck(t => fedEx.ReturnSaturdayPickup = t);
                 }
             }
         }
