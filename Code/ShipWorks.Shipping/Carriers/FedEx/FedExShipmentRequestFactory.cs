@@ -213,29 +213,23 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         /// <returns></returns>
         protected override List<TaxIdentifier> CreateTaxIdentifiers(ShipmentEntity shipment)
         {
-            //TODO: The below needs to be done but untill we have all the information will cause shipments to fail
-            /*
             List<TaxIdentifier> listTaxIds = new List<TaxIdentifier>();
             if (shipment.FedEx.CustomsRecipientTIN != "")
             {
+                // We weren't sending IssuingAuthority with the direct integration to FedEx.
+                // Not sending it here did result in a label, so should be good to not send it to ShipEngine
                 TaxIdentifier taxIdentifier = new TaxIdentifier()
                 {
-                    //TODO: Need to figure out what the "FedEx Tin Type" Means relative to IOSS, VAT, etc.
-                    IdentifierType = (TaxIdentifier.IdentifierTypeEnum) shipment.FedEx.CustomsRecipientTINType,
+                    // SE is mapping all TIN Types to NATIONAL_BUSINESS, so the only thing we can send is that the 
+                    // IdentifierType is TIN
+                    IdentifierType = TaxIdentifier.IdentifierTypeEnum.Tin,
                     TaxableEntityType = "shipper",
-                    //TODO: Might need to add this to UI not sure
-                    IssuingAuthority = shipment.FedEx.CustomsRecipientIssuingAuthority,
                     Value = shipment.FedEx.CustomsRecipientTIN
                 };
 
                 listTaxIds.Add(taxIdentifier);
             }
             return listTaxIds;
-            */
-
-            //TODO: B13AFiling Option for international CA shipments
-
-            return new List<TaxIdentifier>();
         }
 
         /// <summary>
