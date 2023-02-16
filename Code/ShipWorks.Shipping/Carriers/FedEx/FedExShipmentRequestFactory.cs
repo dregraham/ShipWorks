@@ -83,6 +83,10 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             var confirmationType = (FedExSignatureType) shipment.FedEx.Signature;
             labelRequest.Shipment.Confirmation = signatureMap[confirmationType];
 
+            if (shipment.ReturnShipment)
+            {
+                labelRequest.RmaNumber = shipment.FedEx.RmaNumber;
+            }
 
             return labelRequest;
         }
