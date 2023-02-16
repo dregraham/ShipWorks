@@ -69,9 +69,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             {
                 foreach (var package in labelRequest.Shipment.Packages)
                 {
-                    package.LabelMessages.Reference1 = TokenizeField(shipment.FedEx.ReferenceCustomer, shipment);
-                    package.LabelMessages.Reference2 = TokenizeField(shipment.FedEx.ReferenceInvoice, shipment);
-                    package.LabelMessages.Reference3 = TokenizeField(shipment.FedEx.ReferencePO, shipment);
+                    package.LabelMessages.Reference1 = TokenizeField(shipment.FedEx.ReferenceCustomer, "Reference", shipment, 35);
+                    package.LabelMessages.Reference2 = TokenizeField(shipment.FedEx.ReferenceInvoice, "Invoice", shipment);
+                    package.LabelMessages.Reference3 = TokenizeField(shipment.FedEx.ReferencePO, "P.O.", shipment);
                 }
             }
 
@@ -157,7 +157,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             {
                 options.AncillaryEndorsement = EnumHelper.GetApiValue(smartpostEndorsement);
             }
-            
+
             return options;
         }
 
@@ -237,7 +237,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         /// <summary>
         /// Convert tokens to their values
         /// </summary>
-        private string TokenizeField(string field, IShipmentEntity shipment)
+        private string TokenizeField(string field, string fieldName, IShipmentEntity shipment, int maxLength = 30)
         {
             string processedValue = tokenProcessor.ProcessTokens(field, shipment);
 
@@ -246,10 +246,10 @@ namespace ShipWorks.Shipping.Carriers.FedEx
                 return null;
             }
 
-            if (processedValue.Length > 30)
+            if (processedValue.Length > maxLength)
             {
                 // FedEx sends back a confusing error message when this occurs, so be proactive and show the user a friendlier error message
-                throw new FedExException(string.Format("FedEx does not allow references to exceed 30 characters in length. The reference value of \"{0}\" will exceed the 30 character limit. Please shorten the value and try again.", processedValue));
+                throw new FedExException($"FedEx does not allow {fieldName} # to exceed {maxLength} characters in length. The given value, \"{processedValue}\" exceeds the {maxLength} character limit. Please shorten the value and try again.");
             }
 
             return processedValue;
