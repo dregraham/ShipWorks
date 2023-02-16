@@ -1412,7 +1412,7 @@
             this.groupFIMS.Controls.Add(this.referenceFIMS);
             this.groupFIMS.Controls.Add(this.referenceFimsState);
             this.groupFIMS.Controls.Add(this.kryptonBorderEdge12);
-            this.groupFIMS.Location = new System.Drawing.Point(6, 1046);
+            this.groupFIMS.Location = new System.Drawing.Point(6, 996);
             this.groupFIMS.Name = "groupFIMS";
             this.groupFIMS.Size = new System.Drawing.Size(1343, 58);
             this.groupFIMS.TabIndex = 10;
@@ -1522,7 +1522,7 @@
             this.groupReturns.Controls.Add(this.applyReturnProfile);
             this.groupReturns.Controls.Add(this.returnProfileID);
             this.groupReturns.Controls.Add(this.returnProfileIDLabel);
-            this.groupReturns.Location = new System.Drawing.Point(6, 902);
+            this.groupReturns.Location = new System.Drawing.Point(6, 852);
             this.groupReturns.Name = "groupReturns";
             this.groupReturns.Size = new System.Drawing.Size(1343, 138);
             this.groupReturns.TabIndex = 9;
@@ -1738,7 +1738,7 @@
             this.groupSmartPost.Size = new System.Drawing.Size(1343, 72);
             this.groupSmartPost.TabIndex = 6;
             this.groupSmartPost.TabStop = false;
-            this.groupSmartPost.Text = "SmartPost";
+            this.groupSmartPost.Text = "FedEx Ground® Economy";
             //
             // smartIndicia
             //
@@ -1983,14 +1983,8 @@
             this.groupBilling.Controls.Add(this.payorCountryCode);
             this.groupBilling.Controls.Add(this.labelPayorCountryCode);
             this.groupBilling.Controls.Add(this.payorCountryCodeState);
-            this.groupBilling.Controls.Add(this.dutiesAccount);
-            this.groupBilling.Controls.Add(this.labelDutiesAccount);
-            this.groupBilling.Controls.Add(this.payorDuties);
-            this.groupBilling.Controls.Add(this.labelPayorDuties);
             this.groupBilling.Controls.Add(this.transportAccount);
             this.groupBilling.Controls.Add(this.labelTransportAccount);
-            this.groupBilling.Controls.Add(this.payorDutiesAccountState);
-            this.groupBilling.Controls.Add(this.payorDutiesTypeState);
             this.groupBilling.Controls.Add(this.kryptonBorderEdge3);
             this.groupBilling.Controls.Add(this.payorTransportAccountState);
             this.groupBilling.Controls.Add(this.payorTransportTypeState);
@@ -1998,7 +1992,7 @@
             this.groupBilling.Controls.Add(this.labelPayorTransport);
             this.groupBilling.Location = new System.Drawing.Point(6, 716);
             this.groupBilling.Name = "groupBilling";
-            this.groupBilling.Size = new System.Drawing.Size(1343, 180);
+            this.groupBilling.Size = new System.Drawing.Size(1343, 130);
             this.groupBilling.TabIndex = 7;
             this.groupBilling.TabStop = false;
             this.groupBilling.Text = "Billing";

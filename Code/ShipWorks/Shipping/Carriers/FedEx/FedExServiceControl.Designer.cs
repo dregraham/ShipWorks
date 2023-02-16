@@ -288,7 +288,6 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             // 
             // sectionBilling.ContentPanel
             // 
-            this.sectionBilling.ContentPanel.Controls.Add(this.panelPayorDuties);
             this.sectionBilling.ContentPanel.Controls.Add(this.panelTransportAccount);
             this.sectionBilling.ContentPanel.Controls.Add(this.panelPayorTransport);
             this.sectionBilling.ExpandedHeight = 149;
@@ -299,58 +298,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             this.sectionBilling.SettingsKey = "84780845-669f-4fb1-9ab1-cd2accdff93c";
             this.sectionBilling.Size = new System.Drawing.Size(487, 24);
             this.sectionBilling.TabIndex = 6;
-            // 
-            // panelPayorDuties
-            // 
-            this.panelPayorDuties.BackColor = System.Drawing.Color.White;
-            this.panelPayorDuties.Controls.Add(this.dutiesAccount);
-            this.panelPayorDuties.Controls.Add(this.labelDutiesAccount);
-            this.panelPayorDuties.Controls.Add(this.payorDuties);
-            this.panelPayorDuties.Controls.Add(this.labelPayorDuties);
-            this.panelPayorDuties.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panelPayorDuties.Location = new System.Drawing.Point(0, 90);
-            this.panelPayorDuties.Name = "panelPayorDuties";
-            this.panelPayorDuties.Size = new System.Drawing.Size(483, 65);
-            this.panelPayorDuties.TabIndex = 6;
-            // 
-            // dutiesAccount
-            // 
-            this.dutiesAccount.Location = new System.Drawing.Point(123, 36);
-            this.fieldLengthProvider.SetMaxLengthSource(this.dutiesAccount, ShipWorks.Data.Utility.EntityFieldLengthSource.FedExAccountNumber);
-            this.dutiesAccount.Name = "dutiesAccount";
-            this.dutiesAccount.Size = new System.Drawing.Size(173, 21);
-            this.dutiesAccount.TabIndex = 6;
-            // 
-            // labelDutiesAccount
-            // 
-            this.labelDutiesAccount.AutoSize = true;
-            this.labelDutiesAccount.BackColor = System.Drawing.Color.White;
-            this.labelDutiesAccount.Location = new System.Drawing.Point(56, 39);
-            this.labelDutiesAccount.Name = "labelDutiesAccount";
-            this.labelDutiesAccount.Size = new System.Drawing.Size(61, 13);
-            this.labelDutiesAccount.TabIndex = 5;
-            this.labelDutiesAccount.Text = "Account #:";
-            // 
-            // payorDuties
-            // 
-            this.payorDuties.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.payorDuties.FormattingEnabled = true;
-            this.payorDuties.Location = new System.Drawing.Point(123, 9);
-            this.payorDuties.Name = "payorDuties";
-            this.payorDuties.PromptText = "(Multiple Values)";
-            this.payorDuties.Size = new System.Drawing.Size(173, 21);
-            this.payorDuties.TabIndex = 4;
-            this.payorDuties.SelectedIndexChanged += new System.EventHandler(this.OnChangePayorDuties);
-            // 
-            // labelPayorDuties
-            // 
-            this.labelPayorDuties.AutoSize = true;
-            this.labelPayorDuties.BackColor = System.Drawing.Color.White;
-            this.labelPayorDuties.Location = new System.Drawing.Point(24, 12);
-            this.labelPayorDuties.Name = "labelPayorDuties";
-            this.labelPayorDuties.Size = new System.Drawing.Size(93, 13);
-            this.labelPayorDuties.TabIndex = 1;
-            this.labelPayorDuties.Text = "Bill duties/fees to:";
+           
             // 
             // panelTransportAccount
             // 
@@ -360,21 +308,21 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             this.panelTransportAccount.Controls.Add(this.transportAccount);
             this.panelTransportAccount.Controls.Add(this.labelTransportAccount);
             this.panelTransportAccount.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panelTransportAccount.Location = new System.Drawing.Point(0, 32);
+            this.panelTransportAccount.Location = new System.Drawing.Point(0, 58);
             this.panelTransportAccount.Name = "panelTransportAccount";
             this.panelTransportAccount.Size = new System.Drawing.Size(483, 58);
             this.panelTransportAccount.TabIndex = 5;
             // 
             // payorTransportName
             // 
-            this.payorTransportName.Location = new System.Drawing.Point(123, 31);
+            this.payorTransportName.Location = new System.Drawing.Point(123, 35);
             this.payorTransportName.Name = "payorTransportName";
             this.payorTransportName.Size = new System.Drawing.Size(173, 21);
             this.payorTransportName.TabIndex = 5;
             // 
             // labelTransportPayorName
             // 
-            this.labelTransportPayorName.Location = new System.Drawing.Point(71, 29);
+            this.labelTransportPayorName.Location = new System.Drawing.Point(71, 33);
             this.labelTransportPayorName.Name = "labelTransportPayorName";
             this.labelTransportPayorName.Size = new System.Drawing.Size(46, 23);
             this.labelTransportPayorName.TabIndex = 4;
@@ -383,7 +331,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             // 
             // transportAccount
             // 
-            this.transportAccount.Location = new System.Drawing.Point(123, 2);
+            this.transportAccount.Location = new System.Drawing.Point(123, 6);
             this.fieldLengthProvider.SetMaxLengthSource(this.transportAccount, ShipWorks.Data.Utility.EntityFieldLengthSource.FedExAccountNumber);
             this.transportAccount.Name = "transportAccount";
             this.transportAccount.Size = new System.Drawing.Size(173, 21);
@@ -393,7 +341,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             // 
             this.labelTransportAccount.AutoSize = true;
             this.labelTransportAccount.BackColor = System.Drawing.Color.White;
-            this.labelTransportAccount.Location = new System.Drawing.Point(58, 6);
+            this.labelTransportAccount.Location = new System.Drawing.Point(58, 9);
             this.labelTransportAccount.Name = "labelTransportAccount";
             this.labelTransportAccount.Size = new System.Drawing.Size(61, 13);
             this.labelTransportAccount.TabIndex = 2;
@@ -411,7 +359,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             this.panelPayorTransport.Dock = System.Windows.Forms.DockStyle.Top;
             this.panelPayorTransport.Location = new System.Drawing.Point(0, 0);
             this.panelPayorTransport.Name = "panelPayorTransport";
-            this.panelPayorTransport.Size = new System.Drawing.Size(483, 85);
+            this.panelPayorTransport.Size = new System.Drawing.Size(483, 90);
             this.panelPayorTransport.TabIndex = 4;
             // 
             // payorTransport
@@ -439,7 +387,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             // 
             this.payorCountry.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.payorCountry.FormattingEnabled = true;
-            this.payorCountry.Location = new System.Drawing.Point(123, 33);
+            this.payorCountry.Location = new System.Drawing.Point(123, 37);
             this.payorCountry.MaxDropDownItems = 20;
             this.payorCountry.Name = "country";
             this.payorCountry.PromptText = "(Multiple Values)";
@@ -449,14 +397,14 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             // labelPayorCountry
             // 
             this.labelPayorCountry.AutoSize = true;
-            this.labelPayorCountry.Location = new System.Drawing.Point(36, 36);
+            this.labelPayorCountry.Location = new System.Drawing.Point(36, 40);
             this.labelPayorCountry.Name = "labelPayorCountry";
             this.labelPayorCountry.Size = new System.Drawing.Size(37, 13);
             this.labelPayorCountry.Text = "Payor Country:";
             // 
             // postalCode
             // 
-            this.payorPostalCode.Location = new System.Drawing.Point(123, 58);
+            this.payorPostalCode.Location = new System.Drawing.Point(123, 66);
             this.fieldLengthProvider.SetMaxLengthSource(this.payorPostalCode, ShipWorks.Data.Utility.EntityFieldLengthSource.PersonPostal);
             this.payorPostalCode.Name = "payorPostalCode";
             this.payorPostalCode.Size = new System.Drawing.Size(173, 21);
@@ -465,7 +413,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             // labelPayorPostalCode
             // 
             this.labelPayorPostalCode.AutoSize = true;
-            this.labelPayorPostalCode.Location = new System.Drawing.Point(18, 61);
+            this.labelPayorPostalCode.Location = new System.Drawing.Point(18, 69);
             this.labelPayorPostalCode.Name = "labelPayorPostalCode";
             this.labelPayorPostalCode.Size = new System.Drawing.Size(68, 13);
             this.labelPayorPostalCode.Text = "Payor Postal Code:";
@@ -1021,7 +969,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             this.sectionSmartPost.ContentPanel.Controls.Add(this.smartIndicia);
             this.sectionSmartPost.ContentPanel.Controls.Add(this.labelSmartAncillary);
             this.sectionSmartPost.ContentPanel.Controls.Add(this.labelSmartEndicia);
-            this.sectionSmartPost.ExpandedHeight = 136;
+            this.sectionSmartPost.ExpandedHeight = 100;
             this.sectionSmartPost.ExtraText = "";
             this.sectionSmartPost.Location = new System.Drawing.Point(3, 497);
             this.sectionSmartPost.Name = "sectionSmartPost";
@@ -1030,47 +978,47 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             this.sectionSmartPost.Size = new System.Drawing.Size(487, 24);
             this.sectionSmartPost.TabIndex = 5;
             // 
-            // smartEndorsement
-            // 
-            this.smartEndorsement.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.smartEndorsement.FormattingEnabled = true;
-            this.smartEndorsement.Location = new System.Drawing.Point(87, 64);
-            this.smartEndorsement.Name = "smartEndorsement";
-            this.smartEndorsement.PromptText = "(Multiple Values)";
-            this.smartEndorsement.Size = new System.Drawing.Size(225, 21);
-            this.smartEndorsement.TabIndex = 5;
-            this.smartEndorsement.SelectedIndexChanged += new System.EventHandler(this.OnRateCriteriaChanged);
-            // 
             // smartIndicia
             // 
             this.smartIndicia.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.smartIndicia.FormattingEnabled = true;
-            this.smartIndicia.Location = new System.Drawing.Point(87, 37);
+            this.smartIndicia.Location = new System.Drawing.Point(87, 8);
             this.smartIndicia.Name = "smartIndicia";
             this.smartIndicia.PromptText = "(Multiple Values)";
             this.smartIndicia.Size = new System.Drawing.Size(275, 21);
             this.smartIndicia.TabIndex = 3;
             this.smartIndicia.SelectedIndexChanged += new System.EventHandler(this.OnChangeSmartPostIndicia);
             // 
-            // labelSmartAncillary
-            // 
-            this.labelSmartAncillary.AutoSize = true;
-            this.labelSmartAncillary.BackColor = System.Drawing.Color.Transparent;
-            this.labelSmartAncillary.Location = new System.Drawing.Point(30, 68);
-            this.labelSmartAncillary.Name = "labelSmartAncillary";
-            this.labelSmartAncillary.Size = new System.Drawing.Size(51, 13);
-            this.labelSmartAncillary.TabIndex = 4;
-            this.labelSmartAncillary.Text = "Ancillary:";
-            // 
             // labelSmartEndicia
             // 
             this.labelSmartEndicia.AutoSize = true;
             this.labelSmartEndicia.BackColor = System.Drawing.Color.Transparent;
-            this.labelSmartEndicia.Location = new System.Drawing.Point(39, 40);
+            this.labelSmartEndicia.Location = new System.Drawing.Point(39, 11);
             this.labelSmartEndicia.Name = "labelSmartEndicia";
             this.labelSmartEndicia.Size = new System.Drawing.Size(42, 13);
             this.labelSmartEndicia.TabIndex = 2;
             this.labelSmartEndicia.Text = "Indicia:";
+            // 
+            // smartEndorsement
+            // 
+            this.smartEndorsement.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.smartEndorsement.FormattingEnabled = true;
+            this.smartEndorsement.Location = new System.Drawing.Point(87, 37);
+            this.smartEndorsement.Name = "smartEndorsement";
+            this.smartEndorsement.PromptText = "(Multiple Values)";
+            this.smartEndorsement.Size = new System.Drawing.Size(225, 21);
+            this.smartEndorsement.TabIndex = 5;
+            this.smartEndorsement.SelectedIndexChanged += new System.EventHandler(this.OnRateCriteriaChanged);
+            // 
+            // labelSmartAncillary
+            // 
+            this.labelSmartAncillary.AutoSize = true;
+            this.labelSmartAncillary.BackColor = System.Drawing.Color.Transparent;
+            this.labelSmartAncillary.Location = new System.Drawing.Point(30, 40);
+            this.labelSmartAncillary.Name = "labelSmartAncillary";
+            this.labelSmartAncillary.Size = new System.Drawing.Size(51, 13);
+            this.labelSmartAncillary.TabIndex = 4;
+            this.labelSmartAncillary.Text = "Ancillary:";
             // 
             // sectionPackageDetails
             // 
@@ -1906,7 +1854,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             this.infotipSmartPostConfirmation.Name = "infotipSmartPostConfirmation";
             this.infotipSmartPostConfirmation.Size = new System.Drawing.Size(12, 12);
             this.infotipSmartPostConfirmation.TabIndex = 99;
-            this.infotipSmartPostConfirmation.Title = "SmartPost Delivery Confirmation";
+            this.infotipSmartPostConfirmation.Title = "FedEx Ground® Economy Delivery Confirmation";
             // 
             // smartHubID
             // 
@@ -1928,6 +1876,58 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             this.labelSmartHubID.Size = new System.Drawing.Size(44, 13);
             this.labelSmartHubID.TabIndex = 0;
             this.labelSmartHubID.Text = "Hub ID:";
+            // 
+            // panelPayorDuties
+            // 
+            this.panelPayorDuties.BackColor = System.Drawing.Color.White;
+            this.panelPayorDuties.Controls.Add(this.dutiesAccount);
+            this.panelPayorDuties.Controls.Add(this.labelDutiesAccount);
+            this.panelPayorDuties.Controls.Add(this.payorDuties);
+            this.panelPayorDuties.Controls.Add(this.labelPayorDuties);
+            this.panelPayorDuties.Dock = System.Windows.Forms.DockStyle.Top;
+            this.panelPayorDuties.Location = new System.Drawing.Point(0, 90);
+            this.panelPayorDuties.Name = "panelPayorDuties";
+            this.panelPayorDuties.Size = new System.Drawing.Size(483, 65);
+            this.panelPayorDuties.TabIndex = 6;
+            // 
+            // dutiesAccount
+            // 
+            this.dutiesAccount.Location = new System.Drawing.Point(123, 36);
+            this.fieldLengthProvider.SetMaxLengthSource(this.dutiesAccount, ShipWorks.Data.Utility.EntityFieldLengthSource.FedExAccountNumber);
+            this.dutiesAccount.Name = "dutiesAccount";
+            this.dutiesAccount.Size = new System.Drawing.Size(173, 21);
+            this.dutiesAccount.TabIndex = 6;
+            // 
+            // labelDutiesAccount
+            // 
+            this.labelDutiesAccount.AutoSize = true;
+            this.labelDutiesAccount.BackColor = System.Drawing.Color.White;
+            this.labelDutiesAccount.Location = new System.Drawing.Point(56, 39);
+            this.labelDutiesAccount.Name = "labelDutiesAccount";
+            this.labelDutiesAccount.Size = new System.Drawing.Size(61, 13);
+            this.labelDutiesAccount.TabIndex = 5;
+            this.labelDutiesAccount.Text = "Account #:";
+            // 
+            // payorDuties
+            // 
+            this.payorDuties.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.payorDuties.FormattingEnabled = true;
+            this.payorDuties.Location = new System.Drawing.Point(123, 9);
+            this.payorDuties.Name = "payorDuties";
+            this.payorDuties.PromptText = "(Multiple Values)";
+            this.payorDuties.Size = new System.Drawing.Size(173, 21);
+            this.payorDuties.TabIndex = 4;
+            this.payorDuties.SelectedIndexChanged += new System.EventHandler(this.OnChangePayorDuties);
+            // 
+            // labelPayorDuties
+            // 
+            this.labelPayorDuties.AutoSize = true;
+            this.labelPayorDuties.BackColor = System.Drawing.Color.White;
+            this.labelPayorDuties.Location = new System.Drawing.Point(24, 12);
+            this.labelPayorDuties.Name = "labelPayorDuties";
+            this.labelPayorDuties.Size = new System.Drawing.Size(93, 13);
+            this.labelPayorDuties.TabIndex = 1;
+            this.labelPayorDuties.Text = "Bill duties/fees to:";
             #endregion
             //
             // FedExServiceControl

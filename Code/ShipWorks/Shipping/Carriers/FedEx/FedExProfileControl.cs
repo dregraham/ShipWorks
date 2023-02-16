@@ -119,7 +119,8 @@ namespace ShipWorks.Shipping.Carriers.FedEx
 
             AddValueMapping(fedex, FedExProfileFields.PayorTransportType, payorTransportTypeState, payorTransport, labelPayorTransport);
             AddValueMapping(fedex, FedExProfileFields.PayorTransportAccount, payorTransportAccountState, transportAccount, labelTransportAccount);
-            AddValueMapping(fedex, FedExProfileFields.PayorDutiesType, payorDutiesTypeState, payorDuties, labelPayorDuties);
+            //Commented out for FedEx platform. Leaving this causes errors and its not currently needed
+            //AddValueMapping(fedex, FedExProfileFields.PayorDutiesType, payorDutiesTypeState, payorDuties, labelPayorDuties);
             AddValueMapping(fedex, FedExProfileFields.PayorDutiesAccount, payorDutiesAccountState, dutiesAccount, labelDutiesAccount);
             AddValueMapping(fedex, FedExProfileFields.PayorCountryCode, payorCountryCodeState, payorCountryCode, labelPayorCountryCode);
             AddValueMapping(fedex, FedExProfileFields.PayorPostalCode, payorPostalCodeState, payorPostalCode, labelPayorPostalCode);

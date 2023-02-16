@@ -544,7 +544,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
                 payorCountry.ReadMultiValue(t => shipment.FedEx.PayorCountryCode = Geography.GetCountryCode((string) t));
                 payorPostalCode.ReadMultiText(t => shipment.FedEx.PayorPostalCode = t);
 
-                payorDuties.ReadMultiValue(v => shipment.FedEx.PayorDutiesType = (int) v);
+                payorDuties.ReadMultiValue(v => shipment.FedEx.PayorDutiesType = v != null ? (int) v : 0);
                 dutiesAccount.ReadMultiText(t => shipment.FedEx.PayorDutiesAccount = t);
 
                 saturdayDelivery.ReadMultiCheck(c => shipment.FedEx.SaturdayDelivery = c);
@@ -1144,11 +1144,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx
                 "FedEx Date Certain Home Delivery®\n" +
                 "FedEx Evening Home Delivery®\n" +
                 "FedEx Appointment Home Delivery®\n" +
-                "FedEx SmartPost®\n" +
-                "FedEx SmartPost parcel select lightweight\n" +
-                "FedEx SmartPost® Bound Printed Matter\n" +
-                "FedEx SmartPost® Media\n" +
-                "FedEx SmartPost parcel select\n" +
+                "FedEx FedEx Ground® Economy\n" +
+                "FedEx FedEx Ground® Economy parcel select lightweight\n" +
+                "FedEx FedEx Ground® Economy Bound Printed Matter\n" +
+                "FedEx FedEx Ground® Economy Media\n" +
+                "FedEx FedEx Ground® Economy parcel select\n" +
                 "FedEx ShipAlert®\n" +
                 "FedEx Priority Alert Plus™\n" +
                 "FedEx International Ground® Distribution\n" +
