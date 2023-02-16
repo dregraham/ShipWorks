@@ -5,6 +5,7 @@ using System.Data.SqlClient;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Linq;
+using System.Numerics;
 using System.Text;
 using System.Windows.Forms;
 using Autofac;
@@ -170,7 +171,9 @@ namespace ShipWorks.Tests.Shared.Database
             {
                 DatabaseName = builder.InitialCatalog,
                 ServerInstance = builder.DataSource,
-                WindowsAuth = true
+                WindowsAuth = string.IsNullOrEmpty(builder.UserID),
+                Username = builder.UserID,
+                Password = builder.Password
             };
 
             configuration.Freeze();

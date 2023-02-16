@@ -1,0 +1,1 @@
+FROM metapackltd/nemesis-allocation-api:shipworks-sql

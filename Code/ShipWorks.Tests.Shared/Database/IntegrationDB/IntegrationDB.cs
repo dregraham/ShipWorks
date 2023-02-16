@@ -45,7 +45,9 @@ namespace ShipWorks.Tests.Shared.Database.IntegrationDB
             SqlConnectionStringBuilder sb = new SqlConnectionStringBuilder();
             sb.DataSource = dataSource;
             sb.InitialCatalog = databaseName;
-            sb.IntegratedSecurity = true;
+            sb.IntegratedSecurity = false;
+            sb.UserID = "sa";
+            sb.Password = "MyPass@word";
 
             return sb.ConnectionString;
         }
@@ -58,7 +60,9 @@ namespace ShipWorks.Tests.Shared.Database.IntegrationDB
             SqlConnectionStringBuilder sb = new SqlConnectionStringBuilder();
             sb.DataSource = dataSource;
             sb.InitialCatalog = "master";
-            sb.IntegratedSecurity = true;
+            sb.IntegratedSecurity = false;
+            sb.UserID = "sa";
+            sb.Password = "MyPass@word";
             sb.Pooling = false;
 
             return sb.ConnectionString;
