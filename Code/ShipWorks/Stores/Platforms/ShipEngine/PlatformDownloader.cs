@@ -490,7 +490,11 @@ namespace ShipWorks.Stores.Platforms.ShipEngine
         private string FormatNoteText(string text, OrderSourceNoteType noteType)
         {
             text = WebUtility.HtmlDecode(text);
-            return $"{GetNotePreface(noteType)}{text}";
+            if (string.IsNullOrWhiteSpace(text))
+            {
+	            return string.Empty;
+            }
+			return $"{GetNotePreface(noteType)}{text}";
         }
 
         /// <summary>
