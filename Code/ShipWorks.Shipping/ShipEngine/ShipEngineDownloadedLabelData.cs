@@ -55,6 +55,12 @@ namespace ShipWorks.Shipping.ShipEngine
                 default:
                     throw new ShipEngineException($"{EnumHelper.GetDescription(shipment.ShipmentTypeCode)} returned an unsupported label format.");
             }
+
+            if (label.FormDownload?.Href.HasValue() == true)
+            {
+                byte[] otherResource = resourceDownloader.Download(new Uri(label.FormDownload.Href));
+                SavePdfOther(otherResource, "LabelPart");
+            }
         }
 
         /// <summary>
@@ -74,6 +80,23 @@ namespace ShipWorks.Shipping.ShipEngine
             {
                 resourceManager.CreateFromPdf(
                     PdfDocumentType.BlackAndWhite, pdfData, shipment.ShipmentID, i => i == 0 ? "LabelPrimary" : $"LabelPart{i}", (m) => m.ToArray(), true);
+            }
+        }
+
+        /// <summary>
+        /// Save the Other PDF doc
+        /// </summary>
+        private void SavePdfOther(byte[] otherResource, string name)
+        {
+            using (MemoryStream pdfData = new MemoryStream(otherResource))
+            {
+                resourceManager.CreateFromPdf(
+                    PdfDocumentType.BlackAndWhite,
+                    pdfData,
+                    shipment.ShipmentID,
+                    i => i == 0 ? name : $"{name}{i}", 
+                    (m) => m.ToArray(), 
+                    true);
             }
         }
 

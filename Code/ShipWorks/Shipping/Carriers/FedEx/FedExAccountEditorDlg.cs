@@ -108,6 +108,8 @@ namespace ShipWorks.Shipping.Carriers.FedEx
                 account.Description = FedExAccountManager.GetDefaultDescription(account);
             }
 
+            FedExAccountManager.SaveAccount(account);
+
             DialogResult = DialogResult.OK;
         }
 

@@ -550,6 +550,7 @@ namespace ShipWorks.Shipping.ShipEngine
 
                 request.JsonSerializer = new RestSharpJsonNetSerializer(new JsonSerializerSettings
                 {
+                    NullValueHandling = NullValueHandling.Ignore,
                     ContractResolver = new DefaultContractResolver
                     {
                         NamingStrategy = new SnakeCaseNamingStrategy(),

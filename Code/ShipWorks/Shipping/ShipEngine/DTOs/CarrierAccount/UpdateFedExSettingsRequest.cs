@@ -9,15 +9,20 @@ namespace ShipWorks.Shipping.ShipEngine.DTOs.CarrierAccount
     {
         public UpdateFedExSettingsRequest(IFedExAccountEntity account)
         {
-            this.Nickname = account.Email;
-            this.SmartPostHub = EnumHelper.GetApiValue((FedExSmartPostHub) account.SmartPostHub);
-            this.InvoiceSignatureImage = account.Signature;
-            this.InvoiceLetterheadImage = account.Letterhead;
+            Nickname = account.Email;
 
-            //The update request requires the endorsment to be set.
-            //However we are sending the endorsement with each request instead of using the account setting.
-            //So just set it to the default
-            this.SmartPostEndorsement = EnumHelper.GetApiValue(FedExSmartPostEndorsement.AddressCorrection);
+            InvoiceSignatureImage = account.Signature;
+            InvoiceLetterheadImage = account.Letterhead;
+
+            if (account.SmartPostHub != (int) FedExSmartPostHub.None)
+            {
+                SmartPostHub = EnumHelper.GetApiValue((FedExSmartPostHub) account.SmartPostHub);
+
+                //The update request requires the endorsment to be set.
+                //However we are sending the endorsement with each request instead of using the account setting.
+                //So just set it to the default
+                SmartPostEndorsement = EnumHelper.GetApiValue(FedExSmartPostEndorsement.AddressCorrection);
+            }
         }
 
         [JsonProperty("nickname")]
