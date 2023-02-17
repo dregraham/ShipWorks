@@ -246,7 +246,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
 
                 admissibilityPackaging.ReadMultiValue(v => shipment.FedEx.CustomsAdmissibilityPackaging = (int) v);
 
-                filingOption.ReadMultiValue(v => shipment.FedEx.CustomsExportFilingOption = (int) v);
+                filingOption.ReadMultiValue(v => shipment.FedEx.CustomsExportFilingOption = (int) (v ?? FedExCustomsExportFilingOption.NotRequired)) ;
                 electronicExportInfo.ReadMultiText(t => shipment.FedEx.CustomsAESEEI = t);
 
                 commercialInvoice.ReadMultiCheck(c => shipment.FedEx.CommercialInvoice = c);

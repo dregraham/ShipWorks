@@ -307,27 +307,15 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             this.panelTransportAccount.Controls.Add(this.labelTransportPayorName);
             this.panelTransportAccount.Controls.Add(this.transportAccount);
             this.panelTransportAccount.Controls.Add(this.labelTransportAccount);
+            this.panelTransportAccount.Controls.Add(this.payorCountry);
+            this.panelTransportAccount.Controls.Add(this.labelPayorCountry);
+            this.panelTransportAccount.Controls.Add(this.payorPostalCode);
+            this.panelTransportAccount.Controls.Add(this.labelPayorPostalCode);
             this.panelTransportAccount.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panelTransportAccount.Location = new System.Drawing.Point(0, 58);
+            this.panelTransportAccount.Location = new System.Drawing.Point(0, 29);
             this.panelTransportAccount.Name = "panelTransportAccount";
-            this.panelTransportAccount.Size = new System.Drawing.Size(483, 58);
+            this.panelTransportAccount.Size = new System.Drawing.Size(483, 115);
             this.panelTransportAccount.TabIndex = 5;
-            // 
-            // payorTransportName
-            // 
-            this.payorTransportName.Location = new System.Drawing.Point(123, 35);
-            this.payorTransportName.Name = "payorTransportName";
-            this.payorTransportName.Size = new System.Drawing.Size(173, 21);
-            this.payorTransportName.TabIndex = 5;
-            // 
-            // labelTransportPayorName
-            // 
-            this.labelTransportPayorName.Location = new System.Drawing.Point(71, 33);
-            this.labelTransportPayorName.Name = "labelTransportPayorName";
-            this.labelTransportPayorName.Size = new System.Drawing.Size(46, 23);
-            this.labelTransportPayorName.TabIndex = 4;
-            this.labelTransportPayorName.Text = "Name:";
-            this.labelTransportPayorName.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
             // transportAccount
             // 
@@ -347,19 +335,66 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             this.labelTransportAccount.TabIndex = 2;
             this.labelTransportAccount.Text = "Account #:";
             // 
+            // payorTransportName
+            // 
+            this.payorTransportName.Location = new System.Drawing.Point(123, 35);
+            this.payorTransportName.Name = "payorTransportName";
+            this.payorTransportName.Size = new System.Drawing.Size(173, 21);
+            this.payorTransportName.TabIndex = 5;
+            // 
+            // labelTransportPayorName
+            // 
+            this.labelTransportPayorName.Location = new System.Drawing.Point(71, 33);
+            this.labelTransportPayorName.Name = "labelTransportPayorName";
+            this.labelTransportPayorName.Size = new System.Drawing.Size(46, 23);
+            this.labelTransportPayorName.TabIndex = 4;
+            this.labelTransportPayorName.Text = "Name:";
+            this.labelTransportPayorName.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            // 
+            // payorCountry
+            // 
+            this.payorCountry.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.payorCountry.FormattingEnabled = true;
+            this.payorCountry.Location = new System.Drawing.Point(123, 64);
+            this.payorCountry.MaxDropDownItems = 20;
+            this.payorCountry.Name = "country";
+            this.payorCountry.PromptText = "(Multiple Values)";
+            this.payorCountry.Size = new System.Drawing.Size(173, 21);
+            this.payorCountry.TabIndex = 6;
+            // 
+            // labelPayorCountry
+            // 
+            this.labelPayorCountry.AutoSize = true;
+            this.labelPayorCountry.Location = new System.Drawing.Point(36, 67);
+            this.labelPayorCountry.Name = "labelPayorCountry";
+            this.labelPayorCountry.Size = new System.Drawing.Size(37, 13);
+            this.labelPayorCountry.Text = "Payor Country:";
+            // 
+            // postalCode
+            // 
+            this.payorPostalCode.Location = new System.Drawing.Point(123, 93);
+            this.fieldLengthProvider.SetMaxLengthSource(this.payorPostalCode, ShipWorks.Data.Utility.EntityFieldLengthSource.PersonPostal);
+            this.payorPostalCode.Name = "payorPostalCode";
+            this.payorPostalCode.Size = new System.Drawing.Size(173, 21);
+            this.payorPostalCode.TabIndex = 7;
+            // 
+            // labelPayorPostalCode
+            // 
+            this.labelPayorPostalCode.AutoSize = true;
+            this.labelPayorPostalCode.Location = new System.Drawing.Point(18, 96);
+            this.labelPayorPostalCode.Name = "labelPayorPostalCode";
+            this.labelPayorPostalCode.Size = new System.Drawing.Size(68, 13);
+            this.labelPayorPostalCode.Text = "Payor Postal Code:";
+            // 
             // panelPayorTransport
             // 
             this.panelPayorTransport.BackColor = System.Drawing.Color.White;
             this.panelPayorTransport.Controls.Add(this.payorTransport);
             this.panelPayorTransport.Controls.Add(this.labelPayorTransport);
-            this.panelPayorTransport.Controls.Add(this.payorCountry);
-            this.panelPayorTransport.Controls.Add(this.labelPayorCountry);
-            this.panelPayorTransport.Controls.Add(this.payorPostalCode);
-            this.panelPayorTransport.Controls.Add(this.labelPayorPostalCode);
             this.panelPayorTransport.Dock = System.Windows.Forms.DockStyle.Top;
             this.panelPayorTransport.Location = new System.Drawing.Point(0, 0);
             this.panelPayorTransport.Name = "panelPayorTransport";
-            this.panelPayorTransport.Size = new System.Drawing.Size(483, 90);
+            this.panelPayorTransport.Size = new System.Drawing.Size(483, 29);
             this.panelPayorTransport.TabIndex = 4;
             // 
             // payorTransport
@@ -382,41 +417,6 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             this.labelPayorTransport.Size = new System.Drawing.Size(108, 13);
             this.labelPayorTransport.TabIndex = 0;
             this.labelPayorTransport.Text = "Bill transportation to:";
-            // 
-            // payorCountry
-            // 
-            this.payorCountry.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.payorCountry.FormattingEnabled = true;
-            this.payorCountry.Location = new System.Drawing.Point(123, 37);
-            this.payorCountry.MaxDropDownItems = 20;
-            this.payorCountry.Name = "country";
-            this.payorCountry.PromptText = "(Multiple Values)";
-            this.payorCountry.Size = new System.Drawing.Size(173, 21);
-            this.payorCountry.TabIndex = 1;
-            // 
-            // labelPayorCountry
-            // 
-            this.labelPayorCountry.AutoSize = true;
-            this.labelPayorCountry.Location = new System.Drawing.Point(36, 40);
-            this.labelPayorCountry.Name = "labelPayorCountry";
-            this.labelPayorCountry.Size = new System.Drawing.Size(37, 13);
-            this.labelPayorCountry.Text = "Payor Country:";
-            // 
-            // postalCode
-            // 
-            this.payorPostalCode.Location = new System.Drawing.Point(123, 66);
-            this.fieldLengthProvider.SetMaxLengthSource(this.payorPostalCode, ShipWorks.Data.Utility.EntityFieldLengthSource.PersonPostal);
-            this.payorPostalCode.Name = "payorPostalCode";
-            this.payorPostalCode.Size = new System.Drawing.Size(173, 21);
-            this.payorPostalCode.TabIndex = 2;
-            // 
-            // labelPayorPostalCode
-            // 
-            this.labelPayorPostalCode.AutoSize = true;
-            this.labelPayorPostalCode.Location = new System.Drawing.Point(18, 69);
-            this.labelPayorPostalCode.Name = "labelPayorPostalCode";
-            this.labelPayorPostalCode.Size = new System.Drawing.Size(68, 13);
-            this.labelPayorPostalCode.Text = "Payor Postal Code:";
             // 
             // sectionFrom
             // 

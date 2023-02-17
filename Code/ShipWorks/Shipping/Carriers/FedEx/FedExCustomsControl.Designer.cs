@@ -140,16 +140,14 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             // 
             this.sectionGeneral.ContentPanel.Controls.Add(this.recipientTaxID);
             this.sectionGeneral.ContentPanel.Controls.Add(this.customsRecipientTINType);
-            this.sectionGeneral.ContentPanel.Controls.Add(this.filingOption);
             this.sectionGeneral.ContentPanel.Controls.Add(this.labelRecipientTaxID);
             this.sectionGeneral.ContentPanel.Controls.Add(this.labelCustomsRecipientTINType);
-            this.sectionGeneral.ContentPanel.Controls.Add(this.filingOptionLabel);
             this.sectionGeneral.ContentPanel.Controls.Add(this.labelDocuments);
             this.sectionGeneral.ContentPanel.Controls.Add(this.documentsOnly);
             this.sectionGeneral.ContentPanel.Controls.Add(this.admissibilityPackaging);
             this.sectionGeneral.ContentPanel.Controls.Add(this.labelAdmissibilityPackaging);
             this.sectionGeneral.Location = new System.Drawing.Point(6, 5);
-            this.sectionGeneral.Size = new System.Drawing.Size(572, 212);
+            this.sectionGeneral.Size = new System.Drawing.Size(572, 183);
             // 
             // groupSelectedContent
             // 
@@ -160,7 +158,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             // 
             this.admissibilityPackaging.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.admissibilityPackaging.FormattingEnabled = true;
-            this.admissibilityPackaging.Location = new System.Drawing.Point(128, 141);
+            this.admissibilityPackaging.Location = new System.Drawing.Point(128, 112);
             this.admissibilityPackaging.Name = "admissibilityPackaging";
             this.admissibilityPackaging.PromptText = "(Multiple Values)";
             this.admissibilityPackaging.Size = new System.Drawing.Size(145, 21);
@@ -170,7 +168,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             // 
             this.labelAdmissibilityPackaging.AutoSize = true;
             this.labelAdmissibilityPackaging.BackColor = System.Drawing.Color.Transparent;
-            this.labelAdmissibilityPackaging.Location = new System.Drawing.Point(3, 144);
+            this.labelAdmissibilityPackaging.Location = new System.Drawing.Point(3, 115);
             this.labelAdmissibilityPackaging.Name = "labelAdmissibilityPackaging";
             this.labelAdmissibilityPackaging.Size = new System.Drawing.Size(119, 13);
             this.labelAdmissibilityPackaging.TabIndex = 14;
@@ -276,27 +274,6 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             this.commercialInvoice.TabIndex = 0;
             this.commercialInvoice.Text = "Create Commercial Invoice";
             this.commercialInvoice.UseVisualStyleBackColor = false;
-            // 
-            // filingOptionLabel
-            // 
-            this.filingOptionLabel.AutoSize = true;
-            this.filingOptionLabel.BackColor = System.Drawing.Color.White;
-            this.filingOptionLabel.Location = new System.Drawing.Point(24, 116);
-            this.filingOptionLabel.Name = "filingOptionLabel";
-            this.filingOptionLabel.Size = new System.Drawing.Size(98, 13);
-            this.filingOptionLabel.TabIndex = 10;
-            this.filingOptionLabel.Text = "B13A Filing Option:";
-            this.filingOptionLabel.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-            // 
-            // filingOption
-            // 
-            this.filingOption.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.filingOption.FormattingEnabled = true;
-            this.filingOption.Location = new System.Drawing.Point(128, 113);
-            this.filingOption.Name = "filingOption";
-            this.filingOption.PromptText = "(Multiple Values)";
-            this.filingOption.Size = new System.Drawing.Size(145, 21);
-            this.filingOption.TabIndex = 11;
             #region Removed for FedEx Platform
             // 
             // electronicExportInfoLabel
@@ -770,7 +747,27 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             this.labelTermsOfSale.Size = new System.Drawing.Size(75, 13);
             this.labelTermsOfSale.TabIndex = 0;
             this.labelTermsOfSale.Text = "Terms of sale:";
-
+            // 
+            // filingOptionLabel
+            // 
+            this.filingOptionLabel.AutoSize = true;
+            this.filingOptionLabel.BackColor = System.Drawing.Color.White;
+            this.filingOptionLabel.Location = new System.Drawing.Point(24, 116);
+            this.filingOptionLabel.Name = "filingOptionLabel";
+            this.filingOptionLabel.Size = new System.Drawing.Size(98, 13);
+            this.filingOptionLabel.TabIndex = 10;
+            this.filingOptionLabel.Text = "B13A Filing Option:";
+            this.filingOptionLabel.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            // 
+            // filingOption
+            // 
+            this.filingOption.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.filingOption.FormattingEnabled = true;
+            this.filingOption.Location = new System.Drawing.Point(128, 113);
+            this.filingOption.Name = "filingOption";
+            this.filingOption.PromptText = "(Multiple Values)";
+            this.filingOption.Size = new System.Drawing.Size(145, 21);
+            this.filingOption.TabIndex = 11;
             #endregion
             // 
             // FedExCustomsControl
