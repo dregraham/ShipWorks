@@ -37,22 +37,19 @@ namespace ShipWorks.Shipping.Carriers.DhlEcommerce
     public class DhlEcommerceShipmentType : ShipmentType
     {
         private readonly ICarrierAccountRepository<DhlEcommerceAccountEntity, IDhlEcommerceAccountEntity> accountRepository;
-        private readonly IShipEngineWebClient shipEngineWebClient;
-        private readonly IShipEngineTrackingResultFactory trackingResultFactory;
         private readonly ILicenseService licenseService;
+        private readonly IShipEngineTrackingService shipEngineTrackingService;
 
         /// <summary>
         /// Constructor
         /// </summary>
         public DhlEcommerceShipmentType(ICarrierAccountRepository<DhlEcommerceAccountEntity, IDhlEcommerceAccountEntity> accountRepository,
-            IShipEngineWebClient shipEngineWebClient,
-            IShipEngineTrackingResultFactory trackingResultFactory,
-            ILicenseService licenseService)
+            ILicenseService licenseService,
+            IShipEngineTrackingService shipEngineTrackingService)
         {
             this.accountRepository = accountRepository;
-            this.shipEngineWebClient = shipEngineWebClient;
-            this.trackingResultFactory = trackingResultFactory;
             this.licenseService = licenseService;
+            this.shipEngineTrackingService = shipEngineTrackingService;
         }
 
         /// <summary>
@@ -327,35 +324,8 @@ namespace ShipWorks.Shipping.Carriers.DhlEcommerce
         /// Track the shipment
         /// </summary>
         public override TrackingResult TrackShipment(ShipmentEntity shipment)
-        {
-            var failedOrNoResultsSummary = $"<a href='http://webtrack.dhlglobalmail.com/?trackingnumber={shipment.TrackingNumber}' style='color:blue; background-color:white'>Click here to view tracking information online</a>";
-
-            try
-            {
-                string labelID = shipment.DhlEcommerce?.ShipEngineLabelID;
-                ShipEngine.DTOs.TrackingInformation trackingInfo;
-                if (string.IsNullOrWhiteSpace(labelID))
-                {
-                    trackingInfo = Task.Run(() =>
-                        shipEngineWebClient.Track("dhl_Ecommerce", shipment.TrackingNumber, ApiLogSource.DhlEcommerce)).Result;
-                }
-                else
-                {
-                    trackingInfo = Task.Run(() =>
-                        shipEngineWebClient.Track(labelID, ApiLogSource.DhlEcommerce)).Result;
-                }
-
-                if (trackingInfo.StatusCode == "UN" || trackingInfo.Events.None())
-                {
-                    return new TrackingResult { Summary = failedOrNoResultsSummary };
-                }
-
-                return trackingResultFactory.Create(trackingInfo);
-            }
-            catch (Exception)
-            {
-                return new TrackingResult { Summary = failedOrNoResultsSummary };
-            }
+        {            
+            return shipEngineTrackingService.TrackShipment(shipment, ApiLogSource.DhlEcommerce, "dhl_Ecommerce", GetCarrierTrackingUrlInternal(shipment)).Result;
         }
 
         /// <summary>

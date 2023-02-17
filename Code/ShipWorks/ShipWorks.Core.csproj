@@ -1279,6 +1279,7 @@
     <Compile Include="Shipping\Carriers\FedEx\Enums\FedExSmartPostHub.cs" />
     <Compile Include="Shipping\Carriers\FedEx\Enums\FedexTINType.cs" />
     <Compile Include="Shipping\Carriers\FedEx\IFedExAccountRepository.cs" />
+    <Compile Include="Shipping\Carriers\FedEx\IFedExTrackingService.cs" />
     <Compile Include="Shipping\Carriers\UPS\Enums\UpsCustomsRecipientTINType.cs" />
     <Compile Include="Shipping\ShipEngine\DTOs\Address.cs" />
     <Compile Include="Shipping\ShipEngine\DTOs\AddressValidatingShipment.cs" />
