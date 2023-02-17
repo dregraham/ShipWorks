@@ -6,7 +6,6 @@ using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
 using Interapptive.Shared.ComponentRegistration;
-using Interapptive.Shared.IO.Zip;
 using Interapptive.Shared.Pdf;
 using Interapptive.Shared.Utility;
 using SD.LLBLGen.Pro.ORMSupportClasses;
@@ -45,9 +44,10 @@ namespace ShipWorks.Shipping.ShipEngine.Manifest
         /// <summary>
         /// Save a ShipEngine Manifest to ShipWorks
         /// </summary>
-        public async Task<Result> SaveManifest(CreateManifestResponse createManifestResponse, ICarrierAccount account)
+        public async Task<GenericResult<List<long>>> SaveManifest(CreateManifestResponse createManifestResponse, ICarrierAccount account)
         {
             var failedManifests = new List<string>();
+            var succeededManifests = new List<long>();
 
             foreach (var manifestResponse in createManifestResponse.Manifests)
             {
@@ -73,6 +73,8 @@ namespace ShipWorks.Shipping.ShipEngine.Manifest
                         await sqlAdapter.SaveAndRefetchAsync(manifest);
                         SaveManifestPdf(manifest.ShipEngineManifestID, manifest.ManifestUrl);
                     }
+
+                    succeededManifests.Add(manifest.ShipEngineManifestID);
                 }
                 catch (Exception ex)
                 {
@@ -82,10 +84,10 @@ namespace ShipWorks.Shipping.ShipEngine.Manifest
 
             if (failedManifests.Any())
             {
-                return Result.FromError($"Errors occurred saving the following manifests:\n{string.Join("\n", failedManifests)}");
+                return GenericResult.FromError<List<long>>($"Errors occurred saving the following manifests:\n{string.Join("\n", failedManifests)}");
             }
 
-            return Result.FromSuccess();
+            return GenericResult.FromSuccess(succeededManifests);
         }
 
         /// <summary>

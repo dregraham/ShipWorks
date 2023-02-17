@@ -4729,8 +4729,14 @@ namespace ShipWorks
         /// <param name="closeMenu"></param>
         private void PopulateFedExCloseMenu(Divelements.SandRibbon.Menu printMenu, SandMenuItem closeMenu)
         {
-            FedExGroundClose.PopulatePrintReportsMenu(printMenu);
+            using (var scope = IoC.BeginLifetimeScope())
+            {
+                var accountRetriever = scope.ResolveKeyed<ICarrierAccountRetriever>(ShipmentTypeCode.FedEx);
 
+                PopulateShipEngineManifestMenu(closeMenu, printMenu, accountRetriever, scope);
+            }
+
+            // TODO: Is this needed?
             closeMenu.Visible = FedExUtility.GetSmartPostHubs().Any();
         }
 
@@ -4743,7 +4749,7 @@ namespace ShipWorks
             {
                 Cursor.Current = Cursors.WaitCursor;
 
-                List<FedExEndOfDayCloseEntity> closings = FedExGroundClose.ProcessClose();
+                List<long> closings = FedExGroundClose.ProcessClose();
 
                 if (closings != null && closings.Count > 0)
                 {
