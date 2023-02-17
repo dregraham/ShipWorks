@@ -240,6 +240,11 @@ namespace ShipWorks.Shipping.Services
         }
 
         /// <summary>
+        /// The Label ID of a shipment. Throw NotImplementedException if unsupported shipment type
+        /// </summary>
+        public virtual string ShipEngineLabelId => throw new NotImplementedException();
+
+        /// <summary>
         /// Update the insurance fields on the shipment and packages
         /// </summary>
         public abstract void UpdateInsuranceFields(ShippingSettingsEntity shippingSettings);

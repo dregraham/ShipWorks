@@ -51,14 +51,12 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         private readonly IExcludedServiceTypeRepository excludedServiceTypeRepository;
         private readonly IExcludedPackageTypeRepository excludedPackageTypeRepository;
         private ICarrierSettingsRepository settingsRepository;
-        private readonly IShippingSettings shippingSettings;
         private readonly IDateTimeProvider dateTimeProvider;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="FedExShipmentType"/> class.
         /// </summary>
-        public FedExShipmentType() : this(new ExcludedServiceTypeRepository(), new ExcludedPackageTypeRepository(),
-            new ShippingSettingsWrapper(Messenger.Current), new DateTimeProvider())
+        public FedExShipmentType() : this(new ExcludedServiceTypeRepository(), new ExcludedPackageTypeRepository(), new DateTimeProvider())
         {
         }
 
@@ -68,12 +66,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         /// <param name="excludedServiceTypeRepository">The excluded service type repository.</param>
         /// <param name="excludedPackageTypeRepository"></param>
         public FedExShipmentType(IExcludedServiceTypeRepository excludedServiceTypeRepository,
-            IExcludedPackageTypeRepository excludedPackageTypeRepository, IShippingSettings shippingSettings,
+            IExcludedPackageTypeRepository excludedPackageTypeRepository,
             IDateTimeProvider dateTimeProvider)
         {
             this.excludedServiceTypeRepository = excludedServiceTypeRepository;
             this.excludedPackageTypeRepository = excludedPackageTypeRepository;
-            this.shippingSettings = shippingSettings;
             this.dateTimeProvider = dateTimeProvider;
         }
 
@@ -816,7 +813,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             {
                 using (var lifetimeScope = IoC.BeginLifetimeScope())
                 {
-                    return lifetimeScope.Resolve<IFedExShippingClerkFactory>().Create(shipment).Track(shipment);
+                    return lifetimeScope.Resolve<IFedExTrackingService>().TrackShipment(shipment, GetCarrierTrackingUrl(shipment));
                 }
             }
             catch (FedExException ex)
