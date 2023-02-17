@@ -13,6 +13,9 @@ using ShipWorks.Shipping.Tracking;
 
 namespace ShipWorks.Shipping.Carriers.FedEx
 {
+    /// <summary>
+    /// Service for tracking FedEx shipments
+    /// </summary>
     [Component]
     public class FedExTrackingService : IFedExTrackingService
     {
@@ -20,6 +23,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         private readonly IFedExUtility fedExUtility;
         private readonly IFimsShippingClerk fimsShippingClerk;
 
+        /// <summary>
+        /// Constructor
+        /// </summary>
         public FedExTrackingService(IShipEngineTrackingService shipEngineTrackingService, IFedExUtility fedExUtility, IFimsShippingClerk fimsShippingClerk)
         {
             this.shipEngineTrackingService = shipEngineTrackingService;
@@ -27,6 +33,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             this.fimsShippingClerk = fimsShippingClerk;
         }
 
+        /// <summary>
+        /// Track a shipment
+        /// </summary>
         public TrackingResult TrackShipment(ShipmentEntity shipment, string trackingUrl)
         {
             if(fedExUtility.IsFimsService((FedExServiceType) shipment.FedEx.Service))
@@ -39,6 +48,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             }
         }
 
+        /// <summary>
+        /// Track a shipment using ShipEngine
+        /// </summary>
         private TrackingResult TrackUsingShipEngine(ShipmentEntity shipment, string trackingUrl)
         {
             // This is necessary because .Wait() causes the exception to be caught by the .NET runtime, then
