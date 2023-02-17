@@ -282,6 +282,11 @@ namespace ShipWorks.Stores.Platforms.ShipEngine
                 LoadOrderItem(item, order, filteredNotes, filteredCouponCodes);
             }
         }
+        
+        protected virtual object GetOrderStatusCode(OrderSourceApiSalesOrder orderSourceApiSalesOrder, string orderId)
+        {
+            return GetOrderStatusString(orderSourceApiSalesOrder, orderId);
+        }
 
         protected virtual string GetOrderStatusString(OrderSourceApiSalesOrder orderSourceApiSalesOrder, string orderId)
         {
@@ -421,9 +426,8 @@ namespace ShipWorks.Stores.Platforms.ShipEngine
             order.OnlineLastModified = modifiedDate >= orderDate ? modifiedDate : orderDate;
 
             // set the status
-            var orderStatus = GetOrderStatusString(salesOrder, order.OrderNumberComplete);
-            order.OnlineStatus = orderStatus;
-            order.OnlineStatusCode = orderStatus;
+            order.OnlineStatus = GetOrderStatusString(salesOrder, order.OrderNumberComplete);
+            order.OnlineStatusCode = GetOrderStatusCode(salesOrder, order.OrderNumberComplete);
 
             // no customer ID in this Api
             order.OnlineCustomerID = null;
@@ -492,9 +496,9 @@ namespace ShipWorks.Stores.Platforms.ShipEngine
             text = WebUtility.HtmlDecode(text);
             if (string.IsNullOrWhiteSpace(text))
             {
-	            return string.Empty;
+                return string.Empty;
             }
-			return $"{GetNotePreface(noteType)}{text}";
+            return $"{GetNotePreface(noteType)}{text}";
         }
 
         /// <summary>

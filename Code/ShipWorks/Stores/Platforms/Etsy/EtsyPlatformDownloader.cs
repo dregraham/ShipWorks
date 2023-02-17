@@ -1,30 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data.SqlClient;
-using System.Diagnostics;
-using System.Linq;
-using System.Net;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
-using Interapptive.Shared.Business;
-using Interapptive.Shared.Business.Geography;
 using Interapptive.Shared.ComponentRegistration;
-using Interapptive.Shared.Enums;
-using Interapptive.Shared.Extensions;
-using Interapptive.Shared.Metrics;
 using Interapptive.Shared.Utility;
-using log4net;
-using Newtonsoft.Json;
-using ShipWorks.Data;
-using ShipWorks.Data.Administration.Recovery;
-using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Stores.Communication;
-using ShipWorks.Stores.Content;
 using ShipWorks.Stores.Platforms.Amazon.DTO;
-using ShipWorks.Stores.Platforms.Etsy;
+using ShipWorks.Stores.Platforms.Etsy.Enums;
 using ShipWorks.Stores.Platforms.ShipEngine;
 using ShipWorks.Stores.Platforms.ShipEngine.Apollo;
-using Syncfusion.XlsIO.Parser.Biff_Records;
 
 namespace ShipWorks.Stores.Platforms.Etsy
 {
@@ -70,30 +52,23 @@ namespace ShipWorks.Stores.Platforms.Etsy
         /// is the code I used to "unmap" the platform mapping for existing filters:
         /// https://github.com/shipstation/integrations-vice/blob/master/ecommerce/modules/etsy/src/services/mappers/salesOrderExport.Mapper.js#L133
         /// </remarks>
-        protected override string GetOrderStatusString(OrderSourceApiSalesOrder salesOrder, string orderId)
+        protected override object GetOrderStatusCode(OrderSourceApiSalesOrder salesOrder, string orderId)
         {
-            switch (salesOrder.Payment.PaymentStatus)
-            {
-                case OrderSourcePaymentStatus.PaymentInProcess:
-                    return "Payment Processing";
-            }
             switch (salesOrder.Status)
             {
-                case OrderSourceSalesOrderStatus.PendingFulfillment:
-                    return "Open";
-                case OrderSourceSalesOrderStatus.AwaitingShipment:
-                    return "Paid";
                 case OrderSourceSalesOrderStatus.Cancelled:
-                    return "Cancelled";
                 case OrderSourceSalesOrderStatus.Completed:
                     //return "Shipped"; - ambigous: in platform, both  Completed and Shipped are mapped to Completed
-                    return "Completed";
-                case OrderSourceSalesOrderStatus.AwaitingPayment:
-                    return "Unpaid";
+                    return EtsyOrderStatus.Complete;
             }
-            log.Warn($"Encountered unmapped status of {salesOrder.Status} for orderId {orderId}.");
-            return base.GetOrderStatusString(salesOrder, orderId);
+            return EtsyOrderStatus.Open;
         }
+
+        protected override string GetOrderStatusString(OrderSourceApiSalesOrder salesOrder, string orderId)
+        {
+            return EnumHelper.GetDescription((EtsyOrderStatus)GetOrderStatusCode(salesOrder, orderId));
+        }
+
 
         protected override OrderItemEntity LoadOrderItem(OrderSourceSalesOrderItem orderItem, OrderEntity order, IEnumerable<GiftNote> giftNotes, IEnumerable<CouponCode> couponCodes)
         {
