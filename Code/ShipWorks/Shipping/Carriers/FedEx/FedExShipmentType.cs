@@ -10,11 +10,11 @@ using Interapptive.Shared.Collections;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Enums;
 using Interapptive.Shared.Utility;
+using log4net;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.ApplicationCore;
 using ShipWorks.Common;
 using ShipWorks.Common.IO.Hardware.Printers;
-using ShipWorks.Core.Messaging;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model;
 using ShipWorks.Data.Model.Custom;
@@ -23,7 +23,6 @@ using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Shipping.Api;
 using ShipWorks.Shipping.Carriers.BestRate;
-using ShipWorks.Shipping.Carriers.FedEx.Api;
 using ShipWorks.Shipping.Carriers.FedEx.Api.Enums;
 using ShipWorks.Shipping.Carriers.FedEx.Api.Environment;
 using ShipWorks.Shipping.Carriers.FedEx.BestRate;
@@ -36,7 +35,6 @@ using ShipWorks.Shipping.Services;
 using ShipWorks.Shipping.Settings;
 using ShipWorks.Shipping.Settings.Origin;
 using ShipWorks.Shipping.Tracking;
-using ShipWorks.Stores.Platforms.Amazon.WebServices.Associates;
 using ShipWorks.Templates.Processing.TemplateXml.ElementOutlines;
 
 namespace ShipWorks.Shipping.Carriers.FedEx
@@ -52,6 +50,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         private readonly IExcludedPackageTypeRepository excludedPackageTypeRepository;
         private ICarrierSettingsRepository settingsRepository;
         private readonly IDateTimeProvider dateTimeProvider;
+        private static readonly ILog log = LogManager.GetLogger(typeof(FedExShipmentType));
 
         /// <summary>
         /// Initializes a new instance of the <see cref="FedExShipmentType"/> class.
@@ -816,7 +815,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
                     return lifetimeScope.Resolve<IFedExTrackingService>().TrackShipment(shipment, GetCarrierTrackingUrl(shipment));
                 }
             }
-            catch (FedExException ex)
+            catch (Exception ex)
             {
                 throw new ShippingException(ex.Message, ex);
             }
