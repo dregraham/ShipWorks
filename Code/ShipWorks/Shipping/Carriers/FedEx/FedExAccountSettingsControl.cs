@@ -50,11 +50,13 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             if (account.Letterhead.Length > 0)
             {
                 letterheadPreview.Image = account.Letterhead.Base64StringToImage();
+                letterheadString = account.Letterhead;
             }
 
             if (account.Signature.Length > 0)
             {
                 signaturePreview.Image = account.Signature.Base64StringToImage();
+                signatureString = account.Signature;
             }
         }
 
@@ -69,15 +71,8 @@ namespace ShipWorks.Shipping.Carriers.FedEx
 
             try
             {
-                if (letterheadString != null && letterheadString != account.Letterhead)
-                {
-                    account.Letterhead = letterheadString;
-                }
-
-                if (signatureString != null && signatureString != account.Signature)
-                {
-                    account.Signature = signatureString;
-                }
+                account.Letterhead = letterheadString;
+                account.Signature = signatureString;
             }
             catch (Exception ex)
             {
