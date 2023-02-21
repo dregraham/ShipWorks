@@ -90,6 +90,7 @@ using ShipWorks.Shipping.Carriers.Asendia;
 using ShipWorks.Shipping.Carriers.DhlEcommerce;
 using ShipWorks.Shipping.Carriers.FedEx;
 using ShipWorks.Shipping.Carriers.FedEx.Api;
+using ShipWorks.Shipping.Carriers.FedEx.Enums;
 using ShipWorks.Shipping.Carriers.UPS.OneBalance;
 using ShipWorks.Shipping.Carriers.UPS.WorldShip;
 using ShipWorks.Shipping.Profiles;
@@ -4736,7 +4737,7 @@ namespace ShipWorks
                 PopulateShipEngineManifestMenu(closeMenu, printMenu, accountRetriever, scope);
             }
 
-            closeMenu.Visible = FedExAccountManager.Accounts.Any(a => XElement.Parse(a.SmartPostHubList).Descendants("HubID").Any());
+            closeMenu.Visible = FedExAccountManager.Accounts.Any(a => a.SmartPostHub != (int)FedExSmartPostHub.None);
         }
 
         /// <summary>
