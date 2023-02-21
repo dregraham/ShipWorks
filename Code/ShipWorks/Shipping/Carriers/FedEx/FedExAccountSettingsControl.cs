@@ -47,13 +47,13 @@ namespace ShipWorks.Shipping.Carriers.FedEx
                 hubID.ApplyMultiValue((FedExSmartPostHub) account.SmartPostHub);
             }
                 
-            if (account.Letterhead.Length > 0)
+            if (!string.IsNullOrWhiteSpace(account.Letterhead))
             {
                 letterheadPreview.Image = account.Letterhead.Base64StringToImage();
                 letterheadString = account.Letterhead;
             }
 
-            if (account.Signature.Length > 0)
+            if (!string.IsNullOrWhiteSpace(account.Signature))
             {
                 signaturePreview.Image = account.Signature.Base64StringToImage();
                 signatureString = account.Signature;

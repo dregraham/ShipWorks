@@ -13,8 +13,8 @@ namespace ShipWorks.Shipping.ShipEngine.DTOs.CarrierAccount
         {
             Nickname = account.Email;
 
-            InvoiceSignatureImage = account.Signature;
-            InvoiceLetterheadImage = account.Letterhead;
+            InvoiceLetterheadImage = !string.IsNullOrWhiteSpace(account.Letterhead) ? account.Letterhead : null;
+            InvoiceSignatureImage = !string.IsNullOrWhiteSpace(account.Signature) ? account.Signature : null;
 
             if (account.SmartPostHub != (int) FedExSmartPostHub.None)
             {
