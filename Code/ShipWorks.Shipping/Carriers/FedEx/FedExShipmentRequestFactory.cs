@@ -7,6 +7,8 @@ using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Shipping.Carriers.FedEx.Api;
 using ShipWorks.Shipping.Carriers.FedEx.Enums;
+using ShipWorks.Shipping.Insurance;
+using ShipWorks.Shipping.Services;
 using ShipWorks.Shipping.ShipEngine;
 using ShipWorks.Shipping.ShipEngine.DTOs;
 using static ShipWorks.Shipping.ShipEngine.DTOs.MoneyDTO;
@@ -163,6 +165,18 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             }
 
             return options;
+        }
+
+        /// <summary>
+        /// Insurance the FedEx packages when the user has picked FedEx declared value
+        /// </summary>
+        protected override void SetPackageInsurance(ShipmentPackage shipmentPackage, IPackageAdapter packageAdapter)
+        {
+            if (packageAdapter.InsuranceChoice.Insured &&
+                packageAdapter.InsuranceChoice.InsuranceProvider == InsuranceProvider.Carrier)
+            {
+                shipmentPackage.InsuredValue = new MoneyDTO(MoneyDTO.CurrencyEnum.USD, decimal.ToDouble(packageAdapter.InsuranceChoice.InsuranceValue));
+            }
         }
 
         /// <summary>
