@@ -70,15 +70,8 @@ namespace ShipWorks.Stores.Platforms.Platform.OnlineUpdating
                 }
                 else
                 {
-                    if (!string.IsNullOrEmpty(order.ChannelOrderID))
-                    {
-                        shipment.Order = order;
-                        shipments.Add(shipment);
-                    }
-                    else
-                    {
-                        log.InfoFormat("Update failure. There were no ChannelOrderId for OrderID {0}.", order.OrderID);
-                    }
+                    shipment.Order = order;
+                    shipments.Add(shipment);
                 }
             }
 
