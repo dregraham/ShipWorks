@@ -72,7 +72,7 @@ namespace ShipWorks.Shipping.ShipEngine.Manifest
                 resultFields.DefineField(DhlEcommerceShipmentFields.ShipEngineLabelID, 0, "ShipEngineLabelID", "");
                 resultFields.DefineField(DhlEcommerceShipmentFields.DhlEcommerceAccountID, 1, "ShipEngineAccountID", "");
             }
-            if (carrierAccount.ShipmentType == ShipmentTypeCode.FedEx)
+            else if (carrierAccount.ShipmentType == ShipmentTypeCode.FedEx)
             {
                 bucket.Relations.Add(ShipmentEntity.Relations.FedExShipmentEntityUsingShipmentID);
                 bucket.PredicateExpression.AddWithAnd(FedExShipmentFields.FedExAccountID == carrierAccount.AccountId);

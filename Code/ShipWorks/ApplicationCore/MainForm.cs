@@ -4736,8 +4736,7 @@ namespace ShipWorks
                 PopulateShipEngineManifestMenu(closeMenu, printMenu, accountRetriever, scope);
             }
 
-            // TODO: Is this needed?
-            closeMenu.Visible = FedExUtility.GetSmartPostHubs().Any();
+            closeMenu.Visible = FedExAccountManager.Accounts.Any(a => XElement.Parse(a.SmartPostHubList).Descendants("HubID").Any());
         }
 
         /// <summary>

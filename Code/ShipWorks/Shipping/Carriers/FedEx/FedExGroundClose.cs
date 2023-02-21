@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Autofac;
 using ShipWorks.ApplicationCore;
@@ -23,15 +24,29 @@ namespace ShipWorks.Shipping.Carriers.FedEx
 
                 var shipEngineManifestUtility = lifetimeScope.Resolve<IShipEngineManifestUtility>();
 
+                Exception processException = null;
+
                 foreach (var account in FedExAccountManager.Accounts)
                 {
-                    var task = Task.Run(() => shipEngineManifestUtility.CreateManifestTask(account,
-                        new ProgressItem("FedEx Ground Close"), new List<string>(),
-                        new List<string>()));
+                    Task.Run(async () =>
+                    {
+                        try
+                        {
+                            closings.AddRange(await shipEngineManifestUtility.CreateManifestTask(account,
+                                new ProgressItem("FedEx Ground Close"), new List<string>(),
+                                new List<string>()));
+                        }
+                        catch (Exception ex)
+                        {
+                            processException = ex;
+                        }
 
-                    task.Wait();
+                    }).Wait();
 
-                    closings.AddRange(task.Result);
+                    if (processException != null)
+                    {
+                        throw processException;
+                    }
                 }
 
                 return closings;
