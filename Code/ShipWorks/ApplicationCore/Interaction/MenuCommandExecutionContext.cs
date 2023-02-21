@@ -53,7 +53,11 @@ namespace ShipWorks.ApplicationCore.Interaction
         /// </summary>
         public void Complete(MenuCommandResult result, string message)
         {
-            Debug.Assert(!Owner.InvokeRequired, "Complete should be called on the UI thread.");
+            if (Owner.InvokeRequired)
+            {
+                Owner.Invoke(new Action(() => Complete(result, message)));
+                return;
+            }
 
             asyncCallback?.Invoke(MenuCommand, new MenuCommandCompleteEventArgs(result, message));
         }
