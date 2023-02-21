@@ -1,10 +1,12 @@
-﻿using Interapptive.Shared.Utility;
+﻿using System.Reflection;
+using Interapptive.Shared.Utility;
 using Newtonsoft.Json;
 using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Shipping.Carriers.FedEx.Enums;
 
 namespace ShipWorks.Shipping.ShipEngine.DTOs.CarrierAccount
 {
+    [Obfuscation(ApplyToMembers = true, Exclude = true, StripAfterObfuscation = false)]
     public class UpdateFedExSettingsRequest
     {
         public UpdateFedExSettingsRequest(IFedExAccountEntity account)
