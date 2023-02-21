@@ -366,7 +366,7 @@ namespace ShipWorks.Shipping.ShipEngine
         public async Task<TrackingInformation> Track(string carrier, string trackingNumber, ApiLogSource apiLogSource)
         {
             var response = await MakeRequest<TrackingInformation>(
-                ShipEngineEndpoints.Track, Method.GET, null, "TrackShipment", null, apiLogSource);
+                ShipEngineEndpoints.TrackShipment(carrier, trackingNumber), Method.GET, null, "TrackShipment", null, apiLogSource);
 
             if (response.Failure)
             {

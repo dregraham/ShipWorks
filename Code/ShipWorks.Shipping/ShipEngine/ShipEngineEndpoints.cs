@@ -35,7 +35,7 @@
 
         public static string TrackLabel(string labelId) => $"v1/labels/{labelId}/track";
 
-        public static string Track => "v1/tracking";
+        public static string TrackShipment(string carrierCode, string trackingNumber)  => $"v1/tracking?carrier_code={carrierCode}&tracking_number={trackingNumber}";
 
         public static string CreateManifest => "v1/manifests";
     }
