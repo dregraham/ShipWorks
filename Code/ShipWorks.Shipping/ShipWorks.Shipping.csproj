@@ -379,6 +379,7 @@
     <Compile Include="Carriers\FedEx\FedExShipmentRequestFactory.cs" />
     <Compile Include="Carriers\FedEx\FedExShipmentServicesBuilder.cs" />
     <Compile Include="Carriers\FedEx\FedExShippingProfileApplicationStrategy.cs" />
+    <Compile Include="Carriers\FedEx\FedExTrackingService.cs" />
     <Compile Include="Carriers\FedEx\FedExUtilityWrapper.cs" />
     <Compile Include="Carriers\FedEx\IFedExUtility.cs" />
     <Compile Include="Carriers\FedEx\FedExShipEngineMigrator.cs" />
@@ -660,6 +661,7 @@
     <Compile Include="ShipEngine\IShipEngineRequestFactory.cs" />
     <Compile Include="ShipEngine\IShipEngineResourceDownloader.cs" />
     <Compile Include="ShipEngine\IShipEngineTrackingResultFactory.cs" />
+    <Compile Include="ShipEngine\IShipEngineTrackingService.cs" />
     <Compile Include="ShipEngine\IUpsCredentials.cs" />
     <Compile Include="ShipEngine\Manifest\ShipEngineManifestCreator.cs" />
     <Compile Include="ShipEngine\Manifest\ShipEngineManifestUtility.cs" />
@@ -677,6 +679,7 @@
     <Compile Include="ShipEngine\ShipEngineRequestFactory.cs" />
     <Compile Include="ShipEngine\ShipEngineShipmentRequestFactory.cs" />
     <Compile Include="ShipEngine\ShipEngineTrackingResultFactory.cs" />
+    <Compile Include="ShipEngine\ShipEngineTrackingService.cs" />
     <Compile Include="ShipEngine\ShipEngineWebClient.cs" />
     <Compile Include="ShipEngine\UpsCredentials.cs" />
     <Compile Include="ShippingErrorManager.cs" />

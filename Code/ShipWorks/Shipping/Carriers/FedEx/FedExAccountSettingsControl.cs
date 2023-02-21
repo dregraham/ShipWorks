@@ -11,6 +11,8 @@ using Interapptive.Shared.Utility;
 using ShipWorks.Data.Model;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.Api;
+using ShipWorks.Shipping.Carriers.FedEx.Enums;
+using ShipWorks.UI.Controls;
 
 namespace ShipWorks.Shipping.Carriers.FedEx
 {
@@ -30,6 +32,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         public FedExAccountSettingsControl()
         {
             InitializeComponent();
+            EnumHelper.BindComboBox<FedExSmartPostHub>(hubID);
         }
 
         /// <summary>
@@ -39,26 +42,21 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         {
             signatureAuth.Text = account.SignatureRelease;
 
-            XElement root = XElement.Parse(account.SmartPostHubList);
-
-            var hubs = root.Descendants("HubID");
-            if (hubs.Count() > 0)
+            using (MultiValueScope scope = new MultiValueScope())
             {
-                // The first is the default
-                hubID.Text = (string) hubs.First();
-
-                // Additional hubs
-                additionalHubs.Lines = hubs.Skip(1).Select(e => (string) e).ToArray();
+                hubID.ApplyMultiValue((FedExSmartPostHub) account.SmartPostHub);
             }
-
+                
             if (account.Letterhead.Length > 0)
             {
                 letterheadPreview.Image = account.Letterhead.Base64StringToImage();
+                letterheadString = account.Letterhead;
             }
 
             if (account.Signature.Length > 0)
             {
                 signaturePreview.Image = account.Signature.Base64StringToImage();
+                signatureString = account.Signature;
             }
         }
 
@@ -68,41 +66,13 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         public void SaveToAccount(FedExAccountEntity account)
         {
             account.SignatureRelease = signatureAuth.Text;
-
-            XElement root = new XElement("Root");
-
-            if (hubID.Text.Trim().Length > 0)
-            {
-                if (!Regex.IsMatch(hubID.Text.Trim(), @"^[0-9]{4}$"))
-                {
-                    throw new CarrierException("Please enter a Hub ID of 4 numbers with no alpha characters.");
-                }
-                
-                root.Add(new XElement("HubID", hubID.Text.Trim()));
-            }
-
-            foreach (string hubLine in additionalHubs.Lines.Select(l => l.Trim()).Where(l => l.Length > 0))
-            {
-                if (!Regex.IsMatch(hubLine.Trim(), @"^[0-9]{4}$"))
-                {
-                    throw new CarrierException("Please enter a Hub ID of 4 numbers with no alpha characters.");
-                }
-                root.Add(new XElement("HubID", hubLine.Trim()));
-            }
-
-            account.SmartPostHubList = root.ToString();
+            
+            hubID.ReadMultiValue(v => account.SmartPostHub = (int) v);
 
             try
             {
-                if (letterheadString != null && letterheadString != account.Letterhead)
-                {
-                    account.Letterhead = letterheadString;
-                }
-
-                if (signatureString != null && signatureString != account.Signature)
-                {
-                    account.Signature = signatureString;
-                }
+                account.Letterhead = letterheadString;
+                account.Signature = signatureString;
             }
             catch (Exception ex)
             {

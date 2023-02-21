@@ -4078,6 +4078,8 @@ namespace ShipWorks.Data.Model
 		HubCarrierId,
 		///<summary>ShipEngineCarrierID. </summary>
 		ShipEngineCarrierID,
+		///<summary>SmartPostHub. </summary>
+		SmartPostHub,
 		/// <summary></summary>
 		AmountOfFields
 	}

@@ -70,7 +70,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Enums
         [ApiValue("fedex_international_economy_freight")]
         InternationalEconomyFreight = 14,
 
-        [Description("FedEx SmartPost®")]
+        [Description("FedEx Ground® Economy")]
         SmartPost = 15,
 
         [Description("FedEx Europe First International Priority®")]
@@ -159,7 +159,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Enums
         [ApiValue("fedex_freight_priority")]
         FedExFreightPriority = 40,
 
-        [Description("FedEx SmartPost® Returns")]
+        [Description("FedEx Ground® Economy Returns")]
         [ApiValue("fedex_smartpost_returns")]
         FedExSmartPostReturns = 41,
     }

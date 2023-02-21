@@ -1216,6 +1216,7 @@
           <Field Name="ShipEngineCarrierID" Type="string" IsOptional="true" MaxLength="50" FieldIndex="24" />
           <Field Name="Signature" Type="string" MaxLength="2147483647" FieldIndex="21" />
           <Field Name="SignatureRelease" Type="string" MaxLength="10" FieldIndex="4" />
+          <Field Name="SmartPostHub" Type="int" Precision="10" FieldIndex="25" />
           <Field Name="SmartPostHubList" Type="string" MaxLength="2147483647" FieldIndex="6" />
           <Field Name="StateProvCode" Type="string" MaxLength="50" FieldIndex="14" />
           <Field Name="Street1" Type="string" MaxLength="60" FieldIndex="11" />
@@ -6186,6 +6187,7 @@
                     <Field Name="HubVersion" Ordinal="23" IsOptional="true" DbType="8" Precision="10" />
                     <Field Name="HubCarrierId" Ordinal="24" IsOptional="true" DbType="25" />
                     <Field Name="ShipEngineCarrierID" Ordinal="25" IsOptional="true" DbType="12" Length="50" />
+                    <Field Name="SmartPostHub" Ordinal="26" HasDefaultValue="true" DefaultValue="(0)" DbType="8" Precision="10" />
                   </Fields>
                 </Table>
                 <Table Name="FedExEndOfDayClose">
@@ -12522,6 +12524,7 @@
             <FieldMapping FieldName="ShipEngineCarrierID" TargetFieldName="ShipEngineCarrierID" />
             <FieldMapping FieldName="Signature" TargetFieldName="Signature" />
             <FieldMapping FieldName="SignatureRelease" TargetFieldName="SignatureRelease" />
+            <FieldMapping FieldName="SmartPostHub" TargetFieldName="SmartPostHub" />
             <FieldMapping FieldName="SmartPostHubList" TargetFieldName="SmartPostHubList" />
             <FieldMapping FieldName="StateProvCode" TargetFieldName="StateProvCode" />
             <FieldMapping FieldName="Street1" TargetFieldName="Street1" />

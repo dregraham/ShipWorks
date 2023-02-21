@@ -74,6 +74,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         public override string ServiceTypeName => EnumHelper.GetDescription((FedExServiceType) ServiceType);
 
         /// <summary>
+        /// ShipEngine Label ID
+        /// </summary>
+        public override string ShipEngineLabelId => Shipment.FedEx.ShipEngineLabelId;
+
+        /// <summary>
         /// Add a new package to the shipment
         /// </summary>
         /// <param name="manipulateEntity">

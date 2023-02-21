@@ -324,8 +324,7 @@
             this.Pages.AddRange(new ShipWorks.UI.Wizard.WizardPage[] {
             this.wizardPageInitial,
             this.wizardPageLicense,
-            this.wizardPageContactInfo,
-            this.wizardPageSettings});
+            this.wizardPageContactInfo});
             this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Hide;
             this.Text = "FedEx Setup Wizard";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.OnFormClosing);
