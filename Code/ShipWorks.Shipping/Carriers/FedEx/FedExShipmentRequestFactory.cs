@@ -41,8 +41,8 @@ namespace ShipWorks.Shipping.Carriers.FedEx
 
         private readonly Dictionary<FedExSignatureType, Shipment.ConfirmationEnum> signatureMap = new Dictionary<FedExSignatureType, Shipment.ConfirmationEnum>
         {
-            { FedExSignatureType.NoSignature, Shipment.ConfirmationEnum.None },
-            { FedExSignatureType.ServiceDefault, Shipment.ConfirmationEnum.Delivery },
+            { FedExSignatureType.ServiceDefault, Shipment.ConfirmationEnum.None },
+            { FedExSignatureType.NoSignature, Shipment.ConfirmationEnum.Delivery },
             { FedExSignatureType.Adult, Shipment.ConfirmationEnum.Adultsignature},
             { FedExSignatureType.Indirect, Shipment.ConfirmationEnum.Signature },
             { FedExSignatureType.Direct, Shipment.ConfirmationEnum.Directsignature }
