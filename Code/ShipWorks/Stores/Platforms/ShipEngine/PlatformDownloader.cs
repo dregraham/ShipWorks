@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Linq;
+using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 using Interapptive.Shared.Business;
@@ -46,12 +47,9 @@ namespace ShipWorks.Stores.Platforms.ShipEngine
             var itemNotes = new List<GiftNote>();
             if (salesOrder.Notes != null)
             {
-                foreach (var note in salesOrder.Notes)
+                foreach (var note in salesOrder.Notes.Where(n => n.Text.HasValue() && n.Type == OrderSourceNoteType.GiftMessage))
                 {
-                    if (note.Type == OrderSourceNoteType.GiftMessage)
-                    {
-                        itemNotes.Add(GiftNote.FromOrderSourceNote(note));
-                    }
+                    itemNotes.Add(GiftNote.FromOrderSourceNote(note));
                 }
             }
 
@@ -285,6 +283,11 @@ namespace ShipWorks.Stores.Platforms.ShipEngine
                 LoadOrderItem(item, order, filteredNotes, filteredCouponCodes);
             }
         }
+        
+        protected virtual object GetOrderStatusCode(OrderSourceApiSalesOrder orderSourceApiSalesOrder, string orderId)
+        {
+            return GetOrderStatusString(orderSourceApiSalesOrder, orderId);
+        }
 
         protected virtual string GetOrderStatusString(OrderSourceApiSalesOrder orderSourceApiSalesOrder, string orderId)
         {
@@ -424,9 +427,8 @@ namespace ShipWorks.Stores.Platforms.ShipEngine
             order.OnlineLastModified = modifiedDate >= orderDate ? modifiedDate : orderDate;
 
             // set the status
-            var orderStatus = GetOrderStatusString(salesOrder, order.OrderNumberComplete);
-            order.OnlineStatus = orderStatus;
-            order.OnlineStatusCode = orderStatus;
+            order.OnlineStatus = GetOrderStatusString(salesOrder, order.OrderNumberComplete);
+            order.OnlineStatusCode = GetOrderStatusCode(salesOrder, order.OrderNumberComplete);
 
             // no customer ID in this Api
             order.OnlineCustomerID = null;
@@ -448,7 +450,10 @@ namespace ShipWorks.Stores.Platforms.ShipEngine
                     LoadOrderItems(fulfillment, order, giftNotes, couponCodes);
                 }
 
+                AddAdjustments(salesOrder, order);
+
                 AddTaxes(salesOrder, order);
+                AddNotes(salesOrder, giftNotes, order);
 
                 // update the total
                 var calculatedTotal = OrderUtility.CalculateTotal(order);
@@ -462,14 +467,95 @@ namespace ShipWorks.Stores.Platforms.ShipEngine
             await retryAdapter.ExecuteWithRetryAsync(() => SaveDownloadedOrder(order)).ConfigureAwait(false);
         }
 
+        /// <summary>
+        /// Adds notes to order entity
+        /// </summary>
+        private async Task AddNotes(OrderSourceApiSalesOrder salesOrder, List<GiftNote> giftNotes, OrderEntity order)
+        {
+            var notes = salesOrder.Notes.Where(n => n.Type != OrderSourceNoteType.GiftMessage);
+            foreach (var note in notes)
+            {
+                string noteText = FormatNoteText(note.Text, note.Type);
+                var visibility = note.Type == OrderSourceNoteType.InternalNotes ? 
+                    NoteVisibility.Internal : NoteVisibility.Public;
+
+                await InstantiateNote(order, noteText, order.OrderDate, visibility).ConfigureAwait(false);
+            }
+
+            foreach(var note in giftNotes.Where(n=>n.OrderItemId.IsNullOrWhiteSpace()))
+            {
+                var noteText = FormatNoteText(note.Message, OrderSourceNoteType.GiftMessage);
+                await InstantiateNote(order, noteText, order.OrderDate, NoteVisibility.Public).ConfigureAwait(false);
+            }
+        }
+
+        /// <summary>
+        /// Format the note to save
+        /// </summary>
+        private string FormatNoteText(string text, OrderSourceNoteType noteType)
+        {
+            text = WebUtility.HtmlDecode(text);
+            if (string.IsNullOrWhiteSpace(text))
+            {
+                return string.Empty;
+            }
+            return $"{GetNotePreface(noteType)}{text}";
+        }
+
+        /// <summary>
+        /// Get the note preface based on note type
+        /// </summary>
+        private string GetNotePreface(OrderSourceNoteType noteType)
+        {
+            switch (noteType)
+            {
+                case OrderSourceNoteType.GiftMessage:
+                    return "Gift Message: ";
+                case OrderSourceNoteType.NotesToBuyer:
+                    return "To Buyer: ";
+                case OrderSourceNoteType.NotesFromBuyer:
+                    return "From Buyer: ";
+                case OrderSourceNoteType.InternalNotes:
+                    return "Internal: ";
+                default:
+                    return string.Empty;
+            }
+        }
+
+        /// <summary>
+        /// Adds order adjustment charges to order entity
+        /// </summary>
+        private void AddAdjustments(OrderSourceApiSalesOrder salesOrder, OrderEntity order)
+        {
+            foreach (var orderAdjustment in salesOrder.Payment.Adjustments)
+            {
+                AddToCharge(order, orderAdjustment.Description, orderAdjustment.Description, orderAdjustment.Amount);
+            }
+
+            foreach (var orderShippingCharge in salesOrder.Payment.ShippingCharges)
+            {
+                AddToCharge(order, "SHIPPING", orderShippingCharge.Description.Replace(" price", string.Empty), orderShippingCharge.Amount);
+            }
+        }
+
+        /// <summary>
+        /// Adds taxes to order entity
+        /// </summary>
         protected virtual void AddTaxes(OrderSourceApiSalesOrder salesOrder, OrderEntity order)
         {
-            var totalTax = salesOrder.RequestedFulfillments?
+            var itemTaxes = salesOrder.RequestedFulfillments?
                 .SelectMany(f => f.Items)?
                 .SelectMany(i => i.Taxes)?
                 .Sum(t => t.Amount) ?? 0;
+            var orderTaxes = salesOrder.Payment.Taxes.Sum(t => t.Amount);
 
-            AddToCharge(order, "Tax", "Tax", totalTax);
+            // Josh Flanagan said that "one of our guiding principles is to not do aggregation within the integration.
+            // if details are provided at the item level, we should expose them at the item level. if they are only
+            // available at the order level, that is what we will expose. so you should definitely account for that
+            // as a consumer of this data"
+            // In other words, we shouldn't have data that is both at the item level and order level. If we find that we
+            // do, it would be worth bringing up to platform.
+            AddToCharge(order, "Tax", "Tax", itemTaxes + orderTaxes);
         }
     }
 }

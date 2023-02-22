@@ -31,14 +31,14 @@ namespace ShipWorks.Stores.Platforms.Etsy.OnlineUpdating
     public class EtsyOnlineUpdater : IEtsyOnlineUpdater, IOnlineUpdater
     {
         static readonly ILog log = LogManager.GetLogger(typeof(EtsyOnlineUpdater));
-        private readonly IEtsyWebClient webClient;
+        private readonly Func<EtsyStoreEntity, IEtsyWebClient> createWebClient;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public EtsyOnlineUpdater(EtsyStoreEntity store, Func<EtsyStoreEntity, IEtsyWebClient> createWebClient)
+        public EtsyOnlineUpdater(Func<EtsyStoreEntity, IEtsyWebClient> createWebClient)
         {
-            webClient = createWebClient(store);
+            this.createWebClient = createWebClient;
         }
 
         /// <summary>
@@ -125,7 +125,7 @@ namespace ShipWorks.Stores.Platforms.Etsy.OnlineUpdating
                 {
                     try
                     {
-                        webClient.UploadShipmentDetails(etsyStore.EtsyShopID, orderNumber, shipment.TrackingNumber, GetEtsyCarrierCode(shipment));
+                        createWebClient(etsyStore).UploadShipmentDetails(etsyStore.EtsyShopID, orderNumber, shipment.TrackingNumber, GetEtsyCarrierCode(shipment));
                     }
                     catch (EtsyException ex)
                     {

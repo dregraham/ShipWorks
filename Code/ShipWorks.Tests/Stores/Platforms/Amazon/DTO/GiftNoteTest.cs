@@ -24,5 +24,20 @@ namespace ShipWorks.Tests.Stores.Platforms.Amazon.DTO
             Assert.Equal("Enjoy your gift!\nFrom Susan Feero", result.Message);
             Assert.Equal(0, result.Fee);
         }
+
+        [Fact]
+        public void FromOrderSourceNote_SetsNoteAsMessage_WhenNothingToParse()
+        {
+            var testNote = new OrderSourceNote()
+            {
+                Type = OrderSourceNoteType.GiftMessage,
+                Text = "foo\nbar"
+            };
+
+            var result = GiftNote.FromOrderSourceNote(testNote);
+            
+            Assert.Null(result.OrderItemId);
+            Assert.Equal(testNote.Text, result.Message);
+        }
     }
 }

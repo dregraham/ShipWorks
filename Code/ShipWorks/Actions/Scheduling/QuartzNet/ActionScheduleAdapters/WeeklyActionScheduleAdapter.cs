@@ -4,6 +4,7 @@ using Quartz.Impl.Calendar;
 using ShipWorks.Actions.Scheduling.ActionSchedules;
 using System;
 using System.Linq;
+using ShipWorks.Common;
 
 
 namespace ShipWorks.Actions.Scheduling.QuartzNet.ActionScheduleAdapters
@@ -12,10 +13,16 @@ namespace ShipWorks.Actions.Scheduling.QuartzNet.ActionScheduleAdapters
     {
         private readonly IDateTimeProvider dateTimeProvider;
 
+        public WeeklyActionScheduleAdapter()
+        {
+            this.dateTimeProvider = new DateTimeProvider();
+        }
+
         public WeeklyActionScheduleAdapter(IDateTimeProvider dateTimeProvider)
         {
             this.dateTimeProvider = dateTimeProvider;
         }
+        
         public override QuartzActionSchedule Adapt(WeeklyActionSchedule schedule)
         {
             return new QuartzActionSchedule
