@@ -39,16 +39,16 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Enums
         [ApiValue("custom")]
         Custom = 6,
 
-        [Description("SmartPost® Media Mail")]
+        [Description("FedEx Ground® Economy Mail")]
         SPMediaMail = 7,
 
-        [Description("SmartPost® Parcel Select")]
+        [Description("FedEx Ground® Economy Select")]
         SPParcelSelect = 8,
 
-        [Description("SmartPost® Presorted  BPM")]
+        [Description("FedEx Ground® Economy Presorted  BPM")]
         SPPresortedBPM = 9,
 
-        [Description("SmartPost® Presorted Standard")]
+        [Description("FedEx Ground® Economy Presorted Standard")]
         SPPresortedStandard = 10,
 
         [Description("FedEx® Small Box")]

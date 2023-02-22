@@ -32,7 +32,7 @@ namespace ShipWorks.Stores.Platforms.BuyDotCom.Fulfillment
         [Description("UPS MI")]
         UPSMI = 6,
 
-        [Description("FedEx SmartPost")]
+        [Description("FedEx FedEx Ground® Economy")]
         FedExSmartPost = 7,
 
         [Description("DHL Global Mail")]
