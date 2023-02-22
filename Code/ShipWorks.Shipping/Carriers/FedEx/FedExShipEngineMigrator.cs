@@ -234,6 +234,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             {
                 throw response.Exception;
             }
+
+            // Make this call to update the Letterhead and Signature
+            await shipEngineWebClient.UpdateFedExAccount(account).ConfigureAwait(false);
         }
     }
 }
