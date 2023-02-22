@@ -4797,7 +4797,7 @@ namespace ShipWorks
 
                     if (anyClosed)
                     {
-                        MessageHelper.ShowInformation(this, "The close has been successfully processed.\n\nSmartPost Close does not generate any reports to be printed.  No further action is required.");
+                        MessageHelper.ShowInformation(this, "The close has been successfully processed.\n\nFedEx Ground® Economy Close does not generate any reports to be printed.  No further action is required.");
                     }
                     else
                     {
