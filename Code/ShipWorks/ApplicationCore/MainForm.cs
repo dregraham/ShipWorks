@@ -90,6 +90,7 @@ using ShipWorks.Shipping.Carriers.Asendia;
 using ShipWorks.Shipping.Carriers.DhlEcommerce;
 using ShipWorks.Shipping.Carriers.FedEx;
 using ShipWorks.Shipping.Carriers.FedEx.Api;
+using ShipWorks.Shipping.Carriers.FedEx.Enums;
 using ShipWorks.Shipping.Carriers.UPS.OneBalance;
 using ShipWorks.Shipping.Carriers.UPS.WorldShip;
 using ShipWorks.Shipping.Profiles;
@@ -4729,9 +4730,14 @@ namespace ShipWorks
         /// <param name="closeMenu"></param>
         private void PopulateFedExCloseMenu(Divelements.SandRibbon.Menu printMenu, SandMenuItem closeMenu)
         {
-            FedExGroundClose.PopulatePrintReportsMenu(printMenu);
+            using (var scope = IoC.BeginLifetimeScope())
+            {
+                var accountRetriever = scope.ResolveKeyed<ICarrierAccountRetriever>(ShipmentTypeCode.FedEx);
 
-            closeMenu.Visible = FedExUtility.GetSmartPostHubs().Any();
+                PopulateShipEngineManifestMenu(closeMenu, printMenu, accountRetriever, scope);
+            }
+
+            closeMenu.Visible = FedExAccountManager.Accounts.Any(a => a.SmartPostHub != (int)FedExSmartPostHub.None);
         }
 
         /// <summary>
@@ -4743,7 +4749,7 @@ namespace ShipWorks
             {
                 Cursor.Current = Cursors.WaitCursor;
 
-                List<FedExEndOfDayCloseEntity> closings = FedExGroundClose.ProcessClose();
+                List<long> closings = FedExGroundClose.ProcessClose();
 
                 if (closings != null && closings.Count > 0)
                 {
