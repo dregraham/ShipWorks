@@ -1889,6 +1889,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             this.panelPayorDuties.Name = "panelPayorDuties";
             this.panelPayorDuties.Size = new System.Drawing.Size(483, 65);
             this.panelPayorDuties.TabIndex = 6;
+            this.panelPayorDuties.Visible = false;
             // 
             // dutiesAccount
             // 
