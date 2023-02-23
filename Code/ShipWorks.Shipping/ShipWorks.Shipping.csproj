@@ -365,6 +365,7 @@
     <Compile Include="Carriers\FedEx\Api\Ship\OpenShip\FedExOpenShipXmlReader.cs" />
     <Compile Include="Carriers\FedEx\Api\Ship\OpenShip\FedExOpenShipXmlWriter.cs" />
     <Compile Include="Carriers\FedEx\Api\Ship\OpenShip\FedExShipServiceWrapper.cs" />
+    <Compile Include="Carriers\FedEx\FedExFimsDownloadedLabelData.cs" />
     <Compile Include="Carriers\FedEx\FedExPrefetchProvider.cs" />
     <Compile Include="Carriers\Dhl\DhlExpressException.cs" />
     <Compile Include="Carriers\Dhl\DhlExpressInsuranceChoice.cs" />
