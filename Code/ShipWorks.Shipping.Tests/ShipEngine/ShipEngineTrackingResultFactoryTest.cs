@@ -28,6 +28,7 @@ namespace ShipWorks.Shipping.Tests.ShipEngine
                 {
                     new TrackEvent
                     {
+                        CarrierOccurredAt= new DateTime(2023, 2, 23, 16,5, 5, DateTimeKind.Utc),
                         OccurredAt = new DateTime(2017, 7, 7, 7, 7, 7),
                         CityLocality = "St Louis",
                         StateProvince = "MO",
@@ -44,9 +45,24 @@ namespace ShipWorks.Shipping.Tests.ShipEngine
         [Fact]
         public void Create_SetsTrackingResultSummaryToTrackingInfoStatusDescription()
         {
+            shipEngineTrackingInfo.ActualDeliveryDate = new DateTime(2023, 2, 23, 15, 15, 4, DateTimeKind.Utc);
+            shipEngineTrackingInfo.Events.First().Signer = "Kevin Croke";
+            shipEngineTrackingInfo.EstimatedDeliveryDate = shipEngineTrackingInfo.ActualDeliveryDate;
+
             TrackingResult result = testObject.Create(shipEngineTrackingInfo);
 
-            Assert.Equal("Delivered", result.Summary);
+            Assert.Equal("<b>Delivered</b> on 2/23/2023 9:15:04 AM<br/><span style='color: rgb(80, 80, 80);'>Signed by: Kevin Croke</span>", result.Summary);
+        }
+
+        [Fact]
+        public void Create_ShowsEstimatedDate_WhenNoActualDate()
+        {
+            shipEngineTrackingInfo.StatusDescription = "In Transit";
+            shipEngineTrackingInfo.EstimatedDeliveryDate = new DateTime(2023, 2, 23, 15, 15, 4, DateTimeKind.Utc); ;
+
+            TrackingResult result = testObject.Create(shipEngineTrackingInfo);
+
+            Assert.Equal("<b>In Transit</b><br/><span style='color: rgb(80, 80, 80);'>Should arrive: 2/23/2023 3:15:04 PM</span>", result.Summary);
         }
 
         [Fact]
@@ -54,7 +70,7 @@ namespace ShipWorks.Shipping.Tests.ShipEngine
         {
             TrackingResult result = testObject.Create(shipEngineTrackingInfo);
 
-            Assert.Equal(new DateTime(2017, 7, 7, 7, 7, 7).ToString("M/dd/yyy"), result.Details.FirstOrDefault().Date);
+            Assert.Equal(shipEngineTrackingInfo.Events.First().CarrierOccurredAt.Value.ToString("M/dd/yyy"), result.Details.FirstOrDefault().Date);
         }
 
         [Fact]
@@ -62,7 +78,7 @@ namespace ShipWorks.Shipping.Tests.ShipEngine
         {
             TrackingResult result = testObject.Create(shipEngineTrackingInfo);
 
-            Assert.Equal(new DateTime(2017, 7, 7, 7, 7, 7).ToString("h:mm tt"), result.Details.FirstOrDefault().Time);
+            Assert.Equal(shipEngineTrackingInfo.Events.First().CarrierOccurredAt.Value.ToString("h:mm tt"), result.Details.FirstOrDefault().Time);
         }
 
         [Fact]
@@ -115,6 +131,7 @@ namespace ShipWorks.Shipping.Tests.ShipEngine
         public void Create_SetsTrackingResultDetailDateToEmptyString_WhenTrackingEventOccurredAtIsNull()
         {
             shipEngineTrackingInfo.Events.FirstOrDefault().OccurredAt = null;
+            shipEngineTrackingInfo.Events.FirstOrDefault().CarrierOccurredAt = null;
 
             TrackingResult result = testObject.Create(shipEngineTrackingInfo);
 
@@ -125,6 +142,7 @@ namespace ShipWorks.Shipping.Tests.ShipEngine
         public void Create_SetsTrackingResultDetailTimeToEmptyString_WhenTrackingEventOccurredAtIsNull()
         {
             shipEngineTrackingInfo.Events.FirstOrDefault().OccurredAt = null;
+            shipEngineTrackingInfo.Events.FirstOrDefault().CarrierOccurredAt = null;
 
             TrackingResult result = testObject.Create(shipEngineTrackingInfo);
 

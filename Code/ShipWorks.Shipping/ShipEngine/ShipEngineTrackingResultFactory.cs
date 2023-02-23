@@ -55,15 +55,15 @@ namespace ShipWorks.Shipping.ShipEngine
 
             if(detail.ActualDeliveryDate.HasValue)
             {
-                sb.Append($" on {detail.ActualDeliveryDate.Value}");
+                sb.Append($" on {detail.ActualDeliveryDate.Value.ToLocalTime()}");
             }
 
-            if(detail.EstimatedDeliveryDate.HasValue)
+            if(detail.EstimatedDeliveryDate.HasValue && detail.ActualDeliveryDate == null)
             {
                 sb.Append($"<br/><span style='color: rgb(80, 80, 80);'>Should arrive: {detail.EstimatedDeliveryDate.Value}</span>");
             }
 
-            var signer = detail.Events.FirstOrDefault()?.Signer;
+            var signer = detail.Events?.FirstOrDefault()?.Signer;
             if (signer.HasValue())
             {
                 sb.Append($"<br/><span style='color: rgb(80, 80, 80);'>Signed by: {AddressCasing.Apply(signer)}</span>");
