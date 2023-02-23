@@ -768,12 +768,6 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         {
             updatingPayorChoices = true;
 
-            if (anyInternational != null)
-            {
-                // Only can do duties if there are international
-                panelPayorDuties.Visible = anyInternational.Value;
-            }
-
             int oldIndex = payorTransport.SelectedIndex;
 
             EnumHelper.BindComboBox<FedExPayorType>(payorTransport, t => anyGround || t != FedExPayorType.Collect);
