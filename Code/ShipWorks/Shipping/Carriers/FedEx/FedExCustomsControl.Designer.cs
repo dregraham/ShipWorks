@@ -233,47 +233,6 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             this.customsRecipientTINType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.customsRecipientTINType.FormattingEnabled = true;
             this.customsRecipientTINType.PromptText = "(Select a Value)";
-            // 
-            // sectionCommercialInvoice
-            // 
-            this.sectionCommercialInvoice.Anchor = ((System.Windows.Forms.AnchorStyles) (((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.sectionCommercialInvoice.Collapsed = true;
-            // 
-            // sectionCommercialInvoice.ContentPanel
-            // 
-            this.sectionCommercialInvoice.ContentPanel.Controls.Add(this.electronicTradeDocuments);
-            this.sectionCommercialInvoice.ContentPanel.Controls.Add(this.commercialInvoice);
-            this.sectionCommercialInvoice.ExpandedHeight = 97;
-            this.sectionCommercialInvoice.ExtraText = "";
-            this.sectionCommercialInvoice.Location = new System.Drawing.Point(6, 822);
-            this.sectionCommercialInvoice.Name = "sectionCommercialInvoice";
-            this.sectionCommercialInvoice.SectionName = "Commercial Invoice";
-            this.sectionCommercialInvoice.SettingsKey = "{de95083a-38da-4848-8967-9078ca062e50}";
-            this.sectionCommercialInvoice.Size = new System.Drawing.Size(572, 24);
-            this.sectionCommercialInvoice.TabIndex = 3;
-            // 
-            // electronicTradeDocuments
-            // 
-            this.electronicTradeDocuments.AutoSize = true;
-            this.electronicTradeDocuments.BackColor = System.Drawing.Color.White;
-            this.electronicTradeDocuments.Location = new System.Drawing.Point(36, 38);
-            this.electronicTradeDocuments.Name = "electronicTradeDocuments";
-            this.electronicTradeDocuments.Size = new System.Drawing.Size(154, 17);
-            this.electronicTradeDocuments.TabIndex = 1;
-            this.electronicTradeDocuments.Text = "File electronically";
-            this.electronicTradeDocuments.UseVisualStyleBackColor = false;
-            // 
-            // commercialInvoice
-            // 
-            this.commercialInvoice.AutoSize = true;
-            this.commercialInvoice.BackColor = System.Drawing.Color.White;
-            this.commercialInvoice.Location = new System.Drawing.Point(8, 12);
-            this.commercialInvoice.Name = "commercialInvoice";
-            this.commercialInvoice.Size = new System.Drawing.Size(154, 17);
-            this.commercialInvoice.TabIndex = 0;
-            this.commercialInvoice.Text = "Create Commercial Invoice";
-            this.commercialInvoice.UseVisualStyleBackColor = false;
             #region Removed for FedEx Platform
             // 
             // electronicExportInfoLabel
@@ -768,16 +727,55 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             this.filingOption.PromptText = "(Multiple Values)";
             this.filingOption.Size = new System.Drawing.Size(145, 21);
             this.filingOption.TabIndex = 11;
+            // 
+            // sectionCommercialInvoice
+            // 
+            this.sectionCommercialInvoice.Anchor = ((System.Windows.Forms.AnchorStyles) (((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.sectionCommercialInvoice.Collapsed = true;
+            // 
+            // sectionCommercialInvoice.ContentPanel
+            // 
+            this.sectionCommercialInvoice.ContentPanel.Controls.Add(this.electronicTradeDocuments);
+            this.sectionCommercialInvoice.ContentPanel.Controls.Add(this.commercialInvoice);
+            this.sectionCommercialInvoice.ExpandedHeight = 97;
+            this.sectionCommercialInvoice.ExtraText = "";
+            this.sectionCommercialInvoice.Location = new System.Drawing.Point(6, 822);
+            this.sectionCommercialInvoice.Name = "sectionCommercialInvoice";
+            this.sectionCommercialInvoice.SectionName = "Commercial Invoice";
+            this.sectionCommercialInvoice.SettingsKey = "{de95083a-38da-4848-8967-9078ca062e50}";
+            this.sectionCommercialInvoice.Size = new System.Drawing.Size(572, 24);
+            this.sectionCommercialInvoice.TabIndex = 3;
+            // 
+            // electronicTradeDocuments
+            // 
+            this.electronicTradeDocuments.AutoSize = true;
+            this.electronicTradeDocuments.BackColor = System.Drawing.Color.White;
+            this.electronicTradeDocuments.Location = new System.Drawing.Point(36, 38);
+            this.electronicTradeDocuments.Name = "electronicTradeDocuments";
+            this.electronicTradeDocuments.Size = new System.Drawing.Size(154, 17);
+            this.electronicTradeDocuments.TabIndex = 1;
+            this.electronicTradeDocuments.Text = "File electronically";
+            this.electronicTradeDocuments.UseVisualStyleBackColor = false;
+            // 
+            // commercialInvoice
+            // 
+            this.commercialInvoice.AutoSize = true;
+            this.commercialInvoice.BackColor = System.Drawing.Color.White;
+            this.commercialInvoice.Location = new System.Drawing.Point(8, 12);
+            this.commercialInvoice.Name = "commercialInvoice";
+            this.commercialInvoice.Size = new System.Drawing.Size(154, 17);
+            this.commercialInvoice.TabIndex = 0;
+            this.commercialInvoice.Text = "Create Commercial Invoice";
+            this.commercialInvoice.UseVisualStyleBackColor = false;
             #endregion
             // 
             // FedExCustomsControl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.Controls.Add(this.sectionCommercialInvoice);
             this.Name = "FedExCustomsControl";
             this.Size = new System.Drawing.Size(581, 925);
-            this.Controls.SetChildIndex(this.sectionCommercialInvoice, 0);
             this.Controls.SetChildIndex(this.sectionContents, 0);
             this.Controls.SetChildIndex(this.sectionGeneral, 0);
             ((System.ComponentModel.ISupportInitialize) (this.sectionContents.ContentPanel)).EndInit();

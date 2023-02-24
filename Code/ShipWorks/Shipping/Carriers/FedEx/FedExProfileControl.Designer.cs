@@ -2225,7 +2225,6 @@
             // 
             // tabPageCustoms
             // 
-            this.tabPageCustoms.Controls.Add(this.groupBoxCommercialInvoice);
             this.tabPageCustoms.Controls.Add(this.groupBoxCustomsRecipientTIN);
             this.tabPageCustoms.Location = new System.Drawing.Point(4, 22);
             this.tabPageCustoms.Name = "tabPageCustoms";
@@ -2312,7 +2311,7 @@
             this.groupBoxCustomsRecipientTIN.Controls.Add(this.customsRecipientTINType);
             this.groupBoxCustomsRecipientTIN.Controls.Add(this.customsRecipientTINTypeState);
             this.groupBoxCustomsRecipientTIN.Controls.Add(this.kryptonBorderEdgeTIN);
-            this.groupBoxCustomsRecipientTIN.Location = new System.Drawing.Point(6, 80);
+            this.groupBoxCustomsRecipientTIN.Location = new System.Drawing.Point(6, 8);
             this.groupBoxCustomsRecipientTIN.Name = "groupBoxCustomsRecipientTIN";
             this.groupBoxCustomsRecipientTIN.Size = new System.Drawing.Size(1240, 72);
             this.groupBoxCustomsRecipientTIN.TabIndex = 0;
