@@ -679,8 +679,7 @@ namespace ShipWorks
             //
             menuFedExEndOfDay.Items.AddRange(new Divelements.SandRibbon.WidgetBase[] {
             this.menuFedExEndDayClose,
-            this.menuFedExEndDayPrint,
-            this.menuFedExSmartPostClose});
+            this.menuFedExEndDayPrint});
             //
             // menuFedExEndDayClose
             //
