@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.Composition.Primitives;
 using System.Data.SqlClient;
 using System.Diagnostics;
 using System.Linq;
@@ -36,13 +37,16 @@ namespace ShipWorks.Stores.Platforms.Shopify
 
     public class ShopifyPlatformDownloader : PlatformDownloader
     {
+        private readonly IShopifyFraudDownloader shopifyFraudDownloader;
+
         /// <summary>
         /// Constructor
         /// </summary>
         public ShopifyPlatformDownloader(StoreEntity store, IStoreTypeManager storeTypeManager,
-            IStoreManager storeManager, IPlatformOrderWebClient platformOrderWebClient)
+            IStoreManager storeManager, IPlatformOrderWebClient platformOrderWebClient, IShopifyFraudDownloader shopifyFraudDownloader)
             : base(store, storeTypeManager.GetType(store), storeManager, platformOrderWebClient)
         {
+            this.shopifyFraudDownloader = shopifyFraudDownloader;
         }
 
 
@@ -61,6 +65,33 @@ namespace ShipWorks.Stores.Platforms.Shopify
             }
 
             var order = (ShopifyOrderEntity) result.Value;
+            var orderNumberString = salesOrder.RequestedFulfillments?.FirstOrDefault()?.Extensions?.CustomField3;
+            if (!long.TryParse(orderNumberString, out long orderNumber))
+            {
+                log.InfoFormat("Skipping order '{0}': {1}.", shopifyOrderId, "Missing OrderNumber");
+                return null;
+            }
+            
+            order.OrderNumber = orderNumber;
+            var fraudRiskString = salesOrder.RequestedFulfillments?.FirstOrDefault()?.Extensions?.CustomField2;
+            //https://github.com/shipstation/integrations-ecommerce/blob/56380abc4fde3e0d299d48252bc95d5a0ddff2ce/modules/shopify/src/api/types/enums.ts
+            //export enum RiskRecommendation
+            //{
+            //    accept = 1,
+            //    investigate = 2,
+            //    cancel = 3,
+            //}
+            if (fraudRiskString == "2" || fraudRiskString == "3")
+            {
+                var paymentDetailEntity = new OrderPaymentDetailEntity
+                {
+                    Label = fraudRiskString == "2" ? "investigate" : "cancel",
+                    Value = "Fraud risk"
+                };
+
+                shopifyFraudDownloader.Merge(order, new List<OrderPaymentDetailEntity> { paymentDetailEntity });
+            }
+
             //unshipped
             //partial
             //fulfilled

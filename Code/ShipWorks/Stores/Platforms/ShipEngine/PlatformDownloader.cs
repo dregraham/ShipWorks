@@ -385,7 +385,7 @@ namespace ShipWorks.Stores.Platforms.ShipEngine
                 {
                     // We only throw at the end to give the import a chance to process any orders that were provided.
                     throw new Exception(
-                        "Connection to Etsy failed. Please try again. If it continues to fail, update your credentials in store settings or contact ShipWorks support.");
+                        $"Connection to {StoreType.StoreTypeName} failed. Please try again. If it continues to fail, update your credentials in store settings or contact ShipWorks support.");
                 }
             }
             catch (Exception ex)
