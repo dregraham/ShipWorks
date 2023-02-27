@@ -1344,6 +1344,7 @@
     <Compile Include="Stores\Platforms\Platform\OnlineUpdating\PlatformBulkOnlineUpdater.cs" />
     <Compile Include="Stores\Platforms\Platform\OnlineUpdating\PlatformBulkOnlineUpdaterRequest.cs" />
     <Compile Include="Stores\Platforms\Platform\OnlineUpdating\PlatformOnlineUpdater.cs" />
+    <Compile Include="Stores\Platforms\Platform\OnlineUpdating\SwatPlatformOnlineUpdater.cs" />
     <Compile Include="Stores\Platforms\Platform\PlatformStoreException.cs" />
     <Compile Include="Stores\Platforms\ShipEngine\Apollo\GetOrdersDTO.cs" />
     <Compile Include="Stores\Platforms\ShipEngine\Apollo\PlatformApolloDTO.cs" />
