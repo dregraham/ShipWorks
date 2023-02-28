@@ -129,6 +129,19 @@ namespace ShipWorks.Stores.Platforms.ShipEngine
                 }
             }
 
+            // Instantiate OrderItemAttribute and set values from the item product details
+            if (orderItem.Product?.Details != null)
+            {
+                foreach (var detail in orderItem.Product.Details)
+                {
+                    OrderItemAttributeEntity attribute = InstantiateOrderItemAttribute(item);
+                    attribute.Name = detail.Name;
+                    attribute.Description = detail.Value;
+                    attribute.UnitPrice = 0;
+                    item.OrderItemAttributes.Add(attribute);
+                }
+            }
+
             AddOrderItemCharges(orderItem, order);
             return item;
         }
