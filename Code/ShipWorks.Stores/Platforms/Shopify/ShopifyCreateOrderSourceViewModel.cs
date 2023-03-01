@@ -28,8 +28,8 @@ namespace ShipWorks.Stores.Platforms.Shopify
         private readonly IHubOrderSourceClient hubOrderSourceClient;
         private readonly IMessageHelper messageHelper;
         private readonly ILog log;
-        
-		private bool openingUrl;
+
+        private bool openingUrl;
         private ShopifyStoreEntity store;
         private string OrderSourceName => store.StoreTypeCode.ToString().ToLowerInvariant();
 
@@ -41,8 +41,8 @@ namespace ShipWorks.Stores.Platforms.Shopify
             this.webHelper = webHelper;
             this.hubOrderSourceClient = hubOrderSourceClient;
             this.messageHelper = messageHelper;
-            
-			log = logFactory(typeof(ShopifyCreateOrderSourceViewModel));
+
+            log = logFactory(typeof(ShopifyCreateOrderSourceViewModel));
 
             GetOrderSourceId = new RelayCommand(async () => await GetOrderSourceIdCommand().ConfigureAwait(true));
         }
@@ -55,7 +55,10 @@ namespace ShipWorks.Stores.Platforms.Shopify
             OpeningUrl = true;
             try
             {
-                var parameters = new Dictionary<string, string> { { "shopify_domain", ShopifyHelper.GetShopUrl(ShopifyShopUrlName) } };
+                var parameters = new Dictionary<string, string>();
+                parameters.Add("shopify_domain", ShopifyHelper.GetShopUrl(ShopifyShopUrlName));
+                parameters.Add("notify_customer", store.ShopifyNotifyCustomer.ToString());
+
                 var url = await hubOrderSourceClient.GetCreateOrderSourceInitiateUrl(OrderSourceName, store.InitialDownloadDays, parameters).ConfigureAwait(true);
                 webHelper.OpenUrl(url);
             }
@@ -166,7 +169,7 @@ namespace ShipWorks.Stores.Platforms.Shopify
                     log.Error("The provided string could not be deserialized.");
                     return false;
                 }
-                if (createOrderSourceResult.StoreType!= "Shopify")
+                if (createOrderSourceResult.StoreType != "Shopify")
                 {
                     log.Error("The provided token is not valid Shopify token.");
                     return false;
@@ -183,7 +186,7 @@ namespace ShipWorks.Stores.Platforms.Shopify
                     log.Error("The provided token's third part was not a GUID");
                     return false;
                 }
-                
+
                 store.ShopifyShopUrlName = ShopifyShopUrlName;
 
                 store.OrderSourceID = createOrderSourceResult.OrderSourceId;

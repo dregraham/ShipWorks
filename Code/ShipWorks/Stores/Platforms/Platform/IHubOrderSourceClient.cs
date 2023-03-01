@@ -52,5 +52,11 @@ namespace ShipWorks.Stores.Platforms.Platform
         /// Call hub to update the amazon sp FBA criteria
         /// </summary>
         Task UpdateAmazonFbaCriteria(string orderSourceId, bool downloadFba, string apiRegion);
+
+        /// <summary>
+        /// Call hub to update the platform/shopify configuration for notify_customer
+        /// </summary>
+        Task UpdateShopifyNotifyCustomer(string orderSourceId, bool notifyCustomer);
+
     }
 }

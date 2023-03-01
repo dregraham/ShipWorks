@@ -29,7 +29,6 @@ using ShipWorks.Stores.Platforms.Shopify.Enums;
 
 namespace ShipWorks.Stores.Platforms.Shopify
 {
-    // TODO: Update registration to use a Keyed Component to replace the MWS downloader
     /// <summary>
     /// Order downloader for Shopify stores via Platform
     /// </summary>

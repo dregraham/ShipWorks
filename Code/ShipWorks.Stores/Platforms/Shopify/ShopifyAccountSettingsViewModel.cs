@@ -28,17 +28,17 @@ namespace ShipWorks.Stores.Platforms.Shopify
         private readonly IWebHelper webHelper;
         private readonly IHubOrderSourceClient hubOrderSourceClient;
         private readonly IMessageHelper messageHelper;
-        
-		/// <summary>
-		/// Constructor
-		/// </summary>
-		public ShopifyAccountSettingsViewModel(IWebHelper webHelper, IHubOrderSourceClient hubOrderSourceClient, IMessageHelper messageHelper)
+
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        public ShopifyAccountSettingsViewModel(IWebHelper webHelper, IHubOrderSourceClient hubOrderSourceClient, IMessageHelper messageHelper)
         {
             this.webHelper = webHelper;
             this.hubOrderSourceClient = hubOrderSourceClient;
             this.messageHelper = messageHelper;
-            
-			UpdateOrderSource = new RelayCommand(async () => await UpdateOrderSourceCommand().ConfigureAwait(true));
+
+            UpdateOrderSource = new RelayCommand(async () => await UpdateOrderSourceCommand().ConfigureAwait(true));
         }
 
         /// <summary>
@@ -65,7 +65,8 @@ namespace ShipWorks.Stores.Platforms.Shopify
             {
                 var url = await hubOrderSourceClient.GetUpdateOrderSourceInitiateUrl(orderSourceName, store.OrderSourceID, new Dictionary<string, string>
                 {
-                    { "shopify_domain", ShopifyHelper.GetShopUrl(store.ShopifyShopUrlName)}
+                    { "shopify_domain", ShopifyHelper.GetShopUrl(store.ShopifyShopUrlName)},
+                    { "notify_customer", store.ShopifyNotifyCustomer.ToString() }
                 }).ConfigureAwait(true);
                 webHelper.OpenUrl(url);
             }
