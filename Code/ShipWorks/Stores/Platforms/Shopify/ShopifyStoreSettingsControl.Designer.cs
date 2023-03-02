@@ -48,7 +48,7 @@
             // shopifyNotifyCustomer
             // 
             this.shopifyNotifyCustomer.AutoSize = true;
-            this.shopifyNotifyCustomer.Location = new System.Drawing.Point(17, 41);
+            this.shopifyNotifyCustomer.Location = new System.Drawing.Point(20, 41);
             this.shopifyNotifyCustomer.Name = "shopifyNotifyCustomer";
             this.shopifyNotifyCustomer.Size = new System.Drawing.Size(316, 17);
             this.shopifyNotifyCustomer.TabIndex = 22;
