@@ -1,18 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using Autofac;
 using Common.Logging;
 using Interapptive.Shared.Threading;
 using Interapptive.Shared.UI;
-using Interapptive.Shared.Utility;
 using ShipWorks.ApplicationCore;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Management;
 using ShipWorks.Stores.Platforms.Platform;
 using ShipWorks.Stores.Platforms.Shopify.DTOs;
-using ShipWorks.Stores.Platforms.Shopify.Enums;
 
 namespace ShipWorks.Stores.Platforms.Shopify
 {
@@ -30,8 +27,6 @@ namespace ShipWorks.Stores.Platforms.Shopify
         public ShopifyStoreSettingsControl()
         {
             InitializeComponent();
-
-            EnumHelper.BindComboBox<ShopifyRequestedShippingField>(requestedShippingOptions);
         }
 
         /// <summary>
@@ -43,7 +38,6 @@ namespace ShipWorks.Stores.Platforms.Shopify
 
             LoadLocations(shopifyStore);
 
-            requestedShippingOptions.SelectedValue = (ShopifyRequestedShippingField) shopifyStore.ShopifyRequestedShippingOption;
             shopifyNotifyCustomer.Checked = shopifyStore.ShopifyNotifyCustomer;
         }
 
@@ -54,9 +48,7 @@ namespace ShipWorks.Stores.Platforms.Shopify
         {
             shopifyStore = (ShopifyStoreEntity) store;
 
-            shopifyStore.ShopifyRequestedShippingOption = (int) requestedShippingOptions.SelectedValue;
             shopifyStore.ShopifyNotifyCustomer = shopifyNotifyCustomer.Checked;
-            shopifyStore.ShopifyFulfillmentLocation = (long) shopifyLocations.SelectedValue;
 
             return true;
         }
@@ -119,13 +111,6 @@ namespace ShipWorks.Stores.Platforms.Shopify
                     log.Error($"An error occurred retrieving the list of Shopify locations: {ex.Message}", ex);
                 }
             }
-
-            shopifyLocations.DisplayMember = "Name";
-            shopifyLocations.ValueMember = "ID";
-            shopifyLocations.DataSource = locations;
-
-            shopifyLocations.SelectedValue = locations.Where(x => x.ID == store.ShopifyFulfillmentLocation)
-                .Select(x => x.ID).FirstOrDefault();
         }
     }
 }
