@@ -69,6 +69,7 @@ namespace ShipWorks.Stores.Platforms.Shopify.Warehouse
 
             shopifyOrderEntity.RequestedShipping = requestedShippingField == ShopifyRequestedShippingField.Code ?
                 shopifyWarehouseOrder.RequestedShippingCode : shopifyWarehouseOrder.RequestedShippingTitle;
+            shopifyOrderEntity.ChannelOrderID = warehouseOrder.ShipEngineSalesOrderId;
         }
 
         /// <summary>

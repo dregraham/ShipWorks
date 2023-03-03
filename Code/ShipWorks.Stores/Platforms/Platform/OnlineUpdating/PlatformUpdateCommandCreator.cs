@@ -25,6 +25,7 @@ namespace ShipWorks.Stores.Platforms.Platform.OnlineUpdating
     [KeyedComponent(typeof(IOnlineUpdateCommandCreator), StoreTypeCode.GrouponHub)]
     [KeyedComponent(typeof(IOnlineUpdateCommandCreator), StoreTypeCode.Amazon)]
     [KeyedComponent(typeof(IOnlineUpdateCommandCreator), StoreTypeCode.Etsy)]
+    [KeyedComponent(typeof(IOnlineUpdateCommandCreator), StoreTypeCode.Shopify)]
     public class PlatformUpdateCommandCreator : IOnlineUpdateCommandCreator
     {
         private readonly IIndex<StoreTypeCode, IPlatformOnlineUpdater> platformOnlineUpdaterIndex;

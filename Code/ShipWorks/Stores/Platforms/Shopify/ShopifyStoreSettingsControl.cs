@@ -1,15 +1,12 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 using Autofac;
 using Common.Logging;
-using Interapptive.Shared.Threading;
 using Interapptive.Shared.UI;
 using ShipWorks.ApplicationCore;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Management;
 using ShipWorks.Stores.Platforms.Platform;
-using ShipWorks.Stores.Platforms.Shopify.DTOs;
 
 namespace ShipWorks.Stores.Platforms.Shopify
 {
@@ -19,7 +16,6 @@ namespace ShipWorks.Stores.Platforms.Shopify
     public partial class ShopifyStoreSettingsControl : StoreSettingsControlBase
     {
         private ShopifyStoreEntity shopifyStore;
-        private static readonly ILog log = LogManager.GetLogger(typeof(ShopifyWebClient));
 
         /// <summary>
         /// Constructor
@@ -35,8 +31,6 @@ namespace ShipWorks.Stores.Platforms.Shopify
         public override void LoadStore(StoreEntity store)
         {
             shopifyStore = (ShopifyStoreEntity) store;
-
-            LoadLocations(shopifyStore);
 
             shopifyNotifyCustomer.Checked = shopifyStore.ShopifyNotifyCustomer;
         }
@@ -83,34 +77,6 @@ namespace ShipWorks.Stores.Platforms.Shopify
             }
 
             return true;
-        }
-
-        /// <summary>
-        /// Populates the fulfillment location dropdown with Shopify locations
-        /// </summary>
-        private void LoadLocations(ShopifyStoreEntity store)
-        {
-            List<ShopifyLocation> locations = new List<ShopifyLocation>();
-
-            ShopifyLocation defaultLocation = new ShopifyLocation();
-            defaultLocation.ID = 0;
-            defaultLocation.Name = "Shop Default";
-
-            locations.Add(defaultLocation);
-
-            using (var lifetimeScope = IoC.BeginLifetimeScope())
-            {
-                var webClient = lifetimeScope.Resolve<IShopifyWebClient>(TypedParameter.From(store), TypedParameter.From<IProgressReporter>(null));
-
-                try
-                {
-                    locations.AddRange(webClient.GetLocations().Locations);
-                }
-                catch (ShopifyException ex)
-                {
-                    log.Error($"An error occurred retrieving the list of Shopify locations: {ex.Message}", ex);
-                }
-            }
         }
     }
 }
