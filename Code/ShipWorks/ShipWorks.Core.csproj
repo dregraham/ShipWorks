@@ -2667,7 +2667,6 @@
     <Compile Include="Stores\Platforms\Shopify\IShopifyWebClient.cs" />
     <Compile Include="Stores\Platforms\Shopify\DTOs\ShopifyFulfillment.cs" />
     <Compile Include="Stores\Platforms\Shopify\DTOs\ShopifyFulfillmentRequst.cs" />
-    <Compile Include="Stores\Platforms\Shopify\ShopifyAuthorizationDashboardItem.cs" />
     <Compile Include="Stores\Platforms\Shopify\ShopifyAuthorizationException.cs" />
     <Compile Include="Stores\Platforms\ShopSite\IShopSiteIdentifier.cs" />
     <Compile Include="Stores\Platforms\ShopSite\IShopSiteWebClient.cs" />

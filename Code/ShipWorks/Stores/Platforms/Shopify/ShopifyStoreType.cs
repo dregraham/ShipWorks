@@ -204,38 +204,7 @@ namespace ShipWorks.Stores.Platforms.Shopify
             return new ShopifyStoreSettingsControl();
         }
 
-        /// <summary>
-        /// Create dashboard message for updating token if necessary
-        /// </summary>
-        public override IEnumerable<DashboardStoreItem> CreateDashboardMessages()
-        {
-            ShopifyStoreEntity store = (ShopifyStoreEntity) Store;
-
-            try
-            {
-                using (var lifetimeScope = IoC.BeginLifetimeScope())
-                {
-                    var webClient = lifetimeScope.Resolve<IShopifyWebClient>(TypedParameter.From(store), TypedParameter.From<IProgressReporter>(null));
-                    webClient.ValidateCredentials();
-                }
-            }
-            catch (ShopifyAuthorizationException)
-            {
-                return new DashboardStoreItem[]
-                {
-                    new ShopifyAuthorizationDashboardItem(store)
-                };
-
-            }
-            catch (Exception)
-            {
-                // Since we're just checking token validity, we don't want any other errors causing problems
-            }
-
-            return null;
-        }
-
-        /// <summary>
+		/// <summary>
         /// Should the Hub be used for this store?
         /// </summary>
         public override bool ShouldUseHub(IStoreEntity store) => true;
