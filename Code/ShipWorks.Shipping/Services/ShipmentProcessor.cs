@@ -262,12 +262,14 @@ namespace ShipWorks.Shipping.Services
                 }
 
                 string message = workflowResult.NewErrors.Take(3)
-                    .Aggregate($"Your request cannot be completed at this time. Please contact ShipWorks Support at 314-821-5888 for assistance.{Environment.NewLine} {Environment.NewLine} Error Message(s): ", (x, y) => x + "\n\n" + y);
+                    .Aggregate($"Your request cannot be completed at this time.{Environment.NewLine} {Environment.NewLine} Error Message(s): ", (x, y) => x + "\n\n" + y);
 
                 if (workflowResult.NewErrors.Count > 3)
                 {
                     message += "\n\nSee the shipment list for all errors.";
                 }
+
+                message += "\n\nFor assistance, please contact ShipWorks Support at 314-821-5888.";
 
                 await messageHelper.ShowError(message);
             }
