@@ -515,6 +515,9 @@ namespace ShipWorks.Stores.Platforms.ShipEngine
             return $"{GetNotePreface(noteType)}{text}";
         }
 
+        /// <summary>
+        /// Decode html encoded strings for order item name and attributes
+        /// </summary>
         private string EntitiesDecode(string text)
         {
             text = WebUtility.HtmlDecode(text);
