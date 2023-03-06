@@ -1,7 +1,5 @@
-﻿using System.Linq;
-using Interapptive.Shared.Utility;
+﻿using Interapptive.Shared.Utility;
 using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Shipping.Carriers.FedEx.Enums;
 using ShipWorks.Shipping.Carriers.UPS.Enums;
 
 namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools
@@ -21,7 +19,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools
 			{
 				if (shipment.Ups.Packages.Count > 1)
 				{
-					return Result.FromError("UPS shipments to/from Mexico can only contain 1 package.");
+					return Result.FromError("Single shipments containing multiple packages to/from Mexico are not allowed. Please create a shipment for each package.");
 				}
 			}
 
