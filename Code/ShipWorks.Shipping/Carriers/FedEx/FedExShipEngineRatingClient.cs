@@ -64,7 +64,6 @@ namespace ShipWorks.Shipping.Carriers.FedEx
                     .Select(t => EnumHelper.GetApiValue(t))
                     .ToList();
 
-
                 // Only need to add the Smart Post values if it's in the available types
                 if (availableServiceTypeIds.Contains((int) FedExServiceType.SmartPost))
                 {
