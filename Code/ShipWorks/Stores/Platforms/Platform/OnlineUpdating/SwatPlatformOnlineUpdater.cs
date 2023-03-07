@@ -18,6 +18,7 @@ namespace ShipWorks.Stores.Platforms.Platform.OnlineUpdating
     /// shipment notifications to Platform
     /// </summary>
     [KeyedComponent(typeof(IPlatformOnlineUpdater), StoreTypeCode.Etsy)]
+    [KeyedComponent(typeof(IPlatformOnlineUpdater), StoreTypeCode.Shopify)]
     public class SwatPlatformOnlineUpdater : PlatformOnlineUpdater
     {
         public SwatPlatformOnlineUpdater(
