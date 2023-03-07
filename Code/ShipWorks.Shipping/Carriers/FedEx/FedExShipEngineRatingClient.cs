@@ -73,6 +73,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx
                     availableServiceTypeApiCodes.AddRange(smartPostNames);
                 }
 
+                rateShipmentResponse.RateResponse.Rates.ForEach(r =>
+                    r.ServiceType = r.ServiceType.Replace("FedEx SmartPost parcel select", "FedEx Ground® Economy"));
+
                 return rateGroupFactory.Create(rateShipmentResponse.RateResponse, ShipmentTypeCode.FedEx, availableServiceTypeApiCodes);
             }
             catch (Exception ex) when (ex.GetType() != typeof(ShippingException))
