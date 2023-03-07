@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Autofac.Features.Indexed;
+using Interapptive.Shared.Collections;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Utility;
 using ShipWorks.ApplicationCore.Logging;
@@ -57,9 +58,20 @@ namespace ShipWorks.Shipping.Carriers.FedEx
                 RateShipmentResponse rateShipmentResponse = Task.Run(async () =>
                         await shipEngineWebClient.RateShipment(request, ApiLogSource.FedEx).ConfigureAwait(false)).Result;
 
-                IEnumerable<string> availableServiceTypeApiCodes = shipmentType.GetAvailableServiceTypes()
+                var availableServiceTypeIds = shipmentType.GetAvailableServiceTypes().ToList();
+                var availableServiceTypeApiCodes = availableServiceTypeIds
                     .Cast<FedExServiceType>()
-                    .Select(t => EnumHelper.GetApiValue(t));
+                    .Select(t => EnumHelper.GetApiValue(t))
+                    .ToList();
+
+                // Only need to add the Smart Post values if it's in the available types
+                if (availableServiceTypeIds.Contains((int) FedExServiceType.SmartPost))
+                {
+                    var smartPostNames = Enum.GetValues(typeof(FedExSmartPostIndicia))
+                        .Cast<FedExSmartPostIndicia>()
+                        .Select(x => EnumHelper.GetApiValue(x));
+                    availableServiceTypeApiCodes.AddRange(smartPostNames);
+                }
 
                 return rateGroupFactory.Create(rateShipmentResponse.RateResponse, ShipmentTypeCode.FedEx, availableServiceTypeApiCodes);
             }
