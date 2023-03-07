@@ -475,7 +475,7 @@ namespace ShipWorks.Shipping.ShipEngine
         public async Task<GenericResult<CreateManifestResponse>> CreateManifest(List<string> labelIDs, ILog log)
         {
             GenericResult<CreateManifestResponse> response;
-            using (new LoggedStopwatch(log, $"DHL eCommerce call to create manifest, initial try.  LabelID count: {labelIDs.Count}"))
+            using (new LoggedStopwatch(log, $"ShipEngine call to create manifest, initial try.  LabelID count: {labelIDs.Count}"))
             {
                 response = await MakeRequest<CreateManifestResponse>(ShipEngineEndpoints.CreateManifest, Method.POST,
                     new CreateManifestRequest { LabelIds = labelIDs }, "CreateManifest");
@@ -493,7 +493,7 @@ namespace ShipWorks.Shipping.ShipEngine
                     var newIDs = labelIDs.Except(alreadyManifestedIDs).ToList();
                     if (newIDs.Any())
                     {
-                        using (new LoggedStopwatch(log, $"DHL eCommerce call to create manifest, second try.  LabelID count: {newIDs.Count}"))
+                        using (new LoggedStopwatch(log, $"ShipEngine call to create manifest, second try.  LabelID count: {newIDs.Count}"))
                         {
                             response = await MakeRequest<CreateManifestResponse>(ShipEngineEndpoints.CreateManifest,
                                 Method.POST,

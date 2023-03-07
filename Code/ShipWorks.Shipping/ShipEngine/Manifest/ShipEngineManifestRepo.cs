@@ -51,6 +51,13 @@ namespace ShipWorks.Shipping.ShipEngine.Manifest
 
             foreach (var manifestResponse in createManifestResponse.Manifests)
             {
+                // Currently it seems that if the SubmissionId is null, then the manifest has been
+                // submitted electronically and there is nothing to download and save.
+                if (manifestResponse.SubmissionId == null)
+                {
+                    continue;
+                }
+
                 try
                 {
                     var manifest = new ShipEngineManifestEntity
@@ -65,7 +72,7 @@ namespace ShipWorks.Shipping.ShipEngine.Manifest
                         ShipDate = manifestResponse.ShipDate,
                         ShipmentCount = manifestResponse.ShipmentCount,
                         ShipmentTypeCode = (int) account.ShipmentType,
-                        SubmissionID = manifestResponse.SubmissionId,
+                        SubmissionID = manifestResponse.SubmissionId ?? "None supplied",
                     };
 
                     using (var sqlAdapter = sqlAdapterFactory.Create())
