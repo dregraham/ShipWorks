@@ -67,9 +67,9 @@ namespace ShipWorks.Stores.Platforms.ShipEngine
         protected virtual OrderItemEntity LoadOrderItem(OrderSourceSalesOrderItem orderItem, OrderEntity order, IEnumerable<GiftNote> giftNotes, IEnumerable<CouponCode> couponCodes)
         {
             var item = InstantiateOrderItem(order);
-
+            
             // populate the basics
-            item.Name = orderItem.Product.Name;
+            item.Name = EntitiesDecode(orderItem.Product.Name);
             item.Quantity = orderItem.Quantity;
             item.UnitPrice = orderItem.UnitPrice;
             item.SKU = orderItem.Product.Identifiers.Sku;
@@ -135,8 +135,8 @@ namespace ShipWorks.Stores.Platforms.ShipEngine
                 foreach (var detail in orderItem.Product.Details)
                 {
                     OrderItemAttributeEntity attribute = InstantiateOrderItemAttribute(item);
-                    attribute.Name = detail.Name;
-                    attribute.Description = detail.Value;
+                    attribute.Name = EntitiesDecode(detail.Name);
+                    attribute.Description = EntitiesDecode(detail.Value);
                     attribute.UnitPrice = 0;
                     item.OrderItemAttributes.Add(attribute);
                 }
@@ -513,6 +513,21 @@ namespace ShipWorks.Stores.Platforms.ShipEngine
                 return string.Empty;
             }
             return $"{GetNotePreface(noteType)}{text}";
+        }
+
+        /// <summary>
+        /// Decode html encoded strings for order item name and attributes
+        /// </summary>
+        private string EntitiesDecode(string text)
+        {
+            text = WebUtility.HtmlDecode(text);
+
+            if (string.IsNullOrWhiteSpace(text))
+            {
+                return string.Empty;
+            }
+
+            return text;
         }
 
         /// <summary>
