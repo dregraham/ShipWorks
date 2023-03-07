@@ -882,6 +882,12 @@ namespace ShipWorks.Shipping.Carriers.FedEx
                 return serviceTypeParsed;
             }
 
+            // This is needed because it's possible a Smart Post value has been provided
+            if (EnumHelper.TryGetEnumByApiValue(serviceType, out FedExSmartPostIndicia? smartPostServiceTypeParsed))
+            {
+                return FedExServiceType.SmartPost;
+            }
+
             return null;
         }
 
