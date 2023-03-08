@@ -26,7 +26,6 @@ namespace ShipWorks.Stores.Platforms.Platform.OnlineUpdating
     [KeyedComponent(typeof(IPlatformOnlineUpdater), StoreTypeCode.ChannelAdvisorHub)]
     [KeyedComponent(typeof(IPlatformOnlineUpdater), StoreTypeCode.VolusionHub)]
     [KeyedComponent(typeof(IPlatformOnlineUpdater), StoreTypeCode.GrouponHub)]
-    [KeyedComponent(typeof(IPlatformOnlineUpdater), StoreTypeCode.Etsy)]
     public class PlatformOnlineUpdater : IPlatformOnlineUpdater
     {
         // Logger
@@ -50,6 +49,11 @@ namespace ShipWorks.Stores.Platforms.Platform.OnlineUpdating
             this.shippingManager = shippingManager;
             this.orderManager = orderManager;
         }
+
+        /// <summary>
+        /// Newer stores use the swat id to upload Platform shipments
+        /// </summary>
+        protected virtual bool UseSwatId => false;
 
         /// <summary>
         /// Update the online status of the given order
@@ -151,7 +155,7 @@ namespace ShipWorks.Stores.Platforms.Platform.OnlineUpdating
             {
                 await shippingManager.EnsureShipmentLoadedAsync(shipment).ConfigureAwait(false);
                 string carrier = GetCarrierName(shipment);
-                var result = await client.NotifyShipped(shipment.Order.ChannelOrderID, shipment.TrackingNumber, carrier).ConfigureAwait(false);
+                var result = await client.NotifyShipped(shipment.Order.ChannelOrderID, shipment.TrackingNumber, carrier, UseSwatId).ConfigureAwait(false);
                 result.OnFailure(ex => throw new PlatformStoreException($"Error uploading shipment details: {ex.Message}", ex));
             }
         }
