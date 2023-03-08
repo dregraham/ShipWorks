@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Controls;
-using System.Windows.Documents;
+using System.Windows.Media;
 using ShipWorks.ApplicationCore.Licensing.Warehouse.DTO;
 
 namespace ShipWorks.ApplicationCore.Licensing.Warehouse.Messages
@@ -32,24 +32,21 @@ namespace ShipWorks.ApplicationCore.Licensing.Warehouse.Messages
                 OkButton.IsEnabled = false;
             }
 
-            var paragraph = new Paragraph();
-
             var messagesArray = messages.ToArray();
+
+            var markdown = string.Empty;
 
             for (int i = 0; i < messagesArray.Length; i++)
             {
                 if (messagesArray.Length > 1)
                 {
-                    paragraph.Inlines.Add(new Bold(new Run($"Message {i + 1}:")));
-                    paragraph.Inlines.Add(new LineBreak());
+                    markdown += $"**Message {i + 1}:**\n\n";
                 }
 
-                paragraph.Inlines.Add(new Run(messagesArray[i].Message));
-                paragraph.Inlines.Add(new LineBreak());
-                paragraph.Inlines.Add(new LineBreak());
+                markdown += $"{messagesArray[i].Message}\n\n\n";
             }
 
-            Messages.Document = new FlowDocument(paragraph);
+            Messages.Markdown = markdown;
         }
 
         /// <summary>
