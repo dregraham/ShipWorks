@@ -29,7 +29,7 @@
             <Border Grid.Row="1" BorderBrush="DarkGray" BorderThickness="1" Background="White">
                 <mdxam:MarkdownScrollViewer Opacity="1" Grid.Row="1" Padding="8" Name="Messages" VerticalScrollBarVisibility="Auto" ClickAction="OpenBrowser" MarkdownStyle="{x:Static mdxam:MarkdownStyle.GithubLike}" xml:space="preserve" Background="White" />
             </Border>
-            <CheckBox Visibility="Collapsed" VerticalContentAlignment="Center" Margin="0,8,0,0" Grid.Row="2" Name="Acknowledgement" Checked="AcknowledgmentChanged" Unchecked="AcknowledgmentChanged" HorizontalAlignment="Right">I acknowledge that I have read the above messages</CheckBox>
+            <CheckBox Visibility="Collapsed" VerticalContentAlignment="Center" Margin="0,8,0,0" Grid.Row="2" Name="Acknowledgement" Checked="AcknowledgmentChanged" Unchecked="AcknowledgmentChanged" HorizontalAlignment="Right" x:FieldModifier="public">I acknowledge that I have read the above messages</CheckBox>
             <Button Name="OkButton" Margin="0,8,0,0" Grid.Row="3" Width="50" Height="auto" Content="OK" HorizontalAlignment="Right" Click="OkButtonClicked"></Button>
         </Grid>
     </Border>
