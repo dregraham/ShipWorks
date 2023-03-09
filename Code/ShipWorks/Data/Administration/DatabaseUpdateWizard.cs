@@ -70,7 +70,7 @@ namespace ShipWorks.Data.Administration
         TelemetricResult<Unit> backupTelemetry = null;
 
         // This is the cutoff version for the FedEx upgrade that requires a database backup when upgraded
-        private static Version FedExUpgradeVersion = new Version(9, 13, 4, 0);
+        private static Version FedExUpgradeVersion = new Version(9, 13, 0, 0);
 
         /// <summary>
         /// Open the upgrade window and returns true if the wizard completed with an OK result.
@@ -105,7 +105,6 @@ namespace ShipWorks.Data.Administration
         private DatabaseUpdateWizard(ILifetimeScope lifetimeScope)
         {
             InitializeComponent();
-
             installed = SqlSchemaUpdater.GetInstalledSchemaVersion();
             showFirewallPage = installed < new Version(3, 0);
 
