@@ -14,7 +14,7 @@ namespace ShipWorks.Stores.UI.Platforms.Shopify
 		{
 			if (string.IsNullOrEmpty(store.OrderSourceID))
 			{
-				var createOrderSourceViewModel = IoC.UnsafeGlobalLifetimeScope.Resolve<IShopifyCreateOrderSourceViewModel>();
+				var createOrderSourceViewModel = IoC.UnsafeGlobalLifetimeScope.Resolve<IShopifyMigrateOrderSourceViewModel>();
 				return new ShopifyAccountSettingsMigrationControl(createOrderSourceViewModel);
 			}
 

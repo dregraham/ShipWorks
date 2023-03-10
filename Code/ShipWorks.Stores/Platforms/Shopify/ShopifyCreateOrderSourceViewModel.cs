@@ -114,7 +114,7 @@ namespace ShipWorks.Stores.Platforms.Shopify
         /// <summary>
         /// Save the order source
         /// </summary>
-        public bool Save(ShopifyStoreEntity store)
+        public async virtual Task<bool> Save(ShopifyStoreEntity store)
         {
             if (string.IsNullOrWhiteSpace(ShopifyShopUrlName))
             {
@@ -201,3 +201,4 @@ namespace ShipWorks.Stores.Platforms.Shopify
         }
     }
 }
+

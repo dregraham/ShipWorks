@@ -58,5 +58,9 @@ namespace ShipWorks.Stores.Platforms.Platform
         /// </summary>
         Task UpdateShopifyNotifyCustomer(string orderSourceId, bool notifyCustomer);
 
+        /// <summary>
+        /// Call hub to update orderSourceId for OrderSource migrated to platform
+        /// </summary>
+        Task MigrateStoreToPlatform(string warehouseStoreId, string orderSourceId);
     }
 }

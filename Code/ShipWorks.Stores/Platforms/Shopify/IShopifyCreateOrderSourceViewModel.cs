@@ -1,4 +1,5 @@
-﻿using ShipWorks.Data.Model.EntityClasses;
+﻿using System.Threading.Tasks;
+using ShipWorks.Data.Model.EntityClasses;
 
 namespace ShipWorks.Stores.Platforms.Shopify
 {
@@ -15,7 +16,7 @@ namespace ShipWorks.Stores.Platforms.Shopify
         /// <summary>
         /// Save the store
         /// </summary>
-        bool Save(ShopifyStoreEntity store);
+        Task<bool> Save(ShopifyStoreEntity store);
 
         string EncodedOrderSource { get; set; }
 

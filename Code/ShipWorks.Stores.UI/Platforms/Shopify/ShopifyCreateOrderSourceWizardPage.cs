@@ -41,7 +41,7 @@ namespace ShipWorks.Stores.UI.Platforms.Shopify
         /// </summary>
         private void OnStepNext(object sender, WizardStepEventArgs e)
         {
-            if (!viewModel.Save(GetStore<ShopifyStoreEntity>()))
+            if (!viewModel.Save(GetStore<ShopifyStoreEntity>()).Result)
             {
                 e.NextPage = this;
             }

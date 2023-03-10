@@ -1,4 +1,5 @@
-﻿using System.Windows.Forms;
+﻿using System.Threading.Tasks;
+using System.Windows.Forms;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.ComponentRegistration.Ordering;
 using ShipWorks.Data.Model.EntityClasses;
@@ -14,23 +15,22 @@ namespace ShipWorks.Stores.UI.Platforms.Shopify
     [KeyedComponent(typeof(AccountSettingsControlBase), StoreTypeCode.Shopify)]
     public partial class ShopifyAccountSettingsMigrationControl : AccountSettingsControlBase
     {
-        private readonly IShopifyCreateOrderSourceViewModel viewModel;
+        private readonly IShopifyMigrateOrderSourceViewModel viewModel;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public ShopifyAccountSettingsMigrationControl(IShopifyCreateOrderSourceViewModel viewModel)
+        public ShopifyAccountSettingsMigrationControl(IShopifyMigrateOrderSourceViewModel viewModel)
         {
             this.viewModel = viewModel;
             InitializeComponent();
         }
 
-        /// <summary>
-        /// Nothing to save
-        /// </summary>
-        public override bool SaveToEntity(StoreEntity store)
+        public override bool IsSaveAsync => true;
+
+        public async override Task<bool> SaveToEntityAsync(StoreEntity store)
         {
-            return viewModel.Save((ShopifyStoreEntity) store);
+            return await viewModel.Save((ShopifyStoreEntity) store);
         }
 
         /// <summary>
