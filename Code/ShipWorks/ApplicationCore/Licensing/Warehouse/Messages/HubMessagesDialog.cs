@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Windows;
 using System.Windows.Forms;
 using ShipWorks.ApplicationCore.Licensing.Warehouse.DTO;
 
@@ -28,7 +27,7 @@ namespace ShipWorks.ApplicationCore.Licensing.Warehouse.Messages
         protected override void OnFormClosing(FormClosingEventArgs e)
         {
             base.OnFormClosing(e);
-            if (this.messageControl.Acknowledgement.Visibility == Visibility.Visible && (!this.messageControl.Acknowledgement.IsChecked ?? true))
+            if (this.messageControl.RequiresAcknowledgement && !this.messageControl.IsAcknowledged)
             {
                 e.Cancel = true;
             }
