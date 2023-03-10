@@ -1,27 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel.Composition.Primitives;
-using System.Data.SqlClient;
-using System.Diagnostics;
 using System.Linq;
-using System.Net;
 using System.Threading.Tasks;
-using Interapptive.Shared.Business;
-using Interapptive.Shared.Business.Geography;
 using Interapptive.Shared.ComponentRegistration;
-using Interapptive.Shared.Enums;
-using Interapptive.Shared.Extensions;
-using Interapptive.Shared.Metrics;
 using Interapptive.Shared.Utility;
-using log4net;
-using Newtonsoft.Json;
-using ShipWorks.Data;
-using ShipWorks.Data.Administration.Recovery;
-using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model;
 using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Stores.Communication;
-using ShipWorks.Stores.Content;
 using ShipWorks.Stores.Platforms.Amazon.DTO;
 using ShipWorks.Stores.Platforms.ShipEngine;
 using ShipWorks.Stores.Platforms.ShipEngine.Apollo;
@@ -48,7 +32,9 @@ namespace ShipWorks.Stores.Platforms.Shopify
             this.shopifyFraudDownloader = shopifyFraudDownloader;
         }
 
-
+        /// <summary>
+        /// Create a Shopify order
+        /// </summary>
         protected override async Task<OrderEntity> CreateOrder(OrderSourceApiSalesOrder salesOrder)
         {
             long shopifyOrderId = long.Parse(salesOrder.OrderId);
@@ -64,14 +50,9 @@ namespace ShipWorks.Stores.Platforms.Shopify
             }
 
             var order = (ShopifyOrderEntity) result.Value;
-            var orderNumberString = salesOrder.RequestedFulfillments?.FirstOrDefault()?.Extensions?.CustomField3;
-            if (!long.TryParse(orderNumberString, out long orderNumber))
-            {
-                log.InfoFormat("Skipping order '{0}': {1}.", shopifyOrderId, "Missing OrderNumber");
-                return null;
-            }
-            
-            order.OrderNumber = orderNumber;
+
+            LoadOrderNumber(order, salesOrder);
+           
             var fraudRiskString = salesOrder.RequestedFulfillments?.FirstOrDefault()?.Extensions?.CustomField2;
             //https://github.com/shipstation/integrations-ecommerce/blob/56380abc4fde3e0d299d48252bc95d5a0ddff2ce/modules/shopify/src/api/types/enums.ts
             //export enum RiskRecommendation
@@ -140,6 +121,48 @@ namespace ShipWorks.Stores.Platforms.Shopify
                     order.PaymentStatusCode = (int) ShopifyPaymentStatus.Paid; break;
             }
             return order;
+        }
+
+        /// <summary>
+        /// Load the order number for the Shopify order, taking into consideration the prefix\postfix Shopify allows
+        /// </summary>
+        private void LoadOrderNumber(ShopifyOrderEntity order, OrderSourceApiSalesOrder salesOrder)
+        {
+            // Get shopify's field shopify calls "order_number" which SE puts into a field called custom_field_3
+            var orderNumberString = salesOrder.RequestedFulfillments?.FirstOrDefault()?.Extensions?.CustomField3;
+            if (!long.TryParse(orderNumberString, out long orderNumber))
+            {
+                throw new InvalidCastException($"Skipping order '{salesOrder.OrderId}': Missing OrderNumber");
+            }
+
+            order.OrderNumber = orderNumber;
+
+            // Shopify allows adding prefix\suffix to the order number.  The "full" order number is stored in the 'name' node.  We'll use that to determine what
+            // the prefix\suffix is
+            string fullOrderNumber = salesOrder.OrderNumber;
+
+            int numericIndex = fullOrderNumber.IndexOf(order.OrderNumber.ToString(), StringComparison.Ordinal);
+
+            // Shouldn't happen, but bail if it does
+            if (numericIndex < 0)
+            {
+                return;
+            }
+
+            // Extract the prefix
+            string prefix = fullOrderNumber.Substring(0, numericIndex);
+
+            // Extract the postfix
+            string postfix = fullOrderNumber.Substring(numericIndex + order.OrderNumber.ToString().Length);
+
+            // Shopify defaults to # as a prefix... let's not consider that
+            if (prefix == "#")
+            {
+                prefix = "";
+            }
+
+            order.ApplyOrderNumberPrefix(prefix);
+            order.ApplyOrderNumberPostfix(postfix);
         }
 
         /// <summary>
