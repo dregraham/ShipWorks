@@ -27,6 +27,8 @@ namespace ShipWorks.Stores.Platforms.Platform.OnlineUpdating
     [KeyedComponent(typeof(IPlatformOnlineUpdater), StoreTypeCode.ChannelAdvisorHub)]
     [KeyedComponent(typeof(IPlatformOnlineUpdater), StoreTypeCode.VolusionHub)]
     [KeyedComponent(typeof(IPlatformOnlineUpdater), StoreTypeCode.GrouponHub)]
+    [KeyedComponent(typeof(IPlatformOnlineUpdater), StoreTypeCode.Etsy)]
+    [KeyedComponent(typeof(IPlatformOnlineUpdater), StoreTypeCode.Shopify)]
     public class PlatformOnlineUpdater : IPlatformOnlineUpdater
     {
         // Logger
@@ -35,26 +37,24 @@ namespace ShipWorks.Stores.Platforms.Platform.OnlineUpdating
         protected readonly IShippingManager shippingManager;
         private readonly ISqlAdapterFactory sqlAdapterFactory;
         private readonly Func<IWarehouseOrderClient> createWarehouseOrderClient;
-        private readonly IIndex<StoreTypeCode, IOnlineUpdater> storeSpecificOnlineUpdaterFactory;
+        private readonly IIndex<StoreTypeCode, IOnlineUpdater> legacyStoreSpecificOnlineUpdaterFactory;
+        private readonly IIndex<StoreTypeCode, IPlatformOnlineUpdaterBehavior> platformOnlineUpdateBehavior;
 
         /// <summary>
         /// Constructor
         /// </summary>
         public PlatformOnlineUpdater(IOrderManager orderManager, IShippingManager shippingManager,
             ISqlAdapterFactory sqlAdapterFactory, Func<IWarehouseOrderClient> createWarehouseOrderClient,
-            IIndex<StoreTypeCode, IOnlineUpdater> storeSpecificOnlineUpdaterFactory)
+            IIndex<StoreTypeCode, IOnlineUpdater> legacyStoreSpecificOnlineUpdaterFactory,
+            IIndex<StoreTypeCode, IPlatformOnlineUpdaterBehavior> platformOnlineUpdateBehavior)
         {
             this.sqlAdapterFactory = sqlAdapterFactory;
             this.createWarehouseOrderClient = createWarehouseOrderClient;
-            this.storeSpecificOnlineUpdaterFactory = storeSpecificOnlineUpdaterFactory;
+            this.legacyStoreSpecificOnlineUpdaterFactory = legacyStoreSpecificOnlineUpdaterFactory;
             this.shippingManager = shippingManager;
             this.orderManager = orderManager;
+            this.platformOnlineUpdateBehavior = platformOnlineUpdateBehavior;
         }
-
-        /// <summary>
-        /// Newer stores use the swat id to upload Platform shipments
-        /// </summary>
-        protected virtual bool UseSwatId => false;
 
         /// <summary>
         /// Update the online status of the given order
@@ -132,7 +132,7 @@ namespace ShipWorks.Stores.Platforms.Platform.OnlineUpdating
 
             if (nonPlatformShipments.Any())
             {
-                if (storeSpecificOnlineUpdaterFactory.TryGetValue(store.StoreTypeCode, out var uploader))
+                if (legacyStoreSpecificOnlineUpdaterFactory.TryGetValue(store.StoreTypeCode, out var uploader))
                 {
                     await uploader.UploadShipmentDetails(store, nonPlatformShipments.ToList());
                 }
@@ -152,18 +152,27 @@ namespace ShipWorks.Stores.Platforms.Platform.OnlineUpdating
         /// </summary
         protected virtual async Task UploadShipmentsToPlatform(List<ShipmentEntity> shipments, StoreEntity store, IWarehouseOrderClient client)
         {
+            if (!platformOnlineUpdateBehavior.TryGetValue(store.StoreTypeCode, out var behavior))
+            {
+                behavior = new DefaultPlatformOnlineUpdaterBehavior();
+            }
+
             foreach (var shipment in shipments.Where(x => !x.Order.ChannelOrderID.IsNullOrWhiteSpace()))
             {
                 await shippingManager.EnsureShipmentLoadedAsync(shipment).ConfigureAwait(false);
                 string carrier = GetCarrierName(shipment);
 
-                List<SalesOrderItem> salesOrderItems = shipment.Order.OrderItems.Select(x => new SalesOrderItem
+                List<SalesOrderItem> salesOrderItems = null;
+                if (behavior.IncludeSalesOrderItems)
                 {
-                    SalesOrderItemId = x.OrderItemID.ToString(),
-                    Quantity = (int) x.Quantity
-                }).ToList();
+                    salesOrderItems = shipment.Order.OrderItems.Select(x => new SalesOrderItem
+                    {
+                        SalesOrderItemId = x.OrderItemID.ToString(),
+                        Quantity = (int) x.Quantity
+                    }).ToList();
+                }
 
-                var result = await client.NotifyShipped(shipment.Order.ChannelOrderID, shipment.TrackingNumber, carrier, UseSwatId, salesOrderItems).ConfigureAwait(false);
+                var result = await client.NotifyShipped(shipment.Order.ChannelOrderID, shipment.TrackingNumber, carrier, behavior.UseSwatId, salesOrderItems).ConfigureAwait(false);
                 result.OnFailure(ex => throw new PlatformStoreException($"Error uploading shipment details: {ex.Message}", ex));
             }
         }

@@ -1339,12 +1339,14 @@
     <Compile Include="Stores\Platforms\Amazon\OnlineUpdating\DTO\AmazonBulkUploadShipmentsRequest.cs" />
     <Compile Include="Stores\Platforms\Etsy\EtsyPlatformDownloader.cs" />
     <Compile Include="Stores\Platforms\Etsy\IEtsyAccountSettingsControlFactory.cs" />
+    <Compile Include="Stores\Platforms\Etsy\OnlineUpdating\EtsyPlatformOnlineUpdaterBehavior.cs" />
     <Compile Include="Stores\Platforms\Platform\IHubOrderSourceClient.cs" />
+    <Compile Include="Stores\Platforms\Platform\OnlineUpdating\DefaultPlatformOnlineUpdaterBehavior.cs" />
     <Compile Include="Stores\Platforms\Platform\OnlineUpdating\IPlatformOnlineUpdater.cs" />
+    <Compile Include="Stores\Platforms\Platform\OnlineUpdating\IPlatformOnlineUpdaterBehavior.cs" />
     <Compile Include="Stores\Platforms\Platform\OnlineUpdating\PlatformBulkOnlineUpdater.cs" />
     <Compile Include="Stores\Platforms\Platform\OnlineUpdating\PlatformBulkOnlineUpdaterRequest.cs" />
     <Compile Include="Stores\Platforms\Platform\OnlineUpdating\PlatformOnlineUpdater.cs" />
-    <Compile Include="Stores\Platforms\Platform\OnlineUpdating\SwatPlatformOnlineUpdater.cs" />
     <Compile Include="Stores\Platforms\Platform\PlatformStoreException.cs" />
     <Compile Include="Stores\Platforms\ShipEngine\Apollo\GetOrdersDTO.cs" />
     <Compile Include="Stores\Platforms\ShipEngine\Apollo\PlatformApolloDTO.cs" />
@@ -1353,6 +1355,7 @@
     <Compile Include="Stores\Platforms\ShipEngine\PlatformOrderWebClient.cs" />
     <Compile Include="Stores\Platforms\ShipEngine\PlatformDownloader.cs" />
     <Compile Include="Stores\Platforms\Shopify\IShopifyAccountSettingsControlFactory.cs" />
+    <Compile Include="Stores\Platforms\Shopify\OnlineUpdating\ShopifyPlatformOnlineUpdaterBehavior.cs" />
     <Compile Include="Stores\Platforms\Shopify\ShopifyPlatformDownloader.cs" />
     <Compile Include="Stores\Platforms\Shopify\WizardPages\ShopifyAssociateAccountPage.cs">
       <SubType>UserControl</SubType>
