@@ -163,7 +163,7 @@ namespace ShipWorks.Stores.Platforms.Shopify.OnlineUpdating
 			var items = new Lazy<IEnumerable<IShopifyOrderItemEntity>>(() => orderManager.GetItems(order).OfType<IShopifyOrderItemEntity>());
 
 			orderSearchEntities
-				.Select(x => PerformUpload(webClient, x, new ShopifyFulfillment(trackingNumber, carrier, carrierTrackingUrl, locationID, store), items, true))
+				.Select(x => PerformUpload(webClient, x, new ShopifyFulfillment(trackingNumber, carrier, carrierTrackingUrl, locationID, store, items.Value), items, true))
 				.ThrowFailures((msg, ex) => new ShopifyException(msg, ex));
 		}
 
@@ -188,7 +188,7 @@ namespace ShipWorks.Stores.Platforms.Shopify.OnlineUpdating
 				if (shouldRetry)
 				{
 					return locationService.GetItemLocations(webClient, orderID, items.Value)
-						.Select(x => uploadDetails.WithLocation(x.locationID, x.items))
+						.Select(x => uploadDetails.WithLocation(x.locationID))
 						.Select(x => PerformUpload(webClient, orderID, x, items, false))
 						.DefaultIfEmpty(Result.FromError(wrappedException))
 						.OrderBy(x => x.Success)

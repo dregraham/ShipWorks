@@ -16,27 +16,28 @@ namespace ShipWorks.Stores.Platforms.Shopify.DTOs
         /// <summary>
         /// Create upload details based on another instance
         /// </summary>
-        private ShopifyFulfillment(ShopifyFulfillment copyFrom, long locationID, IEnumerable<IShopifyOrderItemEntity> items)
+        private ShopifyFulfillment(ShopifyFulfillment copyFrom, long locationID)
         {
             TrackingNumber = copyFrom.TrackingNumber;
             Carrier = copyFrom.Carrier;
             CarrierTrackingUrl = copyFrom.CarrierTrackingUrl;
             NotifyCustomer = copyFrom.NotifyCustomer;
-
+            LineItems = copyFrom.LineItems;
+            
             LocationID = locationID;
-            LineItems = items.Select(x => new ShopifyFulfillmentLineItem(x.ShopifyOrderItemID)).ToList();
         }
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public ShopifyFulfillment(string trackingNumber, string carrier, string carrierTrackingUrl, long locationID, IShopifyStoreEntity store)
+        public ShopifyFulfillment(string trackingNumber, string carrier, string carrierTrackingUrl, long locationID, IShopifyStoreEntity store, IEnumerable<IShopifyOrderItemEntity> items)
         {
             TrackingNumber = trackingNumber;
             Carrier = carrier;
             CarrierTrackingUrl = carrierTrackingUrl;
             LocationID = locationID;
             NotifyCustomer = store.ShopifyNotifyCustomer;
+            LineItems = items.Select(x => new ShopifyFulfillmentLineItem(x.ShopifyOrderItemID)).ToList();
         }
 
         /// <summary>
@@ -78,8 +79,8 @@ namespace ShipWorks.Stores.Platforms.Shopify.DTOs
         /// <summary>
         /// Create a copy of these details with the given location and items
         /// </summary>
-        public ShopifyFulfillment WithLocation(long locationId, IEnumerable<IShopifyOrderItemEntity> items) =>
-            new ShopifyFulfillment(this, locationId, items);
+        public ShopifyFulfillment WithLocation(long locationId) =>
+            new ShopifyFulfillment(this, locationId);
 
         /// <summary>
         /// Get details about this object
