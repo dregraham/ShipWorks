@@ -7,6 +7,7 @@ using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Stores;
 using ShipWorks.Stores.Platforms.Amazon.OnlineUpdating.DTO;
+using ShipWorks.Stores.Platforms.Platform.OnlineUpdating;
 using ShipWorks.Warehouse.Orders.DTO;
 
 namespace ShipWorks.Warehouse.Orders
@@ -25,7 +26,7 @@ namespace ShipWorks.Warehouse.Orders
         /// <summary>
         /// Upload shipment notification information to Hub. This will only work for orders from shipengine
         /// </summary>
-        Task<Result> NotifyShipped(string salesOrderId, string trackingNumber, string carrier, bool useSwatId);
+        Task<Result> NotifyShipped(string salesOrderId, string trackingNumber, string carrier, bool useSwatId, List<SalesOrderItem> salesOrderItems);
 
         /// <summary>
         /// Upload a order to the hub

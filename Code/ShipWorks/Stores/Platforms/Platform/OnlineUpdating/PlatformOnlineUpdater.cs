@@ -8,6 +8,7 @@ using Interapptive.Shared.Utility;
 using log4net;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Shipping;
 using ShipWorks.Shipping.Carriers;
 using ShipWorks.Shipping.Carriers.Api;
@@ -155,7 +156,14 @@ namespace ShipWorks.Stores.Platforms.Platform.OnlineUpdating
             {
                 await shippingManager.EnsureShipmentLoadedAsync(shipment).ConfigureAwait(false);
                 string carrier = GetCarrierName(shipment);
-                var result = await client.NotifyShipped(shipment.Order.ChannelOrderID, shipment.TrackingNumber, carrier, UseSwatId).ConfigureAwait(false);
+
+                List<SalesOrderItem> salesOrderItems = shipment.Order.OrderItems.Select(x => new SalesOrderItem
+                {
+                    SalesOrderItemId = x.OrderItemID.ToString(),
+                    Quantity = (int) x.Quantity
+                }).ToList();
+
+                var result = await client.NotifyShipped(shipment.Order.ChannelOrderID, shipment.TrackingNumber, carrier, UseSwatId, salesOrderItems).ConfigureAwait(false);
                 result.OnFailure(ex => throw new PlatformStoreException($"Error uploading shipment details: {ex.Message}", ex));
             }
         }
