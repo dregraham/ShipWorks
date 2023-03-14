@@ -167,7 +167,7 @@ namespace ShipWorks.Stores.Platforms.Platform.OnlineUpdating
                 {
                     salesOrderItems = shipment.Order.OrderItems.Select(x => new SalesOrderItem
                     {
-                        SalesOrderItemId = x.OrderItemID.ToString(),
+                        SalesOrderItemId = x.StoreOrderItemID,
                         Quantity = (int) x.Quantity
                     }).ToList();
                 }

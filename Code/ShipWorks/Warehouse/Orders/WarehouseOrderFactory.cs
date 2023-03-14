@@ -194,6 +194,7 @@ namespace ShipWorks.Warehouse.Orders
         private void LoadItem(IStoreEntity store, OrderItemEntity itemEntity, WarehouseOrderItem warehouseItem)
         {
             itemEntity.HubItemID = warehouseItem.ID;
+            itemEntity.StoreOrderItemID = warehouseItem.StoreOrderItemID;
             itemEntity.Name = warehouseItem.Name;
             itemEntity.Code = warehouseItem.Code;
             itemEntity.SKU = warehouseItem.SKU;
