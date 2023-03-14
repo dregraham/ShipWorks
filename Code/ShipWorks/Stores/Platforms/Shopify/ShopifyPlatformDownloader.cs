@@ -70,14 +70,16 @@ namespace ShipWorks.Stores.Platforms.Shopify
                 };
 
                 shopifyFraudDownloader.Merge(order, new List<OrderPaymentDetailEntity> { paymentDetailEntity });
-            }
+			}
 
-            //unshipped
-            //partial
-            //fulfilled
-            //restocked
-            //unknown
-            order.FulfillmentStatusCode = (int) ShopifyFulfillmentStatus.Unshipped;
+			order.OnlineCustomerID = salesOrder.Buyer?.BuyerId;
+
+			//unshipped
+			//partial
+			//fulfilled
+			//restocked
+			//unknown
+			order.FulfillmentStatusCode = (int) ShopifyFulfillmentStatus.Unshipped;
             
             //authorized
             //pending
