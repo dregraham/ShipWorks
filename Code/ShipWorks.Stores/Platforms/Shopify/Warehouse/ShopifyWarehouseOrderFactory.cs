@@ -77,7 +77,7 @@ namespace ShipWorks.Stores.Platforms.Shopify.Warehouse
             {
                 // ChannelOrderID should be not populated for old (legacy) orders, because of notification -
                 // notification checks this and will use legacy code for uploading order details
-                base.SetChannelOrderId(order, warehouseOrder);
+                order.ChannelOrderID = warehouseOrder.ShipEngineSalesOrderId;
             }
         }
 
