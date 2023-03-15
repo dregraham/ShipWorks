@@ -502,15 +502,15 @@ namespace ShipWorks.Stores.Platforms.ShipEngine
                         }
                         else
                         {
-                            if (!string.IsNullOrEmpty(existingItem.SKU))
+                            if (!string.IsNullOrEmpty(existingItem?.SKU))
                             {
                                 salesOrderItem = fulfillment.Items.FirstOrDefault(x => existingItem.SKU == x.Product.Identifiers.Sku);
                             }
-                            if (salesOrderItem == null && !string.IsNullOrEmpty(existingItem.Name))
+                            if (salesOrderItem == null && !string.IsNullOrEmpty(existingItem?.Name))
                             {
                                 salesOrderItem = fulfillment.Items.FirstOrDefault(x => EntitiesDecode(x.Product.Name) == existingItem.Name);
                             }
-                            if (salesOrderItem == null && !string.IsNullOrEmpty(existingItem.Code))
+                            if (salesOrderItem == null && !string.IsNullOrEmpty(existingItem?.Code))
                             {
                                 salesOrderItem = fulfillment.Items.FirstOrDefault(x => existingItem.Code == x.Product.Identifiers.Sku);
                             }
