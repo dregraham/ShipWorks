@@ -69,6 +69,7 @@ namespace ShipWorks.Stores.Platforms.ShipEngine
             var item = InstantiateOrderItem(order);
 
             // populate the basics
+            item.StoreOrderItemID = orderItem.SalesOrderItemGuid;
             item.Name = EntitiesDecode(orderItem.Product.Name);
             item.Quantity = orderItem.Quantity;
             item.UnitPrice = orderItem.UnitPrice;
