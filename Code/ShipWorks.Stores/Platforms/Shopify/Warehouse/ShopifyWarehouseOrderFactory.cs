@@ -69,7 +69,16 @@ namespace ShipWorks.Stores.Platforms.Shopify.Warehouse
 
             shopifyOrderEntity.RequestedShipping = requestedShippingField == ShopifyRequestedShippingField.Code ?
                 shopifyWarehouseOrder.RequestedShippingCode : shopifyWarehouseOrder.RequestedShippingTitle;
-            shopifyOrderEntity.ChannelOrderID = warehouseOrder.ShipEngineSalesOrderId;
+        }
+
+        protected override void SetChannelOrderId(OrderEntity order, WarehouseOrder warehouseOrder)
+        {
+            if (order.IsNew)
+            {
+                // ChannelOrderID should be not populated for old (legacy) orders, because of notification -
+                // notification checks this and will use legacy code for uploading order details
+                base.SetChannelOrderId(order, warehouseOrder);
+            }
         }
 
         /// <summary>
