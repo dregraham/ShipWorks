@@ -125,6 +125,16 @@ namespace ShipWorks.Stores.Platforms.Shopify
             return order;
         }
 
+        protected override void SetChannelOrderID(OrderSourceApiSalesOrder salesOrder, OrderEntity order)
+        {
+            if (order.IsNew)
+            {
+                // ChannelOrderID should be not populated for old (legacy) orders, because of notification -
+                // notification checks this and will use legacy code for uploading order details
+                base.SetChannelOrderID(salesOrder, order);  
+            }
+        }
+
         /// <summary>
         /// Load the order number for the Shopify order, taking into consideration the prefix\postfix Shopify allows
         /// </summary>

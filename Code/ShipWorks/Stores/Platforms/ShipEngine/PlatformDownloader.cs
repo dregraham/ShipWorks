@@ -414,6 +414,11 @@ namespace ShipWorks.Stores.Platforms.ShipEngine
         /// </summary>
         protected abstract Task<OrderEntity> CreateOrder(OrderSourceApiSalesOrder salesOrder);
 
+        protected virtual void SetChannelOrderID(OrderSourceApiSalesOrder salesOrder, OrderEntity order)
+        {
+            order.ChannelOrderID = salesOrder.SalesOrderGuid;
+        }
+
         /// <summary>
         /// Store order in database
         /// </summary>
@@ -431,7 +436,7 @@ namespace ShipWorks.Stores.Platforms.ShipEngine
                 return;
             }
 
-            order.ChannelOrderID = salesOrder.SalesOrderGuid;
+            SetChannelOrderID(salesOrder, order);
 
             var orderDate = salesOrder.CreatedDateTime?.DateTime ?? DateTime.UtcNow;
             var modifiedDate = salesOrder.ModifiedDateTime?.DateTime ?? DateTime.UtcNow;
@@ -456,7 +461,7 @@ namespace ShipWorks.Stores.Platforms.ShipEngine
 
             // only load order items on new orders
             if (order.IsNew)
-            {
+            {   
                 var giftNotes = GetGiftNotes(salesOrder);
                 IEnumerable<CouponCode> couponCodes = GetCouponCodes(salesOrder);
                 foreach (var fulfillment in salesOrder.RequestedFulfillments)
@@ -475,59 +480,10 @@ namespace ShipWorks.Stores.Platforms.ShipEngine
                 // get the amount so we can fudge order totals
                 order.OrderTotal = salesOrder.Payment.AmountPaid ?? calculatedTotal;
             }
-            else
-            {
-                UpdateStoreOrderItemID(salesOrder, order);
-            }
 
             // save
             var retryAdapter = new SqlAdapterRetry<SqlException>(5, -5, "PlatformDownloader.LoadOrder");
             await retryAdapter.ExecuteWithRetryAsync(() => SaveDownloadedOrder(order)).ConfigureAwait(false);
-        }
-
-        private void UpdateStoreOrderItemID(OrderSourceApiSalesOrder salesOrder, OrderEntity order)
-        {
-            //update StoreOrderItemID if not populated (required for shopify)
-            var existingItems = order.OrderItems;
-            foreach (var fulfillment in salesOrder.RequestedFulfillments)
-            {
-                foreach (var existingItem in existingItems)
-                {
-                    if (string.IsNullOrEmpty(existingItem?.StoreOrderItemID))
-                    {
-                        OrderSourceSalesOrderItem salesOrderItem = null;
-                        if (fulfillment.Items.Count == 1)
-                        {
-                            salesOrderItem = fulfillment.Items.First();
-                        }
-                        else
-                        {
-                            if (!string.IsNullOrEmpty(existingItem?.SKU))
-                            {
-                                salesOrderItem = fulfillment.Items.FirstOrDefault(x => existingItem.SKU == x.Product.Identifiers.Sku);
-                            }
-                            if (salesOrderItem == null && !string.IsNullOrEmpty(existingItem?.Name))
-                            {
-                                salesOrderItem = fulfillment.Items.FirstOrDefault(x => EntitiesDecode(x.Product.Name) == existingItem.Name);
-                            }
-                            if (salesOrderItem == null && !string.IsNullOrEmpty(existingItem?.Code))
-                            {
-                                salesOrderItem = fulfillment.Items.FirstOrDefault(x => existingItem.Code == x.Product.Identifiers.Sku);
-                            }
-                        }
-                        if (salesOrderItem == null)
-                        {
-                            salesOrderItem = fulfillment.Items.FirstOrDefault();
-                        }
-
-                        var storeOrderItemID = salesOrderItem?.SalesOrderItemGuid;
-                        if (!string.IsNullOrEmpty(storeOrderItemID))
-                        {
-                            existingItem.StoreOrderItemID = storeOrderItemID;
-                        }
-                    }
-                }
-            }
         }
 
         /// <summary>
