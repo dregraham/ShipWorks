@@ -66,7 +66,7 @@ namespace ShipWorks.Stores.Platforms.Shopify
                 var url = await hubOrderSourceClient.GetUpdateOrderSourceInitiateUrl(orderSourceName, store.OrderSourceID, new Dictionary<string, string>
                 {
                     { "shopify_domain", ShopifyHelper.GetShopUrl(store.ShopifyShopUrlName)},
-                    { "notify_customer", store.ShopifyNotifyCustomer.ToString() }
+                    { "notify_buyer", store.ShopifyNotifyCustomer.ToString() }
                 }).ConfigureAwait(true);
                 webHelper.OpenUrl(url);
             }
