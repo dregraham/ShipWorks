@@ -160,7 +160,6 @@ namespace ShipWorks.Stores.Platforms.Platform.OnlineUpdating
 
             foreach (var shipment in shipments.Where(x => !x.Order.ChannelOrderID.IsNullOrWhiteSpace()))
             {
-				UnitOfWork2 unitOfWork = new ManagedConnectionUnitOfWork2();
 				await shippingManager.EnsureShipmentLoadedAsync(shipment).ConfigureAwait(false);
                 string carrier = GetCarrierName(shipment);
 
@@ -179,6 +178,7 @@ namespace ShipWorks.Stores.Platforms.Platform.OnlineUpdating
 
 				if (behavior.SetOrderStatusesOnShipmentNotify)
 				{
+					UnitOfWork2 unitOfWork = new ManagedConnectionUnitOfWork2();
 					behavior.SetOrderStatuses(shipment.Order, unitOfWork);
 
 					using (SqlAdapter adapter = new SqlAdapter(true))
