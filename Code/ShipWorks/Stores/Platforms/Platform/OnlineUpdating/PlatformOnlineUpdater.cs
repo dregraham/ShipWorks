@@ -6,14 +6,15 @@ using Autofac.Features.Indexed;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Utility;
 using log4net;
+using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Data.Connection;
+using ShipWorks.Data.Model.Custom;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping;
 using ShipWorks.Shipping.Carriers;
 using ShipWorks.Shipping.Carriers.Api;
 using ShipWorks.Shipping.Carriers.Postal;
 using ShipWorks.Stores.Content;
-using ShipWorks.Stores.Platforms.ShipEngine.Apollo;
 using ShipWorks.Warehouse.Orders;
 
 namespace ShipWorks.Stores.Platforms.Platform.OnlineUpdating
@@ -28,7 +29,8 @@ namespace ShipWorks.Stores.Platforms.Platform.OnlineUpdating
     [KeyedComponent(typeof(IPlatformOnlineUpdater), StoreTypeCode.VolusionHub)]
     [KeyedComponent(typeof(IPlatformOnlineUpdater), StoreTypeCode.GrouponHub)]
     [KeyedComponent(typeof(IPlatformOnlineUpdater), StoreTypeCode.Etsy)]
-    public class PlatformOnlineUpdater : IPlatformOnlineUpdater
+	[KeyedComponent(typeof(IPlatformOnlineUpdater), StoreTypeCode.Shopify)]
+	public class PlatformOnlineUpdater : IPlatformOnlineUpdater
     {
         // Logger
         static readonly ILog log = LogManager.GetLogger(typeof(PlatformOnlineUpdater));
@@ -158,7 +160,8 @@ namespace ShipWorks.Stores.Platforms.Platform.OnlineUpdating
 
             foreach (var shipment in shipments.Where(x => !x.Order.ChannelOrderID.IsNullOrWhiteSpace()))
             {
-                await shippingManager.EnsureShipmentLoadedAsync(shipment).ConfigureAwait(false);
+				UnitOfWork2 unitOfWork = new ManagedConnectionUnitOfWork2();
+				await shippingManager.EnsureShipmentLoadedAsync(shipment).ConfigureAwait(false);
                 string carrier = GetCarrierName(shipment);
 
                 List<SalesOrderItem> salesOrderItems = null;
@@ -176,15 +179,16 @@ namespace ShipWorks.Stores.Platforms.Platform.OnlineUpdating
 
 				if (behavior.SetOrderStatusesOnShipmentNotify)
 				{
-					SetOrderStatuses(shipment.Order);
+					behavior.SetOrderStatuses(shipment.Order, unitOfWork);
+
+					using (SqlAdapter adapter = new SqlAdapter(true))
+					{
+						unitOfWork.Commit(adapter);
+						adapter.Commit();
+					}
 				}
             }
         }
-
-		protected virtual void SetOrderStatuses(OrderEntity order)
-		{
-			order.OnlineStatus = OrderSourceSalesOrderStatus.Completed.ToString();
-		}
 
         /// <summary>
         /// Gets the carrier name that is allowed in shipengine

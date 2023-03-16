@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Linq;
 using System.Net;
-using System.Text;
 using System.Threading.Tasks;
 using Interapptive.Shared.Business;
 using Interapptive.Shared.Business.Geography;
@@ -16,10 +15,7 @@ using ShipWorks.Data.Administration.Recovery;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Communication;
 using ShipWorks.Stores.Content;
-using ShipWorks.Stores.Platforms.Amazon;
 using ShipWorks.Stores.Platforms.Amazon.DTO;
-using ShipWorks.Stores.Platforms.Amazon.Mws;
-using ShipWorks.Stores.Platforms.Etsy;
 using ShipWorks.Stores.Platforms.ShipEngine.Apollo;
 
 namespace ShipWorks.Stores.Platforms.ShipEngine
