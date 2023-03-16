@@ -167,13 +167,13 @@ namespace ShipWorks.Stores.Platforms.Platform
         /// </summary>
         public async Task UpdateShopifyNotifyCustomer(string orderSourceId, bool notifyCustomer)
         {
-            var request = warehouseRequestFactory.Create(WarehouseEndpoints.UpdateShopifyNotifyCustomer, Method.POST, new { orderSourceId, notifyCustomer });
-            var result = await warehouseRequestClient.MakeRequest(request, "UpdateShopifyNotifyCustomer");
+            //var request = warehouseRequestFactory.Create(WarehouseEndpoints.UpdateShopifyNotifyCustomer, Method.POST, new { orderSourceId, notifyCustomer });
+            //var result = await warehouseRequestClient.MakeRequest(request, "UpdateShopifyNotifyCustomer");
 
-            if (result.Failure)
-            {
-                throw new Exception(result.Message);
-            }
+            //if (result.Failure)
+            //{
+            //    throw new Exception(result.Message);
+            //}
         }
 
         /// <summary>
