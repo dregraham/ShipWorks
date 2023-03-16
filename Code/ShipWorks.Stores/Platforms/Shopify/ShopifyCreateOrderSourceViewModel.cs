@@ -57,7 +57,7 @@ namespace ShipWorks.Stores.Platforms.Shopify
             {
                 var parameters = new Dictionary<string, string>();
                 parameters.Add("shopify_domain", ShopifyHelper.GetShopUrl(ShopifyShopUrlName));
-                parameters.Add("notify_buyer", store.ShopifyNotifyCustomer.ToString());
+                parameters.Add("notify_customer", store.ShopifyNotifyCustomer.ToString());
 
                 var url = await hubOrderSourceClient.GetCreateOrderSourceInitiateUrl(OrderSourceName, store.InitialDownloadDays, parameters).ConfigureAwait(true);
                 webHelper.OpenUrl(url);
