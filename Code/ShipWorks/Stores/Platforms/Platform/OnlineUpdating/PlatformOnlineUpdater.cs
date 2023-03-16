@@ -8,12 +8,12 @@ using Interapptive.Shared.Utility;
 using log4net;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Shipping;
 using ShipWorks.Shipping.Carriers;
 using ShipWorks.Shipping.Carriers.Api;
 using ShipWorks.Shipping.Carriers.Postal;
 using ShipWorks.Stores.Content;
+using ShipWorks.Stores.Platforms.ShipEngine.Apollo;
 using ShipWorks.Warehouse.Orders;
 
 namespace ShipWorks.Stores.Platforms.Platform.OnlineUpdating
@@ -28,7 +28,6 @@ namespace ShipWorks.Stores.Platforms.Platform.OnlineUpdating
     [KeyedComponent(typeof(IPlatformOnlineUpdater), StoreTypeCode.VolusionHub)]
     [KeyedComponent(typeof(IPlatformOnlineUpdater), StoreTypeCode.GrouponHub)]
     [KeyedComponent(typeof(IPlatformOnlineUpdater), StoreTypeCode.Etsy)]
-    [KeyedComponent(typeof(IPlatformOnlineUpdater), StoreTypeCode.Shopify)]
     public class PlatformOnlineUpdater : IPlatformOnlineUpdater
     {
         // Logger
@@ -174,8 +173,18 @@ namespace ShipWorks.Stores.Platforms.Platform.OnlineUpdating
 
                 var result = await client.NotifyShipped(shipment.Order.ChannelOrderID, shipment.TrackingNumber, carrier, behavior.UseSwatId, salesOrderItems).ConfigureAwait(false);
                 result.OnFailure(ex => throw new PlatformStoreException($"Error uploading shipment details: {ex.Message}", ex));
+
+				if (behavior.SetOrderStatusesOnShipmentNotify)
+				{
+					SetOrderStatuses(shipment.Order);
+				}
             }
         }
+
+		protected virtual void SetOrderStatuses(OrderEntity order)
+		{
+			order.OnlineStatus = OrderSourceSalesOrderStatus.Completed.ToString();
+		}
 
         /// <summary>
         /// Gets the carrier name that is allowed in shipengine
