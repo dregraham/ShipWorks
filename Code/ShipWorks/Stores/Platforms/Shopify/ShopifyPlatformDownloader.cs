@@ -72,8 +72,6 @@ namespace ShipWorks.Stores.Platforms.Shopify
                 shopifyFraudDownloader.Merge(order, new List<OrderPaymentDetailEntity> { paymentDetailEntity });
 			}
 
-			order.OnlineCustomerID = salesOrder.Buyer?.BuyerId;
-
 			//unshipped
 			//partial
 			//fulfilled
@@ -135,10 +133,15 @@ namespace ShipWorks.Stores.Platforms.Shopify
             }
         }
 
-        /// <summary>
-        /// Load the order number for the Shopify order, taking into consideration the prefix\postfix Shopify allows
-        /// </summary>
-        private void LoadOrderNumber(ShopifyOrderEntity order, OrderSourceApiSalesOrder salesOrder)
+		protected override void SetOnlineCustomerId(OrderEntity order, OrderSourceApiSalesOrder salesOrder)
+		{
+			order.OnlineCustomerID = salesOrder.Buyer?.BuyerId;
+		}
+
+		/// <summary>
+		/// Load the order number for the Shopify order, taking into consideration the prefix\postfix Shopify allows
+		/// </summary>
+		private void LoadOrderNumber(ShopifyOrderEntity order, OrderSourceApiSalesOrder salesOrder)
         {
             // Get shopify's field shopify calls "order_number" which SE puts into a field called custom_field_3
             var orderNumberString = salesOrder.RequestedFulfillments?.FirstOrDefault()?.Extensions?.CustomField3;

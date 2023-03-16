@@ -423,73 +423,78 @@ namespace ShipWorks.Stores.Platforms.ShipEngine
         /// Store order in database
         /// </summary>
         private async Task LoadOrder(OrderSourceApiSalesOrder salesOrder)
-        {
-            var order = await CreateOrder(salesOrder);
-            if (order == null)
-            {
-                return;
-            }
+		{
+			var order = await CreateOrder(salesOrder);
+			if (order == null)
+			{
+				return;
+			}
 
-            if (salesOrder.Status == OrderSourceSalesOrderStatus.Cancelled && order.IsNew)
-            {
-                log.InfoFormat("Skipping order '{0}' due to canceled and not yet seen by ShipWorks.", salesOrder.OrderNumber);
-                return;
-            }
+			if (salesOrder.Status == OrderSourceSalesOrderStatus.Cancelled && order.IsNew)
+			{
+				log.InfoFormat("Skipping order '{0}' due to canceled and not yet seen by ShipWorks.", salesOrder.OrderNumber);
+				return;
+			}
 
-            SetChannelOrderID(salesOrder, order);
+			SetChannelOrderID(salesOrder, order);
 
-            var orderDate = salesOrder.CreatedDateTime?.DateTime ?? DateTime.UtcNow;
-            var modifiedDate = salesOrder.ModifiedDateTime?.DateTime ?? DateTime.UtcNow;
+			var orderDate = salesOrder.CreatedDateTime?.DateTime ?? DateTime.UtcNow;
+			var modifiedDate = salesOrder.ModifiedDateTime?.DateTime ?? DateTime.UtcNow;
 
-            //Basic properties
-            order.OrderDate = orderDate;
-            order.OnlineLastModified = modifiedDate >= orderDate ? modifiedDate : orderDate;
+			//Basic properties
+			order.OrderDate = orderDate;
+			order.OnlineLastModified = modifiedDate >= orderDate ? modifiedDate : orderDate;
 
-            // set the status
-            order.OnlineStatus = GetOrderStatusString(salesOrder, order.OrderNumberComplete);
-            order.OnlineStatusCode = GetOrderStatusCode(salesOrder, order.OrderNumberComplete);
+			// set the status
+			order.OnlineStatus = GetOrderStatusString(salesOrder, order.OrderNumberComplete);
+			order.OnlineStatusCode = GetOrderStatusCode(salesOrder, order.OrderNumberComplete);
 
-            // no customer ID in this Api
-            order.OnlineCustomerID = null;
+			SetOnlineCustomerId(order, salesOrder);
 
-            // requested shipping
-            order.RequestedShipping =
-                GetRequestedShipping(salesOrder.RequestedFulfillments.FirstOrDefault()?.ShippingPreferences?.ShippingService);
+			// requested shipping
+			order.RequestedShipping =
+				GetRequestedShipping(salesOrder.RequestedFulfillments.FirstOrDefault()?.ShippingPreferences?.ShippingService);
 
-            // Address
-            LoadAddresses(order, salesOrder);
+			// Address
+			LoadAddresses(order, salesOrder);
 
-            // only load order items on new orders
-            if (order.IsNew)
-            {   
-                var giftNotes = GetGiftNotes(salesOrder);
-                IEnumerable<CouponCode> couponCodes = GetCouponCodes(salesOrder);
-                foreach (var fulfillment in salesOrder.RequestedFulfillments)
-                {
-                    LoadOrderItems(fulfillment, order, giftNotes, couponCodes);
-                }
+			// only load order items on new orders
+			if (order.IsNew)
+			{
+				var giftNotes = GetGiftNotes(salesOrder);
+				IEnumerable<CouponCode> couponCodes = GetCouponCodes(salesOrder);
+				foreach (var fulfillment in salesOrder.RequestedFulfillments)
+				{
+					LoadOrderItems(fulfillment, order, giftNotes, couponCodes);
+				}
 
-                AddAdjustments(salesOrder, order);
+				AddAdjustments(salesOrder, order);
 
-                AddTaxes(salesOrder, order);
-                AddNotes(salesOrder, giftNotes, order);
+				AddTaxes(salesOrder, order);
+				AddNotes(salesOrder, giftNotes, order);
 
-                // update the total
-                var calculatedTotal = OrderUtility.CalculateTotal(order);
+				// update the total
+				var calculatedTotal = OrderUtility.CalculateTotal(order);
 
-                // get the amount so we can fudge order totals
-                order.OrderTotal = salesOrder.Payment.AmountPaid ?? calculatedTotal;
-            }
+				// get the amount so we can fudge order totals
+				order.OrderTotal = salesOrder.Payment.AmountPaid ?? calculatedTotal;
+			}
 
-            // save
-            var retryAdapter = new SqlAdapterRetry<SqlException>(5, -5, "PlatformDownloader.LoadOrder");
-            await retryAdapter.ExecuteWithRetryAsync(() => SaveDownloadedOrder(order)).ConfigureAwait(false);
-        }
+			// save
+			var retryAdapter = new SqlAdapterRetry<SqlException>(5, -5, "PlatformDownloader.LoadOrder");
+			await retryAdapter.ExecuteWithRetryAsync(() => SaveDownloadedOrder(order)).ConfigureAwait(false);
+		}
 
-        /// <summary>
-        /// Adds notes to order entity
-        /// </summary>
-        private async Task AddNotes(OrderSourceApiSalesOrder salesOrder, List<GiftNote> giftNotes, OrderEntity order)
+		protected virtual void SetOnlineCustomerId(OrderEntity order, OrderSourceApiSalesOrder salesOrder)
+		{
+			// no customer ID in this Api - at least according to this comment that was here, there actually is one in salesOrder.Buyer?.BuyerId
+			order.OnlineCustomerID = null;
+		}
+
+		/// <summary>
+		/// Adds notes to order entity
+		/// </summary>
+		private async Task AddNotes(OrderSourceApiSalesOrder salesOrder, List<GiftNote> giftNotes, OrderEntity order)
         {
             var notes = salesOrder.Notes.Where(n => n.Type != OrderSourceNoteType.GiftMessage);
             foreach (var note in notes)
