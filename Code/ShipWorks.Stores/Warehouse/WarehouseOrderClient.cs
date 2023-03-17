@@ -127,12 +127,12 @@ namespace ShipWorks.Stores.Warehouse
         /// <summary>
         /// Upload shipment notification information to Hub. This will only work for orders from shipengine
         /// </summary>
-        public async Task<Result> NotifyShipped(string salesOrderId, string trackingNumber, string carrier, bool useSwatId, List<SalesOrderItem> salesOrderItems)
+        public async Task<Result> NotifyShipped(string salesOrderId, string trackingNumber, string carrier, bool useSwatId, List<SalesOrderItem> salesOrderItems, bool? notifyBuyer)
         {
             try
             {
                 IRestRequest request = new RestRequest(WarehouseEndpoints.NotifyShipped(salesOrderId), Method.POST);
-                request.AddJsonBody(new ShipmentNotification(trackingNumber, carrier, useSwatId, salesOrderItems));
+                request.AddJsonBody(new ShipmentNotification(trackingNumber, carrier, useSwatId, salesOrderItems, notifyBuyer));
                 request.JsonSerializer = RestSharpJsonNetSerializer.CreateHubDefault();
 
                 GenericResult<IRestResponse> response = await warehouseRequestClient

@@ -13,12 +13,13 @@ namespace ShipWorks.Stores.Warehouse
     [Obfuscation]
     public class ShipmentNotification
     {
-        public ShipmentNotification(string trackingNumber, string carrierCode, bool useSwatId, List<SalesOrderItem> salesOrderItems)
+        public ShipmentNotification(string trackingNumber, string carrierCode, bool useSwatId, List<SalesOrderItem> salesOrderItems, bool? notifyBuyer)
         {
             TrackingNumber = trackingNumber;
             CarrierCode = carrierCode;
             UseSwatId = useSwatId;
             SalesOrderItems = salesOrderItems;
+            NotifyBuyer = notifyBuyer;
         }
 
         [JsonProperty("trackingNumber")]
@@ -32,5 +33,8 @@ namespace ShipWorks.Stores.Warehouse
 
         [JsonProperty("salesOrderItems")]
         public List<SalesOrderItem> SalesOrderItems { get; set; }
+
+        [JsonProperty("notifyBuyer")]
+        public bool? NotifyBuyer { get; set; }
     }
 }

@@ -46,37 +46,5 @@ namespace ShipWorks.Stores.Platforms.Shopify
 
             return true;
         }
-
-        /// <summary>
-        /// Update the store settings in platform
-        /// </summary>
-        public override async Task<bool> SaveToPlatform(StoreEntity store)
-        {
-            ShopifyStoreEntity storeEntity = store as ShopifyStoreEntity;
-            if (storeEntity.ShopifyNotifyCustomer != shopifyNotifyCustomer.Checked)
-            {
-                using (var lifetimeScope = IoC.BeginLifetimeScope())
-                {
-                    var orderSourceClient = lifetimeScope.Resolve<IHubOrderSourceClient>();
-                    try
-                    {
-                        await orderSourceClient.UpdateShopifyNotifyCustomer(store.OrderSourceID, shopifyNotifyCustomer.Checked).ConfigureAwait(false);
-                        return true;
-                    }
-                    catch (Exception ex)
-                    {
-                        var messageHelper = lifetimeScope.Resolve<IMessageHelper>();
-                        var loggerFactory = lifetimeScope.Resolve<Func<Type, ILog>>();
-                        var logger = loggerFactory(typeof(ShopifyStoreSettingsControl));
-
-                        logger.Error("An error occured updating the shopify store settings in platform", ex);
-                        messageHelper.ShowError("Failed to update settings. Please try again.");
-                        return false;
-                    }
-                }
-            }
-
-            return true;
-        }
     }
 }
