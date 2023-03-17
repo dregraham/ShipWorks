@@ -10,6 +10,7 @@ using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.Custom;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Shipping;
 using ShipWorks.Shipping.Carriers;
 using ShipWorks.Shipping.Carriers.Api;
@@ -173,10 +174,15 @@ namespace ShipWorks.Stores.Platforms.Platform.OnlineUpdating
                     }).ToList();
                 }
 
-                var result = await client.NotifyShipped(shipment.Order.ChannelOrderID, shipment.TrackingNumber, carrier, behavior.UseSwatId, salesOrderItems).ConfigureAwait(false);
+                var shopifyStore = store as IShopifyStoreEntity;
+
+                bool? notifyBuyer = shopifyStore?.ShopifyNotifyCustomer;
+
+                var result = await client.NotifyShipped(shipment.Order.ChannelOrderID, shipment.TrackingNumber, carrier, behavior.UseSwatId, salesOrderItems, notifyBuyer).ConfigureAwait(false);
                 result.OnFailure(ex => throw new PlatformStoreException($"Error uploading shipment details: {ex.Message}", ex));
 
-				if (behavior.SetOrderStatusesOnShipmentNotify)
+
+                if (behavior.SetOrderStatusesOnShipmentNotify)
 				{
 					UnitOfWork2 unitOfWork = new ManagedConnectionUnitOfWork2();
 					behavior.SetOrderStatuses(shipment.Order, unitOfWork);
