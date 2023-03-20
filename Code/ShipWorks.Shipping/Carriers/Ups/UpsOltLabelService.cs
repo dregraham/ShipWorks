@@ -63,8 +63,15 @@ namespace ShipWorks.Shipping.Carriers.UPS
                 {
                     message = "The return shipment's Contents is required.";
                 }
+				if (ex.ErrorCode == "121984" &&
+					(shipment.ShipCountryCode == "MX" || shipment.OriginCountryCode == "MX") &&
+					!string.IsNullOrEmpty(ex.ErrorLocation) &&
+					string.Equals(ex.ErrorLocation, "ShipmentConfirmRequest/Shipment/Package/Description", StringComparison.OrdinalIgnoreCase))
+				{
+					message = "Shipments to Mexico must include a Merchandise Description. Please enter a description into the Customs tab > Description field.";
+				}
 
-                throw new ShippingException(message, ex);
+throw new ShippingException(message, ex);
             }
             catch (CarrierException ex)
             {
