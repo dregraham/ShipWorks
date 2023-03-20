@@ -13,6 +13,7 @@ namespace ShipWorks.Warehouse.Orders.DTO
             ItemAttributes = new List<WarehouseOrderItemAttribute>();
         }
 
+        public string StoreOrderItemID { get; set; }
         public string Name { get; set; }
         public string Code { get; set; }
         public string SKU { get; set; }

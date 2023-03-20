@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Interapptive.Shared.Collections;
-using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.UI;
 using Interapptive.Shared.Utility;
 using log4net;
@@ -17,7 +16,6 @@ namespace ShipWorks.Stores.Platforms.Shopify.OnlineUpdating
     /// <summary>
     /// Create online update commands for Shopify
     /// </summary>
-    [KeyedComponent(typeof(IOnlineUpdateCommandCreator), StoreTypeCode.Shopify)]
     public class ShopifyOnlineUpdateCommandCreator : IOnlineUpdateCommandCreator
     {
         private readonly IMessageHelper messageHelper;

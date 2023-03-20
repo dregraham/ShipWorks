@@ -75,6 +75,7 @@
     <ErrorReport>prompt</ErrorReport>
     <CodeAnalysisRuleSet>..\..\Build\Empty.ruleset</CodeAnalysisRuleSet>
     <LangVersion>latest</LangVersion>
+    <DocumentationFile>bin\Debug %28No Analyzers%29\Interapptive.Shared.xml</DocumentationFile>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Apitron.PDF.Rasterizer, Version=3.0.93.0, Culture=neutral, PublicKeyToken=6e759dbb0039406e, processorArchitecture=MSIL">
@@ -220,7 +221,7 @@
     <Compile Include="Collections\BasicSortDefinition.cs" />
     <Compile Include="ComponentRegistration\ComponentAttribute.cs" />
     <Compile Include="ComponentRegistration\KeyAllComponent.cs" />
-    <Compile Include="ComponentRegistration\KeyedComponent.cs" />
+    <Compile Include="ComponentRegistration\KeyedComponentAttribute.cs" />
     <Compile Include="ComponentRegistration\NamedComponentAttribute.cs" />
     <Compile Include="ComponentRegistration\Ordering\OrderAttribute.cs" />
     <Compile Include="ComponentRegistration\Ordering\OrderedRegistrationExtensions.cs" />

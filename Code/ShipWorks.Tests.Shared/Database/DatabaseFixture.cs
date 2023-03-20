@@ -51,7 +51,7 @@ namespace ShipWorks.Tests.Shared.Database
         private SqlSessionScope sqlSessionScope;
         private ExecutionModeScope executionModeScope;
         private string databaseName;
-        private readonly string databaseSource = @"localhost\Development";
+        private readonly string databaseSource = @"localhost";
 
         /// <summary>
         /// Constructor

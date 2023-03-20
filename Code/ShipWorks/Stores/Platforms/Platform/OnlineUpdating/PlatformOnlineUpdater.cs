@@ -6,8 +6,11 @@ using Autofac.Features.Indexed;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Utility;
 using log4net;
+using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Data.Connection;
+using ShipWorks.Data.Model.Custom;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Shipping;
 using ShipWorks.Shipping.Carriers;
 using ShipWorks.Shipping.Carriers.Api;
@@ -26,7 +29,9 @@ namespace ShipWorks.Stores.Platforms.Platform.OnlineUpdating
     [KeyedComponent(typeof(IPlatformOnlineUpdater), StoreTypeCode.ChannelAdvisorHub)]
     [KeyedComponent(typeof(IPlatformOnlineUpdater), StoreTypeCode.VolusionHub)]
     [KeyedComponent(typeof(IPlatformOnlineUpdater), StoreTypeCode.GrouponHub)]
-    public class PlatformOnlineUpdater : IPlatformOnlineUpdater
+    [KeyedComponent(typeof(IPlatformOnlineUpdater), StoreTypeCode.Etsy)]
+	[KeyedComponent(typeof(IPlatformOnlineUpdater), StoreTypeCode.Shopify)]
+	public class PlatformOnlineUpdater : IPlatformOnlineUpdater
     {
         // Logger
         static readonly ILog log = LogManager.GetLogger(typeof(PlatformOnlineUpdater));
@@ -34,26 +39,24 @@ namespace ShipWorks.Stores.Platforms.Platform.OnlineUpdating
         protected readonly IShippingManager shippingManager;
         private readonly ISqlAdapterFactory sqlAdapterFactory;
         private readonly Func<IWarehouseOrderClient> createWarehouseOrderClient;
-        private readonly IIndex<StoreTypeCode, IOnlineUpdater> storeSpecificOnlineUpdaterFactory;
+        private readonly IIndex<StoreTypeCode, IOnlineUpdater> legacyStoreSpecificOnlineUpdaterFactory;
+        private readonly IIndex<StoreTypeCode, IPlatformOnlineUpdaterBehavior> platformOnlineUpdateBehavior;
 
         /// <summary>
         /// Constructor
         /// </summary>
         public PlatformOnlineUpdater(IOrderManager orderManager, IShippingManager shippingManager,
             ISqlAdapterFactory sqlAdapterFactory, Func<IWarehouseOrderClient> createWarehouseOrderClient,
-            IIndex<StoreTypeCode, IOnlineUpdater> storeSpecificOnlineUpdaterFactory)
+            IIndex<StoreTypeCode, IOnlineUpdater> legacyStoreSpecificOnlineUpdaterFactory,
+            IIndex<StoreTypeCode, IPlatformOnlineUpdaterBehavior> platformOnlineUpdateBehavior)
         {
             this.sqlAdapterFactory = sqlAdapterFactory;
             this.createWarehouseOrderClient = createWarehouseOrderClient;
-            this.storeSpecificOnlineUpdaterFactory = storeSpecificOnlineUpdaterFactory;
+            this.legacyStoreSpecificOnlineUpdaterFactory = legacyStoreSpecificOnlineUpdaterFactory;
             this.shippingManager = shippingManager;
             this.orderManager = orderManager;
+            this.platformOnlineUpdateBehavior = platformOnlineUpdateBehavior;
         }
-
-        /// <summary>
-        /// Newer stores use the swat id to upload Platform shipments
-        /// </summary>
-        protected virtual bool UseSwatId => false;
 
         /// <summary>
         /// Update the online status of the given order
@@ -131,7 +134,7 @@ namespace ShipWorks.Stores.Platforms.Platform.OnlineUpdating
 
             if (nonPlatformShipments.Any())
             {
-                if (storeSpecificOnlineUpdaterFactory.TryGetValue(store.StoreTypeCode, out var uploader))
+                if (legacyStoreSpecificOnlineUpdaterFactory.TryGetValue(store.StoreTypeCode, out var uploader))
                 {
                     await uploader.UploadShipmentDetails(store, nonPlatformShipments.ToList());
                 }
@@ -151,12 +154,45 @@ namespace ShipWorks.Stores.Platforms.Platform.OnlineUpdating
         /// </summary
         protected virtual async Task UploadShipmentsToPlatform(List<ShipmentEntity> shipments, StoreEntity store, IWarehouseOrderClient client)
         {
+            if (!platformOnlineUpdateBehavior.TryGetValue(store.StoreTypeCode, out var behavior))
+            {
+                behavior = new DefaultPlatformOnlineUpdaterBehavior();
+            }
+
             foreach (var shipment in shipments.Where(x => !x.Order.ChannelOrderID.IsNullOrWhiteSpace()))
             {
-                await shippingManager.EnsureShipmentLoadedAsync(shipment).ConfigureAwait(false);
+				await shippingManager.EnsureShipmentLoadedAsync(shipment).ConfigureAwait(false);
                 string carrier = GetCarrierName(shipment);
-                var result = await client.NotifyShipped(shipment.Order.ChannelOrderID, shipment.TrackingNumber, carrier, UseSwatId).ConfigureAwait(false);
+
+                List<SalesOrderItem> salesOrderItems = null;
+                if (behavior.IncludeSalesOrderItems)
+                {
+                    salesOrderItems = shipment.Order.OrderItems.Select(x => new SalesOrderItem
+                    {
+                        SalesOrderItemId = x.StoreOrderItemID,
+                        Quantity = (int) x.Quantity
+                    }).ToList();
+                }
+
+                var shopifyStore = store as IShopifyStoreEntity;
+
+                bool? notifyBuyer = shopifyStore?.ShopifyNotifyCustomer;
+
+                var result = await client.NotifyShipped(shipment.Order.ChannelOrderID, shipment.TrackingNumber, carrier, behavior.UseSwatId, salesOrderItems, notifyBuyer).ConfigureAwait(false);
                 result.OnFailure(ex => throw new PlatformStoreException($"Error uploading shipment details: {ex.Message}", ex));
+
+
+                if (behavior.SetOrderStatusesOnShipmentNotify)
+				{
+					UnitOfWork2 unitOfWork = new ManagedConnectionUnitOfWork2();
+					behavior.SetOrderStatuses(shipment.Order, unitOfWork);
+
+					using (SqlAdapter adapter = new SqlAdapter(true))
+					{
+						unitOfWork.Commit(adapter);
+						adapter.Commit();
+					}
+				}
             }
         }
 

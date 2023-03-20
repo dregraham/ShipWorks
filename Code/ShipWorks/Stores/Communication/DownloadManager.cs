@@ -28,6 +28,7 @@ using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Data.Utility;
 using ShipWorks.Stores.Platforms.Amazon;
 using ShipWorks.Stores.Platforms.Etsy;
+using ShipWorks.Stores.Platforms.Shopify;
 using ShipWorks.Users;
 using ShipWorks.Users.Audit;
 using ShipWorks.Users.Security;
@@ -508,17 +509,7 @@ namespace ShipWorks.Stores.Communication
                                 // We create the log entry right when we start
                                 downloadLog = CreateDownloadLog(store, initiatedBy);
 
-                                // Create the downloader
-                                // TODO: Once all Etsy stores have moved onto the new provider this can be removed and resolved as before
-                                if ((store.StoreTypeCode == StoreTypeCode.Etsy) &&
-                                    store.IsPlatformOrderSource)
-                                {
-                                    downloader = lifetimeScope.Resolve<EtsyPlatformDownloader>(TypedParameter.From(store));
-                                }
-                                else
-                                {
-                                    downloader = lifetimeScope.ResolveKeyed<IStoreDownloader>(store.StoreTypeCode, TypedParameter.From(store));
-                                }
+                                downloader = CreateDownloader(store, lifetimeScope);
 
                                 // Verify the license
                                 progressItem.Detail = "Connecting...";
@@ -649,6 +640,23 @@ namespace ShipWorks.Stores.Communication
                     }
                 }
             }
+        }
+
+        private static IStoreDownloader CreateDownloader(StoreEntity store, ILifetimeScope lifetimeScope)
+        {
+            // Create the downloader
+            // TODO: Once all Etsy and Shopify stores have moved onto the new provider this can be removed and resolved as before
+            if (store.IsPlatformOrderSource)
+            {
+                switch (store.StoreTypeCode)
+                {
+                    case StoreTypeCode.Etsy:
+                        return lifetimeScope.Resolve<EtsyPlatformDownloader>(TypedParameter.From(store));
+                    case StoreTypeCode.Shopify:
+                        return lifetimeScope.Resolve<ShopifyPlatformDownloader>(TypedParameter.From(store));
+                }
+            }
+            return lifetimeScope.ResolveKeyed<IStoreDownloader>(store.StoreTypeCode, TypedParameter.From(store));
         }
 
         /// <summary>

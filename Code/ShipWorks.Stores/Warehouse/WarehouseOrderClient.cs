@@ -17,6 +17,7 @@ using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Editions;
 using ShipWorks.Stores.Communication;
 using ShipWorks.Stores.Platforms.Amazon.OnlineUpdating.DTO;
+using ShipWorks.Stores.Platforms.Platform.OnlineUpdating;
 using ShipWorks.Warehouse.Orders;
 using ShipWorks.Warehouse.Orders.DTO;
 
@@ -126,12 +127,12 @@ namespace ShipWorks.Stores.Warehouse
         /// <summary>
         /// Upload shipment notification information to Hub. This will only work for orders from shipengine
         /// </summary>
-        public async Task<Result> NotifyShipped(string salesOrderId, string trackingNumber, string carrier, bool useSwatId)
+        public async Task<Result> NotifyShipped(string salesOrderId, string trackingNumber, string carrier, bool useSwatId, List<SalesOrderItem> salesOrderItems, bool? notifyBuyer)
         {
             try
             {
                 IRestRequest request = new RestRequest(WarehouseEndpoints.NotifyShipped(salesOrderId), Method.POST);
-                request.AddJsonBody(new ShipmentNotification(trackingNumber, carrier, useSwatId));
+                request.AddJsonBody(new ShipmentNotification(trackingNumber, carrier, useSwatId, salesOrderItems, notifyBuyer));
                 request.JsonSerializer = RestSharpJsonNetSerializer.CreateHubDefault();
 
                 GenericResult<IRestResponse> response = await warehouseRequestClient

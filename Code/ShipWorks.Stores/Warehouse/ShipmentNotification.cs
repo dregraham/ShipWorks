@@ -5,17 +5,21 @@ using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
+using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Stores.Platforms.Platform.OnlineUpdating;
 
 namespace ShipWorks.Stores.Warehouse
 {
     [Obfuscation]
     public class ShipmentNotification
     {
-        public ShipmentNotification(string trackingNumber, string carrierCode, bool useSwatId)
+        public ShipmentNotification(string trackingNumber, string carrierCode, bool useSwatId, List<SalesOrderItem> salesOrderItems, bool? notifyBuyer)
         {
             TrackingNumber = trackingNumber;
             CarrierCode = carrierCode;
             UseSwatId = useSwatId;
+            SalesOrderItems = salesOrderItems;
+            NotifyBuyer = notifyBuyer;
         }
 
         [JsonProperty("trackingNumber")]
@@ -26,5 +30,11 @@ namespace ShipWorks.Stores.Warehouse
 
         [JsonProperty("useSwatId")]
         public bool UseSwatId { get; set; }
+
+        [JsonProperty("salesOrderItems")]
+        public List<SalesOrderItem> SalesOrderItems { get; set; }
+
+        [JsonProperty("notifyBuyer")]
+        public bool? NotifyBuyer { get; set; }
     }
 }

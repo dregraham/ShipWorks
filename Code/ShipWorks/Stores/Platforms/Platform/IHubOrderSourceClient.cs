@@ -52,5 +52,10 @@ namespace ShipWorks.Stores.Platforms.Platform
         /// Call hub to update the amazon sp FBA criteria
         /// </summary>
         Task UpdateAmazonFbaCriteria(string orderSourceId, bool downloadFba, string apiRegion);
+
+        /// <summary>
+        /// Call hub to update orderSourceId for OrderSource migrated to platform
+        /// </summary>
+        Task MigrateStoreToPlatform(string warehouseStoreId, string orderSourceId);
     }
 }

@@ -100,11 +100,17 @@ namespace ShipWorks.Warehouse.Orders
             orderEntity.OnlineStatus = warehouseOrder.OnlineStatus;
             orderEntity.OnlineStatusCode = warehouseOrder.OnlineStatusCode;
             orderEntity.RequestedShipping = warehouseOrder.RequestedShipping;
-            orderEntity.ChannelOrderID = warehouseOrder.ChannelOrderId;
             orderEntity.ShipByDate = warehouseOrder.ShipByDate;
             orderEntity.DeliverByDate = warehouseOrder.DeliverByDate;
             orderEntity.HubOrderID = Guid.Parse(warehouseOrder.HubOrderId);
             orderEntity.HubSequence = warehouseOrder.HubSequence;
+            SetChannelOrderId(orderEntity, warehouseOrder);
+        }
+
+
+        protected virtual void SetChannelOrderId(OrderEntity orderEntity, WarehouseOrder warehouseOrder)
+        {
+            orderEntity.ChannelOrderID = warehouseOrder.ChannelOrderId;
         }
 
         /// <summary>
@@ -194,6 +200,7 @@ namespace ShipWorks.Warehouse.Orders
         private void LoadItem(IStoreEntity store, OrderItemEntity itemEntity, WarehouseOrderItem warehouseItem)
         {
             itemEntity.HubItemID = warehouseItem.ID;
+            itemEntity.StoreOrderItemID = warehouseItem.StoreOrderItemID;
             itemEntity.Name = warehouseItem.Name;
             itemEntity.Code = warehouseItem.Code;
             itemEntity.SKU = warehouseItem.SKU;
