@@ -2573,6 +2573,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 			this.AddElementFieldInfo("OrderItemEntity", "Custom8", typeof(System.String), false, false, false, false,  (int)OrderItemFieldIndex.Custom8, 50, 0, 0);
 			this.AddElementFieldInfo("OrderItemEntity", "Custom9", typeof(System.String), false, false, false, false,  (int)OrderItemFieldIndex.Custom9, 50, 0, 0);
 			this.AddElementFieldInfo("OrderItemEntity", "Custom10", typeof(System.String), false, false, false, false,  (int)OrderItemFieldIndex.Custom10, 50, 0, 0);
+			this.AddElementFieldInfo("OrderItemEntity", "StoreOrderItemID", typeof(System.String), false, false, false, true,  (int)OrderItemFieldIndex.StoreOrderItemID, 50, 0, 0);
 		}
 		/// <summary>Inits OrderItemAttributeEntity's FieldInfo objects</summary>
 		private void InitOrderItemAttributeEntityInfos()

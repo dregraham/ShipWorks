@@ -25,6 +25,7 @@ namespace ShipWorks.Stores.Platforms.Platform.OnlineUpdating
     [KeyedComponent(typeof(IOnlineUpdateCommandCreator), StoreTypeCode.GrouponHub)]
     [KeyedComponent(typeof(IOnlineUpdateCommandCreator), StoreTypeCode.Amazon)]
     [KeyedComponent(typeof(IOnlineUpdateCommandCreator), StoreTypeCode.Etsy)]
+    [KeyedComponent(typeof(IOnlineUpdateCommandCreator), StoreTypeCode.Shopify)]
     public class PlatformUpdateCommandCreator : IOnlineUpdateCommandCreator
     {
         private readonly IIndex<StoreTypeCode, IPlatformOnlineUpdater> platformOnlineUpdaterIndex;
@@ -69,7 +70,7 @@ namespace ShipWorks.Stores.Platforms.Platform.OnlineUpdating
             var results = await context.SelectedKeys
                 .SelectWithProgress(messageHelper, "Upload Shipment Tracking", "ShipWorks is uploading shipment information.", "Updating order {0} of {1}...",
                     orderID => ShipmentUploadCallback(store, new long[] {orderID}))
-                .ConfigureAwait(false);
+                .ConfigureAwait(true);
 
             var exceptions = results.Where(x => x.Failure).Select(x => x.Exception).Where(x => x != null);
             context.Complete(exceptions, MenuCommandResult.Error);

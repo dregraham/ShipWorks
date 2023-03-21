@@ -60,17 +60,6 @@ namespace ShipWorks.Stores.Platforms.Shopify
         }
 
         /// <summary>
-        /// Initial download policy of the store
-        /// </summary>
-        public override InitialDownloadPolicy InitialDownloadPolicy
-        {
-            get
-            {
-                return new InitialDownloadPolicy(InitialDownloadRestrictionType.DaysBack);
-            }
-        }
-
-        /// <summary>
         /// Creates a new instance of an Shopify store entity
         /// </summary>
         public override StoreEntity CreateStoreInstance()
@@ -131,18 +120,18 @@ namespace ShipWorks.Stores.Platforms.Shopify
             return new IEntityField2[] { OrderFields.OnlineCustomerID };
         }
 
-        /// <summary>
-        /// Create the pages to be displayed in the Add Store Wizard
-        /// </summary>
-        /// <param name="scope"></param>
-        public override List<WizardPage> CreateAddStoreWizardPages(ILifetimeScope scope)
-        {
-            List<WizardPage> pages = new List<WizardPage>();
+        ///// <summary>
+        ///// Create the pages to be displayed in the Add Store Wizard
+        ///// </summary>
+        ///// <param name="scope"></param>
+        //public override List<WizardPage> CreateAddStoreWizardPages(ILifetimeScope scope)
+        //{
+        //    List<WizardPage> pages = new List<WizardPage>();
 
-            pages.Add(new WizardPages.ShopifyAssociateAccountPage());
+        //    pages.Add(new WizardPages.ShopifyAssociateAccountPage());
 
-            return pages;
-        }
+        //    return pages;
+        //}
 
         /// <summary>
         /// Create the control used to configured the actions for online update after shipping
@@ -157,8 +146,13 @@ namespace ShipWorks.Stores.Platforms.Shopify
         /// </summary>
         public override AccountSettingsControlBase CreateAccountSettingsControl()
         {
-            return new ShopifyAccountSettingsControl();
-        }
+	        using (var scope = IoC.BeginLifetimeScope())
+	        {
+		        var factory = scope.Resolve<IShopifyAccountSettingsControlFactory>();
+		        var control = factory.Create(Store);
+		        return control;
+	        }
+		}
 
         /// <summary>
         /// Indicates what columns are supported for this store type
@@ -210,38 +204,7 @@ namespace ShipWorks.Stores.Platforms.Shopify
             return new ShopifyStoreSettingsControl();
         }
 
-        /// <summary>
-        /// Create dashboard message for updating token if necessary
-        /// </summary>
-        public override IEnumerable<DashboardStoreItem> CreateDashboardMessages()
-        {
-            ShopifyStoreEntity store = (ShopifyStoreEntity) Store;
-
-            try
-            {
-                using (var lifetimeScope = IoC.BeginLifetimeScope())
-                {
-                    var webClient = lifetimeScope.Resolve<IShopifyWebClient>(TypedParameter.From(store), TypedParameter.From<IProgressReporter>(null));
-                    webClient.ValidateCredentials();
-                }
-            }
-            catch (ShopifyAuthorizationException)
-            {
-                return new DashboardStoreItem[]
-                {
-                    new ShopifyAuthorizationDashboardItem(store)
-                };
-
-            }
-            catch (Exception)
-            {
-                // Since we're just checking token validity, we don't want any other errors causing problems
-            }
-
-            return null;
-        }
-
-        /// <summary>
+		/// <summary>
         /// Should the Hub be used for this store?
         /// </summary>
         public override bool ShouldUseHub(IStoreEntity store) => true;

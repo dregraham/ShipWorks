@@ -72,6 +72,7 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
             Custom8 = source.Custom8;
             Custom9 = source.Custom9;
             Custom10 = source.Custom10;
+            StoreOrderItemID = source.StoreOrderItemID;
             
             
             Order = (IOrderEntity) source.Order?.AsReadOnly(objectMap);
@@ -299,6 +300,12 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
         /// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 50<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
         public System.String Custom10 { get; }
+        /// <summary> The StoreOrderItemID property of the Entity OrderItem<br/><br/>
+        /// </summary>
+        /// <remarks>Mapped on table field: "OrderItem"."StoreOrderItemID"<br/>
+        /// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 50<br/>
+        /// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+        public System.String StoreOrderItemID { get; }
         
         
         public IOrderEntity Order { get; }

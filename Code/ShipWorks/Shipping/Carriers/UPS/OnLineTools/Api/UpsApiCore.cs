@@ -240,8 +240,17 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api
 
                     xmlWriter.WriteElementString("Description", contents);
                 }
+                else if (ups.Shipment.ShipCountryCode == "MX" || ups.Shipment.OriginCountryCode == "MX")
+				{
+					string description = ups.CustomsDescription;
+					if (description.Length > 35)
+					{
+						description = description.Substring(0, 35);
+					}
+					xmlWriter.WriteElementString("Description", description);
+				}
 
-                string packagingCode = GetPackagingCode((UpsPackagingType) package.PackagingType);
+				string packagingCode = GetPackagingCode((UpsPackagingType) package.PackagingType);
 
                 // Type
                 xmlWriter.WriteStartElement("PackagingType");

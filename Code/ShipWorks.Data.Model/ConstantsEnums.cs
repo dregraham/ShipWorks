@@ -472,6 +472,8 @@ namespace ShipWorks.Data.Model
 		Custom9,
 		///<summary>Custom10. Inherited from OrderItem</summary>
 		Custom10,
+		///<summary>StoreOrderItemID. Inherited from OrderItem</summary>
+		StoreOrderItemID,
 		///<summary>OrderItemID. </summary>
 		OrderItemID,
 		///<summary>AmazonOrderItemCode. </summary>
@@ -1168,6 +1170,8 @@ namespace ShipWorks.Data.Model
 		Custom9,
 		///<summary>Custom10. Inherited from OrderItem</summary>
 		Custom10,
+		///<summary>StoreOrderItemID. Inherited from OrderItem</summary>
+		StoreOrderItemID,
 		///<summary>OrderItemID. </summary>
 		OrderItemID,
 		///<summary>OrderAddressID. </summary>
@@ -1366,6 +1370,8 @@ namespace ShipWorks.Data.Model
 		Custom9,
 		///<summary>Custom10. Inherited from OrderItem</summary>
 		Custom10,
+		///<summary>StoreOrderItemID. Inherited from OrderItem</summary>
+		StoreOrderItemID,
 		///<summary>OrderItemID. </summary>
 		OrderItemID,
 		///<summary>ReceiptItemID. </summary>
@@ -1762,6 +1768,8 @@ namespace ShipWorks.Data.Model
 		Custom9,
 		///<summary>Custom10. Inherited from OrderItem</summary>
 		Custom10,
+		///<summary>StoreOrderItemID. Inherited from OrderItem</summary>
+		StoreOrderItemID,
 		///<summary>OrderItemID. </summary>
 		OrderItemID,
 		///<summary>MarketplaceName. </summary>
@@ -3184,6 +3192,8 @@ namespace ShipWorks.Data.Model
 		Custom9,
 		///<summary>Custom10. Inherited from OrderItem</summary>
 		Custom10,
+		///<summary>StoreOrderItemID. Inherited from OrderItem</summary>
+		StoreOrderItemID,
 		///<summary>OrderItemID. </summary>
 		OrderItemID,
 		///<summary>LocalEbayOrderID. </summary>
@@ -3900,6 +3910,8 @@ namespace ShipWorks.Data.Model
 		Custom9,
 		///<summary>Custom10. Inherited from OrderItem</summary>
 		Custom10,
+		///<summary>StoreOrderItemID. Inherited from OrderItem</summary>
+		StoreOrderItemID,
 		///<summary>OrderItemID. </summary>
 		OrderItemID,
 		///<summary>ListingID. </summary>
@@ -5272,6 +5284,8 @@ namespace ShipWorks.Data.Model
 		Custom9,
 		///<summary>Custom10. Inherited from OrderItem</summary>
 		Custom10,
+		///<summary>StoreOrderItemID. Inherited from OrderItem</summary>
+		StoreOrderItemID,
 		///<summary>OrderItemID. </summary>
 		OrderItemID,
 		///<summary>AmazonOrderItemCode. </summary>
@@ -5736,6 +5750,8 @@ namespace ShipWorks.Data.Model
 		Custom9,
 		///<summary>Custom10. Inherited from OrderItem</summary>
 		Custom10,
+		///<summary>StoreOrderItemID. Inherited from OrderItem</summary>
+		StoreOrderItemID,
 		///<summary>OrderItemID. </summary>
 		OrderItemID,
 		///<summary>Permalink. </summary>
@@ -5934,6 +5950,8 @@ namespace ShipWorks.Data.Model
 		Custom9,
 		///<summary>Custom10. Inherited from OrderItem</summary>
 		Custom10,
+		///<summary>StoreOrderItemID. Inherited from OrderItem</summary>
+		StoreOrderItemID,
 		///<summary>OrderItemID. </summary>
 		OrderItemID,
 		///<summary>Marketplace. </summary>
@@ -6460,6 +6478,8 @@ namespace ShipWorks.Data.Model
 		Custom9,
 		///<summary>Custom10. Inherited from OrderItem</summary>
 		Custom10,
+		///<summary>StoreOrderItemID. Inherited from OrderItem</summary>
+		StoreOrderItemID,
 		///<summary>OrderItemID. </summary>
 		OrderItemID,
 		///<summary>MerchantSku. </summary>
@@ -6876,6 +6896,8 @@ namespace ShipWorks.Data.Model
 		Custom9,
 		///<summary>Custom10. Inherited from OrderItem</summary>
 		Custom10,
+		///<summary>StoreOrderItemID. Inherited from OrderItem</summary>
+		StoreOrderItemID,
 		///<summary>OrderItemID. </summary>
 		OrderItemID,
 		///<summary>UrlName. </summary>
@@ -8420,6 +8442,8 @@ namespace ShipWorks.Data.Model
 		Custom9,
 		///<summary>Custom10. Inherited from OrderItem</summary>
 		Custom10,
+		///<summary>StoreOrderItemID. Inherited from OrderItem</summary>
+		StoreOrderItemID,
 		///<summary>OrderItemID. </summary>
 		OrderItemID,
 		///<summary>SellerPartNumber. </summary>
@@ -9104,6 +9128,8 @@ namespace ShipWorks.Data.Model
 		Custom9,
 		///<summary>Custom10. </summary>
 		Custom10,
+		///<summary>StoreOrderItemID. </summary>
+		StoreOrderItemID,
 		/// <summary></summary>
 		AmountOfFields
 	}
@@ -9770,6 +9796,8 @@ namespace ShipWorks.Data.Model
 		Custom9,
 		///<summary>Custom10. Inherited from OrderItem</summary>
 		Custom10,
+		///<summary>StoreOrderItemID. Inherited from OrderItem</summary>
+		StoreOrderItemID,
 		///<summary>OrderItemID. </summary>
 		OrderItemID,
 		///<summary>SalesChannelLineNumber. </summary>
@@ -11556,6 +11584,8 @@ namespace ShipWorks.Data.Model
 		Custom9,
 		///<summary>Custom10. Inherited from OrderItem</summary>
 		Custom10,
+		///<summary>StoreOrderItemID. Inherited from OrderItem</summary>
+		StoreOrderItemID,
 		///<summary>OrderItemID. </summary>
 		OrderItemID,
 		///<summary>LineNumber. </summary>
@@ -12564,6 +12594,8 @@ namespace ShipWorks.Data.Model
 		Custom9,
 		///<summary>Custom10. Inherited from OrderItem</summary>
 		Custom10,
+		///<summary>StoreOrderItemID. Inherited from OrderItem</summary>
+		StoreOrderItemID,
 		///<summary>OrderItemID. </summary>
 		OrderItemID,
 		///<summary>ShopifyOrderItemID. </summary>
@@ -13426,6 +13458,8 @@ namespace ShipWorks.Data.Model
 		Custom9,
 		///<summary>Custom10. Inherited from OrderItem</summary>
 		Custom10,
+		///<summary>StoreOrderItemID. Inherited from OrderItem</summary>
+		StoreOrderItemID,
 		///<summary>OrderItemID. </summary>
 		OrderItemID,
 		///<summary>ThreeDCartShipmentID. </summary>
@@ -14684,6 +14718,8 @@ namespace ShipWorks.Data.Model
 		Custom9,
 		///<summary>Custom10. Inherited from OrderItem</summary>
 		Custom10,
+		///<summary>StoreOrderItemID. Inherited from OrderItem</summary>
+		StoreOrderItemID,
 		///<summary>OrderItemID. </summary>
 		OrderItemID,
 		///<summary>LineNumber. </summary>
@@ -15378,6 +15414,8 @@ namespace ShipWorks.Data.Model
 		Custom9,
 		///<summary>Custom10. Inherited from OrderItem</summary>
 		Custom10,
+		///<summary>StoreOrderItemID. Inherited from OrderItem</summary>
+		StoreOrderItemID,
 		///<summary>OrderItemID. </summary>
 		OrderItemID,
 		///<summary>YahooProductID. </summary>

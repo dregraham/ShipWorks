@@ -167,5 +167,16 @@ namespace ShipWorks.Stores.Platforms.Platform
         /// </summary>
         private string UpdateLocalUrl(string warehouseUrl) =>
             warehouseUrl.Replace("http://localhost:4001", "http://localhost:3000");
+
+        public async Task MigrateStoreToPlatform(string warehouseStoreId, string orderSourceId)
+        {
+            var request = warehouseRequestFactory.Create(WarehouseEndpoints.MigrateStoreToPlatform, Method.POST, new { storeId=warehouseStoreId, orderSourceId});
+            var result = await warehouseRequestClient.MakeRequest(request, "MigrateStoreToPlatform");
+
+            if (result.Failure)
+            {
+                throw new Exception(result.Message);
+            }
+        }
     }
 }

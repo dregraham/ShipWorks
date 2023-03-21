@@ -33,8 +33,9 @@ namespace ShipWorks.Stores.Platforms.Platform.OnlineUpdating
         /// </summary>
         public PlatformBulkOnlineUpdater(IOrderManager orderManager, IShippingManager shippingManager,
             ISqlAdapterFactory sqlAdapterFactory, Func<IWarehouseOrderClient> createWarehouseOrderClient,
-            IIndex<StoreTypeCode, IOnlineUpdater> storeSpecificOnlineUpdaterFactory, IHubPlatformClient platformWebClient) :
-            base(orderManager, shippingManager, sqlAdapterFactory, createWarehouseOrderClient, storeSpecificOnlineUpdaterFactory)
+            IIndex<StoreTypeCode, IOnlineUpdater> storeSpecificOnlineUpdaterFactory, IHubPlatformClient platformWebClient,
+            IIndex<StoreTypeCode, IPlatformOnlineUpdaterBehavior> platformOnlineUpdateBehavior) :
+            base(orderManager, shippingManager, sqlAdapterFactory, createWarehouseOrderClient, storeSpecificOnlineUpdaterFactory, platformOnlineUpdateBehavior)
         {
             this.platformWebClient = platformWebClient;
         }

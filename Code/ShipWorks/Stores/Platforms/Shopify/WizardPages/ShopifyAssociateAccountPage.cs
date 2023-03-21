@@ -1,6 +1,7 @@
 ﻿using System;
-using System.Linq;
+using Autofac;
 using Interapptive.Shared.UI;
+using ShipWorks.ApplicationCore;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Management;
 using ShipWorks.UI.Wizard;
@@ -8,7 +9,7 @@ using ShipWorks.UI.Wizard;
 namespace ShipWorks.Stores.Platforms.Shopify.WizardPages
 {
     /// <summary>
-    /// Setup wizard page for configuring the Shopify account.
+    /// Page to associate Etsy Account token with ShipWorks Account
     /// </summary>
     public partial class ShopifyAssociateAccountPage : AddStoreWizardPage
     {
@@ -21,36 +22,48 @@ namespace ShipWorks.Stores.Platforms.Shopify.WizardPages
         }
 
         /// <summary>
-        /// Stepping into the page
+        /// On Stepping in
         /// </summary>
         private void OnSteppingIntoAccountPage(object sender, WizardSteppingIntoEventArgs e)
         {
             ShopifyStoreEntity store = GetStore<ShopifyStoreEntity>();
 
-            createTokenControl.InitializeForStore(store);
+            shopifyManageToken.LoadStore(store);
+        }
+
+        /// <summary>
+        /// Handles Import Token Click Event. Imports Token...
+        /// </summary>
+        private void OnImportTokenFileClick(object sender, EventArgs e)
+        {
+            shopifyManageToken.ImportToken();
         }
 
         /// <summary>
         /// Stepping next
         /// </summary>
-        private void OnStepNextAccountPage(object sender, WizardStepEventArgs e)
+        private void OnStepNextShopifyAssociateAccountPage(object sender, WizardStepEventArgs e)
         {
-            if (!createTokenControl.IsAccessTokenValid)
+            ShopifyStoreEntity store = GetStore<ShopifyStoreEntity>();
+            shopifyManageToken.VerifyToken();
+
+            if (!shopifyManageToken.IsTokenValid)
             {
                 e.NextPage = this;
-                MessageHelper.ShowError(this, "Please create or import a valid token.");
-                return;
-            }
-        }
 
-        /// <summary>
-        /// Import a token from file
-        /// </summary>
-        private void OnImportTokenFile(object sender, EventArgs e)
-        {
-            if (ShopifyTokenUtility.ImportTokenFile(GetStore<ShopifyStoreEntity>(), this))
+                MessageHelper.ShowError(this, "Please create or import an Shopify login token.");
+            }
+            else
             {
-                createTokenControl.UpdateStatusDisplay();
+                if (string.IsNullOrEmpty(store.StoreName))
+                {
+
+                    using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
+                    {
+                        var webClient = lifetimeScope.Resolve<IShopifyWebClient>(TypedParameter.From(store));
+                        webClient.RetrieveShopInformation();
+                    }
+                }
             }
         }
     }

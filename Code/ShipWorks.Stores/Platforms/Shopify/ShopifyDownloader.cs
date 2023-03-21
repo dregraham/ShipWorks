@@ -63,7 +63,8 @@ namespace ShipWorks.Stores.Platforms.Shopify
         /// associate any store-specific download properties/metrics.</param>
         protected override async Task Download(TrackedDurationEvent trackedDurationEvent)
         {
-            Progress.Detail = "Downloading orders...";
+            var upgradeErrorMessage = "Update your Shopify credentials by April 1, 2023. First, install the latest version of ShipWorks. Then, go to Manage > Stores and update your Shopify credentials. Allow up to 15 minutes for the new credentials to be updated. For more information, visit support.shipworks.com.";
+            var communicationErrorMessage = "Unable to connect to Shopify. Please, update your Shopify credentials. First, install the latest version of ShipWorks. Then, go to Manage > Stores and update your Shopify credentials. Allow up to 15 minutes for the new credentials to be updated. For more information, visit support.shipworks.com.";
 
             using (new LoggedStopwatch(log, "ShopifyDownloader.Download()"))
             {
@@ -75,17 +76,13 @@ namespace ShipWorks.Stores.Platforms.Shopify
                 {
                     // Just a cancel - nothing to do
                 }
-                catch (ShopifyException ex)
+                catch (Exception ex)
                 {
                     log.Error(ex);
-                    throw new DownloadException(ex.Message, ex);
-                }
-                catch (SqlForeignKeyException ex)
-                {
-                    log.Error(ex);
-                    throw new DownloadException(ex.Message, ex);
+                    throw new DownloadException(communicationErrorMessage, ex);
                 }
             }
+            throw new DownloadException(upgradeErrorMessage);
         }
 
         /// <summary>

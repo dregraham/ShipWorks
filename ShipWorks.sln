@@ -117,6 +117,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ShipWorks.Api", "code\ShipW
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ShipWorks.Api.Tests", "Code\ShipWorks.Api.Tests\ShipWorks.Api.Tests.csproj", "{1093EF5F-C7D3-47B8-AF41-BB225AD96802}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CultureAttribute", "Code\CultureAttribute\CultureAttribute.csproj", "{2933CB4D-BD4C-446B-92BF-175517F650DE}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug (No Analyzers)|Any CPU = Debug (No Analyzers)|Any CPU
@@ -1740,6 +1742,46 @@ Global
 		{1093EF5F-C7D3-47B8-AF41-BB225AD96802}.Release|Win32.Build.0 = Release|Any CPU
 		{1093EF5F-C7D3-47B8-AF41-BB225AD96802}.Release|x86.ActiveCfg = Release|Any CPU
 		{1093EF5F-C7D3-47B8-AF41-BB225AD96802}.Release|x86.Build.0 = Release|Any CPU
+		{2933CB4D-BD4C-446B-92BF-175517F650DE}.Debug (No Analyzers)|Any CPU.ActiveCfg = Debug|Any CPU
+		{2933CB4D-BD4C-446B-92BF-175517F650DE}.Debug (No Analyzers)|Any CPU.Build.0 = Debug|Any CPU
+		{2933CB4D-BD4C-446B-92BF-175517F650DE}.Debug (No Analyzers)|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{2933CB4D-BD4C-446B-92BF-175517F650DE}.Debug (No Analyzers)|Mixed Platforms.Build.0 = Debug|Any CPU
+		{2933CB4D-BD4C-446B-92BF-175517F650DE}.Debug (No Analyzers)|Win32.ActiveCfg = Debug|Any CPU
+		{2933CB4D-BD4C-446B-92BF-175517F650DE}.Debug (No Analyzers)|Win32.Build.0 = Debug|Any CPU
+		{2933CB4D-BD4C-446B-92BF-175517F650DE}.Debug (No Analyzers)|x86.ActiveCfg = Debug|Any CPU
+		{2933CB4D-BD4C-446B-92BF-175517F650DE}.Debug (No Analyzers)|x86.Build.0 = Debug|Any CPU
+		{2933CB4D-BD4C-446B-92BF-175517F650DE}.Debug (x86)|Any CPU.ActiveCfg = Debug|Any CPU
+		{2933CB4D-BD4C-446B-92BF-175517F650DE}.Debug (x86)|Any CPU.Build.0 = Debug|Any CPU
+		{2933CB4D-BD4C-446B-92BF-175517F650DE}.Debug (x86)|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{2933CB4D-BD4C-446B-92BF-175517F650DE}.Debug (x86)|Mixed Platforms.Build.0 = Debug|Any CPU
+		{2933CB4D-BD4C-446B-92BF-175517F650DE}.Debug (x86)|Win32.ActiveCfg = Debug|Any CPU
+		{2933CB4D-BD4C-446B-92BF-175517F650DE}.Debug (x86)|Win32.Build.0 = Debug|Any CPU
+		{2933CB4D-BD4C-446B-92BF-175517F650DE}.Debug (x86)|x86.ActiveCfg = Debug|Any CPU
+		{2933CB4D-BD4C-446B-92BF-175517F650DE}.Debug (x86)|x86.Build.0 = Debug|Any CPU
+		{2933CB4D-BD4C-446B-92BF-175517F650DE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2933CB4D-BD4C-446B-92BF-175517F650DE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2933CB4D-BD4C-446B-92BF-175517F650DE}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{2933CB4D-BD4C-446B-92BF-175517F650DE}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{2933CB4D-BD4C-446B-92BF-175517F650DE}.Debug|Win32.ActiveCfg = Debug|Any CPU
+		{2933CB4D-BD4C-446B-92BF-175517F650DE}.Debug|Win32.Build.0 = Debug|Any CPU
+		{2933CB4D-BD4C-446B-92BF-175517F650DE}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{2933CB4D-BD4C-446B-92BF-175517F650DE}.Debug|x86.Build.0 = Debug|Any CPU
+		{2933CB4D-BD4C-446B-92BF-175517F650DE}.Release (x86)|Any CPU.ActiveCfg = Release|Any CPU
+		{2933CB4D-BD4C-446B-92BF-175517F650DE}.Release (x86)|Any CPU.Build.0 = Release|Any CPU
+		{2933CB4D-BD4C-446B-92BF-175517F650DE}.Release (x86)|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{2933CB4D-BD4C-446B-92BF-175517F650DE}.Release (x86)|Mixed Platforms.Build.0 = Release|Any CPU
+		{2933CB4D-BD4C-446B-92BF-175517F650DE}.Release (x86)|Win32.ActiveCfg = Release|Any CPU
+		{2933CB4D-BD4C-446B-92BF-175517F650DE}.Release (x86)|Win32.Build.0 = Release|Any CPU
+		{2933CB4D-BD4C-446B-92BF-175517F650DE}.Release (x86)|x86.ActiveCfg = Release|Any CPU
+		{2933CB4D-BD4C-446B-92BF-175517F650DE}.Release (x86)|x86.Build.0 = Release|Any CPU
+		{2933CB4D-BD4C-446B-92BF-175517F650DE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2933CB4D-BD4C-446B-92BF-175517F650DE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2933CB4D-BD4C-446B-92BF-175517F650DE}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{2933CB4D-BD4C-446B-92BF-175517F650DE}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{2933CB4D-BD4C-446B-92BF-175517F650DE}.Release|Win32.ActiveCfg = Release|Any CPU
+		{2933CB4D-BD4C-446B-92BF-175517F650DE}.Release|Win32.Build.0 = Release|Any CPU
+		{2933CB4D-BD4C-446B-92BF-175517F650DE}.Release|x86.ActiveCfg = Release|Any CPU
+		{2933CB4D-BD4C-446B-92BF-175517F650DE}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -1769,6 +1811,7 @@ Global
 		{8DC4B15A-64E0-49BD-A92B-1F19C64B8A59} = {08F267EF-3888-428F-B52D-6AECF17550A1}
 		{4B01AF3D-39C7-4FF5-9A3F-3B4ED79A8A43} = {A3D2E92E-1D80-4D89-A59B-D89E5AA0C7D1}
 		{1093EF5F-C7D3-47B8-AF41-BB225AD96802} = {A3D2E92E-1D80-4D89-A59B-D89E5AA0C7D1}
+		{2933CB4D-BD4C-446B-92BF-175517F650DE} = {B6449065-AFD7-4AE5-887D-F343C4F16969}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {EA9D5847-243D-4778-BE03-6909765E2C21}

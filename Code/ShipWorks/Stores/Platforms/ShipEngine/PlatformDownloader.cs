@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Linq;
-using System.Text;
+using System.Net;
 using System.Threading.Tasks;
 using Interapptive.Shared.Business;
 using Interapptive.Shared.Business.Geography;
@@ -15,10 +15,7 @@ using ShipWorks.Data.Administration.Recovery;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Communication;
 using ShipWorks.Stores.Content;
-using ShipWorks.Stores.Platforms.Amazon;
 using ShipWorks.Stores.Platforms.Amazon.DTO;
-using ShipWorks.Stores.Platforms.Amazon.Mws;
-using ShipWorks.Stores.Platforms.Etsy;
 using ShipWorks.Stores.Platforms.ShipEngine.Apollo;
 
 namespace ShipWorks.Stores.Platforms.ShipEngine
@@ -46,12 +43,9 @@ namespace ShipWorks.Stores.Platforms.ShipEngine
             var itemNotes = new List<GiftNote>();
             if (salesOrder.Notes != null)
             {
-                foreach (var note in salesOrder.Notes)
+                foreach (var note in salesOrder.Notes.Where(n => n.Text.HasValue() && n.Type == OrderSourceNoteType.GiftMessage))
                 {
-                    if (note.Type == OrderSourceNoteType.GiftMessage)
-                    {
-                        itemNotes.Add(GiftNote.FromOrderSourceNote(note));
-                    }
+                    itemNotes.Add(GiftNote.FromOrderSourceNote(note));
                 }
             }
 
@@ -71,7 +65,8 @@ namespace ShipWorks.Stores.Platforms.ShipEngine
             var item = InstantiateOrderItem(order);
 
             // populate the basics
-            item.Name = orderItem.Product.Name;
+            item.StoreOrderItemID = orderItem.SalesOrderItemGuid;
+            item.Name = EntitiesDecode(orderItem.Product.Name);
             item.Quantity = orderItem.Quantity;
             item.UnitPrice = orderItem.UnitPrice;
             item.SKU = orderItem.Product.Identifiers.Sku;
@@ -94,9 +89,9 @@ namespace ShipWorks.Stores.Platforms.ShipEngine
             }
 
             //Load the gift messages
-            foreach(var giftNote in giftNotes)
+            foreach (var giftNote in giftNotes)
             {
-                if(giftNote.Message.HasValue() || giftNote.Fee > 0)
+                if (giftNote.Message.HasValue() || giftNote.Fee > 0)
                 {
                     OrderItemAttributeEntity giftAttribute = InstantiateOrderItemAttribute(item);
                     giftAttribute.Name = "Gift Message";
@@ -128,6 +123,19 @@ namespace ShipWorks.Stores.Platforms.ShipEngine
                         couponAttribute.UnitPrice = 0;
                         item.OrderItemAttributes.Add(couponAttribute);
                     }
+                }
+            }
+
+            // Instantiate OrderItemAttribute and set values from the item product details
+            if (orderItem.Product?.Details != null)
+            {
+                foreach (var detail in orderItem.Product.Details)
+                {
+                    OrderItemAttributeEntity attribute = InstantiateOrderItemAttribute(item);
+                    attribute.Name = EntitiesDecode(detail.Name);
+                    attribute.Description = EntitiesDecode(detail.Value);
+                    attribute.UnitPrice = 0;
+                    item.OrderItemAttributes.Add(attribute);
                 }
             }
 
@@ -221,7 +229,8 @@ namespace ShipWorks.Stores.Platforms.ShipEngine
             order.BillEmail = order.ShipEmail;
 
             // Bill To
-            var billToFullName = PersonName.Parse(salesOrder.BillTo.Name ?? salesOrder.Buyer.Name ?? string.Empty);
+            var billName = string.IsNullOrWhiteSpace(salesOrder.BillTo.Name) ? (salesOrder.Buyer.Name ?? string.Empty) : salesOrder.BillTo.Name;
+            var billToFullName = PersonName.Parse(billName);
             order.BillFirstName = billToFullName.First;
             order.BillMiddleName = billToFullName.Middle;
             order.BillLastName = billToFullName.LastWithSuffix;
@@ -283,6 +292,11 @@ namespace ShipWorks.Stores.Platforms.ShipEngine
                 var filteredCouponCodes = couponCodes.Where((c) => c.OrderItemId == item.LineItemId);
                 LoadOrderItem(item, order, filteredNotes, filteredCouponCodes);
             }
+        }
+
+        protected virtual object GetOrderStatusCode(OrderSourceApiSalesOrder orderSourceApiSalesOrder, string orderId)
+        {
+            return GetOrderStatusString(orderSourceApiSalesOrder, orderId);
         }
 
         protected virtual string GetOrderStatusString(OrderSourceApiSalesOrder orderSourceApiSalesOrder, string orderId)
@@ -362,7 +376,7 @@ namespace ShipWorks.Stores.Platforms.ShipEngine
 
                     foreach (var salesOrder in result.Orders.Data.Where(x => x.Status != OrderSourceSalesOrderStatus.AwaitingPayment))
                     {
-                        await LoadOrder(salesOrder).ConfigureAwait(false); 
+                        await LoadOrder(salesOrder).ConfigureAwait(false);
                     }
 
                     // Save the continuation token to the store
@@ -381,7 +395,7 @@ namespace ShipWorks.Stores.Platforms.ShipEngine
                 {
                     // We only throw at the end to give the import a chance to process any orders that were provided.
                     throw new Exception(
-                        "Connection to Etsy failed. Please try again. If it continues to fail, update your credentials in store settings or contact ShipWorks support.");
+                        $"Connection to {StoreType.StoreTypeName} failed. Please try again. If it continues to fail, update your credentials in store settings or contact ShipWorks support.");
                 }
             }
             catch (Exception ex)
@@ -395,80 +409,188 @@ namespace ShipWorks.Stores.Platforms.ShipEngine
         /// Create the order instance
         /// </summary>
         protected abstract Task<OrderEntity> CreateOrder(OrderSourceApiSalesOrder salesOrder);
-        
+
+        protected virtual void SetChannelOrderID(OrderSourceApiSalesOrder salesOrder, OrderEntity order)
+        {
+            order.ChannelOrderID = salesOrder.SalesOrderGuid;
+        }
+
         /// <summary>
         /// Store order in database
         /// </summary>
         private async Task LoadOrder(OrderSourceApiSalesOrder salesOrder)
+		{
+			var order = await CreateOrder(salesOrder);
+			if (order == null)
+			{
+				return;
+			}
+
+			if (salesOrder.Status == OrderSourceSalesOrderStatus.Cancelled && order.IsNew)
+			{
+				log.InfoFormat("Skipping order '{0}' due to canceled and not yet seen by ShipWorks.", salesOrder.OrderNumber);
+				return;
+			}
+
+			SetChannelOrderID(salesOrder, order);
+
+			var orderDate = salesOrder.CreatedDateTime?.DateTime ?? DateTime.UtcNow;
+			var modifiedDate = salesOrder.ModifiedDateTime?.DateTime ?? DateTime.UtcNow;
+
+			//Basic properties
+			order.OrderDate = orderDate;
+			order.OnlineLastModified = modifiedDate >= orderDate ? modifiedDate : orderDate;
+
+			// set the status
+			order.OnlineStatus = GetOrderStatusString(salesOrder, order.OrderNumberComplete);
+			order.OnlineStatusCode = GetOrderStatusCode(salesOrder, order.OrderNumberComplete);
+
+			SetOnlineCustomerId(order, salesOrder);
+
+			// requested shipping
+			order.RequestedShipping =
+				GetRequestedShipping(salesOrder.RequestedFulfillments.FirstOrDefault()?.ShippingPreferences?.ShippingService);
+
+			// Address
+			LoadAddresses(order, salesOrder);
+
+			// only load order items on new orders
+			if (order.IsNew)
+			{
+				var giftNotes = GetGiftNotes(salesOrder);
+				IEnumerable<CouponCode> couponCodes = GetCouponCodes(salesOrder);
+				foreach (var fulfillment in salesOrder.RequestedFulfillments)
+				{
+					LoadOrderItems(fulfillment, order, giftNotes, couponCodes);
+				}
+
+				AddAdjustments(salesOrder, order);
+
+				AddTaxes(salesOrder, order);
+				AddNotes(salesOrder, giftNotes, order);
+
+				// update the total
+				var calculatedTotal = OrderUtility.CalculateTotal(order);
+
+				// get the amount so we can fudge order totals
+				order.OrderTotal = salesOrder.Payment.AmountPaid ?? calculatedTotal;
+			}
+
+			// save
+			var retryAdapter = new SqlAdapterRetry<SqlException>(5, -5, "PlatformDownloader.LoadOrder");
+			await retryAdapter.ExecuteWithRetryAsync(() => SaveDownloadedOrder(order)).ConfigureAwait(false);
+		}
+
+		protected virtual void SetOnlineCustomerId(OrderEntity order, OrderSourceApiSalesOrder salesOrder)
+		{
+			// no customer ID in this Api - at least according to this comment that was here, there actually is one in salesOrder.Buyer?.BuyerId
+			order.OnlineCustomerID = null;
+		}
+
+		/// <summary>
+		/// Adds notes to order entity
+		/// </summary>
+		private async Task AddNotes(OrderSourceApiSalesOrder salesOrder, List<GiftNote> giftNotes, OrderEntity order)
         {
-            var order = await CreateOrder(salesOrder);
-            if (order == null)
+            var notes = salesOrder.Notes.Where(n => n.Type != OrderSourceNoteType.GiftMessage);
+            foreach (var note in notes)
             {
-                return;
+                string noteText = FormatNoteText(note.Text, note.Type);
+                var visibility = note.Type == OrderSourceNoteType.InternalNotes ?
+                    NoteVisibility.Internal : NoteVisibility.Public;
+
+                await InstantiateNote(order, noteText, order.OrderDate, visibility).ConfigureAwait(false);
             }
 
-            if (salesOrder.Status == OrderSourceSalesOrderStatus.Cancelled && order.IsNew)
+            foreach (var note in giftNotes.Where(n => n.OrderItemId.IsNullOrWhiteSpace()))
             {
-                log.InfoFormat("Skipping order '{0}' due to canceled and not yet seen by ShipWorks.", salesOrder.OrderNumber);
-                return;
+                var noteText = FormatNoteText(note.Message, OrderSourceNoteType.GiftMessage);
+                await InstantiateNote(order, noteText, order.OrderDate, NoteVisibility.Public).ConfigureAwait(false);
             }
-
-            order.ChannelOrderID = salesOrder.SalesOrderGuid;
-
-            var orderDate = salesOrder.CreatedDateTime?.DateTime ?? DateTime.UtcNow;
-            var modifiedDate = salesOrder.ModifiedDateTime?.DateTime ?? DateTime.UtcNow;
-
-            //Basic properties
-            order.OrderDate = orderDate;
-            order.OnlineLastModified = modifiedDate >= orderDate ? modifiedDate : orderDate;
-
-            // set the status
-            var orderStatus = GetOrderStatusString(salesOrder, order.OrderNumberComplete);
-            order.OnlineStatus = orderStatus;
-            order.OnlineStatusCode = orderStatus;
-
-            // no customer ID in this Api
-            order.OnlineCustomerID = null;
-
-            // requested shipping
-            order.RequestedShipping =
-                GetRequestedShipping(salesOrder.RequestedFulfillments.FirstOrDefault()?.ShippingPreferences?.ShippingService);
-
-            // Address
-            LoadAddresses(order, salesOrder);
-
-            // only load order items on new orders
-            if (order.IsNew)
-            {
-                var giftNotes = GetGiftNotes(salesOrder);
-                IEnumerable<CouponCode> couponCodes = GetCouponCodes(salesOrder);
-                foreach (var fulfillment in salesOrder.RequestedFulfillments)
-                {
-                    LoadOrderItems(fulfillment, order, giftNotes, couponCodes);
-                }
-
-                AddTaxes(salesOrder, order);
-
-                // update the total
-                var calculatedTotal = OrderUtility.CalculateTotal(order);
-
-                // get the amount so we can fudge order totals
-                order.OrderTotal = salesOrder.Payment.AmountPaid ?? calculatedTotal;
-            }
-
-            // save
-            var retryAdapter = new SqlAdapterRetry<SqlException>(5, -5, "PlatformDownloader.LoadOrder");
-            await retryAdapter.ExecuteWithRetryAsync(() => SaveDownloadedOrder(order)).ConfigureAwait(false);
         }
 
+        /// <summary>
+        /// Format the note to save
+        /// </summary>
+        private string FormatNoteText(string text, OrderSourceNoteType noteType)
+        {
+            text = WebUtility.HtmlDecode(text);
+            if (string.IsNullOrWhiteSpace(text))
+            {
+                return string.Empty;
+            }
+            return $"{GetNotePreface(noteType)}{text}";
+        }
+
+        /// <summary>
+        /// Decode html encoded strings for order item name and attributes
+        /// </summary>
+        private string EntitiesDecode(string text)
+        {
+            text = WebUtility.HtmlDecode(text);
+
+            if (string.IsNullOrWhiteSpace(text))
+            {
+                return string.Empty;
+            }
+
+            return text;
+        }
+
+        /// <summary>
+        /// Get the note preface based on note type
+        /// </summary>
+        private string GetNotePreface(OrderSourceNoteType noteType)
+        {
+            switch (noteType)
+            {
+                case OrderSourceNoteType.GiftMessage:
+                    return "Gift Message: ";
+                case OrderSourceNoteType.NotesToBuyer:
+                    return "To Buyer: ";
+                case OrderSourceNoteType.NotesFromBuyer:
+                    return "From Buyer: ";
+                case OrderSourceNoteType.InternalNotes:
+                    return "Internal: ";
+                default:
+                    return string.Empty;
+            }
+        }
+
+        /// <summary>
+        /// Adds order adjustment charges to order entity
+        /// </summary>
+        private void AddAdjustments(OrderSourceApiSalesOrder salesOrder, OrderEntity order)
+        {
+            foreach (var orderAdjustment in salesOrder.Payment.Adjustments)
+            {
+                AddToCharge(order, orderAdjustment.Description, orderAdjustment.Description, orderAdjustment.Amount);
+            }
+
+            foreach (var orderShippingCharge in salesOrder.Payment.ShippingCharges)
+            {
+                AddToCharge(order, "SHIPPING", orderShippingCharge.Description.Replace(" price", string.Empty), orderShippingCharge.Amount);
+            }
+        }
+
+        /// <summary>
+        /// Adds taxes to order entity
+        /// </summary>
         protected virtual void AddTaxes(OrderSourceApiSalesOrder salesOrder, OrderEntity order)
         {
-            var totalTax = salesOrder.RequestedFulfillments?
+            var itemTaxes = salesOrder.RequestedFulfillments?
                 .SelectMany(f => f.Items)?
                 .SelectMany(i => i.Taxes)?
                 .Sum(t => t.Amount) ?? 0;
+            var orderTaxes = salesOrder.Payment.Taxes.Sum(t => t.Amount);
 
-            AddToCharge(order, "Tax", "Tax", totalTax);
+            // Josh Flanagan said that "one of our guiding principles is to not do aggregation within the integration.
+            // if details are provided at the item level, we should expose them at the item level. if they are only
+            // available at the order level, that is what we will expose. so you should definitely account for that
+            // as a consumer of this data"
+            // In other words, we shouldn't have data that is both at the item level and order level. If we find that we
+            // do, it would be worth bringing up to platform.
+            AddToCharge(order, "Tax", "Tax", itemTaxes + orderTaxes);
         }
     }
 }

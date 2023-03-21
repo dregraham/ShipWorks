@@ -38,6 +38,7 @@
     <None Remove="Platforms\Shopify\ShopifyLocationServiceTest.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\CultureAttribute\CultureAttribute.csproj" />
     <ProjectReference Include="..\Interapptive.Shared\Interapptive.Shared.csproj">
       <Project>{1e53a000-fdeb-4e9e-8be0-19cdc14a0282}</Project>
       <Name>Interapptive.Shared</Name>
