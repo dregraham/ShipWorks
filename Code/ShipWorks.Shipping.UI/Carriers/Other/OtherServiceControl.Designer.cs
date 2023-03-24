@@ -105,7 +105,7 @@ namespace ShipWorks.Shipping.Carriers.Other
             this.weight.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (0)));
             this.weight.Location = new System.Drawing.Point(85, 86);
             this.weight.Name = "weight";
-            this.weight.RangeMax = 300D;
+            this.weight.RangeMax = 600D;
             this.weight.RangeMin = 0D;
             this.weight.Size = new System.Drawing.Size(269, 21);
             this.weight.TabIndex = 7;
