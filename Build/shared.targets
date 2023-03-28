@@ -56,7 +56,7 @@
   </Target>
 
   <!-- Update the label state files for CC.NET so we can sync the build numbers -->
-  <Target Name="UpdateRevisionNumber" >
+  <!-- <Target Name="UpdateRevisionNumber" >
 
     <CreateItem Include="$(ProjectRevisionFile)" >
       <Output TaskParameter="Include" ItemName="RevisionFile" />
@@ -73,5 +73,5 @@
         Lines="$(NewRevision)"
         Overwrite="true"
         />
-  </Target>
+  </Target> -->
 </Project>

@@ -400,7 +400,7 @@
   <PropertyGroup>
     <PackageResultsDependsOn>
       CopyToArchive;
-      UpdateRevisionNumber;
+      <!-- UpdateRevisionNumber; -->
     </PackageResultsDependsOn>
   </PropertyGroup>
   <Target Name="PackageResults"

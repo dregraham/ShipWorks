@@ -583,21 +583,11 @@ void CreateDebugInstaller()
 /// </summary>
 void CreateInstaller(string releaseType, bool obfuscate, bool packageModules)
 {
-	Information($"bracketParam: '{bracketParam}'");	
-	var labelForBuild = "0.0.0";
-	if (!bracketParam.IsNullOrWhiteSpace())
-	{
-		labelForBuild = bracketParam.Trim();
-		Version ver = Version.Parse(labelForBuild);
-		labelForBuild = $"{ver.Major}.{ver.Minor}.{(ver.Build == -1 ? 0 : ver.Build)}";
-	}
+	//Information($"bracketParam: '{bracketParam}'");	
+	var labelForBuild = bracketParam.Trim();
 	Information($"labelForBuild: {labelForBuild}");
 
-	string revisionNumber = GetRevisionNumber();
-	labelForBuild = $"{labelForBuild}.{revisionNumber}";
-	Information($"labelForBuild: {labelForBuild}");
-
-	System.IO.File.WriteAllText(".build-label", labelForBuild);
+	//System.IO.File.WriteAllText(".build-label", labelForBuild);
 
 	var settings = CreateBuildSettings("Release")
 			.WithProperty("TreatWarningsAsErrors", "False")
@@ -606,7 +596,7 @@ void CreateInstaller(string releaseType, bool obfuscate, bool packageModules)
 			.WithProperty("Obfuscate", obfuscate ? "True" : "False")
 			.WithProperty("ReleaseType", releaseType)
 			.WithProperty("BuildType", "Automated")
-			.WithProperty("ProjectRevisionFile", revisionFilePath)
+			//.WithProperty("ProjectRevisionFile", revisionFilePath)
 			.WithProperty("CCNetLabel", labelForBuild)
 			.WithProperty("Platform", "Mixed Platforms");
 
@@ -636,25 +626,6 @@ string ComputeSHA256CheckSum(string filename)
 			return BitConverter.ToString(hash).Replace("-", string.Empty);
 		}
 	}
-}
-
-/// <summary>
-/// Get the current revision number
-/// </summary>
-string GetRevisionNumber()
-{
-	if (System.IO.File.Exists(revisionFilePath))
-	{
-		return System.IO.File.ReadAllText(revisionFilePath);
-	}
-	
-	if (System.IO.File.Exists(devRevisionFilePath))
-	{
-		revisionFilePath = devRevisionFilePath;
-		return System.IO.File.ReadAllText(devRevisionFilePath);
-	}
-
-	throw new Exception("Unable to find next revision text file.");
 }
 
 /// <summary>
