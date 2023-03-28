@@ -519,7 +519,8 @@ namespace ShipWorks.Stores.Platforms.ShipEngine
             {
                 return string.Empty;
             }
-            return $"{GetNotePreface(noteType)}{text}";
+
+            return $"{GetNotePreface(noteType)}{GetCleanNoteText(text)}";
         }
 
         /// <summary>
@@ -555,6 +556,22 @@ namespace ShipWorks.Stores.Platforms.ShipEngine
                 default:
                     return string.Empty;
             }
+        }
+
+        private string GetCleanNoteText(string text)
+        {
+            const string breakNode = "<br/>";
+            if (text.Contains(breakNode))
+            {
+                var values = text.Split(new[] { breakNode }, StringSplitOptions.None);
+                if (values[0].IsNullOrWhiteSpace() || values[0] == "null")
+                {
+                    return string.Empty;
+                }
+                text = values[0];
+            }
+
+            return text;
         }
 
         /// <summary>
