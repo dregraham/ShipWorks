@@ -290,7 +290,7 @@ namespace ShipWorks.Warehouse.Orders
         /// <summary>
         /// Load notes from the warehouse order into the order entity
         /// </summary>
-        private async Task LoadNotes(OrderEntity orderEntity, WarehouseOrder warehouseOrder)
+        protected virtual async Task LoadNotes(OrderEntity orderEntity, WarehouseOrder warehouseOrder)
         {
             foreach (WarehouseOrderNote warehouseOrderNote in warehouseOrder.Notes)
             {

@@ -17,6 +17,7 @@ using ShipWorks.Stores.Communication;
 using ShipWorks.Stores.Content;
 using ShipWorks.Stores.Platforms.Amazon.DTO;
 using ShipWorks.Stores.Platforms.ShipEngine.Apollo;
+using ShipWorks.Stores.Platforms.Shopify;
 
 namespace ShipWorks.Stores.Platforms.ShipEngine
 {
@@ -512,7 +513,7 @@ namespace ShipWorks.Stores.Platforms.ShipEngine
         /// <summary>
         /// Format the note to save
         /// </summary>
-        private string FormatNoteText(string text, OrderSourceNoteType noteType)
+        protected virtual string FormatNoteText(string text, OrderSourceNoteType noteType)
         {
             text = WebUtility.HtmlDecode(text);
             if (string.IsNullOrWhiteSpace(text))
@@ -520,8 +521,7 @@ namespace ShipWorks.Stores.Platforms.ShipEngine
                 return string.Empty;
             }
 
-            text = GetCleanNoteText(text);
-            return string.IsNullOrEmpty(text) ? string.Empty : $"{GetNotePreface(noteType)}{text}";
+            return $"{PlatformHelper.GetNotePreface(noteType)}{text}";
         }
 
         /// <summary>
@@ -534,42 +534,6 @@ namespace ShipWorks.Stores.Platforms.ShipEngine
             if (string.IsNullOrWhiteSpace(text))
             {
                 return string.Empty;
-            }
-
-            return text;
-        }
-
-        /// <summary>
-        /// Get the note preface based on note type
-        /// </summary>
-        private string GetNotePreface(OrderSourceNoteType noteType)
-        {
-            switch (noteType)
-            {
-                case OrderSourceNoteType.GiftMessage:
-                    return "Gift Message: ";
-                case OrderSourceNoteType.NotesToBuyer:
-                    return "To Buyer: ";
-                case OrderSourceNoteType.NotesFromBuyer:
-                    return "From Buyer: ";
-                case OrderSourceNoteType.InternalNotes:
-                    return "Internal: ";
-                default:
-                    return string.Empty;
-            }
-        }
-
-        private string GetCleanNoteText(string text)
-        {
-            const string breakNode = "<br/>";
-            if (text.Contains(breakNode))
-            {
-                var values = text.Split(new[] { breakNode }, StringSplitOptions.None);
-                if (values[0].IsNullOrWhiteSpace() || values[0] == "null")
-                {
-                    return string.Empty;
-                }
-                text = values[0];
             }
 
             return text;
