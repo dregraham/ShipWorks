@@ -63,7 +63,7 @@ namespace ShipWorks.Stores.Platforms.Shopify
         /// associate any store-specific download properties/metrics.</param>
         protected override async Task Download(TrackedDurationEvent trackedDurationEvent)
         {
-            var upgradeErrorMessage = "Update your Shopify credentials by April 1, 2023. First, install the latest version of ShipWorks. Then, go to Manage > Stores and update your Shopify credentials. Allow up to 15 minutes for the new credentials to be updated. For more information, visit support.shipworks.com.";
+            var upgradeErrorMessage = "Please update your Shopify credentials as soon as possible. First, install the latest version of ShipWorks. Then, go to Manage > Stores and update your Shopify credentials. Allow up to 15 minutes for the new credentials to be updated. For more information, visit support.shipworks.com.";
             var communicationErrorMessage = "Unable to connect to Shopify. Please, update your Shopify credentials. First, install the latest version of ShipWorks. Then, go to Manage > Stores and update your Shopify credentials. Allow up to 15 minutes for the new credentials to be updated. For more information, visit support.shipworks.com.";
 
             using (new LoggedStopwatch(log, "ShopifyDownloader.Download()"))
