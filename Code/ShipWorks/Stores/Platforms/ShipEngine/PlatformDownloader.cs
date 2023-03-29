@@ -515,12 +515,13 @@ namespace ShipWorks.Stores.Platforms.ShipEngine
         private string FormatNoteText(string text, OrderSourceNoteType noteType)
         {
             text = WebUtility.HtmlDecode(text);
+            text = GetCleanNoteText(text);
             if (string.IsNullOrWhiteSpace(text))
             {
                 return string.Empty;
             }
 
-            return $"{GetNotePreface(noteType)}{GetCleanNoteText(text)}";
+            return $"{GetNotePreface(noteType)}{text}";
         }
 
         /// <summary>
