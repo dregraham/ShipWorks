@@ -1,6 +1,6 @@
 <Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
 
-  <Import Project="$(MSBuildExtensionsPath)\MSBuildCommunityTasks\MSBuild.Community.Tasks.Targets"/>
+  <Import Project="..\Packages\MSBuildTasks.1.5.0.235\tools\MSBuild.Community.Tasks.Targets"/>
   <Import Project="Interapptive.MSBuild.Tasks.Targets"/>
 
   <PropertyGroup>
