@@ -29,12 +29,12 @@ namespace ShipWorks.Stores.Platforms.Etsy
 
         protected override async Task<OrderEntity> CreateOrder(OrderSourceApiSalesOrder salesOrder)
         {
-			if (salesOrder.Status == OrderSourceSalesOrderStatus.AwaitingPayment)
-			{
-				return null;
-			}
+            if (salesOrder.Status == OrderSourceSalesOrderStatus.AwaitingPayment)
+            {
+                return null;
+            }
 
-			var etsyOrderId = salesOrder.OrderNumber;
+            var etsyOrderId = salesOrder.OrderNumber;
 
             var result = await InstantiateOrder(long.Parse(etsyOrderId)).ConfigureAwait(false);
             if (result.Failure)
