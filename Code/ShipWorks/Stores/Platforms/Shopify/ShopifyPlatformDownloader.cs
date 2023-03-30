@@ -4,9 +4,11 @@ using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 using Interapptive.Shared.ComponentRegistration;
+using Interapptive.Shared.Metrics;
 using Interapptive.Shared.Utility;
 using ShipWorks.Data.Model;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Stores.Communication;
 using ShipWorks.Stores.Platforms.Amazon.DTO;
 using ShipWorks.Stores.Platforms.ShipEngine;
 using ShipWorks.Stores.Platforms.ShipEngine.Apollo;
@@ -31,6 +33,70 @@ namespace ShipWorks.Stores.Platforms.Shopify
             : base(store, storeTypeManager.GetType(store), storeManager, platformOrderWebClient)
         {
             this.shopifyFraudDownloader = shopifyFraudDownloader;
+        }
+
+        protected override async Task Download(TrackedDurationEvent trackedDurationEvent)
+        {
+            try
+            {
+                Progress.Detail = "Connecting to Platform...";
+
+                platformOrderWebClient.Progress = Progress;
+
+                Progress.Detail = "Checking for new orders ";
+
+                var result =
+                    await platformOrderWebClient.GetOrders(Store.OrderSourceID, Store.ContinuationToken, Progress.CancellationToken).ConfigureAwait(false);
+
+                while (result.Orders.Data.Any())
+                {
+                    if (result.Orders.Errors.Count > 0)
+                    {
+                        foreach (var platformError in result.Orders.Errors)
+                        {
+                            log.Error(platformError);
+                        }
+
+                        return;
+                    }
+
+                    if (Progress.IsCancelRequested)
+                    {
+                        log.Warn("A cancel was requested.");
+                        return;
+                    }
+
+                    // progress has to be indicated on each pass since we have 0 idea how many orders exists
+                    Progress.PercentComplete = 0;
+
+                    foreach (var salesOrder in result.Orders.Data.Where(x => x.Status != OrderSourceSalesOrderStatus.OnHold))
+                    {
+                        await LoadOrder(salesOrder).ConfigureAwait(false);
+                    }
+
+                    // Save the continuation token to the store
+                    Store.ContinuationToken = result.Orders.ContinuationToken;
+                    await storeManager.SaveStoreAsync(Store).ConfigureAwait(false);
+
+                    result = await platformOrderWebClient.GetOrders(Store.OrderSourceID, Store.ContinuationToken, Progress.CancellationToken).ConfigureAwait(false);
+
+                }
+
+                Progress.PercentComplete = 100;
+                Progress.Detail = "Done.";
+
+                // There's an error within the refresh
+                if (result.Error)
+                {
+                    // We only throw at the end to give the import a chance to process any orders that were provided.
+                    throw new Exception(
+                        $"Connection to {StoreType.StoreTypeName} failed. Please try again. If it continues to fail, update your credentials in store settings or contact ShipWorks support.");
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new DownloadException(ex.Message, ex);
+            }
         }
 
         /// <summary>

@@ -25,7 +25,7 @@ namespace ShipWorks.Stores.Platforms.ShipEngine
     {
         protected readonly ILog log;
 
-        private readonly IPlatformOrderWebClient platformOrderWebClient;
+        protected readonly IPlatformOrderWebClient platformOrderWebClient;
         /// <summary>
         /// Store manager used to save the continuation token to the platform store
         /// </summary>
@@ -419,7 +419,7 @@ namespace ShipWorks.Stores.Platforms.ShipEngine
         /// <summary>
         /// Store order in database
         /// </summary>
-        private async Task LoadOrder(OrderSourceApiSalesOrder salesOrder)
+        protected async Task LoadOrder(OrderSourceApiSalesOrder salesOrder)
 		{
 			var order = await CreateOrder(salesOrder);
 			if (order == null)
