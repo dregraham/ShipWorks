@@ -25,7 +25,7 @@ namespace ShipWorks.Stores.Platforms.ShipEngine
     {
         protected readonly ILog log;
 
-        protected readonly IPlatformOrderWebClient platformOrderWebClient;
+        private readonly IPlatformOrderWebClient platformOrderWebClient;
         /// <summary>
         /// Store manager used to save the continuation token to the platform store
         /// </summary>
@@ -375,7 +375,7 @@ namespace ShipWorks.Stores.Platforms.ShipEngine
                     // progress has to be indicated on each pass since we have 0 idea how many orders exists
                     Progress.PercentComplete = 0;
 
-                    foreach (var salesOrder in result.Orders.Data.Where(x => x.Status != OrderSourceSalesOrderStatus.AwaitingPayment))
+                    foreach (var salesOrder in result.Orders.Data)
                     {
                         await LoadOrder(salesOrder).ConfigureAwait(false);
                     }
@@ -419,7 +419,7 @@ namespace ShipWorks.Stores.Platforms.ShipEngine
         /// <summary>
         /// Store order in database
         /// </summary>
-        protected async Task LoadOrder(OrderSourceApiSalesOrder salesOrder)
+        private async Task LoadOrder(OrderSourceApiSalesOrder salesOrder)
 		{
 			var order = await CreateOrder(salesOrder);
 			if (order == null)

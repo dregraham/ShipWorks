@@ -79,6 +79,11 @@ namespace ShipWorks.Stores.Platforms.Amazon
 
         protected override async Task<OrderEntity> CreateOrder(OrderSourceApiSalesOrder salesOrder)
         {
+            if(salesOrder.Status == OrderSourceSalesOrderStatus.AwaitingPayment)
+            {
+                return null;
+            }
+
             var fulfillmentChannel = GetFulfillmentChannel(salesOrder);
             if (AmazonStore.ExcludeFBA && fulfillmentChannel == AmazonMwsFulfillmentChannel.AFN)
             {
