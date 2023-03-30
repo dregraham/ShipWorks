@@ -6,6 +6,7 @@ using log4net;
 using ShipWorks.Data.Import;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
+using ShipWorks.Stores.Content;
 using ShipWorks.Stores.Platforms.Shopify.Enums;
 using ShipWorks.Warehouse.Orders;
 using ShipWorks.Warehouse.Orders.DTO;
@@ -92,6 +93,15 @@ namespace ShipWorks.Stores.Platforms.Shopify.Warehouse
             ShopifyItemEntity.ShopifyOrderItemID = shopifyWarehouseItem.ShopifyOrderItemID;
             ShopifyItemEntity.ShopifyProductID = shopifyWarehouseItem.ShopifyProductID;
             ShopifyItemEntity.InventoryItemID = shopifyWarehouseItem.ShopifyInventoryItemID;
+        }
+
+        protected override async Task LoadNotes(OrderEntity orderEntity, WarehouseOrder warehouseOrder)
+        {
+            foreach (WarehouseOrderNote warehouseOrderNote in warehouseOrder.Notes)
+            {
+                await orderElementFactory.CreateNote(orderEntity, ShopifyHelper.GetCleanNoteText(warehouseOrderNote.Text), warehouseOrderNote.Edited,
+                    (NoteVisibility) warehouseOrderNote.Visibility, true).ConfigureAwait(false);
+            }
         }
     }
 }

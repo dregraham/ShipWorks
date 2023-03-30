@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Threading.Tasks;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Utility;
@@ -225,6 +226,21 @@ namespace ShipWorks.Stores.Platforms.Shopify
             //    item.ListingID = productListing.Substring(length+1);
             //}
             return item;
+        }
+
+        /// <summary>
+        /// Format the note to save
+        /// </summary>
+        protected override string FormatNoteText(string text, OrderSourceNoteType noteType)
+        {
+            text = WebUtility.HtmlDecode(text);
+            if (string.IsNullOrWhiteSpace(text))
+            {
+                return string.Empty;
+            }
+
+            text = ShopifyHelper.GetCleanNoteText(text);
+            return string.IsNullOrEmpty(text) ? string.Empty : $"{PlatformHelper.GetNotePreface(noteType)}{text}";
         }
     }
 }

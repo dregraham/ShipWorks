@@ -1352,10 +1352,12 @@
     <Compile Include="Stores\Platforms\ShipEngine\Apollo\PlatformApolloDTO.cs" />
     <Compile Include="Stores\Platforms\ShipEngine\Apollo\PlatformUnitConverter.cs" />
     <Compile Include="Stores\Platforms\ShipEngine\IPlatformOrderWebClient.cs" />
+    <Compile Include="Stores\Platforms\ShipEngine\PlatformHelper.cs" />
     <Compile Include="Stores\Platforms\ShipEngine\PlatformOrderWebClient.cs" />
     <Compile Include="Stores\Platforms\ShipEngine\PlatformDownloader.cs" />
     <Compile Include="Stores\Platforms\Shopify\IShopifyAccountSettingsControlFactory.cs" />
     <Compile Include="Stores\Platforms\Shopify\OnlineUpdating\ShopifyPlatformOnlineUpdaterBehavior.cs" />
+    <Compile Include="Stores\Platforms\Shopify\ShopifyHelper.cs" />
     <Compile Include="Stores\Platforms\Shopify\ShopifyPlatformDownloader.cs" />
     <Compile Include="Stores\Platforms\Shopify\WizardPages\ShopifyAssociateAccountPage.cs">
       <SubType>UserControl</SubType>
