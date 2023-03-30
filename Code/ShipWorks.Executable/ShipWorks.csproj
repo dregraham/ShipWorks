@@ -463,4 +463,11 @@
     <Copy SourceFiles="..\..\Components\Win32\ShipWorks.Native.dll" DestinationFolder="$(MSBuildProjectPath)..\..\Artifacts\Application\\Win32" />
     <Copy SourceFiles="..\..\Components\x64\ShipWorks.Native.dll" DestinationFolder="$(MSBuildProjectPath)..\..\Artifacts\Application\" />
   </Target>
+  <Import Project="..\..\packages\MSBuildTasks.1.5.0.235\build\MSBuildTasks.targets" Condition="Exists('..\..\packages\MSBuildTasks.1.5.0.235\build\MSBuildTasks.targets')" />
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
+    </PropertyGroup>
+    <Error Condition="!Exists('..\..\packages\MSBuildTasks.1.5.0.235\build\MSBuildTasks.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\packages\MSBuildTasks.1.5.0.235\build\MSBuildTasks.targets'))" />
+  </Target>
 </Project>
