@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Threading.Tasks;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Utility;
@@ -225,6 +226,50 @@ namespace ShipWorks.Stores.Platforms.Shopify
             //    item.ListingID = productListing.Substring(length+1);
             //}
             return item;
+        }
+
+        protected override void LoadProductDetails(OrderSourceSalesOrderItem orderItem, OrderItemEntity item)
+        {
+            if (orderItem.Product?.Details != null)
+            {
+                if (!orderItem.Product.Details.Any())
+                {
+                    return;
+                }
+
+                OrderItemAttributeEntity option = InstantiateOrderItemAttribute(item);
+
+                //Set the option properties
+                option.Name = "Variant";
+                option.Description = string.Empty;
+
+                // Shopify only sends the total line price
+                option.UnitPrice = 0;
+
+                foreach (var detail in orderItem.Product.Details)
+                {
+                    OrderItemAttributeEntity attribute = InstantiateOrderItemAttribute(item);
+                    attribute.Name = string.Format("   {0}", EntitiesDecode(detail.Name));
+                    attribute.Description = EntitiesDecode(detail.Value);
+                    attribute.UnitPrice = 0;
+                    item.OrderItemAttributes.Add(attribute);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Format the note to save
+        /// </summary>
+        protected override string FormatNoteText(string text, OrderSourceNoteType noteType)
+        {
+            text = WebUtility.HtmlDecode(text);
+            if (string.IsNullOrWhiteSpace(text))
+            {
+                return string.Empty;
+            }
+
+            text = ShopifyHelper.GetCleanNoteText(text);
+            return string.IsNullOrEmpty(text) ? string.Empty : $"{PlatformHelper.GetNotePreface(noteType)}{text}";
         }
     }
 }

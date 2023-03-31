@@ -17,6 +17,7 @@ using ShipWorks.Stores.Communication;
 using ShipWorks.Stores.Content;
 using ShipWorks.Stores.Platforms.Amazon.DTO;
 using ShipWorks.Stores.Platforms.ShipEngine.Apollo;
+using ShipWorks.Stores.Platforms.Shopify;
 
 namespace ShipWorks.Stores.Platforms.ShipEngine
 {
@@ -126,6 +127,15 @@ namespace ShipWorks.Stores.Platforms.ShipEngine
                 }
             }
 
+            LoadProductDetails(orderItem, item);
+
+            AddOrderItemCharges(orderItem, order);
+
+            return item;
+        }
+
+        protected virtual void LoadProductDetails(OrderSourceSalesOrderItem orderItem, OrderItemEntity item)
+        {
             // Instantiate OrderItemAttribute and set values from the item product details
             if (orderItem.Product?.Details != null)
             {
@@ -138,9 +148,6 @@ namespace ShipWorks.Stores.Platforms.ShipEngine
                     item.OrderItemAttributes.Add(attribute);
                 }
             }
-
-            AddOrderItemCharges(orderItem, order);
-            return item;
         }
 
         /// <summary>
@@ -512,20 +519,21 @@ namespace ShipWorks.Stores.Platforms.ShipEngine
         /// <summary>
         /// Format the note to save
         /// </summary>
-        private string FormatNoteText(string text, OrderSourceNoteType noteType)
+        protected virtual string FormatNoteText(string text, OrderSourceNoteType noteType)
         {
             text = WebUtility.HtmlDecode(text);
             if (string.IsNullOrWhiteSpace(text))
             {
                 return string.Empty;
             }
-            return $"{GetNotePreface(noteType)}{text}";
+
+            return $"{PlatformHelper.GetNotePreface(noteType)}{text}";
         }
 
         /// <summary>
         /// Decode html encoded strings for order item name and attributes
         /// </summary>
-        private string EntitiesDecode(string text)
+        protected string EntitiesDecode(string text)
         {
             text = WebUtility.HtmlDecode(text);
 
@@ -535,26 +543,6 @@ namespace ShipWorks.Stores.Platforms.ShipEngine
             }
 
             return text;
-        }
-
-        /// <summary>
-        /// Get the note preface based on note type
-        /// </summary>
-        private string GetNotePreface(OrderSourceNoteType noteType)
-        {
-            switch (noteType)
-            {
-                case OrderSourceNoteType.GiftMessage:
-                    return "Gift Message: ";
-                case OrderSourceNoteType.NotesToBuyer:
-                    return "To Buyer: ";
-                case OrderSourceNoteType.NotesFromBuyer:
-                    return "From Buyer: ";
-                case OrderSourceNoteType.InternalNotes:
-                    return "Internal: ";
-                default:
-                    return string.Empty;
-            }
         }
 
         /// <summary>
