@@ -127,6 +127,15 @@ namespace ShipWorks.Stores.Platforms.ShipEngine
                 }
             }
 
+            LoadProductDetails(orderItem, item);
+
+            AddOrderItemCharges(orderItem, order);
+
+            return item;
+        }
+
+        protected virtual void LoadProductDetails(OrderSourceSalesOrderItem orderItem, OrderItemEntity item)
+        {
             // Instantiate OrderItemAttribute and set values from the item product details
             if (orderItem.Product?.Details != null)
             {
@@ -139,9 +148,6 @@ namespace ShipWorks.Stores.Platforms.ShipEngine
                     item.OrderItemAttributes.Add(attribute);
                 }
             }
-
-            AddOrderItemCharges(orderItem, order);
-            return item;
         }
 
         /// <summary>
@@ -527,7 +533,7 @@ namespace ShipWorks.Stores.Platforms.ShipEngine
         /// <summary>
         /// Decode html encoded strings for order item name and attributes
         /// </summary>
-        private string EntitiesDecode(string text)
+        protected string EntitiesDecode(string text)
         {
             text = WebUtility.HtmlDecode(text);
 
