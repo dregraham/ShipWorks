@@ -200,7 +200,7 @@ if (Test-Path $MODULES_PACKAGES_CONFIG) {
 }
 
 # Restore DOTFUSCATOR from NuGet
-if (!Test-Path $DOTFUSCATOR_PATH) {
+if (!(Test-Path $DOTFUSCATOR_PATH)) {
     
     Write-Verbose -Message "Restoring DOTFUSCATOR from NuGet..."
     $NuGetOutput = Invoke-Expression "&`"$NUGET_EXE`" install PreEmptive.Protection.Dotfuscator.Pro -Version 6.5.2 -ExcludeVersion -Source https://www.myget.org/F/shipworks/auth/$env:SHIPWORKS_NPM_AUTH_TOKEN/api/v3/index.json -OutputDirectory `"$TOOLS_DIR`""
