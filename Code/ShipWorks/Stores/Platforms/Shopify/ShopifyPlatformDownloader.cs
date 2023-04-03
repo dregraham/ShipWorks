@@ -4,9 +4,11 @@ using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 using Interapptive.Shared.ComponentRegistration;
+using Interapptive.Shared.Metrics;
 using Interapptive.Shared.Utility;
 using ShipWorks.Data.Model;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Stores.Communication;
 using ShipWorks.Stores.Platforms.Amazon.DTO;
 using ShipWorks.Stores.Platforms.ShipEngine;
 using ShipWorks.Stores.Platforms.ShipEngine.Apollo;
@@ -38,6 +40,11 @@ namespace ShipWorks.Stores.Platforms.Shopify
         /// </summary>
         protected override async Task<OrderEntity> CreateOrder(OrderSourceApiSalesOrder salesOrder)
         {
+            if (salesOrder.Status == OrderSourceSalesOrderStatus.OnHold)
+            {
+                return null;
+            }
+
             long shopifyOrderId = long.Parse(salesOrder.OrderId);
 
             GenericResult<OrderEntity> result = await InstantiateOrder(
@@ -53,7 +60,7 @@ namespace ShipWorks.Stores.Platforms.Shopify
             var order = (ShopifyOrderEntity) result.Value;
 
             LoadOrderNumber(order, salesOrder);
-           
+
             var fraudRiskString = salesOrder.RequestedFulfillments?.FirstOrDefault()?.Extensions?.CustomField2;
             //https://github.com/shipstation/integrations-ecommerce/blob/56380abc4fde3e0d299d48252bc95d5a0ddff2ce/modules/shopify/src/api/types/enums.ts
             //export enum RiskRecommendation
@@ -71,15 +78,15 @@ namespace ShipWorks.Stores.Platforms.Shopify
                 };
 
                 shopifyFraudDownloader.Merge(order, new List<OrderPaymentDetailEntity> { paymentDetailEntity });
-			}
+            }
 
-			//unshipped
-			//partial
-			//fulfilled
-			//restocked
-			//unknown
-			order.FulfillmentStatusCode = (int) ShopifyFulfillmentStatus.Unshipped;
-            
+            //unshipped
+            //partial
+            //fulfilled
+            //restocked
+            //unknown
+            order.FulfillmentStatusCode = (int) ShopifyFulfillmentStatus.Unshipped;
+
             //authorized
             //pending
             //paid

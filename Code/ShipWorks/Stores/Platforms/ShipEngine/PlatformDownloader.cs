@@ -381,7 +381,7 @@ namespace ShipWorks.Stores.Platforms.ShipEngine
                     // progress has to be indicated on each pass since we have 0 idea how many orders exists
                     Progress.PercentComplete = 0;
 
-                    foreach (var salesOrder in result.Orders.Data.Where(x => x.Status != OrderSourceSalesOrderStatus.AwaitingPayment))
+                    foreach (var salesOrder in result.Orders.Data)
                     {
                         await LoadOrder(salesOrder).ConfigureAwait(false);
                     }
