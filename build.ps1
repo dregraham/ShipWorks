@@ -110,6 +110,7 @@ $PACKAGES_CONFIG = Join-Path $TOOLS_DIR "packages.config"
 $PACKAGES_CONFIG_MD5 = Join-Path $TOOLS_DIR "packages.config.md5sum"
 $ADDINS_PACKAGES_CONFIG = Join-Path $ADDINS_DIR "packages.config"
 $MODULES_PACKAGES_CONFIG = Join-Path $MODULES_DIR "packages.config"
+$DOTFUSCATOR_PATH = Join-Path $TOOLS_DIR "PreEmptive.Protection.Dotfuscator.Pro"
 
 # Try find NuGet.exe in path if not exists
 if (!(Test-Path $NUGET_EXE)) {
@@ -196,6 +197,19 @@ if (Test-Path $MODULES_PACKAGES_CONFIG) {
     Write-Verbose -Message ($NuGetOutput | out-string)
 
     Pop-Location
+}
+
+# Restore DOTFUSCATOR from NuGet
+if (!Test-Path $DOTFUSCATOR_PATH) {
+    
+    Write-Verbose -Message "Restoring DOTFUSCATOR from NuGet..."
+    $NuGetOutput = Invoke-Expression "&`"$NUGET_EXE`" install PreEmptive.Protection.Dotfuscator.Pro -Version 6.5.2 -ExcludeVersion -Source https://www.myget.org/F/shipworks/auth/$env:SHIPWORKS_NPM_AUTH_TOKEN/api/v3/index.json -OutputDirectory `"$TOOLS_DIR`""
+
+    if ($LASTEXITCODE -ne 0) {
+        Throw "An error occurred while restoring DOTFUSCATOR NuGet."
+    }
+
+    Write-Verbose -Message ($NuGetOutput | out-string)
 }
 
 # Make sure that Cake has been installed.
