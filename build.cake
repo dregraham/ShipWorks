@@ -127,7 +127,7 @@ Task("RestoreNuGetPackages")
     .Does(() =>
 	{
 		LogStartMessage("NuGetRestore");
-		NuGetRestore("./ShipWorks.sln", new NuGetRestoreSettings { Verbosity = NuGetVerbosity.Quiet });
+		NuGetRestore("./ShipWorks.sln", new NuGetRestoreSettings { Verbosity = NuGetVerbosity.Detailed });
 		LogFinishedMessage("NuGetRestore");
 	});
 
