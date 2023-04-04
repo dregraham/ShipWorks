@@ -205,18 +205,20 @@ Write-Host $DOTFUSCATOR_PATH
 if (!(Test-Path $DOTFUSCATOR_PATH)) {
     
     Write-Host "Restoring DOTFUSCATOR from NuGet..."
-    $NuGetOutput = Invoke-Expression "&`"$NUGET_EXE`" install PreEmptive.Protection.Dotfuscator.Pro -Version 6.5.2 -ExcludeVersion -Source https://www.myget.org/F/shipworks/auth/$env:SHIPWORKS_NPM_AUTH_TOKEN/api/v3/index.json -OutputDirectory `"$TOOLS_DIR`""
+    $NuGetOutput = Invoke-Expression "&`"$NUGET_EXE`" install PreEmptive.Protection.Dotfuscator.Pro -Version 6.5.2 -ExcludeVersion -Source https://www.myget.org/F/shipworks/auth/$env:SHIPWORKS_NPM_AUTH_TOKEN/api/v3/index.json -OutputDirectory `"$DOTFUSCATOR_PATH`""
 
     if ($LASTEXITCODE -ne 0) {
         Throw "An error occurred while restoring DOTFUSCATOR NuGet."
     }
 
     Write-Host ($NuGetOutput | out-string)
+    Get-ChildItem $TOOLS_DIR
 }
 else
 {
     Write-Host "DOTFUSCATOR restore directory exists"
     Get-ChildItem $DOTFUSCATOR_PATH
+    Get-ChildItem $TOOLS_DIR
 }
 
 # Make sure that Cake has been installed.
