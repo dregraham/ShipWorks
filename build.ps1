@@ -200,6 +200,8 @@ if (Test-Path $MODULES_PACKAGES_CONFIG) {
 }
 
 # Restore DOTFUSCATOR from NuGet
+Write-Verbose -Message "Checking DOTFUSCATOR restore directory"
+Write-Verbose -Message $DOTFUSCATOR_PATH
 if (!(Test-Path $DOTFUSCATOR_PATH)) {
     
     Write-Verbose -Message "Restoring DOTFUSCATOR from NuGet..."
@@ -210,6 +212,11 @@ if (!(Test-Path $DOTFUSCATOR_PATH)) {
     }
 
     Write-Verbose -Message ($NuGetOutput | out-string)
+}
+else
+{
+    Write-Verbose -Message "DOTFUSCATOR restore directory exists"
+    Get-ChildItem $DOTFUSCATOR_PATH
 }
 
 # Make sure that Cake has been installed.
