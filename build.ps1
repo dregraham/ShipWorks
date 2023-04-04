@@ -60,7 +60,7 @@ Write-Host "Params"
 Write-Host "Target: " $Target
 Write-Host "Configuration: " $Configuration
 Write-Host "Build directory contents: "
-Get-ChildItem Join-Path $PSScriptRoot "Build"
+Get-ChildItem (Join-Path $PSScriptRoot "Build")
 
 [Reflection.Assembly]::LoadWithPartialName("System.Security") | Out-Null
 function MD5HashFile([string] $filePath)
@@ -227,7 +227,7 @@ if (!(Test-Path $CAKE_EXE)) {
 }
 
 Write-Host "Build directory contents: "
-Get-ChildItem Join-Path $PSScriptRoot "Build"
+Get-ChildItem (Join-Path $PSScriptRoot "Build")
 
 # Build Cake arguments
 $cakeArguments = @("$Script");
