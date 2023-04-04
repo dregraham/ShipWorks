@@ -59,6 +59,8 @@ Param(
 Write-Host "Params"
 Write-Host "Target: " $Target
 Write-Host "Configuration: " $Configuration
+Write-Host "Build directory contents: "
+Get-ChildItem Join-Path $PSScriptRoot "Build"
 
 [Reflection.Assembly]::LoadWithPartialName("System.Security") | Out-Null
 function MD5HashFile([string] $filePath)
@@ -212,12 +214,11 @@ if (!(Test-Path $DOTFUSCATOR_PATH)) {
     }
 
     Write-Host ($NuGetOutput | out-string)
-    Get-ChildItem $TOOLS_DIR -Recurse
 }
 else
 {
     Write-Host "DOTFUSCATOR restore directory exists"
-    Get-ChildItem $DOTFUSCATOR_PATH -Recurse
+    Get-ChildItem $DOTFUSCATOR_PATH
 }
 
 # Make sure that Cake has been installed.
@@ -225,7 +226,8 @@ if (!(Test-Path $CAKE_EXE)) {
     Throw "Could not find Cake.exe at $CAKE_EXE"
 }
 
-
+Write-Host "Build directory contents: "
+Get-ChildItem Join-Path $PSScriptRoot "Build"
 
 # Build Cake arguments
 $cakeArguments = @("$Script");
