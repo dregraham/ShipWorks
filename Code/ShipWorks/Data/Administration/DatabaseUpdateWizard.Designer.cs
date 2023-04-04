@@ -221,7 +221,7 @@ namespace ShipWorks.Data.Administration
             this.pictureBox1.Anchor = ((System.Windows.Forms.AnchorStyles) ((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.pictureBox1.Cursor = System.Windows.Forms.Cursors.Default;
             this.pictureBox1.Image = ((System.Drawing.Image) (resources.GetObject("pictureBox1.Image")));
-            this.pictureBox1.Location = new System.Drawing.Point(51, 52);
+            this.pictureBox1.Location = new System.Drawing.Point(51, 55);
             this.pictureBox1.Name = "pictureBox1";
             this.pictureBox1.Size = new System.Drawing.Size(48, 48);
             this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.AutoSize;
@@ -241,7 +241,7 @@ namespace ShipWorks.Data.Administration
             // 
             // backup
             // 
-            this.backup.Location = new System.Drawing.Point(102, 52);
+            this.backup.Location = new System.Drawing.Point(102, 55);
             this.backup.Name = "backup";
             this.backup.Size = new System.Drawing.Size(75, 23);
             this.backup.TabIndex = 1;
@@ -253,7 +253,7 @@ namespace ShipWorks.Data.Administration
             // 
             this.labelBackupInfo.Location = new System.Drawing.Point(20, 9);
             this.labelBackupInfo.Name = "labelBackupInfo";
-            this.labelBackupInfo.Size = new System.Drawing.Size(472, 33);
+            this.labelBackupInfo.Size = new System.Drawing.Size(472, 55);
             this.labelBackupInfo.TabIndex = 0;
             this.labelBackupInfo.Text = "It is recommended that you backup ShipWorks before updating.  We don\'t expect any" +
     "thing to go wrong, but it doesn\'t hurt to be safe.";
