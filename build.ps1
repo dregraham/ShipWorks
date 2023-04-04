@@ -59,8 +59,6 @@ Param(
 Write-Host "Params"
 Write-Host "Target: " $Target
 Write-Host "Configuration: " $Configuration
-Write-Host "Build directory contents: "
-Get-ChildItem (Join-Path $PSScriptRoot "Build")
 
 [Reflection.Assembly]::LoadWithPartialName("System.Security") | Out-Null
 function MD5HashFile([string] $filePath)
@@ -112,7 +110,8 @@ $PACKAGES_CONFIG = Join-Path $TOOLS_DIR "packages.config"
 $PACKAGES_CONFIG_MD5 = Join-Path $TOOLS_DIR "packages.config.md5sum"
 $ADDINS_PACKAGES_CONFIG = Join-Path $ADDINS_DIR "packages.config"
 $MODULES_PACKAGES_CONFIG = Join-Path $MODULES_DIR "packages.config"
-$DOTFUSCATOR_PATH = Join-Path $TOOLS_DIR "PreEmptive.Protection.Dotfuscator.Pro"
+$DOTFUSCATOR_PATH = Join-Path (Get-Item $PSScriptRoot ).Parent.Parent "PreEmptive.Protection.Dotfuscator.Pro"
+$PARENT_DIRECTORY = (Get-Item $PSScriptRoot).Parent.Parent
 
 # Try find NuGet.exe in path if not exists
 if (!(Test-Path $NUGET_EXE)) {
@@ -207,7 +206,7 @@ Write-Host $DOTFUSCATOR_PATH
 if (!(Test-Path $DOTFUSCATOR_PATH)) {
     
     Write-Host "Restoring DOTFUSCATOR from NuGet..."
-    $NuGetOutput = Invoke-Expression "&`"$NUGET_EXE`" install PreEmptive.Protection.Dotfuscator.Pro -Version 6.5.2 -ExcludeVersion -Source https://www.myget.org/F/shipworks/auth/$env:SHIPWORKS_NPM_AUTH_TOKEN/api/v3/index.json -OutputDirectory `"$TOOLS_DIR`""
+    $NuGetOutput = Invoke-Expression "&`"$NUGET_EXE`" install PreEmptive.Protection.Dotfuscator.Pro -Version 6.5.2 -ExcludeVersion -Source https://www.myget.org/F/shipworks/auth/$env:SHIPWORKS_NPM_AUTH_TOKEN/api/v3/index.json -OutputDirectory `"$PARENT_DIRECTORY`""
 
     if ($LASTEXITCODE -ne 0) {
         Throw "An error occurred while restoring DOTFUSCATOR NuGet."
@@ -225,9 +224,6 @@ else
 if (!(Test-Path $CAKE_EXE)) {
     Throw "Could not find Cake.exe at $CAKE_EXE"
 }
-
-Write-Host "Build directory contents: "
-Get-ChildItem (Join-Path $PSScriptRoot "Build")
 
 # Build Cake arguments
 $cakeArguments = @("$Script");
