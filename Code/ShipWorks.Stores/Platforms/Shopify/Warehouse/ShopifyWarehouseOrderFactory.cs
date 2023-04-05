@@ -99,8 +99,21 @@ namespace ShipWorks.Stores.Platforms.Shopify.Warehouse
         {
             foreach (WarehouseOrderNote warehouseOrderNote in warehouseOrder.Notes)
             {
-                await orderElementFactory.CreateNote(orderEntity, ShopifyHelper.GetCleanNoteText(warehouseOrderNote.Text), warehouseOrderNote.Edited,
-                    (NoteVisibility) warehouseOrderNote.Visibility, true).ConfigureAwait(false);
+                var splitNotes = ShopifyHelper.GetSplitNotes(warehouseOrderNote.Text);
+                for (var i = 0; i < splitNotes.Length; i++)
+                {
+                    if (i == 0)
+                    {
+                        var noteText = splitNotes[i] == "null" ? string.Empty : splitNotes[i];
+                        await orderElementFactory.CreateNote(orderEntity, noteText, warehouseOrderNote.Edited,
+                            (NoteVisibility) warehouseOrderNote.Visibility, true).ConfigureAwait(false);
+                    }
+                    else
+                    {
+                        await orderElementFactory.CreateNote(orderEntity, splitNotes[i], warehouseOrderNote.Edited,
+                            NoteVisibility.Internal, true).ConfigureAwait(false);
+                    }
+                }
             }
         }
     }

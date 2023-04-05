@@ -494,15 +494,15 @@ namespace ShipWorks.Stores.Platforms.ShipEngine
 			order.OnlineCustomerID = null;
 		}
 
-		/// <summary>
-		/// Adds notes to order entity
-		/// </summary>
-		private async Task AddNotes(OrderSourceApiSalesOrder salesOrder, List<GiftNote> giftNotes, OrderEntity order)
+        /// <summary>
+        /// Adds notes to order entity
+        /// </summary>
+        protected virtual async Task AddNotes(OrderSourceApiSalesOrder salesOrder, List<GiftNote> giftNotes, OrderEntity order)
         {
             var notes = salesOrder.Notes.Where(n => n.Type != OrderSourceNoteType.GiftMessage);
             foreach (var note in notes)
             {
-                string noteText = FormatNoteText(note.Text, note.Type);
+                var noteText = FormatNoteText(note.Text, note.Type);
                 var visibility = note.Type == OrderSourceNoteType.InternalNotes ?
                     NoteVisibility.Internal : NoteVisibility.Public;
 
@@ -519,10 +519,10 @@ namespace ShipWorks.Stores.Platforms.ShipEngine
         /// <summary>
         /// Format the note to save
         /// </summary>
-        protected virtual string FormatNoteText(string text, OrderSourceNoteType noteType)
+        protected static string FormatNoteText(string text, OrderSourceNoteType noteType)
         {
             text = WebUtility.HtmlDecode(text);
-            if (string.IsNullOrWhiteSpace(text))
+            if (string.IsNullOrWhiteSpace(text) || text == "null")
             {
                 return string.Empty;
             }

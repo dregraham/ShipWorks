@@ -1,14 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Net;
 using System.Threading.Tasks;
 using Interapptive.Shared.ComponentRegistration;
-using Interapptive.Shared.Metrics;
 using Interapptive.Shared.Utility;
 using ShipWorks.Data.Model;
 using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Stores.Communication;
+using ShipWorks.Stores.Content;
 using ShipWorks.Stores.Platforms.Amazon.DTO;
 using ShipWorks.Stores.Platforms.ShipEngine;
 using ShipWorks.Stores.Platforms.ShipEngine.Apollo;
@@ -60,7 +58,7 @@ namespace ShipWorks.Stores.Platforms.Shopify
             var order = (ShopifyOrderEntity) result.Value;
 
             LoadOrderNumber(order, salesOrder);
-
+           
             var fraudRiskString = salesOrder.RequestedFulfillments?.FirstOrDefault()?.Extensions?.CustomField2;
             //https://github.com/shipstation/integrations-ecommerce/blob/56380abc4fde3e0d299d48252bc95d5a0ddff2ce/modules/shopify/src/api/types/enums.ts
             //export enum RiskRecommendation
@@ -78,15 +76,15 @@ namespace ShipWorks.Stores.Platforms.Shopify
                 };
 
                 shopifyFraudDownloader.Merge(order, new List<OrderPaymentDetailEntity> { paymentDetailEntity });
-            }
+			}
 
-            //unshipped
-            //partial
-            //fulfilled
-            //restocked
-            //unknown
-            order.FulfillmentStatusCode = (int) ShopifyFulfillmentStatus.Unshipped;
-
+			//unshipped
+			//partial
+			//fulfilled
+			//restocked
+			//unknown
+			order.FulfillmentStatusCode = (int) ShopifyFulfillmentStatus.Unshipped;
+            
             //authorized
             //pending
             //paid
@@ -265,18 +263,36 @@ namespace ShipWorks.Stores.Platforms.Shopify
         }
 
         /// <summary>
-        /// Format the note to save
+        /// Adds notes to order entity
         /// </summary>
-        protected override string FormatNoteText(string text, OrderSourceNoteType noteType)
+        protected override async Task AddNotes(OrderSourceApiSalesOrder salesOrder, List<GiftNote> giftNotes, OrderEntity order)
         {
-            text = WebUtility.HtmlDecode(text);
-            if (string.IsNullOrWhiteSpace(text))
+            var notes = salesOrder.Notes.Where(n => n.Type != OrderSourceNoteType.GiftMessage);
+            foreach (var note in notes)
             {
-                return string.Empty;
+                var splitNotes = ShopifyHelper.GetSplitNotes(note.Text);
+
+                for (var i = 0; i < splitNotes.Length; i++)
+                {
+                    if (i == 0)
+                    {
+                        var visibility = note.Type == OrderSourceNoteType.InternalNotes ?
+                            NoteVisibility.Internal : NoteVisibility.Public;
+
+                        await InstantiateNote(order, FormatNoteText(splitNotes[i], note.Type), order.OrderDate, visibility).ConfigureAwait(false);
+                    }
+                    else
+                    {
+                        await InstantiateNote(order, splitNotes[i], order.OrderDate, NoteVisibility.Internal).ConfigureAwait(false);
+                    }
+                }
             }
 
-            text = ShopifyHelper.GetCleanNoteText(text);
-            return string.IsNullOrEmpty(text) ? string.Empty : $"{PlatformHelper.GetNotePreface(noteType)}{text}";
+            foreach (var note in giftNotes.Where(n => n.OrderItemId.IsNullOrWhiteSpace()))
+            {
+                var noteText = FormatNoteText(note.Message, OrderSourceNoteType.GiftMessage);
+                await InstantiateNote(order, noteText, order.OrderDate, NoteVisibility.Public).ConfigureAwait(false);
+            }
         }
     }
 }
