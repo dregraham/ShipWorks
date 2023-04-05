@@ -319,7 +319,7 @@
     </CreateItem>
 
     <Message Text="Strong naming assemblies: @(AssembliesToSign->'%(Filename)', ', ')" />
-    <Exec Command='"$(SnExe)" -q -Rc "%(AssembliesToSign.FullPath)" interapptive' />
+    <Exec Command='"sn -q -Rc "%(AssembliesToSign.FullPath)" interapptive' />
 
   </Target>
 
