@@ -69,6 +69,9 @@ if (target.Contains(":"))
                 case "quiet":
                     verbosity = Verbosity.Quiet;
                     break;
+                case "verbose":
+                    verbosity = Verbosity.Verbose;
+                    break;
                 case string s when s.StartsWith("debug_installer"):
                     target = "DebugInstaller";
                     break;
