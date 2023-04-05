@@ -9,7 +9,7 @@
     <SignCommand>"$(SignToolExe)" sign /v /sm /n Interapptive /d "ShipWorks" /du "http://www.shipworks.com" /t "http://timestamp.digicert.com"</SignCommand>
     <InnoSetupExe>C:\Program Files (x86)\Inno Setup 5\ISCC.EXE</InnoSetupExe>
     <DotfuscatorExe>"..\..\PreEmptive.Protection.Dotfuscator.Pro\tools\programdir\netcore\dotfuscator.cmd"</DotfuscatorExe>
-    <ObfuscationCommand>"$(DotfuscatorExe)" "..\ShipWorksDotfuscator.xml"</ObfuscationCommand>
+    <ObfuscationCommand>obfuscate.bat</ObfuscationCommand>
   </PropertyGroup>
 
   <PropertyGroup>

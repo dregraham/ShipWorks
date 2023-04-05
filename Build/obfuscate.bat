@@ -1,0 +1,1 @@
+dotnet "..\..\PreEmptive.Protection.Dotfuscator.Pro\tools\programdir\netcore\dotfuscator.dll" ShipWorksDotfuscator.xml
