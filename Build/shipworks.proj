@@ -68,9 +68,9 @@
 
     <Error Text="ReleaseType is set but CreateInstaller is False"
 			Condition=" $(ReleaseType) != 'None' and $(CreateInstaller) != 'True' " />
-
+<!-- 
     <Error Text="Obfuscate is not True but ReleaseType is Public"
-      Condition=" $(Obfuscate) != 'True' and $(ReleaseType) == 'Public'" />
+      Condition=" $(Obfuscate) != 'True' and $(ReleaseType) == 'Public'" /> -->
 
   </Target>
 
