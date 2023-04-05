@@ -288,7 +288,8 @@
 
     <Message Text="Starting obfuscation..." />
 
-    <Exec Command='$(ObfuscationCommand) ' />
+    <!-- <Exec Command='$(ObfuscationCommand) ' /> -->
+    <Exec Command='"..\..\PreEmptive.Protection.Dotfuscator.Pro\tools\programdir\netcore\dotfuscator.cmd" "..\ShipWorksDotfuscator.xml"' ConsoleToMsBuild=true/>"
 
     <CreateItem Include="$(AppDirectory)\Obfuscated\*.*">
       <Output TaskParameter="Include" ItemName="ObfuscatedAssemblies" />
