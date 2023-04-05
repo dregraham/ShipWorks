@@ -1,14 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Net;
 using System.Threading.Tasks;
 using Interapptive.Shared.ComponentRegistration;
-using Interapptive.Shared.Metrics;
 using Interapptive.Shared.Utility;
 using ShipWorks.Data.Model;
 using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Stores.Communication;
+using ShipWorks.Stores.Content;
 using ShipWorks.Stores.Platforms.Amazon.DTO;
 using ShipWorks.Stores.Platforms.ShipEngine;
 using ShipWorks.Stores.Platforms.ShipEngine.Apollo;
@@ -141,15 +139,15 @@ namespace ShipWorks.Stores.Platforms.Shopify
             }
         }
 
-		protected override void SetOnlineCustomerId(OrderEntity order, OrderSourceApiSalesOrder salesOrder)
-		{
-			order.OnlineCustomerID = salesOrder.Buyer?.BuyerId;
-		}
+        protected override void SetOnlineCustomerId(OrderEntity order, OrderSourceApiSalesOrder salesOrder)
+        {
+            order.OnlineCustomerID = salesOrder.Buyer?.BuyerId;
+        }
 
-		/// <summary>
-		/// Load the order number for the Shopify order, taking into consideration the prefix\postfix Shopify allows
-		/// </summary>
-		private void LoadOrderNumber(ShopifyOrderEntity order, OrderSourceApiSalesOrder salesOrder)
+        /// <summary>
+        /// Load the order number for the Shopify order, taking into consideration the prefix\postfix Shopify allows
+        /// </summary>
+        private void LoadOrderNumber(ShopifyOrderEntity order, OrderSourceApiSalesOrder salesOrder)
         {
             // Get shopify's field shopify calls "order_number" which SE puts into a field called custom_field_3
             var orderNumberString = salesOrder.RequestedFulfillments?.FirstOrDefault()?.Extensions?.CustomField3;
@@ -265,18 +263,33 @@ namespace ShipWorks.Stores.Platforms.Shopify
         }
 
         /// <summary>
-        /// Format the note to save
+        /// Adds notes to order entity
         /// </summary>
-        protected override string FormatNoteText(string text, OrderSourceNoteType noteType)
+        protected override async Task AddNotes(OrderSourceApiSalesOrder salesOrder, List<GiftNote> giftNotes, OrderEntity order)
         {
-            text = WebUtility.HtmlDecode(text);
-            if (string.IsNullOrWhiteSpace(text))
+            var notes = salesOrder.Notes.Where(n => n.Type != OrderSourceNoteType.GiftMessage);
+            foreach (var note in notes)
             {
-                return string.Empty;
+                var splitNotes = ShopifyHelper.GetSplitNotes(note.Text);
+                if (splitNotes[0] != "null")
+                {
+                    var visibility = note.Type == OrderSourceNoteType.InternalNotes ?
+                        NoteVisibility.Internal : NoteVisibility.Public;
+
+                    await InstantiateNote(order, FormatNoteText(splitNotes[0], note.Type), order.OrderDate, visibility).ConfigureAwait(false);
+                }
+
+                for (var i = 1; i < splitNotes.Length; i++)
+                {
+                    await InstantiateNote(order, splitNotes[i], order.OrderDate, NoteVisibility.Internal).ConfigureAwait(false);
+                }
             }
 
-            text = ShopifyHelper.GetCleanNoteText(text);
-            return string.IsNullOrEmpty(text) ? string.Empty : $"{PlatformHelper.GetNotePreface(noteType)}{text}";
+            foreach (var note in giftNotes.Where(n => n.OrderItemId.IsNullOrWhiteSpace()))
+            {
+                var noteText = FormatNoteText(note.Message, OrderSourceNoteType.GiftMessage);
+                await InstantiateNote(order, noteText, order.OrderDate, NoteVisibility.Public).ConfigureAwait(false);
+            }
         }
     }
 }
