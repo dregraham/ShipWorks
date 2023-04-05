@@ -84,7 +84,7 @@ namespace ShipWorks.Stores.Platforms.Shopify
             //restocked
             //unknown
             order.FulfillmentStatusCode = (int) ShopifyFulfillmentStatus.Unshipped;
-            
+
             //authorized
             //pending
             //paid

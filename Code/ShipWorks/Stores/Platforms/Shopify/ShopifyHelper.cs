@@ -23,6 +23,5 @@ namespace ShipWorks.Stores.Platforms.Shopify
 
             return new []{ string.Empty };
         }
-
-}
+    }
 }
