@@ -100,19 +100,15 @@ namespace ShipWorks.Stores.Platforms.Shopify.Warehouse
             foreach (WarehouseOrderNote warehouseOrderNote in warehouseOrder.Notes)
             {
                 var splitNotes = ShopifyHelper.GetSplitNotes(warehouseOrderNote.Text);
-                for (var i = 0; i < splitNotes.Length; i++)
+                if (splitNotes[0] != "null")
                 {
-                    if (i == 0)
-                    {
-                        var noteText = splitNotes[i] == "null" ? string.Empty : splitNotes[i];
-                        await orderElementFactory.CreateNote(orderEntity, noteText, warehouseOrderNote.Edited,
-                            (NoteVisibility) warehouseOrderNote.Visibility, true).ConfigureAwait(false);
-                    }
-                    else
-                    {
-                        await orderElementFactory.CreateNote(orderEntity, splitNotes[i], warehouseOrderNote.Edited,
-                            NoteVisibility.Internal, true).ConfigureAwait(false);
-                    }
+                    await orderElementFactory.CreateNote(orderEntity, splitNotes[0], warehouseOrderNote.Edited,
+                        (NoteVisibility) warehouseOrderNote.Visibility, true).ConfigureAwait(false);
+                }
+                for (var i = 1; i < splitNotes.Length; i++)
+                {
+                    await orderElementFactory.CreateNote(orderEntity, splitNotes[i], warehouseOrderNote.Edited,
+                        NoteVisibility.Internal, true).ConfigureAwait(false);
                 }
             }
         }

@@ -271,20 +271,17 @@ namespace ShipWorks.Stores.Platforms.Shopify
             foreach (var note in notes)
             {
                 var splitNotes = ShopifyHelper.GetSplitNotes(note.Text);
-
-                for (var i = 0; i < splitNotes.Length; i++)
+                if (splitNotes[0] != "null")
                 {
-                    if (i == 0)
-                    {
-                        var visibility = note.Type == OrderSourceNoteType.InternalNotes ?
-                            NoteVisibility.Internal : NoteVisibility.Public;
+                    var visibility = note.Type == OrderSourceNoteType.InternalNotes ?
+                        NoteVisibility.Internal : NoteVisibility.Public;
 
-                        await InstantiateNote(order, FormatNoteText(splitNotes[i], note.Type), order.OrderDate, visibility).ConfigureAwait(false);
-                    }
-                    else
-                    {
-                        await InstantiateNote(order, splitNotes[i], order.OrderDate, NoteVisibility.Internal).ConfigureAwait(false);
-                    }
+                    await InstantiateNote(order, FormatNoteText(splitNotes[0], note.Type), order.OrderDate, visibility).ConfigureAwait(false);
+                }
+
+                for (var i = 1; i < splitNotes.Length; i++)
+                {
+                    await InstantiateNote(order, splitNotes[i], order.OrderDate, NoteVisibility.Internal).ConfigureAwait(false);
                 }
             }
 

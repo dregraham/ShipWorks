@@ -521,7 +521,7 @@ namespace ShipWorks.Stores.Platforms.ShipEngine
         protected static string FormatNoteText(string text, OrderSourceNoteType noteType)
         {
             text = WebUtility.HtmlDecode(text);
-            if (string.IsNullOrWhiteSpace(text) || text == "null")
+            if (string.IsNullOrWhiteSpace(text))
             {
                 return string.Empty;
             }
