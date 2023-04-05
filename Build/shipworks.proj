@@ -288,7 +288,7 @@
 
     <Message Text="Starting obfuscation..." />
 
-    <Exec Command="obfuscate.bat"/>"
+    <Exec Command="obfuscate.bat" />"
     <!-- <Exec Command='$(ObfuscationCommand) ' /> -->
 
     <CreateItem Include="$(AppDirectory)\Obfuscated\*.*">
