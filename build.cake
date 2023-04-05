@@ -91,7 +91,7 @@ if (target.Contains(":"))
 		}
 
 		bracketParam = ParseBracketParam(targetRight);
-		verbosity = Verbosity.Verbose;
+		// verbosity = Verbosity.Verbose;
 	}
 }
 
