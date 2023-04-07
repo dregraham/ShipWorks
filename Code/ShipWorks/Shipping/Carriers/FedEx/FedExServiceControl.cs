@@ -770,7 +770,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
 
             int oldIndex = payorTransport.SelectedIndex;
 
-            EnumHelper.BindComboBox<FedExPayorType>(payorTransport, t => anyGround || t != FedExPayorType.Collect);
+            EnumHelper.BindComboBox<FedExPayorType>(payorTransport, t => anyGround && t != FedExPayorType.Collect);
 
             payorTransport.SelectedIndex = (oldIndex >= 0 && oldIndex < payorTransport.Items.Count) ? oldIndex : 0;
 

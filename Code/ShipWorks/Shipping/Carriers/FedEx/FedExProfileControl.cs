@@ -393,7 +393,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         /// </summary>
         private void LoadPayorTypes()
         {
-            EnumHelper.BindComboBox<FedExPayorType>(payorTransport);
+            EnumHelper.BindComboBox<FedExPayorType>(payorTransport, t => t != FedExPayorType.Collect);
             EnumHelper.BindComboBox<FedExPayorType>(payorDuties);
         }
 
