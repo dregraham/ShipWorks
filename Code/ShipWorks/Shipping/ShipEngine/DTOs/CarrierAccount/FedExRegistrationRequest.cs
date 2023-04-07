@@ -37,6 +37,7 @@ namespace ShipWorks.Shipping.ShipEngine.DTOs.CarrierAccount
             CountryCode = account.CountryCode;
             Email = account.Email;
             AgreeToEula = true;
+            IsSandbox = true;
         }
 
         [JsonProperty("nickname")]
@@ -80,5 +81,9 @@ namespace ShipWorks.Shipping.ShipEngine.DTOs.CarrierAccount
 
         [JsonProperty("agree_to_eula")]
         public bool AgreeToEula { get; set; }
+
+        [JsonProperty("is_sandbox")]
+        public bool IsSandbox { get; set; }
+
     }
 }

@@ -5,7 +5,7 @@
     /// </summary>
     public static class ShipEngineEndpoints
     {
-        public static string BaseUrl => "https://platform.shipengine.com";
+        public static string BaseUrl => "http://seapi0.sslocal.com";
 
         public static string DhlEcommerceAccountCreation => "v1/connections/carriers/dhl_ecommerce";
 

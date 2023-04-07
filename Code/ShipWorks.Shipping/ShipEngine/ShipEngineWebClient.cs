@@ -547,6 +547,7 @@ namespace ShipWorks.Shipping.ShipEngine
                 var request = restRequestFactory.Create(endpoint, method);
                 request.AddHeader("Content-Type", "application/json");
                 request.AddHeader("api-key", apiKey);
+                request.AddHeader("seller-id", "5045126");
 
                 request.JsonSerializer = new RestSharpJsonNetSerializer(new JsonSerializerSettings
                 {
