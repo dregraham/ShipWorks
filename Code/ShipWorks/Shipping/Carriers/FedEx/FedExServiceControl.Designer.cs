@@ -758,14 +758,14 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             this.sectionOptions.ExtraText = "";
             this.sectionOptions.Location = new System.Drawing.Point(3, 468);
             this.sectionOptions.Name = "sectionOptions";
-            this.sectionOptions.SectionName = "Signature & Reference";
+            this.sectionOptions.SectionName = "FedEx® Delivery Signature Options & Reference";
             this.sectionOptions.SettingsKey = "{2740f860-1d14-453e-a511-8f62ad1e7dcc}";
             this.sectionOptions.Size = new System.Drawing.Size(487, 24);
             this.sectionOptions.TabIndex = 4;
             // 
             // referencePO
             // 
-            this.referencePO.Location = new System.Drawing.Point(86, 89);
+            this.referencePO.Location = new System.Drawing.Point(211, 89);
             this.referencePO.MaxLength = 32767;
             this.fieldLengthProvider.SetMaxLengthSource(this.referencePO, ShipWorks.Data.Utility.EntityFieldLengthSource.FedExReferencePO);
             this.referencePO.Name = "referencePO";
@@ -777,7 +777,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             // 
             this.labelPO.AutoSize = true;
             this.labelPO.BackColor = System.Drawing.Color.Transparent;
-            this.labelPO.Location = new System.Drawing.Point(36, 91);
+            this.labelPO.Location = new System.Drawing.Point(161, 91);
             this.labelPO.Name = "labelPO";
             this.labelPO.Size = new System.Drawing.Size(44, 13);
             this.labelPO.TabIndex = 6;
@@ -785,7 +785,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             // 
             // referenceInvoice
             // 
-            this.referenceInvoice.Location = new System.Drawing.Point(86, 62);
+            this.referenceInvoice.Location = new System.Drawing.Point(211, 62);
             this.referenceInvoice.MaxLength = 32767;
             this.fieldLengthProvider.SetMaxLengthSource(this.referenceInvoice, ShipWorks.Data.Utility.EntityFieldLengthSource.FedExReferenceInvoice);
             this.referenceInvoice.Name = "referenceInvoice";
@@ -797,7 +797,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             // 
             this.labelInvoice.AutoSize = true;
             this.labelInvoice.BackColor = System.Drawing.Color.Transparent;
-            this.labelInvoice.Location = new System.Drawing.Point(23, 64);
+            this.labelInvoice.Location = new System.Drawing.Point(148, 64);
             this.labelInvoice.Name = "labelInvoice";
             this.labelInvoice.Size = new System.Drawing.Size(57, 13);
             this.labelInvoice.TabIndex = 4;
@@ -805,7 +805,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             // 
             // referenceCustomer
             // 
-            this.referenceCustomer.Location = new System.Drawing.Point(86, 35);
+            this.referenceCustomer.Location = new System.Drawing.Point(211, 35);
             this.referenceCustomer.MaxLength = 32767;
             this.fieldLengthProvider.SetMaxLengthSource(this.referenceCustomer, ShipWorks.Data.Utility.EntityFieldLengthSource.FedExReferenceCustomer);
             this.referenceCustomer.Name = "referenceCustomer";
@@ -817,7 +817,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             // 
             this.labelReference.AutoSize = true;
             this.labelReference.BackColor = System.Drawing.Color.Transparent;
-            this.labelReference.Location = new System.Drawing.Point(8, 37);
+            this.labelReference.Location = new System.Drawing.Point(133, 37);
             this.labelReference.Name = "labelReference";
             this.labelReference.Size = new System.Drawing.Size(72, 13);
             this.labelReference.TabIndex = 2;
@@ -827,7 +827,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             // 
             this.signature.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.signature.FormattingEnabled = true;
-            this.signature.Location = new System.Drawing.Point(86, 8);
+            this.signature.Location = new System.Drawing.Point(211, 8);
             this.signature.Name = "signature";
             this.signature.PromptText = "(Multiple Values)";
             this.signature.Size = new System.Drawing.Size(175, 21);
@@ -840,9 +840,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             this.labelSignature.BackColor = System.Drawing.Color.Transparent;
             this.labelSignature.Location = new System.Drawing.Point(23, 11);
             this.labelSignature.Name = "labelSignature";
-            this.labelSignature.Size = new System.Drawing.Size(57, 13);
+            this.labelSignature.Size = new System.Drawing.Size(194, 13);
             this.labelSignature.TabIndex = 0;
-            this.labelSignature.Text = "Signature:";
+            this.labelSignature.Text = "FedEx® Delivery Signature Options:";
             // 
             // sectionCOD
             // 
@@ -947,13 +947,13 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             // 
             this.linkTrademarkInfo.AutoSize = true;
             this.linkTrademarkInfo.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.linkTrademarkInfo.Font = new System.Drawing.Font("Tahoma", 6.75F, System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.linkTrademarkInfo.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.linkTrademarkInfo.ForeColor = System.Drawing.Color.RoyalBlue;
             this.linkTrademarkInfo.Location = new System.Drawing.Point(1, 4);
             this.linkTrademarkInfo.Name = "linkTrademarkInfo";
             this.linkTrademarkInfo.Size = new System.Drawing.Size(381, 11);
             this.linkTrademarkInfo.TabIndex = 0;
-            this.linkTrademarkInfo.Text = "FedEx service marks are owned by Federal Express Corporation and used with permis" +
+            this.linkTrademarkInfo.Text = "FedEx service marks are owned by Federal Express Corporation and used by permis" +
     "sion.\r\n";
             this.linkTrademarkInfo.Click += new System.EventHandler(this.OnLinkTrademarkInfo);
             // 

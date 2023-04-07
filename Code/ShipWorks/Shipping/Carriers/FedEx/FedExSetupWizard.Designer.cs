@@ -227,8 +227,7 @@
             // label1
             // 
             this.label1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.label1.Font = new System.Drawing.Font("Tahoma", 8F);
-            this.label1.ForeColor = System.Drawing.SystemColors.ControlDark;
+            this.label1.Font = new System.Drawing.Font("Tahoma", 8.25F);
             this.label1.Location = new System.Drawing.Point(3, 545);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(320, 33);
