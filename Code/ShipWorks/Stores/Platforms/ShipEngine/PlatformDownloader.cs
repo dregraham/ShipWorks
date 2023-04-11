@@ -325,23 +325,12 @@ namespace ShipWorks.Stores.Platforms.ShipEngine
         }
 
         /// <summary>
-        /// GetRequestedShipping (in the format we used to get it from MWS "carrier: details")
+        /// GetRequestedShipping, without changes to the value, can be overriden, as is for Amazon
         /// </summary
-        protected string GetRequestedShipping(string shippingService)
-        {
-            if (string.IsNullOrWhiteSpace(shippingService))
-            {
-                return string.Empty;
-            }
-
-            var firstSpace = shippingService.IndexOf(' ');
-            if (firstSpace == -1)
-            {
-                return shippingService;
-            }
-
-            return $"{shippingService.Substring(0, firstSpace)}:{shippingService.Substring(firstSpace)}";
-        }
+        protected virtual string GetRequestedShipping(string shippingService)
+		{
+			return string.IsNullOrWhiteSpace(shippingService) ? string.Empty : shippingService;
+		}
 
         /// <summary>
         /// Start the download from Platform for the Etsy store
