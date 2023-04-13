@@ -216,20 +216,45 @@ namespace ShipWorks.Stores.Platforms.Shopify
 
         protected override OrderItemEntity LoadOrderItem(OrderSourceSalesOrderItem orderItem, OrderEntity order, IEnumerable<GiftNote> giftNotes, IEnumerable<CouponCode> couponCodes)
         {
+            //"items": [
+            //   {
+            //     "salesOrderItemGuid": "bcaaf4f5-3648-5be6-a32b-a9df57dbc010",
+            //      "lineItemId": "11711597281385",
+            //      "description": "Blue Shirt (Medium) - Small / red",
+            //      "product": {
+            //                   "productId": "111948576:2964822145",
+
             var item = (ShopifyOrderItemEntity) base.LoadOrderItem(orderItem, order, giftNotes, couponCodes);
-            //TODO:
-            //item.InventoryItemID =
-            //item.ShopifyProductID;
-            //item.ShopifyOrderItemID=
+            if (!long.TryParse(orderItem.LineItemId, out long shopifyOrderItemID))
+            {
+                log.Warn($"Invalid value of ShopifyOrderItemID. Numeric value expected, but found: '{orderItem.LineItemId}'");
+            }
+            else
+            {
+                item.ShopifyOrderItemID = shopifyOrderItemID;
+            }
 
-            //item.TransactionID = orderItem.LineItemId;
+            var platformProductId = orderItem.Product?.ProductId;
+            if (string.IsNullOrWhiteSpace(platformProductId))
+            {
+                log.Warn($"Empty value of ShopifyProductID - Numeric value expected, orderItemId: '{orderItem.LineItemId}'");
+            }
+            else
+            {
+                var idParts = platformProductId.Split(':');
+                string productId = idParts[0];
+                if (!long.TryParse(productId, out long shopifyProductId))
+                {
+                    log.Warn($"Invalid value of ShopifyProductID - should be in format: xx:xx, found: '{platformProductId}'");
+                }
+                else
+                {
+                    item.ShopifyProductID = shopifyProductId;
+                }
+            }
 
-            //var productListing = orderItem.Product?.ProductId;//"productId": "3114960238:653614320"
-            //int length;
-            //if (productListing != null && ((length = productListing.IndexOf(":")) > 0))
-            //{
-            //    item.ListingID = productListing.Substring(length+1);
-            //}
+            //item.InventoryItemID = ;
+         
             return item;
         }
 
