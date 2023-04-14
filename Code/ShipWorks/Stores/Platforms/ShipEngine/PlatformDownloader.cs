@@ -536,7 +536,7 @@ namespace ShipWorks.Stores.Platforms.ShipEngine
         /// <summary>
         /// Adds order adjustment charges to order entity
         /// </summary>
-        private void AddAdjustments(OrderSourceApiSalesOrder salesOrder, OrderEntity order)
+        protected virtual void AddAdjustments(OrderSourceApiSalesOrder salesOrder, OrderEntity order)
         {
             foreach (var orderAdjustment in salesOrder.Payment.Adjustments)
             {
