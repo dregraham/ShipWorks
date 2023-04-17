@@ -291,5 +291,32 @@ namespace ShipWorks.Stores.Platforms.Shopify
                 await InstantiateNote(order, noteText, order.OrderDate, NoteVisibility.Public).ConfigureAwait(false);
             }
         }
+
+        /// <summary>
+        /// Adds order adjustment charges to order entity
+        /// </summary>
+        protected override void AddAdjustments(OrderSourceApiSalesOrder salesOrder, OrderEntity order)
+        {
+            foreach (var orderAdjustment in salesOrder.Payment.Adjustments)
+            {
+                AddToCharge(order, "ADJUST", orderAdjustment.Description, orderAdjustment.Amount);
+            }
+
+            foreach (var orderShippingCharge in salesOrder.Payment.ShippingCharges)
+            {
+                AddToCharge(order, "SHIPPING", orderShippingCharge.Description, orderShippingCharge.Amount);
+            }
+        }
+
+        /// <summary>
+        /// Adds taxes to order entity
+        /// </summary>
+        protected override void AddTaxes(OrderSourceApiSalesOrder salesOrder, OrderEntity order)
+        {
+            foreach (var orderTax in salesOrder.Payment.Taxes)
+            {
+                AddToCharge(order, "TAX", orderTax.Description, orderTax.Amount);
+            }
+        }
     }
 }
