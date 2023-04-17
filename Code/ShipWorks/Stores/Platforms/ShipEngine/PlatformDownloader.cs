@@ -69,6 +69,7 @@ namespace ShipWorks.Stores.Platforms.ShipEngine
             item.Name = EntitiesDecode(orderItem.Product.Name);
             item.Quantity = orderItem.Quantity;
             item.UnitPrice = orderItem.UnitPrice;
+            item.UPC = orderItem.Product.Identifiers.Upc;
             item.SKU = orderItem.Product.Identifiers.Sku;
             item.Code = item.SKU;
 
