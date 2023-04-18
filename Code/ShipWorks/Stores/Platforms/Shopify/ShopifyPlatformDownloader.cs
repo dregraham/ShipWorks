@@ -225,6 +225,10 @@ namespace ShipWorks.Stores.Platforms.Shopify
             //                   "productId": "111948576:2964822145",
 
             var item = (ShopifyOrderItemEntity) base.LoadOrderItem(orderItem, order, giftNotes, couponCodes);
+            
+            //orderItem.Product.Name contains variant name, this will be changed soon in platform
+            item.Name = EntitiesDecode(orderItem.Description);
+
             if (!long.TryParse(orderItem.LineItemId, out long shopifyOrderItemID))
             {
                 log.Warn($"Invalid value of ShopifyOrderItemID. Numeric value expected, but found: '{orderItem.LineItemId}'");
