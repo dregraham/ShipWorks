@@ -154,15 +154,11 @@ namespace ShipWorks.Stores.Platforms.Platform.OnlineUpdating
         /// </summary
         protected virtual async Task UploadShipmentsToPlatform(List<ShipmentEntity> shipments, StoreEntity store, IWarehouseOrderClient client)
         {
-            if (!platformOnlineUpdateBehavior.TryGetValue(store.StoreTypeCode, out var behavior))
-            {
-                behavior = new DefaultPlatformOnlineUpdaterBehavior();
-            }
+            var behavior = GetPlatformOnlineUpdaterBehavior(store);
 
             foreach (var shipment in shipments.Where(x => !x.Order.ChannelOrderID.IsNullOrWhiteSpace()))
             {
 				await shippingManager.EnsureShipmentLoadedAsync(shipment).ConfigureAwait(false);
-                string carrier = GetCarrierName(shipment);
 
                 List<SalesOrderItem> salesOrderItems = null;
                 if (behavior.IncludeSalesOrderItems)
@@ -178,7 +174,9 @@ namespace ShipWorks.Stores.Platforms.Platform.OnlineUpdating
 
                 bool? notifyBuyer = shopifyStore?.ShopifyNotifyCustomer;
 
-                var result = await client.NotifyShipped(shipment.Order.ChannelOrderID, shipment.TrackingNumber, carrier, behavior.UseSwatId, salesOrderItems, notifyBuyer).ConfigureAwait(false);
+                var trackingUrl = behavior.GetTrackingUrl(shipment);
+                var carrierName = behavior.GetCarrierName(shippingManager, shipment);
+                var result = await client.NotifyShipped(shipment.Order.ChannelOrderID, shipment.TrackingNumber, trackingUrl, carrierName, behavior.UseSwatId, salesOrderItems, notifyBuyer).ConfigureAwait(false);
                 result.OnFailure(ex => throw new PlatformStoreException($"Error uploading shipment details: {ex.Message}", ex));
 
 
@@ -196,71 +194,14 @@ namespace ShipWorks.Stores.Platforms.Platform.OnlineUpdating
             }
         }
 
-        /// <summary>
-        /// Gets the carrier name that is allowed in shipengine
-        /// </summary>
-        protected string GetCarrierName(ShipmentEntity shipment)
+        protected IPlatformOnlineUpdaterBehavior GetPlatformOnlineUpdaterBehavior(StoreEntity store)
         {
-            CarrierDescription otherDesc = null;
-            ShipmentTypeCode shipmentTypeCode = shipment.ShipmentTypeCode;
-
-            if (shipmentTypeCode == ShipmentTypeCode.Other)
+            if (!platformOnlineUpdateBehavior.TryGetValue(store.StoreTypeCode, out var behavior))
             {
-                otherDesc = shippingManager.GetOtherCarrierDescription(shipment);
+                behavior = new DefaultPlatformOnlineUpdaterBehavior();
             }
 
-            string sfpName = string.Empty;
-            if (shipmentTypeCode == ShipmentTypeCode.AmazonSFP)
-            {
-                sfpName = shipment.AmazonSFP.CarrierName.ToUpperInvariant();
-            }
-
-            switch (true)
-            {
-                case true when otherDesc?.IsDHL ?? false:
-                case true when ShipmentTypeManager.ShipmentTypeCodeSupportsDhl(shipmentTypeCode) &&
-                        ShipmentTypeManager.IsDhl((PostalServiceType) shipment.Postal.Service):
-                    return "dhl_ecommerce";
-
-                case true when shipmentTypeCode == ShipmentTypeCode.Endicia:
-                case true when shipmentTypeCode == ShipmentTypeCode.Express1Endicia:
-                    return "endicia";
-
-                case true when ShipmentTypeManager.IsPostal(shipmentTypeCode):
-                case true when otherDesc?.IsUSPS ?? false:
-                case true when sfpName.Equals("USPS", StringComparison.OrdinalIgnoreCase):
-                case true when sfpName.Equals("STAMPS_DOT_COM", StringComparison.OrdinalIgnoreCase):
-                    return "stamps_com";
-
-                case true when ShipmentTypeManager.IsFedEx(shipmentTypeCode):
-                case true when otherDesc?.IsFedEx ?? false:
-                case true when sfpName.Equals("FEDEX", StringComparison.OrdinalIgnoreCase):
-                    return "fedex";
-
-                case true when ShipmentTypeManager.IsUps(shipmentTypeCode):
-                case true when otherDesc?.IsUPS ?? false:
-                case true when sfpName.Equals("UPS", StringComparison.OrdinalIgnoreCase):
-                    return "ups";
-
-                case true when shipmentTypeCode == ShipmentTypeCode.DhlExpress:
-                    return "dhl_express";
-
-                case true when shipmentTypeCode == ShipmentTypeCode.DhlEcommerce:
-                    return "dhl_global_mail";
-
-                case true when shipmentTypeCode == ShipmentTypeCode.OnTrac:
-                case true when sfpName.Equals("ONTRAC", StringComparison.OrdinalIgnoreCase):
-                    return "ontrac";
-
-                case true when shipmentTypeCode == ShipmentTypeCode.AmazonSWA:
-                    return "amazon_shipping";
-
-                case true when shipmentTypeCode == ShipmentTypeCode.Asendia:
-                    return "asendia";
-
-                default:
-                    return "other";
-            }
+            return behavior;
         }
     }
 }

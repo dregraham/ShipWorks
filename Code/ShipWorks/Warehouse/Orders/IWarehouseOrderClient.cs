@@ -26,7 +26,7 @@ namespace ShipWorks.Warehouse.Orders
         /// <summary>
         /// Upload shipment notification information to Hub. This will only work for orders from shipengine
         /// </summary>
-        Task<Result> NotifyShipped(string salesOrderId, string trackingNumber, string carrier, bool useSwatId, List<SalesOrderItem> salesOrderItems, bool? notifyBuyer);
+        Task<Result> NotifyShipped(string salesOrderId, string trackingNumber, string trackingUrl, string carrier, bool useSwatId, List<SalesOrderItem> salesOrderItems, bool? notifyBuyer);
 
         /// <summary>
         /// Upload a order to the hub
