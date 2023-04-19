@@ -649,6 +649,7 @@
     <Compile Include="Settings\ShipmentTypeSetupWizardFactory.cs" />
     <Compile Include="ShipEngine\DTOs\CreateManifestRequest.cs" />
     <Compile Include="ShipEngine\DTOs\CreateShipEngineAccount.cs" />
+    <Compile Include="ShipEngine\DTOs\ListServicePointsRequest.cs" />
     <Compile Include="ShipEngine\DTOs\Registration\Address.cs" />
     <Compile Include="ShipEngine\DTOs\Registration\IUpsRegistrationRequestFactory.cs" />
     <Compile Include="ShipEngine\DTOs\Registration\UpsRegistrationRequest.cs" />

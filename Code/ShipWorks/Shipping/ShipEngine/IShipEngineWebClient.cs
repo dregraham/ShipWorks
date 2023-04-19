@@ -4,6 +4,7 @@ using Interapptive.Shared.Business;
 using Interapptive.Shared.Utility;
 using log4net;
 using ShipWorks.ApplicationCore.Logging;
+using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Shipping.ShipEngine.DTOs;
 using ShipWorks.Shipping.ShipEngine.DTOs.CarrierAccount;
@@ -127,5 +128,10 @@ namespace ShipWorks.Shipping.ShipEngine
         /// Create a manifest for the given label IDs, retrying if necessary
         /// </summary>
         Task<GenericResult<CreateManifestResponse>> CreateManifest(List<string> labelIDs, ILog log);
+
+        /// <summary>
+        /// List all carrier service points in the given radius of the shipment address
+        /// </summary>
+        Task<GenericResult<ListServicePointsResponse>> ListServicePoints(string carrierId, ShipmentEntity shipment, int searchRadius = 50, int maxResults = 10);
     }
 }

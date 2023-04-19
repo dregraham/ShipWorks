@@ -1315,6 +1315,7 @@
     <Compile Include="Shipping\ShipEngine\DTOs\LabelMessages.cs" />
     <Compile Include="Shipping\ShipEngine\DTOs\LabelPackage.cs" />
     <Compile Include="Shipping\ShipEngine\DTOs\LinkDTO.cs" />
+    <Compile Include="Shipping\ShipEngine\DTOs\ListServicePointsResponse.cs" />
     <Compile Include="Shipping\ShipEngine\DTOs\MoneyDTO.cs" />
     <Compile Include="Shipping\ShipEngine\DTOs\MultiFormatDownloadLinkDTO.cs" />
     <Compile Include="Shipping\ShipEngine\DTOs\Package.cs" />

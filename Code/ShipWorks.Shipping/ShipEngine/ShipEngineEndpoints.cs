@@ -38,5 +38,7 @@
         public static string TrackShipment(string carrierCode, string trackingNumber)  => $"v1/tracking?carrier_code={carrierCode}&tracking_number={trackingNumber}";
 
         public static string CreateManifest => "v1/manifests";
+
+        public static string ListServicePoints => "v1/service_points/list";
     }
 }

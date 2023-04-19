@@ -15,6 +15,7 @@ using Newtonsoft.Json.Serialization;
 using RestSharp;
 using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Common.Net;
+using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Shipping.ShipEngine.DTOs;
 using ShipWorks.Shipping.ShipEngine.DTOs.CarrierAccount;
@@ -508,6 +509,30 @@ namespace ShipWorks.Shipping.ShipEngine
             }
 
             return response;
+        }
+
+        /// <summary>
+        /// List all carrier service points in the given radius of the shipment address
+        /// </summary>
+        public async Task<GenericResult<ListServicePointsResponse>> ListServicePoints(string carrierId, ShipmentEntity shipment, int searchRadius = 50, int maxResults = 10)
+        {
+            var request = new ListServicePointsRequest()
+            {
+                MaxResults = maxResults,
+                Radius = searchRadius,
+                Providers = new ServicePointProvider[] { new ServicePointProvider { CarrierId = carrierId } },
+                SearchAddress = new ServicePointSearchAddress
+                {
+                    AddressLine1 = shipment.ShipStreet1,
+                    AddressLine2 = shipment.ShipStreet2,
+                    AddressLine3 = shipment.ShipStreet3,
+                    City = shipment.ShipCity,
+                    PostalCode = shipment.ShipPostalCode,
+                    CountryCode = shipment.ShipCountryCode,
+                }
+            };
+
+            return await MakeRequest<ListServicePointsResponse>(ShipEngineEndpoints.ListServicePoints, Method.POST, request, "ListServicePoints");
         }
 
         /// <summary>

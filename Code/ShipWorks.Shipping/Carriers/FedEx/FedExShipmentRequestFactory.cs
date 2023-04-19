@@ -90,6 +90,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx
                 labelRequest.RmaNumber = shipment.FedEx.RmaNumber;
             }
 
+            if (!string.IsNullOrEmpty(shipment.FedEx.HoldLocationId))
+            {
+                labelRequest.ShipToServicePointId = shipment.FedEx.HoldLocationId;
+            }
+
             return labelRequest;
         }
 
