@@ -45,10 +45,11 @@ namespace ShipWorks.Stores.Platforms.Platform.OnlineUpdating
         /// </summary
         protected override async Task UploadShipmentsToPlatform(List<ShipmentEntity> shipments, StoreEntity store, IWarehouseOrderClient client)
         {
+            var behavior = GetPlatformOnlineUpdaterBehavior(store);
             try
             {
                 var updates = shipments
-                    .Select(async s => await GetPlatformBulkOnlineUpdateItem(s))
+                    .Select(async s => await GetPlatformBulkOnlineUpdateItem(s, behavior))
                     .Select(r => r.Result)
                     .Where(s => s != null)
                     .ToList();
@@ -75,14 +76,14 @@ namespace ShipWorks.Stores.Platforms.Platform.OnlineUpdating
         /// <summary>
         /// Create a Shipment Notification item to add to the bulk
         /// </summary>
-        private async Task<PlatformBulkOnlineUpdateItem> GetPlatformBulkOnlineUpdateItem(ShipmentEntity shipment)
+        private async Task<PlatformBulkOnlineUpdateItem> GetPlatformBulkOnlineUpdateItem(ShipmentEntity shipment, IPlatformOnlineUpdaterBehavior behavior)
         {
             await shippingManager.EnsureShipmentLoadedAsync(shipment).ConfigureAwait(false);
             var update = new PlatformBulkOnlineUpdateItem
             {
                 SalesOrderId = shipment.Order.ChannelOrderID,
                 TrackingNumber = shipment.TrackingNumber,
-                CarrierCode = GetCarrierName(shipment),
+                CarrierCode = behavior.GetCarrierName(shippingManager, shipment),
                 ShipFrom = new ShipFrom
                 {
                     Name = shipment.OriginUnparsedName,
