@@ -149,22 +149,19 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         /// Loads address in the dialog asynchronously. This is show the form will display
         /// and tell user we are downloading addresses while downloading addresses.
         /// </summary>
-        private void LoadDialog(object sender, EventArgs e)
+        private async void LoadDialog(object sender, EventArgs e)
         {
-            Task.Run(async () =>
+            try
             {
-                try
-                {
-                    var result = await RequestAddresses();
-                    RequestAddressesComplete(result);
-                }
-                catch (Exception ex)
-                {
-                    MessageHelper.ShowMessage(this, ex.Message);
+                var result = await RequestAddresses();
+                RequestAddressesComplete(result);
+            }
+            catch (Exception ex)
+            {
+                MessageHelper.ShowMessage(this, ex.Message);
 
-                    Close();
-                }
-            });
+                Close();
+            }
         }
 
         /// <summary>
