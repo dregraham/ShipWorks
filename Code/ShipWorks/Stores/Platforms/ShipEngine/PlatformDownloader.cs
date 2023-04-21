@@ -470,11 +470,17 @@ namespace ShipWorks.Stores.Platforms.ShipEngine
 
                 // get the amount so we can fudge order totals
                 order.OrderTotal = salesOrder.Payment.AmountPaid ?? calculatedTotal;
+
+                LoadPaymentDetails(salesOrder, order);
             }
 
             // save
             var retryAdapter = new SqlAdapterRetry<SqlException>(5, -5, "PlatformDownloader.LoadOrder");
             await retryAdapter.ExecuteWithRetryAsync(() => SaveDownloadedOrder(order)).ConfigureAwait(false);
+        }
+
+        protected virtual void LoadPaymentDetails(OrderSourceApiSalesOrder salesOrder, OrderEntity order)
+        {
         }
 
         protected virtual void SetOnlineCustomerId(OrderEntity order, OrderSourceApiSalesOrder salesOrder)

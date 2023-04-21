@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Interapptive.Shared.Business;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Utility;
 using ShipWorks.Data.Model;
@@ -346,6 +347,18 @@ namespace ShipWorks.Stores.Platforms.Shopify
             {
                 AddToCharge(order, "TAX", orderTax.Description, orderTax.Amount);
             }
+        }
+
+        protected override void LoadPaymentDetails(OrderSourceApiSalesOrder salesOrder, OrderEntity order)
+        {
+            var gateway = salesOrder.Payment.PaymentMethod;
+            if (string.IsNullOrWhiteSpace(gateway))
+            {
+                return;
+            }
+            OrderPaymentDetailEntity detail = InstantiateOrderPaymentDetail(order);
+            detail.Label = "Payment Type";
+            detail.Value = AddressCasing.Apply(gateway);
         }
     }
 }
