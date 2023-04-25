@@ -194,7 +194,7 @@ namespace ShipWorks.Stores.Platforms.Platform.OnlineUpdating
 
 				foreach (var orderIdentifier in orderSearchEntities)
 				{
-					var result = await client.NotifyShipped(orderIdentifier, shipment.TrackingNumber, trackingUrl, carrierName, behavior.UseSwatId, salesOrderItems, notifyBuyer).ConfigureAwait(false);
+					var result = await client.NotifyShipped(orderIdentifier ?? shipment.Order.ChannelOrderID, shipment.TrackingNumber, trackingUrl, carrierName, behavior.UseSwatId, salesOrderItems, notifyBuyer).ConfigureAwait(false);
 					result.OnFailure(ex => throw new PlatformStoreException($"Error uploading shipment details: {ex.Message}", ex));
 				}
 
