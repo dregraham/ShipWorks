@@ -1344,6 +1344,7 @@
     <Compile Include="Stores\Platforms\Platform\OnlineUpdating\DefaultPlatformOnlineUpdaterBehavior.cs" />
     <Compile Include="Stores\Platforms\Platform\OnlineUpdating\IPlatformOnlineUpdater.cs" />
     <Compile Include="Stores\Platforms\Platform\OnlineUpdating\IPlatformOnlineUpdaterBehavior.cs" />
+    <Compile Include="Stores\Platforms\Platform\OnlineUpdating\IPlatformOrderSearchProvider.cs" />
     <Compile Include="Stores\Platforms\Platform\OnlineUpdating\PlatformBulkOnlineUpdater.cs" />
     <Compile Include="Stores\Platforms\Platform\OnlineUpdating\PlatformBulkOnlineUpdaterRequest.cs" />
     <Compile Include="Stores\Platforms\Platform\OnlineUpdating\PlatformOnlineUpdater.cs" />

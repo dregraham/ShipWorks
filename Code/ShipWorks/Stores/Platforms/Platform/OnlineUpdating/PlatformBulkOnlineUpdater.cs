@@ -4,7 +4,6 @@ using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
 using Autofac.Features.Indexed;
-using Interapptive.Shared.Collections;
 using log4net;
 using ShipWorks.ApplicationCore.Licensing.Warehouse;
 using ShipWorks.Data.Connection;
@@ -34,8 +33,8 @@ namespace ShipWorks.Stores.Platforms.Platform.OnlineUpdating
         public PlatformBulkOnlineUpdater(IOrderManager orderManager, IShippingManager shippingManager,
             ISqlAdapterFactory sqlAdapterFactory, Func<IWarehouseOrderClient> createWarehouseOrderClient,
             IIndex<StoreTypeCode, IOnlineUpdater> storeSpecificOnlineUpdaterFactory, IHubPlatformClient platformWebClient,
-            IIndex<StoreTypeCode, IPlatformOnlineUpdaterBehavior> platformOnlineUpdateBehavior) :
-            base(orderManager, shippingManager, sqlAdapterFactory, createWarehouseOrderClient, storeSpecificOnlineUpdaterFactory, platformOnlineUpdateBehavior)
+            IIndex<StoreTypeCode, IPlatformOnlineUpdaterBehavior> platformOnlineUpdateBehavior, IPlatformOrderSearchProvider orderSearchProvider) :
+            base(orderManager, shippingManager, sqlAdapterFactory, createWarehouseOrderClient, storeSpecificOnlineUpdaterFactory, platformOnlineUpdateBehavior, orderSearchProvider)
         {
             this.platformWebClient = platformWebClient;
         }
