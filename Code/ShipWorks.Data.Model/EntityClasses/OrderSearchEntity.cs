@@ -398,6 +398,8 @@ namespace ShipWorks.Data.Model.EntityClasses
 			_fieldsCustomProperties.Add("IsManual", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
 			_fieldsCustomProperties.Add("OriginalOrderID", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+			_fieldsCustomProperties.Add("OriginalChannelOrderID", fieldHashtable);
 		}
 		#endregion
 
@@ -611,6 +613,17 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			get { return (System.Int64)GetValue((int)OrderSearchFieldIndex.OriginalOrderID, true); }
 			set	{ SetValue((int)OrderSearchFieldIndex.OriginalOrderID, value); }
+		}
+
+		/// <summary> The OriginalChannelOrderID property of the Entity OrderSearch<br/><br/></summary>
+		/// <remarks>Mapped on  table field: "OrderSearch"."OriginalChannelOrderID"<br/>
+		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 50<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		[DataMember]
+		public virtual System.String OriginalChannelOrderID
+		{
+			get { return (System.String)GetValue((int)OrderSearchFieldIndex.OriginalChannelOrderID, true); }
+			set	{ SetValue((int)OrderSearchFieldIndex.OriginalChannelOrderID, value); }
 		}
 
 		/// <summary> Gets / sets related entity of type 'OrderEntity' which has to be set using a fetch action earlier. If no related entity is set for this property, null is returned..<br/><br/></summary>
