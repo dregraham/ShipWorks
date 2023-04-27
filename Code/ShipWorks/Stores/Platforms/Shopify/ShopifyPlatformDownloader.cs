@@ -255,6 +255,22 @@ namespace ShipWorks.Stores.Platforms.Shopify
                 else
                 {
                     item.ShopifyProductID = shopifyProductId;
+                    if (idParts.Length > 1)
+                    {
+                        var variantIdString = idParts[1];
+                        if (long.TryParse(variantIdString, out long shopifyVariantId))
+                        {
+                            //Instantiate the order item attribute
+                            OrderItemAttributeEntity option = InstantiateOrderItemAttribute(item);
+
+                            //Set the option properties
+                            option.Name = "Variant";
+                            option.Description = orderItem.Product.Name;
+
+                            // Shopify only sends the total line price
+                            option.UnitPrice = 0;
+                        }
+                    }
                 }
             }
 
