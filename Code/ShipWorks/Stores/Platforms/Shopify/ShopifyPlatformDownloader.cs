@@ -258,7 +258,7 @@ namespace ShipWorks.Stores.Platforms.Shopify
                     if (idParts.Length > 1)
                     {
                         var variantIdString = idParts[1];
-                        if (long.TryParse(variantIdString, out long shopifyVariantId))
+                        if (long.TryParse(variantIdString, out long shopifyVariantId) && shopifyVariantId > 0)
                         {
                             //Instantiate the order item attribute
                             OrderItemAttributeEntity option = InstantiateOrderItemAttribute(item);
