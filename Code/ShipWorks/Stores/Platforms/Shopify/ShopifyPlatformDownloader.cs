@@ -266,7 +266,7 @@ namespace ShipWorks.Stores.Platforms.Shopify
                             //Set the option properties
                             option.Name = "Variant";
                             option.Description = orderItem.Product.Name;
-                            var variantSuffix="- "+ option.Description;
+                            var variantSuffix = " - " + option.Description;
                             if (item.Name.EndsWith(variantSuffix))
                             {
                                 item.Name = item.Name.Substring(0, item.Name.Length - variantSuffix.Length);
