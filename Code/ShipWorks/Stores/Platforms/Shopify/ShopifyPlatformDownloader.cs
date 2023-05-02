@@ -260,13 +260,21 @@ namespace ShipWorks.Stores.Platforms.Shopify
                         var variantIdString = idParts[1];
                         if (long.TryParse(variantIdString, out long shopifyVariantId) && shopifyVariantId > 0)
                         {
+                            const string variantNameSeparator = " - ";
+                            var i = item.Name.LastIndexOf(variantNameSeparator);
+                            string variantTitle = orderItem.Product.Name;
+                            if (i > 0 && variantTitle == item.Name)
+                            {
+                                variantTitle = item.Name.Substring(i + variantNameSeparator.Length);
+                            }
+
                             //Instantiate the order item attribute
                             OrderItemAttributeEntity option = InstantiateOrderItemAttribute(item);
 
                             //Set the option properties
                             option.Name = "Variant";
-                            option.Description = orderItem.Product.Name;
-                            var variantSuffix = " - " + option.Description;
+                            option.Description = variantTitle;
+                            var variantSuffix = variantNameSeparator + option.Description;
                             if (item.Name.EndsWith(variantSuffix))
                             {
                                 item.Name = item.Name.Substring(0, item.Name.Length - variantSuffix.Length);
