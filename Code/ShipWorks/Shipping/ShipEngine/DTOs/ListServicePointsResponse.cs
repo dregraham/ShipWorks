@@ -1,12 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
 
 namespace ShipWorks.Shipping.ShipEngine.DTOs
 {
+    [Obfuscation(Exclude = true, ApplyToMembers = true, StripAfterObfuscation = false)]
     public class ListServicePointsResponse : BaseShipEngineResponse
     {
         [JsonProperty("lat")]
@@ -19,6 +21,7 @@ namespace ShipWorks.Shipping.ShipEngine.DTOs
         public ServicePoint[] ServicePoints { get; set; }
     }
 
+    [Obfuscation(Exclude = true, ApplyToMembers = true, StripAfterObfuscation = false)]
     public class ServicePoint
     {
         [JsonProperty("carrier_code")]

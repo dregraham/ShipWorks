@@ -1,12 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
 
 namespace ShipWorks.Shipping.ShipEngine.DTOs
 {
+    [Obfuscation(Exclude = true, ApplyToMembers = true, StripAfterObfuscation = false)]
     public class ListServicePointsRequest
     {
         [JsonProperty("radius")]
@@ -22,12 +24,14 @@ namespace ShipWorks.Shipping.ShipEngine.DTOs
         public ServicePointSearchAddress SearchAddress { get; set; }
     }
 
+    [Obfuscation(Exclude = true, ApplyToMembers = true, StripAfterObfuscation = false)]
     public class ServicePointProvider
     {
         [JsonProperty("carrier_id")]
         public string CarrierId { get; set; }
     }
 
+    [Obfuscation(Exclude = true, ApplyToMembers = true, StripAfterObfuscation = false)]
     public class ServicePointSearchAddress
     {
         [JsonProperty("address_line1")]
