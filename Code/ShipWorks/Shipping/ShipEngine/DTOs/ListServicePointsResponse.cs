@@ -39,7 +39,7 @@ namespace ShipWorks.Shipping.ShipEngine.DTOs
         [JsonProperty("address_line2")]
         public string AddressLine2 { get; set; }
 
-        [JsonProperty("address_line2")]
+        [JsonProperty("address_line3")]
         public string AddressLine3 { get; set; }
 
         [JsonProperty("city_locality")]

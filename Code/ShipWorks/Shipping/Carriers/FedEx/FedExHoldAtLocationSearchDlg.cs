@@ -153,7 +153,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         {
             try
             {
-                var result = await RequestAddresses();
+                var result = await RequestAddresses().ConfigureAwait(true);
                 RequestAddressesComplete(result);
             }
             catch (Exception ex)
