@@ -176,7 +176,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
 
                 var fedExAccount = fedExAccountRepo.GetAccount(shipment);
 
-                var result = await shipEngineWebClient.ListServicePoints(fedExAccount.ShipEngineCarrierID, shipment).ConfigureAwait(false);
+                var result = await shipEngineWebClient.ListServicePoints(fedExAccount.ShipEngineCarrierID, shipment).ConfigureAwait(true);
 
                 if (result.Failure)
                 {

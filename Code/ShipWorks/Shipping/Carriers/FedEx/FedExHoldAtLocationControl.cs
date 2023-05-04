@@ -146,7 +146,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         }
 
         /// <summary>
-        /// Updates the location details text box with the .
+        /// Updates the location details text box with the formatted location details.
         /// </summary>
         private string FormatLocationDetails()
         {
