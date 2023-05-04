@@ -42,7 +42,7 @@
             this.holdAtLocation.Name = "holdAtLocation";
             this.holdAtLocation.Size = new System.Drawing.Size(178, 17);
             this.holdAtLocation.TabIndex = 0;
-            this.holdAtLocation.Text = "Hold shipment at FedEx location";
+            this.holdAtLocation.Text = "Hold shipment at FedEx® location";
             this.holdAtLocation.UseVisualStyleBackColor = false;
             this.holdAtLocation.CheckedChanged += new System.EventHandler(this.OnHoldAtLocationChanged);
             // 

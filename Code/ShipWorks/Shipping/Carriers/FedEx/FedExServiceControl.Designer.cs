@@ -431,7 +431,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             this.sectionHoldAtLocation.ExtraText = "";
             this.sectionHoldAtLocation.Location = new System.Drawing.Point(3, 556);
             this.sectionHoldAtLocation.Name = "sectionHoldAtLocation";
-            this.sectionHoldAtLocation.SectionName = "Hold at FedEx Location";
+            this.sectionHoldAtLocation.SectionName = "Hold at FedEx® Location";
             this.sectionHoldAtLocation.SettingsKey = "{9b529fd1-0bfb-4d24-8aa8-a856c930e196}";
             this.sectionHoldAtLocation.Size = new System.Drawing.Size(487, 24);
             this.sectionHoldAtLocation.TabIndex = 10;
