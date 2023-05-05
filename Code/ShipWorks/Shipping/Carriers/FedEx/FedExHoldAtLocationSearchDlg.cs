@@ -158,7 +158,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             }
             catch (Exception ex)
             {
-                MessageHelper.ShowMessage(this, ex.Message);
+                MessageHelper.ShowMessage(this.Owner, ex.Message);
 
                 Close();
             }
@@ -222,7 +222,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
                 previousAddress = currentAddress;
             }
 
-            topLabel.Text = "Select a Hold At FedEx® Location:";
+            topLabel.Text = "Select a Hold At Location:";
             ResizeDialog();
         }
     }

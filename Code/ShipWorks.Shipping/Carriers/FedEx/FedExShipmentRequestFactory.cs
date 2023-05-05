@@ -90,8 +90,13 @@ namespace ShipWorks.Shipping.Carriers.FedEx
                 labelRequest.RmaNumber = shipment.FedEx.RmaNumber;
             }
 
-            if (!string.IsNullOrEmpty(shipment.FedEx.HoldLocationId))
+            if (shipment.FedEx.FedExHoldAtLocationEnabled)
             {
+                if (string.IsNullOrEmpty(shipment.FedEx.HoldLocationId))
+                {
+                    throw new FedExException("FedEx Hold At Location has been enabled for shipment, but no location was selected.");
+                }
+
                 labelRequest.ShipToServicePointId = shipment.FedEx.HoldLocationId;
             }
 
