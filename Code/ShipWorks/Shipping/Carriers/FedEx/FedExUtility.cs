@@ -149,7 +149,8 @@ namespace ShipWorks.Shipping.Carriers.FedEx
                 FedExServiceType.InternationalPriorityFreight,
                 FedExServiceType.InternationalEconomyFreight,
                 FedExServiceType.FedExFreightEconomy,
-                FedExServiceType.FedExFreightPriority
+                FedExServiceType.FedExFreightPriority,
+                FedExServiceType.FedExInternationalConnectPlus
             };
 
             if (shipments.All(s => (s.AdjustedOriginCountryCode() == "US" && s.AdjustedShipCountryCode() == "CA") ||
@@ -186,7 +187,8 @@ namespace ShipWorks.Shipping.Carriers.FedEx
                 FedExServiceType.FedExNextDayMidMorning,
                 FedExServiceType.FedExNextDayEndOfDay,
                 FedExServiceType.FedExDistanceDeferred,
-                FedExServiceType.FedExNextDayFreight
+                FedExServiceType.FedExNextDayFreight,
+                FedExServiceType.FedExInternationalConnectPlus
             };
         }
 
