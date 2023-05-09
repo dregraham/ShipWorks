@@ -42,7 +42,7 @@
             this.holdAtLocation.Name = "holdAtLocation";
             this.holdAtLocation.Size = new System.Drawing.Size(178, 17);
             this.holdAtLocation.TabIndex = 0;
-            this.holdAtLocation.Text = "Hold shipment at location";
+            this.holdAtLocation.Text = "Hold at Location";
             this.holdAtLocation.UseVisualStyleBackColor = false;
             this.holdAtLocation.CheckedChanged += new System.EventHandler(this.OnHoldAtLocationChanged);
             // 
@@ -62,7 +62,7 @@
             this.searchLink.AutoSize = true;
             this.searchLink.BackColor = System.Drawing.Color.White;
             this.searchLink.Enabled = false;
-            this.searchLink.Location = new System.Drawing.Point(188, 5);
+            this.searchLink.Location = new System.Drawing.Point(115, 5);
             this.searchLink.Name = "searchLink";
             this.searchLink.Size = new System.Drawing.Size(95, 13);
             this.searchLink.TabIndex = 3;
