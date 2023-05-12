@@ -243,6 +243,7 @@ namespace ShipWorks.Stores.Orders.Combine
             combinedOrder.OnlineLastModified = onlineLastModified;
             combinedOrder.OrderTotal = orders.Sum(o => o.OrderTotal);
             combinedOrder.IsManual = orders.All(o => o.IsManual);
+            combinedOrder.HubSequence = orders.Where(o => o.StoreID == combinedOrder.StoreID).Max(o => o.HubSequence);
 
             ResetRollupFields(combinedOrder);
 

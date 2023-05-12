@@ -9476,6 +9476,8 @@ namespace ShipWorks.Data.Model
 		IsManual,
 		///<summary>OriginalOrderID. </summary>
 		OriginalOrderID,
+		///<summary>OriginalChannelOrderID. </summary>
+		OriginalChannelOrderID,
 		/// <summary></summary>
 		AmountOfFields
 	}

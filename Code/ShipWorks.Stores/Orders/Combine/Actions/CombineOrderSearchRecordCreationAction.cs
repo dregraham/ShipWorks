@@ -32,8 +32,9 @@ namespace ShipWorks.Stores.Orders.Combine.Actions
                     OrderNumber = x.OrderNumber,
                     OrderNumberComplete = GetOriginalOrderNumberComplete(x, sqlAdapter),
                     IsManual = x.IsManual,
-                    OriginalOrderID = x.OrderID
-                });
+                    OriginalOrderID = x.OrderID,
+					OriginalChannelOrderID = x.ChannelOrderID,
+});
         }
 
         /// <summary>

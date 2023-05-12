@@ -2627,6 +2627,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 			this.AddElementFieldInfo("OrderSearchEntity", "OrderNumberComplete", typeof(System.String), false, false, false, false,  (int)OrderSearchFieldIndex.OrderNumberComplete, 50, 0, 0);
 			this.AddElementFieldInfo("OrderSearchEntity", "IsManual", typeof(System.Boolean), false, false, false, false,  (int)OrderSearchFieldIndex.IsManual, 0, 0, 0);
 			this.AddElementFieldInfo("OrderSearchEntity", "OriginalOrderID", typeof(System.Int64), false, false, false, false,  (int)OrderSearchFieldIndex.OriginalOrderID, 0, 0, 19);
+			this.AddElementFieldInfo("OrderSearchEntity", "OriginalChannelOrderID", typeof(System.String), false, false, false, true,  (int)OrderSearchFieldIndex.OriginalChannelOrderID, 50, 0, 0);
 		}
 		/// <summary>Inits OtherProfileEntity's FieldInfo objects</summary>
 		private void InitOtherProfileEntityInfos()
