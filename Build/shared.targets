@@ -8,7 +8,7 @@
     <SignToolExe>C:\Program Files (x86)\Windows Kits\10\App Certification Kit\signtool.exe</SignToolExe>
     <SignCommand>"$(SignToolExe)" sign /v /sm /n Interapptive /d "ShipWorks" /du "http://www.shipworks.com" /t "http://timestamp.digicert.com"</SignCommand>
     <InnoSetupExe>C:\Program Files (x86)\Inno Setup 5\ISCC.EXE</InnoSetupExe>
-    <ObfuscationCommand>"C:\Program Files (x86)\PreEmptive Solutions\Dotfuscator Professional Edition 4.25.0\dotfuscator.exe" /q "..\ShipWorksDotfuscator.xml"</ObfuscationCommand>
+    <ObfuscationCommand>"C:\Program Files (x86)\PreEmptive Solutions\Dotfuscator Professional Edition 4.25.0\dotfuscator.exe" -license:BA56392F1F12945E9EC05FB2A4C894CF -v "..\ShipWorksDotfuscator.xml"</ObfuscationCommand>
 </PropertyGroup>
 
   <PropertyGroup>
