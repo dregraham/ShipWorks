@@ -8,9 +8,8 @@
     <SignToolExe>C:\Program Files (x86)\Windows Kits\10\App Certification Kit\signtool.exe</SignToolExe>
     <SignCommand>"$(SignToolExe)" sign /v /sm /n Interapptive /d "ShipWorks" /du "http://www.shipworks.com" /t "http://timestamp.digicert.com"</SignCommand>
     <InnoSetupExe>C:\Program Files (x86)\Inno Setup 5\ISCC.EXE</InnoSetupExe>
-    <DotfuscatorExe>"..\..\PreEmptive.Protection.Dotfuscator.Pro\tools\programdir\netcore\dotfuscator.cmd"</DotfuscatorExe>
-    <ObfuscationCommand>obfuscate.bat</ObfuscationCommand>
-  </PropertyGroup>
+    <ObfuscationCommand>"C:\Program Files (x86)\PreEmptive Solutions\Dotfuscator Professional Edition 4.25.0\dotfuscator.exe" /q "..\ShipWorksDotfuscator.xml"</ObfuscationCommand>
+</PropertyGroup>
 
   <PropertyGroup>
     <VersionMajor>0</VersionMajor>
