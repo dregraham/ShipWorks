@@ -63,6 +63,12 @@ namespace ShipWorks.Data.Model.EntityInterfaces
         /// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
         System.Int64 OriginalOrderID { get; }
+        /// <summary> The OriginalChannelOrderID property of the Entity OrderSearch<br/><br/>
+        /// </summary>
+        /// <remarks>Mapped on table field: "OrderSearch"."OriginalChannelOrderID"<br/>
+        /// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 50<br/>
+        /// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+        System.String OriginalChannelOrderID { get; }
         
         
         IOrderEntity Order { get; }

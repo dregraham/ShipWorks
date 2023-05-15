@@ -22272,6 +22272,11 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(OrderSearchFieldIndex.OriginalOrderID);}
 		}
+		/// <summary>Creates a new OrderSearchEntity.OriginalChannelOrderID field instance</summary>
+		public static EntityField2 OriginalChannelOrderID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(OrderSearchFieldIndex.OriginalChannelOrderID);}
+		}
 	}
 
 	/// <summary>Field Creation Class for entity OtherProfileEntity</summary>

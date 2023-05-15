@@ -10,12 +10,12 @@ using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping;
 using ShipWorks.Shipping.Carriers.Api;
 using ShipWorks.Stores.Content;
-using ShipWorks.Stores.Platforms.Amazon;
-using ShipWorks.Stores.Platforms.Amazon.OnlineUpdating;
 using ShipWorks.Stores.Platforms.Amazon.OnlineUpdating.DTO;
+using ShipWorks.Stores.Platforms.Platform;
+using ShipWorks.Stores.Platforms.Platform.OnlineUpdating;
 using ShipWorks.Warehouse.Orders;
 
-namespace ShipWorks.Stores.Platforms.Platform.OnlineUpdating
+namespace ShipWorks.Stores.Platforms.Amazon.OnlineUpdating
 {
     /// <summary>
     /// Bulk Upload shipment details to Amazon SP

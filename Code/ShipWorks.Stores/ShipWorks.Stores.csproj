@@ -317,6 +317,7 @@
     <Compile Include="Platforms\Platform\PlatformStoreSetup.cs" />
     <Compile Include="Platforms\Platform\PlatformWarehouseOrderFactory.cs" />
     <Compile Include="Platforms\Platform\PlatformStoreType.cs" />
+    <Compile Include="Platforms\Platform\PlatformCombineOrderSearchProvider.cs" />
     <Compile Include="Platforms\Rakuten\Content\RakutenCombineOrderAction.cs" />
     <Compile Include="Platforms\Rakuten\Content\RakutenSplitOrderAction.cs" />
     <Compile Include="Platforms\Rakuten\CoreExtensions\Actions\RakutenShipmentUploadTask.cs" />
@@ -354,7 +355,6 @@
     <Compile Include="Platforms\Shopify\ShopifyCreateOrderSourceViewModel.cs" />
     <Compile Include="Platforms\Shopify\ShopifyDaysBackViewModel.cs" />
     <Compile Include="Platforms\Shopify\IShopifyDaysBackViewModel.cs" />
-    <Compile Include="Platforms\Shopify\ShopifyHelper.cs" />
     <Compile Include="Platforms\ThreeDCart\Warehouse\ThreeDCartStore.cs" />
     <Compile Include="Platforms\Rakuten\DTO\RakutenErrors.cs" />
     <Compile Include="Platforms\Rakuten\DTO\RakutenOrdersResponse.cs" />

@@ -2,10 +2,12 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Interapptive.Shared.Business;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Utility;
 using ShipWorks.Data.Model;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Stores.Content;
 using ShipWorks.Stores.Platforms.Amazon.DTO;
 using ShipWorks.Stores.Platforms.ShipEngine;
 using ShipWorks.Stores.Platforms.ShipEngine.Apollo;
@@ -37,6 +39,11 @@ namespace ShipWorks.Stores.Platforms.Shopify
         /// </summary>
         protected override async Task<OrderEntity> CreateOrder(OrderSourceApiSalesOrder salesOrder)
         {
+            if (salesOrder.Status == OrderSourceSalesOrderStatus.OnHold)
+            {
+                return null;
+            }
+
             long shopifyOrderId = long.Parse(salesOrder.OrderId);
 
             GenericResult<OrderEntity> result = await InstantiateOrder(
@@ -52,7 +59,7 @@ namespace ShipWorks.Stores.Platforms.Shopify
             var order = (ShopifyOrderEntity) result.Value;
 
             LoadOrderNumber(order, salesOrder);
-           
+
             var fraudRiskString = salesOrder.RequestedFulfillments?.FirstOrDefault()?.Extensions?.CustomField2;
             //https://github.com/shipstation/integrations-ecommerce/blob/56380abc4fde3e0d299d48252bc95d5a0ddff2ce/modules/shopify/src/api/types/enums.ts
             //export enum RiskRecommendation
@@ -70,15 +77,15 @@ namespace ShipWorks.Stores.Platforms.Shopify
                 };
 
                 shopifyFraudDownloader.Merge(order, new List<OrderPaymentDetailEntity> { paymentDetailEntity });
-			}
+            }
 
-			//unshipped
-			//partial
-			//fulfilled
-			//restocked
-			//unknown
-			order.FulfillmentStatusCode = (int) ShopifyFulfillmentStatus.Unshipped;
-            
+            //unshipped
+            //partial
+            //fulfilled
+            //restocked
+            //unknown
+            order.FulfillmentStatusCode = (int) ShopifyFulfillmentStatus.Unshipped;
+
             //authorized
             //pending
             //paid
@@ -133,15 +140,15 @@ namespace ShipWorks.Stores.Platforms.Shopify
             }
         }
 
-		protected override void SetOnlineCustomerId(OrderEntity order, OrderSourceApiSalesOrder salesOrder)
-		{
-			order.OnlineCustomerID = salesOrder.Buyer?.BuyerId;
-		}
+        protected override void SetOnlineCustomerId(OrderEntity order, OrderSourceApiSalesOrder salesOrder)
+        {
+            order.OnlineCustomerID = salesOrder.Buyer?.BuyerId;
+        }
 
-		/// <summary>
-		/// Load the order number for the Shopify order, taking into consideration the prefix\postfix Shopify allows
-		/// </summary>
-		private void LoadOrderNumber(ShopifyOrderEntity order, OrderSourceApiSalesOrder salesOrder)
+        /// <summary>
+        /// Load the order number for the Shopify order, taking into consideration the prefix\postfix Shopify allows
+        /// </summary>
+        private void LoadOrderNumber(ShopifyOrderEntity order, OrderSourceApiSalesOrder salesOrder)
         {
             // Get shopify's field shopify calls "order_number" which SE puts into a field called custom_field_3
             var orderNumberString = salesOrder.RequestedFulfillments?.FirstOrDefault()?.Extensions?.CustomField3;
@@ -210,21 +217,177 @@ namespace ShipWorks.Stores.Platforms.Shopify
 
         protected override OrderItemEntity LoadOrderItem(OrderSourceSalesOrderItem orderItem, OrderEntity order, IEnumerable<GiftNote> giftNotes, IEnumerable<CouponCode> couponCodes)
         {
+            //"items": [
+            //   {
+            //     "salesOrderItemGuid": "bcaaf4f5-3648-5be6-a32b-a9df57dbc010",
+            //      "lineItemId": "11711597281385",
+            //      "description": "Blue Shirt (Medium) - Small / red",
+            //      "product": {
+            //                   "productId": "111948576:2964822145",
+
             var item = (ShopifyOrderItemEntity) base.LoadOrderItem(orderItem, order, giftNotes, couponCodes);
-            //TODO:
-            //item.InventoryItemID =
-            //item.ShopifyProductID;
-            //item.ShopifyOrderItemID=
+            
+            //orderItem.Product.Name contains variant name, this will be changed soon in platform
+            item.Name = EntitiesDecode(orderItem.Description);
 
-            //item.TransactionID = orderItem.LineItemId;
+            if (!long.TryParse(orderItem.LineItemId, out long shopifyOrderItemID))
+            {
+                log.Warn($"Invalid value of ShopifyOrderItemID. Numeric value expected, but found: '{orderItem.LineItemId}'");
+            }
+            else
+            {
+                item.ShopifyOrderItemID = shopifyOrderItemID;
+            }
 
-            //var productListing = orderItem.Product?.ProductId;//"productId": "3114960238:653614320"
-            //int length;
-            //if (productListing != null && ((length = productListing.IndexOf(":")) > 0))
-            //{
-            //    item.ListingID = productListing.Substring(length+1);
-            //}
+            var platformProductId = orderItem.Product?.ProductId;
+            if (string.IsNullOrWhiteSpace(platformProductId))
+            {
+                log.Warn($"Empty value of ShopifyProductID - Numeric value expected, orderItemId: '{orderItem.LineItemId}'");
+            }
+            else
+            {
+                var idParts = platformProductId.Split(':');
+                string productId = idParts[0];
+                if (!long.TryParse(productId, out long shopifyProductId))
+                {
+                    log.Warn($"Invalid value of ShopifyProductID - should be in format: xx:xx, found: '{platformProductId}'");
+                }
+                else
+                {
+                    item.ShopifyProductID = shopifyProductId;
+                    if (idParts.Length > 1)
+                    {
+                        var variantIdString = idParts[1];
+                        if (long.TryParse(variantIdString, out long shopifyVariantId) && shopifyVariantId > 0)
+                        {
+                            const string variantNameSeparator = " - ";
+                            var i = item.Name.LastIndexOf(variantNameSeparator);
+                            string variantTitle = orderItem.Product.Name;
+                            if (i > 0 && variantTitle == item.Name)
+                            {
+                                variantTitle = item.Name.Substring(i + variantNameSeparator.Length);
+                            }
+
+                            //Instantiate the order item attribute
+                            OrderItemAttributeEntity option = InstantiateOrderItemAttribute(item);
+
+                            //Set the option properties
+                            option.Name = "Variant";
+                            option.Description = variantTitle;
+                            var variantSuffix = variantNameSeparator + option.Description;
+                            if (item.Name.EndsWith(variantSuffix))
+                            {
+                                item.Name = item.Name.Substring(0, item.Name.Length - variantSuffix.Length);
+                            }
+
+                            // Shopify only sends the total line price
+                            option.UnitPrice = 0;
+                        }
+                    }
+                }
+            }
+
+            //item.InventoryItemID = ;
+         
             return item;
+        }
+
+        protected override void LoadProductDetails(OrderSourceSalesOrderItem orderItem, OrderItemEntity item)
+        {
+            if (orderItem.Product?.Details != null)
+            {
+                if (!orderItem.Product.Details.Any())
+                {
+                    return;
+                }
+
+                OrderItemAttributeEntity option = InstantiateOrderItemAttribute(item);
+
+                //Set the option properties
+                option.Name = "Variant";
+                option.Description = string.Empty;
+
+                // Shopify only sends the total line price
+                option.UnitPrice = 0;
+
+                foreach (var detail in orderItem.Product.Details)
+                {
+                    OrderItemAttributeEntity attribute = InstantiateOrderItemAttribute(item);
+                    attribute.Name = string.Format("   {0}", EntitiesDecode(detail.Name));
+                    attribute.Description = EntitiesDecode(detail.Value);
+                    attribute.UnitPrice = 0;
+                    item.OrderItemAttributes.Add(attribute);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Adds notes to order entity
+        /// </summary>
+        protected override async Task AddNotes(OrderSourceApiSalesOrder salesOrder, List<GiftNote> giftNotes, OrderEntity order)
+        {
+            var notes = salesOrder.Notes.Where(n => n.Type != OrderSourceNoteType.GiftMessage);
+            foreach (var note in notes)
+            {
+                var splitNotes = ShopifyHelper.GetSplitNotes(note.Text);
+                if (splitNotes[0] != "null")
+                {
+                    var visibility = note.Type == OrderSourceNoteType.InternalNotes ?
+                        NoteVisibility.Internal : NoteVisibility.Public;
+
+                    await InstantiateNote(order, FormatNoteText(splitNotes[0], note.Type), order.OrderDate, visibility).ConfigureAwait(false);
+                }
+
+                for (var i = 1; i < splitNotes.Length; i++)
+                {
+                    await InstantiateNote(order, splitNotes[i], order.OrderDate, NoteVisibility.Internal).ConfigureAwait(false);
+                }
+            }
+
+            foreach (var note in giftNotes.Where(n => n.OrderItemId.IsNullOrWhiteSpace()))
+            {
+                var noteText = FormatNoteText(note.Message, OrderSourceNoteType.GiftMessage);
+                await InstantiateNote(order, noteText, order.OrderDate, NoteVisibility.Public).ConfigureAwait(false);
+            }
+        }
+
+        /// <summary>
+        /// Adds order adjustment charges to order entity
+        /// </summary>
+        protected override void AddAdjustments(OrderSourceApiSalesOrder salesOrder, OrderEntity order)
+        {
+            foreach (var orderAdjustment in salesOrder.Payment.Adjustments)
+            {
+                AddToCharge(order, "ADJUST", orderAdjustment.Description, orderAdjustment.Amount);
+            }
+
+            foreach (var orderShippingCharge in salesOrder.Payment.ShippingCharges)
+            {
+                AddToCharge(order, "SHIPPING", orderShippingCharge.Description, orderShippingCharge.Amount);
+            }
+        }
+
+        /// <summary>
+        /// Adds taxes to order entity
+        /// </summary>
+        protected override void AddTaxes(OrderSourceApiSalesOrder salesOrder, OrderEntity order)
+        {
+            foreach (var orderTax in salesOrder.Payment.Taxes)
+            {
+                AddToCharge(order, "TAX", orderTax.Description, orderTax.Amount);
+            }
+        }
+
+        protected override void LoadPaymentDetails(OrderSourceApiSalesOrder salesOrder, OrderEntity order)
+        {
+            var gateway = salesOrder.Payment.PaymentMethod;
+            if (string.IsNullOrWhiteSpace(gateway))
+            {
+                return;
+            }
+            OrderPaymentDetailEntity detail = InstantiateOrderPaymentDetail(order);
+            detail.Label = "Payment Type";
+            detail.Value = AddressCasing.Apply(gateway);
         }
     }
 }

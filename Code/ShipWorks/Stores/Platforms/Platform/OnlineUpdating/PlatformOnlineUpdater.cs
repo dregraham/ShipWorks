@@ -12,177 +12,193 @@ using ShipWorks.Data.Model.Custom;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Shipping;
-using ShipWorks.Shipping.Carriers;
 using ShipWorks.Shipping.Carriers.Api;
-using ShipWorks.Shipping.Carriers.Postal;
 using ShipWorks.Stores.Content;
 using ShipWorks.Warehouse.Orders;
 
 namespace ShipWorks.Stores.Platforms.Platform.OnlineUpdating
 {
-    /// <summary>
-    /// Uploads shipment details to Platform
-    /// </summary>
-    [KeyedComponent(typeof(IPlatformOnlineUpdater), StoreTypeCode.Api)]
-    [KeyedComponent(typeof(IPlatformOnlineUpdater), StoreTypeCode.BrightpearlHub)]
-    [KeyedComponent(typeof(IPlatformOnlineUpdater), StoreTypeCode.WalmartHub)]
-    [KeyedComponent(typeof(IPlatformOnlineUpdater), StoreTypeCode.ChannelAdvisorHub)]
-    [KeyedComponent(typeof(IPlatformOnlineUpdater), StoreTypeCode.VolusionHub)]
-    [KeyedComponent(typeof(IPlatformOnlineUpdater), StoreTypeCode.GrouponHub)]
-    [KeyedComponent(typeof(IPlatformOnlineUpdater), StoreTypeCode.Etsy)]
+	/// <summary>
+	/// Uploads shipment details to Platform
+	/// </summary>
+	[KeyedComponent(typeof(IPlatformOnlineUpdater), StoreTypeCode.Api)]
+	[KeyedComponent(typeof(IPlatformOnlineUpdater), StoreTypeCode.BrightpearlHub)]
+	[KeyedComponent(typeof(IPlatformOnlineUpdater), StoreTypeCode.WalmartHub)]
+	[KeyedComponent(typeof(IPlatformOnlineUpdater), StoreTypeCode.ChannelAdvisorHub)]
+	[KeyedComponent(typeof(IPlatformOnlineUpdater), StoreTypeCode.VolusionHub)]
+	[KeyedComponent(typeof(IPlatformOnlineUpdater), StoreTypeCode.GrouponHub)]
+	[KeyedComponent(typeof(IPlatformOnlineUpdater), StoreTypeCode.Etsy)]
 	[KeyedComponent(typeof(IPlatformOnlineUpdater), StoreTypeCode.Shopify)]
 	public class PlatformOnlineUpdater : IPlatformOnlineUpdater
-    {
-        // Logger
-        static readonly ILog log = LogManager.GetLogger(typeof(PlatformOnlineUpdater));
-        private readonly IOrderManager orderManager;
-        protected readonly IShippingManager shippingManager;
-        private readonly ISqlAdapterFactory sqlAdapterFactory;
-        private readonly Func<IWarehouseOrderClient> createWarehouseOrderClient;
-        private readonly IIndex<StoreTypeCode, IOnlineUpdater> legacyStoreSpecificOnlineUpdaterFactory;
-        private readonly IIndex<StoreTypeCode, IPlatformOnlineUpdaterBehavior> platformOnlineUpdateBehavior;
+	{
+		// Logger
+		static readonly ILog log = LogManager.GetLogger(typeof(PlatformOnlineUpdater));
+		private readonly IOrderManager orderManager;
+		protected readonly IShippingManager shippingManager;
+		private readonly ISqlAdapterFactory sqlAdapterFactory;
+		private readonly Func<IWarehouseOrderClient> createWarehouseOrderClient;
+		private readonly IIndex<StoreTypeCode, IOnlineUpdater> legacyStoreSpecificOnlineUpdaterFactory;
+		private readonly IIndex<StoreTypeCode, IPlatformOnlineUpdaterBehavior> platformOnlineUpdateBehavior;
+		private readonly IPlatformOrderSearchProvider orderSearchProvider;
 
-        /// <summary>
-        /// Constructor
-        /// </summary>
-        public PlatformOnlineUpdater(IOrderManager orderManager, IShippingManager shippingManager,
-            ISqlAdapterFactory sqlAdapterFactory, Func<IWarehouseOrderClient> createWarehouseOrderClient,
-            IIndex<StoreTypeCode, IOnlineUpdater> legacyStoreSpecificOnlineUpdaterFactory,
-            IIndex<StoreTypeCode, IPlatformOnlineUpdaterBehavior> platformOnlineUpdateBehavior)
-        {
-            this.sqlAdapterFactory = sqlAdapterFactory;
-            this.createWarehouseOrderClient = createWarehouseOrderClient;
-            this.legacyStoreSpecificOnlineUpdaterFactory = legacyStoreSpecificOnlineUpdaterFactory;
-            this.shippingManager = shippingManager;
-            this.orderManager = orderManager;
-            this.platformOnlineUpdateBehavior = platformOnlineUpdateBehavior;
-        }
+		/// <summary>
+		/// Constructor
+		/// </summary>
+		public PlatformOnlineUpdater(IOrderManager orderManager, IShippingManager shippingManager,
+			ISqlAdapterFactory sqlAdapterFactory, Func<IWarehouseOrderClient> createWarehouseOrderClient,
+			IIndex<StoreTypeCode, IOnlineUpdater> legacyStoreSpecificOnlineUpdaterFactory,
+			IIndex<StoreTypeCode, IPlatformOnlineUpdaterBehavior> platformOnlineUpdateBehavior,
+			IPlatformOrderSearchProvider orderSearchProvider)
+		{
+			this.sqlAdapterFactory = sqlAdapterFactory;
+			this.createWarehouseOrderClient = createWarehouseOrderClient;
+			this.legacyStoreSpecificOnlineUpdaterFactory = legacyStoreSpecificOnlineUpdaterFactory;
+			this.shippingManager = shippingManager;
+			this.orderManager = orderManager;
+			this.platformOnlineUpdateBehavior = platformOnlineUpdateBehavior;
+			this.orderSearchProvider = orderSearchProvider;
+		}
 
-        /// <summary>
-        /// Update the online status of the given order
-        /// </summary>
-        public async Task UploadOrderShipmentDetails(StoreEntity store, IEnumerable<long> orderKeys)
-        {
-            List<ShipmentEntity> shipments = new List<ShipmentEntity>();
+		protected PlatformOnlineUpdater(IOrderManager orderManager, IShippingManager shippingManager,
+										ISqlAdapterFactory sqlAdapterFactory, Func<IWarehouseOrderClient> createWarehouseOrderClient,
+										IIndex<StoreTypeCode, IOnlineUpdater> legacyStoreSpecificOnlineUpdaterFactory,
+										IIndex<StoreTypeCode, IPlatformOnlineUpdaterBehavior> platformOnlineUpdateBehavior)
+		{
+			this.sqlAdapterFactory = sqlAdapterFactory;
+			this.createWarehouseOrderClient = createWarehouseOrderClient;
+			this.legacyStoreSpecificOnlineUpdaterFactory = legacyStoreSpecificOnlineUpdaterFactory;
+			this.shippingManager = shippingManager;
+			this.orderManager = orderManager;
+			this.platformOnlineUpdateBehavior = platformOnlineUpdateBehavior;
+		}
 
-            var orders = await LoadOrders(orderKeys).ConfigureAwait(false);
+		/// <summary>
+		/// Update the online status of the given order
+		/// </summary>
+		public async Task UploadOrderShipmentDetails(StoreEntity store, IEnumerable<long> orderKeys)
+		{
+			List<ShipmentEntity> shipments = new List<ShipmentEntity>();
 
-            foreach (var order in orders)
-            {
-                // upload tracking number for the most recent processed, not voided shipment
-                ShipmentEntity shipment = await orderManager.GetLatestActiveShipmentAsync(order.OrderID, false).ConfigureAwait(false);
-                if (shipment == null)
-                {
-                    log.InfoFormat("There were no Processed and not Voided shipments to upload for OrderID {0}.", order.OrderID);
-                }
-                else
-                {
-                    shipment.Order = order;
-                    shipments.Add(shipment);
-                }
-            }
+			var orders = await LoadOrders(orderKeys).ConfigureAwait(false);
 
-            await UploadShipmentDetails(store, shipments).ConfigureAwait(false);
-        }
+			foreach (var order in orders)
+			{
+				// upload tracking number for the most recent processed, not voided shipment
+				ShipmentEntity shipment = await orderManager.GetLatestActiveShipmentAsync(order.OrderID, false).ConfigureAwait(false);
+				if (shipment == null)
+				{
+					log.InfoFormat("There were no Processed and not Voided shipments to upload for OrderID {0}.", order.OrderID);
+				}
+				else
+				{
+					shipment.Order = order;
+					shipments.Add(shipment);
+				}
+			}
 
-        /// <summary>
-        /// Load the orders for the given keys
-        /// </summary>
-        private async Task<IEnumerable<OrderEntity>> LoadOrders(IEnumerable<long> orderKeys)
-        {
-            using (ISqlAdapter sqlAdapter = sqlAdapterFactory.Create())
-            {
-                return await orderManager.LoadOrdersAsync(orderKeys, sqlAdapter).ConfigureAwait(false);
-            }
-        }
+			await UploadShipmentDetails(store, shipments).ConfigureAwait(false);
+		}
 
-        /// <summary>
-        /// Uploads shipment details for a particular shipment
-        /// </summary>
-        public async Task UploadShipmentDetails(StoreEntity store, IEnumerable<long> shipmentKeys)
-        {
-            List<ShipmentEntity> shipments = new List<ShipmentEntity>();
+		/// <summary>
+		/// Load the orders for the given keys
+		/// </summary>
+		private async Task<IEnumerable<OrderEntity>> LoadOrders(IEnumerable<long> orderKeys)
+		{
+			using (ISqlAdapter sqlAdapter = sqlAdapterFactory.Create())
+			{
+				return await orderManager.LoadOrdersAsync(orderKeys, sqlAdapter).ConfigureAwait(false);
+			}
+		}
 
-            foreach (long shipmentID in shipmentKeys)
-            {
-                var shipmentAdapter = await shippingManager.GetShipmentAsync(shipmentID).ConfigureAwait(false);
-                ShipmentEntity shipment = shipmentAdapter?.Shipment;
+		/// <summary>
+		/// Uploads shipment details for a particular shipment
+		/// </summary>
+		public async Task UploadShipmentDetails(StoreEntity store, IEnumerable<long> shipmentKeys)
+		{
+			List<ShipmentEntity> shipments = new List<ShipmentEntity>();
 
-                if (shipment == null)
-                {
-                    log.InfoFormat("Not uploading shipment details, since the shipment {0} was deleted.", shipmentID);
-                }
-                else if (!shipment.Processed)
-                {
-                    log.InfoFormat($"Not uploading non-processed shipment with ID {shipmentID}");
-                }
-                else
-                {
-                    shipments.Add(shipment);
-                }
-            }
+			foreach (long shipmentID in shipmentKeys)
+			{
+				var shipmentAdapter = await shippingManager.GetShipmentAsync(shipmentID).ConfigureAwait(false);
+				ShipmentEntity shipment = shipmentAdapter?.Shipment;
 
-            await UploadShipmentDetails(store, shipments).ConfigureAwait(false);
-        }
+				if (shipment == null)
+				{
+					log.InfoFormat("Not uploading shipment details, since the shipment {0} was deleted.", shipmentID);
+				}
+				else if (!shipment.Processed)
+				{
+					log.InfoFormat($"Not uploading non-processed shipment with ID {shipmentID}");
+				}
+				else
+				{
+					shipments.Add(shipment);
+				}
+			}
 
-        /// <summary>
-        /// Uploads shipment details for a particular shipment
-        /// </summary>
-        public async Task UploadShipmentDetails(StoreEntity store, List<ShipmentEntity> shipments)
-        {
-            var nonPlatformShipments = shipments.Where(x => x.Order.ChannelOrderID.IsNullOrWhiteSpace());
+			await UploadShipmentDetails(store, shipments).ConfigureAwait(false);
+		}
 
-            if (nonPlatformShipments.Any())
-            {
-                if (legacyStoreSpecificOnlineUpdaterFactory.TryGetValue(store.StoreTypeCode, out var uploader))
-                {
-                    await uploader.UploadShipmentDetails(store, nonPlatformShipments.ToList());
-                }
-                else
-                {
-                    throw new PlatformStoreException($"Could not find store-specific uploader for type code {store.StoreTypeCode}");
-                }
-            }
+		/// <summary>
+		/// Uploads shipment details for a particular shipment
+		/// </summary>
+		public async Task UploadShipmentDetails(StoreEntity store, List<ShipmentEntity> shipments)
+		{
+			var nonPlatformShipments = shipments.Where(x => x.Order.ChannelOrderID.IsNullOrWhiteSpace());
 
-            var client = createWarehouseOrderClient();
+			if (nonPlatformShipments.Any())
+			{
+				if (legacyStoreSpecificOnlineUpdaterFactory.TryGetValue(store.StoreTypeCode, out var uploader))
+				{
+					await uploader.UploadShipmentDetails(store, nonPlatformShipments.ToList());
+				}
+				else
+				{
+					throw new PlatformStoreException($"Could not find store-specific uploader for type code {store.StoreTypeCode}");
+				}
+			}
 
-            await UploadShipmentsToPlatform(shipments.Where(x => !x.Order.ChannelOrderID.IsNullOrWhiteSpace()).ToList(), store, client).ConfigureAwait(false);
-        }
+			var client = createWarehouseOrderClient();
 
-        /// <summary>
-        /// Upload shipments to Platform (one at a time)
-        /// </summary
-        protected virtual async Task UploadShipmentsToPlatform(List<ShipmentEntity> shipments, StoreEntity store, IWarehouseOrderClient client)
-        {
-            if (!platformOnlineUpdateBehavior.TryGetValue(store.StoreTypeCode, out var behavior))
-            {
-                behavior = new DefaultPlatformOnlineUpdaterBehavior();
-            }
+			await UploadShipmentsToPlatform(shipments.Where(x => !x.Order.ChannelOrderID.IsNullOrWhiteSpace()).ToList(), store, client).ConfigureAwait(false);
+		}
 
-            foreach (var shipment in shipments.Where(x => !x.Order.ChannelOrderID.IsNullOrWhiteSpace()))
-            {
+		/// <summary>
+		/// Upload shipments to Platform (one at a time)
+		/// </summary>
+		protected virtual async Task UploadShipmentsToPlatform(List<ShipmentEntity> shipments, StoreEntity store, IWarehouseOrderClient client)
+		{
+			var behavior = GetPlatformOnlineUpdaterBehavior(store);
+
+			foreach (var shipment in shipments.Where(x => !x.Order.ChannelOrderID.IsNullOrWhiteSpace()))
+			{
 				await shippingManager.EnsureShipmentLoadedAsync(shipment).ConfigureAwait(false);
-                string carrier = GetCarrierName(shipment);
 
-                List<SalesOrderItem> salesOrderItems = null;
-                if (behavior.IncludeSalesOrderItems)
-                {
-                    salesOrderItems = shipment.Order.OrderItems.Select(x => new SalesOrderItem
-                    {
-                        SalesOrderItemId = x.StoreOrderItemID,
-                        Quantity = (int) x.Quantity
-                    }).ToList();
-                }
+				List<SalesOrderItem> salesOrderItems = null;
+				if (behavior.IncludeSalesOrderItems)
+				{
+					salesOrderItems = shipment.Order.OrderItems.Select(x => new SalesOrderItem
+					{
+						SalesOrderItemId = x.StoreOrderItemID,
+						Quantity = (int) x.Quantity
+					}).ToList();
+				}
 
-                var shopifyStore = store as IShopifyStoreEntity;
+				var shopifyStore = store as IShopifyStoreEntity;
+				bool? notifyBuyer = shopifyStore?.ShopifyNotifyCustomer;
 
-                bool? notifyBuyer = shopifyStore?.ShopifyNotifyCustomer;
+				var trackingUrl = behavior.GetTrackingUrl(shipment);
+				var carrierName = behavior.GetCarrierName(shippingManager, shipment);
 
-                var result = await client.NotifyShipped(shipment.Order.ChannelOrderID, shipment.TrackingNumber, carrier, behavior.UseSwatId, salesOrderItems, notifyBuyer).ConfigureAwait(false);
-                result.OnFailure(ex => throw new PlatformStoreException($"Error uploading shipment details: {ex.Message}", ex));
+				var orderSearchEntities = await orderSearchProvider.GetOrderIdentifiers(shipment.Order).ConfigureAwait(false);
 
+				foreach (var orderIdentifier in orderSearchEntities)
+				{
+					var result = await client.NotifyShipped(orderIdentifier ?? shipment.Order.ChannelOrderID, shipment.TrackingNumber, trackingUrl, carrierName, behavior.UseSwatId, salesOrderItems, notifyBuyer).ConfigureAwait(false);
+					result.OnFailure(ex => throw new PlatformStoreException($"Error uploading shipment details: {ex.Message}", ex));
+				}
 
-                if (behavior.SetOrderStatusesOnShipmentNotify)
+				if (behavior.SetOrderStatusesOnShipmentNotify)
 				{
 					UnitOfWork2 unitOfWork = new ManagedConnectionUnitOfWork2();
 					behavior.SetOrderStatuses(shipment.Order, unitOfWork);
@@ -193,74 +209,17 @@ namespace ShipWorks.Stores.Platforms.Platform.OnlineUpdating
 						adapter.Commit();
 					}
 				}
-            }
-        }
+			}
+		}
 
-        /// <summary>
-        /// Gets the carrier name that is allowed in shipengine
-        /// </summary>
-        protected string GetCarrierName(ShipmentEntity shipment)
-        {
-            CarrierDescription otherDesc = null;
-            ShipmentTypeCode shipmentTypeCode = shipment.ShipmentTypeCode;
+		protected IPlatformOnlineUpdaterBehavior GetPlatformOnlineUpdaterBehavior(StoreEntity store)
+		{
+			if (!platformOnlineUpdateBehavior.TryGetValue(store.StoreTypeCode, out var behavior))
+			{
+				behavior = new DefaultPlatformOnlineUpdaterBehavior();
+			}
 
-            if (shipmentTypeCode == ShipmentTypeCode.Other)
-            {
-                otherDesc = shippingManager.GetOtherCarrierDescription(shipment);
-            }
-
-            string sfpName = string.Empty;
-            if (shipmentTypeCode == ShipmentTypeCode.AmazonSFP)
-            {
-                sfpName = shipment.AmazonSFP.CarrierName.ToUpperInvariant();
-            }
-
-            switch (true)
-            {
-                case true when otherDesc?.IsDHL ?? false:
-                case true when ShipmentTypeManager.ShipmentTypeCodeSupportsDhl(shipmentTypeCode) &&
-                        ShipmentTypeManager.IsDhl((PostalServiceType) shipment.Postal.Service):
-                    return "dhl_ecommerce";
-
-                case true when shipmentTypeCode == ShipmentTypeCode.Endicia:
-                case true when shipmentTypeCode == ShipmentTypeCode.Express1Endicia:
-                    return "endicia";
-
-                case true when ShipmentTypeManager.IsPostal(shipmentTypeCode):
-                case true when otherDesc?.IsUSPS ?? false:
-                case true when sfpName.Equals("USPS", StringComparison.OrdinalIgnoreCase):
-                case true when sfpName.Equals("STAMPS_DOT_COM", StringComparison.OrdinalIgnoreCase):
-                    return "stamps_com";
-
-                case true when ShipmentTypeManager.IsFedEx(shipmentTypeCode):
-                case true when otherDesc?.IsFedEx ?? false:
-                case true when sfpName.Equals("FEDEX", StringComparison.OrdinalIgnoreCase):
-                    return "fedex";
-
-                case true when ShipmentTypeManager.IsUps(shipmentTypeCode):
-                case true when otherDesc?.IsUPS ?? false:
-                case true when sfpName.Equals("UPS", StringComparison.OrdinalIgnoreCase):
-                    return "ups";
-
-                case true when shipmentTypeCode == ShipmentTypeCode.DhlExpress:
-                    return "dhl_express";
-
-                case true when shipmentTypeCode == ShipmentTypeCode.DhlEcommerce:
-                    return "dhl_global_mail";
-
-                case true when shipmentTypeCode == ShipmentTypeCode.OnTrac:
-                case true when sfpName.Equals("ONTRAC", StringComparison.OrdinalIgnoreCase):
-                    return "ontrac";
-
-                case true when shipmentTypeCode == ShipmentTypeCode.AmazonSWA:
-                    return "amazon_shipping";
-
-                case true when shipmentTypeCode == ShipmentTypeCode.Asendia:
-                    return "asendia";
-
-                default:
-                    return "other";
-            }
-        }
-    }
+			return behavior;
+		}
+	}
 }

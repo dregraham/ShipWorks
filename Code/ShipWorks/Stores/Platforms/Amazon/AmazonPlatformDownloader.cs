@@ -79,6 +79,11 @@ namespace ShipWorks.Stores.Platforms.Amazon
 
         protected override async Task<OrderEntity> CreateOrder(OrderSourceApiSalesOrder salesOrder)
         {
+            if(salesOrder.Status == OrderSourceSalesOrderStatus.AwaitingPayment)
+            {
+                return null;
+            }
+
             var fulfillmentChannel = GetFulfillmentChannel(salesOrder);
             if (AmazonStore.ExcludeFBA && fulfillmentChannel == AmazonMwsFulfillmentChannel.AFN)
             {
@@ -177,5 +182,24 @@ namespace ShipWorks.Stores.Platforms.Amazon
             log.Warn($"Encountered unmapped status of {salesOrder.Status} for orderId {orderId}.");
             return base.GetOrderStatusString(salesOrder, orderId);
         }
-    }
+
+		/// <summary>
+		/// GetRequestedShipping (in the format we used to get it from MWS "carrier: details")
+		/// </summary
+		protected override string GetRequestedShipping(string shippingService)
+		{
+			if (string.IsNullOrWhiteSpace(shippingService))
+			{
+				return string.Empty;
+			}
+
+			var firstSpace = shippingService.IndexOf(' ');
+			if (firstSpace == -1)
+			{
+				return shippingService;
+			}
+
+			return $"{shippingService.Substring(0, firstSpace)}:{shippingService.Substring(firstSpace)}";
+		}
+	}
 }
