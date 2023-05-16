@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using Interapptive.Shared.ComponentRegistration;
@@ -52,7 +53,7 @@ namespace ShipWorks.Stores.Platforms.ShipEngine
             }
             else
             {
-                returnObject = JsonConvert.DeserializeObject<GetOrdersDTO>(result.Value.Content);
+                returnObject = PlatformHelper.JsonConvertToDto<GetOrdersDTO>(result.Value.Content);
             }
 
             // Make sure the return data isn't null values
