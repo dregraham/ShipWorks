@@ -7,21 +7,21 @@ namespace ShipWorks.Stores.Platforms.Shopify
         public static string GetShopUrl(string shopifyShopUrlName)
             => $"{shopifyShopUrlName}.myshopify.com";
 
-        public static string GetCleanNoteText(string text)
+        public static string[] GetSplitNotes(string text)
         {
             const string breakNode = "<br/>";
-            if (text.Contains(breakNode))
+            if (!string.IsNullOrWhiteSpace(text))
             {
-                var values = text.Split(new[] { breakNode }, StringSplitOptions.None);
-                if (string.IsNullOrWhiteSpace(values[0]) || values[0] == "null")
+                if (text.Contains(breakNode))
                 {
-                    return string.Empty;
+                    var values = text.Split(new[] { breakNode }, StringSplitOptions.None);
+                    return values;
                 }
-                text = values[0];
+
+                return new[] { text };
             }
 
-            return text;
+            return new []{ string.Empty };
         }
-
-}
+    }
 }

@@ -43,6 +43,7 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
             OrderNumberComplete = source.OrderNumberComplete;
             IsManual = source.IsManual;
             OriginalOrderID = source.OriginalOrderID;
+            OriginalChannelOrderID = source.OriginalChannelOrderID;
             
             
             Order = (IOrderEntity) source.Order?.AsReadOnly(objectMap);
@@ -95,6 +96,12 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
         /// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
         public System.Int64 OriginalOrderID { get; }
+        /// <summary> The OriginalChannelOrderID property of the Entity OrderSearch<br/><br/>
+        /// </summary>
+        /// <remarks>Mapped on table field: "OrderSearch"."OriginalChannelOrderID"<br/>
+        /// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 50<br/>
+        /// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+        public System.String OriginalChannelOrderID { get; }
         
         
         public IOrderEntity Order { get; }

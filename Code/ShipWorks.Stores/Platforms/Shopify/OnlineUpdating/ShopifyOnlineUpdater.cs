@@ -146,7 +146,7 @@ namespace ShipWorks.Stores.Platforms.Shopify.OnlineUpdating
 			shipmentType.LoadShipmentData(shipment, true);
 
 			string trackingNumber = string.IsNullOrEmpty(shipment.TrackingNumber) ? "null" : shipment.TrackingNumber;
-			string carrier = GetTrackingCompany(shipment);
+			string carrier = ShopifyPlatformDownloaderBehavior.GetTrackingCompany(shipment);
 			string carrierTrackingUrl = shipmentType.GetCarrierTrackingUrl(shipment);
 
 			// Check the order's online status to see if it's Fulfilled.  If it is, don't try to re-ship it...it will throw an error.
@@ -212,37 +212,7 @@ namespace ShipWorks.Stores.Platforms.Shopify.OnlineUpdating
 			return Result.FromSuccess();
 		}
 
-		/// <summary>
-		/// Gets the tracking company for uploading tracking to Shopify
-		/// </summary>
-		private static string GetTrackingCompany(ShipmentEntity shipment)
-		{
-			if (ShipmentTypeManager.IsPostal(shipment.ShipmentTypeCode))
-			{
-				ShippingManager.EnsureShipmentLoaded(shipment);
-				if (ShipmentTypeManager.IsDhl((PostalServiceType) shipment.Postal.Service))
-				{
-					return "DHL eCommerce";
-				}
-			}
-
-			if (shipment.ShipmentTypeCode == ShipmentTypeCode.Other)
-			{
-				ShippingManager.EnsureShipmentLoaded(shipment);
-				string carrier = shipment.Other.Carrier;
-
-				if (string.IsNullOrWhiteSpace(carrier))
-				{
-					return "Other";
-				}
-
-				return carrier;
-			}
-
-			return ShippingManager.GetCarrierName((ShipmentTypeCode) shipment.ShipmentType);
-		}
-
-		public async Task UploadShipmentDetails(StoreEntity store, List<ShipmentEntity> shipments)
+        public async Task UploadShipmentDetails(StoreEntity store, List<ShipmentEntity> shipments)
 		{
 			foreach (var shipment in shipments)
 			{

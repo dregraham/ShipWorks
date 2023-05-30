@@ -2266,6 +2266,7 @@
           <Field Name="Quantity" Type="double" Precision="29" Scale="9" FieldIndex="15" />
           <Field Name="RowVersion" Type="byte[]" IsReadOnly="true" FieldIndex="1" />
           <Field Name="SKU" Type="string" MaxLength="100" FieldIndex="5" />
+          <Field Name="StoreOrderItemID" Type="string" IsOptional="true" MaxLength="50" FieldIndex="35" />
           <Field Name="Thumbnail" Type="string" MaxLength="2147483647" FieldIndex="11" />
           <Field Name="UnitCost" Type="decimal" Precision="19" Scale="4" FieldIndex="13" />
           <Field Name="UnitPrice" Type="decimal" Precision="19" Scale="4" FieldIndex="12" />
@@ -2322,6 +2323,7 @@
           <Field Name="OrderNumber" Type="long" Precision="19" FieldIndex="3" />
           <Field Name="OrderNumberComplete" Type="string" MaxLength="50" FieldIndex="4" />
           <Field Name="OrderSearchID" Type="long" IsReadOnly="true" Precision="19" IsPrimaryKey="true" FieldIndex="0" />
+          <Field Name="OriginalChannelOrderID" Type="string" IsOptional="true" MaxLength="50" FieldIndex="7" />
           <Field Name="OriginalOrderID" Type="long" Precision="19" FieldIndex="6" />
           <Field Name="StoreID" Type="long" Precision="19" FieldIndex="2" />
         </Fields>
@@ -4843,7 +4845,7 @@
       <Catalogs>
         <Catalog Name="ShipWorksLocal">
           <Schemas>
-            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2023-02-14T05:59:59.0799186Z">
+            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2023-04-25T10:16:00.1073Z">
               <Tables>
                 <Table Name="Action">
                   <PkConstraintName Name="PK_Action" />
@@ -8060,6 +8062,7 @@
                     <Field Name="Custom8" Ordinal="35" HasDefaultValue="true" DefaultValue="''" DbType="12" Length="50" />
                     <Field Name="Custom9" Ordinal="36" HasDefaultValue="true" DefaultValue="''" DbType="12" Length="50" />
                     <Field Name="Custom10" Ordinal="37" HasDefaultValue="true" DefaultValue="''" DbType="12" Length="50" />
+                    <Field Name="StoreOrderItemID" Ordinal="38" IsOptional="true" DbType="12" Length="50" />
                   </Fields>
                 </Table>
                 <Table Name="OrderItemAttribute">
@@ -8124,6 +8127,7 @@
                     <Field Name="OrderNumberComplete" Ordinal="5" DbType="12" Length="50" />
                     <Field Name="IsManual" Ordinal="6" DbType="2" />
                     <Field Name="OriginalOrderID" Ordinal="7" DbType="0" Precision="19" />
+                    <Field Name="OriginalChannelOrderID" Ordinal="8" IsOptional="true" DbType="12" Length="50" />
                   </Fields>
                 </Table>
                 <Table Name="OtherProfile">
@@ -13602,6 +13606,7 @@
             <FieldMapping FieldName="Quantity" TargetFieldName="Quantity" TypeConverterToUse="SD.LLBLGen.Pro.TypeConverters.DoubleDecimalConverter" />
             <FieldMapping FieldName="RowVersion" TargetFieldName="RowVersion" />
             <FieldMapping FieldName="SKU" TargetFieldName="SKU" />
+            <FieldMapping FieldName="StoreOrderItemID" TargetFieldName="StoreOrderItemID" />
             <FieldMapping FieldName="Thumbnail" TargetFieldName="Thumbnail" />
             <FieldMapping FieldName="UnitCost" TargetFieldName="UnitCost" />
             <FieldMapping FieldName="UnitPrice" TargetFieldName="UnitPrice" />
@@ -13660,6 +13665,7 @@
             <FieldMapping FieldName="OrderNumber" TargetFieldName="OrderNumber" />
             <FieldMapping FieldName="OrderNumberComplete" TargetFieldName="OrderNumberComplete" />
             <FieldMapping FieldName="OrderSearchID" TargetFieldName="OrderSearchID" SequenceToUse="SCOPE_IDENTITY()" />
+            <FieldMapping FieldName="OriginalChannelOrderID" TargetFieldName="OriginalChannelOrderID" />
             <FieldMapping FieldName="OriginalOrderID" TargetFieldName="OriginalOrderID" />
             <FieldMapping FieldName="StoreID" TargetFieldName="StoreID" />
           </FieldMappings>

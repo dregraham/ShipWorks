@@ -17,7 +17,6 @@ using ShipWorks.Stores.Communication;
 using ShipWorks.Stores.Content;
 using ShipWorks.Stores.Platforms.Amazon.DTO;
 using ShipWorks.Stores.Platforms.ShipEngine.Apollo;
-using ShipWorks.Stores.Platforms.Shopify;
 
 namespace ShipWorks.Stores.Platforms.ShipEngine
 {
@@ -70,6 +69,7 @@ namespace ShipWorks.Stores.Platforms.ShipEngine
             item.Name = EntitiesDecode(orderItem.Product.Name);
             item.Quantity = orderItem.Quantity;
             item.UnitPrice = orderItem.UnitPrice;
+            item.UPC = orderItem.Product.Identifiers.Upc;
             item.SKU = orderItem.Product.Identifiers.Sku;
             item.Code = item.SKU;
 
@@ -326,23 +326,12 @@ namespace ShipWorks.Stores.Platforms.ShipEngine
         }
 
         /// <summary>
-        /// GetRequestedShipping (in the format we used to get it from MWS "carrier: details")
+        /// GetRequestedShipping, without changes to the value, can be overriden, as is for Amazon
         /// </summary
-        protected string GetRequestedShipping(string shippingService)
-        {
-            if (string.IsNullOrWhiteSpace(shippingService))
-            {
-                return string.Empty;
-            }
-
-            var firstSpace = shippingService.IndexOf(' ');
-            if (firstSpace == -1)
-            {
-                return shippingService;
-            }
-
-            return $"{shippingService.Substring(0, firstSpace)}:{shippingService.Substring(firstSpace)}";
-        }
+        protected virtual string GetRequestedShipping(string shippingService)
+		{
+			return string.IsNullOrWhiteSpace(shippingService) ? string.Empty : shippingService;
+		}
 
         /// <summary>
         /// Start the download from Platform for the Etsy store
@@ -381,7 +370,7 @@ namespace ShipWorks.Stores.Platforms.ShipEngine
                     // progress has to be indicated on each pass since we have 0 idea how many orders exists
                     Progress.PercentComplete = 0;
 
-                    foreach (var salesOrder in result.Orders.Data.Where(x => x.Status != OrderSourceSalesOrderStatus.AwaitingPayment))
+                    foreach (var salesOrder in result.Orders.Data)
                     {
                         await LoadOrder(salesOrder).ConfigureAwait(false);
                     }
@@ -426,83 +415,89 @@ namespace ShipWorks.Stores.Platforms.ShipEngine
         /// Store order in database
         /// </summary>
         private async Task LoadOrder(OrderSourceApiSalesOrder salesOrder)
-		{
-			var order = await CreateOrder(salesOrder);
-			if (order == null)
-			{
-				return;
-			}
+        {
+            var order = await CreateOrder(salesOrder);
+            if (order == null)
+            {
+                return;
+            }
 
-			if (salesOrder.Status == OrderSourceSalesOrderStatus.Cancelled && order.IsNew)
-			{
-				log.InfoFormat("Skipping order '{0}' due to canceled and not yet seen by ShipWorks.", salesOrder.OrderNumber);
-				return;
-			}
+            if (salesOrder.Status == OrderSourceSalesOrderStatus.Cancelled && order.IsNew)
+            {
+                log.InfoFormat("Skipping order '{0}' due to canceled and not yet seen by ShipWorks.", salesOrder.OrderNumber);
+                return;
+            }
 
-			SetChannelOrderID(salesOrder, order);
+            SetChannelOrderID(salesOrder, order);
 
-			var orderDate = salesOrder.CreatedDateTime?.DateTime ?? DateTime.UtcNow;
-			var modifiedDate = salesOrder.ModifiedDateTime?.DateTime ?? DateTime.UtcNow;
+            var orderDate = salesOrder.CreatedDateTime?.DateTime ?? DateTime.UtcNow;
+            var modifiedDate = salesOrder.ModifiedDateTime?.DateTime ?? DateTime.UtcNow;
 
-			//Basic properties
-			order.OrderDate = orderDate;
-			order.OnlineLastModified = modifiedDate >= orderDate ? modifiedDate : orderDate;
+            //Basic properties
+            order.OrderDate = orderDate;
+            order.OnlineLastModified = modifiedDate >= orderDate ? modifiedDate : orderDate;
 
-			// set the status
-			order.OnlineStatus = GetOrderStatusString(salesOrder, order.OrderNumberComplete);
-			order.OnlineStatusCode = GetOrderStatusCode(salesOrder, order.OrderNumberComplete);
+            // set the status
+            order.OnlineStatus = GetOrderStatusString(salesOrder, order.OrderNumberComplete);
+            order.OnlineStatusCode = GetOrderStatusCode(salesOrder, order.OrderNumberComplete);
 
-			SetOnlineCustomerId(order, salesOrder);
+            SetOnlineCustomerId(order, salesOrder);
 
-			// requested shipping
-			order.RequestedShipping =
-				GetRequestedShipping(salesOrder.RequestedFulfillments.FirstOrDefault()?.ShippingPreferences?.ShippingService);
+            // requested shipping
+            order.RequestedShipping =
+                GetRequestedShipping(salesOrder.RequestedFulfillments.FirstOrDefault()?.ShippingPreferences?.ShippingService);
 
-			// Address
-			LoadAddresses(order, salesOrder);
+            // Address
+            LoadAddresses(order, salesOrder);
 
-			// only load order items on new orders
-			if (order.IsNew)
-			{
-				var giftNotes = GetGiftNotes(salesOrder);
-				IEnumerable<CouponCode> couponCodes = GetCouponCodes(salesOrder);
-				foreach (var fulfillment in salesOrder.RequestedFulfillments)
-				{
-					LoadOrderItems(fulfillment, order, giftNotes, couponCodes);
-				}
+            // only load order items on new orders
+            if (order.IsNew)
+            {
+                var giftNotes = GetGiftNotes(salesOrder);
+                IEnumerable<CouponCode> couponCodes = GetCouponCodes(salesOrder);
+                foreach (var fulfillment in salesOrder.RequestedFulfillments)
+                {
+                    LoadOrderItems(fulfillment, order, giftNotes, couponCodes);
+                }
 
-				AddAdjustments(salesOrder, order);
+                AddAdjustments(salesOrder, order);
 
-				AddTaxes(salesOrder, order);
-				AddNotes(salesOrder, giftNotes, order);
+                AddTaxes(salesOrder, order);
+                AddNotes(salesOrder, giftNotes, order);
 
-				// update the total
-				var calculatedTotal = OrderUtility.CalculateTotal(order);
+                // update the total
+                var calculatedTotal = OrderUtility.CalculateTotal(order);
 
-				// get the amount so we can fudge order totals
-				order.OrderTotal = salesOrder.Payment.AmountPaid ?? calculatedTotal;
-			}
+                // get the amount so we can fudge order totals
+                order.OrderTotal = salesOrder.Payment.AmountPaid ?? calculatedTotal;
 
-			// save
-			var retryAdapter = new SqlAdapterRetry<SqlException>(5, -5, "PlatformDownloader.LoadOrder");
-			await retryAdapter.ExecuteWithRetryAsync(() => SaveDownloadedOrder(order)).ConfigureAwait(false);
-		}
+                LoadPaymentDetails(salesOrder, order);
+            }
 
-		protected virtual void SetOnlineCustomerId(OrderEntity order, OrderSourceApiSalesOrder salesOrder)
-		{
-			// no customer ID in this Api - at least according to this comment that was here, there actually is one in salesOrder.Buyer?.BuyerId
-			order.OnlineCustomerID = null;
-		}
+            // save
+            var retryAdapter = new SqlAdapterRetry<SqlException>(5, -5, "PlatformDownloader.LoadOrder");
+            await retryAdapter.ExecuteWithRetryAsync(() => SaveDownloadedOrder(order)).ConfigureAwait(false);
+        }
 
-		/// <summary>
-		/// Adds notes to order entity
-		/// </summary>
-		private async Task AddNotes(OrderSourceApiSalesOrder salesOrder, List<GiftNote> giftNotes, OrderEntity order)
+        protected virtual void LoadPaymentDetails(OrderSourceApiSalesOrder salesOrder, OrderEntity order)
+        {
+        }
+
+        protected virtual void SetOnlineCustomerId(OrderEntity order, OrderSourceApiSalesOrder salesOrder)
+        {
+            // no customer ID in this Api - at least according to this comment that was here, there actually is one in salesOrder.Buyer?.BuyerId
+            order.OnlineCustomerID = null;
+        }
+
+        /// <summary>
+        /// Adds notes to order entity
+        /// </summary>
+        protected virtual async Task AddNotes(OrderSourceApiSalesOrder salesOrder, List<GiftNote> giftNotes, OrderEntity order)
         {
             var notes = salesOrder.Notes.Where(n => n.Type != OrderSourceNoteType.GiftMessage);
             foreach (var note in notes)
             {
-                string noteText = FormatNoteText(note.Text, note.Type);
+                var noteText = FormatNoteText(note.Text, note.Type);
                 var visibility = note.Type == OrderSourceNoteType.InternalNotes ?
                     NoteVisibility.Internal : NoteVisibility.Public;
 
@@ -519,7 +514,7 @@ namespace ShipWorks.Stores.Platforms.ShipEngine
         /// <summary>
         /// Format the note to save
         /// </summary>
-        protected virtual string FormatNoteText(string text, OrderSourceNoteType noteType)
+        protected static string FormatNoteText(string text, OrderSourceNoteType noteType)
         {
             text = WebUtility.HtmlDecode(text);
             if (string.IsNullOrWhiteSpace(text))
@@ -548,7 +543,7 @@ namespace ShipWorks.Stores.Platforms.ShipEngine
         /// <summary>
         /// Adds order adjustment charges to order entity
         /// </summary>
-        private void AddAdjustments(OrderSourceApiSalesOrder salesOrder, OrderEntity order)
+        protected virtual void AddAdjustments(OrderSourceApiSalesOrder salesOrder, OrderEntity order)
         {
             foreach (var orderAdjustment in salesOrder.Payment.Adjustments)
             {

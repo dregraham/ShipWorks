@@ -215,13 +215,13 @@ namespace ShipWorks.Stores.Platforms.Yahoo.ApiIntegration
         /// Get order endpoint
         /// </summary>
         private string YahooOrderEndpoint(IYahooStoreEntity store) => 
-            $"https://order.store.ysbapis.io/V1";
+            $"https://order.store.turbifyapis.io/V1";
 
         /// <summary>
         /// Get catalog endpoint
         /// </summary>
         private string YahooCatalogEndpoint(IYahooStoreEntity store) => 
-            $"https://catalog.store.ysbapis.io/V1";
+            $"https://catalog.store.turbifyapis.io/V1";
 
         /// <summary>
         /// Cleans the response.
