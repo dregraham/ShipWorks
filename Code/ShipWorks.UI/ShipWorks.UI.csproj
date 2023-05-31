@@ -198,7 +198,9 @@
     <Compile Include="Controls\CustomerLicenseActivation\CustomerLicenseActivationControl.xaml.cs">
       <DependentUpon>CustomerLicenseActivationControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Controls\CustomerLicenseActivation\CustomerLicenseActivationControlHost.cs" />
+    <Compile Include="Controls\CustomerLicenseActivation\CustomerLicenseActivationControlHost.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
     <Compile Include="Controls\CustomerLicenseActivation\CustomerLicenseActivationControlHost.Designer.cs">
       <DependentUpon>CustomerLicenseActivationControlHost.cs</DependentUpon>
     </Compile>
@@ -218,7 +220,9 @@
     <Compile Include="Controls\Settings\Api\ApiSettingsControl.xaml.cs">
       <DependentUpon>ApiSettingsControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Controls\Settings\Api\ApiSettingsHost.cs" />
+    <Compile Include="Controls\Settings\Api\ApiSettingsHost.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
     <Compile Include="Controls\Settings\Api\ApiSettingsHost.Designer.cs">
       <DependentUpon>ApiSettingsHost.cs</DependentUpon>
     </Compile>
@@ -230,7 +234,9 @@
     <Compile Include="Controls\Settings\Cubiscan\CubiscanSettingsControl.xaml.cs">
       <DependentUpon>CubiscanSettingsControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Controls\Settings\Cubiscan\CubiscanSettingsHost.cs" />
+    <Compile Include="Controls\Settings\Cubiscan\CubiscanSettingsHost.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
     <Compile Include="Controls\Settings\Cubiscan\CubiscanSettingsHost.Designer.cs">
       <DependentUpon>CubiscanSettingsHost.cs</DependentUpon>
     </Compile>

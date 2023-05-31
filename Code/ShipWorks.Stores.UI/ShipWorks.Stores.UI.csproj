@@ -201,14 +201,18 @@
     <Compile Include="Platforms\Amazon\AmazonAccountSettings.xaml.cs">
       <DependentUpon>AmazonAccountSettings.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Platforms\Amazon\AmazonAccountSettingsControl.cs" />
+    <Compile Include="Platforms\Amazon\AmazonAccountSettingsControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
     <Compile Include="Platforms\Amazon\AmazonAccountSettingsControl.Designer.cs">
       <DependentUpon>AmazonAccountSettingsControl.cs</DependentUpon>
     </Compile>
     <Compile Include="Platforms\Amazon\AmazonCreateOrderSource.xaml.cs">
       <DependentUpon>AmazonCreateOrderSource.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Platforms\Amazon\AmazonCreateOrderSourceWizardPage.cs" />
+    <Compile Include="Platforms\Amazon\AmazonCreateOrderSourceWizardPage.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
     <Compile Include="Platforms\Amazon\AmazonCreateOrderSourceWizardPage.Designer.cs">
       <DependentUpon>AmazonCreateOrderSourceWizardPage.cs</DependentUpon>
     </Compile>
@@ -216,76 +220,106 @@
       <DependentUpon>EtsyAccountSettings.xaml</DependentUpon>
     </Compile>
     <Compile Include="Platforms\Etsy\EtsyAccountSettingsControlFactory.cs" />
-    <Compile Include="Platforms\Etsy\EtsyAccountSettingsMigrationControl.cs" />
+    <Compile Include="Platforms\Etsy\EtsyAccountSettingsMigrationControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
     <Compile Include="Platforms\Etsy\EtsyAccountSettingsMigrationControl.Designer.cs">
       <DependentUpon>EtsyAccountSettingsMigrationControl.cs</DependentUpon>
     </Compile>
-    <Compile Include="Platforms\Etsy\EtsyAccountSettingsControl.cs" />
+    <Compile Include="Platforms\Etsy\EtsyAccountSettingsControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
     <Compile Include="Platforms\Etsy\EtsyAccountSettingsControl.Designer.cs">
       <DependentUpon>EtsyAccountSettingsControl.cs</DependentUpon>
     </Compile>
     <Compile Include="Platforms\Etsy\EtsyCreateOrderSource.xaml.cs">
       <DependentUpon>EtsyCreateOrderSource.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Platforms\Etsy\EtsyCreateOrderSourceWizardPage.cs" />
+    <Compile Include="Platforms\Etsy\EtsyCreateOrderSourceWizardPage.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
     <Compile Include="Platforms\Etsy\EtsyCreateOrderSourceWizardPage.Designer.cs">
       <DependentUpon>EtsyCreateOrderSourceWizardPage.cs</DependentUpon>
     </Compile>
     <Compile Include="Platforms\Etsy\EtsyDaysBack.xaml.cs">
       <DependentUpon>EtsyDaysBack.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Platforms\Etsy\EtsyDaysBackWizardPage.cs" />
+    <Compile Include="Platforms\Etsy\EtsyDaysBackWizardPage.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
     <Compile Include="Platforms\Etsy\EtsyDaysBackWizardPage.Designer.cs">
       <DependentUpon>EtsyDaysBackWizardPage.cs</DependentUpon>
     </Compile>
-    <Compile Include="Platforms\Platform\PlatformAccountSettingsControl.cs" />
+    <Compile Include="Platforms\Platform\PlatformAccountSettingsControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
     <Compile Include="Platforms\Platform\PlatformAccountSettingsControl.Designer.cs">
       <DependentUpon>PlatformAccountSettingsControl.cs</DependentUpon>
     </Compile>
     <Compile Include="Platforms\BigCommerce\BigCommerceAccountSettings.xaml.cs">
       <DependentUpon>BigCommerceAccountSettings.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Platforms\BigCommerce\BigCommerceAccountSettingsControl.cs" />
+    <Compile Include="Platforms\BigCommerce\BigCommerceAccountSettingsControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
     <Compile Include="Platforms\BigCommerce\BigCommerceAccountSettingsControl.Designer.cs">
       <DependentUpon>BigCommerceAccountSettingsControl.cs</DependentUpon>
     </Compile>
-    <Compile Include="Platforms\BigCommerce\BigCommerceAllStoreSettingsControl.cs" />
+    <Compile Include="Platforms\BigCommerce\BigCommerceAllStoreSettingsControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
     <Compile Include="Platforms\BigCommerce\BigCommerceAllStoreSettingsControl.Designer.cs">
       <DependentUpon>BigCommerceAllStoreSettingsControl.cs</DependentUpon>
     </Compile>
-    <Compile Include="Platforms\BigCommerce\BigCommerceDownloadCriteriaControl.cs" />
+    <Compile Include="Platforms\BigCommerce\BigCommerceDownloadCriteriaControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
     <Compile Include="Platforms\BigCommerce\BigCommerceLegacyAccountSettings.xaml.cs">
       <DependentUpon>BigCommerceLegacyAccountSettings.xaml</DependentUpon>
     </Compile>
     <Compile Include="Platforms\BigCommerce\BigCommerceOAuthAccountSettings.xaml.cs">
       <DependentUpon>BigCommerceOAuthAccountSettings.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Platforms\BigCommerce\BigCommerceStoreSettingsControl.cs" />
+    <Compile Include="Platforms\BigCommerce\BigCommerceStoreSettingsControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
     <Compile Include="Platforms\BigCommerce\BigCommerceStoreSettingsControl.Designer.cs">
       <DependentUpon>BigCommerceStoreSettingsControl.cs</DependentUpon>
     </Compile>
     <Compile Include="Platforms\BigCommerce\CoreExtensions\Actions\BigCommerceOrderUpdateEditorFactory.cs" />
-    <Compile Include="Platforms\BigCommerce\CoreExtensions\Actions\BigCommerceOrderUpdateTaskEditor.cs" />
+    <Compile Include="Platforms\BigCommerce\CoreExtensions\Actions\BigCommerceOrderUpdateTaskEditor.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
     <Compile Include="Platforms\BigCommerce\CoreExtensions\Actions\BigCommerceOrderUpdateTaskEditor.Designer.cs">
       <DependentUpon>BigCommerceOrderUpdateTaskEditor.cs</DependentUpon>
     </Compile>
-    <Compile Include="Platforms\BigCommerce\WizardPages\BigCommerceAccountPage.cs" />
+    <Compile Include="Platforms\BigCommerce\WizardPages\BigCommerceAccountPage.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
     <Compile Include="Platforms\BigCommerce\WizardPages\BigCommerceAccountPage.Designer.cs">
       <DependentUpon>BigCommerceAccountPage.cs</DependentUpon>
     </Compile>
-    <Compile Include="Platforms\BigCommerce\WizardPages\BigCommerceOnlineUpdateActionControl.cs" />
+    <Compile Include="Platforms\BigCommerce\WizardPages\BigCommerceOnlineUpdateActionControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
     <Compile Include="Platforms\BigCommerce\WizardPages\BigCommerceOnlineUpdateActionControl.Designer.cs">
       <DependentUpon>BigCommerceOnlineUpdateActionControl.cs</DependentUpon>
     </Compile>
-    <Compile Include="Platforms\BigCommerce\WizardPages\BigCommerceStoreSettingsPage.cs" />
+    <Compile Include="Platforms\BigCommerce\WizardPages\BigCommerceStoreSettingsPage.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
     <Compile Include="Platforms\BigCommerce\WizardPages\BigCommerceStoreSettingsPage.Designer.cs">
       <DependentUpon>BigCommerceStoreSettingsPage.cs</DependentUpon>
     </Compile>
-    <Compile Include="Platforms\ChannelAdvisor\ChannelAdvisorExcludeFbaWizardPage.cs" />
+    <Compile Include="Platforms\ChannelAdvisor\ChannelAdvisorExcludeFbaWizardPage.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
     <Compile Include="Platforms\ChannelAdvisor\ChannelAdvisorExcludeFbaWizardPage.designer.cs">
       <DependentUpon>ChannelAdvisorExcludeFbaWizardPage.cs</DependentUpon>
     </Compile>
-    <Compile Include="Platforms\ChannelAdvisor\ChannelAdvisorAccountSettingsControl.cs" />
+    <Compile Include="Platforms\ChannelAdvisor\ChannelAdvisorAccountSettingsControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
     <Compile Include="Platforms\ChannelAdvisor\ChannelAdvisorAccountSettingsControl.Designer.cs">
       <DependentUpon>ChannelAdvisorAccountSettingsControl.cs</DependentUpon>
     </Compile>
@@ -299,11 +333,15 @@
     <Compile Include="Platforms\ChannelAdvisor\ChannelAdvisorRestAccountSettingsControl.Designer.cs">
       <DependentUpon>ChannelAdvisorRestAccountSettingsControl.cs</DependentUpon>
     </Compile>
-    <Compile Include="Platforms\ChannelAdvisor\ChannelAdvisorSoapAccountSettingsControl.cs" />
+    <Compile Include="Platforms\ChannelAdvisor\ChannelAdvisorSoapAccountSettingsControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
     <Compile Include="Platforms\ChannelAdvisor\ChannelAdvisorSoapAccountSettingsControl.Designer.cs">
       <DependentUpon>ChannelAdvisorSoapAccountSettingsControl.cs</DependentUpon>
     </Compile>
-    <Compile Include="Platforms\ChannelAdvisor\ChannelAdvisorStoreSetupControlHost.cs" />
+    <Compile Include="Platforms\ChannelAdvisor\ChannelAdvisorStoreSetupControlHost.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
     <Compile Include="Platforms\ChannelAdvisor\ChannelAdvisorStoreSetupControlHost.Designer.cs">
       <DependentUpon>ChannelAdvisorStoreSetupControlHost.cs</DependentUpon>
     </Compile>
@@ -312,41 +350,57 @@
     <Compile Include="Platforms\GenericFile\GenericStoreHubControl.xaml.cs">
       <DependentUpon>GenericStoreHubControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Platforms\GenericFile\GenericStoreHubPage.cs" />
+    <Compile Include="Platforms\GenericFile\GenericStoreHubPage.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
     <Compile Include="Platforms\GenericFile\GenericStoreHubPage.Designer.cs">
       <DependentUpon>GenericStoreHubPage.cs</DependentUpon>
     </Compile>
     <Compile Include="Platforms\GenericFile\GenericStoreHubViewModel.cs" />
-    <Compile Include="Platforms\GenericModule\GenericModuleStoreSettingsControl.cs" />
+    <Compile Include="Platforms\GenericModule\GenericModuleStoreSettingsControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
     <Compile Include="Platforms\GenericModule\GenericModuleStoreSettingsControl.Designer.cs">
       <DependentUpon>GenericModuleStoreSettingsControl.cs</DependentUpon>
     </Compile>
     <Compile Include="Platforms\Jet\JetStoreSetupControl.xaml.cs">
       <DependentUpon>JetStoreSetupControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Platforms\Jet\JetStoreSetupControlHost.cs" />
+    <Compile Include="Platforms\Jet\JetStoreSetupControlHost.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
     <Compile Include="Platforms\Jet\JetStoreSetupControlHost.Designer.cs">
       <DependentUpon>JetStoreSetupControlHost.cs</DependentUpon>
     </Compile>
     <Compile Include="Platforms\Jet\JetStoreSetupControlViewModel.cs" />
-    <Compile Include="Platforms\Jet\JetAccountSettingsControlHost.cs" />
+    <Compile Include="Platforms\Jet\JetAccountSettingsControlHost.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
     <Compile Include="Platforms\Jet\JetAccountSettingsControlHost.Designer.cs">
       <DependentUpon>JetAccountSettingsControlHost.cs</DependentUpon>
     </Compile>
-    <Compile Include="Platforms\LemonStand\LemonStandOrderUpdateTaskEditor.cs" />
+    <Compile Include="Platforms\LemonStand\LemonStandOrderUpdateTaskEditor.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
     <Compile Include="Platforms\LemonStand\LemonStandOrderUpdateTaskEditor.Designer.cs">
       <DependentUpon>LemonStandOrderUpdateTaskEditor.cs</DependentUpon>
     </Compile>
-    <Compile Include="Platforms\LemonStand\LemonStandOnlineUpdateActionControl.cs" />
+    <Compile Include="Platforms\LemonStand\LemonStandOnlineUpdateActionControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
     <Compile Include="Platforms\LemonStand\LemonStandOnlineUpdateActionControl.Designer.cs">
       <DependentUpon>LemonStandOnlineUpdateActionControl.cs</DependentUpon>
     </Compile>
-    <Compile Include="Platforms\LemonStand\LemonStandAccountSettingsControl.cs" />
+    <Compile Include="Platforms\LemonStand\LemonStandAccountSettingsControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
     <Compile Include="Platforms\LemonStand\LemonStandAccountSettingsControl.Designer.cs">
       <DependentUpon>LemonStandAccountSettingsControl.cs</DependentUpon>
     </Compile>
     <Compile Include="Platforms\LemonStand\LemonStandStoreModule.cs" />
-    <Compile Include="Platforms\LemonStand\WizardPages\LemonStandAccountPage.cs" />
+    <Compile Include="Platforms\LemonStand\WizardPages\LemonStandAccountPage.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
     <Compile Include="Platforms\LemonStand\WizardPages\LemonStandAccountPage.Designer.cs">
       <DependentUpon>LemonStandAccountPage.cs</DependentUpon>
     </Compile>
@@ -355,7 +409,9 @@
       <DependentUpon>MagentoAccountSettingsControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="Platforms\Magento\MagentoAccountSettingsControlViewModel.cs" />
-    <Compile Include="Platforms\Magento\MagentoAccountSettingsHost.cs" />
+    <Compile Include="Platforms\Magento\MagentoAccountSettingsHost.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
     <Compile Include="Platforms\Magento\MagentoAccountSettingsHost.Designer.cs">
       <DependentUpon>MagentoAccountSettingsHost.cs</DependentUpon>
     </Compile>
@@ -363,7 +419,9 @@
     <Compile Include="Platforms\Magento\WizardPages\MagentoStoreSetupControl.xaml.cs">
       <DependentUpon>MagentoStoreSetupControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Platforms\Magento\WizardPages\MagentoStoreSetupPage.cs" />
+    <Compile Include="Platforms\Magento\WizardPages\MagentoStoreSetupPage.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
     <Compile Include="Platforms\Magento\WizardPages\MagentoStoreSetupPage.Designer.cs">
       <DependentUpon>MagentoStoreSetupPage.cs</DependentUpon>
     </Compile>
@@ -387,7 +445,9 @@
     <Compile Include="Platforms\Odbc\Controls\Import\OdbcImportSubqueryControl.xaml.cs">
       <DependentUpon>OdbcImportSubqueryControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Platforms\Odbc\Controls\OdbcConnectionSettingsControl.cs" />
+    <Compile Include="Platforms\Odbc\Controls\OdbcConnectionSettingsControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
     <Compile Include="Platforms\Odbc\Controls\OdbcConnectionSettingsControl.Designer.cs">
       <DependentUpon>OdbcConnectionSettingsControl.cs</DependentUpon>
     </Compile>
@@ -409,7 +469,9 @@
     <Compile Include="Platforms\Odbc\Controls\OdbcOnDemandDownloadSettingsControl.Designer.cs">
       <DependentUpon>OdbcOnDemandDownloadSettingsControl.cs</DependentUpon>
     </Compile>
-    <Compile Include="Platforms\Odbc\Controls\OdbcSettingsWizard.cs" />
+    <Compile Include="Platforms\Odbc\Controls\OdbcSettingsWizard.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="Platforms\Odbc\Controls\OdbcSettingsWizard.Designer.cs">
       <DependentUpon>OdbcSettingsWizard.cs</DependentUpon>
     </Compile>
@@ -439,84 +501,120 @@
     <Compile Include="Platforms\Odbc\ViewModels\Upload\IOdbcUploadMappingControlViewModel.cs" />
     <Compile Include="Platforms\Odbc\ViewModels\Upload\OdbcUploadMappingControlViewModel.cs" />
     <Compile Include="Platforms\Odbc\ViewModels\Upload\OdbcUploadMapSettingsControlViewModel.cs" />
-    <Compile Include="Platforms\Odbc\WizardPages\Import\OdbcImportDataSourcePage.cs" />
+    <Compile Include="Platforms\Odbc\WizardPages\Import\OdbcImportDataSourcePage.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
     <Compile Include="Platforms\Odbc\WizardPages\Import\OdbcImportDataSourcePage.Designer.cs">
       <DependentUpon>OdbcImportDataSourcePage.cs</DependentUpon>
     </Compile>
-    <Compile Include="Platforms\Odbc\WizardPages\Import\OdbcImportMappingPage.cs" />
+    <Compile Include="Platforms\Odbc\WizardPages\Import\OdbcImportMappingPage.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
     <Compile Include="Platforms\Odbc\WizardPages\Import\OdbcImportMappingPage.Designer.cs">
       <DependentUpon>OdbcImportMappingPage.cs</DependentUpon>
     </Compile>
-    <Compile Include="Platforms\Odbc\WizardPages\Import\OdbcImportMapSettingsPage.cs" />
+    <Compile Include="Platforms\Odbc\WizardPages\Import\OdbcImportMapSettingsPage.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
     <Compile Include="Platforms\Odbc\WizardPages\Import\OdbcImportMapSettingsPage.Designer.cs">
       <DependentUpon>OdbcImportMapSettingsPage.cs</DependentUpon>
     </Compile>
-    <Compile Include="Platforms\Odbc\WizardPages\Import\OdbcImportParameterizedQueryPage.cs" />
+    <Compile Include="Platforms\Odbc\WizardPages\Import\OdbcImportParameterizedQueryPage.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
     <Compile Include="Platforms\Odbc\WizardPages\Import\OdbcImportParameterizedQueryPage.Designer.cs">
       <DependentUpon>OdbcImportParameterizedQueryPage.cs</DependentUpon>
     </Compile>
-    <Compile Include="Platforms\Odbc\WizardPages\Import\OdbcImportSubqueryPage.cs" />
+    <Compile Include="Platforms\Odbc\WizardPages\Import\OdbcImportSubqueryPage.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
     <Compile Include="Platforms\Odbc\WizardPages\Import\OdbcImportSubqueryPage.Designer.cs">
       <DependentUpon>OdbcImportSubqueryPage.cs</DependentUpon>
     </Compile>
-    <Compile Include="Platforms\Odbc\WizardPages\OdbcHubPage.cs" />
+    <Compile Include="Platforms\Odbc\WizardPages\OdbcHubPage.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
     <Compile Include="Platforms\Odbc\WizardPages\OdbcHubPage.Designer.cs">
       <DependentUpon>OdbcHubPage.cs</DependentUpon>
     </Compile>
-    <Compile Include="Platforms\Odbc\WizardPages\OdbcSetupFinishPage.cs" />
+    <Compile Include="Platforms\Odbc\WizardPages\OdbcSetupFinishPage.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
     <Compile Include="Platforms\Odbc\WizardPages\OdbcSetupFinishPage.Designer.cs">
       <DependentUpon>OdbcSetupFinishPage.cs</DependentUpon>
     </Compile>
-    <Compile Include="Platforms\Odbc\WizardPages\Upload\OdbcUploadDataSourcePage.cs" />
+    <Compile Include="Platforms\Odbc\WizardPages\Upload\OdbcUploadDataSourcePage.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
     <Compile Include="Platforms\Odbc\WizardPages\Upload\OdbcUploadDataSourcePage.Designer.cs">
       <DependentUpon>OdbcUploadDataSourcePage.cs</DependentUpon>
     </Compile>
-    <Compile Include="Platforms\Odbc\WizardPages\Upload\OdbcUploadMappingPage.cs" />
+    <Compile Include="Platforms\Odbc\WizardPages\Upload\OdbcUploadMappingPage.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
     <Compile Include="Platforms\Odbc\WizardPages\Upload\OdbcUploadMappingPage.Designer.cs">
       <DependentUpon>OdbcUploadMappingPage.cs</DependentUpon>
     </Compile>
-    <Compile Include="Platforms\Odbc\WizardPages\Upload\OdbcUploadMapSettingsPage.cs" />
+    <Compile Include="Platforms\Odbc\WizardPages\Upload\OdbcUploadMapSettingsPage.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
     <Compile Include="Platforms\Odbc\WizardPages\Upload\OdbcUploadMapSettingsPage.Designer.cs">
       <DependentUpon>OdbcUploadMapSettingsPage.cs</DependentUpon>
     </Compile>
-    <Compile Include="Platforms\Odbc\WizardPages\Upload\OdbcUploadShipmentStrategyPage.cs" />
+    <Compile Include="Platforms\Odbc\WizardPages\Upload\OdbcUploadShipmentStrategyPage.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
     <Compile Include="Platforms\Odbc\WizardPages\Upload\OdbcUploadShipmentStrategyPage.Designer.cs">
       <DependentUpon>OdbcUploadShipmentStrategyPage.cs</DependentUpon>
     </Compile>
-    <Compile Include="Platforms\Overstock\OverstockAccountSettingsControlHost.cs" />
+    <Compile Include="Platforms\Overstock\OverstockAccountSettingsControlHost.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
     <Compile Include="Platforms\Overstock\OverstockAccountSettingsControlHost.Designer.cs">
       <DependentUpon>OverstockAccountSettingsControlHost.cs</DependentUpon>
     </Compile>
     <Compile Include="Platforms\Overstock\OverstockStoreSetupControl.xaml.cs">
       <DependentUpon>OverstockStoreSetupControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Platforms\Overstock\OverstockStoreSetupControlHost.cs" />
+    <Compile Include="Platforms\Overstock\OverstockStoreSetupControlHost.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
     <Compile Include="Platforms\Overstock\OverstockStoreSetupControlHost.Designer.cs">
       <DependentUpon>OverstockStoreSetupControlHost.cs</DependentUpon>
     </Compile>
     <Compile Include="Platforms\Overstock\OverstockStoreSetupControlViewModel.cs" />
-    <Compile Include="Platforms\Rakuten\RakutenAccountSettingsControlHost.cs" />
+    <Compile Include="Platforms\Rakuten\RakutenAccountSettingsControlHost.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
     <Compile Include="Platforms\Rakuten\RakutenAccountSettingsControlHost.Designer.cs">
       <DependentUpon>RakutenAccountSettingsControlHost.cs</DependentUpon>
     </Compile>
     <Compile Include="Platforms\Rakuten\RakutenStoreSetupControl.xaml.cs">
       <DependentUpon>RakutenStoreSetupControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Platforms\Rakuten\RakutenStoreSetupControlHost.cs" />
+    <Compile Include="Platforms\Rakuten\RakutenStoreSetupControlHost.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
     <Compile Include="Platforms\Rakuten\RakutenStoreSetupControlHost.Designer.cs">
       <DependentUpon>RakutenStoreSetupControlHost.cs</DependentUpon>
     </Compile>
     <Compile Include="Platforms\Rakuten\RakutenStoreSetupControlViewModel.cs" />
-    <Compile Include="Platforms\Shopify\ShopifyAccountSettingsControl.cs" />
+    <Compile Include="Platforms\Shopify\ShopifyAccountSettingsControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
     <Compile Include="Platforms\Shopify\ShopifyAccountSettingsControl.Designer.cs">
       <DependentUpon>ShopifyAccountSettingsControl.cs</DependentUpon>
     </Compile>
-    <Compile Include="Platforms\Shopify\ShopifyAccountSettingsMigrationControl.cs" />
+    <Compile Include="Platforms\Shopify\ShopifyAccountSettingsMigrationControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
     <Compile Include="Platforms\Shopify\ShopifyAccountSettingsMigrationControl.Designer.cs">
       <DependentUpon>ShopifyAccountSettingsMigrationControl.cs</DependentUpon>
     </Compile>
     <Compile Include="Platforms\Shopify\ShopifyAccountSettingsControlFactory.cs" />
-    <Compile Include="Platforms\Shopify\ShopifyDaysBackWizardPage.cs" />
+    <Compile Include="Platforms\Shopify\ShopifyDaysBackWizardPage.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
     <Compile Include="Platforms\Shopify\ShopifyDaysBackWizardPage.Designer.cs">
       <DependentUpon>ShopifyDaysBackWizardPage.cs</DependentUpon>
     </Compile>
@@ -526,7 +624,9 @@
     <Compile Include="Platforms\Shopify\ShopifyDaysBack.xaml.cs">
       <DependentUpon>ShopifyDaysBack.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Platforms\Shopify\ShopifyCreateOrderSourceWizardPage.cs" />
+    <Compile Include="Platforms\Shopify\ShopifyCreateOrderSourceWizardPage.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
     <Compile Include="Platforms\Shopify\ShopifyCreateOrderSourceWizardPage.Designer.cs">
       <DependentUpon>ShopifyCreateOrderSourceWizardPage.cs</DependentUpon>
     </Compile>
@@ -539,7 +639,9 @@
     <Compile Include="Platforms\ShopSite\ShopSiteAccountSettings.xaml.cs">
       <DependentUpon>ShopSiteAccountSettings.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Platforms\ShopSite\ShopSiteAccountSettingsControl.cs" />
+    <Compile Include="Platforms\ShopSite\ShopSiteAccountSettingsControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
     <Compile Include="Platforms\ShopSite\ShopSiteAccountSettingsControl.Designer.cs">
       <DependentUpon>ShopSiteAccountSettingsControl.cs</DependentUpon>
     </Compile>
@@ -549,25 +651,35 @@
     <Compile Include="Platforms\ShopSite\ShopSiteLegacyAccountSettings.xaml.cs">
       <DependentUpon>ShopSiteLegacyAccountSettings.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Platforms\ShopSite\WizardPages\ShopSiteAccountPage.cs" />
+    <Compile Include="Platforms\ShopSite\WizardPages\ShopSiteAccountPage.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
     <Compile Include="Platforms\ShopSite\WizardPages\ShopSiteAccountPage.Designer.cs">
       <DependentUpon>ShopSiteAccountPage.cs</DependentUpon>
     </Compile>
-    <Compile Include="Platforms\SparkPay\SparkPaySettingsControl.cs" />
+    <Compile Include="Platforms\SparkPay\SparkPaySettingsControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
     <Compile Include="Platforms\SparkPay\SparkPaySettingsControl.Designer.cs">
       <DependentUpon>SparkPaySettingsControl.cs</DependentUpon>
     </Compile>
-    <Compile Include="Platforms\SparkPay\SparkPayOrderUpdateTaskEditor.cs" />
+    <Compile Include="Platforms\SparkPay\SparkPayOrderUpdateTaskEditor.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
     <Compile Include="Platforms\SparkPay\SparkPayOrderUpdateTaskEditor.Designer.cs">
       <DependentUpon>SparkPayOrderUpdateTaskEditor.cs</DependentUpon>
     </Compile>
-    <Compile Include="Platforms\SparkPay\SparkPayOnlineUpdateActionControl.cs" />
+    <Compile Include="Platforms\SparkPay\SparkPayOnlineUpdateActionControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
     <Compile Include="Platforms\SparkPay\SparkPayOnlineUpdateActionControl.Designer.cs">
       <DependentUpon>SparkPayOnlineUpdateActionControl.cs</DependentUpon>
     </Compile>
     <Compile Include="Platforms\SparkPay\SparkPayStoreModule.cs" />
     <Compile Include="Platforms\SparkPay\WizardPages\ISparkPayAccountViewModel.cs" />
-    <Compile Include="Platforms\SparkPay\WizardPages\SparkPayAccountHost.cs" />
+    <Compile Include="Platforms\SparkPay\WizardPages\SparkPayAccountHost.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
     <Compile Include="Platforms\SparkPay\WizardPages\SparkPayAccountHost.Designer.cs">
       <DependentUpon>SparkPayAccountHost.cs</DependentUpon>
     </Compile>
@@ -576,16 +688,22 @@
     </Compile>
     <Compile Include="Platforms\SparkPay\WizardPages\SparkPayAccountViewModel.cs" />
     <Compile Include="Platforms\Odbc\OdbcStoreModule.cs" />
-    <Compile Include="Platforms\Walmart\WalmartAccountSettingsControlHost.cs" />
+    <Compile Include="Platforms\Walmart\WalmartAccountSettingsControlHost.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
     <Compile Include="Platforms\Walmart\WalmartAccountSettingsControlHost.Designer.cs">
       <DependentUpon>WalmartAccountSettingsControlHost.cs</DependentUpon>
     </Compile>
-    <Compile Include="Platforms\Walmart\WalmartStoreSettingsControl.cs" />
+    <Compile Include="Platforms\Walmart\WalmartStoreSettingsControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
     <Compile Include="Platforms\Walmart\WizardPages\IWalmartStoreSetupControlViewModel.cs" />
     <Compile Include="Platforms\Walmart\WizardPages\WalmartStoreSetupControl.xaml.cs">
       <DependentUpon>WalmartStoreSetupControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Platforms\Walmart\WizardPages\WalmartStoreSetupControlHost.cs" />
+    <Compile Include="Platforms\Walmart\WizardPages\WalmartStoreSetupControlHost.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
     <Compile Include="Platforms\Walmart\WizardPages\WalmartStoreSetupControlHost.Designer.cs">
       <DependentUpon>WalmartStoreSetupControlHost.cs</DependentUpon>
     </Compile>
@@ -593,7 +711,9 @@
     <Compile Include="Platforms\Yahoo\ApiIntegration\WizardPages\YahooApiAccountPage.xaml.cs">
       <DependentUpon>YahooApiAccountPage.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Platforms\Yahoo\ApiIntegration\WizardPages\YahooApiAccountPageHost.cs" />
+    <Compile Include="Platforms\Yahoo\ApiIntegration\WizardPages\YahooApiAccountPageHost.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
     <Compile Include="Platforms\Yahoo\ApiIntegration\WizardPages\YahooApiAccountPageHost.Designer.cs">
       <DependentUpon>YahooApiAccountPageHost.cs</DependentUpon>
     </Compile>
@@ -602,7 +722,9 @@
     <Compile Include="Platforms\Yahoo\ApiIntegration\YahooApiAccountSettings.xaml.cs">
       <DependentUpon>YahooApiAccountSettings.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Platforms\Yahoo\ApiIntegration\YahooApiAccountSettingsHost.cs" />
+    <Compile Include="Platforms\Yahoo\ApiIntegration\YahooApiAccountSettingsHost.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
     <Compile Include="Platforms\Yahoo\ApiIntegration\YahooApiAccountSettingsHost.Designer.cs">
       <DependentUpon>YahooApiAccountSettingsHost.cs</DependentUpon>
     </Compile>

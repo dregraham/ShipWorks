@@ -393,7 +393,9 @@
     <Compile Include="OrderLookupShipmentModel.cs" />
     <Compile Include="OrderLookupViewModelBase.cs" />
     <Compile Include="PreviousProcessedShipmentDetails.cs" />
-    <Compile Include="ShipmentHistory\Controls\ShipmentHistoryGrid.cs" />
+    <Compile Include="ShipmentHistory\Controls\ShipmentHistoryGrid.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
     <Compile Include="ShipmentHistory\Controls\ShipmentHistoryPanel.cs">
       <SubType>UserControl</SubType>
     </Compile>
