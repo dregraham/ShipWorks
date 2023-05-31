@@ -178,15 +178,11 @@
     <Compile Include="Carriers\Amazon\SFP\Terms\AmazonSfpTermsDialog.xaml.cs">
       <DependentUpon>AmazonSfpTermsDialog.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Carriers\DhlEcommerce\DhlEcommerceCustomsControl.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
+    <Compile Include="Carriers\DhlEcommerce\DhlEcommerceCustomsControl.cs" />
     <Compile Include="Carriers\DhlEcommerce\DhlEcommerceCustomsControl.Designer.cs">
       <DependentUpon>DhlEcommerceCustomsControl.cs</DependentUpon>
     </Compile>
-    <Compile Include="Carriers\DhlEcommerce\DhlEcommerceServiceControl.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
+    <Compile Include="Carriers\DhlEcommerce\DhlEcommerceServiceControl.cs" />
     <Compile Include="Carriers\DhlEcommerce\DhlEcommerceServiceControl.Designer.cs">
       <DependentUpon>DhlEcommerceServiceControl.cs</DependentUpon>
     </Compile>
@@ -196,18 +192,12 @@
     <Compile Include="Carriers\DhlEcommerce\DhlEcommerceAccountEditorDlg.Designer.cs">
       <DependentUpon>DhlEcommerceAccountEditorDlg.cs</DependentUpon>
     </Compile>
-    <Compile Include="Carriers\DhlEcommerce\DhlEcommerceServicePickerControl.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Carriers\DhlEcommerce\DhlEcommerceSettingsControl.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
+    <Compile Include="Carriers\DhlEcommerce\DhlEcommerceServicePickerControl.cs" />
+    <Compile Include="Carriers\DhlEcommerce\DhlEcommerceSettingsControl.cs" />
     <Compile Include="Carriers\DhlEcommerce\DhlEcommerceSettingsControl.Designer.cs">
       <DependentUpon>DhlEcommerceSettingsControl.cs</DependentUpon>
     </Compile>
-    <Compile Include="Carriers\DhlEcommerce\DhlEcommerceSetupWizard.cs">
-      <SubType>Form</SubType>
-    </Compile>
+    <Compile Include="Carriers\DhlEcommerce\DhlEcommerceSetupWizard.cs" />
     <Compile Include="Carriers\DhlEcommerce\DhlEcommerceSetupWizard.Designer.cs">
       <DependentUpon>DhlEcommerceSetupWizard.cs</DependentUpon>
     </Compile>
@@ -217,9 +207,7 @@
     <Compile Include="Carriers\DhlEcommerce\DhlEcommerceOptionsControl.Designer.cs">
       <DependentUpon>DhlEcommerceOptionsControl.cs</DependentUpon>
     </Compile>
-    <Compile Include="Carriers\DhlEcommerce\DhlEcommerceProfileControl.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
+    <Compile Include="Carriers\DhlEcommerce\DhlEcommerceProfileControl.cs" />
     <Compile Include="Carriers\DhlEcommerce\DhlEcommerceProfileControl.Designer.cs">
       <DependentUpon>DhlEcommerceProfileControl.cs</DependentUpon>
     </Compile>
@@ -234,30 +222,20 @@
     <Compile Include="Carriers\Amazon\SWA\AmazonSWAAccountEditorDlg.Designer.cs">
       <DependentUpon>AmazonSWAAccountEditorDlg.cs</DependentUpon>
     </Compile>
-    <Compile Include="Carriers\Amazon\SWA\AmazonSWAProfileControl.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
+    <Compile Include="Carriers\Amazon\SWA\AmazonSWAProfileControl.cs" />
     <Compile Include="Carriers\Amazon\SWA\AmazonSWAProfileControl.Designer.cs">
       <DependentUpon>AmazonSWAProfileControl.cs</DependentUpon>
     </Compile>
-    <Compile Include="Carriers\Amazon\SWA\AmazonSWAServiceControl.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
+    <Compile Include="Carriers\Amazon\SWA\AmazonSWAServiceControl.cs" />
     <Compile Include="Carriers\Amazon\SWA\AmazonSWAServiceControl.Designer.cs">
       <DependentUpon>AmazonSWAServiceControl.cs</DependentUpon>
     </Compile>
-    <Compile Include="Carriers\Amazon\SWA\AmazonSWAServicePickerControl.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Carriers\Amazon\SWA\AmazonSWASettingsControl.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
+    <Compile Include="Carriers\Amazon\SWA\AmazonSWAServicePickerControl.cs" />
+    <Compile Include="Carriers\Amazon\SWA\AmazonSWASettingsControl.cs" />
     <Compile Include="Carriers\Amazon\SWA\AmazonSWASettingsControl.Designer.cs">
       <DependentUpon>AmazonSWASettingsControl.cs</DependentUpon>
     </Compile>
-    <Compile Include="Carriers\Amazon\SWA\AmazonSWASetupWizard.cs">
-      <SubType>Form</SubType>
-    </Compile>
+    <Compile Include="Carriers\Amazon\SWA\AmazonSWASetupWizard.cs" />
     <Compile Include="Carriers\Amazon\SWA\AmazonSWASetupWizard.Designer.cs">
       <DependentUpon>AmazonSWASetupWizard.cs</DependentUpon>
     </Compile>
@@ -272,30 +250,20 @@
       <DependentUpon>AmazonSWAAccountManagerControl.cs</DependentUpon>
     </Compile>
     <Compile Include="Carriers\Amazon\SWA\IAmazonSWAAuthorizationViewModel.cs" />
-    <Compile Include="Carriers\Asendia\AsendiaServiceControl.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
+    <Compile Include="Carriers\Asendia\AsendiaServiceControl.cs" />
     <Compile Include="Carriers\Asendia\AsendiaServiceControl.Designer.cs">
       <DependentUpon>AsendiaServiceControl.cs</DependentUpon>
     </Compile>
-    <Compile Include="Carriers\Asendia\AsendiaServicePickerControl.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Carriers\Dhl\DhlExpressSettingsControl.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
+    <Compile Include="Carriers\Asendia\AsendiaServicePickerControl.cs" />
+    <Compile Include="Carriers\Dhl\DhlExpressSettingsControl.cs" />
     <Compile Include="Carriers\Dhl\DhlExpressSettingsControl.Designer.cs">
       <DependentUpon>DhlExpressSettingsControl.cs</DependentUpon>
     </Compile>
-    <Compile Include="Carriers\Asendia\AsendiaSetupWizard.cs">
-      <SubType>Form</SubType>
-    </Compile>
+    <Compile Include="Carriers\Asendia\AsendiaSetupWizard.cs" />
     <Compile Include="Carriers\Asendia\AsendiaSetupWizard.Designer.cs">
       <DependentUpon>AsendiaSetupWizard.cs</DependentUpon>
     </Compile>
-    <Compile Include="Carriers\Asendia\AsendiaSettingsControl.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
+    <Compile Include="Carriers\Asendia\AsendiaSettingsControl.cs" />
     <Compile Include="Carriers\Asendia\AsendiaSettingsControl.Designer.cs">
       <DependentUpon>AsendiaSettingsControl.cs</DependentUpon>
     </Compile>
@@ -305,21 +273,15 @@
     <Compile Include="Carriers\Asendia\AsendiaAccountEditorDlg.Designer.cs">
       <DependentUpon>AsendiaAccountEditorDlg.cs</DependentUpon>
     </Compile>
-    <Compile Include="Carriers\Asendia\AsendiaCustomsControl.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
+    <Compile Include="Carriers\Asendia\AsendiaCustomsControl.cs" />
     <Compile Include="Carriers\Asendia\AsendiaCustomsControl.Designer.cs">
       <DependentUpon>AsendiaCustomsControl.cs</DependentUpon>
     </Compile>
-    <Compile Include="Carriers\Asendia\AsendiaProfileControl.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
+    <Compile Include="Carriers\Asendia\AsendiaProfileControl.cs" />
     <Compile Include="Carriers\Asendia\AsendiaProfileControl.Designer.cs">
       <DependentUpon>AsendiaProfileControl.cs</DependentUpon>
     </Compile>
-    <Compile Include="Carriers\Dhl\DhlExpressSetupWizard.cs">
-      <SubType>Form</SubType>
-    </Compile>
+    <Compile Include="Carriers\Dhl\DhlExpressSetupWizard.cs" />
     <Compile Include="Carriers\Dhl\DhlExpressSetupWizard.Designer.cs">
       <DependentUpon>DhlExpressSetupWizard.cs</DependentUpon>
     </Compile>
@@ -329,9 +291,7 @@
     <Compile Include="Carriers\Dhl\DhlExpressAccountEditorDlg.Designer.cs">
       <DependentUpon>DhlExpressAccountEditorDlg.cs</DependentUpon>
     </Compile>
-    <Compile Include="Carriers\Dhl\DhlExpressServiceControl.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
+    <Compile Include="Carriers\Dhl\DhlExpressServiceControl.cs" />
     <Compile Include="Carriers\Dhl\DhlExpressServiceControl.Designer.cs">
       <DependentUpon>DhlExpressServiceControl.cs</DependentUpon>
     </Compile>
@@ -341,27 +301,19 @@
     <Compile Include="Carriers\Dhl\DhlExpressPackageControl.Designer.cs">
       <DependentUpon>DhlExpressPackageControl.cs</DependentUpon>
     </Compile>
-    <Compile Include="Carriers\Dhl\DhlExpressProfilePackageControl.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
+    <Compile Include="Carriers\Dhl\DhlExpressProfilePackageControl.cs" />
     <Compile Include="Carriers\Dhl\DhlExpressProfilePackageControl.Designer.cs">
       <DependentUpon>DhlExpressProfilePackageControl.cs</DependentUpon>
     </Compile>
-    <Compile Include="Carriers\Dhl\DhlExpressProfileControl.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
+    <Compile Include="Carriers\Dhl\DhlExpressProfileControl.cs" />
     <Compile Include="Carriers\Dhl\DhlExpressProfileControl.Designer.cs">
       <DependentUpon>DhlExpressProfileControl.cs</DependentUpon>
     </Compile>
-    <Compile Include="Carriers\Dhl\DhlExpressCustomsControl.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
+    <Compile Include="Carriers\Dhl\DhlExpressCustomsControl.cs" />
     <Compile Include="Carriers\Dhl\DhlExpressCustomsControl.Designer.cs">
       <DependentUpon>DhlExpressCustomsControl.cs</DependentUpon>
     </Compile>
-    <Compile Include="Carriers\Dhl\DhlExpressServicePickerControl.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
+    <Compile Include="Carriers\Dhl\DhlExpressServicePickerControl.cs" />
     <Compile Include="Carriers\Postal\Usps\GlobalPostDialogDetails.cs" />
     <Compile Include="Carriers\Postal\Usps\GlobalPostLabelNotification.cs" />
     <Compile Include="Carriers\Amazon\SFP\AmazonSFPSameDayNotAvailableFootnote.xaml.cs">
@@ -385,9 +337,7 @@
     </Compile>
     <Compile Include="MessageHandlers\IOrderSelectionChangedHandler.cs" />
     <Compile Include="MessageHandlers\OrderSelectionChangedHandler.cs" />
-    <Compile Include="Profiles\GlobalProfileControl.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
+    <Compile Include="Profiles\GlobalProfileControl.cs" />
     <Compile Include="Profiles\GlobalProfileControl.Designer.cs">
       <DependentUpon>GlobalProfileControl.cs</DependentUpon>
     </Compile>
@@ -407,9 +357,7 @@
     <Compile Include="RatingPanel\RateFootnoteControlContainer.xaml.cs">
       <DependentUpon>RateFootnoteControlContainer.xaml</DependentUpon>
     </Compile>
-    <Compile Include="RatingPanel\GenericRateFootnoteControl.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
+    <Compile Include="RatingPanel\GenericRateFootnoteControl.cs" />
     <Compile Include="RatingPanel\GenericRateFootnoteControl.Designer.cs">
       <DependentUpon>GenericRateFootnoteControl.cs</DependentUpon>
     </Compile>
@@ -426,9 +374,7 @@
     <Compile Include="RatingPanel\RatingPanelViewModel.cs" />
     <Compile Include="RatingPanel\RatingPanelViewModel.Properties.cs" />
     <Compile Include="RatingPanel\TestRatingPanelViewModel.cs" />
-    <Compile Include="Settings\BestRateAccountSettingsControlHost.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
+    <Compile Include="Settings\BestRateAccountSettingsControlHost.cs" />
     <Compile Include="Settings\BestRateAccountSettingsControlHost.Designer.cs">
       <DependentUpon>BestRateAccountSettingsControlHost.cs</DependentUpon>
     </Compile>
@@ -545,27 +491,19 @@
     <Compile Include="ShippingPanel\ValueConverters\ShipmentTypeListConverter.cs" />
     <Compile Include="ShippingPanel\ValueConverters\ShipmentTypeListItem.cs" />
     <Compile Include="ValueConverters\ShipmentTypeToAccountsConverter.cs" />
-    <Compile Include="Carriers\None\NoneServiceControl.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
+    <Compile Include="Carriers\None\NoneServiceControl.cs" />
     <Compile Include="Carriers\None\NoneServiceControl.Designer.cs">
       <DependentUpon>NoneServiceControl.cs</DependentUpon>
     </Compile>
-    <Compile Include="Carriers\Other\OtherProfileControl.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
+    <Compile Include="Carriers\Other\OtherProfileControl.cs" />
     <Compile Include="Carriers\Other\OtherProfileControl.Designer.cs">
       <DependentUpon>OtherProfileControl.cs</DependentUpon>
     </Compile>
-    <Compile Include="Carriers\Other\OtherServiceControl.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
+    <Compile Include="Carriers\Other\OtherServiceControl.cs" />
     <Compile Include="Carriers\Other\OtherServiceControl.Designer.cs">
       <DependentUpon>OtherServiceControl.cs</DependentUpon>
     </Compile>
-    <Compile Include="Carriers\Other\OtherSetupWizard.cs">
-      <SubType>Form</SubType>
-    </Compile>
+    <Compile Include="Carriers\Other\OtherSetupWizard.cs" />
     <Compile Include="Carriers\Other\OtherSetupWizard.Designer.cs">
       <DependentUpon>OtherSetupWizard.cs</DependentUpon>
     </Compile>
@@ -579,27 +517,19 @@
     <Compile Include="Carriers\Amazon\SFP\AmazonSFPOptionsControl.Designer.cs">
       <DependentUpon>AmazonSFPOptionsControl.cs</DependentUpon>
     </Compile>
-    <Compile Include="Carriers\Amazon\SFP\AmazonSFPServiceControl.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
+    <Compile Include="Carriers\Amazon\SFP\AmazonSFPServiceControl.cs" />
     <Compile Include="Carriers\Amazon\SFP\AmazonSFPServiceControl.Designer.cs">
       <DependentUpon>AmazonSFPServiceControl.cs</DependentUpon>
     </Compile>
-    <Compile Include="Carriers\Amazon\SFP\AmazonSFPSettingsControl.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
+    <Compile Include="Carriers\Amazon\SFP\AmazonSFPSettingsControl.cs" />
     <Compile Include="Carriers\Amazon\SFP\AmazonSFPSettingsControl.Designer.cs">
       <DependentUpon>AmazonSFPSettingsControl.cs</DependentUpon>
     </Compile>
-    <Compile Include="Carriers\Amazon\SFP\AmazonSFPShipmentSetupWizard.cs">
-      <SubType>Form</SubType>
-    </Compile>
+    <Compile Include="Carriers\Amazon\SFP\AmazonSFPShipmentSetupWizard.cs" />
     <Compile Include="Carriers\Amazon\SFP\AmazonSFPShipmentSetupWizard.Designer.cs">
       <DependentUpon>AmazonSFPShipmentSetupWizard.cs</DependentUpon>
     </Compile>
-    <Compile Include="Carriers\Amazon\SFP\AmazonSFPProfileControl.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
+    <Compile Include="Carriers\Amazon\SFP\AmazonSFPProfileControl.cs" />
     <Compile Include="Carriers\Amazon\SFP\AmazonSFPProfileControl.Designer.cs">
       <DependentUpon>AmazonSFPProfileControl.cs</DependentUpon>
     </Compile>
