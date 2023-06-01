@@ -16,6 +16,8 @@ namespace ShipWorks.Shipping.Tests.Carriers.FedEx.Api.Ship.Manipulators.Request
         private readonly ShipmentEntity shipment;
         private readonly FedExServiceTypeManipulator testObject;
 
+        public const string DeprecatedCode = "FedEx is no longer going directly to FedEx servers.  It goes through ShipEngine now, so this is deprecated code.";
+
         public FedExServiceTypeManipulatorTest()
         {
             AutoMock mock = AutoMockExtensions.GetLooseThatReturnsMocks();
@@ -28,14 +30,14 @@ namespace ShipWorks.Shipping.Tests.Carriers.FedEx.Api.Ship.Manipulators.Request
             testObject = mock.Create<FedExServiceTypeManipulator>();
         }
 
-        [Fact]
+        [Fact(Skip = DeprecatedCode)]
         public void ShouldApply_ReturnsTrue()
         {
             // Make sure we got a the same values back
             Assert.True(testObject.ShouldApply(shipment, 0));
         }
 
-        [Fact]
+        [Fact(Skip = DeprecatedCode)]
         public void Manipulate_FedExServiceTypeManipulator_ReturnsServiceType()
         {
             testObject.Manipulate(shipment, processShipmentRequest, 0);

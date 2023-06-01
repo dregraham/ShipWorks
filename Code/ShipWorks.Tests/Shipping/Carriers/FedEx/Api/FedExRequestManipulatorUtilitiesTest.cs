@@ -19,6 +19,8 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
         private ProcessShipmentRequest nativeRequest;
         private ShipmentEntity shipmentEntity;
 
+        public const string DeprecatedCode = "FedEx is no longer going directly to FedEx servers.  It goes through ShipEngine now, so this is deprecated code.";
+
         public FedExRequestManipulatorUtilitiesTest()
         {
             shipmentEntity = BuildFedExShipmentEntity.SetupRequestShipmentEntity();
@@ -86,7 +88,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
             Assert.Equal(DropoffType.REGULAR_PICKUP, dropOffType);
         }
 
-        [Fact]
+        [Fact(Skip = DeprecatedCode)]
         public void GetApiServiceType_ReturnFreight_WhenServiceTypeIsFreight()
         {
             //TODO:PLATFORM Update this test when platform request objects exists
