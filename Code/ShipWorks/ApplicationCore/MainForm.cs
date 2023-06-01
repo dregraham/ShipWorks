@@ -35,6 +35,7 @@ using Interapptive.Shared.UI;
 using Interapptive.Shared.Utility;
 using Interapptive.Shared.Win32;
 using log4net;
+using RestSharp;
 using ShipWorks.Actions;
 using ShipWorks.Actions.Triggers;
 using ShipWorks.ApplicationCore;
@@ -91,6 +92,8 @@ using ShipWorks.Shipping.Carriers.FedEx;
 using ShipWorks.Shipping.Carriers.FedEx.Api;
 using ShipWorks.Shipping.Carriers.UPS.OneBalance;
 using ShipWorks.Shipping.Carriers.UPS.WorldShip;
+using ShipWorks.Shipping.Insurance;
+using ShipWorks.Shipping.Insurance.RatesModel;
 using ShipWorks.Shipping.Profiles;
 using ShipWorks.Shipping.ScanForms;
 using ShipWorks.Shipping.Settings;
@@ -102,6 +105,7 @@ using ShipWorks.Stores.Content;
 using ShipWorks.Stores.Management;
 using ShipWorks.Stores.Orders.Archive;
 using ShipWorks.Stores.Orders.Split;
+using ShipWorks.Stores.Platforms.ShipEngine;
 using ShipWorks.Stores.Services;
 using ShipWorks.Templates;
 using ShipWorks.Templates.Controls;
@@ -428,7 +432,9 @@ namespace ShipWorks
 
             SqlSession.Initialize();
 
-            AutoUpdateTelemetryCollector.CollectTelemetry(ShipWorksSession.InstanceID);
+			GetInsuranceRates();
+
+			AutoUpdateTelemetryCollector.CollectTelemetry(ShipWorksSession.InstanceID);
 
             deviceIdentificationControl = new DeviceIdentificationControl() { Size = new Size(0, 0) };
             Controls.Add(deviceIdentificationControl);
@@ -438,11 +444,30 @@ namespace ShipWorks
                 Close();
             }
         }
+		private static void GetInsuranceRates()
+		{
+			using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
+			{
+				IWarehouseRequestClient warehouseRequestClient = lifetimeScope.Resolve<IWarehouseRequestClient>();
+				Task.Run(() =>
+				{
+					var insuranceRates = new InsuranceRates();
+					var request = new RestRequest(WarehouseEndpoints.GetRates, Method.GET);
+					var result = warehouseRequestClient.MakeRequest(request, "GetInsuranceRates");
 
-        /// <summary>
-        /// The device Identify needed to register a UPS account. I don't like this being here either...
-        /// </summary>
-        public string DeviceIdentity => deviceIdentificationControl.Identity;
+					if (!result.Result.Value?.Content?.IsNullOrWhiteSpace() ?? false)
+					{
+						insuranceRates = PlatformHelper.JsonConvertToDto<InsuranceRates>(result.Result.Value.Content);
+					}
+					InsuranceUtility.ConfigureInsurance(insuranceRates);
+				});
+			}
+		}
+
+		/// <summary>
+		/// The device Identify needed to register a UPS account. I don't like this being here either...
+		/// </summary>
+		public string DeviceIdentity => deviceIdentificationControl.Identity;
 
         /// <summary>
         /// Checks whether we have an Asendia account

@@ -1277,6 +1277,10 @@
     <Compile Include="Shipping\Carriers\DhlEcommerce\IDhlEcommerceAccountRepository.cs" />
     <Compile Include="Shipping\Carriers\FedEx\Enums\FedexTINType.cs" />
     <Compile Include="Shipping\Carriers\UPS\Enums\UpsCustomsRecipientTINType.cs" />
+    <Compile Include="Shipping\Insurance\RatesModel\CarrierRates.cs" />
+    <Compile Include="Shipping\Insurance\RatesModel\InsuranceRates.cs" />
+    <Compile Include="Shipping\Insurance\RatesModel\ShipworksRates.cs" />
+    <Compile Include="Shipping\Insurance\RatesModel\Usps.cs" />
     <Compile Include="Shipping\ShipEngine\DTOs\Address.cs" />
     <Compile Include="Shipping\ShipEngine\DTOs\AddressValidatingShipment.cs" />
     <Compile Include="Shipping\ShipEngine\DTOs\AdvancedOptions.cs" />
