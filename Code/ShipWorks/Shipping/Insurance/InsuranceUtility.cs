@@ -14,9 +14,12 @@ using Interapptive.Shared;
 using Interapptive.Shared.Business.Geography;
 using Interapptive.Shared.Net;
 using Interapptive.Shared.UI;
+using Interapptive.Shared.Utility;
 using log4net;
+using RestSharp;
 using ShipWorks.ApplicationCore;
 using ShipWorks.ApplicationCore.Licensing;
+using ShipWorks.ApplicationCore.Licensing.Warehouse;
 using ShipWorks.Data;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.Postal;
@@ -26,6 +29,7 @@ using ShipWorks.Shipping.Insurance.RatesModel;
 using ShipWorks.Shipping.Settings;
 using ShipWorks.Stores;
 using ShipWorks.Stores.Content;
+using ShipWorks.Stores.Platforms.ShipEngine;
 
 namespace ShipWorks.Shipping.Insurance
 {
@@ -48,6 +52,8 @@ namespace ShipWorks.Shipping.Insurance
 		private static int shipWorksRateActualVersion = shipWorksRateCalculateVersion;
 		private static int carrierRateActualVersion = carrierRateCalculationVersion;
 
+		private static bool areRatesDefault = true;
+
 		/// <summary>
 		/// The URL to the customer agreement file online
 		/// </summary>
@@ -59,11 +65,7 @@ namespace ShipWorks.Shipping.Insurance
 		public static string OnlineExcludedCountriesFile =>
 			"https://www.interapptive.com/insurance/insuranceExcludedCountries.xml";
 
-		private static InsuranceRates InsuranceRates
-		{
-			get;
-			set;
-		}
+		private static InsuranceRates InsuranceRates { get; set; } = new InsuranceRates();
 
 		/// <summary>
 		/// Configure anything about our insurance display and interaction based on online data about rate tables, countries, etc.
@@ -76,9 +78,10 @@ namespace ShipWorks.Shipping.Insurance
 			LoadExcludedCountries(countryVersion);
 		}
 
-		public static void ConfigureInsurance(InsuranceRates insuranceRates)
+		public static void SetInsuranceRates(InsuranceRates insuranceRates, bool areDefault = false)
 		{
 			InsuranceRates = insuranceRates;
+			areRatesDefault = areDefault;
 		}
 
 		/// <summary>
@@ -209,6 +212,33 @@ namespace ShipWorks.Shipping.Insurance
 				}
 			}
 		}
+		public static async void GetInsuranceRates()
+		{
+			log.Info($"Start retrieving insurance rates");
+			Stopwatch watch = Stopwatch.StartNew();
+
+			using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
+			{
+				IWarehouseRequestClient warehouseRequestClient = lifetimeScope.Resolve<IWarehouseRequestClient>();
+				await Task.Run(async () =>
+				{
+					var request = new RestRequest(WarehouseEndpoints.GetRates, Method.GET);
+					var result = await warehouseRequestClient.MakeRequest(request, "GetInsuranceRates").ConfigureAwait(false);
+
+					if (result.Success && (!result.Value?.Content?.IsNullOrWhiteSpace() ?? false))
+					{
+						var insuranceRates = PlatformHelper.JsonConvertToDto<InsuranceRates>(result.Value.Content);
+						SetInsuranceRates(insuranceRates);
+					}
+					else
+					{
+						log.Error("Could not retrieve insurance rates correctly. Using default values instead.");
+					}
+				}).ConfigureAwait(false);
+			}
+			watch.Stop();
+			log.Info($"Insurance rates retrieved in {watch.ElapsedMilliseconds}ms");
+		}
 
 		/// <summary>
 		/// Get the cost of insurance for the given shipment given the specified declared value
@@ -216,6 +246,12 @@ namespace ShipWorks.Shipping.Insurance
 		public static InsuranceCost GetInsuranceCost(ShipmentEntity originalShipment, decimal declaredValue)
 		{
 			InsuranceCost cost = new InsuranceCost();
+
+			if (areRatesDefault)
+			{
+				log.Warn("Only default rates are loaded currently, trying to retrieve them again.");
+				GetInsuranceRates();
+			}
 
 			// Check declared value
 			if (declaredValue > 5000)
