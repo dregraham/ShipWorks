@@ -10,11 +10,11 @@ using Interapptive.Shared.Collections;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Enums;
 using Interapptive.Shared.Utility;
+using log4net;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.ApplicationCore;
 using ShipWorks.Common;
 using ShipWorks.Common.IO.Hardware.Printers;
-using ShipWorks.Core.Messaging;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model;
 using ShipWorks.Data.Model.Custom;
@@ -23,7 +23,6 @@ using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Shipping.Api;
 using ShipWorks.Shipping.Carriers.BestRate;
-using ShipWorks.Shipping.Carriers.FedEx.Api;
 using ShipWorks.Shipping.Carriers.FedEx.Api.Enums;
 using ShipWorks.Shipping.Carriers.FedEx.Api.Environment;
 using ShipWorks.Shipping.Carriers.FedEx.BestRate;
@@ -44,19 +43,19 @@ namespace ShipWorks.Shipping.Carriers.FedEx
     /// FedEx implementation of ShipmentType
     /// </summary>
     [Component(RegistrationType.SpecificService, Service = typeof(ICustomsRequired))]
+    [KeyedComponent(typeof(ShipmentType), ShipmentTypeCode.FedEx, SingleInstance = true)]
     public class FedExShipmentType : ShipmentType, ICustomsRequired
     {
         private readonly IExcludedServiceTypeRepository excludedServiceTypeRepository;
         private readonly IExcludedPackageTypeRepository excludedPackageTypeRepository;
         private ICarrierSettingsRepository settingsRepository;
-        private readonly IShippingSettings shippingSettings;
         private readonly IDateTimeProvider dateTimeProvider;
+        private static readonly ILog log = LogManager.GetLogger(typeof(FedExShipmentType));
 
         /// <summary>
         /// Initializes a new instance of the <see cref="FedExShipmentType"/> class.
         /// </summary>
-        public FedExShipmentType() : this(new ExcludedServiceTypeRepository(), new ExcludedPackageTypeRepository(),
-            new ShippingSettingsWrapper(Messenger.Current), new DateTimeProvider())
+        public FedExShipmentType() : this(new ExcludedServiceTypeRepository(), new ExcludedPackageTypeRepository(), new DateTimeProvider())
         {
         }
 
@@ -66,12 +65,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         /// <param name="excludedServiceTypeRepository">The excluded service type repository.</param>
         /// <param name="excludedPackageTypeRepository"></param>
         public FedExShipmentType(IExcludedServiceTypeRepository excludedServiceTypeRepository,
-            IExcludedPackageTypeRepository excludedPackageTypeRepository, IShippingSettings shippingSettings,
+            IExcludedPackageTypeRepository excludedPackageTypeRepository,
             IDateTimeProvider dateTimeProvider)
         {
             this.excludedServiceTypeRepository = excludedServiceTypeRepository;
             this.excludedPackageTypeRepository = excludedPackageTypeRepository;
-            this.shippingSettings = shippingSettings;
             this.dateTimeProvider = dateTimeProvider;
         }
 
@@ -437,6 +435,8 @@ namespace ShipWorks.Shipping.Carriers.FedEx
 
             shipment.FedEx.RequestedLabelFormat = (int) ThermalLanguage.None;
 
+            shipment.FedEx.ShipEngineLabelId = string.Empty;
+
             base.ConfigureNewShipment(shipment);
         }
 
@@ -482,7 +482,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             profile.FedEx.FedExAccountID = shipperID;
             profile.OriginID = (int) ShipmentOriginSource.Account;
 
-            profile.FedEx.ResidentialDetermination = (int) ResidentialDeterminationType.FedExAddressLookup;
+            profile.FedEx.ResidentialDetermination = (int) ResidentialDeterminationType.FromAddressValidation;
 
             profile.FedEx.Service = (int) FedExServiceType.FedExGround;
             profile.FedEx.Signature = (int) FedExSignatureType.ServiceDefault;
@@ -500,6 +500,8 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             profile.FedEx.PayorTransportAccount = "";
             profile.FedEx.PayorDutiesType = (int) FedExPayorType.Recipient;
             profile.FedEx.PayorDutiesAccount = "";
+            profile.FedEx.PayorCountryCode = "";
+            profile.FedEx.PayorPostalCode = "";
 
             profile.FedEx.SaturdayDelivery = false;
 
@@ -810,10 +812,10 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             {
                 using (var lifetimeScope = IoC.BeginLifetimeScope())
                 {
-                    return lifetimeScope.Resolve<IFedExShippingClerkFactory>().Create(shipment).Track(shipment);
+                    return lifetimeScope.Resolve<IFedExTrackingService>().TrackShipment(shipment, GetCarrierTrackingUrl(shipment));
                 }
             }
-            catch (FedExException ex)
+            catch (Exception ex)
             {
                 throw new ShippingException(ex.Message, ex);
             }
@@ -857,6 +859,36 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             }
 
             return string.Equals(originCountryCode, destinationCountryCode, StringComparison.OrdinalIgnoreCase);
+        }
+
+        /// <summary>
+        /// Convert a string value of service type to a FedExServiceType
+        /// </summary>
+        public static FedExServiceType? ConvertToServiceType(object tag)
+        {
+            switch (tag)
+            {
+                case null:
+                    return null;
+                case FedExRateSelection fedExRateSelection:
+                    return fedExRateSelection.ServiceType;
+                case FedExServiceType fedExServiceType:
+                    return fedExServiceType;
+            }
+
+            var serviceType = tag.ToString();
+            if (EnumHelper.TryGetEnumByApiValue(serviceType, out FedExServiceType? serviceTypeParsed))
+            {
+                return serviceTypeParsed;
+            }
+
+            // This is needed because it's possible a Smart Post value has been provided
+            if (EnumHelper.TryGetEnumByApiValue(serviceType, out FedExSmartPostIndicia? smartPostServiceTypeParsed))
+            {
+                return FedExServiceType.SmartPost;
+            }
+
+            return null;
         }
 
         /// <summary>

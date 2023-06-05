@@ -71,7 +71,12 @@ namespace ShipWorks.Shipping.Carriers.DhlEcommerce
         /// Service type name
         /// </summary>
         public override string ServiceTypeName => EnumHelper.GetDescription((DhlEcommerceServiceType) ServiceType);
-        
+
+        /// <summary>
+        /// Gets the ShipEngineLabelID
+        /// </summary>
+        public override string ShipEngineLabelId => Shipment.DhlEcommerce.ShipEngineLabelID;
+
         /// <summary>
         /// Update the insurance fields on the shipment and packages
         /// </summary>

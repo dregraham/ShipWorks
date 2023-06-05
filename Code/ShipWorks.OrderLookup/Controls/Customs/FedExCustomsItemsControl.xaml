@@ -137,13 +137,15 @@
                 <TextBlock
                     Grid.Row="2"
                     Grid.Column="0"
-                    Text="Weight" />
+                    Text="Weight" 
+                    Visibility="Collapsed"/>
                 <ui:WeightControl
                     Grid.Row="2"
                     Grid.Column="1"
                     ErrorMessage="{Binding WeightErrorMessage, Mode=OneWay}"
                     Style="{StaticResource OrderLookupWeightControl}"
-                    Weight="{Binding SelectedCustomsItem.Weight, Mode=TwoWay, UpdateSourceTrigger=LostFocus, ValidatesOnDataErrors=true, NotifyOnValidationError=true}" />
+                    Weight="{Binding SelectedCustomsItem.Weight, Mode=TwoWay, UpdateSourceTrigger=LostFocus, ValidatesOnDataErrors=true, NotifyOnValidationError=true}" 
+                    Visibility="Collapsed"/>
                 <TextBlock
                     Grid.Row="3"
                     Grid.Column="0"
@@ -180,24 +182,28 @@
                 <TextBlock
                     Grid.Row="6"
                     Grid.Column="0"
-                    Text="Number of Pieces" />
+                    Text="Number of Pieces" 
+                    Visibility="Collapsed"/>
                 <TextBox
                     Grid.Row="6"
                     Grid.Column="1"
                     MaxLength="14"
                     Style="{StaticResource FormNumberTextBox}"
-                    Text="{Binding SelectedCustomsItem.NumberOfPieces, NotifyOnValidationError=true, ValidatesOnDataErrors=true}" />
+                    Text="{Binding SelectedCustomsItem.NumberOfPieces, NotifyOnValidationError=true, ValidatesOnDataErrors=true}" 
+                    Visibility="Collapsed"/>
 
                 <TextBlock
                     Grid.Row="7"
                     Grid.Column="0"
-                    Text="Unit Price" />
+                    Text="Unit Price" 
+                    Visibility="Collapsed"/>
                 <TextBox
                     Grid.Row="7"
                     Grid.Column="1"
                     MaxLength="14"
                     Style="{StaticResource FormNumberTextBox}"
-                    Text="{Binding SelectedCustomsItem.UnitPriceAmount, Converter={StaticResource EmptyMoney}, NotifyOnValidationError=true, StringFormat=C, UpdateSourceTrigger=LostFocus, ValidatesOnDataErrors=true}" />
+                    Text="{Binding SelectedCustomsItem.UnitPriceAmount, Converter={StaticResource EmptyMoney}, NotifyOnValidationError=true, StringFormat=C, UpdateSourceTrigger=LostFocus, ValidatesOnDataErrors=true}" 
+                    Visibility="Collapsed"/>
             </Grid>
         </GroupBox>
     </Grid>

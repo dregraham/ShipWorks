@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using Interapptive.Shared.Net;
 using Interapptive.Shared.Utility;
-using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.FedEx.Api.Shipping;
 using ShipWorks.Shipping.Editing.Rating;
@@ -31,12 +30,6 @@ namespace ShipWorks.Shipping.Carriers.Api
         /// </summary>
         /// <param name="shipmentEntity">The shipment entity.</param>
         void Void(ShipmentEntity shipmentEntity);
-
-        /// <summary>
-        /// Registers a carrier account for use with the carrier API.
-        /// </summary>
-        /// <param name="account">The carrier specific account.</param>
-        void RegisterAccount(EntityBase2 account);
 
         /// <summary>
         /// Gets the shipping rates from the carrier for the given shipment.

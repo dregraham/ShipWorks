@@ -104,7 +104,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         /// </summary>
         private void OnInsuranceProviderChanged(object sender, EventArgs e)
         {
-            pennyOne.Enabled = (insuranceProviderChooser.InsuranceProvider == InsuranceProvider.ShipWorks);
+            var pennyOneEnabled = (insuranceProviderChooser.InsuranceProvider == InsuranceProvider.ShipWorks);
+            pennyOne.Visible = pennyOneEnabled;
+            pennyOneLink.Visible = pennyOneEnabled;
         }
 
         /// <summary>

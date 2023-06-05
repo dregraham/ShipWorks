@@ -15,6 +15,7 @@ using Newtonsoft.Json.Serialization;
 using RestSharp;
 using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Common.Net;
+using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Shipping.ShipEngine.DTOs;
 using ShipWorks.Shipping.ShipEngine.DTOs.CarrierAccount;
@@ -96,6 +97,68 @@ namespace ShipWorks.Shipping.ShipEngine
             }
 
             return response.Value.CarrierId;
+        }
+
+        /// <summary>
+        /// Connect the given FedEx account to ShipEngine
+        /// </summary>
+        public async Task<GenericResult<string>> ConnectFedExAccount(FedExRegistrationRequest fedExRequest)
+        {
+            try
+            {
+                // Check to see if the carrier already exists in ShipEngine
+                // We're using the nickname as a secondary check here because of the multiple SmartPost Hub accounts that will have the same account number
+                // There is a chance this could give a false negative (Nickname changed etc..), but in those cases we'll create brand new Engine carriers
+                // which hopefully wont cause any problems
+                var existingShipEngineCarrierIdResult = await GetCarrierId(c => c.AccountNumber == fedExRequest.AccountNumber && c.Nickname == fedExRequest.Nickname).ConfigureAwait(false);
+                if (existingShipEngineCarrierIdResult.Success)
+                {
+                    return existingShipEngineCarrierIdResult;
+                }
+
+                var connectAccountResult = await MakeRequest<ConnectAccountResponseDTO>(
+                    ShipEngineEndpoints.FedExAccountCreation, Method.POST, fedExRequest, "ConnectFedExAccount");
+
+                if (connectAccountResult.Failure)
+                {
+                    return GenericResult.FromError<string>(connectAccountResult.Message);
+                }
+
+                return GenericResult.FromSuccess(connectAccountResult.Value.CarrierId);
+            }
+            catch (Exception ex)
+            {
+                return GenericResult.FromError<string>($"An error occurred connecting FedEx account {fedExRequest.AccountNumber}: {ex.Message}");
+            }
+        }
+
+        /// <summary>
+        /// Update a FedEx accounts settings
+        /// </summary>
+        public async Task<Result> UpdateFedExAccount(IFedExAccountEntity fedExAccount)
+        {
+            try
+            {
+                var request = new UpdateFedExSettingsRequest(fedExAccount);
+
+                var updateAccountResult = await MakeRequest<ConnectAccountResponseDTO>(
+                    ShipEngineEndpoints.FedExAccountUpdate(fedExAccount.ShipEngineCarrierID),
+                    Method.PUT,
+                    request,
+                    "UpdateFedExAccount",
+                    new List<HttpStatusCode> { HttpStatusCode.NoContent });
+
+                if (updateAccountResult.Failure)
+                {
+                    return Result.FromError(updateAccountResult.Message);
+                }
+
+                return Result.FromSuccess();
+            }
+            catch (Exception ex)
+            {
+                return Result.FromError($"An error occurred updating FedEx account {fedExAccount.AccountNumber}: {ex.Message}");
+            }
         }
 
         /// <summary>
@@ -190,7 +253,12 @@ namespace ShipWorks.Shipping.ShipEngine
         /// <summary>
         /// Get the CarrierId for the given accountNumber
         /// </summary>
-        private async Task<GenericResult<string>> GetCarrierId(string accountNumber)
+        private async Task<GenericResult<string>> GetCarrierId(string accountNumber) => await GetCarrierId(c => c.AccountNumber == accountNumber);
+
+        /// <summary>
+        /// Get the CarrierId with the given account equality check
+        /// </summary>
+        private async Task<GenericResult<string>> GetCarrierId(Func<Carrier, bool> equalityCheck)
         {
             var response = await MakeRequest<CarrierListResponse>(ShipEngineEndpoints.ListCarriers, Method.GET, null, "ListCarriers");
 
@@ -199,7 +267,7 @@ namespace ShipWorks.Shipping.ShipEngine
                 return GenericResult.FromError<string>(response.Message);
             }
 
-            var carrierId = response.Value?.Carriers?.FirstOrDefault(c => c.AccountNumber == accountNumber)?.CarrierId ?? string.Empty;
+            var carrierId = response.Value?.Carriers?.FirstOrDefault(equalityCheck)?.CarrierId ?? string.Empty;
 
             if (!carrierId.IsNullOrWhiteSpace())
             {
@@ -299,7 +367,7 @@ namespace ShipWorks.Shipping.ShipEngine
         public async Task<TrackingInformation> Track(string carrier, string trackingNumber, ApiLogSource apiLogSource)
         {
             var response = await MakeRequest<TrackingInformation>(
-                ShipEngineEndpoints.Track, Method.GET, null, "TrackShipment", null, apiLogSource);
+                ShipEngineEndpoints.TrackShipment(carrier, trackingNumber), Method.GET, null, "TrackShipment", null, apiLogSource);
 
             if (response.Failure)
             {
@@ -408,7 +476,7 @@ namespace ShipWorks.Shipping.ShipEngine
         public async Task<GenericResult<CreateManifestResponse>> CreateManifest(List<string> labelIDs, ILog log)
         {
             GenericResult<CreateManifestResponse> response;
-            using (new LoggedStopwatch(log, $"DHL eCommerce call to create manifest, initial try.  LabelID count: {labelIDs.Count}"))
+            using (new LoggedStopwatch(log, $"ShipEngine call to create manifest, initial try.  LabelID count: {labelIDs.Count}"))
             {
                 response = await MakeRequest<CreateManifestResponse>(ShipEngineEndpoints.CreateManifest, Method.POST,
                     new CreateManifestRequest { LabelIds = labelIDs }, "CreateManifest");
@@ -426,7 +494,7 @@ namespace ShipWorks.Shipping.ShipEngine
                     var newIDs = labelIDs.Except(alreadyManifestedIDs).ToList();
                     if (newIDs.Any())
                     {
-                        using (new LoggedStopwatch(log, $"DHL eCommerce call to create manifest, second try.  LabelID count: {newIDs.Count}"))
+                        using (new LoggedStopwatch(log, $"ShipEngine call to create manifest, second try.  LabelID count: {newIDs.Count}"))
                         {
                             response = await MakeRequest<CreateManifestResponse>(ShipEngineEndpoints.CreateManifest,
                                 Method.POST,
@@ -441,6 +509,30 @@ namespace ShipWorks.Shipping.ShipEngine
             }
 
             return response;
+        }
+
+        /// <summary>
+        /// List all carrier service points in the given radius of the shipment address
+        /// </summary>
+        public async Task<GenericResult<ListServicePointsResponse>> ListServicePoints(string carrierId, ShipmentEntity shipment, int searchRadius = 50, int maxResults = 10)
+        {
+            var request = new ListServicePointsRequest()
+            {
+                MaxResults = maxResults,
+                Radius = searchRadius,
+                Providers = new ServicePointProvider[] { new ServicePointProvider { CarrierId = carrierId } },
+                SearchAddress = new ServicePointSearchAddress
+                {
+                    AddressLine1 = shipment.ShipStreet1,
+                    AddressLine2 = shipment.ShipStreet2,
+                    AddressLine3 = shipment.ShipStreet3,
+                    City = shipment.ShipCity,
+                    PostalCode = shipment.ShipPostalCode,
+                    CountryCode = shipment.ShipCountryCode,
+                }
+            };
+
+            return await MakeRequest<ListServicePointsResponse>(ShipEngineEndpoints.ListServicePoints, Method.POST, request, "ListServicePoints");
         }
 
         /// <summary>
@@ -483,6 +575,7 @@ namespace ShipWorks.Shipping.ShipEngine
 
                 request.JsonSerializer = new RestSharpJsonNetSerializer(new JsonSerializerSettings
                 {
+                    NullValueHandling = NullValueHandling.Ignore,
                     ContractResolver = new DefaultContractResolver
                     {
                         NamingStrategy = new SnakeCaseNamingStrategy(),

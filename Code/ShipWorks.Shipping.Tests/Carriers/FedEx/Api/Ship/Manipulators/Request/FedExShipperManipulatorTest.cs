@@ -103,17 +103,6 @@ namespace ShipWorks.Shipping.Tests.Carriers.FedEx.Api.Ship.Manipulators.Request
         }
 
         [Fact]
-        public void Manipulate_ThrowsInvalidOperationException_WhenFedExAddressLookupTypeIsSpecified()
-        {
-            shipment.FedEx.OriginResidentialDetermination = (int) ResidentialDeterminationType.FedExAddressLookup;
-
-            var result = testObject.Manipulate(shipment, processShipmentRequest, 0);
-
-            Assert.True(result.Failure);
-            Assert.IsAssignableFrom<InvalidOperationException>(result.Exception);
-        }
-
-        [Fact]
         public void Manipulate_AddressAddedToRecipeint_RequestedShipmentIsReturn()
         {
             shipment.ReturnShipment = true;

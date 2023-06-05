@@ -1,71 +1,143 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Autofac.Features.Indexed;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Utility;
+using log4net;
+using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Shipping.Carriers.Api;
 using ShipWorks.Shipping.Carriers.FedEx.Api;
 using ShipWorks.Shipping.Carriers.FedEx.Api.Shipping;
+using ShipWorks.Shipping.Carriers.FedEx.Enums;
+using ShipWorks.Shipping.ShipEngine;
+using ShipWorks.Shipping.ShipEngine.DTOs;
 
 namespace ShipWorks.Shipping.Carriers.FedEx
 {
     /// <summary>
-    /// Label Service for the FedEx carrier
+    /// Label service for FedEx
     /// </summary>
     [KeyedComponent(typeof(ILabelService), ShipmentTypeCode.FedEx)]
-    public class FedExLabelService : ILabelService
+    public class FedExLabelService : ShipEngineLabelService
     {
+        private readonly IFedExAccountRepository accountRepository;
         private readonly IFedExShippingClerkFactory shippingClerkFactory;
-        private readonly Func<IEnumerable<IFedExShipResponse>, FedExDownloadedLabelData> createDownloadedLabelData;
+        private readonly Func<IEnumerable<IFedExShipResponse>, FedFimsExDownloadedLabelData> createFedExFimsDownloadedLabelData;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public FedExLabelService(IFedExShippingClerkFactory shippingClerkFactory,
-            Func<IEnumerable<IFedExShipResponse>, FedExDownloadedLabelData> createDownloadedLabelData)
+        public FedExLabelService(
+            IShipEngineWebClient shipEngineWebClient,
+            IFedExAccountRepository accountRepository,
+            IFedExShippingClerkFactory shippingClerkFactory,
+            IIndex<ShipmentTypeCode, ICarrierShipmentRequestFactory> shipmentRequestFactory,
+            Func<ShipmentEntity, Label, FedExDownloadedLabelData> createDownloadedLabelData,
+            Func<IEnumerable<IFedExShipResponse>, FedFimsExDownloadedLabelData> createFedExFimsDownloadedLabelData,
+            Func<Type, ILog> logFactory)
+            : base(shipEngineWebClient, shipmentRequestFactory, createDownloadedLabelData, logFactory)
         {
+            log = logFactory(typeof(FedExLabelService));
+            this.accountRepository = accountRepository;
             this.shippingClerkFactory = shippingClerkFactory;
-            this.createDownloadedLabelData = createDownloadedLabelData;
+            this.createFedExFimsDownloadedLabelData = createFedExFimsDownloadedLabelData;
         }
 
         /// <summary>
-        /// Creates the label
+        /// The api log source for this label service
         /// </summary>
-        public Task<TelemetricResult<IDownloadedLabelData>> Create(ShipmentEntity shipment)
-        {
-            try
-            {
-                IFedExShippingClerk clerk = shippingClerkFactory.Create(shipment);
-                TelemetricResult<GenericResult<IEnumerable<IFedExShipResponse>>> telemetricShipResult = clerk.Ship(shipment);
-                FedExDownloadedLabelData labelData = telemetricShipResult.Value.Map(createDownloadedLabelData).Match(x => x, ex => { throw ex; });
+        public override ApiLogSource ApiLogSource => ApiLogSource.FedEx;
 
-                TelemetricResult<IDownloadedLabelData> telemetry = new TelemetricResult<IDownloadedLabelData>(TelemetricResultBaseName.ApiResponseTimeInMilliseconds);
-                telemetricShipResult.CopyTo(telemetry);
-                telemetry.SetValue(labelData);
-                return Task.FromResult(telemetry);
-            }
-            catch (FedExException ex)
+        /// <summary>
+        /// The shipment type code for this label service
+        /// </summary>
+        public override ShipmentTypeCode ShipmentTypeCode => ShipmentTypeCode.FedEx;
+
+        /// <summary>
+        /// Get the ShipEngine carrier ID from the shipment
+        /// </summary>
+        protected override string GetShipEngineCarrierID(ShipmentEntity shipment) => accountRepository.GetAccount(shipment)?.ShipEngineCarrierID ?? string.Empty;
+
+        /// <summary>
+        /// Get the ShipEngine label ID from the shipment
+        /// </summary>
+        protected override string GetShipEngineLabelID(ShipmentEntity shipment) => shipment.FedEx.ShipEngineLabelId;
+
+        /// <summary>
+        /// Create the label
+        /// </summary>
+        public override async Task<TelemetricResult<IDownloadedLabelData>> Create(ShipmentEntity shipment)
+        {
+            MethodConditions.EnsureArgumentIsNotNull(shipment, nameof(shipment));
+            TelemetricResult<IDownloadedLabelData> telemetricResult = new TelemetricResult<IDownloadedLabelData>(TelemetricResultBaseName.ApiResponseTimeInMilliseconds);
+
+            // If this isn't a ShipEngine shipment, create the label the old way
+            var serviceType = (FedExServiceType) shipment.FedEx.Service;
+            if (serviceType == FedExServiceType.FedExFimsMailView ||
+                serviceType == FedExServiceType.FedExFimsMailViewLite ||
+                serviceType == FedExServiceType.FedExFimsPremium ||
+                serviceType == FedExServiceType.FedExFimsStandard)
             {
-                throw new ShippingException(ex.Message, ex);
+                log.Info("FIMS FedEx shipment should go directly to ShipEngine");
+                var shippingClerk = shippingClerkFactory.Create(shipment);
+
+                try
+                {
+                    try
+                    {
+                        TelemetricResult<GenericResult<IEnumerable<IFedExShipResponse>>> telemetricShipResult = shippingClerk.Ship(shipment);
+
+                        FedFimsExDownloadedLabelData labelData = telemetricShipResult
+                            .Value
+                            .Map(createFedExFimsDownloadedLabelData)
+                            .Match(x => x, ex => { throw ex; });
+
+                        TelemetricResult<IDownloadedLabelData> telemetry = new TelemetricResult<IDownloadedLabelData>(TelemetricResultBaseName.ApiResponseTimeInMilliseconds);
+                        telemetricShipResult.CopyTo(telemetry);
+                        telemetry.SetValue(labelData);
+                        return telemetry;
+                    }
+                    catch (FedExException ex)
+                    {
+                        throw new ShippingException(ex.Message, ex);
+                    }
+                }
+                catch (FedExException ex)
+                {
+                    throw new ShippingException(ex.Message, ex);
+                }
+
             }
+
+            return await CreateLabelInternal(shipment,
+                () => shipEngineWebClient.PurchaseLabel(shipmentRequestFactory.CreatePurchaseLabelRequest(shipment), ApiLogSource, telemetricResult), telemetricResult);
         }
 
         /// <summary>
-        /// Voids the label
+        /// Void the shipment
         /// </summary>
-        public void Void(ShipmentEntity shipment)
+        public override void Void(ShipmentEntity shipment)
         {
-            IShippingClerk shippingClerk = shippingClerkFactory.Create(shipment);
+            // If this isn't a ShipEngine shipment, void the old way
+            if (!shipment.FedEx.ShipEngineLabelId.HasValue())
+            {
+                log.Info("Voiding FedEx shipment with no ShipEngineLabelId");
+                var shippingClerk = shippingClerkFactory.Create(shipment);
 
-            try
-            {
-                shippingClerk.Void(shipment);
+                try
+                {
+                    shippingClerk.Void(shipment);
+
+                    return;
+                }
+                catch (FedExException ex)
+                {
+                    throw new ShippingException(ex.Message, ex);
+                }
             }
-            catch (FedExException ex)
-            {
-                throw new ShippingException(ex.Message, ex);
-            }
+
+            base.Void(shipment);
         }
     }
 }

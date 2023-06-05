@@ -12,6 +12,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Rate.Manipulators.Request
     /// </summary>
     public class FedExRatePackagingTypeManipulator : IFedExRateRequestManipulator
     {
+        //TODO:PLATFORM update this to use EnumHelper.GetApiValue when platform request is built
         private static Lazy<Dictionary<FedExPackagingType, PackagingType>> packageTypeLookup =
             new Lazy<Dictionary<FedExPackagingType, PackagingType>>(() =>
                 new Dictionary<FedExPackagingType, PackagingType> {

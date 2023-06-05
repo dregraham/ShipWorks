@@ -56,7 +56,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             requestedLabelFormat.SaveDefaultProfile();
 
             settings.FedExThermalDocTab = thermalDocTab.Checked;
-            settings.FedExThermalDocTabType = (int) thermalDocTabType.SelectedValue;
+            settings.FedExThermalDocTabType = (int) (thermalDocTabType.SelectedValue ?? ThermalDocTabType.Leading);
         }
     }
 }

@@ -235,13 +235,5 @@ namespace ShipWorks.Shipping.Carriers.Ups.OneBalance
         {
             return null;
         }
-
-        /// <summary>
-        /// Create shipment items
-        /// </summary>
-        protected override List<ShipmentItem> CreateItems(ShipmentEntity shipment)
-        {
-            return new List<ShipmentItem>();
-        }
     }
 }

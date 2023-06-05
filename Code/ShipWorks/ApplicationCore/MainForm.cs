@@ -52,6 +52,7 @@ using ShipWorks.ApplicationCore.Licensing.Warehouse.Messages;
 using ShipWorks.ApplicationCore.MessageBoxes;
 using ShipWorks.ApplicationCore.Nudges;
 using ShipWorks.ApplicationCore.Settings;
+using ShipWorks.Carriers.Services;
 using ShipWorks.Common.IO.Hardware.Printers;
 using ShipWorks.Common.Threading;
 using ShipWorks.Core.Common.Threading;
@@ -89,6 +90,7 @@ using ShipWorks.Shipping.Carriers.Asendia;
 using ShipWorks.Shipping.Carriers.DhlEcommerce;
 using ShipWorks.Shipping.Carriers.FedEx;
 using ShipWorks.Shipping.Carriers.FedEx.Api;
+using ShipWorks.Shipping.Carriers.FedEx.Enums;
 using ShipWorks.Shipping.Carriers.UPS.OneBalance;
 using ShipWorks.Shipping.Carriers.UPS.WorldShip;
 using ShipWorks.Shipping.Profiles;
@@ -896,6 +898,8 @@ namespace ShipWorks
             MigrateStoresToHub();
 
             SynchronizeConfig();
+
+            MigrateFedExAccountsToShipEngine();
 
             MigrateSqlConfigToHub();
 
@@ -4726,9 +4730,14 @@ namespace ShipWorks
         /// <param name="closeMenu"></param>
         private void PopulateFedExCloseMenu(Divelements.SandRibbon.Menu printMenu, SandMenuItem closeMenu)
         {
-            FedExGroundClose.PopulatePrintReportsMenu(printMenu);
+            using (var scope = IoC.BeginLifetimeScope())
+            {
+                var accountRetriever = scope.ResolveKeyed<ICarrierAccountRetriever>(ShipmentTypeCode.FedEx);
 
-            closeMenu.Visible = FedExUtility.GetSmartPostHubs().Any();
+                PopulateShipEngineManifestMenu(closeMenu, printMenu, accountRetriever, scope);
+            }
+
+            closeMenu.Visible = FedExAccountManager.Accounts.Any(a => a.SmartPostHub != (int)FedExSmartPostHub.None);
         }
 
         /// <summary>
@@ -4740,7 +4749,7 @@ namespace ShipWorks
             {
                 Cursor.Current = Cursors.WaitCursor;
 
-                List<FedExEndOfDayCloseEntity> closings = FedExGroundClose.ProcessClose();
+                List<long> closings = FedExGroundClose.ProcessClose();
 
                 if (closings != null && closings.Count > 0)
                 {
@@ -4788,7 +4797,7 @@ namespace ShipWorks
 
                     if (anyClosed)
                     {
-                        MessageHelper.ShowInformation(this, "The close has been successfully processed.\n\nSmartPost Close does not generate any reports to be printed.  No further action is required.");
+                        MessageHelper.ShowInformation(this, "The close has been successfully processed.\n\nFedEx Ground® Economy Close does not generate any reports to be printed.  No further action is required.");
                     }
                     else
                     {
@@ -5695,6 +5704,19 @@ namespace ShipWorks
                 var fetcher = lifetimeScope.Resolve<IAmazonOrderSourceIdFetcher>();
 
                 fetcher.FetchOrderSourceIds(this);
+            }
+        }
+
+        /// <summary>
+        /// Migrate FedEx Accounts to ShipEngine
+        /// </summary>
+        private void MigrateFedExAccountsToShipEngine()
+        {
+            using (var lifetimeScope = IoC.BeginLifetimeScope())
+            {
+                var migrator = lifetimeScope.Resolve<IFedExShipEngineMigrator>();
+
+                migrator.Migrate(this);
             }
         }
 

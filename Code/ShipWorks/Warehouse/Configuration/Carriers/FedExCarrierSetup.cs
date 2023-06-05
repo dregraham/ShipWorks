@@ -8,7 +8,6 @@ using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Shipping;
 using ShipWorks.Shipping.Carriers;
 using ShipWorks.Shipping.Carriers.FedEx;
-using ShipWorks.Shipping.Carriers.FedEx.Api;
 using ShipWorks.Shipping.Settings;
 using ShipWorks.Warehouse.Configuration.Carriers.DTO;
 
@@ -21,7 +20,6 @@ namespace ShipWorks.Warehouse.Configuration.Carriers
     public class FedExCarrierSetup : BaseCarrierSetup<FedExAccountEntity, IFedExAccountEntity>, ICarrierSetup
     {
         private readonly ICarrierAccountRepository<FedExAccountEntity, IFedExAccountEntity> fedExAccountRepository;
-        private readonly IFedExShippingClerk shippingClerk;
 
         /// <summary>
         /// Constructor
@@ -29,12 +27,10 @@ namespace ShipWorks.Warehouse.Configuration.Carriers
         public FedExCarrierSetup(IShipmentTypeSetupActivity shipmentTypeSetupActivity,
             ICarrierAccountRepository<FedExAccountEntity, IFedExAccountEntity> fedExAccountRepository,
             IShippingSettings shippingSettings,
-            IShipmentPrintHelper printHelper,
-            IFedExShippingClerkFactory shippingClerkFactory) :
+            IShipmentPrintHelper printHelper) :
             base(shipmentTypeSetupActivity, shippingSettings, printHelper, fedExAccountRepository)
         {
             this.fedExAccountRepository = fedExAccountRepository;
-            this.shippingClerk = shippingClerkFactory.Create();
         }
 
         /// <summary>
@@ -62,8 +58,8 @@ namespace ShipWorks.Warehouse.Configuration.Carriers
                 fedExAccount.SmartPostHubList = "<Root />";
                 fedExAccount.SignatureRelease = string.Empty;
                 fedExAccount.Description = FedExAccountManager.GetDefaultDescription(fedExAccount);
+                fedExAccount.ShipEngineCarrierID = config.ShipEngineCarrierID;
                 fedExAccount.InitializeNullsToDefault();
-                shippingClerk.RegisterAccount(fedExAccount);
             }
 
             fedExAccountRepository.Save(fedExAccount);
