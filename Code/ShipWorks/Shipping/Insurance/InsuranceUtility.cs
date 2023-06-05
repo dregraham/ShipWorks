@@ -212,7 +212,8 @@ namespace ShipWorks.Shipping.Insurance
 				}
 			}
 		}
-		public static async void GetInsuranceRates()
+
+		public static async Task GetInsuranceRates()
 		{
 			log.Info($"Start retrieving insurance rates");
 			Stopwatch watch = Stopwatch.StartNew();
