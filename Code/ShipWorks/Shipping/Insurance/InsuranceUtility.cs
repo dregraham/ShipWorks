@@ -213,18 +213,19 @@ namespace ShipWorks.Shipping.Insurance
 			}
 		}
 
-		public static async Task GetInsuranceRates()
+		public static void GetInsuranceRates()
 		{
-			log.Info($"Start retrieving insurance rates");
-			Stopwatch watch = Stopwatch.StartNew();
-
-			using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
+			Task.Factory.StartNew(() =>
 			{
-				IWarehouseRequestClient warehouseRequestClient = lifetimeScope.Resolve<IWarehouseRequestClient>();
-				await Task.Run(async () =>
+				log.Info($"Start retrieving insurance rates");
+				Stopwatch watch = Stopwatch.StartNew();
+
+				using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
 				{
+					IWarehouseRequestClient warehouseRequestClient = lifetimeScope.Resolve<IWarehouseRequestClient>();
+
 					var request = new RestRequest(WarehouseEndpoints.GetRates, Method.GET);
-					var result = await warehouseRequestClient.MakeRequest(request, "GetInsuranceRates").ConfigureAwait(false);
+					var result = warehouseRequestClient.MakeRequest(request, "GetInsuranceRates").Result;
 
 					if (result.Success && (!result.Value?.Content?.IsNullOrWhiteSpace() ?? false))
 					{
@@ -235,10 +236,11 @@ namespace ShipWorks.Shipping.Insurance
 					{
 						log.Error("Could not retrieve insurance rates correctly. Using default values instead.");
 					}
-				}).ConfigureAwait(false);
-			}
-			watch.Stop();
-			log.Info($"Insurance rates retrieved in {watch.ElapsedMilliseconds}ms");
+				}
+
+				watch.Stop();
+				log.Info($"Insurance rates retrieved in {watch.ElapsedMilliseconds}ms");
+			});
 		}
 
 		/// <summary>
