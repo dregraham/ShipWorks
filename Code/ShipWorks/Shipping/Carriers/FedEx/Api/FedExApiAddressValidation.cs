@@ -217,7 +217,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
                 UserCredential = new WebAuthenticationCredential
                 {
                     Key = settings.FedExUsername,
-                    Password = SecureText.Decrypt(settings.FedExPassword, "FedEx")
+                    Password = !string.IsNullOrEmpty(settings.FedExPassword) ? SecureText.Decrypt(settings.FedExPassword, "FedEx") : null
                 }
             };
 

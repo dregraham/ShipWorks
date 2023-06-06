@@ -128,13 +128,5 @@ namespace ShipWorks.Shipping.Tests.Carriers.FedEx.Api.Rate.Manipulators.Request
 
             Assert.False(result.RequestedShipment.Shipper.Address.Residential);
         }
-
-        [Fact]
-        public void Manipulate_ThrowsInvalidOperationException_WhenFedExAddressLookupTypeIsSpecified()
-        {
-            shipment.FedEx.OriginResidentialDetermination = (int) ResidentialDeterminationType.FedExAddressLookup;
-
-            Assert.Throws<InvalidOperationException>(() => testObject.Manipulate(shipment, new RateRequest()));
-        }
     }
 }

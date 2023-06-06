@@ -91,6 +91,11 @@ namespace ShipWorks.Shipping.Services
         string ServiceTypeName { get; }
 
         /// <summary>
+        /// The Label ID of a shipment. Throw NotImplementedException if unsupported shipment type
+        /// </summary>
+        string ShipEngineLabelId { get; }
+
+        /// <summary>
         /// Clone the shipment adapter and shipment
         /// </summary>
         ICarrierShipmentAdapter Clone();

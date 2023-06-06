@@ -124,13 +124,5 @@ namespace ShipWorks.Shipping.Carriers.DhlEcommerce
 
             return TaxIdentifiers;
         }
-
-        /// <summary>
-        /// Create shipment items
-        /// </summary>
-        protected override List<ShipmentItem> CreateItems(ShipmentEntity shipment)
-        {
-            return new List<ShipmentItem>();
-        }
     }
 }

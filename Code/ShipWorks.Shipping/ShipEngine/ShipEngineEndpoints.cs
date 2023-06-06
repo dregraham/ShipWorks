@@ -11,6 +11,10 @@
 
         public static string DhlExpressAccountCreation => "v1/connections/carriers/dhl_express";
 
+        public static string FedExAccountCreation => "v1/connections/carriers/fedex";
+
+        public static string FedExAccountUpdate(string carrierId) => $"{FedExAccountCreation}/{carrierId}/settings";
+
         public static string DisconnectAmazonShippingAccount(string accountId) => $"v1/connections/carriers/amazon_shipping_us/{accountId}";
 
         public static string AsendiaAccountCreation => "v1/connections/carriers/asendia";
@@ -31,8 +35,10 @@
 
         public static string TrackLabel(string labelId) => $"v1/labels/{labelId}/track";
 
-        public static string Track => "v1/tracking";
+        public static string TrackShipment(string carrierCode, string trackingNumber)  => $"v1/tracking?carrier_code={carrierCode}&tracking_number={trackingNumber}";
 
         public static string CreateManifest => "v1/manifests";
+
+        public static string ListServicePoints => "v1/service_points/list";
     }
 }

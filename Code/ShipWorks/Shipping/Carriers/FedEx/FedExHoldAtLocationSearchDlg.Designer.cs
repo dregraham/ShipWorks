@@ -52,7 +52,7 @@
             this.topLabel.Name = "topLabel";
             this.topLabel.Size = new System.Drawing.Size(255, 13);
             this.topLabel.TabIndex = 3;
-            this.topLabel.Text = "Requesting Hold at Locations From FedEx...";
+            this.topLabel.Text = "Requesting Hold at Locations From FedEx®...";
             // 
             // addressPanel
             // 
@@ -79,7 +79,7 @@
             this.ShowIcon = false;
             this.ShowInTaskbar = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
-            this.Text = "FedEx Location Search";
+            this.Text = "FedEx® Location Search";
             this.Load += new System.EventHandler(this.LoadDialog);
             this.ResumeLayout(false);
             this.PerformLayout();

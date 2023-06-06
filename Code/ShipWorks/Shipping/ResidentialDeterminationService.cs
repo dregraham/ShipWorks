@@ -1,10 +1,7 @@
 ﻿using System;
-using log4net;
 using ShipWorks.AddressValidation.Enums;
 using Interapptive.Shared.ComponentRegistration;
 using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Shipping.Carriers.FedEx;
-using ShipWorks.Shipping.Carriers.FedEx.Api;
 
 namespace ShipWorks.Shipping
 {
@@ -14,8 +11,6 @@ namespace ShipWorks.Shipping
     [Component]
     public class ResidentialDeterminationService : IResidentialDeterminationService
     {
-        static readonly ILog log = LogManager.GetLogger(typeof(ResidentialDeterminationService));
-
         /// <summary>
         /// Uses the address and shipment config to determine what the residential status flag should be set to.
         /// </summary>
@@ -38,35 +33,6 @@ namespace ShipWorks.Shipping
 
                 case ResidentialDeterminationType.CommercialIfCompany:
                     return string.IsNullOrEmpty(shipment.ShipCompany);
-
-                case ResidentialDeterminationType.FedExAddressLookup:
-                    {
-                        if (shipment.ShipmentType != (int) ShipmentTypeCode.FedEx)
-                        {
-                            throw new ShippingException("Cannot use FedEx address lookup for a non FedEx shipment.");
-                        }
-
-                        try
-                        {
-                            bool result = FedExApiAddressValidation.IsResidentialAddress(shipment);
-
-                            log.InfoFormat("Shipment {0}  - FedEx address lookup ({1})", shipment.ShipmentID, result);
-
-                            return result;
-                        }
-                        catch (FedExException ex)
-                        {
-                            // If there are no FedEx accounts the user must be trying to get counter rates
-                            // grab the residential status using the old method. If they choose to add a FedEx
-                            // account we will get the residential status from the account they add.
-                            if (ex.Message == "No FedEx account is selected for the shipment.")
-                            {
-                                return AddressValidationResidentialDetermination(shipment);
-                            }
-
-                            throw new FedExAddressValidationException(ex.Message, ex);
-                        }
-                    }
 
                 case ResidentialDeterminationType.FromAddressValidation:
                     return AddressValidationResidentialDetermination(shipment);

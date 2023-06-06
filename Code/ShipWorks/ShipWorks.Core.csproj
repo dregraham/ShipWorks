@@ -202,6 +202,9 @@
       <HintPath>..\..\packages\HtmlAgilityPack.1.4.9.5\lib\Net45\HtmlAgilityPack.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="ICSharpCode.AvalonEdit, Version=6.0.0.0, Culture=neutral, PublicKeyToken=9cc39be672370310, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\AvalonEdit.6.0.0\lib\net45\ICSharpCode.AvalonEdit.dll</HintPath>
+    </Reference>
     <Reference Include="ICSharpCode.SharpZipLib, Version=0.86.0.518, Culture=neutral, PublicKeyToken=1b03e6acf1164f73, processorArchitecture=MSIL">
       <HintPath>..\..\packages\SharpZipLib.0.86.0\lib\20\ICSharpCode.SharpZipLib.dll</HintPath>
     </Reference>
@@ -211,6 +214,12 @@
     <Reference Include="log4net, Version=2.0.7.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a, processorArchitecture=MSIL">
       <HintPath>..\..\packages\log4net.2.0.7\lib\net45-full\log4net.dll</HintPath>
       <Private>True</Private>
+    </Reference>
+    <Reference Include="MdXaml, Version=1.17.0.0, Culture=neutral, PublicKeyToken=9f8c7afb435b7edc, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\MdXaml.1.17.0\lib\net45\MdXaml.dll</HintPath>
+    </Reference>
+    <Reference Include="MdXaml.Plugins, Version=1.17.0.0, Culture=neutral, PublicKeyToken=9f8c7afb435b7edc, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\MdXaml.Plugins.1.17.0\lib\net45\MdXaml.Plugins.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.ApplicationInsights, Version=2.2.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\..\packages\Microsoft.ApplicationInsights.2.2.0\lib\net46\Microsoft.ApplicationInsights.dll</HintPath>
@@ -1012,6 +1021,7 @@
     <Compile Include="Filters\Content\Conditions\Orders\VerifiedCondition.cs" />
     <Compile Include="Filters\Content\Conditions\Shipments\AccountCondition.cs" />
     <Compile Include="Filters\Content\Conditions\Shipments\TrackingStatusCondition.cs" />
+    <Compile Include="Carriers\Services\IFedExShipEngineMigrator.cs" />
     <Compile Include="Messaging\Messages\ChangeDimensionsMessage.cs" />
     <Compile Include="Messaging\Messages\Orders\OrderLookupUnverifyMessage.cs" />
     <Compile Include="Messaging\Messages\Orders\OrderVerifiedMessage.cs" />
@@ -1275,7 +1285,10 @@
     <Compile Include="Shipping\Carriers\DhlEcommerce\DhlEcommercePackageAdapter.cs" />
     <Compile Include="Shipping\Api\IOnlineUpdater.cs" />
     <Compile Include="Shipping\Carriers\DhlEcommerce\IDhlEcommerceAccountRepository.cs" />
+    <Compile Include="Shipping\Carriers\FedEx\Enums\FedExSmartPostHub.cs" />
     <Compile Include="Shipping\Carriers\FedEx\Enums\FedexTINType.cs" />
+    <Compile Include="Shipping\Carriers\FedEx\IFedExAccountRepository.cs" />
+    <Compile Include="Shipping\Carriers\FedEx\IFedExTrackingService.cs" />
     <Compile Include="Shipping\Carriers\UPS\Enums\UpsCustomsRecipientTINType.cs" />
     <Compile Include="Shipping\ShipEngine\DTOs\Address.cs" />
     <Compile Include="Shipping\ShipEngine\DTOs\AddressValidatingShipment.cs" />
@@ -1285,9 +1298,12 @@
     <Compile Include="Shipping\ShipEngine\DTOs\AsendiaAccountInformationDTO.cs" />
     <Compile Include="Shipping\ShipEngine\DTOs\BaseShipEngineResponse.cs" />
     <Compile Include="Shipping\ShipEngine\DTOs\Carrier.cs" />
+    <Compile Include="Shipping\ShipEngine\DTOs\CarrierAccount\FedExRegistrationRequest.cs" />
     <Compile Include="Shipping\ShipEngine\DTOs\CarrierAccount\DhlEcommerceRegistrationRequest.cs" />
+    <Compile Include="Shipping\ShipEngine\DTOs\CarrierAccount\UpdateFedExSettingsRequest.cs" />
     <Compile Include="Shipping\ShipEngine\DTOs\CarrierAdvancedOption.cs" />
     <Compile Include="Shipping\ShipEngine\DTOs\CarrierListResponse.cs" />
+    <Compile Include="Shipping\ShipEngine\DTOs\CollectOnDeliveryAdvancedOption.cs" />
     <Compile Include="Shipping\ShipEngine\DTOs\ConnectAccountResponseDTO.cs" />
     <Compile Include="Shipping\ShipEngine\DTOs\CreateManifestResponse.cs" />
     <Compile Include="Shipping\ShipEngine\DTOs\CustomsItem.cs" />
@@ -1299,9 +1315,11 @@
     <Compile Include="Shipping\ShipEngine\DTOs\LabelMessages.cs" />
     <Compile Include="Shipping\ShipEngine\DTOs\LabelPackage.cs" />
     <Compile Include="Shipping\ShipEngine\DTOs\LinkDTO.cs" />
+    <Compile Include="Shipping\ShipEngine\DTOs\ListServicePointsResponse.cs" />
     <Compile Include="Shipping\ShipEngine\DTOs\MoneyDTO.cs" />
     <Compile Include="Shipping\ShipEngine\DTOs\MultiFormatDownloadLinkDTO.cs" />
     <Compile Include="Shipping\ShipEngine\DTOs\Package.cs" />
+    <Compile Include="Shipping\ShipEngine\DTOs\PaymentTypeEnum.cs" />
     <Compile Include="Shipping\ShipEngine\DTOs\ProviderError.cs" />
     <Compile Include="Shipping\ShipEngine\DTOs\PurchaseLabelRequest.cs" />
     <Compile Include="Shipping\ShipEngine\DTOs\PurchaseLabelWithoutShipmentRequest.cs" />

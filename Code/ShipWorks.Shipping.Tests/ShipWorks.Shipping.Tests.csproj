@@ -296,6 +296,7 @@
     <Compile Include="Carriers\FedEx\Api\Fims\FimsCarrierResponseTest.cs" />
     <Compile Include="Carriers\FedEx\Api\Fims\FimsShippingClerkTest.cs" />
     <Compile Include="Carriers\FedEx\FedExShippingProfileApplicationStrategyTest.cs" />
+    <Compile Include="Carriers\FedEx\FedExTrackingServiceTest.cs" />
     <Compile Include="Carriers\iParcel\iParcelShipmentTypeTest.cs" />
     <Compile Include="Carriers\iParcel\iParcelDownloadedLabelDataTest.cs" />
     <Compile Include="Carriers\iParcel\iParcelShipmentAdapterTest.cs" />
@@ -441,6 +442,7 @@
     <Compile Include="ShipEngine\ShipEngineApiKeyTest.cs" />
     <Compile Include="Settings\ShipmentDateCutoffTest.cs" />
     <Compile Include="ShipEngine\ShipEngineTrackingResultFactoryTest.cs" />
+    <Compile Include="ShipEngine\ShipEngineTrackingServiceTest.cs" />
     <Compile Include="ShipEngine\ShipEngineWebClientTest.cs" />
     <Compile Include="ShipEngine\ShipEnginePartnerWebClientTest.cs" />
     <Compile Include="ShipEngine\ShipmentElementFactoryTest.cs" />

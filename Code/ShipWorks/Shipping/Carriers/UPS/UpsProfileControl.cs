@@ -111,7 +111,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
 
             EnumHelper.BindComboBox<UpsServiceType>(service, t => ShowService(t, isMIAvailable, isSurePostAvailable));
             EnumHelper.BindComboBox<UpsDeliveryConfirmationType>(confirmationType);
-            EnumHelper.BindComboBox<ResidentialDeterminationType>(residentialDetermination, t => t != ResidentialDeterminationType.FedExAddressLookup);
+            EnumHelper.BindComboBox<ResidentialDeterminationType>(residentialDetermination);
             EnumHelper.BindComboBox<UpsPayorType>(payorType);
             EnumHelper.BindComboBox<UpsEmailNotificationSubject>(emailSubject);
             EnumHelper.BindComboBox<UpsReturnServiceType>(returnService);

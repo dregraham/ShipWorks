@@ -149,7 +149,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Ship.Manipulators.Request.Intern
 
             // if the user has uploaded letterhead
             // Submit the image detail to the commercial invoice detail
-            if (account.Letterhead.Length > 0)
+            if (!string.IsNullOrWhiteSpace(account.Letterhead))
             {
                 CustomerImageUsage letterheadDetail = new CustomerImageUsage
                 {

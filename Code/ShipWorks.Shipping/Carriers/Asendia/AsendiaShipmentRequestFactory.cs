@@ -105,13 +105,5 @@ namespace ShipWorks.Shipping.Carriers.Asendia
             }
             return listTaxIds;
         }
-
-        /// <summary>
-        /// Create shipment items
-        /// </summary>
-        protected override List<ShipmentItem> CreateItems(ShipmentEntity shipment)
-        {
-            return new List<ShipmentItem>();
-        }
     }
 }

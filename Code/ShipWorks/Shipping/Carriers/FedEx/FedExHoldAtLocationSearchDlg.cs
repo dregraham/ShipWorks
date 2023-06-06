@@ -2,14 +2,18 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 using Autofac;
 using Interapptive.Shared.UI;
 using ShipWorks.ApplicationCore;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Shipping.Carriers.Api;
 using ShipWorks.Shipping.Carriers.FedEx.Api;
 using ShipWorks.Shipping.Carriers.FedEx.WebServices.GlobalShipAddress;
+using ShipWorks.Shipping.ShipEngine;
+using ShipWorks.Shipping.ShipEngine.DTOs;
 
 namespace ShipWorks.Shipping.Carriers.FedEx
 {
@@ -22,7 +26,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
 
         private List<RadioButton> addressRadioButtons;
 
-        private DistanceAndLocationDetail[] distanceAndLocationDetails;
+        private ServicePoint[] servicePoints;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="FedExHoldAtLocationSearchDlg" /> class.
@@ -38,7 +42,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         /// Gets the selected location.
         /// </summary>
         /// <value>The selected location.</value>
-        public DistanceAndLocationDetail SelectedLocation
+        public ServicePoint SelectedServicePoint
         {
             get;
             private set;
@@ -58,29 +62,33 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         /// <summary>
         /// Formats the address result for display.
         /// </summary>
-        public string FormattedAddress(DistanceAndLocationDetail distanceAndLocation)
+        public string FormattedAddress(ServicePoint servicePoint)
         {
-            Contact contact = distanceAndLocation.LocationDetail.LocationContactAndAddress.Contact;
-            Address address = distanceAndLocation.LocationDetail.LocationContactAndAddress.Address;
-            string phoneLine = string.Empty;
 
-            if (!string.IsNullOrWhiteSpace(contact.TollFreePhoneNumber))
+            string phoneLine = !string.IsNullOrWhiteSpace(servicePoint.Phone) ? servicePoint.Phone : string.Empty;
+            var distanceInMiles = Math.Round(servicePoint.DistanceInMeters * 0.00062137, 2);
+
+            var street = servicePoint.AddressLine1;
+
+            if (!string.IsNullOrEmpty(servicePoint.AddressLine2))
             {
-                phoneLine = contact.TollFreePhoneNumber;
+                street += $"\n{servicePoint.AddressLine2}";
             }
-            else if (!string.IsNullOrWhiteSpace(contact.PhoneNumber))
+
+            if (!string.IsNullOrEmpty(servicePoint.AddressLine3))
             {
-                phoneLine = contact.PhoneNumber;
+                street += $"\n{servicePoint.AddressLine3}";
             }
+    
 
             return string.Format("{1} ({2} miles) {0}{3}{0}{4}, {5} {6}{7}",
                 Environment.NewLine,
-                contact.CompanyName,
-                Math.Round(distanceAndLocation.Distance.Value, 2),
-                string.Join(Environment.NewLine, address.StreetLines),
-                address.City,
-                address.StateOrProvinceCode,
-                address.PostalCode,
+                servicePoint.CompanyName,
+                distanceInMiles,
+                street,
+                servicePoint.City,
+                servicePoint.StateProvince,
+                servicePoint.PostalCode,
                 !string.IsNullOrWhiteSpace(phoneLine) ? string.Format("{0}{1}", Environment.NewLine, phoneLine) : string.Empty);
         }
 
@@ -110,36 +118,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         /// <summary>
         /// Determines whether the user previously had selected this address.
         /// </summary>
-        private bool IsSelected(DistanceAndLocationDetail distanceAndLocationDetail)
-        {
-            string[] returnedStreetArray = distanceAndLocationDetail.LocationDetail.LocationContactAndAddress.Address.StreetLines;
+        private bool IsSelected(ServicePoint servicePoint) =>
+            servicePoint.AddressLine1 == shipment.FedEx.HoldStreet1 &&
+            servicePoint.AddressLine2 == shipment.FedEx.HoldStreet2 &&
+            servicePoint.AddressLine3 == shipment.FedEx.HoldStreet3;
 
-            // The first street lines don't match
-            if (returnedStreetArray[0] != shipment.FedEx.HoldStreet1)
-            {
-                return false;
-            }
-
-            // The first street lines match and there are no second street lines
-            if (returnedStreetArray.Length == 1 && string.IsNullOrEmpty(shipment.FedEx.HoldStreet2))
-            {
-                return true;
-            }
-
-            // The shipment has a second line, but the returned location does not
-            if (returnedStreetArray.Length == 1)
-            {
-                return false;
-            }
-
-            // The first and second street lines match
-            if (returnedStreetArray[1] == shipment.FedEx.HoldStreet2)
-            {
-                return true;
-            }
-
-            return false;
-        }
 
         /// <summary>
         /// Clicks the ok button.
@@ -154,7 +137,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
 
                     if (addressRadioButton.Checked)
                     {
-                        SelectedLocation = distanceAndLocationDetails[index];
+                        SelectedServicePoint = servicePoints[index];
                     }
                 }
             }
@@ -166,25 +149,41 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         /// Loads address in the dialog asynchronously. This is show the form will display
         /// and tell user we are downloading addresses while downloading addresses.
         /// </summary>
-        private void LoadDialog(object sender, EventArgs e)
+        private async void LoadDialog(object sender, EventArgs e)
         {
-            BackgroundWorker worker = new BackgroundWorker();
-            worker.DoWork += RequestAddresses;
-            worker.RunWorkerCompleted += RequestAddressesComplete;
+            try
+            {
+                var result = await RequestAddresses().ConfigureAwait(true);
+                RequestAddressesComplete(result);
+            }
+            catch (Exception ex)
+            {
+                MessageHelper.ShowMessage(this.Owner, ex.Message);
 
-            worker.RunWorkerAsync();
+                Close();
+            }
         }
 
         /// <summary>
         /// Gets the addresses form FedEx.
         /// </summary>
-        private void RequestAddresses(object sender, DoWorkEventArgs e)
+        private async Task<ListServicePointsResponse> RequestAddresses()
         {
             using (var lifetimeScope = IoC.BeginLifetimeScope())
             {
-                IFedExShippingClerk fedExShippingClerk = lifetimeScope.Resolve<IFedExShippingClerkFactory>().Create(shipment);
+                IShipEngineWebClient shipEngineWebClient = lifetimeScope.Resolve<IShipEngineWebClient>();
+                var fedExAccountRepo = lifetimeScope.Resolve<ICarrierAccountRepository<FedExAccountEntity, IFedExAccountEntity>>();
 
-                e.Result = fedExShippingClerk.PerformHoldAtLocationSearch(shipment);
+                var fedExAccount = fedExAccountRepo.GetAccount(shipment);
+
+                var result = await shipEngineWebClient.ListServicePoints(fedExAccount.ShipEngineCarrierID, shipment).ConfigureAwait(true);
+
+                if (result.Failure)
+                {
+                    throw result.Exception;
+                }
+
+                return result.Value;
             }
         }
 
@@ -193,61 +192,38 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         /// </summary>
         /// <param name="sender">The sender.</param>
         /// <param name="e">The <see cref="RunWorkerCompletedEventArgs" /> instance containing the event data.</param>
-        private void RequestAddressesComplete(object sender, RunWorkerCompletedEventArgs e)
+        private void RequestAddressesComplete(ListServicePointsResponse response)
         {
-            if (e.Error != null)
-            {
-                CarrierException carrierException = e.Error as CarrierException;
-                if (carrierException != null)
-                {
-                    MessageHelper.ShowMessage(this, carrierException.Message);
-
-                    Close();
-                    return;
-                }
-                // if not carrier exception, throw
-                throw new Exception("Error returned finding drop off locations", e.Error);
-            }
-
-            distanceAndLocationDetails = (DistanceAndLocationDetail[]) e.Result;
+            servicePoints = response.ServicePoints;
 
             addressRadioButtons = new List<RadioButton>();
 
-            try
+            RadioButton previousAddress = null;
+            foreach (var servicePoint in servicePoints)
             {
-                RadioButton previousAddress = null;
-                foreach (DistanceAndLocationDetail distanceAndLocationDetail in distanceAndLocationDetails)
+                int position = 0;
+
+                if (previousAddress != null)
                 {
-                    int position = 0;
-
-                    if (previousAddress != null)
-                    {
-                        position = previousAddress.Location.Y + previousAddress.Height + 10;
-                    }
-
-                    RadioButton currentAddress = new RadioButton
-                    {
-                        Text = FormattedAddress(distanceAndLocationDetail),
-                        Top = position,
-                        AutoSize = true,
-                        Checked = IsSelected(distanceAndLocationDetail)
-                    };
-
-                    addressRadioButtons.Add(currentAddress);
-                    addressPanel.Controls.Add(currentAddress);
-
-                    previousAddress = currentAddress;
+                    position = previousAddress.Location.Y + previousAddress.Height + 10;
                 }
 
-                topLabel.Text = "Select a Hold At FedEx Location:";
-                ResizeDialog();
-            }
-            catch (CarrierException ex)
-            {
-                MessageHelper.ShowMessage(this, ex.Message);
+                RadioButton currentAddress = new RadioButton
+                {
+                    Text = FormattedAddress(servicePoint),
+                    Top = position,
+                    AutoSize = true,
+                    Checked = IsSelected(servicePoint)
+                };
 
-                Close();
+                addressRadioButtons.Add(currentAddress);
+                addressPanel.Controls.Add(currentAddress);
+
+                previousAddress = currentAddress;
             }
+
+            topLabel.Text = "Select a Hold At Location:";
+            ResizeDialog();
         }
     }
 }
