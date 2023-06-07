@@ -389,7 +389,7 @@ namespace ShipWorks.Shipping.Insurance
 						}
 						else
 						{
-							rate = InsuranceRates.ShipworksRates.FedExUpsCost;
+							rate = GetFedExUpsRate(shipment);
 						}
 					}
 					break;
@@ -404,7 +404,7 @@ namespace ShipWorks.Shipping.Insurance
 					break;
 
 				default:
-					rate = InsuranceRates.ShipworksRates.OtherCost;
+					rate = GetOthersRate(shipment);
 					break;
 			}
 
@@ -457,7 +457,7 @@ namespace ShipWorks.Shipping.Insurance
 				}
 
 				adjustedValue = Math.Max(declaredValue - 100, 0);
-				rate = InsuranceRates.ShipworksRates.FedExUpsCost;
+				rate = GetFedExUpsRate(shipment);
 			}
 
 			if (adjustedValue <= 0)
@@ -480,6 +480,12 @@ namespace ShipWorks.Shipping.Insurance
 		/// </summary>
 		private static decimal GetUspsRate(ShipmentEntity shipment)
 					=> shipment.ShipPerson.IsDomesticCountry() ? InsuranceRates.ShipworksRates.UspsDomesticCost : InsuranceRates.ShipworksRates.UspsInternationalCost;
+		
+		private static decimal GetFedExUpsRate(ShipmentEntity shipment)
+							=> shipment.ShipPerson.IsDomesticCountry() ? InsuranceRates.ShipworksRates.FedExUpsDomesticCost : InsuranceRates.ShipworksRates.FedExUpsInternationalCost;
+		
+		private static decimal GetOthersRate(ShipmentEntity shipment)
+							=> shipment.ShipPerson.IsDomesticCountry() ? InsuranceRates.ShipworksRates.OtherDomesticCost : InsuranceRates.ShipworksRates.OtherInternationalCost;
 
 		/// <summary>
 		/// Get the native carrier cost of the give shipment with the specified declared value
