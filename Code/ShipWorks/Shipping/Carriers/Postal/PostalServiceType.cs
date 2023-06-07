@@ -10,6 +10,7 @@ namespace ShipWorks.Shipping.Carriers.Postal
         [Description("Priority")]
         PriorityMail = 0,
 
+        [Deprecated]
         [Description("First Class")]
         FirstClass = 1,
 
@@ -51,6 +52,7 @@ namespace ShipWorks.Shipping.Carriers.Postal
         [Description("Express Mail (Premium)")]
         ExpressMailPremium = 12,
 
+        [Deprecated]
         [Description("Parcel Select")]
         ParcelSelect = 13,
 
@@ -59,6 +61,9 @@ namespace ShipWorks.Shipping.Carriers.Postal
 
         [Description("Pay-on-Use Return")]
         PayOnUseReturn = 15,
+
+        [Description("Ground Advantage")]
+        GroundAdvantage = 16,
 
         [Description("DHL SM Parcel Expedited")]
         [ApiValue("DHLGMSMPARCELSEXPEDITED")]

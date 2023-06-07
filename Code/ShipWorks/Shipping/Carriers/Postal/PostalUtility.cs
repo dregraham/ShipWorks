@@ -165,12 +165,13 @@ namespace ShipWorks.Shipping.Carriers.Postal
             {
                 PostalServiceType.PriorityMail,
                 PostalServiceType.ExpressMail,
+                PostalServiceType.GroundAdvantage,
                 PostalServiceType.FirstClass,
                 PostalServiceType.ParcelSelect,
                 PostalServiceType.MediaMail,
                 PostalServiceType.LibraryMail,
                 PostalServiceType.CriticalMail,
-                PostalServiceType.StandardPost
+                PostalServiceType.StandardPost,
             };
 
             if (shipmentType == ShipmentTypeCode.Usps || shipmentType == ShipmentTypeCode.Express1Usps ||
