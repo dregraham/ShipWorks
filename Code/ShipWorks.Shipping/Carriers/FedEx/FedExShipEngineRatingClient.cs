@@ -102,30 +102,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         {
             if (!string.IsNullOrWhiteSpace(rate.PackageType) && rate.PackageType.Contains("_onerate"))
             {
-                switch (rate.PackageType)
-                {
-                    case "fedex_envelope_onerate":
-                        rate.ServiceType += " - FedEx® One Rate Envelope";
-                        break;
-                    case "fedex_small_box_onerate":
-                        rate.ServiceType += " - FedEx® One Rate Small Box";
-                        break;
-                    case "fedex_medium_box_onerate":
-                        rate.ServiceType += " - FedEx® One Rate Medium Box";
-                        break;
-                    case "fedex_large_box_onerate":
-                        rate.ServiceType += " - FedEx® One Rate Large Box";
-                        break;
-                    case "fedex_extra_large_box_onerate":
-                        rate.ServiceType += " - FedEx® One Rate Extra Large Box";
-                        break;
-                    case "fedex_pak_onerate":
-                        rate.ServiceType += " - FedEx® One Rate Pak";
-                        break;
-                    case "fedex_tube_onerate":
-                        rate.ServiceType += " - FedEx® One Rate Tube";
-                        break;
-                }
+                rate.ServiceType = "FedEx One Rate® (" + rate.ServiceType.Replace("FedEx ", "").Replace("®", "") + ")";
             }
 
             return rate;
