@@ -83,10 +83,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
                 {
                     r.ServiceType = r.ServiceType.Replace("FedEx SmartPost parcel select", "FedEx Ground® Economy");
 
-                    if (!string.IsNullOrWhiteSpace(r.PackageType) && r.PackageType.Contains("_onerate"))
-                    {
-                        r.ServiceType += " One Rate®";
-                    }
+                    CheckIsOneRateService(r);
                 });
 
                 rateShipmentResponse.RateResponse.Rates = rateShipmentResponse.RateResponse.Rates
@@ -99,6 +96,39 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             {
                 throw new ShippingException(ex.GetBaseException().Message);
             }
+        }
+
+        private Rate CheckIsOneRateService(Rate rate)
+        {
+            if (!string.IsNullOrWhiteSpace(rate.PackageType) && rate.PackageType.Contains("_onerate"))
+            {
+                switch (rate.PackageType)
+                {
+                    case "fedex_envelope_onerate":
+                        rate.ServiceType += " - FedEx® One Rate Envelope";
+                        break;
+                    case "fedex_small_box_onerate":
+                        rate.ServiceType += " - FedEx® One Rate Small Box";
+                        break;
+                    case "fedex_medium_box_onerate":
+                        rate.ServiceType += " - FedEx® One Rate Medium Box";
+                        break;
+                    case "fedex_large_box_onerate":
+                        rate.ServiceType += " - FedEx® One Rate Large Box";
+                        break;
+                    case "fedex_extra_large_box_onerate":
+                        rate.ServiceType += " - FedEx® One Rate Extra Large Box";
+                        break;
+                    case "fedex_pak_onerate":
+                        rate.ServiceType += " - FedEx® One Rate Pak";
+                        break;
+                    case "fedex_tube_onerate":
+                        rate.ServiceType += " - FedEx® One Rate Tube";
+                        break;
+                }
+            }
+
+            return rate;
         }
 
         private List<string> GetPackageTypes(List<IPackageAdapter> packages)
