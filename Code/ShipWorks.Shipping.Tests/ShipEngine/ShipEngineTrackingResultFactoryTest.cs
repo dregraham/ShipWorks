@@ -51,7 +51,7 @@ namespace ShipWorks.Shipping.Tests.ShipEngine
 
             TrackingResult result = testObject.Create(shipEngineTrackingInfo);
 
-            Assert.Equal("<b>Delivered</b> on 2/23/2023 4:15:04 PM<br/><span style='color: rgb(80, 80, 80);'>Signed by: Wojciech Wojcik</span>", result.Summary);
+            Assert.Equal("<b>Delivered</b> on 2/23/2023 3:15:04 PM<br/><span style='color: rgb(80, 80, 80);'>Signed by: Wojciech Wojcik</span>", result.Summary);
         }
 
         [Fact]
