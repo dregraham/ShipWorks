@@ -33,7 +33,6 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             {
                 LabelPackage labelPackage = label.Packages[i];
                 FedExPackageEntity fedExPackage = fedExShipment.Packages[i];
-
                 fedExPackage.TrackingNumber = labelPackage.TrackingNumber;
             }
         }
