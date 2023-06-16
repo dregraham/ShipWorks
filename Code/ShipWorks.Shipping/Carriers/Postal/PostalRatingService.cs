@@ -71,7 +71,8 @@ namespace ShipWorks.Shipping.Carriers.Postal
         {
             IEnumerable<PostalServiceType> availableServiceTypes = shipmentTypeManager[shipment.ShipmentTypeCode]
                     .GetAvailableServiceTypes()
-                    .Cast<PostalServiceType>();
+                    .Cast<PostalServiceType>()
+                    .Where(x => !x.IsHiddenFor(HiddenForContext.Rates));
             List<RateResult> results = rates.Where(r => r.Tag is PostalRateSelection && availableServiceTypes.Contains(((PostalRateSelection) r.Tag).ServiceType)).ToList();
 
             return results;

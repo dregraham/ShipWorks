@@ -110,6 +110,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
                 case "ParcelSelect": return PostalServiceType.ParcelSelect;
                 case "Priority": return PostalServiceType.PriorityMail;
                 case "CriticalMail": return PostalServiceType.CriticalMail;
+                case "GroundAdvantage": return PostalServiceType.GroundAdvantage;
 
                 case "ExpressMailInternational": return PostalServiceType.InternationalExpress;
                 case "PriorityMailInternational": return PostalServiceType.InternationalPriority;

@@ -36,7 +36,7 @@ namespace ShipWorks.Shipping.Carriers.Postal
 
             List<PostalServiceType> availableServices = shipmentType.GetAvailableServiceTypes(excludedServiceTypeRepository)
                 .Cast<PostalServiceType>()
-                .Where(x => EnumHelper.GetDeprecated(x) == false)
+                .Where(x => EnumHelper.GetDeprecated(x) == false && x.IsHiddenFor(HiddenForContext.NewShipment) == false)
                 .ToList();
 
             // If they are all international we can load up all the international services

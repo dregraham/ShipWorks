@@ -10,7 +10,7 @@ namespace ShipWorks.Shipping.Carriers.Postal
         [Description("Priority")]
         PriorityMail = 0,
 
-        [Deprecated]
+        [HiddenFor(HiddenForContext.NewShipment | HiddenForContext.Rates)]
         [Description("First Class")]
         FirstClass = 1,
 
@@ -52,7 +52,7 @@ namespace ShipWorks.Shipping.Carriers.Postal
         [Description("Express Mail (Premium)")]
         ExpressMailPremium = 12,
 
-        [Deprecated]
+        [HiddenFor(HiddenForContext.NewShipment | HiddenForContext.Rates)]
         [Description("Parcel Select")]
         ParcelSelect = 13,
 
