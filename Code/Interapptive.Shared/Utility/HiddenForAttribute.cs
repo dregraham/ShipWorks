@@ -17,6 +17,7 @@ namespace Interapptive.Shared.Utility
     /// <summary>
     /// Attribute for decorating enumeration values that should not be visible in provided context.
     /// </summary>
+    [AttributeUsage(AttributeTargets.Field)]
     public class HiddenForAttribute : Attribute
     {
         public HiddenForAttribute(HiddenForContext context)
