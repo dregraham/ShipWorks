@@ -133,6 +133,7 @@ namespace ShipWorks.Shipping.ShipEngine
             {
                 AddressResidentialIndicator = residentialIndicator,
                 Name = personAdapter.UnparsedName,
+                Email = personAdapter.Email,
                 Phone = personAdapter.Phone,
                 CompanyName = personAdapter.Company,
                 AddressLine1 = personAdapter.Street1,
