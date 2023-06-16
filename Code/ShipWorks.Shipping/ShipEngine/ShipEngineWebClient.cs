@@ -588,11 +588,11 @@ namespace ShipWorks.Shipping.ShipEngine
                 }
 
                 var logEntry = logEntryFactory.GetLogEntry(logSource, logName, LogActionType.Other);
-                logEntry.LogRequest(request, client, "txt");
+                logEntry.LogRequest(request, client, "json");
 
                 IRestResponse response = await client.ExecuteTaskAsync(request).ConfigureAwait(false);
 
-                logEntry.LogResponse(response, "txt");
+                logEntry.LogResponse(response, "json");
 
                 var responseObject = JsonConvert.DeserializeObject<TResponse>(response.Content);
 
