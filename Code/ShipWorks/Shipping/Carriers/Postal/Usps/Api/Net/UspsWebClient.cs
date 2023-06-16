@@ -1339,7 +1339,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
             rate.Width = shipment.Postal.DimsWidth;
             rate.Height = shipment.Postal.DimsHeight;
 
-            rate.ShipDate = shipment.ShipDate;
+            rate.ShipDate = shipment.ShipDate.ToLocalTime();
             rate.DeclaredValue = shipment.CustomsValue;
 
             if (CustomsManager.IsCustomsRequired(shipment))
