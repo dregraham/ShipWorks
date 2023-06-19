@@ -51,17 +51,18 @@ namespace ShipWorks.Shipping.ShipEngine
         public PurchaseLabelRequest CreatePurchaseLabelRequest(ShipmentEntity shipment, List<IPackageAdapter> packages, string serviceCode, 
             Func<IPackageAdapter, string> getPackageCode, Action<ShipmentPackage, IPackageAdapter> addPackageInsurance)
         {
+            var shipDate = shipment.ShipDate.ToLocalTime().Date;
             PurchaseLabelRequest request = new PurchaseLabelRequest()
             {
                 LabelFormat = GetPurchaseLabelRequestLabelFormat((ThermalLanguage) shipment.RequestedLabelFormat),
                 LabelLayout = "4x6",
-                IsReturnLabel = shipment.ReturnShipment,           
+                IsReturnLabel = shipment.ReturnShipment,
 
                 Shipment = new Shipment()
                 {
                     ShipTo = CreateShipToAddress(shipment),
                     ShipFrom = CreateShipFromAddress(shipment),
-                    ShipDate = shipment.ShipDate,
+                    ShipDate = new DateTime(shipDate.Year, shipDate.Month, shipDate.Day, 0, 0, 0, DateTimeKind.Utc),
                     Packages = CreatePackageForLabel(packages, getPackageCode, addPackageInsurance),
                     ServiceCode = serviceCode
                 }
