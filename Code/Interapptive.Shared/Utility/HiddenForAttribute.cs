@@ -10,8 +10,9 @@ namespace Interapptive.Shared.Utility
     public enum HiddenForContext
     {
         None = 0,
-        NewShipment = 1,
-        Rates = 2
+        NewShipment = 0b1,
+        Rates = 0b10,
+        Profiles = 0b100,
     }
 
     /// <summary>
