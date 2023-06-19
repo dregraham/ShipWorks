@@ -84,6 +84,12 @@ namespace ShipWorks.Shipping.ShipEngine.DTOs
         public string Name { get; set; }
 
         /// <summary>
+        /// Gets or Sets Name
+        /// </summary>
+        [DataMember(Name = "email", EmitDefaultValue = false)]
+        public string Email { get; set; }
+
+        /// <summary>
         /// Gets or Sets Phone
         /// </summary>
         [DataMember(Name = "phone", EmitDefaultValue = false)]
