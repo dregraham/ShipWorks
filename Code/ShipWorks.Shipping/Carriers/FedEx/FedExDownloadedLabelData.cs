@@ -1,4 +1,5 @@
 ﻿using Interapptive.Shared.ComponentRegistration;
+using Interapptive.Shared.Enums;
 using ShipWorks.Data;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.ShipEngine;
@@ -21,6 +22,19 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             IShipEngineResourceDownloader resourceDownloader) 
             : base(shipment, label, resourceManager, resourceDownloader)
         {
+        }
+
+        protected override void SaveLabelInfoToEntity(ShipmentEntity shipment, Label label)
+        {
+            base.SaveLabelInfoToEntity(shipment, label);
+            FedExShipmentEntity fedExShipment = shipment.FedEx;
+
+            for (int i = 0; i < label.Packages.Count; i++)
+            {
+                LabelPackage labelPackage = label.Packages[i];
+                FedExPackageEntity fedExPackage = fedExShipment.Packages[i];
+                fedExPackage.TrackingNumber = labelPackage.TrackingNumber;
+            }
         }
 
         /// <summary>
