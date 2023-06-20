@@ -15,6 +15,12 @@ namespace ShipWorks.Shipping.ShipEngine
     [Component(SingleInstance = true)]
     public class ShipEngineTrackingResultFactory : IShipEngineTrackingResultFactory
     {
+        private readonly IDateTimeProvider _dateTimeProvider;
+
+        public ShipEngineTrackingResultFactory(IDateTimeProvider dateTimeProvider)
+        {
+            _dateTimeProvider = dateTimeProvider;
+        }
         /// <summary>
         /// Creates ShipWorks TrackingResult from the ShipEngine TrackingInformation
         /// </summary>
@@ -55,7 +61,7 @@ namespace ShipWorks.Shipping.ShipEngine
 
             if(detail.ActualDeliveryDate.HasValue)
             {
-                sb.Append($" on {detail.ActualDeliveryDate.Value.ToLocalTime()}");
+                sb.Append($" on {detail.ActualDeliveryDate.Value.ToLocalTime(_dateTimeProvider.TimeZoneInfo)}");
             }
 
             if(detail.EstimatedDeliveryDate.HasValue && detail.ActualDeliveryDate == null)

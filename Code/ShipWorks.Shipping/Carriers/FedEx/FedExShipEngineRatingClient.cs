@@ -10,6 +10,7 @@ using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.FedEx.Enums;
 using ShipWorks.Shipping.Editing.Rating;
+using ShipWorks.Shipping.Services;
 using ShipWorks.Shipping.ShipEngine;
 using ShipWorks.Shipping.ShipEngine.DTOs;
 
@@ -25,6 +26,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         private readonly IShipEngineWebClient shipEngineWebClient;
         private readonly IShipEngineRateGroupFactory rateGroupFactory;
         private readonly ShipmentType shipmentType;
+        private readonly IShipmentTypeManager shipmentTypeManager;
 
         /// <summary>
         /// Constructor
@@ -38,6 +40,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             this.rateRequestFactory = rateRequestFactory[ShipmentTypeCode.FedEx];
             this.shipEngineWebClient = shipEngineWebClient;
             this.rateGroupFactory = rateGroupFactory;
+            this.shipmentTypeManager = shipmentTypeManager;
             shipmentType = shipmentTypeManager.Get(ShipmentTypeCode.FedEx);
         }
 
@@ -55,6 +58,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             try
             {
                 RateShipmentRequest request = rateRequestFactory.CreateRateShipmentRequest(shipment);
+                List<IPackageAdapter> packages = GetPackages(shipment);
+
+                request.RateOptions.PackageTypes = GetPackageTypes(packages);
                 RateShipmentResponse rateShipmentResponse = Task.Run(async () =>
                         await shipEngineWebClient.RateShipment(request, ApiLogSource.FedEx).ConfigureAwait(false)).Result;
 
@@ -74,7 +80,15 @@ namespace ShipWorks.Shipping.Carriers.FedEx
                 }
 
                 rateShipmentResponse.RateResponse.Rates.ForEach(r =>
-                    r.ServiceType = r.ServiceType.Replace("FedEx SmartPost parcel select", "FedEx Ground® Economy"));
+                {
+                    r.ServiceType = r.ServiceType.Replace("FedEx SmartPost parcel select", "FedEx Ground® Economy");
+
+                    CheckIsOneRateService(r);
+                });
+
+                rateShipmentResponse.RateResponse.Rates = rateShipmentResponse.RateResponse.Rates
+                    .OrderByDescending(r => r.ShippingAmount.Amount)
+                    .ToList();
 
                 return rateGroupFactory.Create(rateShipmentResponse.RateResponse, ShipmentTypeCode.FedEx, availableServiceTypeApiCodes);
             }
@@ -82,6 +96,33 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             {
                 throw new ShippingException(ex.GetBaseException().Message);
             }
+        }
+
+        private Rate CheckIsOneRateService(Rate rate)
+        {
+            if (!string.IsNullOrWhiteSpace(rate.PackageType) && rate.PackageType.Contains("_onerate"))
+            {
+                rate.ServiceType = "FedEx One Rate® (" + rate.ServiceType.Replace("FedEx ", "").Replace("®", "") + ")";
+            }
+
+            return rate;
+        }
+
+        private List<string> GetPackageTypes(List<IPackageAdapter> packages)
+        {
+            var package= packages.FirstOrDefault();
+
+            if (package != null)
+            {
+                return new List<string>() { EnumHelper.GetApiValue((FedExPackagingType) package.PackagingType), EnumHelper.GetApiValue((FedExPackagingType) package.PackagingType) + "_onerate" };
+            }
+
+            return new List<string>() { "package", "fedex_pak", "fedex_tube", "fedex_envelope", "fedex_envelope_onerate", "fedex_extra_large_box_onerate", "fedex_large_box_onerate", "fedex_medium_box_onerate", "fedex_pak_onerate", "fedex_small_box_onerate" };
+        }
+
+        private List<IPackageAdapter> GetPackages(ShipmentEntity shipment)
+        {
+            return shipmentTypeManager.Get(shipment.ShipmentTypeCode).GetPackageAdapters(shipment).ToList();
         }
     }
 }
