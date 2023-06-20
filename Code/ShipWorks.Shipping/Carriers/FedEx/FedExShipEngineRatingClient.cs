@@ -87,7 +87,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
                 });
 
                 rateShipmentResponse.RateResponse.Rates = rateShipmentResponse.RateResponse.Rates
-                    .OrderByDescending(r => r.ShippingAmount.Amount)
+                    .OrderBy(r => r.ShippingAmount.Amount)
                     .ToList();
 
                 return rateGroupFactory.Create(rateShipmentResponse.RateResponse, ShipmentTypeCode.FedEx, availableServiceTypeApiCodes);
