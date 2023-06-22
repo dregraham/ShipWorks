@@ -27,7 +27,7 @@ namespace ShipWorks.Shipping.ShipEngine
                 {
                     ShipTo = CreateShipToAddress(shipment),
                     ShipFrom = CreateShipFromAddress(shipment),
-                    ShipDate = shipment.ShipDate,
+                    ShipDate = GetDatePartInLocalTimeZone(shipment.ShipDate),
                 }
             };
             return request;
@@ -45,13 +45,18 @@ namespace ShipWorks.Shipping.ShipEngine
             };
         }
 
+        private DateTime GetDatePartInLocalTimeZone(DateTime utcDate)
+        {
+            var shipDate = utcDate.ToLocalTime().Date;
+            return new DateTime(shipDate.Year, shipDate.Month, shipDate.Day, 0, 0, 0, DateTimeKind.Utc);
+        }
+
         /// <summary>
         /// Create a PurchaseLabelRequest from a shipment, packages and service code
         /// </summary>
         public PurchaseLabelRequest CreatePurchaseLabelRequest(ShipmentEntity shipment, List<IPackageAdapter> packages, string serviceCode, 
             Func<IPackageAdapter, string> getPackageCode, Action<ShipmentPackage, IPackageAdapter> addPackageInsurance)
         {
-            var shipDate = shipment.ShipDate.ToLocalTime().Date;
             PurchaseLabelRequest request = new PurchaseLabelRequest()
             {
                 LabelFormat = GetPurchaseLabelRequestLabelFormat((ThermalLanguage) shipment.RequestedLabelFormat),
@@ -62,7 +67,7 @@ namespace ShipWorks.Shipping.ShipEngine
                 {
                     ShipTo = CreateShipToAddress(shipment),
                     ShipFrom = CreateShipFromAddress(shipment),
-                    ShipDate = new DateTime(shipDate.Year, shipDate.Month, shipDate.Day, 0, 0, 0, DateTimeKind.Utc),
+                    ShipDate = GetDatePartInLocalTimeZone(shipment.ShipDate),
                     Packages = CreatePackageForLabel(packages, getPackageCode, addPackageInsurance),
                     ServiceCode = serviceCode
                 }

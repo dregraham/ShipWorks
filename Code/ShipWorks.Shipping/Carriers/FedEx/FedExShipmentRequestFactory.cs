@@ -67,6 +67,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         public override PurchaseLabelRequest CreatePurchaseLabelRequest(ShipmentEntity shipment)
         {
             var labelRequest = base.CreatePurchaseLabelRequest(shipment);
+            FedExServiceType fedExServiceType = (FedExServiceType) shipment.FedEx.Service;
             if (labelRequest.Shipment.Packages.Any())
             {
                 foreach (var package in labelRequest.Shipment.Packages)
@@ -77,7 +78,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
                 }
             }
 
-            if (shipment.FedEx.Service == (int) FedExServiceType.SmartPost)
+            if (fedExServiceType == FedExServiceType.SmartPost)
             {
                 labelRequest.Shipment.ServiceCode = EnumHelper.GetApiValue((FedExSmartPostIndicia) shipment.FedEx.SmartPostIndicia);
             }
@@ -98,6 +99,17 @@ namespace ShipWorks.Shipping.Carriers.FedEx
                 }
 
                 labelRequest.ShipToServicePointId = shipment.FedEx.HoldLocationId;
+            }
+
+            if (FedExUtility.IsOneRateService(fedExServiceType))
+            {
+                foreach(var package in labelRequest.Shipment.Packages)
+                {
+                    if (package.PackageCode != null)
+                    {
+                        package.PackageCode += "_onerate";
+                    }
+                }
             }
 
             return labelRequest;
@@ -275,6 +287,16 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             }
 
             return processedValue;
+        }
+
+        protected override string GetPackagingCode(IPackageAdapter package)
+        {
+            if (package == null)
+            {
+                return null;
+            }
+            FedExPackagingType fedExPackagingType = (FedExPackagingType) package.PackagingType;
+            return EnumHelper.GetApiValue(fedExPackagingType);
         }
     }
 }
