@@ -3,9 +3,11 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.Linq;
+using Interapptive.Shared.Utility;
 using ShipWorks.Data;
 using ShipWorks.Data.Model;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Shipping.Carriers.FedEx.Enums;
 using ShipWorks.Templates.Processing;
 using ShipWorks.Templates.Processing.TemplateXml.ElementOutlines;
 
@@ -51,7 +53,17 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         /// </summary>
         private static List<TemplateLabelData> LoadLabelData(Func<ShipmentEntity> shipment)
         {
-            if (shipment().FedEx.ShipEngineLabelId != null)
+            bool isFimsService = false;
+            var serviceType = (FedExServiceType) shipment().FedEx.Service;
+            if (serviceType == FedExServiceType.FedExFimsMailView ||
+                serviceType == FedExServiceType.FedExFimsMailViewLite ||
+                serviceType == FedExServiceType.FedExFimsPremium ||
+                serviceType == FedExServiceType.FedExFimsStandard)
+            {
+                isFimsService = true;
+            }
+
+            if (shipment().FedEx.ShipEngineLabelId != null && !isFimsService)
             {
                 return DataResourceManager.GetConsumerResourceReferences(shipment().ShipmentID)
                     .Where(x => x.Label.StartsWith("LabelPrimary") || x.Label.StartsWith("LabelPart"))
