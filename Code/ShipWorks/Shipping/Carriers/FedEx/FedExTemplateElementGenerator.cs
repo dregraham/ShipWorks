@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.Linq;
-using Interapptive.Shared.Utility;
 using ShipWorks.Data;
 using ShipWorks.Data.Model;
 using ShipWorks.Data.Model.EntityClasses;
@@ -55,10 +54,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         {
             bool isFimsService = false;
             var serviceType = (FedExServiceType) shipment().FedEx.Service;
-            if (serviceType == FedExServiceType.FedExFimsMailView ||
-                serviceType == FedExServiceType.FedExFimsMailViewLite ||
-                serviceType == FedExServiceType.FedExFimsPremium ||
-                serviceType == FedExServiceType.FedExFimsStandard)
+            if (FedExUtility.IsFimsService(serviceType))
             {
                 isFimsService = true;
             }

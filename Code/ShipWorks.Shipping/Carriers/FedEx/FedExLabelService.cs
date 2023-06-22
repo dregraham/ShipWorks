@@ -74,10 +74,8 @@ namespace ShipWorks.Shipping.Carriers.FedEx
 
             // If this isn't a ShipEngine shipment, create the label the old way
             var serviceType = (FedExServiceType) shipment.FedEx.Service;
-            if (serviceType == FedExServiceType.FedExFimsMailView ||
-                serviceType == FedExServiceType.FedExFimsMailViewLite ||
-                serviceType == FedExServiceType.FedExFimsPremium ||
-                serviceType == FedExServiceType.FedExFimsStandard)
+           
+            if (FedExUtility.IsFimsService(serviceType))
             {
                 log.Info("FIMS FedEx shipment should go directly to ShipEngine");
                 var shippingClerk = shippingClerkFactory.Create(shipment);
