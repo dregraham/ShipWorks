@@ -52,14 +52,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         /// </summary>
         private static List<TemplateLabelData> LoadLabelData(Func<ShipmentEntity> shipment)
         {
-            bool isFimsService = false;
             var serviceType = (FedExServiceType) shipment().FedEx.Service;
-            if (FedExUtility.IsFimsService(serviceType))
-            {
-                isFimsService = true;
-            }
 
-            if (shipment().FedEx.ShipEngineLabelId != null && !isFimsService)
+            if (shipment().FedEx.ShipEngineLabelId != null && !FedExUtility.IsFimsService(serviceType))
             {
                 return DataResourceManager.GetConsumerResourceReferences(shipment().ShipmentID)
                     .Where(x => x.Label.StartsWith("LabelPrimary") || x.Label.StartsWith("LabelPart"))
