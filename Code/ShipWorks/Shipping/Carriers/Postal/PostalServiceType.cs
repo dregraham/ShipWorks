@@ -10,7 +10,6 @@ namespace ShipWorks.Shipping.Carriers.Postal
         [Description("Priority")]
         PriorityMail = 0,
 
-        [HiddenFor(HiddenForContext.NewShipment | HiddenForContext.Rates | HiddenForContext.Profiles)]
         [Description("First Class")]
         FirstClass = 1,
 
