@@ -46,7 +46,6 @@ namespace ShipWorks.Shipping.ShipEngine
             {
                 return UpsShipEngineServiceTypeUtility.GetServiceType(serviceCode);
             }
-
             return serviceCode;
         }
 

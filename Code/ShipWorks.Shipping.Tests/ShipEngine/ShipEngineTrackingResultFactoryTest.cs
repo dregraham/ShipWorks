@@ -9,6 +9,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Xunit;
+using Interapptive.Shared.Utility;
 
 namespace ShipWorks.Shipping.Tests.ShipEngine
 {
@@ -39,6 +40,7 @@ namespace ShipWorks.Shipping.Tests.ShipEngine
                 }
             };
 
+            mock.Mock<IDateTimeProvider>().SetupGet(x => x.TimeZoneInfo).Returns(TimeZoneInfo.FindSystemTimeZoneById("Central Standard Time"));//StLouis time zone
             testObject = mock.Create<ShipEngineTrackingResultFactory>();
         }
 
@@ -46,12 +48,12 @@ namespace ShipWorks.Shipping.Tests.ShipEngine
         public void Create_SetsTrackingResultSummaryToTrackingInfoStatusDescription()
         {
             shipEngineTrackingInfo.ActualDeliveryDate = new DateTime(2023, 2, 23, 15, 15, 4, DateTimeKind.Utc);
-            shipEngineTrackingInfo.Events.First().Signer = "Kevin Croke";
+            shipEngineTrackingInfo.Events.First().Signer = "Wojciech Wojcik";
             shipEngineTrackingInfo.EstimatedDeliveryDate = shipEngineTrackingInfo.ActualDeliveryDate;
 
             TrackingResult result = testObject.Create(shipEngineTrackingInfo);
 
-            Assert.Equal("<b>Delivered</b> on 2/23/2023 9:15:04 AM<br/><span style='color: rgb(80, 80, 80);'>Signed by: Kevin Croke</span>", result.Summary);
+            Assert.Equal("<b>Delivered</b> on 2/23/2023 9:15:04 AM<br/><span style='color: rgb(80, 80, 80);'>Signed by: Wojciech Wojcik</span>", result.Summary);
         }
 
         [Fact]

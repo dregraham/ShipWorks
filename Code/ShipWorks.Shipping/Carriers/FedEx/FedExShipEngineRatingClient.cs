@@ -10,6 +10,7 @@ using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.FedEx.Enums;
 using ShipWorks.Shipping.Editing.Rating;
+using ShipWorks.Shipping.Services;
 using ShipWorks.Shipping.ShipEngine;
 using ShipWorks.Shipping.ShipEngine.DTOs;
 
@@ -23,8 +24,8 @@ namespace ShipWorks.Shipping.Carriers.FedEx
     {
         private readonly ICarrierShipmentRequestFactory rateRequestFactory;
         private readonly IShipEngineWebClient shipEngineWebClient;
-        private readonly IShipEngineRateGroupFactory rateGroupFactory;
         private readonly ShipmentType shipmentType;
+        private readonly IShipmentTypeManager shipmentTypeManager;
 
         /// <summary>
         /// Constructor
@@ -32,12 +33,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         public FedExShipEngineRatingClient(
             IIndex<ShipmentTypeCode, ICarrierShipmentRequestFactory> rateRequestFactory,
             IShipEngineWebClient shipEngineWebClient,
-            IShipEngineRateGroupFactory rateGroupFactory,
             IShipmentTypeManager shipmentTypeManager)
         {
             this.rateRequestFactory = rateRequestFactory[ShipmentTypeCode.FedEx];
             this.shipEngineWebClient = shipEngineWebClient;
-            this.rateGroupFactory = rateGroupFactory;
+            this.shipmentTypeManager = shipmentTypeManager;
             shipmentType = shipmentTypeManager.Get(ShipmentTypeCode.FedEx);
         }
 
@@ -55,11 +55,14 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             try
             {
                 RateShipmentRequest request = rateRequestFactory.CreateRateShipmentRequest(shipment);
+                List<IPackageAdapter> packages = GetPackages(shipment);
+
+                request.RateOptions.PackageTypes = GetPackageTypes(packages);
                 RateShipmentResponse rateShipmentResponse = Task.Run(async () =>
                         await shipEngineWebClient.RateShipment(request, ApiLogSource.FedEx).ConfigureAwait(false)).Result;
 
                 var availableServiceTypeIds = shipmentType.GetAvailableServiceTypes().ToList();
-                var availableServiceTypeApiCodes = availableServiceTypeIds
+                var availableServiceTypeApiValues = availableServiceTypeIds
                     .Cast<FedExServiceType>()
                     .Select(t => EnumHelper.GetApiValue(t))
                     .ToList();
@@ -67,21 +70,52 @@ namespace ShipWorks.Shipping.Carriers.FedEx
                 // Only need to add the Smart Post values if it's in the available types
                 if (availableServiceTypeIds.Contains((int) FedExServiceType.SmartPost))
                 {
-                    var smartPostNames = Enum.GetValues(typeof(FedExSmartPostIndicia))
+                    var smartPostApiValues = Enum.GetValues(typeof(FedExSmartPostIndicia))
                         .Cast<FedExSmartPostIndicia>()
                         .Select(x => EnumHelper.GetApiValue(x));
-                    availableServiceTypeApiCodes.AddRange(smartPostNames);
+                    availableServiceTypeApiValues.AddRange(smartPostApiValues);
                 }
 
-                rateShipmentResponse.RateResponse.Rates.ForEach(r =>
-                    r.ServiceType = r.ServiceType.Replace("FedEx SmartPost parcel select", "FedEx Ground® Economy"));
-
-                return rateGroupFactory.Create(rateShipmentResponse.RateResponse, ShipmentTypeCode.FedEx, availableServiceTypeApiCodes);
+                rateShipmentResponse.RateResponse.Rates = rateShipmentResponse.RateResponse.Rates
+                    .OrderBy(r => r.ShippingAmount.Amount)
+                    .ToList();
+                var rateGroupFactory = new FedExRateGroupFactory(availableServiceTypeIds);
+                return rateGroupFactory.Create(rateShipmentResponse.RateResponse, ShipmentTypeCode.FedEx, availableServiceTypeApiValues);
             }
             catch (Exception ex) when (ex.GetType() != typeof(ShippingException))
             {
                 throw new ShippingException(ex.GetBaseException().Message);
             }
+        }
+
+        static string[] availablePackageTypes = new[] { "package", "fedex_pak", "fedex_tube", "fedex_envelope", "fedex_envelope_onerate", "fedex_extra_large_box_onerate", "fedex_large_box_onerate", "fedex_medium_box_onerate", "fedex_pak_onerate", "fedex_small_box_onerate", "fedex_tube_onerate" };
+
+        private List<string> GetPackageTypes(List<IPackageAdapter> packages)
+        {
+            var package = packages.FirstOrDefault();
+            var result = new List<string>();
+
+            if (package != null)
+            {
+                var packageType = EnumHelper.GetApiValue((FedExPackagingType) package.PackagingType);
+                result.Add(packageType);
+                var oneRateType = packageType + "_onerate";
+                if (availablePackageTypes.Contains(oneRateType))
+                {
+                    result.Add(oneRateType);
+                }
+            }
+            else
+            {
+                result.AddRange(availablePackageTypes);
+            }
+
+            return result;
+        }
+
+        private List<IPackageAdapter> GetPackages(ShipmentEntity shipment)
+        {
+            return shipmentTypeManager.Get(shipment.ShipmentTypeCode).GetPackageAdapters(shipment).ToList();
         }
     }
 }
