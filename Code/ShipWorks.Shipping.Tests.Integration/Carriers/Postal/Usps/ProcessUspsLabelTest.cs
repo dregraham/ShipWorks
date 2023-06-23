@@ -38,7 +38,7 @@ namespace ShipWorks.Shipping.Tests.Integration.Carriers.Postal.Usps
         private readonly CreateIndiciumResult defaultResponse = new CreateIndiciumResult
         {
             TrackingNumber = string.Empty,
-            Rate = new RateV40(),
+            Rate = new RateV46(),
             ImageData = new[] { Convert.FromBase64String("R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==") },
         };
 
@@ -75,18 +75,18 @@ namespace ShipWorks.Shipping.Tests.Integration.Carriers.Postal.Usps
         [Fact]
         public async Task Process_WithUspsShipment_SavesTrackingNumber()
         {
-            Mock<IExtendedSwsimV111> webService = context.Mock.CreateMock<IExtendedSwsimV111>(w =>
+            Mock<IExtendedSwsimV135> webService = context.Mock.CreateMock<IExtendedSwsimV135>(w =>
             {
                 UspsTestHelpers.SetupAddressValidationResponse(w);
                 w.Setup(x => x.CreateIndicium(It.IsAny<CreateIndiciumParameters>()))
                     .Returns(new CreateIndiciumResult
                     {
                         TrackingNumber = "FooTracking",
-                        Rate = new RateV40(),
+                        Rate = new RateV46(),
                         ImageData = new[] { Convert.FromBase64String("R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==") },
                     });
 
-                AccountInfoV54 accountInfo = new AccountInfoV54()
+                AccountInfoV65 accountInfo = new AccountInfoV65()
                 {
                     Terms = new Terms()
                     {
@@ -133,23 +133,23 @@ namespace ShipWorks.Shipping.Tests.Integration.Carriers.Postal.Usps
                 { "third", Create.CarrierAccount<UspsAccountEntity, IUspsAccountEntity>().Set(x => x.Username, "third").Save().AccountId },
             };
 
-            Mock<IExtendedSwsimV111> webService = context.Mock.CreateMock<IExtendedSwsimV111>(w =>
+            Mock<IExtendedSwsimV135> webService = context.Mock.CreateMock<IExtendedSwsimV135>(w =>
             {
                 UspsTestHelpers.SetupAddressValidationResponse(w);
                 w.Setup(x => x.CreateIndicium(It.IsAny<CreateIndiciumParameters>())).Returns(defaultResponse);
 
-                Func<decimal, RateV40[]> createRate = amount => new[] {
-                    new RateV40 { ServiceType = ServiceType.USFC, Amount = amount,
-                        AddOns = new [] { new AddOnV17 { AddOnType = AddOnTypeV17.USADC } }, DeliverDays = "2" } };
+                Func<decimal, RateV46[]> createRate = amount => new[] {
+                    new RateV46 { ServiceType = ServiceType.USFC, Amount = amount,
+                        AddOns = new [] { new AddOnV20 { AddOnType = AddOnTypeV20.USADC } }, DeliverDays = "2" } };
 
-                w.Setup(x => x.GetRates(It.Is<Credentials>(c => c.Username == "first"), It.IsAny<RateV40>(), Carrier.USPS))
+                w.Setup(x => x.GetRates(It.Is<Credentials>(c => c.Username == "first"), It.IsAny<RateV46>(), Carrier.USPS))
                     .Returns(createRate(first));
-                w.Setup(x => x.GetRates(It.Is<Credentials>(c => c.Username == "second"), It.IsAny<RateV40>(), Carrier.USPS))
+                w.Setup(x => x.GetRates(It.Is<Credentials>(c => c.Username == "second"), It.IsAny<RateV46>(), Carrier.USPS))
                     .Returns(createRate(second));
-                w.Setup(x => x.GetRates(It.Is<Credentials>(c => c.Username == "third"), It.IsAny<RateV40>(), Carrier.USPS))
+                w.Setup(x => x.GetRates(It.Is<Credentials>(c => c.Username == "third"), It.IsAny<RateV46>(), Carrier.USPS))
                     .Returns(createRate(third));
 
-                AccountInfoV54 accountInfo = new AccountInfoV54()
+                AccountInfoV65 accountInfo = new AccountInfoV65()
                 {
                     Terms = new Terms()
                     {
