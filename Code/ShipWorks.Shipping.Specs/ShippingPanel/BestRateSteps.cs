@@ -42,7 +42,7 @@ namespace ShipWorks.Shipping.Specs.ShippingPanel
         private readonly DataContext context;
         private readonly IMessenger messenger;
         private readonly ShippingPanelViewModel shippingPanelViewModel;
-        private Mock<SwsimV111> client;
+        private Mock<SwsimV135> client;
         private Mock<ILicenseService> licenseService;
 
         public BestRateSteps(DatabaseFixture db)
@@ -158,11 +158,11 @@ namespace ShipWorks.Shipping.Specs.ShippingPanel
         /// <summary>
         /// Create a mocked version of ISwsimV111
         /// </summary>
-        private Mock<SwsimV111> CreateMockedUspsWebService(Autofac.Extras.Moq.AutoMock mock)
+        private Mock<SwsimV135> CreateMockedUspsWebService(Autofac.Extras.Moq.AutoMock mock)
         {
-            var uspsClient = mock.CreateMock<SwsimV111>();
+            var uspsClient = mock.CreateMock<SwsimV135>();
             uspsClient.Setup(x => x.GetAccountInfo(It.IsAny<Credentials>()))
-                .Returns(new AccountInfoResult(new AccountInfoV54
+                .Returns(new AccountInfoResult(new AccountInfoV65
                 {
                     Terms = new Terms
                     {
@@ -177,7 +177,7 @@ namespace ShipWorks.Shipping.Specs.ShippingPanel
                 .Returns(new CreateIndiciumResult
                 {
                     TrackingNumber = "123abc",
-                    Rate = new RateV40(),
+                    Rate = new RateV46(),
                     StampsTxID = Guid.NewGuid()
                 });
             return uspsClient;
@@ -199,7 +199,7 @@ namespace ShipWorks.Shipping.Specs.ShippingPanel
                 true, // IsPOBoxSpecified
                 new [] { address }, // CandidateAddresses
                 new StatusCodes(), // Status codes
-                new RateV40[0], // Rates
+                new RateV46[0], // Rates
                 "", // AddressCleansingResult
                 AddressVerificationLevel.Maximum // Verification Level
             };

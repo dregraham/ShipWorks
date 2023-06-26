@@ -192,8 +192,8 @@
     <Compile Include="..\ShipWorks\Properties\AssemblyInfoCommon.cs">
       <Link>Properties\AssemblyInfoCommon.cs</Link>
     </Compile>
-    <Compile Include="Custom\Shipping\Carriers\Postal\Usps\Net\IExtendedSwsimV111.cs" />
-    <Compile Include="Custom\Shipping\Carriers\Postal\Usps\Net\SwsimV111.cs" />
+    <Compile Include="Custom\Shipping\Carriers\Postal\Usps\Net\IExtendedSwsimV135.cs" />
+    <Compile Include="Custom\Shipping\Carriers\Postal\Usps\Net\SwsimV135.cs" />
     <Compile Include="Properties\Settings.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
@@ -209,8 +209,8 @@
     <Compile Include="Shipping\Carriers\Postal\Usps\Net\AccountInfoResult.cs" />
     <Compile Include="Shipping\Carriers\Postal\Usps\Net\CreateEnvelopeIndiciumParameters.cs" />
     <Compile Include="Shipping\Carriers\Postal\Usps\Net\ISwimFinishAccountVerification.cs" />
-    <Compile Include="Shipping\Carriers\Postal\Usps\Net\ISwsimV111.cs" />
-    <Compile Include="Shipping\Carriers\Postal\Usps\Net\ISwsimV111.Implementation.cs" />
+    <Compile Include="Shipping\Carriers\Postal\Usps\Net\ISwsimV135.cs" />
+    <Compile Include="Shipping\Carriers\Postal\Usps\Net\ISwsimV135.Implementation.cs" />
     <Compile Include="Shipping\Carriers\Postal\Usps\Net\SwsimFinishAccountVerification.cs" />
     <Compile Include="Shipping\Carriers\UPS\Api\WebServices\OpenAccount\BillingAddressType.cs" />
     <Compile Include="Shipping\Carriers\UPS\Api\WebServices\OpenAccount\IAddressType.cs" />
@@ -846,7 +846,7 @@
     <None Include="Web References\Shipping.Carriers.Postal.Usps.WebServices.v36\TrackingEvent.datasource">
       <DependentUpon>Reference.map</DependentUpon>
     </None>
-    <None Include="Web References\Shipping.Carriers.Postal.Usps.WebServices\AccountInfoV54.datasource">
+    <None Include="Web References\Shipping.Carriers.Postal.Usps.WebServices\AccountInfoV65.datasource">
       <DependentUpon>Reference.map</DependentUpon>
     </None>
     <None Include="Web References\Shipping.Carriers.Postal.Usps.WebServices\Address.datasource">
@@ -897,10 +897,10 @@
     <None Include="Web References\Shipping.Carriers.Postal.Usps.WebServices\NetstampsStatus.datasource">
       <DependentUpon>Reference.map</DependentUpon>
     </None>
-    <None Include="Web References\Shipping.Carriers.Postal.Usps.WebServices\PaymentMethod.datasource">
+    <None Include="Web References\Shipping.Carriers.Postal.Usps.WebServices\NotificationSetting.datasource">
       <DependentUpon>Reference.map</DependentUpon>
     </None>
-    <None Include="Web References\Shipping.Carriers.Postal.Usps.WebServices\PGClaimStatus.datasource">
+    <None Include="Web References\Shipping.Carriers.Postal.Usps.WebServices\PaymentMethod.datasource">
       <DependentUpon>Reference.map</DependentUpon>
     </None>
     <None Include="Web References\Shipping.Carriers.Postal.Usps.WebServices\PostageBalance.datasource">
@@ -909,7 +909,7 @@
     <None Include="Web References\Shipping.Carriers.Postal.Usps.WebServices\PurchaseStatus.datasource">
       <DependentUpon>Reference.map</DependentUpon>
     </None>
-    <None Include="Web References\Shipping.Carriers.Postal.Usps.WebServices\RateV40.datasource">
+    <None Include="Web References\Shipping.Carriers.Postal.Usps.WebServices\RateV46.datasource">
       <DependentUpon>Reference.map</DependentUpon>
     </None>
     <None Include="Web References\Shipping.Carriers.Postal.Usps.WebServices\Reference.map">
@@ -925,7 +925,7 @@
     <None Include="Web References\Shipping.Carriers.Postal.Usps.WebServices\ResidentialDeliveryIndicatorType.datasource">
       <DependentUpon>Reference.map</DependentUpon>
     </None>
-    <None Include="Web References\Shipping.Carriers.Postal.Usps.WebServices\ShipmentV32.datasource">
+    <None Include="Web References\Shipping.Carriers.Postal.Usps.WebServices\ShipmentV39.datasource">
       <DependentUpon>Reference.map</DependentUpon>
     </None>
     <None Include="Web References\Shipping.Carriers.Postal.Usps.WebServices\StatusCodes.datasource">
@@ -934,7 +934,7 @@
     <None Include="Web References\Shipping.Carriers.Postal.Usps.WebServices\StoreShippingMethodOption.datasource">
       <DependentUpon>Reference.map</DependentUpon>
     </None>
-    <None Include="Web References\Shipping.Carriers.Postal.Usps.WebServices\swsimv111.wsdl" />
+    <None Include="Web References\Shipping.Carriers.Postal.Usps.WebServices\swsimv135.wsdl" />
     <None Include="Web References\Shipping.Carriers.Postal.Usps.WebServices\TrackingEvent.datasource">
       <DependentUpon>Reference.map</DependentUpon>
     </None>
@@ -2105,10 +2105,10 @@
     <WebReferences Include="Web References\" />
   </ItemGroup>
   <ItemGroup>
-    <WebReferenceUrl Include="https://swsim.stamps.com/swsim/swsimv111.asmx%3fwsdl">
+    <WebReferenceUrl Include="https://swsim.qa002.stamps.dev/swsim/swsimv135.asmx%3fWSDL">
       <UrlBehavior>Dynamic</UrlBehavior>
       <RelPath>Web References\Shipping.Carriers.Postal.Usps.WebServices\</RelPath>
-      <UpdateFromURL>https://swsim.stamps.com/swsim/swsimv111.asmx%3fwsdl</UpdateFromURL>
+      <UpdateFromURL>https://swsim.qa002.stamps.dev/swsim/swsimv135.asmx%3fWSDL</UpdateFromURL>
       <ServiceLocationURL>
       </ServiceLocationURL>
       <CachedDynamicPropName>
