@@ -177,14 +177,16 @@ namespace ShipWorks.Stores.Platforms.Platform.OnlineUpdating
 				List<SalesOrderItem> salesOrderItems = null;
 				if (behavior.IncludeSalesOrderItems)
 				{
-					salesOrderItems = shipment.Order.OrderItems.Select(x => new SalesOrderItem
-					{
-						SalesOrderItemId = x.StoreOrderItemID,
-						Quantity = (int) x.Quantity
-					}).ToList();
-				}
+                    salesOrderItems = shipment.Order.OrderItems
+                        .Where(x => !x.OrderItemAttributes.Any(attr => attr.Name.Trim() == "digital"))
+                        .Select(x => new SalesOrderItem
+                        {
+                            SalesOrderItemId = x.StoreOrderItemID,
+                            Quantity = (int) x.Quantity
+                        }).ToList();
+                }
 
-				var shopifyStore = store as IShopifyStoreEntity;
+                var shopifyStore = store as IShopifyStoreEntity;
 				bool? notifyBuyer = shopifyStore?.ShopifyNotifyCustomer;
 
 				var trackingUrl = behavior.GetTrackingUrl(shipment);
