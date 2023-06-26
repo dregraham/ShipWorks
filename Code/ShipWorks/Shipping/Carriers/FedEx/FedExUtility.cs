@@ -44,6 +44,12 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             }
         }
 
+        public static bool IsOneRateService(FedExServiceType serviceType)
+        {
+            return OneRateServiceTypes.Contains(serviceType);
+        }
+
+
         /// <summary>
         /// Gets the valid service types.
         /// </summary>

@@ -36,7 +36,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Enums
         Box25Kg = 5,
 
         [Description("Your Packaging")]
-        [ApiValue("custom")]
+        [ApiValue("package")]
         Custom = 6,
 
         [Description("FedEx Ground® Economy Mail")]
