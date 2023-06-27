@@ -16,6 +16,7 @@ using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Shipping.Carriers.FedEx.Api.Enums;
 using ShipWorks.Shipping.Carriers.FedEx.Enums;
 using ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip;
+using ShipWorks.Shipping.Carriers.UPS.Enums;
 using ShipWorks.Shipping.FedEx;
 using ShipWorks.Shipping.Settings;
 
@@ -762,6 +763,12 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         /// <returns>True if the dimensions are valid.  False otherwise.</returns>
         public static bool DimensionsAreValid(FedExPackageEntity package)
         {
+            // Only check the dimensions if the package type is custom
+            if (package.FedExShipment.PackagingType != (int) FedExPackagingType.Custom)
+            {
+                return true;
+            }
+
             if (package.DimsLength <= 0 || package.DimsWidth <= 0 || package.DimsHeight <= 0)
             {
                 return false;
