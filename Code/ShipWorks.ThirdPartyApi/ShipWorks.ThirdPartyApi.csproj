@@ -2114,7 +2114,7 @@
       <CachedDynamicPropName>
       </CachedDynamicPropName>
       <CachedAppSettingsObjectName>Settings</CachedAppSettingsObjectName>
-      <CachedSettingsPropName>ShipWorks_ThirdPartyApi_Shipping_Carriers_Postal_Usps_WebServices_SwsimV111</CachedSettingsPropName>
+      <CachedSettingsPropName>ShipWorks_ThirdPartyApi_Shipping_Carriers_Postal_Usps_WebServices_SwsimV135</CachedSettingsPropName>
     </WebReferenceUrl>
     <WebReferenceUrl Include="\\intfs01\development\Partners\Shipping\FedEx\FedEx 2017 Certification\vWS Software 2017\2017 WSDLs\OpenShipService_v13.wsdl">
       <UrlBehavior>Static</UrlBehavior>

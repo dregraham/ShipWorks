@@ -164,7 +164,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.WebServices {
         
         /// <remarks/>
         public SwsimV135() {
-            this.Url = global::ShipWorks.Properties.Settings.Default.ShipWorks_ThirdPartyApi_Shipping_Carriers_Postal_Usps_WebServices_SwsimV111;
+            this.Url = global::ShipWorks.Properties.Settings.Default.ShipWorks_ThirdPartyApi_Shipping_Carriers_Postal_Usps_WebServices_SwsimV135;
             if ((this.IsLocalFileSystemWebService(this.Url) == true)) {
                 this.UseDefaultCredentials = true;
                 this.useDefaultCredentialsSetExplicitly = false;

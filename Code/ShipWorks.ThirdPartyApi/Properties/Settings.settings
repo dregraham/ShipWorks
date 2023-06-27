@@ -5,7 +5,7 @@
     <Setting Name="ShipWorks_ThirdPartyApi_Shipping_Carriers_FedEx_WebServices_UploadDocument_UploadDocumentService" Type="(Web Service URL)" Scope="Application">
       <Value Profile="(Default)">https://wsbeta.fedex.com:443/web-services/uploaddocument</Value>
     </Setting>
-    <Setting Name="ShipWorks_ThirdPartyApi_Shipping_Carriers_Postal_Usps_WebServices_SwsimV111" Type="(Web Service URL)" Scope="Application">
+    <Setting Name="ShipWorks_ThirdPartyApi_Shipping_Carriers_Postal_Usps_WebServices_SwsimV135" Type="(Web Service URL)" Scope="Application">
       <Value Profile="(Default)">https://swsim.testing.stamps.com/swsim/swsimv135.asmx</Value>
     </Setting>
   </Settings>

@@ -3,7 +3,7 @@
 namespace ShipWorks.Shipping.Carriers.Postal.Usps.WebServices
 {
     /// <summary>
-    /// ISwsimV111 interface that exposes custom features
+    /// ISwsimV135 interface that exposes custom features
     /// </summary>
     public interface IExtendedSwsimV135 : ISwsimV135
     {
