@@ -600,6 +600,7 @@ namespace ShipWorks.Shipping.Carriers.Postal
 
             IEnumerable<PostalServiceType> postalServices = GetDomesticServices(shipmentType.ShipmentTypeCode)
                 .Union(GetInternationalServices(shipmentType.ShipmentTypeCode))
+                .Where(s => !s.IsHiddenFor(HiddenForContext.NewShipment))
                 .ToList();
 
             servicePicker.Initialize(postalServices, excludedServices);
