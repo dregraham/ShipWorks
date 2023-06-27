@@ -6388,10 +6388,10 @@
   <wsdl:service name="SwsimV135">
     <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Stamps.com Web Services for Individual Meters (SWS/IM) Version 135</wsdl:documentation>
     <wsdl:port name="SwsimV135Soap" binding="tns:SwsimV135Soap">
-      <soap:address location="https://swsim.qa002.stamps.dev/swsim/swsimv135.asmx" />
+      <soap:address location="https://swsim.testing.stamps.com/swsim/swsimv135.asmx" />
     </wsdl:port>
     <wsdl:port name="SwsimV135Soap12" binding="tns:SwsimV135Soap12">
-      <soap12:address location="https://swsim.qa002.stamps.dev/swsim/swsimv135.asmx" />
+      <soap12:address location="https://swsim.testing.stamps.com/swsim/swsimv135.asmx" />
     </wsdl:port>
   </wsdl:service>
 </wsdl:definitions>

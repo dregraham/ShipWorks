@@ -2105,10 +2105,10 @@
     <WebReferences Include="Web References\" />
   </ItemGroup>
   <ItemGroup>
-    <WebReferenceUrl Include="https://swsim.qa002.stamps.dev/swsim/swsimv135.asmx%3fWSDL">
+    <WebReferenceUrl Include="https://swsim.testing.stamps.com/swsim/swsimv135.asmx%3fWSDL">
       <UrlBehavior>Dynamic</UrlBehavior>
       <RelPath>Web References\Shipping.Carriers.Postal.Usps.WebServices\</RelPath>
-      <UpdateFromURL>https://swsim.qa002.stamps.dev/swsim/swsimv135.asmx%3fWSDL</UpdateFromURL>
+      <UpdateFromURL>https://swsim.testing.stamps.com/swsim/swsimv135.asmx%3fWSDL</UpdateFromURL>
       <ServiceLocationURL>
       </ServiceLocationURL>
       <CachedDynamicPropName>
