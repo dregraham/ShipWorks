@@ -16,7 +16,6 @@ using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Shipping.Carriers.FedEx.Api.Enums;
 using ShipWorks.Shipping.Carriers.FedEx.Enums;
 using ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip;
-using ShipWorks.Shipping.Carriers.UPS.Enums;
 using ShipWorks.Shipping.FedEx;
 using ShipWorks.Shipping.Settings;
 
