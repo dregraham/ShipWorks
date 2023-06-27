@@ -707,9 +707,9 @@ namespace ShipWorks
             //
             // menuFedExSmartPostClose
             //
-            this.menuFedExSmartPostClose.GroupName = "FedEx Ground® Economy";
+            this.menuFedExSmartPostClose.GroupName = "FedEx GroundÂ® Economy";
             this.menuFedExSmartPostClose.Guid = new System.Guid("7292d100-9bf0-4c76-a25a-9122a8ac140c");
-            this.menuFedExSmartPostClose.Text = "FedEx Ground® Economy Close";
+            this.menuFedExSmartPostClose.Text = "FedEx GroundÂ® Economy Close";
             this.menuFedExSmartPostClose.Activate += new System.EventHandler(this.OnFedExSmartPostClose);
             //
             // shortcut1
