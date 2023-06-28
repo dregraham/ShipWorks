@@ -9,6 +9,7 @@ using Interapptive.Shared.Utility;
 using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.FedEx.Enums;
+using ShipWorks.Shipping.Carriers.UPS.Enums;
 using ShipWorks.Shipping.Editing.Rating;
 using ShipWorks.Shipping.Services;
 using ShipWorks.Shipping.ShipEngine;
@@ -51,11 +52,14 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             {
                 throw new ShippingException("An account is required to view FedEx rates.");
             }
-
+            
             try
             {
                 RateShipmentRequest request = rateRequestFactory.CreateRateShipmentRequest(shipment);
                 List<IPackageAdapter> packages = GetPackages(shipment);
+                
+                var confirmationType = (FedExSignatureType) shipment.FedEx.Signature;
+                request.Shipment.Confirmation = (AddressValidatingShipment.ConfirmationEnum) FedExUtility.ShipmentConfirmationMap(confirmationType);
 
                 request.RateOptions.PackageTypes = GetPackageTypes(packages);
                 RateShipmentResponse rateShipmentResponse = Task.Run(async () =>
