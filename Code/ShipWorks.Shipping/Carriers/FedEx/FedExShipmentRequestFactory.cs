@@ -39,15 +39,6 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             {CurrencyType.CAD, CurrencyEnum.CAD }
         };
 
-        private readonly Dictionary<FedExSignatureType, Shipment.ConfirmationEnum> signatureMap = new Dictionary<FedExSignatureType, Shipment.ConfirmationEnum>
-        {
-            { FedExSignatureType.ServiceDefault, Shipment.ConfirmationEnum.None },
-            { FedExSignatureType.NoSignature, Shipment.ConfirmationEnum.Delivery },
-            { FedExSignatureType.Adult, Shipment.ConfirmationEnum.Adultsignature},
-            { FedExSignatureType.Indirect, Shipment.ConfirmationEnum.Signature },
-            { FedExSignatureType.Direct, Shipment.ConfirmationEnum.Directsignature }
-        };
-
         public FedExShipmentRequestFactory(IFedExAccountRepository accountRepository,
            IShipEngineRequestFactory shipmentElementFactory,
            IShipmentTypeManager shipmentTypeManager,
@@ -84,7 +75,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             }
 
             var confirmationType = (FedExSignatureType) shipment.FedEx.Signature;
-            labelRequest.Shipment.Confirmation = signatureMap[confirmationType];
+            labelRequest.Shipment.Confirmation = FedExUtility.signatureMap[confirmationType];
 
             if (shipment.ReturnShipment)
             {

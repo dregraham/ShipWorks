@@ -734,7 +734,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             return signatureMap[fedExSignatureType];
         }
 
-        private static readonly Dictionary<FedExSignatureType, Shipment.ConfirmationEnum> signatureMap = new Dictionary<FedExSignatureType, Shipment.ConfirmationEnum>
+        public static readonly Dictionary<FedExSignatureType, Shipment.ConfirmationEnum> signatureMap = new Dictionary<FedExSignatureType, Shipment.ConfirmationEnum>
         {
             { FedExSignatureType.ServiceDefault, Shipment.ConfirmationEnum.None },
             { FedExSignatureType.NoSignature, Shipment.ConfirmationEnum.Delivery },
