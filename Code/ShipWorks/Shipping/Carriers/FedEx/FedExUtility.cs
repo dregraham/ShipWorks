@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Text;
 using System.Windows.Forms;
 using System.Xml;
 using System.Xml.Linq;
@@ -726,6 +727,57 @@ namespace ShipWorks.Shipping.Carriers.FedEx
                     FedExServiceType.GroundHomeDelivery,
                     FedExServiceType.FedExInternationalGround
                 }).Contains(service);
+        }
+
+
+        /// <summary>
+        /// Checks each packages dimensions, making sure that each is valid.  If one or more packages have invalid dimensions,
+        /// a ShippingException is thrown informing the user.
+        /// </summary>
+        public static void ValidatePackageDimensions(ShipmentEntity shipment)
+        {
+            StringBuilder exceptionMessage = new StringBuilder();
+            int packageIndex = 1;
+
+            foreach (FedExPackageEntity fedExPackage in shipment.FedEx.Packages)
+            {
+                if (!DimensionsAreValid(fedExPackage))
+                {
+                    exceptionMessage.AppendLine($"Package {packageIndex} has invalid dimensions.");
+                }
+
+                packageIndex++;
+            }
+
+            if (exceptionMessage.Length > 0)
+            {
+                exceptionMessage.Append("Package dimensions must be greater than 0 and not 1x1x1.  ");
+                throw new InvalidPackageDimensionsException(exceptionMessage.ToString());
+            }
+        }
+
+        /// <summary>
+        /// Check to see if a package dimensions are valid for carriers that require dimensions.
+        /// </summary>
+        /// <returns>True if the dimensions are valid.  False otherwise.</returns>
+        public static bool DimensionsAreValid(FedExPackageEntity package)
+        {
+            // Only check the dimensions if the package type is custom
+            if (package.FedExShipment.PackagingType != (int) FedExPackagingType.Custom)
+            {
+                return true;
+            }
+
+            if (package.DimsLength <= 0 || package.DimsWidth <= 0 || package.DimsHeight <= 0)
+            {
+                return false;
+            }
+
+            // Some customers may have 1x1x1 in a profile to get around carriers that used to require dimensions.
+            // This is no longer valid due to new dimensional weight requirements.
+            return !(package.DimsLength.IsEquivalentTo(1) &&
+                     package.DimsWidth.IsEquivalentTo(1) &&
+                     package.DimsHeight.IsEquivalentTo(1));
         }
     }
 }
