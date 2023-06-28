@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 using Autofac.Features.Indexed;
 using Interapptive.Shared.Collections;
@@ -60,7 +61,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx
                 var confirmationType = (FedExSignatureType) shipment.FedEx.Signature;
                 request.Shipment.Confirmation = (AddressValidatingShipment.ConfirmationEnum) FedExUtility.ShipmentConfirmationMap(confirmationType);
 
+                FedExUtility.ValidatePackageDimensions(shipment);
                 request.RateOptions.PackageTypes = GetPackageTypes(packages);
+
                 RateShipmentResponse rateShipmentResponse = Task.Run(async () =>
                         await shipEngineWebClient.RateShipment(request, ApiLogSource.FedEx).ConfigureAwait(false)).Result;
 
