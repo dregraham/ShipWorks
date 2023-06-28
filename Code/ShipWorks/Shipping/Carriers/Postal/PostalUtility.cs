@@ -442,7 +442,7 @@ namespace ShipWorks.Shipping.Carriers.Postal
         {
             return
                 serviceType == PostalServiceType.ParcelSelect ||
-                ShipmentTypeManager.IsEndiciaDhl(serviceType);
+                ShipmentTypeManager.IsEndiciaDhl(serviceType) || serviceType == PostalServiceType.GroundAdvantage;
         }
 
         /// <summary>
