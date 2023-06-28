@@ -52,11 +52,15 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             {
                 throw new ShippingException("An account is required to view FedEx rates.");
             }
-
+            
             try
             {
                 RateShipmentRequest request = rateRequestFactory.CreateRateShipmentRequest(shipment);
                 List<IPackageAdapter> packages = GetPackages(shipment);
+                
+                var confirmationType = (FedExSignatureType) shipment.FedEx.Signature;
+                request.Shipment.Confirmation = (AddressValidatingShipment.ConfirmationEnum) FedExUtility.ShipmentConfirmationMap(confirmationType);
+
                 FedExUtility.ValidatePackageDimensions(shipment);
                 request.RateOptions.PackageTypes = GetPackageTypes(packages);
 

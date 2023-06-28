@@ -18,6 +18,7 @@ using ShipWorks.Shipping.Carriers.FedEx.Enums;
 using ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip;
 using ShipWorks.Shipping.FedEx;
 using ShipWorks.Shipping.Settings;
+using ShipWorks.Shipping.ShipEngine.DTOs;
 
 namespace ShipWorks.Shipping.Carriers.FedEx
 {
@@ -729,6 +730,19 @@ namespace ShipWorks.Shipping.Carriers.FedEx
                 }).Contains(service);
         }
 
+        public static Shipment.ConfirmationEnum ShipmentConfirmationMap(FedExSignatureType fedExSignatureType)
+        {
+            return signatureMap[fedExSignatureType];
+        }
+
+        public static readonly Dictionary<FedExSignatureType, Shipment.ConfirmationEnum> signatureMap = new Dictionary<FedExSignatureType, Shipment.ConfirmationEnum>
+        {
+            { FedExSignatureType.ServiceDefault, Shipment.ConfirmationEnum.None },
+            { FedExSignatureType.NoSignature, Shipment.ConfirmationEnum.Delivery },
+            { FedExSignatureType.Adult, Shipment.ConfirmationEnum.Adultsignature},
+            { FedExSignatureType.Indirect, Shipment.ConfirmationEnum.Signature },
+            { FedExSignatureType.Direct, Shipment.ConfirmationEnum.Directsignature }
+        };
 
         /// <summary>
         /// Checks each packages dimensions, making sure that each is valid.  If one or more packages have invalid dimensions,
