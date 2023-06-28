@@ -66,6 +66,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         /// <returns></returns>
         public override PurchaseLabelRequest CreatePurchaseLabelRequest(ShipmentEntity shipment)
         {
+            FedExUtility.ValidatePackageDimensions(shipment);
             var labelRequest = base.CreatePurchaseLabelRequest(shipment);
             FedExServiceType fedExServiceType = (FedExServiceType) shipment.FedEx.Service;
             if (labelRequest.Shipment.Packages.Any())
