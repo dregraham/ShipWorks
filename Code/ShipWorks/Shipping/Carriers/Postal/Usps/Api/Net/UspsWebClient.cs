@@ -929,13 +929,13 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
 		/// <summary>
 		/// The internal VoidShipment implementation intended to be wrapped by the exception wrapper
 		/// </summary>
-		protected void VoidShipmentInternal(UspsAccountEntity account, object uspsTransactionID)
+		protected void VoidShipmentInternal(UspsAccountEntity account, Guid uspsTransactionID)
 		{
 			using (ISwsimV135 webService = CreateWebService("Void"))
 			{
 				webService.CancelIndicium(
 					GetCredentials(account),
-					new[] { uspsTransactionID },
+					new object[] { new[] { uspsTransactionID } },
 					null, // SendEmail
 					false); // SendsEmailSpecified
 			}
