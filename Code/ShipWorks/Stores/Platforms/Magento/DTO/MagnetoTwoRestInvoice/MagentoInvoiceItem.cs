@@ -4,7 +4,7 @@ namespace ShipWorks.Stores.Platforms.Magento.DTO.MagnetoTwoRestInvoice
 {
     public class MagentoInvoiceItem
     {
-        [JsonProperty("orderItemId")]
+        [JsonProperty("order_item_id")]
         public long MagentoOrderItemId { get; set; }
 
         [JsonProperty("qty")]
