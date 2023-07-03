@@ -106,11 +106,13 @@ namespace ShipWorks.Shipping.Carriers.Postal
         {
             List<PostalPackagingType> selectedPackagingTypes = new List<PostalPackagingType>();
             bool isFirstClass = false;
+			bool isShipmentSent = false;
             foreach (var postalShipment in shipments.Select(x => x.Postal).Where(x => x != null))
             {
                 selectedPackagingTypes.Add((PostalPackagingType) postalShipment.PackagingType);
                 isFirstClass |= (PostalServiceType) postalShipment.Service == PostalServiceType.FirstClass;
-            }
+				isShipmentSent |= postalShipment.Shipment.Status == ShipmentStatus.Processed;
+			}
 
             var exclusions = new List<PostalPackagingType>();
             if (ShipmentTypeCode != ShipmentTypeCode.Express1Endicia)
@@ -119,7 +121,7 @@ namespace ShipWorks.Shipping.Carriers.Postal
                 exclusions.Add(PostalPackagingType.Cubic);
             }
 
-            if (isFirstClass)
+            if (isFirstClass && !isShipmentSent)
             {
                 //Package is not available with FirstClass anymore
                 exclusions.Add(PostalPackagingType.Package);
