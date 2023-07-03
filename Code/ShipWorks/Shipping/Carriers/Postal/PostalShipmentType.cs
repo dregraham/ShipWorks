@@ -111,7 +111,7 @@ namespace ShipWorks.Shipping.Carriers.Postal
             {
                 selectedPackagingTypes.Add((PostalPackagingType) postalShipment.PackagingType);
                 isFirstClass |= (PostalServiceType) postalShipment.Service == PostalServiceType.FirstClass;
-				isShipmentSent |= postalShipment.Shipment.Status == ShipmentStatus.Processed;
+				isShipmentSent |= postalShipment.Shipment.Status == ShipmentStatus.Processed || postalShipment.Shipment.Status == ShipmentStatus.Voided;
 			}
 
             var exclusions = new List<PostalPackagingType>();
