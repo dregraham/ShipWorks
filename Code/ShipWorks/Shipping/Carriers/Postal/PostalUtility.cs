@@ -290,6 +290,7 @@ namespace ShipWorks.Shipping.Carriers.Postal
                 case PostalServiceType.PriorityMail:
                 case PostalServiceType.FirstClass:
                 case PostalServiceType.CriticalMail:
+                case PostalServiceType.GroundAdvantage:
                     return "1-3";
 
                 case PostalServiceType.StandardPost:
