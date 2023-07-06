@@ -165,12 +165,13 @@ namespace ShipWorks.Shipping.Carriers.Postal
             {
                 PostalServiceType.PriorityMail,
                 PostalServiceType.ExpressMail,
+                PostalServiceType.GroundAdvantage,
                 PostalServiceType.FirstClass,
                 PostalServiceType.ParcelSelect,
                 PostalServiceType.MediaMail,
                 PostalServiceType.LibraryMail,
                 PostalServiceType.CriticalMail,
-                PostalServiceType.StandardPost
+                PostalServiceType.StandardPost,
             };
 
             if (shipmentType == ShipmentTypeCode.Usps || shipmentType == ShipmentTypeCode.Express1Usps ||
@@ -289,6 +290,7 @@ namespace ShipWorks.Shipping.Carriers.Postal
                 case PostalServiceType.PriorityMail:
                 case PostalServiceType.FirstClass:
                 case PostalServiceType.CriticalMail:
+                case PostalServiceType.GroundAdvantage:
                     return "1-3";
 
                 case PostalServiceType.StandardPost:
@@ -441,7 +443,7 @@ namespace ShipWorks.Shipping.Carriers.Postal
         {
             return
                 serviceType == PostalServiceType.ParcelSelect ||
-                ShipmentTypeManager.IsEndiciaDhl(serviceType);
+                ShipmentTypeManager.IsEndiciaDhl(serviceType) || serviceType == PostalServiceType.GroundAdvantage;
         }
 
         /// <summary>
@@ -599,6 +601,7 @@ namespace ShipWorks.Shipping.Carriers.Postal
 
             IEnumerable<PostalServiceType> postalServices = GetDomesticServices(shipmentType.ShipmentTypeCode)
                 .Union(GetInternationalServices(shipmentType.ShipmentTypeCode))
+                .Where(s => !s.IsHiddenFor(HiddenForContext.NewShipment))
                 .ToList();
 
             servicePicker.Initialize(postalServices, excludedServices);

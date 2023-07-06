@@ -103,7 +103,10 @@ namespace ShipWorks.Filters.Controls
 
             UpdateQuickFilterDisplay();
 
-            filterEditedToken = Messenger.Current.OfType<FilterNodeEditedMessage>().Subscribe(HandleFilterEdited);
+            if (LicenseManager.UsageMode != LicenseUsageMode.Designtime)
+            {
+                filterEditedToken = Messenger.Current.OfType<FilterNodeEditedMessage>().Subscribe(HandleFilterEdited);
+            }
         }
 
         /// <summary>

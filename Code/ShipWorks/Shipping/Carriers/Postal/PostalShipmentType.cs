@@ -104,13 +104,33 @@ namespace ShipWorks.Shipping.Carriers.Postal
         /// </summary>
         public override Dictionary<int, string> BuildPackageTypeDictionary(List<ShipmentEntity> shipments, IExcludedPackageTypeRepository excludedPackageTypeRepository)
         {
+            List<PostalPackagingType> selectedPackagingTypes = new List<PostalPackagingType>();
+            bool isFirstClass = false;
+			bool isShipmentSent = false;
+            foreach (var postalShipment in shipments.Select(x => x.Postal).Where(x => x != null))
+            {
+                selectedPackagingTypes.Add((PostalPackagingType) postalShipment.PackagingType);
+                isFirstClass |= (PostalServiceType) postalShipment.Service == PostalServiceType.FirstClass;
+				isShipmentSent |= postalShipment.Shipment.Status == ShipmentStatus.Processed || postalShipment.Shipment.Status == ShipmentStatus.Voided;
+			}
+
+            var exclusions = new List<PostalPackagingType>();
+            if (ShipmentTypeCode != ShipmentTypeCode.Express1Endicia)
+            {
+                // Only Express 1 Endicia should see the cubic packaging type
+                exclusions.Add(PostalPackagingType.Cubic);
+            }
+
+            if (isFirstClass && !isShipmentSent)
+            {
+                //Package is not available with FirstClass anymore
+                exclusions.Add(PostalPackagingType.Package);
+            }
+
             return GetAvailablePackageTypes(excludedPackageTypeRepository)
                 .Cast<PostalPackagingType>()
-                .Union(shipments.Select(x => x.Postal)
-                    .Where(x => x != null)
-                    .Select(x => (PostalPackagingType) x.PackagingType))
-                // Only Express 1 Endicia should see the cubic packaging type
-                .Where(p => (p != PostalPackagingType.Cubic || ShipmentTypeCode == ShipmentTypeCode.Express1Endicia))
+                .Union(selectedPackagingTypes)
+                .Except(exclusions)
                 .ToDictionary(t => (int) t, t => EnumHelper.GetDescription(t));
         }
 

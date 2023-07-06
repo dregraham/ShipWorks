@@ -14,7 +14,6 @@ namespace ShipWorks.ApplicationCore.Logging
             if (LogSession.IsApiLogActionTypeEnabled(logActionType))
             {
                 createdLogEntry = new ApiLogEntry(source, name);
-
             }
             else
             {

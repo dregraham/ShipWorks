@@ -13,7 +13,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
         /// <summary>
         /// Create the web service
         /// </summary>
-        IExtendedSwsimV111 Create(string logName, LogActionType logActionType);
+        IExtendedSwsimV135 Create(string logName, LogActionType logActionType);
 
         /// <summary>
         /// Create the webservice for FinishAccountVerification

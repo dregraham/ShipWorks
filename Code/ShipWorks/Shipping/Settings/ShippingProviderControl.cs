@@ -11,6 +11,7 @@ using ShipWorks.Core.Messaging;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Filters;
 using ShipWorks.Messaging.Messages;
+using ShipWorks.UI.Controls.Design;
 using ShipWorks.UI.Utility;
 
 namespace ShipWorks.Shipping.Settings
@@ -35,9 +36,11 @@ namespace ShipWorks.Shipping.Settings
 
             toolStripFakeDelete.Renderer = new NoBorderToolStripRenderer();
             toolStripAddRule.Renderer = new NoBorderToolStripRenderer();
-
-            shippingProviderRuleManager = IoC.UnsafeGlobalLifetimeScope.Resolve<IShippingProviderRuleManager>();
-            carrierConfiguredToken = Messenger.Current.OfType<CarrierConfiguredMessage>().Subscribe(HandleCarrierConfigured);
+            if (!DesignModeDetector.IsDesignerHosted())
+            {
+                shippingProviderRuleManager = IoC.UnsafeGlobalLifetimeScope.Resolve<IShippingProviderRuleManager>();
+                carrierConfiguredToken = Messenger.Current.OfType<CarrierConfiguredMessage>().Subscribe(HandleCarrierConfigured);
+            }
         }
 
         /// <summary>

@@ -272,7 +272,7 @@ namespace ShipWorks.Shipping.Settings
                 {
                     settingsControl = e.OptionPage.Controls.Count == 1 ?
                         e.OptionPage.Controls[0] as ShipmentTypeSettingsControl :
-                        settingsControl = BuildPageControl(e.OptionPage);
+                        BuildPageControl(e.OptionPage);
                 }
 
                 if (settingsControl != null)

@@ -51,6 +51,7 @@ namespace ShipWorks.Shipping.Carriers.Postal
         [Description("Express Mail (Premium)")]
         ExpressMailPremium = 12,
 
+        [HiddenFor(HiddenForContext.NewShipment | HiddenForContext.Rates | HiddenForContext.Profiles)]
         [Description("Parcel Select")]
         ParcelSelect = 13,
 
@@ -59,6 +60,9 @@ namespace ShipWorks.Shipping.Carriers.Postal
 
         [Description("Pay-on-Use Return")]
         PayOnUseReturn = 15,
+
+        [Description("Ground Advantage")]
+        GroundAdvantage = 16,
 
         [Description("DHL SM Parcel Expedited")]
         [ApiValue("DHLGMSMPARCELSEXPEDITED")]

@@ -121,8 +121,12 @@ namespace ShipWorks.Shipping.Carriers.Postal
 
             ShipmentTypeCode shipmentType = (ShipmentTypeCode) Profile.ShipmentType;
 
-            service.DataSource = ActiveEnumerationBindingSource.Create<PostalServiceType>(PostalUtility.GetDomesticServices(shipmentType).Concat(PostalUtility.GetInternationalServices(shipmentType))
-                .Select(s => new KeyValuePair<string, PostalServiceType>(PostalUtility.GetPostalServiceTypeDescription(s), s)).ToList());
+            service.DataSource =
+                ActiveEnumerationBindingSource.Create<PostalServiceType>(PostalUtility.GetDomesticServices(shipmentType)
+                .Concat(PostalUtility.GetInternationalServices(shipmentType))
+                .Where(s => !s.IsHiddenFor(HiddenForContext.Profiles))
+                .Select(s => new KeyValuePair<string, PostalServiceType>(PostalUtility.GetPostalServiceTypeDescription(s), s))
+                .ToList());
         }
 
         /// <summary>
