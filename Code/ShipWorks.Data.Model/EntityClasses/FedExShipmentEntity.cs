@@ -715,6 +715,8 @@ namespace ShipWorks.Data.Model.EntityClasses
 			_fieldsCustomProperties.Add("PayorPostalCode", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
 			_fieldsCustomProperties.Add("ShipEngineLabelId", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+			_fieldsCustomProperties.Add("DeliveredDutyPaid", fieldHashtable);
 		}
 		#endregion
 
@@ -2655,6 +2657,17 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			get { return (System.String)GetValue((int)FedExShipmentFieldIndex.ShipEngineLabelId, true); }
 			set	{ SetValue((int)FedExShipmentFieldIndex.ShipEngineLabelId, value); }
+		}
+
+		/// <summary> The DeliveredDutyPaid property of the Entity FedExShipment<br/><br/></summary>
+		/// <remarks>Mapped on  table field: "FedExShipment"."DeliveredDutyPaid"<br/>
+		/// Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
+		public virtual System.Boolean DeliveredDutyPaid
+		{
+			get { return (System.Boolean)GetValue((int)FedExShipmentFieldIndex.DeliveredDutyPaid, true); }
+			set	{ SetValue((int)FedExShipmentFieldIndex.DeliveredDutyPaid, value); }
 		}
 
 		/// <summary> Gets the EntityCollection with the related entities of type 'FedExPackageEntity' which are related to this entity via a relation of type '1:n'. If the EntityCollection hasn't been fetched yet, the collection returned will be empty.<br/><br/></summary>

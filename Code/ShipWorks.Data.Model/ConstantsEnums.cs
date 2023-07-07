@@ -4302,6 +4302,8 @@ namespace ShipWorks.Data.Model
 		PayorCountryCode,
 		///<summary>PayorPostalCode. </summary>
 		PayorPostalCode,
+		///<summary>DeliveredDutyPaid. </summary>
+		DeliveredDutyPaid,
 		/// <summary></summary>
 		AmountOfFields
 	}
@@ -4726,6 +4728,8 @@ namespace ShipWorks.Data.Model
 		PayorPostalCode,
 		///<summary>ShipEngineLabelId. </summary>
 		ShipEngineLabelId,
+		///<summary>DeliveredDutyPaid. </summary>
+		DeliveredDutyPaid,
 		/// <summary></summary>
 		AmountOfFields
 	}

@@ -1290,6 +1290,7 @@
           <Field Name="CreateCommercialInvoice" Type="bool" IsOptional="true" FieldIndex="37" />
           <Field Name="CustomsRecipientTIN" Type="string" IsOptional="true" MaxLength="24" FieldIndex="39" />
           <Field Name="CustomsRecipientTINType" Type="int" IsOptional="true" Precision="10" FieldIndex="40" />
+          <Field Name="DeliveredDutyPaid" Type="bool" IsOptional="true" FieldIndex="43" />
           <Field Name="DropoffType" Type="int" IsOptional="true" FieldIndex="27" />
           <Field Name="EmailNotifyBroker" Type="int" IsOptional="true" FieldIndex="26" />
           <Field Name="EmailNotifyMessage" Type="string" IsOptional="true" MaxLength="120" FieldIndex="19" />
@@ -1429,6 +1430,7 @@
           <Field Name="CustomsRecipientIdentificationValue" Type="string" MaxLength="50" FieldIndex="76" />
           <Field Name="CustomsRecipientTIN" Type="string" MaxLength="24" FieldIndex="70" />
           <Field Name="CustomsRecipientTINType" Type="int" IsOptional="true" Precision="10" FieldIndex="163" />
+          <Field Name="DeliveredDutyPaid" Type="bool" FieldIndex="167" />
           <Field Name="DropoffType" Type="int" FieldIndex="108" />
           <Field Name="EmailNotifyBroker" Type="int" FieldIndex="27" />
           <Field Name="EmailNotifyMessage" Type="string" MaxLength="120" FieldIndex="32" />
@@ -4845,7 +4847,7 @@
       <Catalogs>
         <Catalog Name="ShipWorksLocal">
           <Schemas>
-            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2023-04-25T10:16:00.1073Z">
+            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2023-07-07T10:13:53.4227339Z">
               <Tables>
                 <Table Name="Action">
                   <PkConstraintName Name="PK_Action" />
@@ -6188,7 +6190,7 @@
                     <Field Name="Signature" Ordinal="22" HasDefaultValue="true" DefaultValue="''" DbType="12" Length="2147483647" />
                     <Field Name="HubVersion" Ordinal="23" IsOptional="true" DbType="8" Precision="10" />
                     <Field Name="HubCarrierId" Ordinal="24" IsOptional="true" DbType="25" />
-                    <Field Name="ShipEngineCarrierID" Ordinal="25" IsOptional="true" DbType="12" Length="50" />
+                    <Field Name="ShipEngineCarrierId" Ordinal="25" IsOptional="true" DbType="12" Length="50" />
                     <Field Name="SmartPostHub" Ordinal="26" HasDefaultValue="true" DefaultValue="(0)" DbType="8" Precision="10" />
                   </Fields>
                 </Table>
@@ -6268,39 +6270,40 @@
                     <Field Name="ReferenceInvoice" Ordinal="8" IsOptional="true" DbType="12" Length="300" />
                     <Field Name="ReferencePO" Ordinal="9" IsOptional="true" DbType="12" Length="300" />
                     <Field Name="ReferenceShipmentIntegrity" Ordinal="10" IsOptional="true" DbType="12" Length="300" />
-                    <Field Name="PayorTransportType" Ordinal="11" IsOptional="true" DbType="8" Precision="10" />
-                    <Field Name="PayorTransportAccount" Ordinal="12" IsOptional="true" DbType="24" Length="12" />
-                    <Field Name="PayorDutiesType" Ordinal="13" IsOptional="true" DbType="8" Precision="10" />
-                    <Field Name="PayorDutiesAccount" Ordinal="14" IsOptional="true" DbType="24" Length="12" />
-                    <Field Name="SaturdayDelivery" Ordinal="15" IsOptional="true" DbType="2" />
-                    <Field Name="EmailNotifySender" Ordinal="16" IsOptional="true" DbType="8" Precision="10" />
-                    <Field Name="EmailNotifyRecipient" Ordinal="17" IsOptional="true" DbType="8" Precision="10" />
-                    <Field Name="EmailNotifyOther" Ordinal="18" IsOptional="true" DbType="8" Precision="10" />
-                    <Field Name="EmailNotifyOtherAddress" Ordinal="19" IsOptional="true" DbType="12" Length="100" />
-                    <Field Name="EmailNotifyMessage" Ordinal="20" IsOptional="true" DbType="24" Length="120" />
-                    <Field Name="ResidentialDetermination" Ordinal="21" IsOptional="true" DbType="8" Precision="10" />
-                    <Field Name="SmartPostIndicia" Ordinal="22" IsOptional="true" DbType="8" Precision="10" />
-                    <Field Name="SmartPostEndorsement" Ordinal="23" IsOptional="true" DbType="8" Precision="10" />
-                    <Field Name="SmartPostConfirmation" Ordinal="24" IsOptional="true" DbType="2" />
-                    <Field Name="SmartPostCustomerManifest" Ordinal="25" IsOptional="true" DbType="12" Length="50" />
-                    <Field Name="SmartPostHubID" Ordinal="26" IsOptional="true" DbType="24" Length="10" />
-                    <Field Name="EmailNotifyBroker" Ordinal="27" IsOptional="true" DbType="8" Precision="10" />
-                    <Field Name="DropoffType" Ordinal="28" IsOptional="true" DbType="8" Precision="10" />
-                    <Field Name="OriginResidentialDetermination" Ordinal="29" IsOptional="true" DbType="8" Precision="10" />
-                    <Field Name="PayorTransportName" Ordinal="30" IsOptional="true" DbType="10" Length="60" />
-                    <Field Name="ReturnType" Ordinal="31" IsOptional="true" DbType="8" Precision="10" />
-                    <Field Name="RmaNumber" Ordinal="32" IsOptional="true" DbType="12" Length="30" />
-                    <Field Name="RmaReason" Ordinal="33" IsOptional="true" DbType="12" Length="60" />
-                    <Field Name="ReturnSaturdayPickup" Ordinal="34" IsOptional="true" DbType="2" />
-                    <Field Name="ReturnsClearance" Ordinal="35" IsOptional="true" DbType="2" />
-                    <Field Name="ReferenceFIMS" Ordinal="36" IsOptional="true" DbType="12" Length="300" />
-                    <Field Name="ThirdPartyConsignee" Ordinal="37" IsOptional="true" DbType="2" />
-                    <Field Name="CreateCommercialInvoice" Ordinal="38" IsOptional="true" DbType="2" />
-                    <Field Name="FileElectronically" Ordinal="39" IsOptional="true" DbType="2" />
-                    <Field Name="CustomsRecipientTIN" Ordinal="40" IsOptional="true" DbType="12" Length="24" />
-                    <Field Name="CustomsRecipientTINType" Ordinal="41" IsOptional="true" DbType="8" Precision="10" />
-                    <Field Name="PayorCountryCode" Ordinal="42" IsOptional="true" DbType="12" Length="2" />
-                    <Field Name="PayorPostalCode" Ordinal="43" IsOptional="true" DbType="12" Length="10" />
+                    <Field Name="PayorCountryCode" Ordinal="11" IsOptional="true" DbType="12" Length="2" />
+                    <Field Name="PayorPostalCode" Ordinal="12" IsOptional="true" DbType="12" Length="10" />
+                    <Field Name="PayorTransportType" Ordinal="13" IsOptional="true" DbType="8" Precision="10" />
+                    <Field Name="PayorTransportAccount" Ordinal="14" IsOptional="true" DbType="24" Length="12" />
+                    <Field Name="PayorDutiesType" Ordinal="15" IsOptional="true" DbType="8" Precision="10" />
+                    <Field Name="PayorDutiesAccount" Ordinal="16" IsOptional="true" DbType="24" Length="12" />
+                    <Field Name="SaturdayDelivery" Ordinal="17" IsOptional="true" DbType="2" />
+                    <Field Name="EmailNotifySender" Ordinal="18" IsOptional="true" DbType="8" Precision="10" />
+                    <Field Name="EmailNotifyRecipient" Ordinal="19" IsOptional="true" DbType="8" Precision="10" />
+                    <Field Name="EmailNotifyOther" Ordinal="20" IsOptional="true" DbType="8" Precision="10" />
+                    <Field Name="EmailNotifyOtherAddress" Ordinal="21" IsOptional="true" DbType="12" Length="100" />
+                    <Field Name="EmailNotifyMessage" Ordinal="22" IsOptional="true" DbType="24" Length="120" />
+                    <Field Name="ResidentialDetermination" Ordinal="23" IsOptional="true" DbType="8" Precision="10" />
+                    <Field Name="SmartPostIndicia" Ordinal="24" IsOptional="true" DbType="8" Precision="10" />
+                    <Field Name="SmartPostEndorsement" Ordinal="25" IsOptional="true" DbType="8" Precision="10" />
+                    <Field Name="SmartPostConfirmation" Ordinal="26" IsOptional="true" DbType="2" />
+                    <Field Name="SmartPostCustomerManifest" Ordinal="27" IsOptional="true" DbType="12" Length="50" />
+                    <Field Name="SmartPostHubID" Ordinal="28" IsOptional="true" DbType="24" Length="10" />
+                    <Field Name="EmailNotifyBroker" Ordinal="29" IsOptional="true" DbType="8" Precision="10" />
+                    <Field Name="DropoffType" Ordinal="30" IsOptional="true" DbType="8" Precision="10" />
+                    <Field Name="OriginResidentialDetermination" Ordinal="31" IsOptional="true" DbType="8" Precision="10" />
+                    <Field Name="PayorTransportName" Ordinal="32" IsOptional="true" DbType="10" Length="60" />
+                    <Field Name="ReturnType" Ordinal="33" IsOptional="true" DbType="8" Precision="10" />
+                    <Field Name="RmaNumber" Ordinal="34" IsOptional="true" DbType="12" Length="30" />
+                    <Field Name="RmaReason" Ordinal="35" IsOptional="true" DbType="12" Length="60" />
+                    <Field Name="ReturnSaturdayPickup" Ordinal="36" IsOptional="true" DbType="2" />
+                    <Field Name="ReturnsClearance" Ordinal="37" IsOptional="true" DbType="2" />
+                    <Field Name="ReferenceFIMS" Ordinal="38" IsOptional="true" DbType="12" Length="300" />
+                    <Field Name="ThirdPartyConsignee" Ordinal="39" IsOptional="true" DbType="2" />
+                    <Field Name="CreateCommercialInvoice" Ordinal="40" IsOptional="true" DbType="2" />
+                    <Field Name="FileElectronically" Ordinal="41" IsOptional="true" DbType="2" />
+                    <Field Name="CustomsRecipientTIN" Ordinal="42" IsOptional="true" DbType="12" Length="24" />
+                    <Field Name="CustomsRecipientTINType" Ordinal="43" IsOptional="true" DbType="8" Precision="10" />
+                    <Field Name="DeliveredDutyPaid" Ordinal="44" IsOptional="true" DbType="2" />
                   </Fields>
                 </Table>
                 <Table Name="FedExProfilePackage">
@@ -7061,6 +7064,7 @@
                     <Field Name="FreightGuaranteeDate" Ordinal="165" DbType="4" />
                     <Field Name="CustomsRecipientTINType" Ordinal="166" IsOptional="true" DbType="8" Precision="10" />
                     <Field Name="ShipEngineLabelId" Ordinal="167" IsOptional="true" DbType="12" Length="50" />
+                    <Field Name="DeliveredDutyPaid" Ordinal="168" DbType="2" />
                   </Fields>
                 </Table>
                 <Table Name="Filter">
@@ -12525,7 +12529,7 @@
             <FieldMapping FieldName="Phone" TargetFieldName="Phone" />
             <FieldMapping FieldName="PostalCode" TargetFieldName="PostalCode" />
             <FieldMapping FieldName="RowVersion" TargetFieldName="RowVersion" />
-            <FieldMapping FieldName="ShipEngineCarrierID" TargetFieldName="ShipEngineCarrierID" />
+            <FieldMapping FieldName="ShipEngineCarrierID" TargetFieldName="ShipEngineCarrierId" />
             <FieldMapping FieldName="Signature" TargetFieldName="Signature" />
             <FieldMapping FieldName="SignatureRelease" TargetFieldName="SignatureRelease" />
             <FieldMapping FieldName="SmartPostHub" TargetFieldName="SmartPostHub" />
@@ -12602,6 +12606,7 @@
             <FieldMapping FieldName="CreateCommercialInvoice" TargetFieldName="CreateCommercialInvoice" />
             <FieldMapping FieldName="CustomsRecipientTIN" TargetFieldName="CustomsRecipientTIN" />
             <FieldMapping FieldName="CustomsRecipientTINType" TargetFieldName="CustomsRecipientTINType" />
+            <FieldMapping FieldName="DeliveredDutyPaid" TargetFieldName="DeliveredDutyPaid" />
             <FieldMapping FieldName="DropoffType" TargetFieldName="DropoffType" />
             <FieldMapping FieldName="EmailNotifyBroker" TargetFieldName="EmailNotifyBroker" />
             <FieldMapping FieldName="EmailNotifyMessage" TargetFieldName="EmailNotifyMessage" />
@@ -12742,6 +12747,7 @@
             <FieldMapping FieldName="CustomsRecipientIdentificationValue" TargetFieldName="CustomsRecipientIdentificationValue" />
             <FieldMapping FieldName="CustomsRecipientTIN" TargetFieldName="CustomsRecipientTIN" />
             <FieldMapping FieldName="CustomsRecipientTINType" TargetFieldName="CustomsRecipientTINType" />
+            <FieldMapping FieldName="DeliveredDutyPaid" TargetFieldName="DeliveredDutyPaid" />
             <FieldMapping FieldName="DropoffType" TargetFieldName="DropoffType" />
             <FieldMapping FieldName="EmailNotifyBroker" TargetFieldName="EmailNotifyBroker" />
             <FieldMapping FieldName="EmailNotifyMessage" TargetFieldName="EmailNotifyMessage" />

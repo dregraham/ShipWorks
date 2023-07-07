@@ -317,6 +317,8 @@ namespace ShipWorks.Shipping.Carriers.FedEx
                     smartConfirmation.ApplyMultiCheck(shipment.FedEx.SmartPostConfirmation);
                     smartManifestID.ApplyMultiText(shipment.FedEx.SmartPostCustomerManifest);
 
+                    deliveredDutyPaid.ApplyMultiCheck(shipment.FedEx.DeliveredDutyPaid);
+
                     LoadEmailNotificationSettings(shipment.FedEx);
                 }
 
@@ -548,6 +550,8 @@ namespace ShipWorks.Shipping.Carriers.FedEx
                 dutiesAccount.ReadMultiText(t => shipment.FedEx.PayorDutiesAccount = t);
 
                 saturdayDelivery.ReadMultiCheck(c => shipment.FedEx.SaturdayDelivery = c);
+
+                deliveredDutyPaid.ReadMultiCheck(c => shipment.FedEx.DeliveredDutyPaid = c);
 
                 homeInstructions.ReadMultiText(t => shipment.FedEx.HomeDeliveryInstructions = t);
                 homePremiumService.ReadMultiValue(v => shipment.FedEx.HomeDeliveryType = (int) v);
