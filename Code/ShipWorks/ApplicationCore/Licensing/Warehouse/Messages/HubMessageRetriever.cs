@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Reflection;
 using System.Threading.Tasks;
 using System.Web;
 using System.Windows.Forms;
@@ -41,7 +42,7 @@ namespace ShipWorks.ApplicationCore.Licensing.Warehouse.Messages
         /// </summary>
         public async Task GetMessages(IWin32Window owner)
         {
-            var request = requestFactory.Create(string.Format(WarehouseEndpoints.GetMessages, HttpUtility.UrlEncode(userSession.User.Username)), Method.GET, null);
+            var request = requestFactory.Create(string.Format(WarehouseEndpoints.GetMessages, HttpUtility.UrlEncode(userSession.User.Username), Assembly.GetExecutingAssembly().GetName().Version), Method.GET, null);
 
             var response = await warehouseClient.MakeRequest<MessagesResponse>(request, "GetMessages").ConfigureAwait(true);
 

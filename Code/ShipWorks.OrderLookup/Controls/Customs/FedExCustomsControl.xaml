@@ -103,7 +103,8 @@
                 Grid.Row="4"
                 Grid.Column="0"
                 Style="{StaticResource FieldLabel}"
-                Text="B13A Filing Option" />
+                Text="B13A Filing Option" 
+                Visibility="Collapsed"/>
             <ComboBox
                 Grid.Row="4"
                 Grid.Column="1"
@@ -111,18 +112,21 @@
                 ItemsSource="{Binding CustomsExportFilingOptions, UpdateSourceTrigger=PropertyChanged}"
                 SelectedValue="{Binding ShipmentModel.ShipmentAdapter.Shipment.FedEx.CustomsExportFilingOption}"
                 SelectedValuePath="Key"
-                Style="{StaticResource FormComboBox}" />
+                Style="{StaticResource FormComboBox}" 
+                Visibility="Collapsed"/>
             
             <TextBlock
                 Grid.Row="5"
                 Grid.Column="0"
                 Style="{StaticResource FieldLabel}"
-                Text="AES/EEI Exemption" />
+                Text="AES/EEI Exemption" 
+                Visibility="Collapsed"/>
             <TextBox
                 Grid.Row="5"
                 Grid.Column="1"
                 Text="{Binding ShipmentModel.ShipmentAdapter.Shipment.FedEx.CustomsAESEEI, UpdateSourceTrigger=PropertyChanged}"
-                Style="{StaticResource FormTextBox}" />
+                Style="{StaticResource FormTextBox}" 
+                Visibility="Collapsed"/>
             
         </Grid>
         

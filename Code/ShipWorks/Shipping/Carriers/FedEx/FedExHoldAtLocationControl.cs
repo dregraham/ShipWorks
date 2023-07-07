@@ -8,13 +8,15 @@ using ShipWorks.UI.Controls;
 using ShipWorks.Shipping.Carriers.FedEx.WebServices.GlobalShipAddress;
 using System.Collections.Generic;
 using Interapptive.Shared;
+using ShipWorks.Shipping.ShipEngine.DTOs;
+using Rebex.Security.Cryptography.Pkcs;
 
 namespace ShipWorks.Shipping.Carriers.FedEx
 {
     public partial class FedExHoldAtLocationControl : UserControl
     {
         // a member/attribute to reference the FedEx API object representing a selected location 
-        private DistanceAndLocationDetail fedExLocationDetails;
+        private ServicePoint fedExLocationDetails;
         private IEnumerable<ShipmentEntity> shipments;
 
         /// <summary>
@@ -23,7 +25,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         public FedExHoldAtLocationControl()
         {
             InitializeComponent();
-            fedExLocationDetails = new DistanceAndLocationDetail();
+            fedExLocationDetails = new ServicePoint();
 
             EnableDetailControls(false);
         }
@@ -65,69 +67,24 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             }
 
             // Don't save anything if the option is selected and the location details were never set
-            if (shipmentEntity.FedEx.FedExHoldAtLocationEnabled && fedExLocationDetails.LocationDetail != null)
+            if (shipmentEntity.FedEx.FedExHoldAtLocationEnabled && !locationDetails.MultiValued && !string.IsNullOrEmpty(fedExLocationDetails.ServicePointId))
             {
-                // Don't save multi-valued location details otherwise location details will get overwritten
-                if (!locationDetails.MultiValued)
-                {
-                    // Get a handle to the entity, contact, and address so we don't have to walk
-                    // the object graph each time
-                    FedExShipmentEntity fedEx = shipmentEntity.FedEx;
-                    Contact contactInfo = GetContact();
-                    Address address = GetAddress();
+                // Get a handle to the entity, contact, and address so we don't have to walk
+                // the object graph each time
+                FedExShipmentEntity fedEx = shipmentEntity.FedEx;
 
-                    fedEx.HoldLocationId = fedExLocationDetails.LocationDetail.LocationId;
+                fedEx.HoldLocationId = fedExLocationDetails.ServicePointId;
 
-                    if (contactInfo != null)
-                    {
-                        fedEx.HoldContactId = contactInfo.ContactId;
-                        fedEx.HoldPersonName = contactInfo.PersonName;
-                        fedEx.HoldTitle = contactInfo.Title;
-                        fedEx.HoldCompanyName = contactInfo.CompanyName;
-
-                        fedEx.HoldPhoneNumber = contactInfo.PhoneNumber;
-                        fedEx.HoldPhoneExtension = contactInfo.PhoneExtension;
-                        fedEx.HoldPagerNumber = contactInfo.PagerNumber;
-                        fedEx.HoldFaxNumber = contactInfo.FaxNumber;
-                        fedEx.HoldEmailAddress = contactInfo.EMailAddress;
-                    }
-
-                    if (address != null)
-                    {
-                        fedEx.HoldStreet1 = GetStreetLineFromFedExAddress(address, 0);
-                        fedEx.HoldStreet2 = GetStreetLineFromFedExAddress(address, 1);
-                        fedEx.HoldStreet3 = GetStreetLineFromFedExAddress(address, 2);
-
-                        fedEx.HoldCity = address.City;
-                        fedEx.HoldStateOrProvinceCode = address.StateOrProvinceCode;
-                        fedEx.HoldPostalCode = address.PostalCode;
-                        fedEx.HoldCountryCode = address.CountryCode;
-                        fedEx.HoldResidential = address.Residential;
-                        fedEx.HoldUrbanizationCode = address.UrbanizationCode;
-                    }
-                }
+                fedEx.HoldCompanyName = fedExLocationDetails.CompanyName;
+                fedEx.HoldPhoneNumber = fedExLocationDetails.Phone;
+                fedEx.HoldStreet1 = fedExLocationDetails.AddressLine1;
+                fedEx.HoldStreet2 = fedExLocationDetails.AddressLine2;
+                fedEx.HoldStreet3 = fedExLocationDetails.AddressLine3;
+                fedEx.HoldCity = fedExLocationDetails.City;
+                fedEx.HoldStateOrProvinceCode = fedExLocationDetails.StateProvince;
+                fedEx.HoldCountryCode = fedExLocationDetails.CountryCode;
+                fedEx.HoldPostalCode = fedExLocationDetails.PostalCode;
             }
-        }
-
-        /// <summary>
-        /// Gets the street line from FedEx address.
-        /// </summary>
-        /// <param name="address">The address.</param>
-        /// <param name="lineNumber">The line number.</param>
-        /// <returns>The text of the specified address line.</returns>
-        private string GetStreetLineFromFedExAddress(Address address, int lineNumber)
-        {
-            string line = string.Empty;
-
-            if (address.StreetLines.Length > lineNumber)
-            {
-                if (!string.IsNullOrEmpty(address.StreetLines[lineNumber]))
-                {
-                    line = address.StreetLines[lineNumber];
-                }
-            }
-
-            return line;
         }
 
         /// <summary>
@@ -158,7 +115,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         private void ClearLocationDetails()
         {
             // Create a new location details object to clear out any pre-existing data
-            fedExLocationDetails = new DistanceAndLocationDetail();
+            fedExLocationDetails = new ServicePoint();
             locationDetails.Clear();
         }
 
@@ -172,139 +129,72 @@ namespace ShipWorks.Shipping.Carriers.FedEx
 
             if (fedExShipment.FedExHoldAtLocationEnabled)
             {
-                fedExLocationDetails.LocationDetail = new LocationDetail
+                fedExLocationDetails = new ServicePoint
                 {
-                    LocationId = fedExShipment.HoldLocationId,
-                    LocationContactAndAddress = new LocationContactAndAddress
-                    {
-                        Address = new Address
-                        {
-                            City = fedExShipment.HoldCity,
-                            CountryCode = fedExShipment.HoldCountryCode,
-                            PostalCode = fedExShipment.HoldPostalCode,
-                            Residential = fedExShipment.HoldResidential ?? false,
-                            StateOrProvinceCode = fedExShipment.HoldStateOrProvinceCode,
-                            StreetLines = new[] { fedExShipment.HoldStreet1, fedExShipment.HoldStreet2, fedExShipment.HoldStreet3 },
-                            UrbanizationCode = fedExShipment.HoldUrbanizationCode
-                        },
-                        Contact = new Contact
-                        {
-                            ContactId = fedExShipment.HoldContactId,
-                            CompanyName = fedExShipment.HoldCompanyName,
-                            EMailAddress = fedExShipment.HoldEmailAddress,
-                            FaxNumber = fedExShipment.HoldFaxNumber,
-                            PagerNumber = fedExShipment.HoldPagerNumber,
-                            PersonName = fedExShipment.HoldPersonName,
-                            PhoneExtension = fedExShipment.HoldPhoneExtension,
-                            PhoneNumber = fedExShipment.HoldPhoneNumber,
-                            Title = fedExShipment.HoldTitle
-                        }
-                    }
+                    ServicePointId = fedExShipment.HoldLocationId,
+                    AddressLine1 = fedExShipment.HoldStreet1,
+                    AddressLine2 = fedExShipment.HoldStreet2,
+                    AddressLine3 = fedExShipment.HoldStreet3,
+                    City = fedExShipment.HoldCity,
+                    CountryCode = fedExShipment.HoldCountryCode,
+                    PostalCode = fedExShipment.HoldPostalCode,
+                    StateProvince = fedExShipment.HoldStateOrProvinceCode,
+                    CompanyName = fedExShipment.HoldCompanyName,
+                    Phone = fedExShipment.HoldPhoneNumber
                 };
             }
         }
 
         /// <summary>
-        /// Helper method to get a handle to the contact object within the location details object.
-        /// </summary>
-        /// <returns>A Contact object.</returns>
-        private Contact GetContact()
-        {
-            Contact contactInfo = null;
-            
-            if (fedExLocationDetails.LocationDetail != null)
-            {
-                if (fedExLocationDetails.LocationDetail.LocationContactAndAddress != null)
-                {
-                    contactInfo = fedExLocationDetails.LocationDetail.LocationContactAndAddress.Contact;
-                }
-            }
-
-            return contactInfo;
-        }
-
-        /// <summary>
-        /// Helper method to get a handle to the address object within the location details object.
-        /// </summary>
-        /// <returns>An Address object.</returns>
-        private Address GetAddress()
-        {
-            Address address = null;
-
-            if (fedExLocationDetails.LocationDetail != null)
-            {
-                if (fedExLocationDetails.LocationDetail.LocationContactAndAddress != null)
-                {
-                    address = fedExLocationDetails.LocationDetail.LocationContactAndAddress.Address;
-                }
-            }
-
-            return address;
-        }
-
-        /// <summary>
-        /// Updates the location details text box with the .
+        /// Updates the location details text box with the formatted location details.
         /// </summary>
         private string FormatLocationDetails()
         {
             StringBuilder formattedLocation = new StringBuilder();
-            
-            // Get a handle to the contanct and address within the fedExLocationDetails object
-            Contact contactInfo = GetContact();
-            Address address = GetAddress();
 
-            if (contactInfo != null)
+            if (!string.IsNullOrEmpty(fedExLocationDetails.CompanyName))
             {
-                // Write the contact info
-                if (!string.IsNullOrEmpty(contactInfo.PersonName))
-                {   
-                    formattedLocation.AppendFormat("{0}{1}", contactInfo.PersonName, Environment.NewLine);
-                }
-                if (!string.IsNullOrEmpty(contactInfo.CompanyName))
-                {
-                    formattedLocation.AppendFormat("{0}{1}", contactInfo.CompanyName, Environment.NewLine);
-                }
+                formattedLocation.AppendFormat("{0}{1}", fedExLocationDetails.CompanyName, Environment.NewLine);
             }
 
-            if (address != null)
+            // Convert the address into a single string
+
+            var streetAddress = fedExLocationDetails.AddressLine1;
+
+            if (!string.IsNullOrEmpty(fedExLocationDetails.AddressLine2))
             {
-                // We have an address populated in the FedEx location details object
-
-                // Convert the address array into a single string
-                string streetAddress = string.Join(Environment.NewLine, address.StreetLines.Where(s => !string.IsNullOrEmpty(s)));
-                if (!string.IsNullOrEmpty(streetAddress))
-                {
-                    formattedLocation.AppendFormat("{0}{1}", streetAddress, Environment.NewLine);
-                }
-
-                // Write out the city, state, and postal code
-                if (!string.IsNullOrEmpty(address.City))
-                {
-                    formattedLocation.AppendFormat("{0}", address.City);
-                }
-
-                if (!string.IsNullOrEmpty(address.StateOrProvinceCode))
-                {
-                    formattedLocation.AppendFormat(", {0}", address.StateOrProvinceCode);
-                }
-
-                if (!string.IsNullOrEmpty(address.PostalCode))
-                {
-                    formattedLocation.AppendFormat(" {0}", address.PostalCode);
-                }
+                streetAddress += $"\n{fedExLocationDetails.AddressLine2}";
             }
 
-            if (contactInfo != null)
+            if (!string.IsNullOrEmpty(fedExLocationDetails.AddressLine3))
             {
-                // Write the contact phone number
-                if (!string.IsNullOrEmpty(contactInfo.TollFreePhoneNumber))
-                {
-                    formattedLocation.AppendFormat("{0}{1}", Environment.NewLine, contactInfo.TollFreePhoneNumber);
-                }
-                if (!string.IsNullOrEmpty(contactInfo.PhoneNumber))
-                {
-                    formattedLocation.AppendFormat("{0}{1}", Environment.NewLine, contactInfo.PhoneNumber);
-                }
+                streetAddress += $"\n{fedExLocationDetails.AddressLine3}";
+            }
+
+            if (!string.IsNullOrEmpty(streetAddress))
+            {
+                formattedLocation.AppendFormat("{0}{1}", streetAddress, Environment.NewLine);
+            }
+
+            // Write out the city, state, and postal code
+            if (!string.IsNullOrEmpty(fedExLocationDetails.City))
+            {
+                formattedLocation.AppendFormat("{0}", fedExLocationDetails.City);
+            }
+
+            if (!string.IsNullOrEmpty(fedExLocationDetails.StateProvince))
+            {
+                formattedLocation.AppendFormat(", {0}", fedExLocationDetails.StateProvince);
+            }
+
+            if (!string.IsNullOrEmpty(fedExLocationDetails.PostalCode))
+            {
+                formattedLocation.AppendFormat(" {0}", fedExLocationDetails.PostalCode);
+            }
+
+            if (!string.IsNullOrEmpty(fedExLocationDetails.Phone))
+            {
+                formattedLocation.AppendFormat("{0}{1}", Environment.NewLine, fedExLocationDetails.Phone);
             }
 
             // The location should be formatted based on the location details now
@@ -323,9 +213,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx
                 using (FedExHoldAtLocationSearchDlg searchDialog = new FedExHoldAtLocationSearchDlg(shipments.First()))
                 {
                     DialogResult result = searchDialog.ShowDialog(this);
-                    if (result == DialogResult.OK && searchDialog.SelectedLocation != null)
+                    if (result == DialogResult.OK && searchDialog.SelectedServicePoint != null)
                     {
-                        fedExLocationDetails = searchDialog.SelectedLocation;
+                        fedExLocationDetails = searchDialog.SelectedServicePoint;
                         SaveToShipment(shipments.First());
                     }
                 }

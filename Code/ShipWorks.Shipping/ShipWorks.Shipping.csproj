@@ -365,6 +365,7 @@
     <Compile Include="Carriers\FedEx\Api\Ship\OpenShip\FedExOpenShipXmlReader.cs" />
     <Compile Include="Carriers\FedEx\Api\Ship\OpenShip\FedExOpenShipXmlWriter.cs" />
     <Compile Include="Carriers\FedEx\Api\Ship\OpenShip\FedExShipServiceWrapper.cs" />
+    <Compile Include="Carriers\FedEx\FedExFimsDownloadedLabelData.cs" />
     <Compile Include="Carriers\FedEx\FedExPrefetchProvider.cs" />
     <Compile Include="Carriers\Dhl\DhlExpressException.cs" />
     <Compile Include="Carriers\Dhl\DhlExpressInsuranceChoice.cs" />
@@ -376,10 +377,15 @@
     <Compile Include="Carriers\Dhl\DhlExpressShipmentType.cs" />
     <Compile Include="Carriers\Dhl\DhlExpressRatingService.cs" />
     <Compile Include="Carriers\FedEx\FedExDownloadedLabelData.cs" />
+    <Compile Include="Carriers\FedEx\FedExRateGroupFactory.cs" />
+    <Compile Include="Carriers\FedEx\FedExShipmentRequestFactory.cs" />
     <Compile Include="Carriers\FedEx\FedExShipmentServicesBuilder.cs" />
     <Compile Include="Carriers\FedEx\FedExShippingProfileApplicationStrategy.cs" />
+    <Compile Include="Carriers\FedEx\FedExTrackingService.cs" />
     <Compile Include="Carriers\FedEx\FedExUtilityWrapper.cs" />
+    <Compile Include="Carriers\FedEx\IFedExRateGroupFactory.cs" />
     <Compile Include="Carriers\FedEx\IFedExUtility.cs" />
+    <Compile Include="Carriers\FedEx\FedExShipEngineMigrator.cs" />
     <Compile Include="Carriers\FedEx\FedExShipmentPackageTypesBuilder.cs" />
     <Compile Include="Carriers\FedEx\FedExShipmentAdapter.cs" />
     <Compile Include="Carriers\IDefaultShipmentPreProcessor.cs" />
@@ -645,6 +651,7 @@
     <Compile Include="Settings\ShipmentTypeSetupWizardFactory.cs" />
     <Compile Include="ShipEngine\DTOs\CreateManifestRequest.cs" />
     <Compile Include="ShipEngine\DTOs\CreateShipEngineAccount.cs" />
+    <Compile Include="ShipEngine\DTOs\ListServicePointsRequest.cs" />
     <Compile Include="ShipEngine\DTOs\Registration\Address.cs" />
     <Compile Include="ShipEngine\DTOs\Registration\IUpsRegistrationRequestFactory.cs" />
     <Compile Include="ShipEngine\DTOs\Registration\UpsRegistrationRequest.cs" />
@@ -658,6 +665,7 @@
     <Compile Include="ShipEngine\IShipEngineRequestFactory.cs" />
     <Compile Include="ShipEngine\IShipEngineResourceDownloader.cs" />
     <Compile Include="ShipEngine\IShipEngineTrackingResultFactory.cs" />
+    <Compile Include="ShipEngine\IShipEngineTrackingService.cs" />
     <Compile Include="ShipEngine\IUpsCredentials.cs" />
     <Compile Include="ShipEngine\Manifest\ShipEngineManifestCreator.cs" />
     <Compile Include="ShipEngine\Manifest\ShipEngineManifestUtility.cs" />
@@ -675,6 +683,7 @@
     <Compile Include="ShipEngine\ShipEngineRequestFactory.cs" />
     <Compile Include="ShipEngine\ShipEngineShipmentRequestFactory.cs" />
     <Compile Include="ShipEngine\ShipEngineTrackingResultFactory.cs" />
+    <Compile Include="ShipEngine\ShipEngineTrackingService.cs" />
     <Compile Include="ShipEngine\ShipEngineWebClient.cs" />
     <Compile Include="ShipEngine\UpsCredentials.cs" />
     <Compile Include="ShippingErrorManager.cs" />
@@ -716,7 +725,7 @@
     <Compile Include="Carriers\BestRate\BestRateRateHashingService.cs" />
     <Compile Include="Carriers\FedEx\FedExLabelService.cs" />
     <Compile Include="Carriers\FedEx\FedExRateHashingService.cs" />
-    <Compile Include="Carriers\FedEx\FedExRatingService.cs" />
+    <Compile Include="Carriers\FedEx\FedExShipEngineRatingClient.cs" />
     <Compile Include="Carriers\iParcel\iParcelLabelService.cs" />
     <Compile Include="Carriers\iParcel\iParcelRateHashingService.cs" />
     <Compile Include="Carriers\iParcel\iParcelRatingService.cs" />

@@ -1,6 +1,6 @@
 ﻿using System;
-using System.Data;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 using Autofac;
 using Interapptive.Shared;
@@ -13,11 +13,12 @@ using ShipWorks.ApplicationCore;
 using ShipWorks.Common.IO.Hardware.Printers;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.Api;
-using ShipWorks.Shipping.Carriers.FedEx.Api;
 using ShipWorks.Shipping.Editing.Rating;
 using ShipWorks.Shipping.Profiles;
 using ShipWorks.Shipping.Settings;
 using ShipWorks.Shipping.Settings.WizardPages;
+using ShipWorks.Shipping.ShipEngine;
+using ShipWorks.Shipping.ShipEngine.DTOs.CarrierAccount;
 using ShipWorks.UI.Wizard;
 
 namespace ShipWorks.Shipping.Carriers.FedEx
@@ -28,7 +29,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
     [KeyedComponent(typeof(IShipmentTypeSetupWizard), ShipmentTypeCode.FedEx)]
     public partial class FedExSetupWizard : WizardForm, IShipmentTypeSetupWizard
     {
-        FedExAccountEntity account;
+        private readonly FedExAccountEntity account;
 
         /// <summary>
         /// Constructor
@@ -41,7 +42,6 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         }
 
         /// <summary>
-
         /// Initialization
         /// </summary>
         private void OnLoad(object sender, EventArgs e)
@@ -110,56 +110,70 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         [NDependIgnoreLongMethod]
         private void OnStepNextAccountInfo(object sender, WizardStepEventArgs e)
         {
-            account.AccountNumber = accountNumber.Text;
-            account.SignatureRelease = "";
-
-            personControl.SaveToEntity(new PersonAdapter(account, string.Empty));
-
-            account.Phone = new string(account.Phone.Where(char.IsDigit).ToArray());
-
-            RequiredFieldChecker checker = new RequiredFieldChecker();
-            checker.Check("Account", account.AccountNumber);
-            checker.Check("Full Name", account.FirstName);
-            checker.Check("Company", account.Company);
-            checker.Check("Street Address", account.Street1);
-            checker.Check("City", account.City);
-
-            if (!string.IsNullOrWhiteSpace(account.CountryCode) &&
-                (account.CountryCode == "US" || account.CountryCode == "CA"))
-            {
-                checker.Check("State", account.StateProvCode);
-            }
-
-            checker.Check("Postal Code", account.PostalCode);
-            checker.Check("Email", account.Email);
-            checker.Check("Phone", account.Phone);
-            checker.Check("Website", account.Website);
-
-            if (!checker.Validate(this))
-            {
-                e.NextPage = CurrentPage;
-                return;
-            }
-
-            if (account.Phone.Length != 10)
-            {
-                e.NextPage = CurrentPage;
-                MessageHelper.ShowError(this, "The phone number must be 10 digits.");
-                return;
-            }
-
             try
             {
-                Cursor.Current = Cursors.WaitCursor;
+                account.AccountNumber = accountNumber.Text.Trim();
+                account.SignatureRelease = "";
 
+                personControl.SaveToEntity(new PersonAdapter(account, string.Empty));
 
-                using (var lifetimeScope = IoC.BeginLifetimeScope())
+                account.Phone = new string(account.Phone.Where(char.IsDigit).ToArray());
+
+                RequiredFieldChecker checker = new RequiredFieldChecker();
+                checker.Check("Account", account.AccountNumber);
+                checker.Check("Full Name", account.FirstName);
+                checker.Check("Company", account.Company);
+                checker.Check("Street Address", account.Street1);
+                checker.Check("City", account.City);
+
+                if (!string.IsNullOrWhiteSpace(account.CountryCode) &&
+                    (account.CountryCode == "US" || account.CountryCode == "CA"))
                 {
-                    IFedExShippingClerk clerk = lifetimeScope.Resolve<IFedExShippingClerkFactory>().Create();
-                    clerk.RegisterAccount(account);
+                    checker.Check("State", account.StateProvCode);
+                }
+
+                checker.Check("Postal Code", account.PostalCode);
+                checker.Check("Email", account.Email);
+                checker.Check("Phone", account.Phone);
+                checker.Check("Website", account.Website);
+
+                if (!checker.Validate(this))
+                {
+                    e.NextPage = CurrentPage;
+                    return;
+                }
+
+                if (account.Phone.Length != 10)
+                {
+                    e.NextPage = CurrentPage;
+                    MessageHelper.ShowError(this, "The phone number must be 10 digits.");
+                    return;
                 }
 
                 account.Description = FedExAccountManager.GetDefaultDescription(account);
+
+                Cursor.Current = Cursors.WaitCursor;
+
+                // This is necessary because .Wait() causes the exception to be caught by the .NET runtime, then
+                // rethrown. That's normally fine, but in ShipWorks any exceptions caught by the runtime causes
+                // ShipWorks to close, so we have to work around that.
+                FedExException registrationException = null;
+                Task.Run(async () =>
+                {
+                    try
+                    {
+                        await RegisterAccount(account);
+                    }
+                    catch (FedExException ex)
+                    {
+                        registrationException = ex;
+                    }
+                }).Wait();
+
+                if (registrationException != null)
+                {
+                    throw registrationException;
+                }
 
                 // Save now so it shows up in the settings section
                 if (account.IsNew)
@@ -171,6 +185,30 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             {
                 MessageHelper.ShowError(this, ex.Message);
                 e.NextPage = CurrentPage;
+            }
+        }
+
+        /// <summary>
+        /// Registers a FedEx account for use with the FedEx API.
+        /// </summary>
+        /// <param name="fedExAccount">The account.</param>
+        private async Task RegisterAccount(FedExAccountEntity fedExAccount)
+        {
+            using (var lifetimeScope = IoC.BeginLifetimeScope())
+            {
+                var webClient = lifetimeScope.Resolve<IShipEngineWebClient>();
+
+                // Response contains the ShipEngine carrier id
+                var response = await webClient.ConnectFedExAccount(new FedExRegistrationRequest(fedExAccount)).ConfigureAwait(false);
+
+                if (response.Success)
+                {
+                    fedExAccount.ShipEngineCarrierID = response.Value;
+                }
+                else
+                {
+                    throw new FedExException($"Failed to register the FedEx account: {response.Message}");
+                }
             }
         }
 

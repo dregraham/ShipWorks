@@ -80,6 +80,18 @@ namespace ShipWorks.Shipping.ShipEngine
         }
 
         /// <summary>
+        /// Create a return label
+        /// </summary>
+        /// <param name="shipment"></param>
+        /// <returns></returns>
+        public virtual PurchaseLabelRequest CreateReturnLabelRequest(ShipmentEntity shipment)
+        {
+            var req = CreatePurchaseLabelRequest(shipment);
+            req.IsReturnLabel = true;
+            return req;
+        }
+
+        /// <summary>
         /// Creates a ShipEngine rate request
         /// </summary>
         public virtual RateShipmentRequest CreateRateShipmentRequest(ShipmentEntity shipment)
@@ -146,6 +158,11 @@ namespace ShipWorks.Shipping.ShipEngine
         }
 
         /// <summary>
+        /// Create shipment items
+        /// </summary>
+        protected virtual List<ShipmentItem> CreateItems(ShipmentEntity shipment) => new List<ShipmentItem>();
+
+        /// <summary>
         /// Ensures the carrier specific shipment (ex. shipment.Dhl) is not null
         /// </summary>
         protected abstract void EnsureCarrierShipmentIsNotNull(ShipmentEntity shipment);
@@ -174,11 +191,6 @@ namespace ShipWorks.Shipping.ShipEngine
         /// Creates the ShipEngine tax identifier node
         /// </summary>
         protected abstract List<TaxIdentifier> CreateTaxIdentifiers(ShipmentEntity shipment);
-
-        /// <summary>
-        /// Create shipment items
-        /// </summary>
-        protected abstract List<ShipmentItem> CreateItems(ShipmentEntity shipment);
 
         /// <summary>
         /// Gets the carrier specific packages

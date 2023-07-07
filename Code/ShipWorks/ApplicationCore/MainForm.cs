@@ -52,6 +52,7 @@ using ShipWorks.ApplicationCore.Licensing.Warehouse.Messages;
 using ShipWorks.ApplicationCore.MessageBoxes;
 using ShipWorks.ApplicationCore.Nudges;
 using ShipWorks.ApplicationCore.Settings;
+using ShipWorks.Carriers.Services;
 using ShipWorks.Common.IO.Hardware.Printers;
 using ShipWorks.Common.Threading;
 using ShipWorks.Core.Common.Threading;
@@ -89,6 +90,7 @@ using ShipWorks.Shipping.Carriers.Asendia;
 using ShipWorks.Shipping.Carriers.DhlEcommerce;
 using ShipWorks.Shipping.Carriers.FedEx;
 using ShipWorks.Shipping.Carriers.FedEx.Api;
+using ShipWorks.Shipping.Carriers.FedEx.Enums;
 using ShipWorks.Shipping.Carriers.UPS.OneBalance;
 using ShipWorks.Shipping.Carriers.UPS.WorldShip;
 using ShipWorks.Shipping.Insurance;
@@ -900,7 +902,9 @@ namespace ShipWorks
 
 			SynchronizeConfig();
 
-			MigrateSqlConfigToHub();
+            MigrateFedExAccountsToShipEngine();
+
+            MigrateSqlConfigToHub();
 
 			ConvertLegacyTrialStores();
 
@@ -2302,9 +2306,9 @@ namespace ShipWorks
 				return;
 			}
 
-			UpdateStatusBar();
-			UpdateCommandState();
-			UpdatePanelState();
+            UpdateStatusBar();
+            UpdateCommandState();
+            UpdatePanelsState();
 
 			ribbonSecurityProvider.UpdateSecurityUI();
 		}
@@ -2428,37 +2432,29 @@ namespace ShipWorks
 			ribbon.EditingContexts.Add(new EditingContext("Shipping Tools", "SHIPPINGMENU", System.Drawing.Color.LightBlue));
 		}
 
-		/// <summary>
-		/// Update the state of the panels based on the current selection
-		/// </summary>
-		private void UpdatePanelState()
-		{
-			IEnumerable<DockControl> controls = Panels.Where(d => d.Controls.Count == 1).ToList();
-			controls.Select(x => UpdatePanelState(x)).ToList();
-		}
+        /// <summary>
+        /// Update the state of the panels based on the current selection
+        /// </summary>
+        private void UpdatePanelsState()
+        {
+            var controls = Panels
+                .Where(dockControl => dockControl.IsOpen && dockControl.Controls.Count == 1)
+                .Select(d => d.Controls[0] as DockingPanelContentHolder)
+                .Where(h => h != null).ToList();
 
-		/// <summary>
-		/// Update the state of the panel content for the given dock control, only if it contains a panel, and only if it's open.
-		/// </summary>
-		private Task UpdatePanelState(DockControl dockControl)
-		{
-			// This function can get called as panels are activating.  Activation can be changing as we are closing them during logoff,
-			// so we have to make sure we're logged on or updating would crash.
-			if (!UserSession.IsLoggedOn)
-			{
-				return TaskUtility.CompletedTask;
-			}
-
-			DockingPanelContentHolder holder = dockControl.Controls[0] as DockingPanelContentHolder;
-			if (holder != null && dockControl.IsOpen)
-			{
-				// This happens to often to use GetOrderedSelectdKeys. If ordering becomes important, we'll need to improve
-				// the performance of that somehow for massive selections where there is virtual selection.
-				return holder.UpdateContent(gridControl.ActiveFilterTarget, gridControl.Selection);
-			}
-
-			return TaskUtility.CompletedTask;
-		}
+            foreach (var dockingPanelContentHolder in controls)
+            {
+                // This function can get called as panels are activating.  Activation can be changing as we are closing them during logoff,
+                // so we have to make sure we're logged on or updating would crash.
+                if (!UserSession.IsLoggedOn)
+                {
+                    return;
+                }
+                // This happens to often to use GetOrderedSelectdKeys. If ordering becomes important, we'll need to improve
+                // the performance of that somehow for massive selections where there is virtual selection.
+                _ = dockingPanelContentHolder.UpdateContent(gridControl.ActiveFilterTarget, gridControl.Selection);
+            }
+        }
 
 		/// <summary>
 		/// The popup window for displaying panels is opening
@@ -3366,8 +3362,8 @@ namespace ShipWorks
 				return;
 			}
 
-			UpdatePanelState();
-		}
+            UpdatePanelsState();
+        }
 
 		/// <summary>
 		/// The grid is going into or coming out of search mode
@@ -4420,24 +4416,24 @@ namespace ShipWorks
 
 			EnsureBatchMode();
 
-			// If a new panel was shown, then we may need to update its display state
-			UpdatePanelState();
-		}
+            // If a new panel was shown, then we may need to update its display state
+            UpdatePanelsState();
+        }
 
-		/// <summary>
-		/// Initialize the panels for the current user
-		/// </summary>
-		[NDependIgnoreLongMethod]
-		private void InitializePanels()
-		{
-			// First go through each panel and wrap it in a Panel control that will allow us to show messages to the user like "No orders are selected.";
-			foreach (DockControl dockControl in Panels)
-			{
-				// See if this is one that needs wrapped
-				if (dockControl.Controls.Count == 1 && dockControl.Controls[0] is IDockingPanelContent)
-				{
-					DockingPanelContentHolder holder = new DockingPanelContentHolder();
-					holder.Initialize((IDockingPanelContent) dockControl.Controls[0]);
+        /// <summary>
+        /// Initialize the panels for the current user
+        /// </summary>
+        [NDependIgnoreLongMethod]
+        private void InitializePanels()
+        {
+            // First go through each panel and wrap it in a Panel control that will allow us to show messages to the user like "No orders are selected.";
+            foreach (DockControl dockControl in Panels)
+            {
+                // See if this is one that needs wrapped
+                if (dockControl.Controls.Count == 1 && dockControl.Controls[0] is IDockingPanelContent content)
+                {
+                    DockingPanelContentHolder holder = new DockingPanelContentHolder();
+                    holder.Initialize(content);
 
 					holder.Dock = DockStyle.Fill;
 					dockControl.Controls.Add(holder);
@@ -4722,17 +4718,22 @@ namespace ShipWorks
 		private void OnOrderLookupViewFedExClosePopupOpening(object sender, BeforePopupEventArgs e) =>
 			PopulateFedExCloseMenu(menuOrderLookupViewFedExPrintReports, menuOrderLookupViewFedExSmartPostClose);
 
-		/// <summary>
-		/// Populate the FedEx close menu
-		/// </summary>
-		/// <param name="printMenu"></param>
-		/// <param name="closeMenu"></param>
-		private void PopulateFedExCloseMenu(Divelements.SandRibbon.Menu printMenu, SandMenuItem closeMenu)
-		{
-			FedExGroundClose.PopulatePrintReportsMenu(printMenu);
+        /// <summary>
+        /// Populate the FedEx close menu
+        /// </summary>
+        /// <param name="printMenu"></param>
+        /// <param name="closeMenu"></param>
+        private void PopulateFedExCloseMenu(Divelements.SandRibbon.Menu printMenu, SandMenuItem closeMenu)
+        {
+            using (var scope = IoC.BeginLifetimeScope())
+            {
+                var accountRetriever = scope.ResolveKeyed<ICarrierAccountRetriever>(ShipmentTypeCode.FedEx);
 
-			closeMenu.Visible = FedExUtility.GetSmartPostHubs().Any();
-		}
+                PopulateShipEngineManifestMenu(closeMenu, printMenu, accountRetriever, scope);
+            }
+
+            closeMenu.Visible = FedExAccountManager.Accounts.Any(a => a.SmartPostHub != (int)FedExSmartPostHub.None);
+        }
 
 		/// <summary>
 		/// Process FedEx end of day close
@@ -4743,7 +4744,7 @@ namespace ShipWorks
 			{
 				Cursor.Current = Cursors.WaitCursor;
 
-				List<FedExEndOfDayCloseEntity> closings = FedExGroundClose.ProcessClose();
+                List<long> closings = FedExGroundClose.ProcessClose();
 
 				if (closings != null && closings.Count > 0)
 				{
@@ -4789,21 +4790,21 @@ namespace ShipWorks
 						}
 					}
 
-					if (anyClosed)
-					{
-						MessageHelper.ShowInformation(this, "The close has been successfully processed.\n\nSmartPost Close does not generate any reports to be printed.  No further action is required.");
-					}
-					else
-					{
-						MessageHelper.ShowInformation(this, "There were no shipments to be closed.");
-					}
-				}
-			}
-			catch (FedExException ex)
-			{
-				MessageHelper.ShowError(this, ex.Message);
-			}
-		}
+                    if (anyClosed)
+                    {
+                        MessageHelper.ShowInformation(this, "The close has been successfully processed.\n\nFedEx Ground® Economy Close does not generate any reports to be printed.  No further action is required.");
+                    }
+                    else
+                    {
+                        MessageHelper.ShowInformation(this, "There were no shipments to be closed.");
+                    }
+                }
+            }
+            catch (FedExException ex)
+            {
+                MessageHelper.ShowError(this, ex.Message);
+            }
+        }
 
 		/// <summary>
 		/// The postal scan form popup is opening, we need to dynamically repopulate the print menu
@@ -5701,16 +5702,29 @@ namespace ShipWorks
 			}
 		}
 
-		/// <summary>
-		/// Clean up any resources being used.
-		/// </summary>
-		/// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
-		protected override void Dispose(bool disposing)
-		{
-			if (disposing && (components != null))
-			{
-				components.Dispose();
-			}
+        /// <summary>
+        /// Migrate FedEx Accounts to ShipEngine
+        /// </summary>
+        private void MigrateFedExAccountsToShipEngine()
+        {
+            using (var lifetimeScope = IoC.BeginLifetimeScope())
+            {
+                var migrator = lifetimeScope.Resolve<IFedExShipEngineMigrator>();
+
+                migrator.Migrate(this);
+            }
+        }
+
+        /// <summary>
+        /// Clean up any resources being used.
+        /// </summary>
+        /// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing && (components != null))
+            {
+                components.Dispose();
+            }
 
 			// Send telemetry data to Azure, giving it 2 seconds to complete.
 			Telemetry.Flush();

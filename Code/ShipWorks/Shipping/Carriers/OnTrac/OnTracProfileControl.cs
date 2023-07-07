@@ -48,7 +48,7 @@ namespace ShipWorks.Shipping.Carriers.OnTrac
 
             LoadOnTracAccounts();
 
-            EnumHelper.BindComboBox<ResidentialDeterminationType>(residentialDetermination, t => t != ResidentialDeterminationType.FedExAddressLookup);
+            EnumHelper.BindComboBox<ResidentialDeterminationType>(residentialDetermination);
             EnumHelper.BindComboBox<OnTracServiceType>(service, type => type != OnTracServiceType.None);
             EnumHelper.BindComboBox<OnTracPackagingType>(packaging);
 

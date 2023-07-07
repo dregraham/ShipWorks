@@ -74,6 +74,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         public override string ServiceTypeName => EnumHelper.GetDescription((FedExServiceType) ServiceType);
 
         /// <summary>
+        /// ShipEngine Label ID
+        /// </summary>
+        public override string ShipEngineLabelId => Shipment.FedEx.ShipEngineLabelId;
+
+        /// <summary>
         /// Add a new package to the shipment
         /// </summary>
         /// <param name="manipulateEntity">
@@ -131,7 +136,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         /// </summary>
         protected override int? GetServiceTypeAsIntFromTag(object tag)
         {
-            FedExServiceType? service = tag as FedExServiceType? ?? (tag as FedExRateSelection)?.ServiceType;
+            var service = FedExShipmentType.ConvertToServiceType(tag);
 
             return service.HasValue ? (int?) service.Value : base.GetServiceTypeAsIntFromTag(tag);
         }

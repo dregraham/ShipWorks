@@ -8,7 +8,7 @@ using System.ComponentModel;
 namespace ShipWorks.Shipping
 {
     /// <summary>
-    /// Various ways for ShipWorks to determine whether or not to set the residentail\commercial flag on a shipment.
+    /// Various ways for ShipWorks to determine whether or not to set the residential\commercial flag on a shipment.
     /// </summary>
     [Obfuscation(Feature = "PreserveLiteralValues", Exclude = false, StripAfterObfuscation = false)]
     public enum ResidentialDeterminationType
@@ -31,12 +31,9 @@ namespace ShipWorks.Shipping
         [Description("Commercial")]
         Commercial = 2,
 
-        /// <summary>
-        /// Use address lookup feature of the carrier to determine residential status.  Not supported
-        /// by all carriers.
-        /// </summary>
-        [Description("FedEx address lookup")]
-        FedExAddressLookup = 3,
+        // This value has been removed and should not be referenced
+        // but should be reserved in case of future development
+        // FedExAddressLookup = 3,
 
         /// <summary>
         /// Use the status retrieved from address validation

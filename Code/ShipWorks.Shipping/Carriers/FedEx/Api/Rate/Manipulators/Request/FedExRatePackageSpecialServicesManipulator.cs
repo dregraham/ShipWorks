@@ -97,10 +97,10 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Rate.Manipulators.Request
                 specialServices = specialServices.Append(PackageSpecialServiceType.SIGNATURE_OPTION);
             }
 
-            ServiceType apiServiceType = GetApiServiceType((FedExServiceType) shipment.FedEx.Service);
+            FedExServiceType serviceType = (FedExServiceType) shipment.FedEx.Service;
 
             // Non-standard container (only applies to Ground services)
-            if (shipment.FedEx.NonStandardContainer && (apiServiceType == ServiceType.GROUND_HOME_DELIVERY || apiServiceType == ServiceType.FEDEX_GROUND))
+            if (shipment.FedEx.NonStandardContainer && (serviceType == FedExServiceType.GroundHomeDelivery || serviceType == FedExServiceType.FedExGround))
             {
                 specialServices = specialServices.Append(PackageSpecialServiceType.NON_STANDARD_CONTAINER);
             }
@@ -114,17 +114,6 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Rate.Manipulators.Request
             specialServicesRequested.SpecialServiceTypes = specialServices.ToArray();
 
             return packageRequest;
-        }
-
-        /// <summary>
-        /// Gets the type of the API service.
-        /// </summary>
-        /// <param name="serviceType">Type of the service.</param>
-        /// <returns></returns>
-        /// <exception cref="System.InvalidOperationException">Invalid FedEx ServiceType  + serviceType</exception>
-        private static ServiceType GetApiServiceType(FedExServiceType serviceType)
-        {
-            return (ServiceType) EnumHelper.GetApiValue<ServiceType>(serviceType);
         }
 
         /// <summary>

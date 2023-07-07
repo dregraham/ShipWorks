@@ -165,6 +165,10 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             this.sectionFimsOptions = new ShipWorks.UI.Controls.CollapsibleGroupControl();
             this.fimsOptionsControl = new ShipWorks.Shipping.Carriers.FedEx.FimsOptionsControl();
             this.labelReturnsClearance = new System.Windows.Forms.Label();
+            this.payorCountry = new ShipWorks.UI.Controls.MultiValueComboBox();
+            this.labelPayorCountry = new System.Windows.Forms.Label();
+            this.payorPostalCode = new ShipWorks.UI.Controls.MultiValueTextBox();
+            this.labelPayorPostalCode = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.sectionRecipient)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.sectionRecipient.ContentPanel)).BeginInit();
             this.sectionRecipient.ContentPanel.SuspendLayout();
@@ -275,32 +279,6 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             this.sectionLabelOptions.Location = new System.Drawing.Point(3, 822);
             this.sectionLabelOptions.Size = new System.Drawing.Size(487, 24);
             this.sectionLabelOptions.TabIndex = 14;
-            //
-            // sectionHoldAtLocation
-            // 
-            this.sectionHoldAtLocation.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.sectionHoldAtLocation.Collapsed = true;
-            // 
-            // sectionHoldAtLocation.ContentPanel
-            // 
-            this.sectionHoldAtLocation.ContentPanel.Controls.Add(this.fedExHoldAtLocationControl);
-            this.sectionHoldAtLocation.ExpandedHeight = 176;
-            this.sectionHoldAtLocation.ExtraText = "";
-            this.sectionHoldAtLocation.Location = new System.Drawing.Point(3, 706);
-            this.sectionHoldAtLocation.Name = "sectionHoldAtLocation";
-            this.sectionHoldAtLocation.SectionName = "Hold at FedEx Location";
-            this.sectionHoldAtLocation.SettingsKey = "{9b529fd1-0bfb-4d24-8aa8-a856c930e196}";
-            this.sectionHoldAtLocation.Size = new System.Drawing.Size(487, 24);
-            this.sectionHoldAtLocation.TabIndex = 10;
-            // 
-            // fedExHoldAtLocationControl
-            // 
-            this.fedExHoldAtLocationControl.BackColor = System.Drawing.Color.White;
-            this.fedExHoldAtLocationControl.Location = new System.Drawing.Point(1, 4);
-            this.fedExHoldAtLocationControl.Name = "fedExHoldAtLocationControl";
-            this.fedExHoldAtLocationControl.Size = new System.Drawing.Size(392, 150);
-            this.fedExHoldAtLocationControl.TabIndex = 0;
             // 
             // sectionBilling
             // 
@@ -310,7 +288,6 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             // 
             // sectionBilling.ContentPanel
             // 
-            this.sectionBilling.ContentPanel.Controls.Add(this.panelPayorDuties);
             this.sectionBilling.ContentPanel.Controls.Add(this.panelTransportAccount);
             this.sectionBilling.ContentPanel.Controls.Add(this.panelPayorTransport);
             this.sectionBilling.ExpandedHeight = 149;
@@ -321,58 +298,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             this.sectionBilling.SettingsKey = "84780845-669f-4fb1-9ab1-cd2accdff93c";
             this.sectionBilling.Size = new System.Drawing.Size(487, 24);
             this.sectionBilling.TabIndex = 6;
-            // 
-            // panelPayorDuties
-            // 
-            this.panelPayorDuties.BackColor = System.Drawing.Color.White;
-            this.panelPayorDuties.Controls.Add(this.dutiesAccount);
-            this.panelPayorDuties.Controls.Add(this.labelDutiesAccount);
-            this.panelPayorDuties.Controls.Add(this.payorDuties);
-            this.panelPayorDuties.Controls.Add(this.labelPayorDuties);
-            this.panelPayorDuties.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panelPayorDuties.Location = new System.Drawing.Point(0, 90);
-            this.panelPayorDuties.Name = "panelPayorDuties";
-            this.panelPayorDuties.Size = new System.Drawing.Size(483, 65);
-            this.panelPayorDuties.TabIndex = 6;
-            // 
-            // dutiesAccount
-            // 
-            this.dutiesAccount.Location = new System.Drawing.Point(123, 36);
-            this.fieldLengthProvider.SetMaxLengthSource(this.dutiesAccount, ShipWorks.Data.Utility.EntityFieldLengthSource.FedExAccountNumber);
-            this.dutiesAccount.Name = "dutiesAccount";
-            this.dutiesAccount.Size = new System.Drawing.Size(173, 21);
-            this.dutiesAccount.TabIndex = 6;
-            // 
-            // labelDutiesAccount
-            // 
-            this.labelDutiesAccount.AutoSize = true;
-            this.labelDutiesAccount.BackColor = System.Drawing.Color.White;
-            this.labelDutiesAccount.Location = new System.Drawing.Point(56, 39);
-            this.labelDutiesAccount.Name = "labelDutiesAccount";
-            this.labelDutiesAccount.Size = new System.Drawing.Size(61, 13);
-            this.labelDutiesAccount.TabIndex = 5;
-            this.labelDutiesAccount.Text = "Account #:";
-            // 
-            // payorDuties
-            // 
-            this.payorDuties.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.payorDuties.FormattingEnabled = true;
-            this.payorDuties.Location = new System.Drawing.Point(123, 9);
-            this.payorDuties.Name = "payorDuties";
-            this.payorDuties.PromptText = "(Multiple Values)";
-            this.payorDuties.Size = new System.Drawing.Size(173, 21);
-            this.payorDuties.TabIndex = 4;
-            this.payorDuties.SelectedIndexChanged += new System.EventHandler(this.OnChangePayorDuties);
-            // 
-            // labelPayorDuties
-            // 
-            this.labelPayorDuties.AutoSize = true;
-            this.labelPayorDuties.BackColor = System.Drawing.Color.White;
-            this.labelPayorDuties.Location = new System.Drawing.Point(24, 12);
-            this.labelPayorDuties.Name = "labelPayorDuties";
-            this.labelPayorDuties.Size = new System.Drawing.Size(93, 13);
-            this.labelPayorDuties.TabIndex = 1;
-            this.labelPayorDuties.Text = "Bill duties/fees to:";
+           
             // 
             // panelTransportAccount
             // 
@@ -381,31 +307,19 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             this.panelTransportAccount.Controls.Add(this.labelTransportPayorName);
             this.panelTransportAccount.Controls.Add(this.transportAccount);
             this.panelTransportAccount.Controls.Add(this.labelTransportAccount);
+            this.panelTransportAccount.Controls.Add(this.payorCountry);
+            this.panelTransportAccount.Controls.Add(this.labelPayorCountry);
+            this.panelTransportAccount.Controls.Add(this.payorPostalCode);
+            this.panelTransportAccount.Controls.Add(this.labelPayorPostalCode);
             this.panelTransportAccount.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panelTransportAccount.Location = new System.Drawing.Point(0, 32);
+            this.panelTransportAccount.Location = new System.Drawing.Point(0, 29);
             this.panelTransportAccount.Name = "panelTransportAccount";
-            this.panelTransportAccount.Size = new System.Drawing.Size(483, 58);
+            this.panelTransportAccount.Size = new System.Drawing.Size(483, 115);
             this.panelTransportAccount.TabIndex = 5;
-            // 
-            // payorTransportName
-            // 
-            this.payorTransportName.Location = new System.Drawing.Point(123, 31);
-            this.payorTransportName.Name = "payorTransportName";
-            this.payorTransportName.Size = new System.Drawing.Size(173, 21);
-            this.payorTransportName.TabIndex = 5;
-            // 
-            // labelTransportPayorName
-            // 
-            this.labelTransportPayorName.Location = new System.Drawing.Point(71, 29);
-            this.labelTransportPayorName.Name = "labelTransportPayorName";
-            this.labelTransportPayorName.Size = new System.Drawing.Size(46, 23);
-            this.labelTransportPayorName.TabIndex = 4;
-            this.labelTransportPayorName.Text = "Name:";
-            this.labelTransportPayorName.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
             // transportAccount
             // 
-            this.transportAccount.Location = new System.Drawing.Point(123, 2);
+            this.transportAccount.Location = new System.Drawing.Point(123, 6);
             this.fieldLengthProvider.SetMaxLengthSource(this.transportAccount, ShipWorks.Data.Utility.EntityFieldLengthSource.FedExAccountNumber);
             this.transportAccount.Name = "transportAccount";
             this.transportAccount.Size = new System.Drawing.Size(173, 21);
@@ -415,11 +329,62 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             // 
             this.labelTransportAccount.AutoSize = true;
             this.labelTransportAccount.BackColor = System.Drawing.Color.White;
-            this.labelTransportAccount.Location = new System.Drawing.Point(58, 6);
+            this.labelTransportAccount.Location = new System.Drawing.Point(58, 9);
             this.labelTransportAccount.Name = "labelTransportAccount";
             this.labelTransportAccount.Size = new System.Drawing.Size(61, 13);
             this.labelTransportAccount.TabIndex = 2;
             this.labelTransportAccount.Text = "Account #:";
+            // 
+            // payorTransportName
+            // 
+            this.payorTransportName.Location = new System.Drawing.Point(123, 35);
+            this.payorTransportName.Name = "payorTransportName";
+            this.payorTransportName.Size = new System.Drawing.Size(173, 21);
+            this.payorTransportName.TabIndex = 5;
+            // 
+            // labelTransportPayorName
+            // 
+            this.labelTransportPayorName.Location = new System.Drawing.Point(71, 33);
+            this.labelTransportPayorName.Name = "labelTransportPayorName";
+            this.labelTransportPayorName.Size = new System.Drawing.Size(46, 23);
+            this.labelTransportPayorName.TabIndex = 4;
+            this.labelTransportPayorName.Text = "Name:";
+            this.labelTransportPayorName.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            // 
+            // payorCountry
+            // 
+            this.payorCountry.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.payorCountry.FormattingEnabled = true;
+            this.payorCountry.Location = new System.Drawing.Point(123, 64);
+            this.payorCountry.MaxDropDownItems = 20;
+            this.payorCountry.Name = "country";
+            this.payorCountry.PromptText = "(Multiple Values)";
+            this.payorCountry.Size = new System.Drawing.Size(173, 21);
+            this.payorCountry.TabIndex = 6;
+            // 
+            // labelPayorCountry
+            // 
+            this.labelPayorCountry.AutoSize = true;
+            this.labelPayorCountry.Location = new System.Drawing.Point(36, 67);
+            this.labelPayorCountry.Name = "labelPayorCountry";
+            this.labelPayorCountry.Size = new System.Drawing.Size(37, 13);
+            this.labelPayorCountry.Text = "Payor Country:";
+            // 
+            // postalCode
+            // 
+            this.payorPostalCode.Location = new System.Drawing.Point(123, 93);
+            this.fieldLengthProvider.SetMaxLengthSource(this.payorPostalCode, ShipWorks.Data.Utility.EntityFieldLengthSource.PersonPostal);
+            this.payorPostalCode.Name = "payorPostalCode";
+            this.payorPostalCode.Size = new System.Drawing.Size(173, 21);
+            this.payorPostalCode.TabIndex = 7;
+            // 
+            // labelPayorPostalCode
+            // 
+            this.labelPayorPostalCode.AutoSize = true;
+            this.labelPayorPostalCode.Location = new System.Drawing.Point(18, 96);
+            this.labelPayorPostalCode.Name = "labelPayorPostalCode";
+            this.labelPayorPostalCode.Size = new System.Drawing.Size(68, 13);
+            this.labelPayorPostalCode.Text = "Payor Postal Code:";
             // 
             // panelPayorTransport
             // 
@@ -429,7 +394,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             this.panelPayorTransport.Dock = System.Windows.Forms.DockStyle.Top;
             this.panelPayorTransport.Location = new System.Drawing.Point(0, 0);
             this.panelPayorTransport.Name = "panelPayorTransport";
-            this.panelPayorTransport.Size = new System.Drawing.Size(483, 32);
+            this.panelPayorTransport.Size = new System.Drawing.Size(483, 29);
             this.panelPayorTransport.TabIndex = 4;
             // 
             // payorTransport
@@ -452,6 +417,32 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             this.labelPayorTransport.Size = new System.Drawing.Size(108, 13);
             this.labelPayorTransport.TabIndex = 0;
             this.labelPayorTransport.Text = "Bill transportation to:";
+            //
+            // sectionHoldAtLocation
+            // 
+            this.sectionHoldAtLocation.Anchor = ((System.Windows.Forms.AnchorStyles) (((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.sectionHoldAtLocation.Collapsed = true;
+            // 
+            // sectionHoldAtLocation.ContentPanel
+            // 
+            this.sectionHoldAtLocation.ContentPanel.Controls.Add(this.fedExHoldAtLocationControl);
+            this.sectionHoldAtLocation.ExpandedHeight = 176;
+            this.sectionHoldAtLocation.ExtraText = "";
+            this.sectionHoldAtLocation.Location = new System.Drawing.Point(3, 556);
+            this.sectionHoldAtLocation.Name = "sectionHoldAtLocation";
+            this.sectionHoldAtLocation.SectionName = "Hold at Location";
+            this.sectionHoldAtLocation.SettingsKey = "{9b529fd1-0bfb-4d24-8aa8-a856c930e196}";
+            this.sectionHoldAtLocation.Size = new System.Drawing.Size(487, 24);
+            this.sectionHoldAtLocation.TabIndex = 10;
+            // 
+            // fedExHoldAtLocationControl
+            // 
+            this.fedExHoldAtLocationControl.BackColor = System.Drawing.Color.White;
+            this.fedExHoldAtLocationControl.Location = new System.Drawing.Point(1, 4);
+            this.fedExHoldAtLocationControl.Name = "fedExHoldAtLocationControl";
+            this.fedExHoldAtLocationControl.Size = new System.Drawing.Size(392, 150);
+            this.fedExHoldAtLocationControl.TabIndex = 0;
             // 
             // sectionFrom
             // 
@@ -773,28 +764,6 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             this.labelHomeInstructions.TabIndex = 1;
             this.labelHomeInstructions.Text = "Instructions:";
             // 
-            // sectionFreight
-            // 
-            this.sectionFreight.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.sectionFreight.ContentPanel.Controls.Add(this.fedExFreightContainerControl);
-            this.sectionFreight.ExtraText = "";
-            this.sectionFreight.Location = new System.Drawing.Point(3, 613);
-            this.sectionFreight.Name = "sectionFreight";
-            this.sectionFreight.SectionName = "Freight";
-            this.sectionFreight.SettingsKey = "{A7947F0F-9648-4443-A678-F67E7FCEE38C}";
-            this.sectionFreight.Size = new System.Drawing.Size(487, 88);
-            this.sectionFreight.TabIndex = 9;
-            // 
-            // fedExFreightContainerControl
-            // 
-            this.fedExFreightContainerControl.Location = new System.Drawing.Point(7, 5);
-            this.fedExFreightContainerControl.Margin = new System.Windows.Forms.Padding(0, 3, 3, 3);
-            this.fedExFreightContainerControl.Name = "fedExFreightContainerControl2";
-            this.fedExFreightContainerControl.Size = new System.Drawing.Size(469, 50);
-            this.fedExFreightContainerControl.TabIndex = 7;
-            this.fedExFreightContainerControl.Resize += OnFreightContainerControlResize;
-            // 
             // sectionOptions
             // 
             this.sectionOptions.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
@@ -803,8 +772,6 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             // 
             // sectionOptions.ContentPanel
             // 
-            this.sectionOptions.ContentPanel.Controls.Add(this.referenceShipmentIntegrity);
-            this.sectionOptions.ContentPanel.Controls.Add(this.labelShipmentIntegrity);
             this.sectionOptions.ContentPanel.Controls.Add(this.referencePO);
             this.sectionOptions.ContentPanel.Controls.Add(this.labelPO);
             this.sectionOptions.ContentPanel.Controls.Add(this.referenceInvoice);
@@ -813,14 +780,389 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             this.sectionOptions.ContentPanel.Controls.Add(this.labelReference);
             this.sectionOptions.ContentPanel.Controls.Add(this.signature);
             this.sectionOptions.ContentPanel.Controls.Add(this.labelSignature);
-            this.sectionOptions.ExpandedHeight = 172;
+            this.sectionOptions.ExpandedHeight = 140;
             this.sectionOptions.ExtraText = "";
             this.sectionOptions.Location = new System.Drawing.Point(3, 468);
             this.sectionOptions.Name = "sectionOptions";
-            this.sectionOptions.SectionName = "Signature & Reference";
+            this.sectionOptions.SectionName = "FedEx® Delivery Signature Options & Reference";
             this.sectionOptions.SettingsKey = "{2740f860-1d14-453e-a511-8f62ad1e7dcc}";
             this.sectionOptions.Size = new System.Drawing.Size(487, 24);
             this.sectionOptions.TabIndex = 4;
+            // 
+            // referencePO
+            // 
+            this.referencePO.Location = new System.Drawing.Point(211, 89);
+            this.referencePO.MaxLength = 32767;
+            this.fieldLengthProvider.SetMaxLengthSource(this.referencePO, ShipWorks.Data.Utility.EntityFieldLengthSource.FedExReferencePO);
+            this.referencePO.Name = "referencePO";
+            this.referencePO.Size = new System.Drawing.Size(210, 21);
+            this.referencePO.TabIndex = 7;
+            this.referencePO.TokenSuggestionFactory = commonTokenSuggestionsFactory2;
+            // 
+            // labelPO
+            // 
+            this.labelPO.AutoSize = true;
+            this.labelPO.BackColor = System.Drawing.Color.Transparent;
+            this.labelPO.Location = new System.Drawing.Point(161, 91);
+            this.labelPO.Name = "labelPO";
+            this.labelPO.Size = new System.Drawing.Size(44, 13);
+            this.labelPO.TabIndex = 6;
+            this.labelPO.Text = "P.O. #:";
+            // 
+            // referenceInvoice
+            // 
+            this.referenceInvoice.Location = new System.Drawing.Point(211, 62);
+            this.referenceInvoice.MaxLength = 32767;
+            this.fieldLengthProvider.SetMaxLengthSource(this.referenceInvoice, ShipWorks.Data.Utility.EntityFieldLengthSource.FedExReferenceInvoice);
+            this.referenceInvoice.Name = "referenceInvoice";
+            this.referenceInvoice.Size = new System.Drawing.Size(210, 21);
+            this.referenceInvoice.TabIndex = 5;
+            this.referenceInvoice.TokenSuggestionFactory = commonTokenSuggestionsFactory3;
+            // 
+            // labelInvoice
+            // 
+            this.labelInvoice.AutoSize = true;
+            this.labelInvoice.BackColor = System.Drawing.Color.Transparent;
+            this.labelInvoice.Location = new System.Drawing.Point(148, 64);
+            this.labelInvoice.Name = "labelInvoice";
+            this.labelInvoice.Size = new System.Drawing.Size(57, 13);
+            this.labelInvoice.TabIndex = 4;
+            this.labelInvoice.Text = "Invoice #:";
+            // 
+            // referenceCustomer
+            // 
+            this.referenceCustomer.Location = new System.Drawing.Point(211, 35);
+            this.referenceCustomer.MaxLength = 32767;
+            this.fieldLengthProvider.SetMaxLengthSource(this.referenceCustomer, ShipWorks.Data.Utility.EntityFieldLengthSource.FedExReferenceCustomer);
+            this.referenceCustomer.Name = "referenceCustomer";
+            this.referenceCustomer.Size = new System.Drawing.Size(210, 21);
+            this.referenceCustomer.TabIndex = 3;
+            this.referenceCustomer.TokenSuggestionFactory = commonTokenSuggestionsFactory4;
+            // 
+            // labelReference
+            // 
+            this.labelReference.AutoSize = true;
+            this.labelReference.BackColor = System.Drawing.Color.Transparent;
+            this.labelReference.Location = new System.Drawing.Point(133, 37);
+            this.labelReference.Name = "labelReference";
+            this.labelReference.Size = new System.Drawing.Size(72, 13);
+            this.labelReference.TabIndex = 2;
+            this.labelReference.Text = "Reference #:";
+            // 
+            // signature
+            // 
+            this.signature.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.signature.FormattingEnabled = true;
+            this.signature.Location = new System.Drawing.Point(211, 8);
+            this.signature.Name = "signature";
+            this.signature.PromptText = "(Multiple Values)";
+            this.signature.Size = new System.Drawing.Size(175, 21);
+            this.signature.TabIndex = 1;
+            this.signature.SelectedIndexChanged += new System.EventHandler(this.OnRateCriteriaChanged);
+            // 
+            // labelSignature
+            // 
+            this.labelSignature.AutoSize = true;
+            this.labelSignature.BackColor = System.Drawing.Color.Transparent;
+            this.labelSignature.Location = new System.Drawing.Point(23, 11);
+            this.labelSignature.Name = "labelSignature";
+            this.labelSignature.Size = new System.Drawing.Size(194, 13);
+            this.labelSignature.TabIndex = 0;
+            this.labelSignature.Text = "FedEx® Delivery Signature Options:";
+            // 
+            // sectionCOD
+            // 
+            this.sectionCOD.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.sectionCOD.Collapsed = true;
+            // 
+            // sectionCOD.ContentPanel
+            // 
+            this.sectionCOD.ContentPanel.Controls.Add(this.codAddFreight);
+            this.sectionCOD.ContentPanel.Controls.Add(this.codPaymentType);
+            this.sectionCOD.ContentPanel.Controls.Add(this.labelCodPayment);
+            this.sectionCOD.ContentPanel.Controls.Add(this.codAmount);
+            this.sectionCOD.ContentPanel.Controls.Add(this.labelCodAmount);
+            this.sectionCOD.ContentPanel.Controls.Add(this.codEnabled);
+            this.sectionCOD.ExpandedHeight = 125;
+            this.sectionCOD.ExtraText = "";
+            this.sectionCOD.Location = new System.Drawing.Point(3, 735);
+            this.sectionCOD.Name = "sectionCOD";
+            this.sectionCOD.SectionName = "FedEx® Collect on Delivery (C.O.D.) or FedEx Ground® C.O.D.";
+            this.sectionCOD.SettingsKey = "{c15e50fb-864c-415f-a752-ddfcc1c1e315}";
+            this.sectionCOD.Size = new System.Drawing.Size(487, 24);
+            this.sectionCOD.TabIndex = 11;
+            // 
+            // codPaymentType
+            // 
+            this.codPaymentType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.codPaymentType.FormattingEnabled = true;
+            this.codPaymentType.Location = new System.Drawing.Point(86, 57);
+            this.codPaymentType.Name = "codPaymentType";
+            this.codPaymentType.PromptText = "(Multiple Values)";
+            this.codPaymentType.Size = new System.Drawing.Size(94, 21);
+            this.codPaymentType.TabIndex = 3;
+            // 
+            // labelCodPayment
+            // 
+            this.labelCodPayment.AutoSize = true;
+            this.labelCodPayment.BackColor = System.Drawing.Color.White;
+            this.labelCodPayment.Location = new System.Drawing.Point(30, 60);
+            this.labelCodPayment.Name = "labelCodPayment";
+            this.labelCodPayment.Size = new System.Drawing.Size(53, 13);
+            this.labelCodPayment.TabIndex = 12;
+            this.labelCodPayment.Text = "Payment:";
+            // 
+            // codAmount
+            // 
+            this.codAmount.Amount = new decimal(new int[] {
+            0,
+            0,
+            0,
+            131072});
+            this.codAmount.IgnoreSet = false;
+            this.codAmount.Location = new System.Drawing.Point(86, 30);
+            this.codAmount.Name = "codAmount";
+            this.codAmount.Size = new System.Drawing.Size(94, 21);
+            this.codAmount.TabIndex = 1;
+            this.codAmount.Text = "$0.00";
+            // 
+            // labelCodAmount
+            // 
+            this.labelCodAmount.AutoSize = true;
+            this.labelCodAmount.BackColor = System.Drawing.Color.White;
+            this.labelCodAmount.Location = new System.Drawing.Point(35, 33);
+            this.labelCodAmount.Name = "labelCodAmount";
+            this.labelCodAmount.Size = new System.Drawing.Size(48, 13);
+            this.labelCodAmount.TabIndex = 10;
+            this.labelCodAmount.Text = "Amount:";
+            // 
+            // codEnabled
+            // 
+            this.codEnabled.AutoSize = true;
+            this.codEnabled.BackColor = System.Drawing.Color.White;
+            this.codEnabled.Location = new System.Drawing.Point(7, 8);
+            this.codEnabled.Name = "codEnabled";
+            this.codEnabled.Size = new System.Drawing.Size(160, 17);
+            this.codEnabled.TabIndex = 0;
+            this.codEnabled.Text = "C.O.D. (Collect on Delivery)";
+            this.codEnabled.UseVisualStyleBackColor = false;
+            this.codEnabled.CheckedChanged += new System.EventHandler(this.OnRateCriteriaChanged);
+            // 
+            // codAddFreight
+            // 
+            this.codAddFreight.AutoSize = true;
+            this.codAddFreight.BackColor = System.Drawing.Color.White;
+            this.codAddFreight.Location = new System.Drawing.Point(186, 32);
+            this.codAddFreight.Name = "codAddFreight";
+            this.codAddFreight.Size = new System.Drawing.Size(114, 17);
+            this.codAddFreight.TabIndex = 2;
+            this.codAddFreight.Text = "Add shipment cost";
+            this.codAddFreight.UseVisualStyleBackColor = false;
+            // 
+            // panelTrademarkInfo
+            // 
+            this.panelTrademarkInfo.Controls.Add(this.linkTrademarkInfo);
+            this.panelTrademarkInfo.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.panelTrademarkInfo.Location = new System.Drawing.Point(0, 1115);
+            this.panelTrademarkInfo.Name = "panelTrademarkInfo";
+            this.panelTrademarkInfo.Size = new System.Drawing.Size(493, 19);
+            this.panelTrademarkInfo.TabIndex = 16;
+            // 
+            // linkTrademarkInfo
+            // 
+            this.linkTrademarkInfo.AutoSize = true;
+            this.linkTrademarkInfo.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.linkTrademarkInfo.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.linkTrademarkInfo.ForeColor = System.Drawing.Color.RoyalBlue;
+            this.linkTrademarkInfo.Location = new System.Drawing.Point(1, 4);
+            this.linkTrademarkInfo.Name = "linkTrademarkInfo";
+            this.linkTrademarkInfo.Size = new System.Drawing.Size(381, 11);
+            this.linkTrademarkInfo.TabIndex = 0;
+            this.linkTrademarkInfo.Text = "FedEx service marks are owned by Federal Express Corporation and used by permis" +
+    "sion.\r\n";
+            this.linkTrademarkInfo.Click += new System.EventHandler(this.OnLinkTrademarkInfo);
+            // 
+            // sectionSmartPost
+            // 
+            this.sectionSmartPost.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.sectionSmartPost.Collapsed = true;
+            // 
+            // sectionSmartPost.ContentPanel
+            // 
+            this.sectionSmartPost.ContentPanel.Controls.Add(this.smartEndorsement);
+            this.sectionSmartPost.ContentPanel.Controls.Add(this.smartIndicia);
+            this.sectionSmartPost.ContentPanel.Controls.Add(this.labelSmartAncillary);
+            this.sectionSmartPost.ContentPanel.Controls.Add(this.labelSmartEndicia);
+            this.sectionSmartPost.ExpandedHeight = 100;
+            this.sectionSmartPost.ExtraText = "";
+            this.sectionSmartPost.Location = new System.Drawing.Point(3, 497);
+            this.sectionSmartPost.Name = "sectionSmartPost";
+            this.sectionSmartPost.SectionName = "FedEx Ground® Economy";
+            this.sectionSmartPost.SettingsKey = "{37cbefe5-8feb-4b9c-945f-970382580a52}";
+            this.sectionSmartPost.Size = new System.Drawing.Size(487, 24);
+            this.sectionSmartPost.TabIndex = 5;
+            // 
+            // smartIndicia
+            // 
+            this.smartIndicia.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.smartIndicia.FormattingEnabled = true;
+            this.smartIndicia.Location = new System.Drawing.Point(87, 8);
+            this.smartIndicia.Name = "smartIndicia";
+            this.smartIndicia.PromptText = "(Multiple Values)";
+            this.smartIndicia.Size = new System.Drawing.Size(275, 21);
+            this.smartIndicia.TabIndex = 3;
+            this.smartIndicia.SelectedIndexChanged += new System.EventHandler(this.OnChangeSmartPostIndicia);
+            // 
+            // labelSmartEndicia
+            // 
+            this.labelSmartEndicia.AutoSize = true;
+            this.labelSmartEndicia.BackColor = System.Drawing.Color.Transparent;
+            this.labelSmartEndicia.Location = new System.Drawing.Point(39, 11);
+            this.labelSmartEndicia.Name = "labelSmartEndicia";
+            this.labelSmartEndicia.Size = new System.Drawing.Size(42, 13);
+            this.labelSmartEndicia.TabIndex = 2;
+            this.labelSmartEndicia.Text = "Indicia:";
+            // 
+            // smartEndorsement
+            // 
+            this.smartEndorsement.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.smartEndorsement.FormattingEnabled = true;
+            this.smartEndorsement.Location = new System.Drawing.Point(87, 37);
+            this.smartEndorsement.Name = "smartEndorsement";
+            this.smartEndorsement.PromptText = "(Multiple Values)";
+            this.smartEndorsement.Size = new System.Drawing.Size(225, 21);
+            this.smartEndorsement.TabIndex = 5;
+            this.smartEndorsement.SelectedIndexChanged += new System.EventHandler(this.OnRateCriteriaChanged);
+            // 
+            // labelSmartAncillary
+            // 
+            this.labelSmartAncillary.AutoSize = true;
+            this.labelSmartAncillary.BackColor = System.Drawing.Color.Transparent;
+            this.labelSmartAncillary.Location = new System.Drawing.Point(30, 40);
+            this.labelSmartAncillary.Name = "labelSmartAncillary";
+            this.labelSmartAncillary.Size = new System.Drawing.Size(51, 13);
+            this.labelSmartAncillary.TabIndex = 4;
+            this.labelSmartAncillary.Text = "Ancillary:";
+            // 
+            // sectionPackageDetails
+            // 
+            this.sectionPackageDetails.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.sectionPackageDetails.Collapsed = true;
+            // 
+            // sectionPackageDetails.ContentPanel
+            // 
+            this.sectionPackageDetails.ContentPanel.Controls.Add(this.otherPackageHolder);
+            this.sectionPackageDetails.ExpandedHeight = 774;
+            this.sectionPackageDetails.ExtraText = "";
+            this.sectionPackageDetails.Location = new System.Drawing.Point(3, 439);
+            this.sectionPackageDetails.Name = "sectionPackageDetails";
+            this.sectionPackageDetails.SectionName = "Other Package Details";
+            this.sectionPackageDetails.SettingsKey = "{ce947713-e7de-463b-b583-9106a542cd24}";
+            this.sectionPackageDetails.Size = new System.Drawing.Size(487, 40);
+            this.sectionPackageDetails.TabIndex = 3;
+            // 
+            // otherPackageHolder
+            // 
+            this.otherPackageHolder.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.otherPackageHolder.BackColor = System.Drawing.Color.Transparent;
+            this.otherPackageHolder.Controls.Add(this.packageDetailsControl);
+            this.otherPackageHolder.Location = new System.Drawing.Point(0, 0);
+            this.otherPackageHolder.Name = "otherPackageHolder";
+            this.otherPackageHolder.Size = new System.Drawing.Size(477, 546);
+            this.otherPackageHolder.TabIndex = 1;
+            // 
+            // packageDetailsControl
+            // 
+            this.packageDetailsControl.AutoSize = true;
+            this.packageDetailsControl.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.packageDetailsControl.BackColor = System.Drawing.Color.Transparent;
+            this.packageDetailsControl.Location = new System.Drawing.Point(0, 0);
+            this.packageDetailsControl.Name = "packageDetailsControl";
+            this.packageDetailsControl.Size = new System.Drawing.Size(345, 300);
+            this.packageDetailsControl.TabIndex = 0;
+            this.packageDetailsControl.PackageDetailsChanged += new System.EventHandler(this.OnRateCriteriaChanged);
+            this.packageDetailsControl.Resize += new System.EventHandler(this.OnPackageDetailsResize);
+            this.packageDetailsControl.DangerousGoodsChanged += new EventHandler(this.OnDangerousGoodsChecked);
+            // 
+            // sectionServiceOptions
+            // 
+            this.sectionServiceOptions.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.sectionServiceOptions.Collapsed = true;
+            // 
+            // sectionServiceOptions.ContentPanel
+            // 
+            this.sectionServiceOptions.ContentPanel.Controls.Add(this.thirdPartyConsignee);
+            this.sectionServiceOptions.ContentPanel.Controls.Add(this.consigneeLabel);
+            this.sectionServiceOptions.ExpandedHeight = 60;
+            this.sectionServiceOptions.ExtraText = "";
+            this.sectionServiceOptions.Location = new System.Drawing.Point(3, 793);
+            this.sectionServiceOptions.Name = "sectionServiceOptions";
+            this.sectionServiceOptions.SectionName = "Service Options";
+            this.sectionServiceOptions.SettingsKey = "{e4ccd963-eb98-4d6a-880f-1a3e236ce413}";
+            this.sectionServiceOptions.Size = new System.Drawing.Size(487, 24);
+            this.sectionServiceOptions.TabIndex = 13;
+            // 
+            // thirdPartyConsignee
+            // 
+            this.thirdPartyConsignee.AutoSize = true;
+            this.thirdPartyConsignee.BackColor = System.Drawing.Color.Transparent;
+            this.thirdPartyConsignee.Location = new System.Drawing.Point(106, 5);
+            this.thirdPartyConsignee.Name = "thirdPartyConsignee";
+            this.thirdPartyConsignee.Size = new System.Drawing.Size(79, 17);
+            this.thirdPartyConsignee.TabIndex = 66;
+            this.thirdPartyConsignee.Text = "Third Party";
+            this.thirdPartyConsignee.UseVisualStyleBackColor = false;
+            // 
+            // consigneeLabel
+            // 
+            this.consigneeLabel.AutoSize = true;
+            this.consigneeLabel.BackColor = System.Drawing.Color.Transparent;
+            this.consigneeLabel.Location = new System.Drawing.Point(41, 5);
+            this.consigneeLabel.Name = "consigneeLabel";
+            this.consigneeLabel.Size = new System.Drawing.Size(61, 13);
+            this.consigneeLabel.TabIndex = 6;
+            this.consigneeLabel.Text = "Consignee:";
+            // 
+            // sectionFimsOptions
+            // 
+            this.sectionFimsOptions.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            // 
+            // sectionFimsOptions.ContentPanel
+            // 
+            this.sectionFimsOptions.ContentPanel.Controls.Add(this.fimsOptionsControl);
+            this.sectionFimsOptions.ExtraText = "";
+            this.sectionFimsOptions.Location = new System.Drawing.Point(3, 851);
+            this.sectionFimsOptions.Name = "sectionFimsOptions";
+            this.sectionFimsOptions.SectionName = "FIMS Options";
+            this.sectionFimsOptions.SettingsKey = "{e87cbd40-e049-4cdf-adbd-d2daa1720fcf}";
+            this.sectionFimsOptions.Size = new System.Drawing.Size(487, 99);
+            this.sectionFimsOptions.TabIndex = 15;
+            // 
+            // fimsOptionsControl
+            // 
+            this.fimsOptionsControl.AutoSize = true;
+            this.fimsOptionsControl.BackColor = System.Drawing.Color.Transparent;
+            this.fimsOptionsControl.Location = new System.Drawing.Point(27, 5);
+            this.fimsOptionsControl.Name = "fimsOptionsControl";
+            this.fimsOptionsControl.Size = new System.Drawing.Size(279, 59);
+            this.fimsOptionsControl.TabIndex = 0;
+            // 
+            // labelReturnsClearance
+            // 
+            this.labelReturnsClearance.AutoSize = true;
+            this.labelReturnsClearance.BackColor = System.Drawing.Color.Transparent;
+            this.labelReturnsClearance.Location = new System.Drawing.Point(2, 33);
+            this.labelReturnsClearance.Name = "labelReturnsClearance";
+            this.labelReturnsClearance.Size = new System.Drawing.Size(100, 13);
+            this.labelReturnsClearance.TabIndex = 64;
+            this.labelReturnsClearance.Text = "Returns Clearance:";
+            #region Removed For FedEx Platform
             // 
             // referenceShipmentIntegrity
             // 
@@ -842,90 +1184,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             this.labelShipmentIntegrity.TabIndex = 8;
             this.labelShipmentIntegrity.Text = "Integrity:";
             // 
-            // referencePO
-            // 
-            this.referencePO.Location = new System.Drawing.Point(86, 89);
-            this.referencePO.MaxLength = 32767;
-            this.fieldLengthProvider.SetMaxLengthSource(this.referencePO, ShipWorks.Data.Utility.EntityFieldLengthSource.FedExReferencePO);
-            this.referencePO.Name = "referencePO";
-            this.referencePO.Size = new System.Drawing.Size(210, 21);
-            this.referencePO.TabIndex = 7;
-            this.referencePO.TokenSuggestionFactory = commonTokenSuggestionsFactory2;
-            // 
-            // labelPO
-            // 
-            this.labelPO.AutoSize = true;
-            this.labelPO.BackColor = System.Drawing.Color.Transparent;
-            this.labelPO.Location = new System.Drawing.Point(36, 91);
-            this.labelPO.Name = "labelPO";
-            this.labelPO.Size = new System.Drawing.Size(44, 13);
-            this.labelPO.TabIndex = 6;
-            this.labelPO.Text = "P.O. #:";
-            // 
-            // referenceInvoice
-            // 
-            this.referenceInvoice.Location = new System.Drawing.Point(86, 62);
-            this.referenceInvoice.MaxLength = 32767;
-            this.fieldLengthProvider.SetMaxLengthSource(this.referenceInvoice, ShipWorks.Data.Utility.EntityFieldLengthSource.FedExReferenceInvoice);
-            this.referenceInvoice.Name = "referenceInvoice";
-            this.referenceInvoice.Size = new System.Drawing.Size(210, 21);
-            this.referenceInvoice.TabIndex = 5;
-            this.referenceInvoice.TokenSuggestionFactory = commonTokenSuggestionsFactory3;
-            // 
-            // labelInvoice
-            // 
-            this.labelInvoice.AutoSize = true;
-            this.labelInvoice.BackColor = System.Drawing.Color.Transparent;
-            this.labelInvoice.Location = new System.Drawing.Point(23, 64);
-            this.labelInvoice.Name = "labelInvoice";
-            this.labelInvoice.Size = new System.Drawing.Size(57, 13);
-            this.labelInvoice.TabIndex = 4;
-            this.labelInvoice.Text = "Invoice #:";
-            // 
-            // referenceCustomer
-            // 
-            this.referenceCustomer.Location = new System.Drawing.Point(86, 35);
-            this.referenceCustomer.MaxLength = 32767;
-            this.fieldLengthProvider.SetMaxLengthSource(this.referenceCustomer, ShipWorks.Data.Utility.EntityFieldLengthSource.FedExReferenceCustomer);
-            this.referenceCustomer.Name = "referenceCustomer";
-            this.referenceCustomer.Size = new System.Drawing.Size(210, 21);
-            this.referenceCustomer.TabIndex = 3;
-            this.referenceCustomer.TokenSuggestionFactory = commonTokenSuggestionsFactory4;
-            // 
-            // labelReference
-            // 
-            this.labelReference.AutoSize = true;
-            this.labelReference.BackColor = System.Drawing.Color.Transparent;
-            this.labelReference.Location = new System.Drawing.Point(8, 37);
-            this.labelReference.Name = "labelReference";
-            this.labelReference.Size = new System.Drawing.Size(72, 13);
-            this.labelReference.TabIndex = 2;
-            this.labelReference.Text = "Reference #:";
-            // 
-            // signature
-            // 
-            this.signature.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.signature.FormattingEnabled = true;
-            this.signature.Location = new System.Drawing.Point(86, 8);
-            this.signature.Name = "signature";
-            this.signature.PromptText = "(Multiple Values)";
-            this.signature.Size = new System.Drawing.Size(175, 21);
-            this.signature.TabIndex = 1;
-            this.signature.SelectedIndexChanged += new System.EventHandler(this.OnRateCriteriaChanged);
-            // 
-            // labelSignature
-            // 
-            this.labelSignature.AutoSize = true;
-            this.labelSignature.BackColor = System.Drawing.Color.Transparent;
-            this.labelSignature.Location = new System.Drawing.Point(23, 11);
-            this.labelSignature.Name = "labelSignature";
-            this.labelSignature.Size = new System.Drawing.Size(57, 13);
-            this.labelSignature.TabIndex = 0;
-            this.labelSignature.Text = "Signature:";
-            // 
             // sectionEmail
             // 
-            this.sectionEmail.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            this.sectionEmail.Anchor = ((System.Windows.Forms.AnchorStyles) (((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
             this.sectionEmail.Collapsed = true;
             this.sectionEmail.TabIndex = 7;
@@ -1057,7 +1318,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             // 
             // kryptonBorderEdgeEmail2
             // 
-            this.kryptonBorderEdgeEmail2.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            this.kryptonBorderEdgeEmail2.Anchor = ((System.Windows.Forms.AnchorStyles) (((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
             this.kryptonBorderEdgeEmail2.AutoSize = false;
             this.kryptonBorderEdgeEmail2.BorderStyle = ComponentFactory.Krypton.Toolkit.PaletteBorderStyle.GridDataCellSheet;
@@ -1156,7 +1417,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             // 
             // kryptonBorderEdgeEmail
             // 
-            this.kryptonBorderEdgeEmail.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            this.kryptonBorderEdgeEmail.Anchor = ((System.Windows.Forms.AnchorStyles) (((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
             this.kryptonBorderEdgeEmail.AutoSize = false;
             this.kryptonBorderEdgeEmail.BorderStyle = ComponentFactory.Krypton.Toolkit.PaletteBorderStyle.GridDataCellSheet;
@@ -1318,7 +1579,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             // 
             // kryptonBorderEdge1
             // 
-            this.kryptonBorderEdge1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            this.kryptonBorderEdge1.Anchor = ((System.Windows.Forms.AnchorStyles) (((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
             this.kryptonBorderEdge1.AutoSize = false;
             this.kryptonBorderEdge1.BorderStyle = ComponentFactory.Krypton.Toolkit.PaletteBorderStyle.GridDataCellSheet;
@@ -1329,7 +1590,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             // 
             // kryptonBorderEdge2
             // 
-            this.kryptonBorderEdge2.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            this.kryptonBorderEdge2.Anchor = ((System.Windows.Forms.AnchorStyles) (((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
             this.kryptonBorderEdge2.AutoSize = false;
             this.kryptonBorderEdge2.BorderStyle = ComponentFactory.Krypton.Toolkit.PaletteBorderStyle.GridDataCellSheet;
@@ -1429,32 +1690,48 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             this.pictureBox1.TabIndex = 0;
             this.pictureBox1.TabStop = false;
             // 
-            // sectionCOD
+            // sectionFreight
             // 
-            this.sectionCOD.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            this.sectionFreight.Anchor = ((System.Windows.Forms.AnchorStyles) (((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.sectionCOD.Collapsed = true;
+            this.sectionFreight.ContentPanel.Controls.Add(this.fedExFreightContainerControl);
+            this.sectionFreight.ExtraText = "";
+            this.sectionFreight.Location = new System.Drawing.Point(3, 613);
+            this.sectionFreight.Name = "sectionFreight";
+            this.sectionFreight.SectionName = "Freight";
+            this.sectionFreight.SettingsKey = "{A7947F0F-9648-4443-A678-F67E7FCEE38C}";
+            this.sectionFreight.Size = new System.Drawing.Size(487, 88);
+            this.sectionFreight.TabIndex = 9;
             // 
-            // sectionCOD.ContentPanel
+            // fedExFreightContainerControl
             // 
-            this.sectionCOD.ContentPanel.Controls.Add(this.taxInfoLabel);
-            this.sectionCOD.ContentPanel.Controls.Add(this.codTaxId);
-            this.sectionCOD.ContentPanel.Controls.Add(this.CodTINLabel);
-            this.sectionCOD.ContentPanel.Controls.Add(this.codOrigin);
-            this.sectionCOD.ContentPanel.Controls.Add(this.codAddFreight);
-            this.sectionCOD.ContentPanel.Controls.Add(this.codPaymentType);
-            this.sectionCOD.ContentPanel.Controls.Add(this.labelCodPayment);
-            this.sectionCOD.ContentPanel.Controls.Add(this.codAmount);
-            this.sectionCOD.ContentPanel.Controls.Add(this.labelCodAmount);
-            this.sectionCOD.ContentPanel.Controls.Add(this.codEnabled);
-            this.sectionCOD.ExpandedHeight = 543;
-            this.sectionCOD.ExtraText = "";
-            this.sectionCOD.Location = new System.Drawing.Point(3, 735);
-            this.sectionCOD.Name = "sectionCOD";
-            this.sectionCOD.SectionName = "FedEx® Collect on Delivery (C.O.D.) or FedEx Ground® C.O.D.";
-            this.sectionCOD.SettingsKey = "{c15e50fb-864c-415f-a752-ddfcc1c1e315}";
-            this.sectionCOD.Size = new System.Drawing.Size(487, 24);
-            this.sectionCOD.TabIndex = 11;
+            this.fedExFreightContainerControl.Location = new System.Drawing.Point(7, 5);
+            this.fedExFreightContainerControl.Margin = new System.Windows.Forms.Padding(0, 3, 3, 3);
+            this.fedExFreightContainerControl.Name = "fedExFreightContainerControl2";
+            this.fedExFreightContainerControl.Size = new System.Drawing.Size(469, 50);
+            this.fedExFreightContainerControl.TabIndex = 7;
+            this.fedExFreightContainerControl.Resize += OnFreightContainerControlResize;
+            // 
+            // codOrigin
+            // 
+            this.codOrigin.Anchor = ((System.Windows.Forms.AnchorStyles) (((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.codOrigin.AvailableFields = ((ShipWorks.Data.Controls.PersonFields) ((((((((ShipWorks.Data.Controls.PersonFields.Name | ShipWorks.Data.Controls.PersonFields.Company)
+            | ShipWorks.Data.Controls.PersonFields.Street)
+            | ShipWorks.Data.Controls.PersonFields.City)
+            | ShipWorks.Data.Controls.PersonFields.State)
+            | ShipWorks.Data.Controls.PersonFields.Postal)
+            | ShipWorks.Data.Controls.PersonFields.Residential)
+            | ShipWorks.Data.Controls.PersonFields.Phone)));
+            this.codOrigin.BackColor = System.Drawing.Color.Transparent;
+            this.codOrigin.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (0)));
+            this.codOrigin.Location = new System.Drawing.Point(28, 86);
+            this.codOrigin.Margin = new System.Windows.Forms.Padding(3, 5, 3, 3);
+            this.codOrigin.Name = "codOrigin";
+            this.codOrigin.OriginLabel = "Return To";
+            this.codOrigin.Size = new System.Drawing.Size(372, 323);
+            this.codOrigin.TabIndex = 4;
+            this.codOrigin.OriginChanged += new System.EventHandler(this.OnCodOriginChanged);
             // 
             // taxInfoLabel
             // 
@@ -1469,7 +1746,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             // 
             // codTaxId
             // 
-            this.codTaxId.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            this.codTaxId.Anchor = ((System.Windows.Forms.AnchorStyles) (((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
             this.codTaxId.Location = new System.Drawing.Point(109, 436);
             this.codTaxId.Name = "codTaxId";
@@ -1485,325 +1762,6 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             this.CodTINLabel.Size = new System.Drawing.Size(43, 13);
             this.CodTINLabel.TabIndex = 13;
             this.CodTINLabel.Text = "Tax ID:";
-            // 
-            // codOrigin
-            // 
-            this.codOrigin.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.codOrigin.AvailableFields = ((ShipWorks.Data.Controls.PersonFields)((((((((ShipWorks.Data.Controls.PersonFields.Name | ShipWorks.Data.Controls.PersonFields.Company) 
-            | ShipWorks.Data.Controls.PersonFields.Street) 
-            | ShipWorks.Data.Controls.PersonFields.City) 
-            | ShipWorks.Data.Controls.PersonFields.State) 
-            | ShipWorks.Data.Controls.PersonFields.Postal) 
-            | ShipWorks.Data.Controls.PersonFields.Residential) 
-            | ShipWorks.Data.Controls.PersonFields.Phone)));
-            this.codOrigin.BackColor = System.Drawing.Color.Transparent;
-            this.codOrigin.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.codOrigin.Location = new System.Drawing.Point(28, 86);
-            this.codOrigin.Margin = new System.Windows.Forms.Padding(3, 5, 3, 3);
-            this.codOrigin.Name = "codOrigin";
-            this.codOrigin.OriginLabel = "Return To";
-            this.codOrigin.Size = new System.Drawing.Size(372, 323);
-            this.codOrigin.TabIndex = 4;
-            this.codOrigin.OriginChanged += new System.EventHandler(this.OnCodOriginChanged);
-            // 
-            // codAddFreight
-            // 
-            this.codAddFreight.AutoSize = true;
-            this.codAddFreight.BackColor = System.Drawing.Color.White;
-            this.codAddFreight.Location = new System.Drawing.Point(186, 32);
-            this.codAddFreight.Name = "codAddFreight";
-            this.codAddFreight.Size = new System.Drawing.Size(114, 17);
-            this.codAddFreight.TabIndex = 2;
-            this.codAddFreight.Text = "Add shipment cost";
-            this.codAddFreight.UseVisualStyleBackColor = false;
-            // 
-            // codPaymentType
-            // 
-            this.codPaymentType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.codPaymentType.FormattingEnabled = true;
-            this.codPaymentType.Location = new System.Drawing.Point(86, 57);
-            this.codPaymentType.Name = "codPaymentType";
-            this.codPaymentType.PromptText = "(Multiple Values)";
-            this.codPaymentType.Size = new System.Drawing.Size(94, 21);
-            this.codPaymentType.TabIndex = 3;
-            // 
-            // labelCodPayment
-            // 
-            this.labelCodPayment.AutoSize = true;
-            this.labelCodPayment.BackColor = System.Drawing.Color.White;
-            this.labelCodPayment.Location = new System.Drawing.Point(30, 60);
-            this.labelCodPayment.Name = "labelCodPayment";
-            this.labelCodPayment.Size = new System.Drawing.Size(53, 13);
-            this.labelCodPayment.TabIndex = 12;
-            this.labelCodPayment.Text = "Payment:";
-            // 
-            // codAmount
-            // 
-            this.codAmount.Amount = new decimal(new int[] {
-            0,
-            0,
-            0,
-            131072});
-            this.codAmount.IgnoreSet = false;
-            this.codAmount.Location = new System.Drawing.Point(86, 30);
-            this.codAmount.Name = "codAmount";
-            this.codAmount.Size = new System.Drawing.Size(94, 21);
-            this.codAmount.TabIndex = 1;
-            this.codAmount.Text = "$0.00";
-            // 
-            // labelCodAmount
-            // 
-            this.labelCodAmount.AutoSize = true;
-            this.labelCodAmount.BackColor = System.Drawing.Color.White;
-            this.labelCodAmount.Location = new System.Drawing.Point(35, 33);
-            this.labelCodAmount.Name = "labelCodAmount";
-            this.labelCodAmount.Size = new System.Drawing.Size(48, 13);
-            this.labelCodAmount.TabIndex = 10;
-            this.labelCodAmount.Text = "Amount:";
-            // 
-            // codEnabled
-            // 
-            this.codEnabled.AutoSize = true;
-            this.codEnabled.BackColor = System.Drawing.Color.White;
-            this.codEnabled.Location = new System.Drawing.Point(7, 8);
-            this.codEnabled.Name = "codEnabled";
-            this.codEnabled.Size = new System.Drawing.Size(160, 17);
-            this.codEnabled.TabIndex = 0;
-            this.codEnabled.Text = "C.O.D. (Collect on Delivery)";
-            this.codEnabled.UseVisualStyleBackColor = false;
-            this.codEnabled.CheckedChanged += new System.EventHandler(this.OnRateCriteriaChanged);
-            // 
-            // panelTrademarkInfo
-            // 
-            this.panelTrademarkInfo.Controls.Add(this.linkTrademarkInfo);
-            this.panelTrademarkInfo.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.panelTrademarkInfo.Location = new System.Drawing.Point(0, 1115);
-            this.panelTrademarkInfo.Name = "panelTrademarkInfo";
-            this.panelTrademarkInfo.Size = new System.Drawing.Size(493, 19);
-            this.panelTrademarkInfo.TabIndex = 16;
-            // 
-            // linkTrademarkInfo
-            // 
-            this.linkTrademarkInfo.AutoSize = true;
-            this.linkTrademarkInfo.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.linkTrademarkInfo.Font = new System.Drawing.Font("Tahoma", 6.75F, System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.linkTrademarkInfo.ForeColor = System.Drawing.Color.RoyalBlue;
-            this.linkTrademarkInfo.Location = new System.Drawing.Point(1, 4);
-            this.linkTrademarkInfo.Name = "linkTrademarkInfo";
-            this.linkTrademarkInfo.Size = new System.Drawing.Size(381, 11);
-            this.linkTrademarkInfo.TabIndex = 0;
-            this.linkTrademarkInfo.Text = "FedEx service marks are owned by Federal Express Corporation and used with permis" +
-    "sion.\r\n";
-            this.linkTrademarkInfo.Click += new System.EventHandler(this.OnLinkTrademarkInfo);
-            // 
-            // smartManifestID
-            // 
-            this.smartManifestID.Location = new System.Drawing.Point(87, 119);
-            this.smartManifestID.MaxLength = 32767;
-            this.fieldLengthProvider.SetMaxLengthSource(this.smartManifestID, ShipWorks.Data.Utility.EntityFieldLengthSource.FedExSmartPostCustomerManifest);
-            this.smartManifestID.Name = "smartManifestID";
-            this.smartManifestID.Size = new System.Drawing.Size(222, 21);
-            this.smartManifestID.TabIndex = 9;
-            this.smartManifestID.TokenSuggestionFactory = commonTokenSuggestionsFactory5;
-            // 
-            // sectionSmartPost
-            // 
-            this.sectionSmartPost.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.sectionSmartPost.Collapsed = true;
-            // 
-            // sectionSmartPost.ContentPanel
-            // 
-            this.sectionSmartPost.ContentPanel.Controls.Add(this.infotipSmartPostConfirmation);
-            this.sectionSmartPost.ContentPanel.Controls.Add(this.smartHubID);
-            this.sectionSmartPost.ContentPanel.Controls.Add(this.labelSmartHubID);
-            this.sectionSmartPost.ContentPanel.Controls.Add(this.smartConfirmation);
-            this.sectionSmartPost.ContentPanel.Controls.Add(this.smartEndorsement);
-            this.sectionSmartPost.ContentPanel.Controls.Add(this.smartIndicia);
-            this.sectionSmartPost.ContentPanel.Controls.Add(this.labelSmartAncillary);
-            this.sectionSmartPost.ContentPanel.Controls.Add(this.labelSmartEndicia);
-            this.sectionSmartPost.ContentPanel.Controls.Add(this.labelSmartConfirmation);
-            this.sectionSmartPost.ContentPanel.Controls.Add(this.smartManifestID);
-            this.sectionSmartPost.ContentPanel.Controls.Add(this.labelSmartManifestID);
-            this.sectionSmartPost.ExpandedHeight = 174;
-            this.sectionSmartPost.ExtraText = "";
-            this.sectionSmartPost.Location = new System.Drawing.Point(3, 497);
-            this.sectionSmartPost.Name = "sectionSmartPost";
-            this.sectionSmartPost.SectionName = "FedEx SmartPost®";
-            this.sectionSmartPost.SettingsKey = "{37cbefe5-8feb-4b9c-945f-970382580a52}";
-            this.sectionSmartPost.Size = new System.Drawing.Size(487, 24);
-            this.sectionSmartPost.TabIndex = 5;
-            // 
-            // infotipSmartPostConfirmation
-            // 
-            this.infotipSmartPostConfirmation.Caption = "Delivery Confirmation is always used when Indicia is Parcel Select.  This option " +
-    "only affects the other Indicia types.";
-            this.infotipSmartPostConfirmation.Location = new System.Drawing.Point(242, 96);
-            this.infotipSmartPostConfirmation.Name = "infotipSmartPostConfirmation";
-            this.infotipSmartPostConfirmation.Size = new System.Drawing.Size(12, 12);
-            this.infotipSmartPostConfirmation.TabIndex = 99;
-            this.infotipSmartPostConfirmation.Title = "SmartPost Delivery Confirmation";
-            // 
-            // smartHubID
-            // 
-            this.smartHubID.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.smartHubID.FormattingEnabled = true;
-            this.smartHubID.Location = new System.Drawing.Point(87, 8);
-            this.smartHubID.Name = "smartHubID";
-            this.smartHubID.PromptText = "(Multiple Values)";
-            this.smartHubID.Size = new System.Drawing.Size(225, 21);
-            this.smartHubID.TabIndex = 1;
-            this.smartHubID.SelectedIndexChanged += new System.EventHandler(this.OnRateCriteriaChanged);
-            // 
-            // labelSmartHubID
-            // 
-            this.labelSmartHubID.AutoSize = true;
-            this.labelSmartHubID.BackColor = System.Drawing.Color.Transparent;
-            this.labelSmartHubID.Location = new System.Drawing.Point(37, 11);
-            this.labelSmartHubID.Name = "labelSmartHubID";
-            this.labelSmartHubID.Size = new System.Drawing.Size(44, 13);
-            this.labelSmartHubID.TabIndex = 0;
-            this.labelSmartHubID.Text = "Hub ID:";
-            // 
-            // smartConfirmation
-            // 
-            this.smartConfirmation.AutoSize = true;
-            this.smartConfirmation.BackColor = System.Drawing.Color.White;
-            this.smartConfirmation.Location = new System.Drawing.Point(87, 94);
-            this.smartConfirmation.Name = "smartConfirmation";
-            this.smartConfirmation.Size = new System.Drawing.Size(157, 17);
-            this.smartConfirmation.TabIndex = 7;
-            this.smartConfirmation.Text = "USPS Delivery Confirmation";
-            this.smartConfirmation.UseVisualStyleBackColor = false;
-            this.smartConfirmation.CheckedChanged += new System.EventHandler(this.OnRateCriteriaChanged);
-            // 
-            // smartEndorsement
-            // 
-            this.smartEndorsement.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.smartEndorsement.FormattingEnabled = true;
-            this.smartEndorsement.Location = new System.Drawing.Point(87, 64);
-            this.smartEndorsement.Name = "smartEndorsement";
-            this.smartEndorsement.PromptText = "(Multiple Values)";
-            this.smartEndorsement.Size = new System.Drawing.Size(225, 21);
-            this.smartEndorsement.TabIndex = 5;
-            this.smartEndorsement.SelectedIndexChanged += new System.EventHandler(this.OnRateCriteriaChanged);
-            // 
-            // smartIndicia
-            // 
-            this.smartIndicia.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.smartIndicia.FormattingEnabled = true;
-            this.smartIndicia.Location = new System.Drawing.Point(87, 37);
-            this.smartIndicia.Name = "smartIndicia";
-            this.smartIndicia.PromptText = "(Multiple Values)";
-            this.smartIndicia.Size = new System.Drawing.Size(225, 21);
-            this.smartIndicia.TabIndex = 3;
-            this.smartIndicia.SelectedIndexChanged += new System.EventHandler(this.OnChangeSmartPostIndicia);
-            // 
-            // labelSmartAncillary
-            // 
-            this.labelSmartAncillary.AutoSize = true;
-            this.labelSmartAncillary.BackColor = System.Drawing.Color.Transparent;
-            this.labelSmartAncillary.Location = new System.Drawing.Point(30, 68);
-            this.labelSmartAncillary.Name = "labelSmartAncillary";
-            this.labelSmartAncillary.Size = new System.Drawing.Size(51, 13);
-            this.labelSmartAncillary.TabIndex = 4;
-            this.labelSmartAncillary.Text = "Ancillary:";
-            // 
-            // labelSmartEndicia
-            // 
-            this.labelSmartEndicia.AutoSize = true;
-            this.labelSmartEndicia.BackColor = System.Drawing.Color.Transparent;
-            this.labelSmartEndicia.Location = new System.Drawing.Point(39, 40);
-            this.labelSmartEndicia.Name = "labelSmartEndicia";
-            this.labelSmartEndicia.Size = new System.Drawing.Size(42, 13);
-            this.labelSmartEndicia.TabIndex = 2;
-            this.labelSmartEndicia.Text = "Indicia:";
-            // 
-            // labelSmartConfirmation
-            // 
-            this.labelSmartConfirmation.AutoSize = true;
-            this.labelSmartConfirmation.BackColor = System.Drawing.Color.Transparent;
-            this.labelSmartConfirmation.Location = new System.Drawing.Point(9, 95);
-            this.labelSmartConfirmation.Name = "labelSmartConfirmation";
-            this.labelSmartConfirmation.Size = new System.Drawing.Size(72, 13);
-            this.labelSmartConfirmation.TabIndex = 6;
-            this.labelSmartConfirmation.Text = "Confirmation:";
-            // 
-            // labelSmartManifestID
-            // 
-            this.labelSmartManifestID.AutoSize = true;
-            this.labelSmartManifestID.BackColor = System.Drawing.Color.Transparent;
-            this.labelSmartManifestID.Location = new System.Drawing.Point(15, 122);
-            this.labelSmartManifestID.Name = "labelSmartManifestID";
-            this.labelSmartManifestID.Size = new System.Drawing.Size(66, 13);
-            this.labelSmartManifestID.TabIndex = 8;
-            this.labelSmartManifestID.Text = "Manifest ID:";
-            // 
-            // sectionPackageDetails
-            // 
-            this.sectionPackageDetails.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.sectionPackageDetails.Collapsed = true;
-            // 
-            // sectionPackageDetails.ContentPanel
-            // 
-            this.sectionPackageDetails.ContentPanel.Controls.Add(this.otherPackageHolder);
-            this.sectionPackageDetails.ExpandedHeight = 774;
-            this.sectionPackageDetails.ExtraText = "";
-            this.sectionPackageDetails.Location = new System.Drawing.Point(3, 439);
-            this.sectionPackageDetails.Name = "sectionPackageDetails";
-            this.sectionPackageDetails.SectionName = "Other Package Details";
-            this.sectionPackageDetails.SettingsKey = "{ce947713-e7de-463b-b583-9106a542cd24}";
-            this.sectionPackageDetails.Size = new System.Drawing.Size(487, 40);
-            this.sectionPackageDetails.TabIndex = 3;
-            // 
-            // otherPackageHolder
-            // 
-            this.otherPackageHolder.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.otherPackageHolder.BackColor = System.Drawing.Color.Transparent;
-            this.otherPackageHolder.Controls.Add(this.packageDetailsControl);
-            this.otherPackageHolder.Location = new System.Drawing.Point(0, 0);
-            this.otherPackageHolder.Name = "otherPackageHolder";
-            this.otherPackageHolder.Size = new System.Drawing.Size(477, 546);
-            this.otherPackageHolder.TabIndex = 1;
-            // 
-            // packageDetailsControl
-            // 
-            this.packageDetailsControl.AutoSize = true;
-            this.packageDetailsControl.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.packageDetailsControl.BackColor = System.Drawing.Color.Transparent;
-            this.packageDetailsControl.Location = new System.Drawing.Point(0, 0);
-            this.packageDetailsControl.Name = "packageDetailsControl";
-            this.packageDetailsControl.Size = new System.Drawing.Size(345, 300);
-            this.packageDetailsControl.TabIndex = 0;
-            this.packageDetailsControl.PackageDetailsChanged += new System.EventHandler(this.OnRateCriteriaChanged);
-            this.packageDetailsControl.Resize += new System.EventHandler(this.OnPackageDetailsResize);
-            this.packageDetailsControl.DangerousGoodsChanged += new EventHandler(this.OnDangerousGoodsChecked);
-            // 
-            // sectionServiceOptions
-            // 
-            this.sectionServiceOptions.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.sectionServiceOptions.Collapsed = true;
-            // 
-            // sectionServiceOptions.ContentPanel
-            // 
-            this.sectionServiceOptions.ContentPanel.Controls.Add(this.returnsClearance);
-            this.sectionServiceOptions.ContentPanel.Controls.Add(this.returnsClearanceLabel);
-            this.sectionServiceOptions.ContentPanel.Controls.Add(this.labelDropoffType);
-            this.sectionServiceOptions.ContentPanel.Controls.Add(this.dropoffType);
-            this.sectionServiceOptions.ContentPanel.Controls.Add(this.thirdPartyConsignee);
-            this.sectionServiceOptions.ContentPanel.Controls.Add(this.consigneeLabel);
-            this.sectionServiceOptions.ExpandedHeight = 104;
-            this.sectionServiceOptions.ExtraText = "";
-            this.sectionServiceOptions.Location = new System.Drawing.Point(3, 793);
-            this.sectionServiceOptions.Name = "sectionServiceOptions";
-            this.sectionServiceOptions.SectionName = "Service Options";
-            this.sectionServiceOptions.SettingsKey = "{e4ccd963-eb98-4d6a-880f-1a3e236ce413}";
-            this.sectionServiceOptions.Size = new System.Drawing.Size(487, 24);
-            this.sectionServiceOptions.TabIndex = 13;
             // 
             // returnsClearance
             // 
@@ -1846,61 +1804,132 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             this.dropoffType.Size = new System.Drawing.Size(175, 21);
             this.dropoffType.TabIndex = 62;
             // 
-            // thirdPartyConsignee
+            // smartConfirmation
             // 
-            this.thirdPartyConsignee.AutoSize = true;
-            this.thirdPartyConsignee.BackColor = System.Drawing.Color.Transparent;
-            this.thirdPartyConsignee.Location = new System.Drawing.Point(106, 56);
-            this.thirdPartyConsignee.Name = "thirdPartyConsignee";
-            this.thirdPartyConsignee.Size = new System.Drawing.Size(79, 17);
-            this.thirdPartyConsignee.TabIndex = 66;
-            this.thirdPartyConsignee.Text = "Third Party";
-            this.thirdPartyConsignee.UseVisualStyleBackColor = false;
+            this.smartConfirmation.AutoSize = true;
+            this.smartConfirmation.BackColor = System.Drawing.Color.White;
+            this.smartConfirmation.Location = new System.Drawing.Point(87, 94);
+            this.smartConfirmation.Name = "smartConfirmation";
+            this.smartConfirmation.Size = new System.Drawing.Size(157, 17);
+            this.smartConfirmation.TabIndex = 7;
+            this.smartConfirmation.Text = "USPS Delivery Confirmation";
+            this.smartConfirmation.UseVisualStyleBackColor = false;
+            this.smartConfirmation.CheckedChanged += new System.EventHandler(this.OnRateCriteriaChanged);
             // 
-            // consigneeLabel
+            // labelSmartConfirmation
             // 
-            this.consigneeLabel.AutoSize = true;
-            this.consigneeLabel.BackColor = System.Drawing.Color.Transparent;
-            this.consigneeLabel.Location = new System.Drawing.Point(41, 56);
-            this.consigneeLabel.Name = "consigneeLabel";
-            this.consigneeLabel.Size = new System.Drawing.Size(61, 13);
-            this.consigneeLabel.TabIndex = 6;
-            this.consigneeLabel.Text = "Consignee:";
+            this.labelSmartConfirmation.AutoSize = true;
+            this.labelSmartConfirmation.BackColor = System.Drawing.Color.Transparent;
+            this.labelSmartConfirmation.Location = new System.Drawing.Point(9, 95);
+            this.labelSmartConfirmation.Name = "labelSmartConfirmation";
+            this.labelSmartConfirmation.Size = new System.Drawing.Size(72, 13);
+            this.labelSmartConfirmation.TabIndex = 6;
+            this.labelSmartConfirmation.Text = "Confirmation:";
             // 
-            // sectionFimsOptions
+            // smartManifestID
             // 
-            this.sectionFimsOptions.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
+            this.smartManifestID.Location = new System.Drawing.Point(87, 119);
+            this.smartManifestID.MaxLength = 32767;
+            this.fieldLengthProvider.SetMaxLengthSource(this.smartManifestID, ShipWorks.Data.Utility.EntityFieldLengthSource.FedExSmartPostCustomerManifest);
+            this.smartManifestID.Name = "smartManifestID";
+            this.smartManifestID.Size = new System.Drawing.Size(222, 21);
+            this.smartManifestID.TabIndex = 9;
+            this.smartManifestID.TokenSuggestionFactory = commonTokenSuggestionsFactory5;
             // 
-            // sectionFimsOptions.ContentPanel
+            // labelSmartManifestID
             // 
-            this.sectionFimsOptions.ContentPanel.Controls.Add(this.fimsOptionsControl);
-            this.sectionFimsOptions.ExtraText = "";
-            this.sectionFimsOptions.Location = new System.Drawing.Point(3, 851);
-            this.sectionFimsOptions.Name = "sectionFimsOptions";
-            this.sectionFimsOptions.SectionName = "FIMS Options";
-            this.sectionFimsOptions.SettingsKey = "{e87cbd40-e049-4cdf-adbd-d2daa1720fcf}";
-            this.sectionFimsOptions.Size = new System.Drawing.Size(487, 99);
-            this.sectionFimsOptions.TabIndex = 15;
+            this.labelSmartManifestID.AutoSize = true;
+            this.labelSmartManifestID.BackColor = System.Drawing.Color.Transparent;
+            this.labelSmartManifestID.Location = new System.Drawing.Point(15, 122);
+            this.labelSmartManifestID.Name = "labelSmartManifestID";
+            this.labelSmartManifestID.Size = new System.Drawing.Size(66, 13);
+            this.labelSmartManifestID.TabIndex = 8;
+            this.labelSmartManifestID.Text = "Manifest ID:";
             // 
-            // fimsOptionsControl
+            // infotipSmartPostConfirmation
             // 
-            this.fimsOptionsControl.AutoSize = true;
-            this.fimsOptionsControl.BackColor = System.Drawing.Color.Transparent;
-            this.fimsOptionsControl.Location = new System.Drawing.Point(27, 5);
-            this.fimsOptionsControl.Name = "fimsOptionsControl";
-            this.fimsOptionsControl.Size = new System.Drawing.Size(279, 59);
-            this.fimsOptionsControl.TabIndex = 0;
+            this.infotipSmartPostConfirmation.Caption = "Delivery Confirmation is always used when Indicia is Parcel Select.  This option " +
+    "only affects the other Indicia types.";
+            this.infotipSmartPostConfirmation.Location = new System.Drawing.Point(242, 96);
+            this.infotipSmartPostConfirmation.Name = "infotipSmartPostConfirmation";
+            this.infotipSmartPostConfirmation.Size = new System.Drawing.Size(12, 12);
+            this.infotipSmartPostConfirmation.TabIndex = 99;
+            this.infotipSmartPostConfirmation.Title = "FedEx Ground® Economy Delivery Confirmation";
             // 
-            // labelReturnsClearance
+            // smartHubID
             // 
-            this.labelReturnsClearance.AutoSize = true;
-            this.labelReturnsClearance.BackColor = System.Drawing.Color.Transparent;
-            this.labelReturnsClearance.Location = new System.Drawing.Point(2, 33);
-            this.labelReturnsClearance.Name = "labelReturnsClearance";
-            this.labelReturnsClearance.Size = new System.Drawing.Size(100, 13);
-            this.labelReturnsClearance.TabIndex = 64;
-            this.labelReturnsClearance.Text = "Returns Clearance:";
+            this.smartHubID.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.smartHubID.FormattingEnabled = true;
+            this.smartHubID.Location = new System.Drawing.Point(87, 8);
+            this.smartHubID.Name = "smartHubID";
+            this.smartHubID.PromptText = "(Multiple Values)";
+            this.smartHubID.Size = new System.Drawing.Size(225, 21);
+            this.smartHubID.TabIndex = 1;
+            this.smartHubID.SelectedIndexChanged += new System.EventHandler(this.OnRateCriteriaChanged);
+            // 
+            // labelSmartHubID
+            // 
+            this.labelSmartHubID.AutoSize = true;
+            this.labelSmartHubID.BackColor = System.Drawing.Color.Transparent;
+            this.labelSmartHubID.Location = new System.Drawing.Point(37, 11);
+            this.labelSmartHubID.Name = "labelSmartHubID";
+            this.labelSmartHubID.Size = new System.Drawing.Size(44, 13);
+            this.labelSmartHubID.TabIndex = 0;
+            this.labelSmartHubID.Text = "Hub ID:";
+            // 
+            // panelPayorDuties
+            // 
+            this.panelPayorDuties.BackColor = System.Drawing.Color.White;
+            this.panelPayorDuties.Controls.Add(this.dutiesAccount);
+            this.panelPayorDuties.Controls.Add(this.labelDutiesAccount);
+            this.panelPayorDuties.Controls.Add(this.payorDuties);
+            this.panelPayorDuties.Controls.Add(this.labelPayorDuties);
+            this.panelPayorDuties.Dock = System.Windows.Forms.DockStyle.Top;
+            this.panelPayorDuties.Location = new System.Drawing.Point(0, 90);
+            this.panelPayorDuties.Name = "panelPayorDuties";
+            this.panelPayorDuties.Size = new System.Drawing.Size(483, 65);
+            this.panelPayorDuties.TabIndex = 6;
+            this.panelPayorDuties.Visible = false;
+            // 
+            // dutiesAccount
+            // 
+            this.dutiesAccount.Location = new System.Drawing.Point(123, 36);
+            this.fieldLengthProvider.SetMaxLengthSource(this.dutiesAccount, ShipWorks.Data.Utility.EntityFieldLengthSource.FedExAccountNumber);
+            this.dutiesAccount.Name = "dutiesAccount";
+            this.dutiesAccount.Size = new System.Drawing.Size(173, 21);
+            this.dutiesAccount.TabIndex = 6;
+            // 
+            // labelDutiesAccount
+            // 
+            this.labelDutiesAccount.AutoSize = true;
+            this.labelDutiesAccount.BackColor = System.Drawing.Color.White;
+            this.labelDutiesAccount.Location = new System.Drawing.Point(56, 39);
+            this.labelDutiesAccount.Name = "labelDutiesAccount";
+            this.labelDutiesAccount.Size = new System.Drawing.Size(61, 13);
+            this.labelDutiesAccount.TabIndex = 5;
+            this.labelDutiesAccount.Text = "Account #:";
+            // 
+            // payorDuties
+            // 
+            this.payorDuties.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.payorDuties.FormattingEnabled = true;
+            this.payorDuties.Location = new System.Drawing.Point(123, 9);
+            this.payorDuties.Name = "payorDuties";
+            this.payorDuties.PromptText = "(Multiple Values)";
+            this.payorDuties.Size = new System.Drawing.Size(173, 21);
+            this.payorDuties.TabIndex = 4;
+            this.payorDuties.SelectedIndexChanged += new System.EventHandler(this.OnChangePayorDuties);
+            // 
+            // labelPayorDuties
+            // 
+            this.labelPayorDuties.AutoSize = true;
+            this.labelPayorDuties.BackColor = System.Drawing.Color.White;
+            this.labelPayorDuties.Location = new System.Drawing.Point(24, 12);
+            this.labelPayorDuties.Name = "labelPayorDuties";
+            this.labelPayorDuties.Size = new System.Drawing.Size(93, 13);
+            this.labelPayorDuties.TabIndex = 1;
+            this.labelPayorDuties.Text = "Bill duties/fees to:";
+            #endregion
             //
             // FedExServiceControl
             //
@@ -1913,10 +1942,8 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             this.Controls.Add(this.sectionOptions);
             this.Controls.Add(this.sectionSmartPost);
             this.Controls.Add(this.sectionBilling);
-            this.Controls.Add(this.sectionEmail);
-            this.Controls.Add(this.sectionHomeDelivery);
-            this.Controls.Add(this.sectionFreight);
             this.Controls.Add(this.sectionHoldAtLocation);
+            this.Controls.Add(this.sectionHomeDelivery);
             this.Controls.Add(this.sectionCOD);
             this.Controls.Add(this.sectionServiceOptions);
             this.Controls.Add(this.sectionFimsOptions);
@@ -1927,11 +1954,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             this.Controls.SetChildIndex(this.sectionServiceOptions, 0);
             this.Controls.SetChildIndex(this.sectionReturns, 0);
             this.Controls.SetChildIndex(this.sectionCOD, 0);
-            this.Controls.SetChildIndex(this.sectionHoldAtLocation, 0);
-            this.Controls.SetChildIndex(this.sectionFreight, 0);
             this.Controls.SetChildIndex(this.sectionHomeDelivery, 0);
-            this.Controls.SetChildIndex(this.sectionEmail, 0);
             this.Controls.SetChildIndex(this.sectionBilling, 0);
+            this.Controls.SetChildIndex(this.sectionHoldAtLocation, 0);
             this.Controls.SetChildIndex(this.sectionSmartPost, 0);
             this.Controls.SetChildIndex(this.sectionOptions, 0);
             this.Controls.SetChildIndex(this.sectionPackageDetails, 0);
@@ -2033,6 +2058,10 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         private FedExPackageControl packageControl;
         private System.Windows.Forms.Label labelPayorTransport;
         private ShipWorks.UI.Controls.MultiValueComboBox payorTransport;
+        private ShipWorks.UI.Controls.MultiValueComboBox payorCountry;
+        private System.Windows.Forms.Label labelPayorCountry;
+        private ShipWorks.UI.Controls.MultiValueTextBox payorPostalCode;
+        private System.Windows.Forms.Label labelPayorPostalCode;
         private System.Windows.Forms.Label labelTransportAccount;
         private System.Windows.Forms.Label labelPayorDuties;
         private System.Windows.Forms.Panel panelPayorDuties;

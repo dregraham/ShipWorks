@@ -1181,8 +1181,6 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Express1.Net
 
                 case Usps.WebServices.ServiceType.DHLPE:
                 case Usps.WebServices.ServiceType.DHLPG:
-                case Usps.WebServices.ServiceType.DHLPPE:
-                case Usps.WebServices.ServiceType.DHLPPG:
                 case Usps.WebServices.ServiceType.DHLBPME:
                 case Usps.WebServices.ServiceType.DHLBPMG:
                 default:

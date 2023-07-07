@@ -73,7 +73,7 @@ namespace ShipWorks.Stores.Content.Panels
 
             IEntityGateway gateway = null;
 
-            if (EntityID != null)
+            if (entityID != null)
             {
                 gateway = CreateGateway(EntityID.Value);
             }

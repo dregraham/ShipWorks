@@ -6,6 +6,7 @@ using System.Linq;
 using ShipWorks.Data;
 using ShipWorks.Data.Model;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Shipping.Carriers.FedEx.Enums;
 using ShipWorks.Templates.Processing;
 using ShipWorks.Templates.Processing.TemplateXml.ElementOutlines;
 
@@ -21,7 +22,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         /// </summary>
         public static void Generate(ElementOutline container, Func<ShipmentEntity> shipment, Func<ShipmentEntity> loaded)
         {
-            var labels = new Lazy<List<TemplateLabelData>>(() => LoadLabelData(shipment));
+            var labels = new Lazy<List<TemplateLabelData>>(() => LoadLabelData(loaded));
 
             container.AddElement("TIN", () => loaded().FedEx.CustomsRecipientTIN);
             // Add the labels content
@@ -51,6 +52,17 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         /// </summary>
         private static List<TemplateLabelData> LoadLabelData(Func<ShipmentEntity> shipment)
         {
+            var serviceType = (FedExServiceType) shipment().FedEx.Service;
+
+            if (shipment().FedEx.ShipEngineLabelId != null && !FedExUtility.IsFimsService(serviceType))
+            {
+                return DataResourceManager.GetConsumerResourceReferences(shipment().ShipmentID)
+                    .Where(x => x.Label.StartsWith("LabelPrimary") || x.Label.StartsWith("LabelPart"))
+                    .Select(x => new TemplateLabelData(null, "Label", x.Label.StartsWith("LabelPrimary") ?
+                        TemplateLabelCategory.Primary : TemplateLabelCategory.Supplemental, x))
+                    .ToList();
+            }
+
             List<TemplateLabelData> labelData = new List<TemplateLabelData>();
 
             // FedEx stores some stuff at the shipmentID level, but we include it as apart of the first package

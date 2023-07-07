@@ -160,6 +160,9 @@ namespace ShipWorks.Shipping.ShipEngine.DTOs
         [DataMember(Name = "label_layout", EmitDefaultValue = false)]
         public string LabelLayout { get; set; }
 
+        [DataMember(Name = "ship_to_service_point_id", EmitDefaultValue = false)]
+        public string ShipToServicePointId { get; set; }
+
 
 
         /// <summary>
@@ -178,6 +181,7 @@ namespace ShipWorks.Shipping.ShipEngine.DTOs
             sb.Append("  LabelLayout: ").Append(LabelLayout).Append("\n");
             sb.Append("  LabelFormat: ").Append(LabelFormat).Append("\n");
             sb.Append("  LabelDownloadType: ").Append(LabelDownloadType).Append("\n");
+            sb.Append("  ShipToServicePointId: ").Append(ShipToServicePointId).Append("\n");
             sb.Append("}\n");
             return sb.ToString();
         }
@@ -251,6 +255,11 @@ namespace ShipWorks.Shipping.ShipEngine.DTOs
                     this.LabelDownloadType == input.LabelDownloadType ||
                     (this.LabelDownloadType != null &&
                     this.LabelDownloadType.Equals(input.LabelDownloadType))
+                ) &&
+                (
+                    this.ShipToServicePointId == input.ShipToServicePointId ||
+                    (this.ShipToServicePointId != null &&
+                    this.ShipToServicePointId.Equals(input.ShipToServicePointId))
                 );
         }
 

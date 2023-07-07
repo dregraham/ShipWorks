@@ -125,7 +125,7 @@ namespace ShipWorks.Shipping.Carriers.Dhl.API.Stamps
         /// <summary>
         /// Build a RateResult from a USPS rate
         /// </summary>
-        private RateResult BuildRateResult(ShipmentEntity shipment, RateV40 uspsRate, DhlExpressServiceType serviceType)
+        private RateResult BuildRateResult(ShipmentEntity shipment, RateV46 uspsRate, DhlExpressServiceType serviceType)
         {
             var baseRate = new RateResult(
                 EnumHelper.GetDescription(serviceType),
@@ -143,14 +143,14 @@ namespace ShipWorks.Shipping.Carriers.Dhl.API.Stamps
         /// <summary>
         /// Create customs information for the given shipment
         /// </summary>
-        protected override CustomsV7 CreateCustoms(ShipmentEntity shipment)
+        protected override CustomsV8 CreateCustoms(ShipmentEntity shipment)
         {
             if (!CustomsManager.IsCustomsRequired(shipment))
             {
                 return null;
             }
 
-            CustomsV7 customs = new CustomsV7();
+            CustomsV8 customs = new CustomsV8();
 
             // Content type
             ShipEngineContentsType contents = (ShipEngineContentsType) shipment.DhlExpress.Contents;
@@ -232,9 +232,9 @@ namespace ShipWorks.Shipping.Carriers.Dhl.API.Stamps
         /// <summary>
         /// Create a rate object for processing
         /// </summary>
-        protected override RateV40 CreateRateForProcessing(ShipmentEntity shipment, UspsAccountEntity account, Address toAddress, Address fromAddress)
+        protected override RateV46 CreateRateForProcessing(ShipmentEntity shipment, UspsAccountEntity account, Address toAddress, Address fromAddress)
         {
-            RateV40 rate = CreateRateForRating(shipment, account);
+            RateV46 rate = CreateRateForRating(shipment, account);
 
             rate.PackageType = GetPackageType((DhlExpressServiceType) shipment.DhlExpress.Service);
 
@@ -242,16 +242,16 @@ namespace ShipWorks.Shipping.Carriers.Dhl.API.Stamps
             rate.ServiceType = ServiceType.DHLEWW;
             rate.PrintLayout = "Normal4X6";
 
-            List<AddOnV17> addOns = new List<AddOnV17>();
+            List<AddOnV20> addOns = new List<AddOnV20>();
 
             if (shipment.DhlExpress.SaturdayDelivery)
             {
-                addOns.Add(new AddOnV17 { AddOnType = AddOnTypeV17.CARASAT });
+                addOns.Add(new AddOnV20 { AddOnType = AddOnTypeV20.CARASAT });
             }
 
             if (shipment.DhlExpress.ResidentialDelivery)
             {
-                addOns.Add(new AddOnV17 { AddOnType = AddOnTypeV17.CARARES });
+                addOns.Add(new AddOnV20 { AddOnType = AddOnTypeV20.CARARES });
             }
 
             if (addOns.Count > 0)
@@ -281,7 +281,7 @@ namespace ShipWorks.Shipping.Carriers.Dhl.API.Stamps
         /// <summary>
         /// Create a rate object 
         /// </summary>
-        protected override RateV40 CreateRateForRating(ShipmentEntity shipment, UspsAccountEntity account)
+        protected override RateV46 CreateRateForRating(ShipmentEntity shipment, UspsAccountEntity account)
         {
             var rate = CreateInitialRate(shipment, account);
 
@@ -312,9 +312,9 @@ namespace ShipWorks.Shipping.Carriers.Dhl.API.Stamps
             {
                 rate.AddOns = new[]
                 {
-                    new AddOnV17
+                    new AddOnV20
                     {
-                        AddOnType = AddOnTypeV17.CARASAT
+                        AddOnType = AddOnTypeV20.CARASAT
                     }
                 };
             }
@@ -325,7 +325,7 @@ namespace ShipWorks.Shipping.Carriers.Dhl.API.Stamps
         /// <summary>
         /// Create a RateV40 with addresses set
         /// </summary>
-        public static RateV40 CreateInitialRate(ShipmentEntity shipment, UspsAccountEntity account)
+        public static RateV46 CreateInitialRate(ShipmentEntity shipment, UspsAccountEntity account)
         {
             string fromZipCode = !string.IsNullOrEmpty(account.MailingPostalCode)
                 ? account.MailingPostalCode
@@ -334,7 +334,7 @@ namespace ShipWorks.Shipping.Carriers.Dhl.API.Stamps
             string toCountry = shipment.AdjustedShipCountryCode();
             string fromCountry = shipment.AdjustedOriginCountryCode();
 
-            RateV40 rate = new RateV40
+            RateV46 rate = new RateV46
             {
                 From = new Address()
                 {
@@ -354,7 +354,7 @@ namespace ShipWorks.Shipping.Carriers.Dhl.API.Stamps
         /// <summary>
         /// Get package type for the given service
         /// </summary>
-        private static GenericResult<DhlExpressServiceType> GetServiceType(RateV40 rate)
+        private static GenericResult<DhlExpressServiceType> GetServiceType(RateV46 rate)
         {
             if (rate.ServiceType != ServiceType.DHLEWW)
             {
@@ -421,18 +421,18 @@ namespace ShipWorks.Shipping.Carriers.Dhl.API.Stamps
         /// <summary>
         /// Get the rate total including surcharges and add ons
         /// </summary>
-        private decimal GetRateTotalWithSurchargesAndAddOns(ShipmentEntity shipment, RateV40 rate)
+        private decimal GetRateTotalWithSurchargesAndAddOns(ShipmentEntity shipment, RateV46 rate)
         {
             decimal addOns = rate.Surcharges.Sum(s => s.Amount);
 
             if (shipment.DhlExpress.SaturdayDelivery)
             {
-                addOns += rate.AddOns.Where(a => a.AddOnType == AddOnTypeV17.CARASAT).Sum(a => a.Amount);
+                addOns += rate.AddOns.Where(a => a.AddOnType == AddOnTypeV20.CARASAT).Sum(a => a.Amount);
             }
 
             if (shipment.DhlExpress.ResidentialDelivery)
             {
-                addOns += rate.AddOns.Where(a => a.AddOnType == AddOnTypeV17.CARARES).Sum(a => a.Amount);
+                addOns += rate.AddOns.Where(a => a.AddOnType == AddOnTypeV20.CARARES).Sum(a => a.Amount);
             }
 
             return rate.Amount + addOns;

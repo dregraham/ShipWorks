@@ -200,6 +200,9 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
             FreightGuaranteeType = source.FreightGuaranteeType;
             FreightGuaranteeDate = source.FreightGuaranteeDate;
             CustomsRecipientTINType = source.CustomsRecipientTINType;
+            PayorCountryCode = source.PayorCountryCode;
+            PayorPostalCode = source.PayorPostalCode;
+            ShipEngineLabelId = source.ShipEngineLabelId;
             
             Shipment = (IShipmentEntity) source.Shipment?.AsReadOnly(objectMap);
             
@@ -1195,6 +1198,24 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
         /// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
         public Nullable<System.Int32> CustomsRecipientTINType { get; }
+        /// <summary> The PayorCountryCode property of the Entity FedExShipment<br/><br/>
+        /// </summary>
+        /// <remarks>Mapped on table field: "FedExShipment"."PayorCountryCode"<br/>
+        /// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 2<br/>
+        /// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+        public System.String PayorCountryCode { get; }
+        /// <summary> The PayorPostalCode property of the Entity FedExShipment<br/><br/>
+        /// </summary>
+        /// <remarks>Mapped on table field: "FedExShipment"."PayorPostalCode"<br/>
+        /// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 10<br/>
+        /// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+        public System.String PayorPostalCode { get; }
+        /// <summary> The ShipEngineLabelId property of the Entity FedExShipment<br/><br/>
+        /// </summary>
+        /// <remarks>Mapped on table field: "FedExShipment"."ShipEngineLabelId"<br/>
+        /// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 50<br/>
+        /// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+        public System.String ShipEngineLabelId { get; }
         
         public IShipmentEntity Shipment { get; }
         

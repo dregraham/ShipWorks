@@ -290,8 +290,7 @@ namespace ShipWorks.Shipping.Editing
             // Load residential stuff only if necessary
             if (anyNeedResidential)
             {
-                bool anyFedex = shipments.Any(s => s.ShipmentType == (int) ShipmentTypeCode.FedEx);
-                LoadResidentialDeterminationOptions(anyFedex);
+                EnumHelper.BindComboBox<ResidentialDeterminationType>(residentialDetermination);
             }
         }
 
@@ -495,19 +494,6 @@ namespace ShipWorks.Shipping.Editing
         }
 
         /// <summary>
-        /// Load the options for selecting residential determination based on if any are fedex.  For now only fedex offers residential\commercial
-        /// address lookup.
-        /// </summary>
-        private void LoadResidentialDeterminationOptions(bool anyFedEx)
-        {
-            EnumHelper.BindComboBox<ResidentialDeterminationType>
-                (
-                    residentialDetermination,
-                    t => anyFedEx || t != ResidentialDeterminationType.FedExAddressLookup
-                );
-        }
-
-        /// <summary>
         /// Sometimes the weight can change through other means, like through the customs editor.  This should be overriden by derived controls to update the
         /// displayed weight.
         /// </summary>
@@ -547,11 +533,7 @@ namespace ShipWorks.Shipping.Editing
 
                     if (type != null)
                     {
-                        // Only fedex can use fedex address lookup
-                        if (type != ResidentialDeterminationType.FedExAddressLookup || shipment.ShipmentType == (int) ShipmentTypeCode.FedEx)
-                        {
-                            shipment.ResidentialDetermination = (int) type;
-                        }
+                        shipment.ResidentialDetermination = (int) type;
                     }
                 }
             }

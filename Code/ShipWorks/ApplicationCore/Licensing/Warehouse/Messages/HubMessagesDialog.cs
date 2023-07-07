@@ -20,5 +20,17 @@ namespace ShipWorks.ApplicationCore.Licensing.Warehouse.Messages
         {
             this.messageControl.SetMessages(messages);
         }
+
+        /// <summary>
+        /// Prevent closing through any means until the user has acknowledged the messages
+        /// </summary>
+        protected override void OnFormClosing(FormClosingEventArgs e)
+        {
+            base.OnFormClosing(e);
+            if (this.messageControl.RequiresAcknowledgement && !this.messageControl.IsAcknowledged)
+            {
+                e.Cancel = true;
+            }
+        }
     }
 }
