@@ -456,8 +456,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             this.deliveredDutyPaid.Name = "deliveredDutyPaid";
             this.deliveredDutyPaid.Size = new System.Drawing.Size(437, 17);
             this.deliveredDutyPaid.TabIndex = 22;
-            this.deliveredDutyPaid.Text = "Indicates that the shipper is paying the international delivery duties for this s" +
-    "hipment.";
+            this.deliveredDutyPaid.Text = "Delivered Duties Paid";
             this.deliveredDutyPaid.UseVisualStyleBackColor = true;
             // 
             // labelDeliveredDutyPaid
@@ -468,7 +467,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             this.labelDeliveredDutyPaid.Name = "labelDeliveredDutyPaid";
             this.labelDeliveredDutyPaid.Size = new System.Drawing.Size(105, 13);
             this.labelDeliveredDutyPaid.TabIndex = 23;
-            this.labelDeliveredDutyPaid.Text = "Delivered Duty Paid:";
+            this.labelDeliveredDutyPaid.Text = "DDP:";
             // 
             // payorTransport
             // 

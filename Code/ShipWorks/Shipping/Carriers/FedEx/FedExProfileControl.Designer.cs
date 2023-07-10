@@ -29,12 +29,12 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            ShipWorks.Templates.Tokens.CommonTokenSuggestionsFactory commonTokenSuggestionsFactory7 = new ShipWorks.Templates.Tokens.CommonTokenSuggestionsFactory();
-            ShipWorks.Templates.Tokens.CommonTokenSuggestionsFactory commonTokenSuggestionsFactory8 = new ShipWorks.Templates.Tokens.CommonTokenSuggestionsFactory();
-            ShipWorks.Templates.Tokens.CommonTokenSuggestionsFactory commonTokenSuggestionsFactory9 = new ShipWorks.Templates.Tokens.CommonTokenSuggestionsFactory();
-            ShipWorks.Templates.Tokens.CommonTokenSuggestionsFactory commonTokenSuggestionsFactory10 = new ShipWorks.Templates.Tokens.CommonTokenSuggestionsFactory();
-            ShipWorks.Templates.Tokens.CommonTokenSuggestionsFactory commonTokenSuggestionsFactory11 = new ShipWorks.Templates.Tokens.CommonTokenSuggestionsFactory();
-            ShipWorks.Templates.Tokens.CommonTokenSuggestionsFactory commonTokenSuggestionsFactory12 = new ShipWorks.Templates.Tokens.CommonTokenSuggestionsFactory();
+            ShipWorks.Templates.Tokens.CommonTokenSuggestionsFactory commonTokenSuggestionsFactory1 = new ShipWorks.Templates.Tokens.CommonTokenSuggestionsFactory();
+            ShipWorks.Templates.Tokens.CommonTokenSuggestionsFactory commonTokenSuggestionsFactory2 = new ShipWorks.Templates.Tokens.CommonTokenSuggestionsFactory();
+            ShipWorks.Templates.Tokens.CommonTokenSuggestionsFactory commonTokenSuggestionsFactory3 = new ShipWorks.Templates.Tokens.CommonTokenSuggestionsFactory();
+            ShipWorks.Templates.Tokens.CommonTokenSuggestionsFactory commonTokenSuggestionsFactory4 = new ShipWorks.Templates.Tokens.CommonTokenSuggestionsFactory();
+            ShipWorks.Templates.Tokens.CommonTokenSuggestionsFactory commonTokenSuggestionsFactory5 = new ShipWorks.Templates.Tokens.CommonTokenSuggestionsFactory();
+            ShipWorks.Templates.Tokens.CommonTokenSuggestionsFactory commonTokenSuggestionsFactory6 = new ShipWorks.Templates.Tokens.CommonTokenSuggestionsFactory();
             this.groupBoxFrom = new System.Windows.Forms.GroupBox();
             this.labelSenderResidential = new System.Windows.Forms.Label();
             this.senderResidentialCombo = new ShipWorks.UI.Controls.MultiValueComboBox();
@@ -657,7 +657,7 @@
             this.referenceCustomer.Name = "referenceCustomer";
             this.referenceCustomer.Size = new System.Drawing.Size(222, 21);
             this.referenceCustomer.TabIndex = 3;
-            this.referenceCustomer.TokenSuggestionFactory = commonTokenSuggestionsFactory7;
+            this.referenceCustomer.TokenSuggestionFactory = commonTokenSuggestionsFactory1;
             // 
             // labelReference
             // 
@@ -897,7 +897,7 @@
             this.smartManifestID.Name = "smartManifestID";
             this.smartManifestID.Size = new System.Drawing.Size(222, 21);
             this.smartManifestID.TabIndex = 9;
-            this.smartManifestID.TokenSuggestionFactory = commonTokenSuggestionsFactory8;
+            this.smartManifestID.TokenSuggestionFactory = commonTokenSuggestionsFactory2;
             // 
             // groupEmail
             // 
@@ -1408,7 +1408,7 @@
             this.referenceFIMS.Name = "referenceFIMS";
             this.referenceFIMS.Size = new System.Drawing.Size(222, 21);
             this.referenceFIMS.TabIndex = 1;
-            this.referenceFIMS.TokenSuggestionFactory = commonTokenSuggestionsFactory9;
+            this.referenceFIMS.TokenSuggestionFactory = commonTokenSuggestionsFactory3;
             // 
             // referenceFimsState
             // 
@@ -1877,7 +1877,7 @@
             this.referenceShipmentIntegrity.Name = "referenceShipmentIntegrity";
             this.referenceShipmentIntegrity.Size = new System.Drawing.Size(222, 21);
             this.referenceShipmentIntegrity.TabIndex = 9;
-            this.referenceShipmentIntegrity.TokenSuggestionFactory = commonTokenSuggestionsFactory10;
+            this.referenceShipmentIntegrity.TokenSuggestionFactory = commonTokenSuggestionsFactory4;
             // 
             // labelShipmentIntegrity
             // 
@@ -1921,7 +1921,7 @@
             this.referencePO.Name = "referencePO";
             this.referencePO.Size = new System.Drawing.Size(222, 21);
             this.referencePO.TabIndex = 7;
-            this.referencePO.TokenSuggestionFactory = commonTokenSuggestionsFactory11;
+            this.referencePO.TokenSuggestionFactory = commonTokenSuggestionsFactory5;
             // 
             // labelPO
             // 
@@ -1953,7 +1953,7 @@
             this.referenceInvoice.Name = "referenceInvoice";
             this.referenceInvoice.Size = new System.Drawing.Size(222, 21);
             this.referenceInvoice.TabIndex = 5;
-            this.referenceInvoice.TokenSuggestionFactory = commonTokenSuggestionsFactory12;
+            this.referenceInvoice.TokenSuggestionFactory = commonTokenSuggestionsFactory6;
             // 
             // labelInvoice
             // 
@@ -2007,21 +2007,20 @@
             // 
             this.labelDeliveredDutyPaid.AutoSize = true;
             this.labelDeliveredDutyPaid.BackColor = System.Drawing.Color.Transparent;
-            this.labelDeliveredDutyPaid.Location = new System.Drawing.Point(43, 130);
+            this.labelDeliveredDutyPaid.Location = new System.Drawing.Point(122, 130);
             this.labelDeliveredDutyPaid.Name = "labelDeliveredDutyPaid";
-            this.labelDeliveredDutyPaid.Size = new System.Drawing.Size(105, 13);
+            this.labelDeliveredDutyPaid.Size = new System.Drawing.Size(31, 13);
             this.labelDeliveredDutyPaid.TabIndex = 114;
-            this.labelDeliveredDutyPaid.Text = "Delivered Duty Paid:";
+            this.labelDeliveredDutyPaid.Text = "DDP:";
             // 
             // deliveredDutyPaid
             // 
             this.deliveredDutyPaid.AutoSize = true;
             this.deliveredDutyPaid.Location = new System.Drawing.Point(160, 129);
             this.deliveredDutyPaid.Name = "deliveredDutyPaid";
-            this.deliveredDutyPaid.Size = new System.Drawing.Size(437, 17);
+            this.deliveredDutyPaid.Size = new System.Drawing.Size(127, 17);
             this.deliveredDutyPaid.TabIndex = 113;
-            this.deliveredDutyPaid.Text = "Indicates that the shipper is paying the international delivery duties for this s" +
-    "hipment.";
+            this.deliveredDutyPaid.Text = "Delivered Duties Paid";
             this.deliveredDutyPaid.UseVisualStyleBackColor = true;
             // 
             // deliveredDutyPaidState
