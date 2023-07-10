@@ -15,6 +15,7 @@ using ShipWorks.Data;
 using ShipWorks.Data.Caching;
 using System.Threading.Tasks;
 using ShipWorks.Core.Common.Threading;
+using System.Diagnostics;
 
 namespace ShipWorks.ApplicationCore.Interaction
 {
@@ -22,6 +23,9 @@ namespace ShipWorks.ApplicationCore.Interaction
     /// UserControl that holds an instance of IDockingPanelContent, for use on the MainForm and updating docking content
     /// </summary>
     [ToolboxItem(false)]
+#if DEBUG
+    [DebuggerDisplay("{"+nameof(DebuggerDisplay)+"} panel")]
+#endif
     public partial class DockingPanelContentHolder : UserControl
     {
         IDockingPanelContent content;
@@ -70,6 +74,10 @@ namespace ShipWorks.ApplicationCore.Interaction
             this.content = content;
         }
 
+#if DEBUG
+        private string DebuggerDisplay => (this.content as Control)?.Name;
+#endif
+
         /// <summary>
         /// The message to display in the panel
         /// </summary>
@@ -100,45 +108,31 @@ namespace ShipWorks.ApplicationCore.Interaction
         /// </summary>
         public Task UpdateContent(FilterTarget activeTarget, IGridSelection selection)
         {
-            bool showMessage = false;
+            string message = null;
 
             // If it doesn't support multi-select, pass no keys
             if (!content.SupportedTargets.Contains(activeTarget))
             {
-                Message = string.Format("No {0} are selected.", FormatTargetList(content.SupportedTargets));
-                showMessage = true;
-
-                selection = new StaticGridSelection();
+                message = $"No {FormatTargetList(content.SupportedTargets)} are selected.";
             }
-
-            else
+            else if (selection.Count == 0)
             {
-                if (selection.Count == 0)
-                {
-                    Message = string.Format("No {0} are selected.", EnumHelper.GetDescription(activeTarget).ToLowerInvariant());
-                    showMessage = true;
-                }
-
-                if (selection.Count > 1 && !content.SupportsMultiSelect)
-                {
-                    Message = string.Format("Multiple {0} are selected.", EnumHelper.GetDescription(activeTarget).ToLowerInvariant());
-                    showMessage = true;
-
-                    selection = new StaticGridSelection();
-                }
-
-                if (selection.Count > PagedEntityGrid.MaxMultiSelectCount)
-                {
-                    Message = string.Format("Only {0} {1} can be displayed at a time.", PagedEntityGrid.MaxMultiSelectCount, EnumHelper.GetDescription(activeTarget).ToLowerInvariant());
-                    showMessage = true;
-
-                    selection = new StaticGridSelection();
-                }
+                message = $"No {EnumHelper.GetDescription(activeTarget).ToLowerInvariant()} are selected.";
             }
+            else if (selection.Count > 1 && !content.SupportsMultiSelect)
+            {
+                message = $"Multiple {EnumHelper.GetDescription(activeTarget).ToLowerInvariant()} are selected.";
+            }
+            else if (selection.Count > PagedEntityGrid.MaxMultiSelectCount)
+            {
+                message = $"Only {PagedEntityGrid.MaxMultiSelectCount} {EnumHelper.GetDescription(activeTarget).ToLowerInvariant()} can be displayed at a time.";
+            }
+
+            Message = message;
 
             // Update the visibility of the control depending on if we want the message to show through.
-            ((Control) content).Visible = !showMessage;
-            
+            ((Control) content).Visible = message == null;
+
             EntityTypeChangeVersion changeVersion = DataProvider.GetEntityTypeChangeVersion(content.EntityType);
 
             Task task;
@@ -176,30 +170,20 @@ namespace ShipWorks.ApplicationCore.Interaction
         /// </summary>
         private bool HasSelectionChanged(IGridSelection selection)
         {
-            bool changed;
-
             // If nothing about the selection has changed, then we know it hasn't changed
             if (selection.Version == lastSelectionVersion)
             {
-                changed = false;
+                return false;
             }
+
             // If the count changed, we know for sure it has changed
-            else if (selection.Count != lastSelectedKeys.Count)
+            if (selection.Count == lastSelectedKeys.Count && selection.OrderedKeys.SequenceEqual(lastSelectedKeys))
             {
-                changed = true;
-            }
-            else
-            {
-                // See if the selection is truly actually the same
-                changed = !selection.OrderedKeys.SequenceEqual(lastSelectedKeys);
+                return false;
             }
 
-            if (changed)
-            {
-                lastSelectedKeys = selection.OrderedKeys.ToList();
-            }
-
-            return changed;
+            lastSelectedKeys = selection.OrderedKeys.ToList();
+            return true;
         }
 
         /// <summary>

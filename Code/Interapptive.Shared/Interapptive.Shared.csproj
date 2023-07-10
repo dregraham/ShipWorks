@@ -435,6 +435,7 @@
     <Compile Include="Utility\DateTimeExtensions.cs" />
     <Compile Include="Utility\DecimalExtensions.cs" />
     <Compile Include="Utility\DetailsAttribute.cs" />
+    <Compile Include="Utility\EnumExtension.cs" />
     <Compile Include="Utility\EnumResult.cs" />
     <Compile Include="Utility\DoubleExtensions.cs" />
     <Compile Include="Utility\EnumResultExtensions.cs" />
@@ -583,6 +584,7 @@
     <Compile Include="Utility\GenericResult.cs" />
     <Compile Include="Utility\GuidHelper.cs" />
     <Compile Include="Utility\HiddenAttribute.cs" />
+    <Compile Include="Utility\HiddenForAttribute.cs" />
     <Compile Include="Utility\HtmlEntityUtility.cs" />
     <Compile Include="Utility\IAssembly.cs" />
     <Compile Include="Utility\IClrHelper.cs" />

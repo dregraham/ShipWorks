@@ -2,10 +2,12 @@
 using System.Diagnostics.CodeAnalysis;
 using Interapptive.Shared.Messaging.Logging;
 using Interapptive.Shared.StackTraceHelper;
+using Interapptive.Shared.Utility;
 using Interapptive.Shared.Win32;
 using Newtonsoft.Json;
 using SD.Tools.OrmProfiler.Interceptor;
 using ShipWorks.ApplicationCore;
+using ShipWorks.AutoInstall;
 using ShipWorks.Data.JsonConverters;
 
 namespace ShipWorks.Startup
@@ -21,6 +23,7 @@ namespace ShipWorks.Startup
             Justification = "The main program method cannot be async")]
         static void Main(string[] args)
         {
+            ImageResourceAttribute.Initialize(typeof(AutoInstaller).Assembly);//can be any class from ShipWorks.Core assembly
             // The default value of KeepTextBoxDisplaySynchronizedWithTextProperty depends on which version of dotnet the app targets
             // 4.0 defaults to false while 4.5 defaults to true, ShipWorks was built assuming the value is false so we set it here.
             // see https://docs.microsoft.com/en-us/dotnet/api/system.windows.frameworkcompatibilitypreferences.keeptextboxdisplaysynchronizedwithtextproperty?view=netframework-4.5

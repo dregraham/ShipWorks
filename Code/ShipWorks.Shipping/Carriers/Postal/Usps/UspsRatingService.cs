@@ -175,9 +175,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         private static Task<RateGroup> CreateEmptyExpress1RatesTask()
         {
             // Create a dummy task that will return an empty result
-            TaskCompletionSource<RateGroup> completionSource = new TaskCompletionSource<RateGroup>();
-            completionSource.SetResult(new RateGroup(Enumerable.Empty<RateResult>()));
-            return completionSource.Task;
+            return Task.FromResult(new RateGroup(Enumerable.Empty<RateResult>()));
         }
 
         /// <summary>

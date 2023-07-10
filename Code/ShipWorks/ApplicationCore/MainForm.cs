@@ -2305,7 +2305,7 @@ namespace ShipWorks
 
             UpdateStatusBar();
             UpdateCommandState();
-            UpdatePanelState();
+            UpdatePanelsState();
 
             ribbonSecurityProvider.UpdateSecurityUI();
         }
@@ -2432,33 +2432,25 @@ namespace ShipWorks
         /// <summary>
         /// Update the state of the panels based on the current selection
         /// </summary>
-        private void UpdatePanelState()
+        private void UpdatePanelsState()
         {
-            IEnumerable<DockControl> controls = Panels.Where(d => d.Controls.Count == 1).ToList();
-            controls.Select(x => UpdatePanelState(x)).ToList();
-        }
+            var controls = Panels
+                .Where(dockControl => dockControl.IsOpen && dockControl.Controls.Count == 1)
+                .Select(d => d.Controls[0] as DockingPanelContentHolder)
+                .Where(h => h != null).ToList();
 
-        /// <summary>
-        /// Update the state of the panel content for the given dock control, only if it contains a panel, and only if it's open.
-        /// </summary>
-        private Task UpdatePanelState(DockControl dockControl)
-        {
-            // This function can get called as panels are activating.  Activation can be changing as we are closing them during logoff,
-            // so we have to make sure we're logged on or updating would crash.
-            if (!UserSession.IsLoggedOn)
+            foreach (var dockingPanelContentHolder in controls)
             {
-                return TaskUtility.CompletedTask;
-            }
-
-            DockingPanelContentHolder holder = dockControl.Controls[0] as DockingPanelContentHolder;
-            if (holder != null && dockControl.IsOpen)
-            {
+                // This function can get called as panels are activating.  Activation can be changing as we are closing them during logoff,
+                // so we have to make sure we're logged on or updating would crash.
+                if (!UserSession.IsLoggedOn)
+                {
+                    return;
+                }
                 // This happens to often to use GetOrderedSelectdKeys. If ordering becomes important, we'll need to improve
                 // the performance of that somehow for massive selections where there is virtual selection.
-                return holder.UpdateContent(gridControl.ActiveFilterTarget, gridControl.Selection);
+                _ = dockingPanelContentHolder.UpdateContent(gridControl.ActiveFilterTarget, gridControl.Selection);
             }
-
-            return TaskUtility.CompletedTask;
         }
 
         /// <summary>
@@ -3367,7 +3359,7 @@ namespace ShipWorks
                 return;
             }
 
-            UpdatePanelState();
+            UpdatePanelsState();
         }
 
         /// <summary>
@@ -4422,7 +4414,7 @@ namespace ShipWorks
             EnsureBatchMode();
 
             // If a new panel was shown, then we may need to update its display state
-            UpdatePanelState();
+            UpdatePanelsState();
         }
 
         /// <summary>
@@ -4435,10 +4427,10 @@ namespace ShipWorks
             foreach (DockControl dockControl in Panels)
             {
                 // See if this is one that needs wrapped
-                if (dockControl.Controls.Count == 1 && dockControl.Controls[0] is IDockingPanelContent)
+                if (dockControl.Controls.Count == 1 && dockControl.Controls[0] is IDockingPanelContent content)
                 {
                     DockingPanelContentHolder holder = new DockingPanelContentHolder();
-                    holder.Initialize((IDockingPanelContent) dockControl.Controls[0]);
+                    holder.Initialize(content);
 
                     holder.Dock = DockStyle.Fill;
                     dockControl.Controls.Add(holder);
@@ -4797,7 +4789,7 @@ namespace ShipWorks
 
                     if (anyClosed)
                     {
-                        MessageHelper.ShowInformation(this, "The close has been successfully processed.\n\nFedEx Ground® Economy Close does not generate any reports to be printed.  No further action is required.");
+                        MessageHelper.ShowInformation(this, "The close has been successfully processed.\n\nFedEx GroundÂ® Economy Close does not generate any reports to be printed.  No further action is required.");
                     }
                     else
                     {

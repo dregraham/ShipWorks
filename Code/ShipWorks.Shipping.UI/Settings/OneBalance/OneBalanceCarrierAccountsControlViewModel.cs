@@ -109,7 +109,7 @@ namespace ShipWorks.Shipping.UI.Settings.OneBalance
             {
                 try
                 {
-                    var response = (AccountInfoV54) webClient.GetAccountInfo(result.Value);
+                    var response = (AccountInfoV65) webClient.GetAccountInfo(result.Value);
                     return response.Capabilities.CanPrintDX && (response.ConfiguredCarriers?.Any(c=>c.Carrier == Carrier.DHLExpress) ?? false);
                 }
                 catch (Exception)
