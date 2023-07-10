@@ -172,7 +172,6 @@ namespace ShipWorks.Shipping.Carriers.FedEx
                 };
             }
 
-            
             options.ThirdPartyConsignee = shipment.FedEx.ThirdPartyConsignee;
             options.NonMachinable = shipment.FedEx.NonStandardContainer;
 
