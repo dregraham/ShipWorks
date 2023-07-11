@@ -18,6 +18,7 @@ using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Messaging.Messages;
 using ShipWorks.Shipping.Carriers.FedEx.Api.Enums;
 using ShipWorks.Shipping.Carriers.FedEx.Enums;
+using ShipWorks.Shipping.Carriers.FedEx.WebServices.Ship;
 using ShipWorks.Shipping.Editing;
 using ShipWorks.Shipping.Editing.Rating;
 using ShipWorks.Shipping.Settings.Origin;
@@ -199,6 +200,8 @@ namespace ShipWorks.Shipping.Carriers.FedEx
 
             bool anySaturday = false;
 
+            bool isInternational = false;
+
             // Determine if all shipments will have the same destination service types
             foreach (ShipmentEntity shipment in LoadedShipments)
             {
@@ -209,6 +212,12 @@ namespace ShipWorks.Shipping.Carriers.FedEx
                 anyInternational = !ShipmentTypeManager.GetType(shipment).IsDomestic(overriddenShipment);
 
                 FedExServiceType thisService = (FedExServiceType) shipment.FedEx.Service;
+
+                isInternational = FedExUtility.IsInternationalService(thisService);
+
+                deliveredDutyPaid.Visible = isInternational;
+                labelDeliveredDutyPaid.Visible = isInternational;
+
                 if (FedExUtility.IsGroundService(thisService))
                 {
                     anyGround = true;
@@ -252,6 +261,8 @@ namespace ShipWorks.Shipping.Carriers.FedEx
 
             UpdatePackagingChoices(allServicesSame && serviceType.HasValue ? serviceType.Value : (FedExServiceType?) null);
             UpdatePayorChoices(anyGround, anyInternational);
+
+            
 
             // Make it visible if any of them have Saturday dates
             saturdayDelivery.Visible = anySaturday;
@@ -779,6 +790,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             payorTransport.SelectedIndex = (oldIndex >= 0 && oldIndex < payorTransport.Items.Count) ? oldIndex : 0;
 
             updatingPayorChoices = false;
+            
         }
 
         /// <summary>
