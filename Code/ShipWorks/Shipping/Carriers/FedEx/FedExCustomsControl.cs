@@ -39,7 +39,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         public override void Initialize()
         {
             base.Initialize();
-            this.RemoveWeight();
+            //this.RemoveWeight();
 
             EnumHelper.BindComboBox<FedExPhysicalPackagingType>(admissibilityPackaging);
             EnumHelper.BindComboBox<FedExTermsOfSale>(ciTermsOfSale);
