@@ -215,9 +215,8 @@ namespace ShipWorks.Shipping.Carriers.FedEx
 
                 isInternational = FedExUtility.IsInternationalService(thisService);
 
-                deliveredDutyPaid.Visible = isInternational;
-                labelDeliveredDutyPaid.Visible = isInternational;
-
+                panelDeliveredDutiesPaid.Visible = isInternational;
+                
                 if (FedExUtility.IsGroundService(thisService))
                 {
                     anyGround = true;
@@ -1041,7 +1040,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
                 bottom = dutiesAccount.Visible ? panelPayorDuties.Bottom : panelPayorDuties.Top + dutiesAccount.Top;
             }
 
-            sectionBilling.Height = bottom + (sectionBilling.Height - sectionBilling.ContentPanel.Height) + 4;
+            sectionBilling.Height = bottom + (sectionBilling.Height - sectionBilling.ContentPanel.Height) + 34;
         }
 
         /// <summary>
