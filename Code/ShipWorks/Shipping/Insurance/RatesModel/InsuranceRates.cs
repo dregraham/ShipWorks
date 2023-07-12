@@ -1,7 +1,9 @@
 ﻿using System;
+using System.Reflection;
 
 namespace ShipWorks.Shipping.Insurance.RatesModel
 {
+	[Obfuscation(Exclude = true, ApplyToMembers = true)]
 	public class InsuranceRates
 	{
 		public ShipworksRates ShipworksRates { get; set; } = new ShipworksRates();
