@@ -1040,7 +1040,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
                 bottom = dutiesAccount.Visible ? panelPayorDuties.Bottom : panelPayorDuties.Top + dutiesAccount.Top;
             }
 
-            sectionBilling.Height = bottom + (sectionBilling.Height - sectionBilling.ContentPanel.Height) + 34;
+            sectionBilling.Height = bottom + (sectionBilling.Height - sectionBilling.ContentPanel.Height) + panelDeliveredDutiesPaid.Height;
         }
 
         /// <summary>
