@@ -10,6 +10,7 @@ namespace ShipWorks.Shipping.Insurance.RatesModel
 		public CarrierRates CarrierRates { get; set; } = new CarrierRates();
 	}
 
+	[Obfuscation(Exclude = true, ApplyToMembers = true)]
 	public class ShipworksRates
 	{
 		public decimal FedExUpsDomesticCost { get; set; } = 0.55m;
@@ -21,6 +22,7 @@ namespace ShipWorks.Shipping.Insurance.RatesModel
 		public decimal OtherInternationalCost { get; set; } = 0.55m;
 	}
 
+	[Obfuscation(Exclude = true, ApplyToMembers = true)]
 	public class CarrierRates
 	{
 		public decimal FedExUpsMinimumCost { get; set; } = 2.25m;
@@ -30,6 +32,7 @@ namespace ShipWorks.Shipping.Insurance.RatesModel
 		public Usps Usps { get; set; } = new Usps();
 	}
 
+	[Obfuscation(Exclude = true, ApplyToMembers = true)]
 	public class Usps
 	{
 		public decimal CostFor50 { get; set; } = 1.8m;

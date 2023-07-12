@@ -80,8 +80,12 @@ namespace ShipWorks.Shipping.Insurance
 
 		public static void SetInsuranceRates(InsuranceRates insuranceRates, bool areDefault = false)
 		{
+			log.Info($"Setting insurance rates");
 			InsuranceRates = insuranceRates;
 			areRatesDefault = areDefault;
+			log.Info($"insurance FedExUpsMinimumCost Value from parameters: {insuranceRates.CarrierRates.FedExUpsMinimumCost}");
+			log.Info($"insurance FedExUpsMinimumCost Value from class: {InsuranceRates.CarrierRates.FedExUpsMinimumCost}");
+			log.Info($"Setting insurance rates finished");
 		}
 
 		/// <summary>
@@ -229,7 +233,9 @@ namespace ShipWorks.Shipping.Insurance
 
 					if (result.Success && (!result.Value?.Content?.IsNullOrWhiteSpace() ?? false))
 					{
+						log.Info($"Insurance response success, parsing it now");
 						var insuranceRates = PlatformHelper.JsonConvertToDto<InsuranceRates>(result.Value.Content);
+						log.Info($"Insurance parsing complete");
 						SetInsuranceRates(insuranceRates);
 					}
 					else
@@ -287,6 +293,7 @@ namespace ShipWorks.Shipping.Insurance
 			// Make sure there aren't new rates we don't know about
 			if (shipWorksRateCalculateVersion == shipWorksRateActualVersion)
 			{
+				log.Info($"insurance FedExUpsMinimumCost Value from class: {InsuranceRates.CarrierRates.FedExUpsMinimumCost}");
 				FillInShipWorksCost(cost, shipment, declaredValue);
 
 				if (carrierRateCalculationVersion == carrierRateActualVersion)
