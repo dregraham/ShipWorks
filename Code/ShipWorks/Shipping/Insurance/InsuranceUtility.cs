@@ -65,7 +65,7 @@ namespace ShipWorks.Shipping.Insurance
 		public static string OnlineExcludedCountriesFile =>
 			"https://www.interapptive.com/insurance/insuranceExcludedCountries.xml";
 
-		private static InsuranceRates InsuranceRates { get; set; } = new InsuranceRates();
+		private static InsuranceRates InsuranceRates { get; set; }
 
 		/// <summary>
 		/// Configure anything about our insurance display and interaction based on online data about rate tables, countries, etc.
@@ -235,6 +235,7 @@ namespace ShipWorks.Shipping.Insurance
 					else
 					{
 						log.Error("Could not retrieve insurance rates correctly. Using default values instead.");
+						SetInsuranceRates(new InsuranceRates(), true);
 					}
 				}
 
