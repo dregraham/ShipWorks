@@ -474,6 +474,9 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor.OnlineUpdating
                 case PostalServiceType.PriorityMail:
                     return "PRIORITY";
 
+                case PostalServiceType.GroundAdvantage:
+                    return "GROUNDADVANTAGE";
+
                 // CA doesn't have a default code for Critical right now (10-21-2011) so fall back
                 case PostalServiceType.CriticalMail:
                     return "PRIORITY";
