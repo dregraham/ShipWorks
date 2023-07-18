@@ -11,6 +11,7 @@ using ShipWorks.Shipping.Insurance;
 using ShipWorks.Shipping.Services;
 using ShipWorks.Shipping.ShipEngine;
 using ShipWorks.Shipping.ShipEngine.DTOs;
+using ShipWorks.Stores.Platforms.Amazon.WebServices.Associates;
 using static ShipWorks.Shipping.ShipEngine.DTOs.MoneyDTO;
 
 namespace ShipWorks.Shipping.Carriers.FedEx
@@ -73,6 +74,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             if (fedExServiceType == FedExServiceType.SmartPost)
             {
                 labelRequest.Shipment.ServiceCode = EnumHelper.GetApiValue((FedExSmartPostIndicia) shipment.FedEx.SmartPostIndicia);
+            }
+
+            if (labelRequest.Shipment.Packages.Any(p => p.InsuredValue != null && p.InsuredValue.Amount > 0))
+            {
+                labelRequest.Shipment.InsuranceProvider = Shipment.InsuranceProviderEnum.Carrier;
             }
 
             var confirmationType = (FedExSignatureType) shipment.FedEx.Signature;
