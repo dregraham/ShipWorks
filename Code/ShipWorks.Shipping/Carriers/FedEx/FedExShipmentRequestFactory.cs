@@ -11,7 +11,6 @@ using ShipWorks.Shipping.Insurance;
 using ShipWorks.Shipping.Services;
 using ShipWorks.Shipping.ShipEngine;
 using ShipWorks.Shipping.ShipEngine.DTOs;
-using ShipWorks.Stores.Platforms.Amazon.WebServices.Associates;
 using static ShipWorks.Shipping.ShipEngine.DTOs.MoneyDTO;
 
 namespace ShipWorks.Shipping.Carriers.FedEx
