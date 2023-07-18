@@ -73,6 +73,11 @@ namespace ShipWorks.Shipping.ShipEngine
                 }
             };
 
+            if (request.Shipment.Packages.Any(p => p.InsuredValue.Amount > 0))
+            {
+                request.Shipment.InsuranceProvider = Shipment.InsuranceProviderEnum.Carrier;
+            }
+
             if (request.Shipment.Packages.Any() && shipment.ShipmentTypeCode == ShipmentTypeCode.DhlEcommerce)
             {
                 // Yes, set to Reference3 as per DHL
