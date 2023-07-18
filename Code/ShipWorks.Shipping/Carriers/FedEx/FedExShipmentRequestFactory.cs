@@ -75,6 +75,15 @@ namespace ShipWorks.Shipping.Carriers.FedEx
                 labelRequest.Shipment.ServiceCode = EnumHelper.GetApiValue((FedExSmartPostIndicia) shipment.FedEx.SmartPostIndicia);
             }
 
+            if (labelRequest.Shipment.Packages.Any(p => p.InsuredValue != null && p.InsuredValue.Amount > 0))
+            { 
+                labelRequest.Shipment.InsuranceProvider = Shipment.InsuranceProviderEnum.Carrier;
+            }
+            else
+            {
+                labelRequest.Shipment.InsuranceProvider = Shipment.InsuranceProviderEnum.None;
+            }
+
             var confirmationType = (FedExSignatureType) shipment.FedEx.Signature;
             labelRequest.Shipment.Confirmation = FedExUtility.signatureMap[confirmationType];
 
