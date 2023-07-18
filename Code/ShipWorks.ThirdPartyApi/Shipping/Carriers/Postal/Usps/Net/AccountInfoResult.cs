@@ -10,7 +10,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
         /// <summary>
         /// Constructor
         /// </summary>
-        public AccountInfoResult(AccountInfoV54 accountInfo, Address address, string email)
+        public AccountInfoResult(AccountInfoV65 accountInfo, Address address, string email)
         {
             AccountInfo = accountInfo;
             Address = address;
@@ -20,7 +20,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
         /// <summary>
         /// Account information
         /// </summary>
-        public AccountInfoV54 AccountInfo { get; }
+        public AccountInfoV65 AccountInfo { get; }
 
         /// <summary>
         /// Address

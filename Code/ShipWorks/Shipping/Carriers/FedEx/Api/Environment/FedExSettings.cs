@@ -76,7 +76,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Environment
         /// <value>The user credentials password.</value>
         public string UserCredentialsPassword
         {
-            get { return shippingSettings.FedExPassword != null ? SecureText.Decrypt(shippingSettings.FedExPassword, "FedEx") : null; }
+            get { return !string.IsNullOrEmpty(shippingSettings.FedExPassword) ? SecureText.Decrypt(shippingSettings.FedExPassword, "FedEx") : null; }
         }
 
         /// <summary>

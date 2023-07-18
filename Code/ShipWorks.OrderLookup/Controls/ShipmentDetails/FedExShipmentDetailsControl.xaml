@@ -37,7 +37,7 @@
             <ui:FieldLayoutRowDefinition FieldID="{x:Static ns:SectionLayoutFieldIDs.ShipmentDetailsInsurance}" />
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="85" />
+            <ColumnDefinition Width="190" />
             <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
 
@@ -95,8 +95,9 @@
         <TextBlock
             Grid.Row="3"
             Grid.Column="0"
-            Style="{StaticResource FieldLabel}"
-            Text="Signature" />
+            Style="{StaticResource FieldLabel}">
+            FedEx&#x00AE; Delivery Signature Options
+        </TextBlock>
 
         <ComboBox
             Grid.Row="3"

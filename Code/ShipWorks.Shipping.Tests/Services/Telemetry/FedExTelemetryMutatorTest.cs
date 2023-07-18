@@ -436,7 +436,7 @@ namespace ShipWorks.Shipping.Tests.Services.Telemetry
 			trackedDurationEventMock.Verify(x => x.AddProperty("Label.FedEx.SmartPostCustomerManifest", "SmartPostCustomerManifest"));
 			trackedDurationEventMock.Verify(x => x.AddProperty("Label.FedEx.SmartPostEndorsement", "Change Service"));
 			trackedDurationEventMock.Verify(x => x.AddProperty("Label.FedEx.SmartPostHubID", "SmartPostH"));
-			trackedDurationEventMock.Verify(x => x.AddProperty("Label.FedEx.SmartPostIndicia", "FedEx SmartPost® Media"));
+			trackedDurationEventMock.Verify(x => x.AddProperty("Label.FedEx.SmartPostIndicia", "FedEx Ground® Economy Media Mail"));
 			trackedDurationEventMock.Verify(x => x.AddProperty("Label.FedEx.SmartPostUspsApplicationId", "SmartPostU"));
 			trackedDurationEventMock.Verify(x => x.AddProperty("Label.FedEx.ThirdPartyConsignee", "True"));
 			fedExShipment.VerifyGet(x => x.ThirdPartyConsignee, Times.Once);

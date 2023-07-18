@@ -7,6 +7,7 @@ using System.Windows.Forms;
 using Autofac;
 using Interapptive.Shared;
 using Interapptive.Shared.Business;
+using Interapptive.Shared.Business.Geography;
 using Interapptive.Shared.UI;
 using Interapptive.Shared.Utility;
 using ShipWorks.ApplicationCore;
@@ -17,10 +18,12 @@ using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Messaging.Messages;
 using ShipWorks.Shipping.Carriers.FedEx.Api.Enums;
 using ShipWorks.Shipping.Carriers.FedEx.Enums;
+using ShipWorks.Shipping.Carriers.FedEx.WebServices.Ship;
 using ShipWorks.Shipping.Editing;
 using ShipWorks.Shipping.Editing.Rating;
 using ShipWorks.Shipping.Settings.Origin;
 using ShipWorks.UI.Controls;
+using static ShipWorks.Data.Controls.PersonControl;
 
 namespace ShipWorks.Shipping.Carriers.FedEx
 {
@@ -82,15 +85,17 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             EnumHelper.BindComboBox<FedExCodPaymentType>(codPaymentType);
             EnumHelper.BindComboBox<FedExSmartPostIndicia>(smartIndicia);
             EnumHelper.BindComboBox<FedExSmartPostEndorsement>(smartEndorsement);
+            EnumHelper.BindComboBox<FedExPayorType>(payorTransport);
 
-            // Don't give the user the option to have FedEx perform the address look up; the thought it that the shipper will know
+            // Don't give the user the option to perform the address look up; the thought it that the shipper will know
             // what type of address they are shipping from, and it saves delays associated with a service call
-            EnumHelper.BindComboBox<ResidentialDeterminationType>(fromAddressType, t => t != ResidentialDeterminationType.FedExAddressLookup && t != ResidentialDeterminationType.FromAddressValidation);
+            EnumHelper.BindComboBox<ResidentialDeterminationType>(fromAddressType, t => t != ResidentialDeterminationType.FromAddressValidation);
 
             packageControl.Initialize();
 
 
             cutoffDateDisplay.ShipmentType = ShipmentTypeCode;
+            EnsurePayorCountryInitialized();
         }
 
         /// <summary>
@@ -196,6 +201,8 @@ namespace ShipWorks.Shipping.Carriers.FedEx
 
             bool anySaturday = false;
 
+            bool isInternational = false;
+
             // Determine if all shipments will have the same destination service types
             foreach (ShipmentEntity shipment in LoadedShipments)
             {
@@ -206,6 +213,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx
                 anyInternational = !ShipmentTypeManager.GetType(shipment).IsDomestic(overriddenShipment);
 
                 FedExServiceType thisService = (FedExServiceType) shipment.FedEx.Service;
+
+                isInternational = FedExUtility.IsInternationalService(thisService);
+
+                panelDeliveredDutiesPaid.Visible = isInternational;
+                
                 if (FedExUtility.IsGroundService(thisService))
                 {
                     anyGround = true;
@@ -250,6 +262,8 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             UpdatePackagingChoices(allServicesSame && serviceType.HasValue ? serviceType.Value : (FedExServiceType?) null);
             UpdatePayorChoices(anyGround, anyInternational);
 
+            
+
             // Make it visible if any of them have Saturday dates
             saturdayDelivery.Visible = anySaturday;
 
@@ -289,6 +303,8 @@ namespace ShipWorks.Shipping.Carriers.FedEx
                     payorTransport.ApplyMultiValue((FedExPayorType) shipment.FedEx.PayorTransportType);
                     transportAccount.ApplyMultiText(shipment.FedEx.PayorTransportAccount);
                     payorTransportName.ApplyMultiText(shipment.FedEx.PayorTransportName);
+                    payorCountry.ApplyMultiValue(Geography.GetCountryName(shipment.FedEx.PayorCountryCode ?? string.Empty));
+                    payorPostalCode.ApplyMultiText(shipment.FedEx.PayorPostalCode ?? string.Empty);
 
                     payorDuties.ApplyMultiValue((FedExPayorType) shipment.FedEx.PayorDutiesType);
                     dutiesAccount.ApplyMultiText(shipment.FedEx.PayorDutiesAccount);
@@ -311,6 +327,8 @@ namespace ShipWorks.Shipping.Carriers.FedEx
                     smartEndorsement.ApplyMultiValue((FedExSmartPostEndorsement) shipment.FedEx.SmartPostEndorsement);
                     smartConfirmation.ApplyMultiCheck(shipment.FedEx.SmartPostConfirmation);
                     smartManifestID.ApplyMultiText(shipment.FedEx.SmartPostCustomerManifest);
+
+                    deliveredDutyPaid.ApplyMultiCheck(shipment.FedEx.DeliveredDutyPaid);
 
                     LoadEmailNotificationSettings(shipment.FedEx);
                 }
@@ -471,6 +489,25 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         }
 
         /// <summary>
+        /// Ensure the control gets initialized one time
+        /// </summary>
+        private void EnsurePayorCountryInitialized()
+        {
+            if (payorCountry.DataSource != null)
+            {
+                return;
+            }
+
+            // Country drop down
+            payorCountry.DisplayMember = "Name";
+            payorCountry.ValueMember = "Name";
+            payorCountry.DataSource = new CountryBindingSource();
+
+            // Default to use
+            payorCountry.SelectedValue = Geography.GetCountryName("US");
+        }
+
+        /// <summary>
         /// Save the values in the control to the specified entities
         /// </summary>
         [NDependIgnoreLongMethod]
@@ -500,7 +537,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
 
                 fedexAccount.ReadMultiValue(v => shipment.FedEx.FedExAccountID = (long) v);
                 service.ReadMultiValue(v => { if (v != null) shipment.FedEx.Service = (int) v; });
-                dropoffType.ReadMultiValue(v => shipment.FedEx.DropoffType = (int) v);
+                dropoffType.ReadMultiValue(v => shipment.FedEx.DropoffType = v != null ? (int) v : 0);
                 returnsClearance.ReadMultiCheck(v => shipment.FedEx.ReturnsClearance = v);
                 thirdPartyConsignee.ReadMultiCheck(v => shipment.FedEx.ThirdPartyConsignee = v);
                 shipDate.ReadMultiDate(d => shipment.ShipDate = d.Date.ToUniversalTime());
@@ -517,11 +554,15 @@ namespace ShipWorks.Shipping.Carriers.FedEx
                 payorTransport.ReadMultiValue(v => shipment.FedEx.PayorTransportType = (int) v);
                 transportAccount.ReadMultiText(t => shipment.FedEx.PayorTransportAccount = t);
                 payorTransportName.ReadMultiText(t => shipment.FedEx.PayorTransportName = t);
+                payorCountry.ReadMultiValue(t => shipment.FedEx.PayorCountryCode = Geography.GetCountryCode((string) t));
+                payorPostalCode.ReadMultiText(t => shipment.FedEx.PayorPostalCode = t);
 
-                payorDuties.ReadMultiValue(v => shipment.FedEx.PayorDutiesType = (int) v);
+                payorDuties.ReadMultiValue(v => shipment.FedEx.PayorDutiesType = v != null ? (int) v : 0);
                 dutiesAccount.ReadMultiText(t => shipment.FedEx.PayorDutiesAccount = t);
 
                 saturdayDelivery.ReadMultiCheck(c => shipment.FedEx.SaturdayDelivery = c);
+
+                deliveredDutyPaid.ReadMultiCheck(c => shipment.FedEx.DeliveredDutyPaid = c);
 
                 homeInstructions.ReadMultiText(t => shipment.FedEx.HomeDeliveryInstructions = t);
                 homePremiumService.ReadMultiValue(v => shipment.FedEx.HomeDeliveryType = (int) v);
@@ -684,7 +725,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         {
             if (!service.MultiValued && service.SelectedValue != null)
             {
-                FedExServiceType serviceType = (FedExServiceType) service.SelectedValue;
+                FedExServiceType selectedServiceType = (FedExServiceType) service.SelectedValue;
                 RateResult matchingRate = RateControl.RateGroup.Rates.FirstOrDefault(r =>
                 {
                     if (r.Tag == null || r.ShipmentType != ShipmentTypeCode.FedEx)
@@ -692,7 +733,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx
                         return false;
                     }
 
-                    return ((FedExRateSelection) r.OriginalTag).ServiceType == serviceType;
+                    var serviceType = FedExShipmentType.ConvertToServiceType(r.OriginalTag);
+
+                    return serviceType == selectedServiceType;
                 });
 
                 RateControl.SelectRate(matchingRate);
@@ -740,19 +783,17 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         {
             updatingPayorChoices = true;
 
-            if (anyInternational != null)
-            {
-                // Only can do duties if there are international
-                panelPayorDuties.Visible = anyInternational.Value;
-            }
-
             int oldIndex = payorTransport.SelectedIndex;
 
-            EnumHelper.BindComboBox<FedExPayorType>(payorTransport, t => anyGround || t != FedExPayorType.Collect);
+            if (oldIndex >= 0)
+            {
+                EnumHelper.BindComboBox<FedExPayorType>(payorTransport, t => (anyGround && t != FedExPayorType.Collect) || t != FedExPayorType.Collect);
 
-            payorTransport.SelectedIndex = (oldIndex >= 0 && oldIndex < payorTransport.Items.Count) ? oldIndex : 0;
+                payorTransport.SelectedIndex = (oldIndex >= 0 && oldIndex < payorTransport.Items.Count) ? oldIndex : 0;
+            }
 
             updatingPayorChoices = false;
+            
         }
 
         /// <summary>
@@ -898,9 +939,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         {
             int oldIndex = service.SelectedIndex;
 
-            FedExRateSelection rate = e.Rate.OriginalTag as FedExRateSelection;
+            var serviceType = FedExShipmentType.ConvertToServiceType(e.Rate.OriginalTag);
 
-            service.SelectedValue = rate?.ServiceType;
+            service.SelectedValue = serviceType;
             if (service.SelectedIndex == -1 && oldIndex != -1)
             {
                 service.SelectedIndex = oldIndex;
@@ -924,7 +965,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         private void OnChangePayorTransport(object sender, EventArgs e)
         {
             panelTransportAccount.Visible = payorTransport.MultiValued ||
-                (payorTransport.SelectedValue != null && (FedExPayorType) payorTransport.SelectedValue != FedExPayorType.Sender);
+                                            (payorTransport.SelectedValue != null && (FedExPayorType) payorTransport.SelectedValue != FedExPayorType.Sender);
 
             if (payorTransport.SelectedValue != null && (FedExPayorType) payorTransport.SelectedValue == FedExPayorType.Recipient)
             {
@@ -1003,7 +1044,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
                 bottom = dutiesAccount.Visible ? panelPayorDuties.Bottom : panelPayorDuties.Top + dutiesAccount.Top;
             }
 
-            sectionBilling.Height = bottom + (sectionBilling.Height - sectionBilling.ContentPanel.Height) + 4;
+            sectionBilling.Height = bottom + (sectionBilling.Height - sectionBilling.ContentPanel.Height) + panelDeliveredDutiesPaid.Height;
         }
 
         /// <summary>
@@ -1116,11 +1157,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx
                 "FedEx Date Certain Home Delivery®\n" +
                 "FedEx Evening Home Delivery®\n" +
                 "FedEx Appointment Home Delivery®\n" +
-                "FedEx SmartPost®\n" +
-                "FedEx SmartPost parcel select lightweight\n" +
-                "FedEx SmartPost® Bound Printed Matter\n" +
-                "FedEx SmartPost® Media\n" +
-                "FedEx SmartPost parcel select\n" +
+                "FedEx FedEx Ground® Economy\n" +
+                "FedEx FedEx Ground® Economy parcel select lightweight\n" +
+                "FedEx FedEx Ground® Economy Bound Printed Matter\n" +
+                "FedEx FedEx Ground® Economy Media\n" +
+                "FedEx FedEx Ground® Economy parcel select\n" +
                 "FedEx ShipAlert®\n" +
                 "FedEx Priority Alert Plus™\n" +
                 "FedEx International Ground® Distribution\n" +
@@ -1191,8 +1232,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             List<FedExShipmentEntity> fedExShipments =
                 LoadedShipments.Where(shipment => shipment.FedEx != null).Select(shipment => shipment.FedEx).ToList();
 
-            if (format == ThermalLanguage.EPL &&
-                fedExShipments.Any(fedExShipment => FedExUtility.IsFimsService((FedExServiceType) fedExShipment.Service)))
+            if (format == ThermalLanguage.EPL)
             {
                 return false;
             }

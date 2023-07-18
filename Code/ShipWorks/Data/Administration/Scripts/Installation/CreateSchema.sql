@@ -1032,7 +1032,7 @@ CREATE TABLE [dbo].[Store]
 [ManagedInHub] [bit] NOT NULL CONSTRAINT [DF_Store_ManagedInHub] DEFAULT (0),
 [OrderSourceID] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
 [PlatformAmazonCarrierID] [nvarchar] (100) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
-[ShouldMigrate] [bit] NOT NULL, 
+[ShouldMigrate] [bit] NOT NULL,
 [ContinuationToken] [nvarchar] (2048) NULL
 )
 GO
@@ -2080,6 +2080,8 @@ CREATE TABLE [dbo].[FedExShipment]
 [PayorTransportType] [int] NOT NULL,
 [PayorTransportName] [nvarchar] (60) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [PayorTransportAccount] [varchar] (12) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+[PayorCountryCode] [nvarchar](2) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
+[PayorPostalCode] [nvarchar](10) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
 [PayorDutiesType] [int] NOT NULL,
 [PayorDutiesAccount] [varchar] (12) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [PayorDutiesName] [nvarchar] (60) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
@@ -2229,7 +2231,9 @@ CREATE TABLE [dbo].[FedExShipment]
 [FreightSpecialServices] [int] NOT NULL,
 [FreightGuaranteeType] [int] NOT NULL,
 [FreightGuaranteeDate] [datetime] NOT NULL,
-[CustomsRecipientTINType] [int] NULL
+[CustomsRecipientTINType] [int] NULL,
+[ShipEngineLabelId] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
+[DeliveredDutyPaid] [bit] NULL
 )
 GO
 PRINT N'Creating primary key [PK_FedExShipment] on [dbo].[FedExShipment]'
@@ -2258,6 +2262,8 @@ CREATE TABLE [dbo].[FedExProfile]
 [ReferenceInvoice] [nvarchar] (300) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
 [ReferencePO] [nvarchar] (300) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
 [ReferenceShipmentIntegrity] [nvarchar] (300) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
+[PayorCountryCode] [nvarchar](2) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
+[PayorPostalCode] [nvarchar](10) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
 [PayorTransportType] [int] NULL,
 [PayorTransportAccount] [varchar] (12) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
 [PayorDutiesType] [int] NULL,
@@ -2288,7 +2294,8 @@ CREATE TABLE [dbo].[FedExProfile]
 [CreateCommercialInvoice] [bit] NULL,
 [FileElectronically] [bit] NULL,
 [CustomsRecipientTIN] [nvarchar] (24) NULL,
-[CustomsRecipientTINType] [int] NULL
+[CustomsRecipientTINType] [int] NULL,
+[DeliveredDutyPaid] [bit] NULL
 )
 GO
 PRINT N'Creating primary key [PK_FedExProfile] on [dbo].[FedExProfile]'
@@ -3004,7 +3011,7 @@ CREATE TABLE [dbo].[DhlEcommerceAccount](
 	[Phone] [nvarchar](26) NOT NULL DEFAULT(('')),
 	[Email] [nvarchar](100) NOT NULL DEFAULT(('')),
 	[CreatedDate] [datetime] NOT NULL
- CONSTRAINT [PK_PostalDhlEcommerceAccount] PRIMARY KEY CLUSTERED 
+ CONSTRAINT [PK_PostalDhlEcommerceAccount] PRIMARY KEY CLUSTERED
 (
 	[DhlEcommerceAccountID] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
@@ -3045,7 +3052,7 @@ CREATE TABLE [dbo].[DhlEcommerceShipment](
 	[InsuranceValue] [money] NOT NULL CONSTRAINT [DF_DhlEcommerceShipment_InsuranceValue] DEFAULT ((0)),
 	[InsurancePennyOne] [bit] NOT NULL CONSTRAINT [DF_DhlEcommerceShipment_InsurancePennyOne] DEFAULT ((0)),
 	[AncillaryEndorsement] [int] NOT NULL CONSTRAINT [DF_DhlEcommerceShipment_AncillaryEndorsement] DEFAULT ((0))
- CONSTRAINT [PK_DhlEcommerceShipment] PRIMARY KEY CLUSTERED 
+ CONSTRAINT [PK_DhlEcommerceShipment] PRIMARY KEY CLUSTERED
 (
 	[ShipmentID] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
@@ -3073,8 +3080,8 @@ CREATE TABLE [dbo].[DhlEcommerceProfile](
 	[CustomsTinIssuingAuthority] [nvarchar](2) NULL,
 	[PackagingType] [int] NULL,
 	[Reference1] [nvarchar](300) NULL,
-	[AncillaryEndorsement] [int] NULL 
- CONSTRAINT [PK_DhlEcommerceProfile] PRIMARY KEY CLUSTERED 
+	[AncillaryEndorsement] [int] NULL
+ CONSTRAINT [PK_DhlEcommerceProfile] PRIMARY KEY CLUSTERED
 (
 	[ShippingProfileID] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
@@ -3096,7 +3103,7 @@ CREATE TABLE [dbo].[ShipEngineManifest](
 	[SubmissionID] [varchar](255) NOT NULL,
 	[CarrierID] [varchar](50) NOT NULL,
 	[ManifestUrl] [varchar](2048) NOT NULL
- CONSTRAINT [PK_ShipEngineManifest] PRIMARY KEY CLUSTERED 
+ CONSTRAINT [PK_ShipEngineManifest] PRIMARY KEY CLUSTERED
 (
 	[ShipEngineManifestID] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
@@ -4951,7 +4958,9 @@ CREATE TABLE [dbo].[FedExAccount]
 [Letterhead] [nvarchar] (max) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL CONSTRAINT [DF_FedExAccount_Letterhead] DEFAULT (''),
 [Signature] [nvarchar] (max) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL CONSTRAINT [DF_FedExAccount_Signature] DEFAULT (''),
 [HubVersion] [int] NULL,
-[HubCarrierId] [uniqueidentifier] NULL
+[HubCarrierId] [uniqueidentifier] NULL,
+[ShipEngineCarrierId] [nvarchar] (50) NULL,
+[SmartPostHub] [int] NOT NULL DEFAULT (0),
 )
 GO
 PRINT N'Creating primary key [PK_FedExAccount] on [dbo].[FedExAccount]'

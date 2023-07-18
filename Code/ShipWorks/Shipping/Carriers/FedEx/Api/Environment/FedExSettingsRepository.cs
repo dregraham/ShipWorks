@@ -5,6 +5,7 @@ using ShipWorks.ApplicationCore;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Shipping.Api;
+using ShipWorks.Shipping.Carriers.FedEx.Api.Fims;
 using ShipWorks.Shipping.Settings;
 
 namespace ShipWorks.Shipping.Carriers.FedEx.Api.Environment
@@ -15,6 +16,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Environment
     /// </summary>
     [Component(RegistrationType.Self)]
     [KeyedComponent(typeof(ICarrierSettingsRepository), ShipmentTypeCode.FedEx)]
+    [Component(RegistrationType.SpecificService, Service = typeof(IFedExSettingsRepository))]
     public class FedExSettingsRepository : IFedExSettingsRepository
     {
         /// <summary>

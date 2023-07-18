@@ -77,6 +77,32 @@ namespace ShipWorks.Shipping.Editing
         protected bool EnableEditing => enableEditing;
 
         /// <summary>
+        /// Remove the weight option
+        /// </summary>
+        protected void RemoveWeight()
+        {
+            this.weight.Visible = false;
+            this.labelWeight.Visible = false;
+            AdjustPosition(value, 0, -25);
+            AdjustPosition(labelValue, 0, -25);
+            AdjustPosition(harmonizedCode, 0, -25);
+            AdjustPosition(labelHarmonized, 0, -25);
+            AdjustPosition(countryOfOrigin, 0, -25);
+            AdjustPosition(labelCountryOfOrigin, 0, -25);
+        }
+
+        /// <summary>
+        /// Adjust the position of a control by the given offsets
+        /// </summary>
+        /// <param name="control"></param>
+        /// <param name="xOffset"></param>
+        /// <param name="yOffset"></param>
+        private void AdjustPosition(Control control, int xOffset, int yOffset)
+        {
+            control.Location = new Point(control.Location.X + xOffset, control.Location.Y + yOffset);
+        }
+
+        /// <summary>
         /// Load the given shipments customs information into the control and resets the selection
         /// to the first item in the list (if there are any).
         /// </summary>

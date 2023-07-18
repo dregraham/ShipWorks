@@ -44,7 +44,7 @@ namespace ShipWorks.Shipping.ShipEngine.Manifest
         }
 
         /// <summary>
-        /// Create a DHL eCommerce Manifest from today's shipments
+        /// Create a Manifest from today's shipments, supports Dhl Ecommerce and FedEx
         /// </summary>
         public async Task<List<GenericResult<CreateManifestResponse>>> CreateManifest(ICarrierAccount carrierAccount, IProgressReporter progress)
         {
@@ -72,6 +72,13 @@ namespace ShipWorks.Shipping.ShipEngine.Manifest
                 resultFields.DefineField(DhlEcommerceShipmentFields.ShipEngineLabelID, 0, "ShipEngineLabelID", "");
                 resultFields.DefineField(DhlEcommerceShipmentFields.DhlEcommerceAccountID, 1, "ShipEngineAccountID", "");
             }
+            else if (carrierAccount.ShipmentType == ShipmentTypeCode.FedEx)
+            {
+                bucket.Relations.Add(ShipmentEntity.Relations.FedExShipmentEntityUsingShipmentID);
+                bucket.PredicateExpression.AddWithAnd(FedExShipmentFields.FedExAccountID == carrierAccount.AccountId);
+                resultFields.DefineField(FedExShipmentFields.ShipEngineLabelId, 0, "ShipEngineLabelID", "");
+                resultFields.DefineField(FedExShipmentFields.FedExAccountID, 1, "ShipEngineAccountID", "");
+            }
             else
             {
                 throw new ShipEngineException($"Shipment Type {EnumHelper.GetDescription(carrierAccount.ShipmentType)} does not currently support generating manifests in ShipWorks.");
@@ -88,7 +95,7 @@ namespace ShipWorks.Shipping.ShipEngine.Manifest
                 {
                     progress.Detail = $"Loading Shipments: {index}";
 
-                    string labelID = reader.GetString(0);
+                    string labelID = reader.IsDBNull(0) ? null : reader.GetString(0);
                     long accountID = reader.GetInt64(1);
 
                     if (!string.IsNullOrWhiteSpace(labelID))

@@ -69,6 +69,9 @@ namespace ShipWorks.Data.Administration
         private bool backupCompleted = false;
         TelemetricResult<Unit> backupTelemetry = null;
 
+        // This is the cutoff version for the FedEx upgrade that requires a database backup when upgraded
+        private static Version FedExUpgradeVersion = new Version(9, 13, 0, 0);
+
         /// <summary>
         /// Open the upgrade window and returns true if the wizard completed with an OK result.
         /// </summary>
@@ -102,7 +105,6 @@ namespace ShipWorks.Data.Administration
         private DatabaseUpdateWizard(ILifetimeScope lifetimeScope)
         {
             InitializeComponent();
-
             installed = SqlSchemaUpdater.GetInstalledSchemaVersion();
             showFirewallPage = installed < new Version(3, 0);
 
@@ -367,6 +369,9 @@ namespace ShipWorks.Data.Administration
         private void OnSteppingIntoBackup(object sender, WizardSteppingIntoEventArgs e)
         {
             const string backupText = "User '{0}' does not have permissions to create a backup.";
+            const string fedExBackupHeaderText = "ShipWorks Backup Required";
+            const string fedExBackupText = "A ShipWorks backup is required before updating. We don’t expect anything to go wrong, but it doesn’t hurt to be safe. " +
+                                           "Please keep in mind that a backup can only be made from your ShipWorks server machine.";
 
             // Make sure we are on the right machine
             if (!SqlSession.Current.IsLocalServer())
@@ -386,6 +391,17 @@ namespace ShipWorks.Data.Administration
             {
                 labelBackupNoPermission.Visible = false;
                 backup.Enabled = true;
+            }
+
+            // The page needs new text and state when upgrading past the FedEx upgrade
+            if (IsPreFedExUpgrade())
+            {
+                wizardPageBackup.Title = fedExBackupHeaderText;
+                labelBackupInfo.Text = fedExBackupText;
+                if (!backupCompleted)
+                {
+                    NextEnabled = false;
+                }
             }
         }
 
@@ -409,6 +425,12 @@ namespace ShipWorks.Data.Administration
                     {
                         NextEnabled = true;
                     }
+
+                    // Backups are required for the FedEx upgrade, enable the next button when completed
+                    if (IsPreFedExUpgrade())
+                    {
+                        NextEnabled = true;
+                    }
                 }
             }
         }
@@ -425,6 +447,14 @@ namespace ShipWorks.Data.Administration
             {
                 backupCompleted = true;
             }
+        }
+
+        /// <summary>
+        /// Checks the installed database version against the FedEx upgrade version
+        /// </summary>
+        private bool IsPreFedExUpgrade()
+        {
+            return installed < FedExUpgradeVersion;
         }
 
         #endregion

@@ -164,6 +164,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
         /// </summary>
         public static ServiceType GetApiServiceType(FedExServiceType serviceType)
         {
+            //TODO:PLATFORM Update this to use the new api values once the Request objects exist
             return (ServiceType) EnumHelper.GetApiValue<ServiceType>(serviceType);
         }
 

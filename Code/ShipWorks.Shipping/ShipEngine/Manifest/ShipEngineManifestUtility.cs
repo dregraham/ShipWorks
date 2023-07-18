@@ -178,7 +178,7 @@ namespace ShipWorks.Shipping.ShipEngine.Manifest
         /// <summary>
         /// Create the manifests
         /// </summary>
-        private async Task CreateManifestTask(ICarrierAccount carrierAccount, 
+        public async Task<List<long>> CreateManifestTask(ICarrierAccount carrierAccount, 
             IProgressReporter manifestProgress,
             List<string> successMessages, 
             List<string> errorMessages)
@@ -189,12 +189,14 @@ namespace ShipWorks.Shipping.ShipEngine.Manifest
             manifestProgress.Detail = "Saving Manifest";
             manifestProgress.PercentComplete = 100;
 
+            var manifestList = new List<long>();
+
             foreach (var result in results)
             {
                 if (result.Success)
                 {
                     var saveResult = await manifestRepo.SaveManifest(result.Value, carrierAccount);
-
+                    
                     if (saveResult.Success)
                     {
                         var msg = $"{EnumHelper.GetDescription(carrierAccount.ShipmentType)} manifest created.";
@@ -202,6 +204,8 @@ namespace ShipWorks.Shipping.ShipEngine.Manifest
                         {
                             successMessages.Add(msg);
                         }
+
+                        manifestList.AddRange(saveResult.Value);
                     }
                     else
                     {
@@ -233,6 +237,8 @@ namespace ShipWorks.Shipping.ShipEngine.Manifest
             {
                 log.Info(successMessages);
             }
+
+            return manifestList;
         }
 
         /// <summary>
@@ -295,7 +301,7 @@ namespace ShipWorks.Shipping.ShipEngine.Manifest
         /// <summary>
         /// Print a manifest
         /// </summary>
-        private void Print(long shipEngineManifestId)
+        public void Print(long shipEngineManifestId)
         {
             List<Image> images = new List<Image>();
 

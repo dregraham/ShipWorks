@@ -31,6 +31,7 @@ namespace Interapptive.Shared.Utility
             public string ApiValue { get; set; }
             public bool Hidden { get; internal set; }
             public int RawValue { get; internal set; }
+            public HiddenForContext HiddenFor { get; internal set; }
         }
 
         /// <summary>
@@ -223,6 +224,14 @@ namespace Interapptive.Shared.Utility
         }
 
         /// <summary>
+        /// Gets whether or not the enum value has should be hidden in given context
+        /// </summary>
+        public static bool IsHiddenFor(Enum value, HiddenForContext context)
+        {
+            return (GetEnumMetadata(value).HiddenFor & context) != 0;
+        }
+
+        /// <summary>
         /// Gets the Image associated with the enum value, or null if no ImageResourceAttribute was applied.
         /// </summary>
         public static Image GetImage(Enum value)
@@ -281,12 +290,12 @@ namespace Interapptive.Shared.Utility
             var typeCache = enumMetadataCache.GetOrAdd(enumType, BuildEnumMetadata);
 
             EnumMetadata result;
-            if (!typeCache.TryGetValue(Convert.ToInt32(value), out result))
+            if (typeCache.TryGetValue(Convert.ToInt32(value), out result))
             {
-                throw new NotFoundException(string.Format("Value '{0}' is not valid for enum '{1}'.", value, enumType));
+                return result;
             }
 
-            return result;
+            throw new NotFoundException(string.Format("Value '{0}' is not valid for enum '{1}'.", value, enumType));
         }
 
         /// <summary>
@@ -307,7 +316,7 @@ namespace Interapptive.Shared.Utility
         /// </summary>
         private static EnumMetadata BuildFieldMetadata(FieldInfo fieldInfo)
         {
-            return new EnumMetadata
+            var metadata = new EnumMetadata
             {
                 RawValue = Convert.ToInt32(fieldInfo.GetRawConstantValue()),
                 DescriptionAttribute = (DescriptionAttribute) Attribute.GetCustomAttribute(fieldInfo, typeof(DescriptionAttribute)),
@@ -320,6 +329,12 @@ namespace Interapptive.Shared.Utility
                 ApiValue = fieldInfo.GetCustomAttribute<ApiValueAttribute>()?.ApiValue,
                 InternationalServiceAttribute = (InternationalServiceAttribute) Attribute.GetCustomAttribute(fieldInfo, typeof(InternationalServiceAttribute))
             };
+            var hiddenForAttribute = fieldInfo.GetCustomAttribute<HiddenForAttribute>();
+            if (hiddenForAttribute != null)
+            {
+                metadata.HiddenFor = hiddenForAttribute.Context;
+            }
+            return metadata;
         }
 
         /// <summary>

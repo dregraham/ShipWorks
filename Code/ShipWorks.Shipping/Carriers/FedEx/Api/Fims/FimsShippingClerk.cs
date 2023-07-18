@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Web.Services.Protocols;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Net;
@@ -178,14 +179,6 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Fims
         }
 
         /// <summary>
-        /// Does not register an account as FIMS does not support registering an account .
-        /// </summary>
-        public void RegisterAccount(EntityBase2 account)
-        {
-            return;
-        }
-
-        /// <summary>
         /// Does not get rates as FIMS does not support getting rates.
         /// </summary>
         public RateGroup GetRates(ShipmentEntity shipment, ICertificateInspector certificateInspector)
@@ -243,6 +236,15 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Fims
         public void PerformUploadImages(FedExAccountEntity account)
         {
             throw new NotImplementedException();
+        }
+
+        /// <summary>
+        /// Not supported
+        /// </summary>
+        /// <param name="account"></param>
+        public Task RegisterAccountAsync(EntityBase2 account)
+        {
+            return Task.CompletedTask;
         }
     }
 }

@@ -42,7 +42,7 @@ namespace ShipWorks.SqlServer.Filters.DirtyCounts
             tableBitCount[(int) FilterNodeColumnMaskTable.ProStoresOrder] = 4;
             tableBitCount[(int) FilterNodeColumnMaskTable.PostalShipment] = 24;
             tableBitCount[(int) FilterNodeColumnMaskTable.UpsShipment] = 54;
-            tableBitCount[(int) FilterNodeColumnMaskTable.FedExShipment] = 164;
+            tableBitCount[(int) FilterNodeColumnMaskTable.FedExShipment] = 168;
             tableBitCount[(int) FilterNodeColumnMaskTable.CommerceInterfaceOrder] = 2;
             tableBitCount[(int) FilterNodeColumnMaskTable.ShopifyOrder] = 4;
             tableBitCount[(int) FilterNodeColumnMaskTable.EtsyOrder] = 3;

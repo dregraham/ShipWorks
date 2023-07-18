@@ -1005,6 +1005,30 @@ namespace ShipWorks.Data.Model.EntityInterfaces
         /// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
         Nullable<System.Int32> CustomsRecipientTINType { get; }
+        /// <summary> The PayorCountryCode property of the Entity FedExShipment<br/><br/>
+        /// </summary>
+        /// <remarks>Mapped on table field: "FedExShipment"."PayorCountryCode"<br/>
+        /// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 2<br/>
+        /// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+        System.String PayorCountryCode { get; }
+        /// <summary> The PayorPostalCode property of the Entity FedExShipment<br/><br/>
+        /// </summary>
+        /// <remarks>Mapped on table field: "FedExShipment"."PayorPostalCode"<br/>
+        /// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 10<br/>
+        /// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+        System.String PayorPostalCode { get; }
+        /// <summary> The ShipEngineLabelId property of the Entity FedExShipment<br/><br/>
+        /// </summary>
+        /// <remarks>Mapped on table field: "FedExShipment"."ShipEngineLabelId"<br/>
+        /// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 50<br/>
+        /// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+        System.String ShipEngineLabelId { get; }
+        /// <summary> The DeliveredDutyPaid property of the Entity FedExShipment<br/><br/>
+        /// </summary>
+        /// <remarks>Mapped on table field: "FedExShipment"."DeliveredDutyPaid"<br/>
+        /// Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
+        /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+        System.Boolean DeliveredDutyPaid { get; }
         
         IShipmentEntity Shipment { get; }
         

@@ -96,5 +96,14 @@ namespace Interapptive.Shared.Utility
             }
             return TimeZoneInfo.ConvertTimeToUtc(valueWithoutKind, timeZoneInfo);
         }
+
+        public static DateTime ToLocalTime(this DateTime value, TimeZoneInfo timeZoneInfo)
+        {
+            if (value.Kind == DateTimeKind.Local)
+            {
+                return value;
+            }
+            return TimeZoneInfo.ConvertTimeFromUtc(value, timeZoneInfo);
+        }
     }
 }

@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Controls;
-using System.Windows.Documents;
 using ShipWorks.ApplicationCore.Licensing.Warehouse.DTO;
 
 namespace ShipWorks.ApplicationCore.Licensing.Warehouse.Messages
@@ -11,7 +10,7 @@ namespace ShipWorks.ApplicationCore.Licensing.Warehouse.Messages
     /// </summary>
     public partial class HubMessagesControl : UserControl
     {
-        public System.Windows.Forms.Form ParentDialog { get; set; }
+        private bool hasScrolledToBottom = true;
 
         /// <summary>
         /// Constructor
@@ -30,26 +29,54 @@ namespace ShipWorks.ApplicationCore.Licensing.Warehouse.Messages
             {
                 Acknowledgement.Visibility = System.Windows.Visibility.Visible;
                 OkButton.IsEnabled = false;
+                RequiresAcknowledgement = true;
+                IsAcknowledged = false;
             }
 
-            var paragraph = new Paragraph();
-
             var messagesArray = messages.ToArray();
+
+            var markdown = string.Empty;
 
             for (int i = 0; i < messagesArray.Length; i++)
             {
                 if (messagesArray.Length > 1)
                 {
-                    paragraph.Inlines.Add(new Bold(new Run($"Message {i + 1}:")));
-                    paragraph.Inlines.Add(new LineBreak());
+                    markdown += $"**Message {i + 1}:**\n\n";
                 }
 
-                paragraph.Inlines.Add(new Run(messagesArray[i].Message));
-                paragraph.Inlines.Add(new LineBreak());
-                paragraph.Inlines.Add(new LineBreak());
+                markdown += $"{messagesArray[i].Message}\n\n\n";
             }
 
-            Messages.Document = new FlowDocument(paragraph);
+            Messages.Markdown = markdown;
+        }
+
+        /// <summary>
+        /// The control has finished loading
+        /// </summary>
+        private void MessagesControl_Loaded(object sender, System.Windows.RoutedEventArgs e)
+        {
+            var scrollViewer = Messages.Template.FindName("PART_ContentHost", Messages) as ScrollViewer;
+
+            if (RequiresAcknowledgement && scrollViewer.VerticalOffset != scrollViewer.ScrollableHeight)
+            {
+                Acknowledgement.IsEnabled = false;
+                scrollViewer.ScrollChanged += ScrollViewer_ScrollChanged;
+                hasScrolledToBottom = false;
+            }
+        }
+
+        /// <summary>
+        /// The scroll bar has moved
+        /// </summary>
+        private void ScrollViewer_ScrollChanged(object sender, ScrollChangedEventArgs e)
+        {
+            var scrollViewer = (ScrollViewer) sender;
+
+            if (!hasScrolledToBottom && scrollViewer.VerticalOffset == scrollViewer.ScrollableHeight)
+            {
+                hasScrolledToBottom = true;
+                Acknowledgement.IsEnabled = true;
+            }
         }
 
         /// <summary>
@@ -57,12 +84,28 @@ namespace ShipWorks.ApplicationCore.Licensing.Warehouse.Messages
         /// </summary>
         private void AcknowledgmentChanged(object sender, System.Windows.RoutedEventArgs e)
         {
-            OkButton.IsEnabled = Acknowledgement.IsChecked ?? true;
+            IsAcknowledged = Acknowledgement.IsChecked ?? true;
+            OkButton.IsEnabled = IsAcknowledged;
         }
 
         /// <summary>
         /// The OK button is clicked
         /// </summary>
         private void OkButtonClicked(object sender, System.Windows.RoutedEventArgs e) => ParentDialog?.Close();
+
+        /// <summary>
+        /// Whether or not confirmation is required
+        /// </summary>
+        public bool RequiresAcknowledgement { get; set; } = false;
+
+        /// <summary>
+        /// Whether or not the user has confirmed they've read the messages
+        /// </summary>
+        public bool IsAcknowledged { get; set; } = true;
+
+        /// <summary>
+        /// The parent dialog for this control
+        /// </summary>
+        public System.Windows.Forms.Form ParentDialog { get; set; }
     }
 }

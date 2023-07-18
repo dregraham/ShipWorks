@@ -85,10 +85,13 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
             get { return declaredValue; }
             set
             {
-                handler.Set(nameof(DeclaredValue), ref declaredValue, value, true);
-                InsuranceChoice.InsuranceValue = declaredValue;
-                UpdateCostDisplay();
-            }
+				if (value != declaredValue)
+				{
+					handler.Set(nameof(DeclaredValue), ref declaredValue, value, true);
+					InsuranceChoice.InsuranceValue = declaredValue;
+					UpdateCostDisplay();
+				}
+			}
         }
 
         /// <summary>

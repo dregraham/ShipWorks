@@ -17,6 +17,7 @@ namespace ShipWorks.Shipping.ShipEngine.DTOs
         public List<ShipEngineError> Errors { get; set; }
     }
 
+    [Obfuscation(Exclude = true, ApplyToMembers = true, StripAfterObfuscation = false)]
     public class ShipEngineError
     {
         [JsonProperty("error_source")]

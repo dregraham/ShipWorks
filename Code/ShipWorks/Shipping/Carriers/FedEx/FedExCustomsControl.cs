@@ -39,6 +39,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         public override void Initialize()
         {
             base.Initialize();
+            //this.RemoveWeight();
 
             EnumHelper.BindComboBox<FedExPhysicalPackagingType>(admissibilityPackaging);
             EnumHelper.BindComboBox<FedExTermsOfSale>(ciTermsOfSale);
@@ -245,13 +246,13 @@ namespace ShipWorks.Shipping.Carriers.FedEx
 
                 admissibilityPackaging.ReadMultiValue(v => shipment.FedEx.CustomsAdmissibilityPackaging = (int) v);
 
-                filingOption.ReadMultiValue(v => shipment.FedEx.CustomsExportFilingOption = (int) v);
+                filingOption.ReadMultiValue(v => shipment.FedEx.CustomsExportFilingOption = (int) (v ?? FedExCustomsExportFilingOption.NotRequired)) ;
                 electronicExportInfo.ReadMultiText(t => shipment.FedEx.CustomsAESEEI = t);
 
                 commercialInvoice.ReadMultiCheck(c => shipment.FedEx.CommercialInvoice = c);
                 electronicTradeDocuments.ReadMultiCheck(c => shipment.FedEx.CommercialInvoiceFileElectronically = c);
-                ciTermsOfSale.ReadMultiValue(v => shipment.FedEx.CommercialInvoiceTermsOfSale = (int) v);
-                ciPurpose.ReadMultiValue(v => shipment.FedEx.CommercialInvoicePurpose = (int) v);
+                ciTermsOfSale.ReadMultiValue(v => shipment.FedEx.CommercialInvoiceTermsOfSale = (int) (v ?? FedExTermsOfSale.FOB_or_FCA));
+                ciPurpose.ReadMultiValue(v => shipment.FedEx.CommercialInvoicePurpose = (int) (v ?? FedExCommercialInvoicePurpose.Sold));
                 ciComments.ReadMultiText(t => shipment.FedEx.CommercialInvoiceComments = t);
                 ciFreight.ReadMultiAmount(a => shipment.FedEx.CommercialInvoiceFreight = a);
                 ciInsurance.ReadMultiAmount(a => shipment.FedEx.CommercialInvoiceInsurance = a);

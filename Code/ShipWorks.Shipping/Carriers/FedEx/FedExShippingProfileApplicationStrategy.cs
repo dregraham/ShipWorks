@@ -104,6 +104,8 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             ApplyProfileValue(fedExProfile.PayorTransportAccount, fedExShipment, FedExShipmentFields.PayorTransportAccount);
             ApplyProfileValue(fedExProfile.PayorDutiesType, fedExShipment, FedExShipmentFields.PayorDutiesType);
             ApplyProfileValue(fedExProfile.PayorDutiesAccount, fedExShipment, FedExShipmentFields.PayorDutiesAccount);
+            ApplyProfileValue(fedExProfile.PayorCountryCode, fedExShipment, FedExShipmentFields.PayorCountryCode);
+            ApplyProfileValue(fedExProfile.PayorPostalCode, fedExShipment, FedExShipmentFields.PayorPostalCode);
         }
 
         /// <summary>

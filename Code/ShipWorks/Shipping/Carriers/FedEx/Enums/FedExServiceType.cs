@@ -11,138 +11,131 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Enums
     public enum FedExServiceType
     {
         [Description("FedEx Priority Overnight®")]
-        [ApiValue("PRIORITY_OVERNIGHT")]
+        [ApiValue("fedex_priority_overnight")]
         PriorityOvernight = 0,
 
         [Description("FedEx Standard Overnight®")]
-        [ApiValue("STANDARD_OVERNIGHT")]
+        [ApiValue("fedex_standard_overnight")]
         StandardOvernight = 1,
 
         [Description("FedEx First Overnight®")]
-        [ApiValue("FIRST_OVERNIGHT")]
+        [ApiValue("fedex_first_overnight")]
         FirstOvernight = 2,
 
         [Description("FedEx 2Day®")]
-        [ApiValue("FEDEX_2_DAY")]
+        [ApiValue("fedex_2day")]
         FedEx2Day = 3,
 
         [Description("FedEx Express Saver®")]
-        [ApiValue("FEDEX_EXPRESS_SAVER")]
+        [ApiValue("fedex_express_saver")]
         FedExExpressSaver = 4,
 
         [Description("FedEx International Priority®")]
-        [ApiValue("INTERNATIONAL_PRIORITY")]
+        [ApiValue("fedex_international_priority")]
         InternationalPriority = 5,
 
         [Description("FedEx International Economy®")]
-        [ApiValue("INTERNATIONAL_ECONOMY")]
+        [ApiValue("fedex_international_economy")]
         InternationalEconomy = 6,
 
         [Description("FedEx International First®")]
-        [ApiValue("INTERNATIONAL_FIRST")]
+        [ApiValue("fedex_international_first")]
         InternationalFirst = 7,
 
         [Description("FedEx 1Day® Freight")]
-        [ApiValue("FEDEX_1_DAY_FREIGHT")]
+        [ApiValue("fedex_1_day_freight")]
         FedEx1DayFreight = 8,
 
         [Description("FedEx 2Day® Freight")]
-        [ApiValue("FEDEX_2_DAY_FREIGHT")]
+        [ApiValue("fedex_2_day_freight")]
         FedEx2DayFreight = 9,
 
         [Description("FedEx 3Day® Freight")]
-        [ApiValue("FEDEX_3_DAY_FREIGHT")]
+        [ApiValue("fedex_3_day_freight")]
         FedEx3DayFreight = 10,
 
         [Description("FedEx Ground®")]
-        [ApiValue("FEDEX_GROUND")]
+        [ApiValue("fedex_ground")]
         FedExGround = 11,
 
         [Description("FedEx Home Delivery®")]
-        [ApiValue("GROUND_HOME_DELIVERY")]
+        [ApiValue("fedex_home_delivery")]
         GroundHomeDelivery = 12,
 
         [Description("FedEx International Priority® Freight")]
-        [ApiValue("INTERNATIONAL_PRIORITY_FREIGHT")]
+        [ApiValue("fedex_international_priority_freight")]
         InternationalPriorityFreight = 13,
 
         [Description("FedEx International Economy® Freight")]
-        [ApiValue("INTERNATIONAL_ECONOMY_FREIGHT")]
+        [ApiValue("fedex_international_economy_freight")]
         InternationalEconomyFreight = 14,
 
-        [Description("FedEx SmartPost®")]
-        [ApiValue("SMART_POST")]
+        [Description("FedEx Ground® Economy")]
         SmartPost = 15,
 
         [Description("FedEx Europe First International Priority®")]
-        [ApiValue("EUROPE_FIRST_INTERNATIONAL_PRIORITY")]
+        [ApiValue("fedex_europe_first")]
         FedExEuropeFirstInternationalPriority = 17,
 
         [Description("FedEx 2Day® A.M.")]
-        [ApiValue("FEDEX_2_DAY_AM")]
+        [ApiValue("fedex_2day_am")]
         FedEx2DayAM = 18,
 
         [Description("FedEx First Overnight® Freight")]
-        [ApiValue("FEDEX_FIRST_FREIGHT")]
+        [ApiValue("fedex_first_overnight_freight")]
         FirstFreight = 19,
 
         [Description("FedEx One Rate® (First Overnight)")]
-        [ApiValue("FIRST_OVERNIGHT")]
+        [ApiValue("fedex_first_overnight")]
         OneRateFirstOvernight = 20,
 
         [Description("FedEx One Rate® (Priority Overnight)")]
-        [ApiValue("PRIORITY_OVERNIGHT")]
+        [ApiValue("fedex_priority_overnight")]
         OneRatePriorityOvernight = 21,
 
         [Description("FedEx One Rate® (Standard Overnight)")]
-        [ApiValue("STANDARD_OVERNIGHT")]
+        [ApiValue("fedex_standard_overnight")]
         OneRateStandardOvernight = 22,
 
         [Description("FedEx One Rate® (2Day)")]
-        [ApiValue("FEDEX_2_DAY")]
+        [ApiValue("fedex_2day")]
         OneRate2Day = 23,
 
         [Description("FedEx One Rate® (2Day A.M.)")]
-        [ApiValue("FEDEX_2_DAY_AM")]
+        [ApiValue("fedex_2day_am")]
         OneRate2DayAM = 24,
 
         [Description("FedEx One Rate® (Express Saver)")]
-        [ApiValue("FEDEX_EXPRESS_SAVER")]
+        [ApiValue("fedex_express_saver")]
         OneRateExpressSaver = 25,
 
         [Description("FedEx Economy")]
-        [ApiValue("FEDEX_EXPRESS_SAVER")]
+        [ApiValue("fedex_express_saver")]
         FedExEconomyCanada = 26,
 
         [Description("FedEx FIMS Mailview")]
         FedExFimsMailView = 27,
 
         [Description("FedEx International Ground®")]
-        [ApiValue("FEDEX_GROUND")]
+        [ApiValue("fedex_ground_international")]
         FedExInternationalGround = 28,
 
         [Description("FedEx Next Day Afternoon")]
-        [ApiValue("FEDEX_NEXT_DAY_AFTERNOON")]
         FedExNextDayAfternoon = 29,
 
         [Description("FedEx Next Day Early Morning")]
-        [ApiValue("FEDEX_NEXT_DAY_EARLY_MORNING")]
         FedExNextDayEarlyMorning = 30,
 
         [Description("FedEx Next Day Mid Morning")]
-        [ApiValue("FEDEX_NEXT_DAY_MID_MORNING")]
         FedExNextDayMidMorning = 31,
 
         [Description("FedEx Next Day End Of Day")]
-        [ApiValue("FEDEX_NEXT_DAY_END_OF_DAY")]
         FedExNextDayEndOfDay = 32,
 
         [Description("FedEx Distance Deferred")]
-        [ApiValue("FEDEX_DISTANCE_DEFERRED")]
         FedExDistanceDeferred = 33,
 
         [Description("FedEx Next Day Freight")]
-        [ApiValue("FEDEX_NEXT_DAY_FREIGHT")]
         FedExNextDayFreight = 34,
 
         [Description("FedEx FIMS Mailview Lite")]
@@ -155,15 +148,23 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Enums
         FedExFimsPremium = 37,
 
         [Description("FedEx International Priority® Express")]
-        [ApiValue("INTERNATIONAL_PRIORITY_EXPRESS")]
+        [ApiValue("fedex_international_priority_express")]
         InternationalPriorityExpress = 38,
 
         [Description("FedEx Freight® Economy")]
-        [ApiValue("FEDEX_FREIGHT_ECONOMY")]
+        [ApiValue("fedex_freight_economy")]
         FedExFreightEconomy = 39,
 
         [Description("FedEx Freight® Priority")]
-        [ApiValue("FEDEX_FREIGHT_PRIORITY")]
+        [ApiValue("fedex_freight_priority")]
         FedExFreightPriority = 40,
+
+        [Description("FedEx Ground® Economy Returns")]
+        [ApiValue("fedex_smartpost_returns")]
+        FedExSmartPostReturns = 41,
+
+        [Description("FedEx® International Connect Plus")]
+        [ApiValue("fedex_international_connect_plus")]
+        FedExInternationalConnectPlus = 42,
     }
 }

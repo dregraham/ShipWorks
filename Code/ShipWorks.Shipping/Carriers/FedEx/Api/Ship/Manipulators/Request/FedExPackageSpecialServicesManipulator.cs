@@ -58,10 +58,10 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Ship.Manipulators.Request
                 specialServices = specialServices.Append(PackageSpecialServiceType.SIGNATURE_OPTION);
             }
 
-            ServiceType apiServiceType = FedExRequestManipulatorUtilities.GetApiServiceType((FedExServiceType) fedex.Service);
+            FedExServiceType serviceType = (FedExServiceType) fedex.Service;
 
             // Non-standard container (only applies to Ground services)
-            if (fedex.NonStandardContainer && (apiServiceType == ServiceType.GROUND_HOME_DELIVERY || apiServiceType == ServiceType.FEDEX_GROUND))
+            if (fedex.NonStandardContainer && (serviceType == FedExServiceType.GroundHomeDelivery || serviceType == FedExServiceType.FedExGround))
             {
                 specialServices = specialServices.Append(PackageSpecialServiceType.NON_STANDARD_CONTAINER);
             }

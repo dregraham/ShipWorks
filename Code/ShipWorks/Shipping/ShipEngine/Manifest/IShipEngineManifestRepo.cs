@@ -15,7 +15,7 @@ namespace ShipWorks.Shipping.ShipEngine.Manifest
         /// <summary>
         /// Save a ShipEngine Manifest to ShipWorks
         /// </summary>
-        Task<Result> SaveManifest(CreateManifestResponse createManifestResponse, ICarrierAccount account);
+        Task<GenericResult<List<long>>> SaveManifest(CreateManifestResponse createManifestResponse, ICarrierAccount account);
 
         /// <summary>
         /// Get ShipEngineManifestEntities for a carrier account
