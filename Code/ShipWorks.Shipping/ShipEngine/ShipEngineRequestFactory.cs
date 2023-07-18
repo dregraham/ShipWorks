@@ -62,7 +62,6 @@ namespace ShipWorks.Shipping.ShipEngine
                 LabelFormat = GetPurchaseLabelRequestLabelFormat((ThermalLanguage) shipment.RequestedLabelFormat),
                 LabelLayout = "4x6",
                 IsReturnLabel = shipment.ReturnShipment,
-
                 Shipment = new Shipment()
                 {
                     ShipTo = CreateShipToAddress(shipment),
