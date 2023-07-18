@@ -185,6 +185,9 @@
             this.labelInvoice = new System.Windows.Forms.Label();
             this.kryptonBorderEdge4 = new ComponentFactory.Krypton.Toolkit.KryptonBorderEdge();
             this.groupBilling = new System.Windows.Forms.GroupBox();
+            this.labelDeliveredDutyPaid = new System.Windows.Forms.Label();
+            this.deliveredDutyPaid = new System.Windows.Forms.CheckBox();
+            this.deliveredDutyPaidState = new System.Windows.Forms.CheckBox();
             this.payorPostalCode = new ShipWorks.UI.Controls.MultiValueTextBox();
             this.labelPayorPostalCode = new System.Windows.Forms.Label();
             this.payorPostalCodeState = new System.Windows.Forms.CheckBox();
@@ -206,12 +209,6 @@
             this.labelPackages = new System.Windows.Forms.Label();
             this.packagesState = new System.Windows.Forms.CheckBox();
             this.tabPageCustoms = new System.Windows.Forms.TabPage();
-            this.groupBoxCommercialInvoice = new System.Windows.Forms.GroupBox();
-            this.createCommercialInvoice = new System.Windows.Forms.CheckBox();
-            this.fileElectronicallyState = new System.Windows.Forms.CheckBox();
-            this.createCommercialInvoiceState = new System.Windows.Forms.CheckBox();
-            this.fileElectronically = new System.Windows.Forms.CheckBox();
-            this.kryptonBorderEdge13 = new ComponentFactory.Krypton.Toolkit.KryptonBorderEdge();
             this.groupBoxCustomsRecipientTIN = new System.Windows.Forms.GroupBox();
             this.customsRecipientTIN = new ShipWorks.UI.Controls.MultiValueTextBox();
             this.customsRecipientTINState = new System.Windows.Forms.CheckBox();
@@ -220,6 +217,12 @@
             this.customsRecipientTINType = new ShipWorks.UI.Controls.MultiValueComboBox();
             this.customsRecipientTINTypeState = new System.Windows.Forms.CheckBox();
             this.kryptonBorderEdgeTIN = new ComponentFactory.Krypton.Toolkit.KryptonBorderEdge();
+            this.groupBoxCommercialInvoice = new System.Windows.Forms.GroupBox();
+            this.createCommercialInvoice = new System.Windows.Forms.CheckBox();
+            this.fileElectronicallyState = new System.Windows.Forms.CheckBox();
+            this.createCommercialInvoiceState = new System.Windows.Forms.CheckBox();
+            this.fileElectronically = new System.Windows.Forms.CheckBox();
+            this.kryptonBorderEdge13 = new ComponentFactory.Krypton.Toolkit.KryptonBorderEdge();
             this.dutiesAccount = new ShipWorks.UI.Controls.MultiValueTextBox();
             this.labelDutiesAccount = new System.Windows.Forms.Label();
             this.payorDuties = new ShipWorks.UI.Controls.MultiValueComboBox();
@@ -249,8 +252,8 @@
             this.tabPagePackages.SuspendLayout();
             this.groupBoxPackages.SuspendLayout();
             this.tabPageCustoms.SuspendLayout();
-            this.groupBoxCommercialInvoice.SuspendLayout();
             this.groupBoxCustomsRecipientTIN.SuspendLayout();
+            this.groupBoxCommercialInvoice.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.fieldLengthProvider)).BeginInit();
             this.SuspendLayout();
             // 
@@ -1380,7 +1383,7 @@
             this.groupFIMS.Controls.Add(this.referenceFIMS);
             this.groupFIMS.Controls.Add(this.referenceFimsState);
             this.groupFIMS.Controls.Add(this.kryptonBorderEdge12);
-            this.groupFIMS.Location = new System.Drawing.Point(6, 996);
+            this.groupFIMS.Location = new System.Drawing.Point(6, 1017);
             this.groupFIMS.Name = "groupFIMS";
             this.groupFIMS.Size = new System.Drawing.Size(1343, 58);
             this.groupFIMS.TabIndex = 10;
@@ -1490,7 +1493,7 @@
             this.groupReturns.Controls.Add(this.applyReturnProfile);
             this.groupReturns.Controls.Add(this.returnProfileID);
             this.groupReturns.Controls.Add(this.returnProfileIDLabel);
-            this.groupReturns.Location = new System.Drawing.Point(6, 852);
+            this.groupReturns.Location = new System.Drawing.Point(6, 873);
             this.groupReturns.Name = "groupReturns";
             this.groupReturns.Size = new System.Drawing.Size(1343, 138);
             this.groupReturns.TabIndex = 9;
@@ -1977,6 +1980,9 @@
             // 
             this.groupBilling.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+            this.groupBilling.Controls.Add(this.labelDeliveredDutyPaid);
+            this.groupBilling.Controls.Add(this.deliveredDutyPaid);
+            this.groupBilling.Controls.Add(this.deliveredDutyPaidState);
             this.groupBilling.Controls.Add(this.payorPostalCode);
             this.groupBilling.Controls.Add(this.labelPayorPostalCode);
             this.groupBilling.Controls.Add(this.payorPostalCodeState);
@@ -1992,10 +1998,42 @@
             this.groupBilling.Controls.Add(this.labelPayorTransport);
             this.groupBilling.Location = new System.Drawing.Point(6, 716);
             this.groupBilling.Name = "groupBilling";
-            this.groupBilling.Size = new System.Drawing.Size(1343, 130);
+            this.groupBilling.Size = new System.Drawing.Size(1343, 151);
             this.groupBilling.TabIndex = 7;
             this.groupBilling.TabStop = false;
             this.groupBilling.Text = "Billing";
+            // 
+            // labelDeliveredDutyPaid
+            // 
+            this.labelDeliveredDutyPaid.AutoSize = true;
+            this.labelDeliveredDutyPaid.BackColor = System.Drawing.Color.Transparent;
+            this.labelDeliveredDutyPaid.Location = new System.Drawing.Point(122, 130);
+            this.labelDeliveredDutyPaid.Name = "labelDeliveredDutyPaid";
+            this.labelDeliveredDutyPaid.Size = new System.Drawing.Size(31, 13);
+            this.labelDeliveredDutyPaid.TabIndex = 114;
+            this.labelDeliveredDutyPaid.Text = "DDP:";
+            // 
+            // deliveredDutyPaid
+            // 
+            this.deliveredDutyPaid.AutoSize = true;
+            this.deliveredDutyPaid.Location = new System.Drawing.Point(160, 129);
+            this.deliveredDutyPaid.Name = "deliveredDutyPaid";
+            this.deliveredDutyPaid.Size = new System.Drawing.Size(127, 17);
+            this.deliveredDutyPaid.TabIndex = 113;
+            this.deliveredDutyPaid.Text = "Delivered Duties Paid";
+            this.deliveredDutyPaid.UseVisualStyleBackColor = true;
+            // 
+            // deliveredDutyPaidState
+            // 
+            this.deliveredDutyPaidState.AutoSize = true;
+            this.deliveredDutyPaidState.Checked = true;
+            this.deliveredDutyPaidState.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.deliveredDutyPaidState.Location = new System.Drawing.Point(9, 130);
+            this.deliveredDutyPaidState.Name = "deliveredDutyPaidState";
+            this.deliveredDutyPaidState.Size = new System.Drawing.Size(15, 14);
+            this.deliveredDutyPaidState.TabIndex = 112;
+            this.deliveredDutyPaidState.Tag = "";
+            this.deliveredDutyPaidState.UseVisualStyleBackColor = true;
             // 
             // payorPostalCode
             // 
@@ -2083,7 +2121,7 @@
             this.kryptonBorderEdge3.BorderStyle = ComponentFactory.Krypton.Toolkit.PaletteBorderStyle.GridDataCellSheet;
             this.kryptonBorderEdge3.Location = new System.Drawing.Point(29, 57);
             this.kryptonBorderEdge3.Name = "kryptonBorderEdge3";
-            this.kryptonBorderEdge3.Size = new System.Drawing.Size(1, 148);
+            this.kryptonBorderEdge3.Size = new System.Drawing.Size(1, 169);
             this.kryptonBorderEdge3.Text = "kryptonBorderEdge1";
             // 
             // payorTransportAccountState
@@ -2233,73 +2271,6 @@
             this.tabPageCustoms.Text = "Customs";
             this.tabPageCustoms.UseVisualStyleBackColor = true;
             // 
-            // groupBoxCommercialInvoice
-            // 
-            this.groupBoxCommercialInvoice.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.groupBoxCommercialInvoice.Controls.Add(this.createCommercialInvoice);
-            this.groupBoxCommercialInvoice.Controls.Add(this.fileElectronicallyState);
-            this.groupBoxCommercialInvoice.Controls.Add(this.createCommercialInvoiceState);
-            this.groupBoxCommercialInvoice.Controls.Add(this.fileElectronically);
-            this.groupBoxCommercialInvoice.Controls.Add(this.kryptonBorderEdge13);
-            this.groupBoxCommercialInvoice.Location = new System.Drawing.Point(6, 4);
-            this.groupBoxCommercialInvoice.Name = "groupBoxCommercialInvoice";
-            this.groupBoxCommercialInvoice.Size = new System.Drawing.Size(1240, 72);
-            this.groupBoxCommercialInvoice.TabIndex = 0;
-            this.groupBoxCommercialInvoice.TabStop = false;
-            this.groupBoxCommercialInvoice.Text = "Commercial Invoice";
-            // 
-            // createCommercialInvoice
-            // 
-            this.createCommercialInvoice.AutoSize = true;
-            this.createCommercialInvoice.BackColor = System.Drawing.Color.White;
-            this.createCommercialInvoice.Location = new System.Drawing.Point(47, 19);
-            this.createCommercialInvoice.Name = "createCommercialInvoice";
-            this.createCommercialInvoice.Size = new System.Drawing.Size(154, 17);
-            this.createCommercialInvoice.TabIndex = 5;
-            this.createCommercialInvoice.Text = "Create Commercial Invoice";
-            this.createCommercialInvoice.UseVisualStyleBackColor = false;
-            // 
-            // fileElectronicallyState
-            // 
-            this.fileElectronicallyState.AutoSize = true;
-            this.fileElectronicallyState.Location = new System.Drawing.Point(9, 41);
-            this.fileElectronicallyState.Name = "fileElectronicallyState";
-            this.fileElectronicallyState.Size = new System.Drawing.Size(15, 14);
-            this.fileElectronicallyState.TabIndex = 6;
-            this.fileElectronicallyState.UseVisualStyleBackColor = true;
-            // 
-            // createCommercialInvoiceState
-            // 
-            this.createCommercialInvoiceState.AutoSize = true;
-            this.createCommercialInvoiceState.Location = new System.Drawing.Point(9, 20);
-            this.createCommercialInvoiceState.Name = "createCommercialInvoiceState";
-            this.createCommercialInvoiceState.Size = new System.Drawing.Size(15, 14);
-            this.createCommercialInvoiceState.TabIndex = 4;
-            this.createCommercialInvoiceState.UseVisualStyleBackColor = true;
-            // 
-            // fileElectronically
-            // 
-            this.fileElectronically.AutoSize = true;
-            this.fileElectronically.BackColor = System.Drawing.Color.White;
-            this.fileElectronically.Location = new System.Drawing.Point(71, 40);
-            this.fileElectronically.Name = "fileElectronically";
-            this.fileElectronically.Size = new System.Drawing.Size(107, 17);
-            this.fileElectronically.TabIndex = 7;
-            this.fileElectronically.Text = "File electronically";
-            this.fileElectronically.UseVisualStyleBackColor = false;
-            // 
-            // kryptonBorderEdge13
-            // 
-            this.kryptonBorderEdge13.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left)));
-            this.kryptonBorderEdge13.AutoSize = false;
-            this.kryptonBorderEdge13.BorderStyle = ComponentFactory.Krypton.Toolkit.PaletteBorderStyle.GridDataCellSheet;
-            this.kryptonBorderEdge13.Location = new System.Drawing.Point(29, 17);
-            this.kryptonBorderEdge13.Name = "kryptonBorderEdge80";
-            this.kryptonBorderEdge13.Size = new System.Drawing.Size(1, 44);
-            this.kryptonBorderEdge13.Text = "kryptonBorderEdge80";
-            // 
             // groupBoxCustomsRecipientTIN
             // 
             this.groupBoxCustomsRecipientTIN.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
@@ -2383,6 +2354,73 @@
             this.kryptonBorderEdgeTIN.Name = "kryptonBorderEdgeTIN";
             this.kryptonBorderEdgeTIN.Size = new System.Drawing.Size(1, 44);
             this.kryptonBorderEdgeTIN.Text = "kryptonBorderEdgeTIN";
+            // 
+            // groupBoxCommercialInvoice
+            // 
+            this.groupBoxCommercialInvoice.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.groupBoxCommercialInvoice.Controls.Add(this.createCommercialInvoice);
+            this.groupBoxCommercialInvoice.Controls.Add(this.fileElectronicallyState);
+            this.groupBoxCommercialInvoice.Controls.Add(this.createCommercialInvoiceState);
+            this.groupBoxCommercialInvoice.Controls.Add(this.fileElectronically);
+            this.groupBoxCommercialInvoice.Controls.Add(this.kryptonBorderEdge13);
+            this.groupBoxCommercialInvoice.Location = new System.Drawing.Point(6, 4);
+            this.groupBoxCommercialInvoice.Name = "groupBoxCommercialInvoice";
+            this.groupBoxCommercialInvoice.Size = new System.Drawing.Size(1240, 72);
+            this.groupBoxCommercialInvoice.TabIndex = 0;
+            this.groupBoxCommercialInvoice.TabStop = false;
+            this.groupBoxCommercialInvoice.Text = "Commercial Invoice";
+            // 
+            // createCommercialInvoice
+            // 
+            this.createCommercialInvoice.AutoSize = true;
+            this.createCommercialInvoice.BackColor = System.Drawing.Color.White;
+            this.createCommercialInvoice.Location = new System.Drawing.Point(47, 19);
+            this.createCommercialInvoice.Name = "createCommercialInvoice";
+            this.createCommercialInvoice.Size = new System.Drawing.Size(152, 17);
+            this.createCommercialInvoice.TabIndex = 5;
+            this.createCommercialInvoice.Text = "Create Commercial Invoice";
+            this.createCommercialInvoice.UseVisualStyleBackColor = false;
+            // 
+            // fileElectronicallyState
+            // 
+            this.fileElectronicallyState.AutoSize = true;
+            this.fileElectronicallyState.Location = new System.Drawing.Point(9, 41);
+            this.fileElectronicallyState.Name = "fileElectronicallyState";
+            this.fileElectronicallyState.Size = new System.Drawing.Size(15, 14);
+            this.fileElectronicallyState.TabIndex = 6;
+            this.fileElectronicallyState.UseVisualStyleBackColor = true;
+            // 
+            // createCommercialInvoiceState
+            // 
+            this.createCommercialInvoiceState.AutoSize = true;
+            this.createCommercialInvoiceState.Location = new System.Drawing.Point(9, 20);
+            this.createCommercialInvoiceState.Name = "createCommercialInvoiceState";
+            this.createCommercialInvoiceState.Size = new System.Drawing.Size(15, 14);
+            this.createCommercialInvoiceState.TabIndex = 4;
+            this.createCommercialInvoiceState.UseVisualStyleBackColor = true;
+            // 
+            // fileElectronically
+            // 
+            this.fileElectronically.AutoSize = true;
+            this.fileElectronically.BackColor = System.Drawing.Color.White;
+            this.fileElectronically.Location = new System.Drawing.Point(71, 40);
+            this.fileElectronically.Name = "fileElectronically";
+            this.fileElectronically.Size = new System.Drawing.Size(106, 17);
+            this.fileElectronically.TabIndex = 7;
+            this.fileElectronically.Text = "File electronically";
+            this.fileElectronically.UseVisualStyleBackColor = false;
+            // 
+            // kryptonBorderEdge13
+            // 
+            this.kryptonBorderEdge13.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left)));
+            this.kryptonBorderEdge13.AutoSize = false;
+            this.kryptonBorderEdge13.BorderStyle = ComponentFactory.Krypton.Toolkit.PaletteBorderStyle.GridDataCellSheet;
+            this.kryptonBorderEdge13.Location = new System.Drawing.Point(29, 17);
+            this.kryptonBorderEdge13.Name = "kryptonBorderEdge80";
+            this.kryptonBorderEdge13.Size = new System.Drawing.Size(1, 44);
+            this.kryptonBorderEdge13.Text = "kryptonBorderEdge80";
             // 
             // dutiesAccount
             // 
@@ -2514,10 +2552,10 @@
             this.groupBoxPackages.ResumeLayout(false);
             this.groupBoxPackages.PerformLayout();
             this.tabPageCustoms.ResumeLayout(false);
-            this.groupBoxCommercialInvoice.ResumeLayout(false);
-            this.groupBoxCommercialInvoice.PerformLayout();
             this.groupBoxCustomsRecipientTIN.ResumeLayout(false);
             this.groupBoxCustomsRecipientTIN.PerformLayout();
+            this.groupBoxCommercialInvoice.ResumeLayout(false);
+            this.groupBoxCommercialInvoice.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.fieldLengthProvider)).EndInit();
             this.ResumeLayout(false);
 
@@ -2720,5 +2758,8 @@
         private UI.Controls.MultiValueTextBox payorCountryCode;
         private System.Windows.Forms.Label labelPayorCountryCode;
         private System.Windows.Forms.CheckBox payorCountryCodeState;
+        private System.Windows.Forms.Label labelDeliveredDutyPaid;
+        private System.Windows.Forms.CheckBox deliveredDutyPaid;
+        private System.Windows.Forms.CheckBox deliveredDutyPaidState;
     }
 }

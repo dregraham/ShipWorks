@@ -435,6 +435,8 @@ namespace ShipWorks.Data.Model.EntityClasses
 			_fieldsCustomProperties.Add("PayorCountryCode", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
 			_fieldsCustomProperties.Add("PayorPostalCode", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+			_fieldsCustomProperties.Add("DeliveredDutyPaid", fieldHashtable);
 		}
 		#endregion
 
@@ -1004,6 +1006,17 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			get { return (System.String)GetValue((int)FedExProfileFieldIndex.PayorPostalCode, true); }
 			set	{ SetValue((int)FedExProfileFieldIndex.PayorPostalCode, value); }
+		}
+
+		/// <summary> The DeliveredDutyPaid property of the Entity FedExProfile<br/><br/></summary>
+		/// <remarks>Mapped on  table field: "FedExProfile"."DeliveredDutyPaid"<br/>
+		/// Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		[DataMember]
+		public virtual Nullable<System.Boolean> DeliveredDutyPaid
+		{
+			get { return (Nullable<System.Boolean>)GetValue((int)FedExProfileFieldIndex.DeliveredDutyPaid, false); }
+			set	{ SetValue((int)FedExProfileFieldIndex.DeliveredDutyPaid, value); }
 		}
 
 		/// <summary> Gets / sets related entity of type 'ShippingProfileEntity' which has to be set using a fetch action earlier. If no related entity is set for this property, null is returned.<br/><br/>

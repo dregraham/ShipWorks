@@ -18,6 +18,7 @@ using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Messaging.Messages;
 using ShipWorks.Shipping.Carriers.FedEx.Api.Enums;
 using ShipWorks.Shipping.Carriers.FedEx.Enums;
+using ShipWorks.Shipping.Carriers.FedEx.WebServices.Ship;
 using ShipWorks.Shipping.Editing;
 using ShipWorks.Shipping.Editing.Rating;
 using ShipWorks.Shipping.Settings.Origin;
@@ -200,6 +201,8 @@ namespace ShipWorks.Shipping.Carriers.FedEx
 
             bool anySaturday = false;
 
+            bool isInternational = false;
+
             // Determine if all shipments will have the same destination service types
             foreach (ShipmentEntity shipment in LoadedShipments)
             {
@@ -210,6 +213,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx
                 anyInternational = !ShipmentTypeManager.GetType(shipment).IsDomestic(overriddenShipment);
 
                 FedExServiceType thisService = (FedExServiceType) shipment.FedEx.Service;
+
+                isInternational = FedExUtility.IsInternationalService(thisService);
+
+                panelDeliveredDutiesPaid.Visible = isInternational;
+                
                 if (FedExUtility.IsGroundService(thisService))
                 {
                     anyGround = true;
@@ -253,6 +261,8 @@ namespace ShipWorks.Shipping.Carriers.FedEx
 
             UpdatePackagingChoices(allServicesSame && serviceType.HasValue ? serviceType.Value : (FedExServiceType?) null);
             UpdatePayorChoices(anyGround, anyInternational);
+
+            
 
             // Make it visible if any of them have Saturday dates
             saturdayDelivery.Visible = anySaturday;
@@ -317,6 +327,8 @@ namespace ShipWorks.Shipping.Carriers.FedEx
                     smartEndorsement.ApplyMultiValue((FedExSmartPostEndorsement) shipment.FedEx.SmartPostEndorsement);
                     smartConfirmation.ApplyMultiCheck(shipment.FedEx.SmartPostConfirmation);
                     smartManifestID.ApplyMultiText(shipment.FedEx.SmartPostCustomerManifest);
+
+                    deliveredDutyPaid.ApplyMultiCheck(shipment.FedEx.DeliveredDutyPaid);
 
                     LoadEmailNotificationSettings(shipment.FedEx);
                 }
@@ -550,6 +562,8 @@ namespace ShipWorks.Shipping.Carriers.FedEx
 
                 saturdayDelivery.ReadMultiCheck(c => shipment.FedEx.SaturdayDelivery = c);
 
+                deliveredDutyPaid.ReadMultiCheck(c => shipment.FedEx.DeliveredDutyPaid = c);
+
                 homeInstructions.ReadMultiText(t => shipment.FedEx.HomeDeliveryInstructions = t);
                 homePremiumService.ReadMultiValue(v => shipment.FedEx.HomeDeliveryType = (int) v);
                 homePremiumDate.ReadMultiDate(d => shipment.FedEx.HomeDeliveryDate = (d.Date.AddHours(12)));
@@ -779,6 +793,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             }
 
             updatingPayorChoices = false;
+            
         }
 
         /// <summary>
@@ -1029,7 +1044,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
                 bottom = dutiesAccount.Visible ? panelPayorDuties.Bottom : panelPayorDuties.Top + dutiesAccount.Top;
             }
 
-            sectionBilling.Height = bottom + (sectionBilling.Height - sectionBilling.ContentPanel.Height) + 4;
+            sectionBilling.Height = bottom + (sectionBilling.Height - sectionBilling.ContentPanel.Height) + panelDeliveredDutiesPaid.Height;
         }
 
         /// <summary>

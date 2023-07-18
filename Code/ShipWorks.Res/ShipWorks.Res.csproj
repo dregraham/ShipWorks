@@ -519,6 +519,7 @@
     <Content Include="Data\Administration\Scripts\Support\OlaHallengren\CommandExecute.sql" />
     <Content Include="Data\Administration\Scripts\Support\OlaHallengren\IndexOptimize.sql" />
     <EmbeddedResource Include="Data\Administration\Scripts\Support\Products\ProductListView.sql" />
+    <EmbeddedResource Include="Data\Administration\Scripts\Update\10.1\10.1.1.0.sql" />
     <EmbeddedResource Include="Data\Administration\Scripts\Update\10.1\10.1.0.0.sql" />
     <EmbeddedResource Include="Data\Administration\Scripts\Update\10.2\10.2.0.0.sql" />
     <Content Include="Data\Administration\Scripts\Update\5.27\5.27.1.5.sql" />
@@ -832,9 +833,7 @@
     <EmbeddedResource Include="Templates\Distribution\Source\System\Snippets\FormatAddress\template.xsl" />
     <EmbeddedResource Include="Templates\Distribution\Source\System\Snippets\FormatAddress\settings.xml" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Data\Administration\Scripts\Update\10.0\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it.
        Other similar extension points exist, see Microsoft.Common.targets.

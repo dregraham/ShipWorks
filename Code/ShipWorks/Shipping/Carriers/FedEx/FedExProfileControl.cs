@@ -125,6 +125,8 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             AddValueMapping(fedex, FedExProfileFields.PayorCountryCode, payorCountryCodeState, payorCountryCode, labelPayorCountryCode);
             AddValueMapping(fedex, FedExProfileFields.PayorPostalCode, payorPostalCodeState, payorPostalCode, labelPayorPostalCode);
 
+            AddValueMapping(fedex, FedExProfileFields.DeliveredDutyPaid, deliveredDutyPaidState, deliveredDutyPaid, labelDeliveredDutyPaid);
+
             AddValueMapping(profile, ShippingProfileFields.ReturnShipment, returnShipmentState, returnShipment);
             AddValueMapping(fedex, FedExProfileFields.ReturnType, returnTypeState, returnType, labelReturnType);
             AddValueMapping(fedex, FedExProfileFields.RmaNumber, rmaNumberState, rmaNumber, labelRmaNumber);

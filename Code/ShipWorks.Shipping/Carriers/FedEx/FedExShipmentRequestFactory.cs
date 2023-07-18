@@ -146,11 +146,14 @@ namespace ShipWorks.Shipping.Carriers.FedEx
                 ContainsAlcohol = shipment.FedEx.Packages.Any(p => p.ContainsAlcohol),
             };
 
+
             if (shipment.FedEx.Packages.Any(p => p.DryIceWeight > 0))
             {
                 options.DryIceWeight = new Weight(shipment.FedEx.Packages.Sum(p => p.DryIceWeight), Weight.UnitEnum.Pound);
                 options.DryIce = true;
             }
+
+            options.DeliveredDutyPaid = shipment.FedEx.DeliveredDutyPaid;
 
             var billToType = (FedExPayorType) shipment.FedEx.PayorTransportType;
 

@@ -437,6 +437,28 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         }
 
         /// <summary>
+        /// Indicates if the given service is a international service
+        /// </summary>
+        public static bool IsInternationalService(FedExServiceType serviceType)
+        {
+            switch (serviceType)
+            {
+                case FedExServiceType.InternationalFirst:
+                case FedExServiceType.InternationalPriority:
+                case FedExServiceType.InternationalPriorityExpress:
+                case FedExServiceType.InternationalEconomy:
+                case FedExServiceType.InternationalPriorityFreight:
+                case FedExServiceType.InternationalEconomyFreight:
+                case FedExServiceType.FedExFreightEconomy:
+                case FedExServiceType.FedExFreightPriority:
+                case FedExServiceType.FedExInternationalConnectPlus:
+                    return true;
+            }
+
+            return false;
+        }
+
+        /// <summary>
         /// Indicates if the given service is a freight LTL service
         /// </summary>
         public static bool IsFreightLtlService(int? serviceType) =>
