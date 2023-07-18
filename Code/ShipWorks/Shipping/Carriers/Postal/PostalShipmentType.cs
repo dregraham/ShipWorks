@@ -386,7 +386,8 @@ namespace ShipWorks.Shipping.Carriers.Postal
                 PostalServiceType.MediaMail,
                 PostalServiceType.LibraryMail,
                 PostalServiceType.CriticalMail,
-                PostalServiceType.ParcelSelect
+                PostalServiceType.ParcelSelect,
+                PostalServiceType.GroundAdvantage
             };
 
             // All the DHL services require confirmation
@@ -473,6 +474,7 @@ namespace ShipWorks.Shipping.Carriers.Postal
             adultSignatureAllowed.Add(new PostalServicePackagingCombination(PostalServiceType.ExpressMail, PostalPackagingType.FlatRateLegalEnvelope));
 
             adultSignatureAllowed.Add(new PostalServicePackagingCombination(PostalServiceType.ParcelSelect, PostalPackagingType.Package));
+            adultSignatureAllowed.Add(new PostalServicePackagingCombination(PostalServiceType.GroundAdvantage, PostalPackagingType.Package));
 
             adultSignatureAllowed.Add(new PostalServicePackagingCombination(PostalServiceType.CriticalMail, PostalPackagingType.LargeEnvelope));
 

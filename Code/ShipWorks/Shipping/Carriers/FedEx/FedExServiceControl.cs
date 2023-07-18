@@ -85,6 +85,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             EnumHelper.BindComboBox<FedExCodPaymentType>(codPaymentType);
             EnumHelper.BindComboBox<FedExSmartPostIndicia>(smartIndicia);
             EnumHelper.BindComboBox<FedExSmartPostEndorsement>(smartEndorsement);
+            EnumHelper.BindComboBox<FedExPayorType>(payorTransport);
 
             // Don't give the user the option to perform the address look up; the thought it that the shipper will know
             // what type of address they are shipping from, and it saves delays associated with a service call
@@ -784,9 +785,12 @@ namespace ShipWorks.Shipping.Carriers.FedEx
 
             int oldIndex = payorTransport.SelectedIndex;
 
-            EnumHelper.BindComboBox<FedExPayorType>(payorTransport, t => (anyGround && t != FedExPayorType.Collect) || t != FedExPayorType.Collect);
+            if (oldIndex >= 0)
+            {
+                EnumHelper.BindComboBox<FedExPayorType>(payorTransport, t => (anyGround && t != FedExPayorType.Collect) || t != FedExPayorType.Collect);
 
-            payorTransport.SelectedIndex = (oldIndex >= 0 && oldIndex < payorTransport.Items.Count) ? oldIndex : 0;
+                payorTransport.SelectedIndex = (oldIndex >= 0 && oldIndex < payorTransport.Items.Count) ? oldIndex : 0;
+            }
 
             updatingPayorChoices = false;
             
@@ -961,7 +965,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         private void OnChangePayorTransport(object sender, EventArgs e)
         {
             panelTransportAccount.Visible = payorTransport.MultiValued ||
-                (payorTransport.SelectedValue != null && (FedExPayorType) payorTransport.SelectedValue != FedExPayorType.Sender);
+                                            (payorTransport.SelectedValue != null && (FedExPayorType) payorTransport.SelectedValue != FedExPayorType.Sender);
 
             if (payorTransport.SelectedValue != null && (FedExPayorType) payorTransport.SelectedValue == FedExPayorType.Recipient)
             {
