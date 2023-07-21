@@ -10306,6 +10306,8 @@ namespace ShipWorks.Data.Model
 		NoPostage,
 		///<summary>CustomsRecipientTin. </summary>
 		CustomsRecipientTin,
+		///<summary>InternalTransactionNumber. </summary>
+		InternalTransactionNumber,
 		/// <summary></summary>
 		AmountOfFields
 	}

@@ -1855,7 +1855,8 @@ CREATE TABLE [dbo].[PostalProfile]
 [Memo2] [nvarchar] (300) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
 [Memo3] [nvarchar] (300) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
 [NoPostage] [bit] NULL,
-[CustomsRecipientTin] [nvarchar] (14) NULL
+[CustomsRecipientTin] [nvarchar] (14) NULL,
+[InternalTransactionNumber] [nvarchar] (25) NULL
 )
 GO
 PRINT N'Creating primary key [PK_PostalProfile] on [dbo].[PostalProfile]'
@@ -1939,7 +1940,8 @@ CREATE TABLE [dbo].[PostalShipment]
 [Memo3] [nvarchar] (300) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [NoPostage] [bit] NOT NULL CONSTRAINT [DF_PostalShipment_NoPostage] DEFAULT ((0)),
 [Insurance] [bit] NOT NULL,
-[CustomsRecipientTin] [nvarchar] (14) NULL
+[CustomsRecipientTin] [nvarchar] (14) NULL,
+[InternalTransactionNumber] [nvarchar] (25) NULL
 )
 GO
 PRINT N'Creating primary key [PK_PostalShipment] on [dbo].[PostalShipment]'

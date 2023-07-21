@@ -2765,6 +2765,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 			this.AddElementFieldInfo("PostalProfileEntity", "Memo3", typeof(System.String), false, false, false, true,  (int)PostalProfileFieldIndex.Memo3, 300, 0, 0);
 			this.AddElementFieldInfo("PostalProfileEntity", "NoPostage", typeof(Nullable<System.Boolean>), false, false, false, true,  (int)PostalProfileFieldIndex.NoPostage, 0, 0, 0);
 			this.AddElementFieldInfo("PostalProfileEntity", "CustomsRecipientTin", typeof(System.String), false, false, false, true,  (int)PostalProfileFieldIndex.CustomsRecipientTin, 14, 0, 0);
+			this.AddElementFieldInfo("PostalProfileEntity", "InternalTransactionNumber", typeof(System.String), false, false, false, true,  (int)PostalProfileFieldIndex.InternalTransactionNumber, 25, 0, 0);
 		}
 		/// <summary>Inits PostalShipmentEntity's FieldInfo objects</summary>
 		private void InitPostalShipmentEntityInfos()
