@@ -2662,11 +2662,11 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <summary> The DeliveredDutyPaid property of the Entity FedExShipment<br/><br/></summary>
 		/// <remarks>Mapped on  table field: "FedExShipment"."DeliveredDutyPaid"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
-		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
 		[DataMember]
-		public virtual System.Boolean DeliveredDutyPaid
+		public virtual Nullable<System.Boolean> DeliveredDutyPaid
 		{
-			get { return (System.Boolean)GetValue((int)FedExShipmentFieldIndex.DeliveredDutyPaid, true); }
+			get { return (Nullable<System.Boolean>)GetValue((int)FedExShipmentFieldIndex.DeliveredDutyPaid, false); }
 			set	{ SetValue((int)FedExShipmentFieldIndex.DeliveredDutyPaid, value); }
 		}
 

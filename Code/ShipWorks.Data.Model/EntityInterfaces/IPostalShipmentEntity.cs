@@ -165,6 +165,12 @@ namespace ShipWorks.Data.Model.EntityInterfaces
         /// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 14<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
         System.String CustomsRecipientTin { get; }
+        /// <summary> The InternalTransactionNumber property of the Entity PostalShipment<br/><br/>
+        /// </summary>
+        /// <remarks>Mapped on table field: "PostalShipment"."InternalTransactionNumber"<br/>
+        /// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 25<br/>
+        /// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+        System.String InternalTransactionNumber { get; }
         
         IEndiciaShipmentEntity Endicia { get; }
         IShipmentEntity Shipment { get; }

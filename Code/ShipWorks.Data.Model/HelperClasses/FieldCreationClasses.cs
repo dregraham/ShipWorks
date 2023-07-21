@@ -24352,6 +24352,11 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(PostalShipmentFieldIndex.CustomsRecipientTin);}
 		}
+		/// <summary>Creates a new PostalShipmentEntity.InternalTransactionNumber field instance</summary>
+		public static EntityField2 InternalTransactionNumber
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(PostalShipmentFieldIndex.InternalTransactionNumber);}
+		}
 	}
 
 	/// <summary>Field Creation Class for entity PrintResultEntity</summary>

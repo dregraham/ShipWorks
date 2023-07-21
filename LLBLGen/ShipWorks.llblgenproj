@@ -1430,7 +1430,7 @@
           <Field Name="CustomsRecipientIdentificationValue" Type="string" MaxLength="50" FieldIndex="76" />
           <Field Name="CustomsRecipientTIN" Type="string" MaxLength="24" FieldIndex="70" />
           <Field Name="CustomsRecipientTINType" Type="int" IsOptional="true" Precision="10" FieldIndex="163" />
-          <Field Name="DeliveredDutyPaid" Type="bool" FieldIndex="167" />
+          <Field Name="DeliveredDutyPaid" Type="bool" IsOptional="true" FieldIndex="167" />
           <Field Name="DropoffType" Type="int" FieldIndex="108" />
           <Field Name="EmailNotifyBroker" Type="int" FieldIndex="27" />
           <Field Name="EmailNotifyMessage" Type="string" MaxLength="120" FieldIndex="32" />
@@ -2457,6 +2457,7 @@
           <Field Name="ExpressSignatureWaiver" Type="bool" FieldIndex="15" />
           <Field Name="Insurance" Type="bool" FieldIndex="22" />
           <Field Name="InsuranceValue" Type="decimal" Precision="19" Scale="4" FieldIndex="14" />
+          <Field Name="InternalTransactionNumber" Type="string" IsOptional="true" MaxLength="25" FieldIndex="24" />
           <Field Name="Memo1" Type="string" MaxLength="300" FieldIndex="18" />
           <Field Name="Memo2" Type="string" MaxLength="300" FieldIndex="19" />
           <Field Name="Memo3" Type="string" MaxLength="300" FieldIndex="20" />
@@ -4847,7 +4848,7 @@
       <Catalogs>
         <Catalog Name="ShipWorksLocal">
           <Schemas>
-            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2023-07-07T10:13:53.4227339Z">
+            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2023-07-21T10:29:27.1664377Z">
               <Tables>
                 <Table Name="Action">
                   <PkConstraintName Name="PK_Action" />
@@ -7064,7 +7065,7 @@
                     <Field Name="FreightGuaranteeDate" Ordinal="165" DbType="4" />
                     <Field Name="CustomsRecipientTINType" Ordinal="166" IsOptional="true" DbType="8" Precision="10" />
                     <Field Name="ShipEngineLabelId" Ordinal="167" IsOptional="true" DbType="12" Length="50" />
-                    <Field Name="DeliveredDutyPaid" Ordinal="168" DbType="2" />
+                    <Field Name="DeliveredDutyPaid" Ordinal="168" IsOptional="true" DbType="2" />
                   </Fields>
                 </Table>
                 <Table Name="Filter">
@@ -8325,6 +8326,7 @@
                     <Field Name="NoPostage" Ordinal="22" HasDefaultValue="true" DefaultValue="(0)" DbType="2" />
                     <Field Name="Insurance" Ordinal="23" DbType="2" />
                     <Field Name="CustomsRecipientTin" Ordinal="24" IsOptional="true" DbType="12" Length="14" />
+                    <Field Name="InternalTransactionNumber" Ordinal="25" IsOptional="true" DbType="12" Length="25" />
                   </Fields>
                 </Table>
                 <Table Name="PrintResult">
@@ -13808,6 +13810,7 @@
             <FieldMapping FieldName="ExpressSignatureWaiver" TargetFieldName="ExpressSignatureWaiver" />
             <FieldMapping FieldName="Insurance" TargetFieldName="Insurance" />
             <FieldMapping FieldName="InsuranceValue" TargetFieldName="InsuranceValue" />
+            <FieldMapping FieldName="InternalTransactionNumber" TargetFieldName="InternalTransactionNumber" />
             <FieldMapping FieldName="Memo1" TargetFieldName="Memo1" />
             <FieldMapping FieldName="Memo2" TargetFieldName="Memo2" />
             <FieldMapping FieldName="Memo3" TargetFieldName="Memo3" />

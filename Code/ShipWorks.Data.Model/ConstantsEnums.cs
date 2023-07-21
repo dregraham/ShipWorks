@@ -10360,6 +10360,8 @@ namespace ShipWorks.Data.Model
 		Insurance,
 		///<summary>CustomsRecipientTin. </summary>
 		CustomsRecipientTin,
+		///<summary>InternalTransactionNumber. </summary>
+		InternalTransactionNumber,
 		/// <summary></summary>
 		AmountOfFields
 	}
