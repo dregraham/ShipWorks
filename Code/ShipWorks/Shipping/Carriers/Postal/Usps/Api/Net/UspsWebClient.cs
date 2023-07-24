@@ -1114,7 +1114,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
 								OriginalPostageHash = null, // OriginalPostageHash
 								ReturnImageData = true,
 								ReturnImageDataSpecified = true, // returnImageData,
-								InternalTransactionNumber = null,
+								InternalTransactionNumber = shipment.Postal.InternalTransactionNumber,
 								PaperSize = PaperSizeV1.Default,
 								EmailLabelTo = null,
 								PayOnPrint = false, // PayOnPrint

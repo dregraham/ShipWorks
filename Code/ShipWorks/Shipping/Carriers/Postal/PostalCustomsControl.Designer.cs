@@ -170,7 +170,7 @@
 			this.labelInternalTransaction.Name = "labelInternalTransaction";
 			this.labelInternalTransaction.Size = new System.Drawing.Size(39, 13);
 			this.labelInternalTransaction.TabIndex = 6;
-			this.labelInternalTransaction.Text = "ITN #:";
+			this.labelInternalTransaction.Text = "ITN:";
 			// 
 			// internalTransactionNumber
 			// 
