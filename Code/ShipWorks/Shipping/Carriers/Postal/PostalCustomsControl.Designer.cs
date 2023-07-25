@@ -166,9 +166,9 @@
 			// 
 			this.labelInternalTransaction.AutoSize = true;
 			this.labelInternalTransaction.BackColor = System.Drawing.Color.Transparent;
-			this.labelInternalTransaction.Location = new System.Drawing.Point(56, 92);
+			this.labelInternalTransaction.Location = new System.Drawing.Point(67, 92);
 			this.labelInternalTransaction.Name = "labelInternalTransaction";
-			this.labelInternalTransaction.Size = new System.Drawing.Size(39, 13);
+			this.labelInternalTransaction.Size = new System.Drawing.Size(28, 13);
 			this.labelInternalTransaction.TabIndex = 6;
 			this.labelInternalTransaction.Text = "ITN:";
 			// 
