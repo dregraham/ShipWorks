@@ -469,9 +469,9 @@ namespace ShipWorks.Shipping.Carriers.Postal
         public static void SetServiceDetails(RateResult baseRate, PostalServiceType serviceType, string deliverDays)
         {
             baseRate.ServiceLevel = GetServiceLevel(serviceType);
-
             int deliveryDays = -1;
-            if (!int.TryParse(deliverDays.Split('-').LastOrDefault(), out deliveryDays))
+
+            if (deliverDays == null || !int.TryParse(deliverDays.Split('-').LastOrDefault(), out deliveryDays))
             {
                 deliveryDays = GetWorstCaseDeliveryDaysFromServiceType(baseRate.ServiceLevel);
             }
