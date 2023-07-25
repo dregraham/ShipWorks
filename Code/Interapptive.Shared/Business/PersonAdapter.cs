@@ -177,6 +177,8 @@ namespace Interapptive.Shared.Business
             destinationAddress.AddressValidationStatus = AddressValidationStatus;
             destinationAddress.AddressValidationError = AddressValidationError;
             destinationAddress.AddressValidationSuggestionCount = AddressValidationSuggestionCount;
+            destinationAddress.Phone = Phone;
+            destinationAddress.POBox = POBox;
         }
 
         /// <summary>
