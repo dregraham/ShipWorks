@@ -180,7 +180,8 @@ namespace ShipWorks.Shipping.Carriers.FedEx
                     }
                 };
             }
-
+            
+            options.SaturdayDelivery = shipment.FedEx.SaturdayDelivery;
             options.ThirdPartyConsignee = shipment.FedEx.ThirdPartyConsignee;
             options.NonMachinable = shipment.FedEx.NonStandardContainer;
 
