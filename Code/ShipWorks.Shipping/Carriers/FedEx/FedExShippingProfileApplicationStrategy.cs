@@ -77,6 +77,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             ApplyProfilePayor(fedExProfile, fedExShipment);
 
             ApplyProfileValue(fedExProfile.SaturdayDelivery, fedExShipment, FedExShipmentFields.SaturdayDelivery);
+            ApplyProfileValue(fedExProfile.DeliveredDutyPaid, fedExShipment, FedExShipmentFields.DeliveredDutyPaid);
 
             ApplyProfileEmailNotify(fedExProfile, fedExShipment);
             ApplyProfileSmartPost(fedExProfile, fedExShipment);
