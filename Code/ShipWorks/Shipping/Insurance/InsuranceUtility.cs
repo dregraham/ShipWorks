@@ -223,7 +223,7 @@ namespace ShipWorks.Shipping.Insurance
 
 					if (result.Success && (!result.Value?.Content?.IsNullOrWhiteSpace() ?? false))
 					{
-						InsuranceRates = PlatformHelper.JsonConvertToDto<InsuranceRates>(result.Value.Content); ;
+						InsuranceRates = PlatformHelper.JsonConvertToDto<InsuranceRates>(result.Value.Content);
 						areRatesDefault = false;
 						log.Info($"Insurance rates retrieved and set correctly");
 					}
