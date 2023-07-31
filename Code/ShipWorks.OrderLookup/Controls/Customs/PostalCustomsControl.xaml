@@ -33,6 +33,7 @@
                 <RowDefinition Height="auto" />
                 <RowDefinition Height="auto" />
                 <RowDefinition Height="auto" />
+                <RowDefinition Height="auto" />
             </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="102" />
@@ -87,6 +88,17 @@
                 SelectedValue="{Binding ShipmentModel.ShipmentAdapter.Shipment.Postal.CustomsContentType, UpdateSourceTrigger=PropertyChanged}"
                 SelectedValuePath="Key"
                 Style="{StaticResource FormComboBox}" />
+
+            <TextBlock
+                Grid.Row="3"
+                Grid.Column="0"
+                Style="{StaticResource FieldLabel}"
+                Text="ITN" />
+            <TextBox
+                Grid.Row="3"
+                Grid.Column="1"
+                Text="{Binding ShipmentModel.ShipmentAdapter.Shipment.Postal.InternalTransactionNumber, UpdateSourceTrigger=PropertyChanged}"
+                Style="{StaticResource FormTextBox}" />
         </Grid>
         <local:GenericCustomsItemsControl Grid.Row="1"  DataContext="{Binding .}" />
     </Grid>

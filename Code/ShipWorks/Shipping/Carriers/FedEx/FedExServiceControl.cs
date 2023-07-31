@@ -328,7 +328,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
                     smartConfirmation.ApplyMultiCheck(shipment.FedEx.SmartPostConfirmation);
                     smartManifestID.ApplyMultiText(shipment.FedEx.SmartPostCustomerManifest);
 
-                    deliveredDutyPaid.ApplyMultiCheck(shipment.FedEx.DeliveredDutyPaid);
+                    deliveredDutyPaid.ApplyMultiCheck(shipment.FedEx.DeliveredDutyPaid ?? false);
 
                     LoadEmailNotificationSettings(shipment.FedEx);
                 }

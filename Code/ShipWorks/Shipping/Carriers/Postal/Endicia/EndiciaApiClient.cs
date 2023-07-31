@@ -279,6 +279,11 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
                 throw new InvalidOperationException("Unknown endicia reseller");
             }
 
+			if (!shipment.Postal.InternalTransactionNumber.IsNullOrWhiteSpace())
+			{
+				request.EelPfc = shipment.Postal.InternalTransactionNumber;
+			}
+
             CustomsInfo customs = new CustomsInfo();
             request.CustomsInfo = customs;
 

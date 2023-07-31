@@ -61,6 +61,7 @@ namespace ShipWorks.Shipping.Carriers.Postal
             ApplyProfileValue(postalProfile.Profile.Insurance, postalShipment, PostalShipmentFields.Insurance);
 
             ApplyProfileValue(postalProfile.CustomsRecipientTin, postalShipment, PostalShipmentFields.CustomsRecipientTin);
+            ApplyProfileValue(postalProfile.InternalTransactionNumber, postalShipment, PostalShipmentFields.InternalTransactionNumber);
 
             ShipmentType shipmentType = shipmentTypeManager.Get(shipment);
 
