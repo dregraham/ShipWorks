@@ -73,7 +73,11 @@ namespace ShipWorks.Shipping.Carriers.Postal
 						customsRecipientTin.ApplyMultiText(shipment.Postal.CustomsRecipientTin);
 					}
 
-					if (shipment.Postal.InternalTransactionNumber != null)
+					if (shipment.Postal.InternalTransactionNumber == null)
+					{
+						internalTransactionNumber.ApplyMultiText("");
+					}
+					else
 					{
 						internalTransactionNumber.ApplyMultiText(shipment.Postal.InternalTransactionNumber);
 					}
