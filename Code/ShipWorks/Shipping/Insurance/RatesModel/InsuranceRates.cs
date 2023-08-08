@@ -35,11 +35,15 @@ namespace ShipWorks.Shipping.Insurance.RatesModel
 	[Obfuscation(Exclude = true, ApplyToMembers = true)]
 	public class Usps
 	{
-		public decimal CostFor50 { get; set; } = 1.8m;
-		public decimal CostFor100 { get; set; } = 2.3m;
-		public decimal CostFor200 { get; set; } = 2.85m;
-		public decimal CostFor300 { get; set; } = 4.75m;
-		public decimal RatePer100 { get; set; } = 1.05m;
-		public decimal InternationalRatePer50 { get; set; } = 2.3m;
+		public decimal CostFor50 { get; set; } = 2.7m;
+		public decimal CostFor100 { get; set; } = 3.45m;
+		public decimal CostFor200 { get; set; } = 4.55m;
+		public decimal CostFor300 { get; set; } = 5.95m;
+		public decimal CostFor400 { get; set; } = 7.5m;
+		public decimal CostFor500 { get; set; } = 9.05m;
+		public decimal CostFor600 { get; set; } = 12.15m;
+		public decimal RatePer100 { get; set; } = 1.85m;
+		public decimal InternationalCostFor300 { get; set; } = 12.75m;
+		public decimal InternationalRatePer100 { get; set; } = 3.4m;
 	}
 }
