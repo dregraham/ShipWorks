@@ -68,7 +68,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
                     .ToList();
 
                 FedExUtility.ValidatePackageDimensions(shipment);
-                request.RateOptions.PackageTypes = GetPackageTypes(packages, availableServiceTypeApiValues);
+                request.RateOptions.PackageTypes = GetPackageTypes(packages);
 
                 RateShipmentResponse rateShipmentResponse = Task.Run(async () =>
                         await shipEngineWebClient.RateShipment(request, ApiLogSource.FedEx).ConfigureAwait(false)).Result;
@@ -118,7 +118,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             return rates;
         }
 
-        private List<string> GetPackageTypes(List<IPackageAdapter> packages, List<string> availableServiceTypeApiValues)
+        private List<string> GetPackageTypes(List<IPackageAdapter> packages)
         {
             var package = packages.FirstOrDefault();
             var result = new List<string>();
