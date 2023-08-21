@@ -6,13 +6,13 @@ using ShipWorks.Tests.Shared;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using CultureAttribute;
 using Xunit;
 using Interapptive.Shared.Utility;
 
 namespace ShipWorks.Shipping.Tests.ShipEngine
 {
+    [UseCulture("en-US")]
     public class ShipEngineTrackingResultFactoryTest
     {
         private AutoMock mock;

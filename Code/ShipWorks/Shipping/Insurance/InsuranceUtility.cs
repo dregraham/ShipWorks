@@ -595,49 +595,61 @@ namespace ShipWorks.Shipping.Insurance
 				{
 					return InsuranceRates.CarrierRates.Usps.CostFor50;
 				}
-				else if (declaredValue <= 100)
+				if (declaredValue <= 100)
 				{
 					return InsuranceRates.CarrierRates.Usps.CostFor100;
 				}
-				else if (declaredValue <= 200)
+				if (declaredValue <= 200)
 				{
 					return InsuranceRates.CarrierRates.Usps.CostFor200;
 				}
-				else if (declaredValue <= 300)
+				if (declaredValue <= 300)
 				{
 					return InsuranceRates.CarrierRates.Usps.CostFor300;
 				}
-				else
+				if (declaredValue <= 400)
 				{
-					decimal adjustedValue = declaredValue - 300m;
-
-					// Get how many increments of $100
-					int quantity = (int) Math.Ceiling(adjustedValue / 100);
-
-					// $1.05 per $100
-					return InsuranceRates.CarrierRates.Usps.CostFor300 + (quantity * InsuranceRates.CarrierRates.Usps.RatePer100);
+					return InsuranceRates.CarrierRates.Usps.CostFor400;
 				}
+				if (declaredValue <= 500)
+				{
+					return InsuranceRates.CarrierRates.Usps.CostFor500;
+				}
+				if (declaredValue <= 600)
+				{
+					return InsuranceRates.CarrierRates.Usps.CostFor600;
+				}
+				decimal adjustedValue = declaredValue - 600m;
+
+				// Get how many increments of $100
+				int quantity = (int) Math.Ceiling(adjustedValue / 100);
+
+				// $1.85 per $100
+				return InsuranceRates.CarrierRates.Usps.CostFor600 + (quantity * InsuranceRates.CarrierRates.Usps.RatePer100);
 			}
-			else
+
+			if (postalService == PostalServiceType.InternationalPriority ||
+				postalService == PostalServiceType.GlobalPostStandardIntl ||
+				postalService == PostalServiceType.GlobalPostSmartSaverStandardIntl ||
+				postalService == PostalServiceType.GlobalPostPlus ||
+				postalService == PostalServiceType.GlobalPostPlusSmartSaver)
 			{
-				if (postalService == PostalServiceType.InternationalPriority ||
-					postalService == PostalServiceType.GlobalPostStandardIntl ||
-					postalService == PostalServiceType.GlobalPostSmartSaverStandardIntl ||
-					postalService == PostalServiceType.GlobalPostPlus ||
-					postalService == PostalServiceType.GlobalPostPlusSmartSaver)
+				if (declaredValue <= 200)
 				{
-					// Get how many increments of $50
-					int quantity = (int) Math.Ceiling(declaredValue / 50m);
+					return 0;
+				}
 
-					// $2.30 per 50
-					return quantity * InsuranceRates.CarrierRates.Usps.InternationalRatePer50;
-				}
-				else
-				{
-					// Too complicated to calculate
-					return null;
-				}
+				decimal adjustedValue = declaredValue - 300m;
+
+				// Get how many increments of $100
+				int quantity = (int) Math.Ceiling(adjustedValue / 100);
+					
+				// $3.4 per $100
+				return InsuranceRates.CarrierRates.Usps.InternationalCostFor300 + (quantity * InsuranceRates.CarrierRates.Usps.InternationalRatePer100);
 			}
+
+			// Too complicated to calculate
+			return null;
 		}
 
 		/// <summary>
