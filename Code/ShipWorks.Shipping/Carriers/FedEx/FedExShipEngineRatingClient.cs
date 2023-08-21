@@ -61,17 +61,17 @@ namespace ShipWorks.Shipping.Carriers.FedEx
                 var confirmationType = (FedExSignatureType) shipment.FedEx.Signature;
                 request.Shipment.Confirmation = (AddressValidatingShipment.ConfirmationEnum) FedExUtility.ShipmentConfirmationMap(confirmationType);
 
-                FedExUtility.ValidatePackageDimensions(shipment);
-                request.RateOptions.PackageTypes = GetPackageTypes(packages);
-
-                RateShipmentResponse rateShipmentResponse = Task.Run(async () =>
-                        await shipEngineWebClient.RateShipment(request, ApiLogSource.FedEx).ConfigureAwait(false)).Result;
-
                 var availableServiceTypeIds = shipmentType.GetAvailableServiceTypes().ToList();
                 var availableServiceTypeApiValues = availableServiceTypeIds
                     .Cast<FedExServiceType>()
                     .Select(t => EnumHelper.GetApiValue(t))
                     .ToList();
+
+                FedExUtility.ValidatePackageDimensions(shipment);
+                request.RateOptions.PackageTypes = GetPackageTypes(packages);
+
+                RateShipmentResponse rateShipmentResponse = Task.Run(async () =>
+                        await shipEngineWebClient.RateShipment(request, ApiLogSource.FedEx).ConfigureAwait(false)).Result;
 
                 // Only need to add the Smart Post values if it's in the available types
                 if (availableServiceTypeIds.Contains((int) FedExServiceType.SmartPost))
@@ -85,6 +85,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx
                 rateShipmentResponse.RateResponse.Rates = rateShipmentResponse.RateResponse.Rates
                     .OrderBy(r => r.ShippingAmount.Amount)
                     .ToList();
+
+                rateShipmentResponse.RateResponse.Rates = ClearExcludedTypesByService(rateShipmentResponse.RateResponse.Rates);
+
                 var rateGroupFactory = new FedExRateGroupFactory(availableServiceTypeIds);
                 return rateGroupFactory.Create(rateShipmentResponse.RateResponse, ShipmentTypeCode.FedEx, availableServiceTypeApiValues);
             }
@@ -95,6 +98,25 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         }
 
         static string[] availablePackageTypes = new[] { "package", "fedex_pak", "fedex_tube", "fedex_envelope", "fedex_envelope_onerate", "fedex_extra_large_box_onerate", "fedex_large_box_onerate", "fedex_medium_box_onerate", "fedex_pak_onerate", "fedex_small_box_onerate", "fedex_tube_onerate" };
+
+        private List<Rate> ClearExcludedTypesByService(List<Rate> rates)
+        {
+            var excludeServiceTypesIds = shipmentType.GetExcludedServiceTypes().ToList();
+            var excludeServiceTypeApiValues = excludeServiceTypesIds
+                .Cast<FedExServiceType>()
+                .Select(t => EnumHelper.GetApiValue(t))
+                .ToList();
+
+            foreach (var rate in rates.ToList())
+            {
+                if (excludeServiceTypeApiValues.Contains(rate.ServiceCode) && rate.PackageType.Contains("_onerate"))
+                {
+                    rates.Remove(rate);
+                }
+            }
+
+            return rates;
+        }
 
         private List<string> GetPackageTypes(List<IPackageAdapter> packages)
         {
