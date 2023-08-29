@@ -509,10 +509,20 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
 		{
 			var (description, amount) = GetRateAddOnDetails((PostalConfirmationType) shipment.Postal.Confirmation, uspsRate.AddOns);
 
+			var surAmount = 0m;
+
+			if (uspsRate.Surcharges != null)
+			{
+				foreach (var surchargeV5 in uspsRate.Surcharges)
+				{
+					surAmount += surchargeV5.Amount;
+				}
+			}
+
 			var baseRate = new RateResult(
 				PostalUtility.GetPostalServiceTypeDescription(serviceType) + description,
 				PostalUtility.GetDaysForRate(uspsRate.DeliverDays, uspsRate.DeliveryDate),
-				uspsRate.Amount + amount,
+				uspsRate.Amount + amount + surAmount,
 				new UspsPostalRateSelection(serviceType, account))
 			{
 				ProviderLogo = EnumHelper.GetImage((ShipmentTypeCode) shipment.ShipmentType)
