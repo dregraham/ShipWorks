@@ -108,7 +108,7 @@ namespace ShipWorks.Shipping.ShipEngine
         protected virtual void SaveLabelInfoToEntity(ShipmentEntity shipment, Label label)
         {
             shipment.TrackingNumber = label.TrackingNumber;
-            shipment.ShipmentCost = (decimal) label.ShipmentCost.Amount;
+            shipment.ShipmentCost = (decimal) label.ShipmentCost.Amount + (decimal) label.InsuranceCost.Amount;
             SaveShipEngineLabelID(shipment, label);
         }
 
