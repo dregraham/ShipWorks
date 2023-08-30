@@ -112,20 +112,22 @@ $ADDINS_PACKAGES_CONFIG = Join-Path $ADDINS_DIR "packages.config"
 $MODULES_PACKAGES_CONFIG = Join-Path $MODULES_DIR "packages.config"
 
 # Try find NuGet.exe in path if not exists
-# if (!(Test-Path $NUGET_EXE)) {
-#     Write-Verbose -Message "Trying to find nuget.exe in PATH..."
-#     $existingPaths = $Env:Path -Split ';' | Where-Object { (![string]::IsNullOrEmpty($_)) -and (Test-Path $_ -PathType Container) }
-#     $NUGET_EXE_IN_PATH = Get-ChildItem -Path $existingPaths -Filter "nuget.exe" | Select -First 1
-#     if ($NUGET_EXE_IN_PATH -ne $null -and (Test-Path $NUGET_EXE_IN_PATH.FullName)) {
-#         Write-Verbose -Message "Found in PATH at $($NUGET_EXE_IN_PATH.FullName)."
-#         $NUGET_EXE = $NUGET_EXE_IN_PATH.FullName
-#     }
-# }
+if (!(Test-Path $NUGET_EXE)) {
+    Write-Verbose -Message "Trying to find nuget.exe in PATH..."
+    Write-Host "Trying to find nuget.exe in PATH..."
+    $existingPaths = $Env:Path -Split ';' | Where-Object { (![string]::IsNullOrEmpty($_)) -and (Test-Path $_ -PathType Container) }
+    $NUGET_EXE_IN_PATH = Get-ChildItem -Path $existingPaths -Filter "nuget.exe" | Select -First 1
+    if ($NUGET_EXE_IN_PATH -ne $null -and (Test-Path $NUGET_EXE_IN_PATH.FullName)) {
+        Write-Verbose -Message "Found in PATH at $($NUGET_EXE_IN_PATH.FullName)."
+        Write-Host "Found in PATH at $($NUGET_EXE_IN_PATH.FullName)."
+        $NUGET_EXE = $NUGET_EXE_IN_PATH.FullName
+    }
+}
 
-Remove-Item -Path $NUGET_EXE
 # Try download NuGet.exe if not exists
 if (!(Test-Path $NUGET_EXE)) {
     Write-Verbose -Message "Downloading NuGet.exe..."
+    Write-Host "Downloading NuGet.exe..."
     try {
         $wc = GetProxyEnabledWebClient
         $wc.DownloadFile($NUGET_URL, $NUGET_EXE)
