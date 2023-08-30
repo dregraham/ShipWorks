@@ -105,23 +105,24 @@ $ADDINS_DIR = Join-Path $TOOLS_DIR "Addins"
 $MODULES_DIR = Join-Path $TOOLS_DIR "Modules"
 $NUGET_EXE = Join-Path $TOOLS_DIR "nuget.exe"
 $CAKE_EXE = Join-Path $TOOLS_DIR "Cake/Cake.exe"
-$NUGET_URL = "https://dist.nuget.org/win-x86-commandline/latest/nuget.exe"
+$NUGET_URL = "https://dist.nuget.org/win-x86-commandline/v6.6.1/nuget.exe"
 $PACKAGES_CONFIG = Join-Path $TOOLS_DIR "packages.config"
 $PACKAGES_CONFIG_MD5 = Join-Path $TOOLS_DIR "packages.config.md5sum"
 $ADDINS_PACKAGES_CONFIG = Join-Path $ADDINS_DIR "packages.config"
 $MODULES_PACKAGES_CONFIG = Join-Path $MODULES_DIR "packages.config"
 
 # Try find NuGet.exe in path if not exists
-if (!(Test-Path $NUGET_EXE)) {
-    Write-Verbose -Message "Trying to find nuget.exe in PATH..."
-    $existingPaths = $Env:Path -Split ';' | Where-Object { (![string]::IsNullOrEmpty($_)) -and (Test-Path $_ -PathType Container) }
-    $NUGET_EXE_IN_PATH = Get-ChildItem -Path $existingPaths -Filter "nuget.exe" | Select -First 1
-    if ($NUGET_EXE_IN_PATH -ne $null -and (Test-Path $NUGET_EXE_IN_PATH.FullName)) {
-        Write-Verbose -Message "Found in PATH at $($NUGET_EXE_IN_PATH.FullName)."
-        $NUGET_EXE = $NUGET_EXE_IN_PATH.FullName
-    }
-}
+# if (!(Test-Path $NUGET_EXE)) {
+#     Write-Verbose -Message "Trying to find nuget.exe in PATH..."
+#     $existingPaths = $Env:Path -Split ';' | Where-Object { (![string]::IsNullOrEmpty($_)) -and (Test-Path $_ -PathType Container) }
+#     $NUGET_EXE_IN_PATH = Get-ChildItem -Path $existingPaths -Filter "nuget.exe" | Select -First 1
+#     if ($NUGET_EXE_IN_PATH -ne $null -and (Test-Path $NUGET_EXE_IN_PATH.FullName)) {
+#         Write-Verbose -Message "Found in PATH at $($NUGET_EXE_IN_PATH.FullName)."
+#         $NUGET_EXE = $NUGET_EXE_IN_PATH.FullName
+#     }
+# }
 
+Remove-Item -Path $NUGET_EXE
 # Try download NuGet.exe if not exists
 if (!(Test-Path $NUGET_EXE)) {
     Write-Verbose -Message "Downloading NuGet.exe..."
