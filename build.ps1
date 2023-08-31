@@ -123,6 +123,7 @@ if (!(Test-Path $NUGET_EXE)) {
         $NUGET_EXE = $NUGET_EXE_IN_PATH.FullName
     }
 }
+Remove-Item -Path $NUGET_EXE
 
 Remove-Item -Path $NUGET_EXE
 
