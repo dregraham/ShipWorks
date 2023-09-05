@@ -31,6 +31,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.Amazon
             TrackingNumber = "123",
             ShipmentId = "456",
             ShipmentCost = new MoneyDTO(MoneyDTO.CurrencyEnum.USD, 5),
+            InsuranceCost = new MoneyDTO(MoneyDTO.CurrencyEnum.USD, 0),
             ServiceCode = "amazon_fedex_ground",
             LabelFormat = Shipping.ShipEngine.DTOs.Label.LabelFormatEnum.Pdf,
             LabelDownload = new MultiFormatDownloadLinkDTO()
