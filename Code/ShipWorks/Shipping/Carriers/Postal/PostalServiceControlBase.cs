@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using Autofac;
 using Interapptive.Shared;
@@ -150,68 +151,72 @@ namespace ShipWorks.Shipping.Carriers.Postal
             // Unhook events
             service.SelectedIndexChanged -= new EventHandler(OnServiceChanged);
             confirmation.SelectedIndexChanged -= OnConfirmationChanged;
-
-            using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
+            try
             {
-                Dictionary<int, string> services = lifetimeScope.Resolve<IShipmentServicesBuilderFactory>()
-                    .Get(ShipmentTypeCode)
-                    .BuildServiceTypeDictionary(LoadedShipments);
 
-                // Bind the drop down to the international services
-                service.DataSource = ActiveEnumerationBindingSource
-                    .Create(services.Select(type => new KeyValuePair<string, PostalServiceType>(type.Value, (PostalServiceType) type.Key)).ToList());
-            }
-
-            service.DisplayMember = "Key";
-            service.ValueMember = "Value";
-
-            // If they all have confirmation load the confirmation types
-            if (availableConfirmations.Count > 0)
-            {
-                UpdateConfirmationTypes(availableConfirmations);
-            }
-            // Otherwise load nothing
-            else
-            {
-                confirmation.DataSource = new KeyValuePair<string, PostalConfirmationType>[0];
-                confirmation.Enabled = true;
-            }
-            confirmation.DisplayMember = "Key";
-            confirmation.ValueMember = "Value";
-
-            // Load all the shipment values
-            using (MultiValueScope scope = new MultiValueScope())
-            {
-                foreach (ShipmentEntity shipment in LoadedShipments)
+                using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
                 {
-                    service.ApplyMultiValue((PostalServiceType) shipment.Postal.Service);
-                    confirmation.ApplyMultiValue((PostalConfirmationType) shipment.Postal.Confirmation);
+                    Dictionary<int, string> services = lifetimeScope.Resolve<IShipmentServicesBuilderFactory>()
+                        .Get(ShipmentTypeCode)
+                        .BuildServiceTypeDictionary(LoadedShipments);
 
-                    shipDate.ApplyMultiDate(shipment.ShipDate.ToLocalTime());
-                    weight.ApplyMultiWeight(shipment.ContentWeight);
-
-                    packagingType.ApplyMultiValue((PostalPackagingType) shipment.Postal.PackagingType);
-
-                    nonRectangular.ApplyMultiCheck(shipment.Postal.NonRectangular);
-                    nonMachinable.ApplyMultiCheck(shipment.Postal.NonMachinable);
-
-                    expressSignatureWaiver.ApplyMultiCheck(shipment.Postal.ExpressSignatureWaiver);
+                    // Bind the drop down to the international services
+                    service.DataSource = ActiveEnumerationBindingSource
+                        .Create(services.Select(type => new KeyValuePair<string, PostalServiceType>(type.Value, (PostalServiceType) type.Key)).ToList());
                 }
-            }
 
-            // Make sure confirmation looks multi-valued if it's a mix
-            if (availableConfirmations.Count == 0)
+                service.DisplayMember = "Key";
+                service.ValueMember = "Value";
+
+                // If they all have confirmation load the confirmation types
+                if (availableConfirmations.Count > 0)
+                {
+                    UpdateConfirmationTypes(availableConfirmations);
+                }
+                // Otherwise load nothing
+                else
+                {
+                    confirmation.DataSource = new KeyValuePair<string, PostalConfirmationType>[0];
+                    confirmation.Enabled = true;
+                }
+                confirmation.DisplayMember = "Key";
+                confirmation.ValueMember = "Value";
+
+                // Load all the shipment values
+                using (MultiValueScope scope = new MultiValueScope())
+                {
+                    foreach (ShipmentEntity shipment in LoadedShipments)
+                    {
+                        service.ApplyMultiValue((PostalServiceType) shipment.Postal.Service);
+                        confirmation.ApplyMultiValue((PostalConfirmationType) shipment.Postal.Confirmation);
+
+                        shipDate.ApplyMultiDate(shipment.ShipDate.ToLocalTime());
+                        weight.ApplyMultiWeight(shipment.ContentWeight);
+
+                        packagingType.ApplyMultiValue((PostalPackagingType) shipment.Postal.PackagingType);
+
+                        nonRectangular.ApplyMultiCheck(shipment.Postal.NonRectangular);
+                        nonMachinable.ApplyMultiCheck(shipment.Postal.NonMachinable);
+
+                        expressSignatureWaiver.ApplyMultiCheck(shipment.Postal.ExpressSignatureWaiver);
+                    }
+                }
+
+                // Make sure confirmation looks multi-valued if it's a mix
+                if (availableConfirmations.Count == 0)
+                {
+                    confirmation.MultiValued = true;
+                }
+
+                // Only show express section if necessary
+                sectionExpress.Visible = allExpressMail;
+            }
+            finally
             {
-                confirmation.MultiValued = true;
+                // Rehook events
+                service.SelectedIndexChanged += new EventHandler(OnServiceChanged);
+                confirmation.SelectedIndexChanged += OnConfirmationChanged;
             }
-
-            // Only show express section if necessary
-            sectionExpress.Visible = allExpressMail;
-
-            // Rehook events
-            service.SelectedIndexChanged += new EventHandler(OnServiceChanged);
-            confirmation.SelectedIndexChanged += OnConfirmationChanged;
-
             // Update the descriptive section text
             UpdateSectionDescription();
 
@@ -363,6 +368,10 @@ namespace ShipWorks.Shipping.Carriers.Postal
 
             // Update section description
             UpdateSectionDescription();
+
+            //needed to recalculation of package types
+            SaveToShipments();
+            UpdateAvailablePackageTypes(LoadedShipments);
 
             UpdateAvailableShipmentOptions((PostalPackagingType?) packagingType.SelectedValue);
 

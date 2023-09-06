@@ -27,7 +27,7 @@ namespace ShipWorks.Shipping.ShipEngine
                 {
                     ShipTo = CreateShipToAddress(shipment),
                     ShipFrom = CreateShipFromAddress(shipment),
-                    ShipDate = shipment.ShipDate,
+                    ShipDate = GetDatePartInLocalTimeZone(shipment.ShipDate),
                 }
             };
             return request;
@@ -45,6 +45,12 @@ namespace ShipWorks.Shipping.ShipEngine
             };
         }
 
+        private DateTime GetDatePartInLocalTimeZone(DateTime utcDate)
+        {
+            var shipDate = utcDate.ToLocalTime().Date;
+            return new DateTime(shipDate.Year, shipDate.Month, shipDate.Day, 0, 0, 0, DateTimeKind.Utc);
+        }
+
         /// <summary>
         /// Create a PurchaseLabelRequest from a shipment, packages and service code
         /// </summary>
@@ -55,13 +61,12 @@ namespace ShipWorks.Shipping.ShipEngine
             {
                 LabelFormat = GetPurchaseLabelRequestLabelFormat((ThermalLanguage) shipment.RequestedLabelFormat),
                 LabelLayout = "4x6",
-                IsReturnLabel = shipment.ReturnShipment,           
-
+                IsReturnLabel = shipment.ReturnShipment,
                 Shipment = new Shipment()
                 {
                     ShipTo = CreateShipToAddress(shipment),
                     ShipFrom = CreateShipFromAddress(shipment),
-                    ShipDate = shipment.ShipDate,
+                    ShipDate = GetDatePartInLocalTimeZone(shipment.ShipDate),
                     Packages = CreatePackageForLabel(packages, getPackageCode, addPackageInsurance),
                     ServiceCode = serviceCode
                 }
@@ -69,8 +74,8 @@ namespace ShipWorks.Shipping.ShipEngine
 
             if (request.Shipment.Packages.Any() && shipment.ShipmentTypeCode == ShipmentTypeCode.DhlEcommerce)
             {
-                // Yes, set to Reference3 as per DHL
-                request.Shipment.Packages.First().LabelMessages.Reference3 = shipment.DhlEcommerce.Reference1;
+                // Yes, set to Reference1 as per DHL
+                request.Shipment.Packages.First().LabelMessages.Reference1 = shipment.DhlEcommerce.Reference1;
             }
 
             return request;
@@ -133,6 +138,7 @@ namespace ShipWorks.Shipping.ShipEngine
             {
                 AddressResidentialIndicator = residentialIndicator,
                 Name = personAdapter.UnparsedName,
+                Email = personAdapter.Email,
                 Phone = personAdapter.Phone,
                 CompanyName = personAdapter.Company,
                 AddressLine1 = personAdapter.Street1,

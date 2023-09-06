@@ -40,6 +40,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.DhlExpress
                 LabelDownload = link,
                 TrackingNumber = "aaaaaaaa",
                 ShipmentCost = new MoneyDTO() { Amount = 2 },
+                InsuranceCost = new MoneyDTO() { Amount = 0 },
                 ShipmentId = "abcd",
                 LabelId = "defg"
             };

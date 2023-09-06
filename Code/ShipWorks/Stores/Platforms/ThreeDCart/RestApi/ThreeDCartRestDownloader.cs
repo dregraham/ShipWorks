@@ -114,7 +114,7 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart.RestApi
                     return;
                 }
 
-                await DownloadOrders(startDate.Value).ConfigureAwait(false);
+                await DownloadOrders(startDate.Value, totalCount).ConfigureAwait(false);
             }
             catch (Exception ex)
             {
@@ -130,26 +130,25 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart.RestApi
         /// <summary>
         /// Downloads orders on or after the startDate
         /// </summary>
-        private async Task DownloadOrders(DateTime startDate)
+        private async Task DownloadOrders(DateTime startDate, int ordersNumberToDownload)
         {
             int offset = 1;
-            bool ordersToDownload = true;
+            int downloadedOrders = 0;
 
-            while (ordersToDownload)
+            while (ordersNumberToDownload > downloadedOrders)
             {
                 IEnumerable<ThreeDCartOrder> orders = restWebClient.GetOrders(startDate, offset).ToList();
-                if (!orders.Any())
+                var downloadedCount = orders.Count();
+                if (downloadedCount == 0)
                 {
-                    Progress.Detail = "Done.";
-                    Progress.PercentComplete = 100;
-                    ordersToDownload = false;
+                    break;
                 }
-                else
-                {
-                    await LoadOrders(orders).ConfigureAwait(false);
-                    offset += orders.Count();
-                }
+                await LoadOrders(orders).ConfigureAwait(false);
+                offset += downloadedCount;
+                downloadedOrders += downloadedCount;
             }
+            Progress.Detail = "Done.";
+            Progress.PercentComplete = 100;
         }
 
         /// <summary>

@@ -55,6 +55,12 @@ namespace ShipWorks.Shipping.ShipEngine
                 default:
                     throw new ShipEngineException($"{EnumHelper.GetDescription(shipment.ShipmentTypeCode)} returned an unsupported label format.");
             }
+
+            if (label.FormDownload?.Href.HasValue() == true)
+            {
+                byte[] otherResource = resourceDownloader.Download(new Uri(label.FormDownload.Href));
+                SavePdfOther(otherResource, "LabelPart");
+            }
         }
 
         /// <summary>
@@ -78,6 +84,23 @@ namespace ShipWorks.Shipping.ShipEngine
         }
 
         /// <summary>
+        /// Save the Other PDF doc
+        /// </summary>
+        private void SavePdfOther(byte[] otherResource, string name)
+        {
+            using (MemoryStream pdfData = new MemoryStream(otherResource))
+            {
+                resourceManager.CreateFromPdf(
+                    PdfDocumentType.BlackAndWhite,
+                    pdfData,
+                    shipment.ShipmentID,
+                    i => i == 0 ? name : $"{name}{i}", 
+                    (m) => m.ToArray(), 
+                    true);
+            }
+        }
+
+        /// <summary>
         /// Save the label info to the shipment
         /// </summary>
         /// <param name="shipment"></param>
@@ -85,7 +108,7 @@ namespace ShipWorks.Shipping.ShipEngine
         protected virtual void SaveLabelInfoToEntity(ShipmentEntity shipment, Label label)
         {
             shipment.TrackingNumber = label.TrackingNumber;
-            shipment.ShipmentCost = (decimal) label.ShipmentCost.Amount;
+            shipment.ShipmentCost = (decimal) label.ShipmentCost.Amount + (decimal) label.InsuranceCost.Amount;
             SaveShipEngineLabelID(shipment, label);
         }
 

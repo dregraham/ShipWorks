@@ -26,7 +26,6 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
         ShippingPanelControl shippingPanelControl;
         ShippingPanelViewModel viewModel;
         IDisposable visibilitySubscription;
-        readonly IMessenger messenger;
 
         /// <summary>
         /// Constructor
@@ -34,13 +33,6 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
         public ShippingPanel()
         {
             InitializeComponent();
-
-            if (DesignModeDetector.IsDesignerHosted())
-            {
-                return;
-            }
-
-            messenger = IoC.UnsafeGlobalLifetimeScope.Resolve<IMessenger>();
         }
 
         /// <summary>

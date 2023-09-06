@@ -63,7 +63,7 @@ namespace ShipWorks.Shipping.ShipEngine.DTOs
         /// <param name="ancillaryEndorsement">ancillaryEndorsement.</param>
         public AdvancedOptions(string billToAccount = default(string), string billToCountryCode = default(string), BillToPartyEnum? billToParty = default(BillToPartyEnum?), string billToPostalCode = default(string), bool? containsAlcohol = default(bool?), bool? deliveredDutyPaid = default(bool?), bool? nonMachinable = default(bool?), bool? saturdayDelivery = default(bool?), bool? dryIce = default(bool?), Weight dryIceWeight = default(Weight), bool? useUpsGroundFreightPricing = default(bool?), string freightClass = default(string), 
             string customField1 = default(string), string customField2 = default(string), string customField3 = default(string),
-            string ancillaryEndorsement = default(string))
+            string ancillaryEndorsement = default(string), CollectOnDeliveryAdvancedOption collectOnDelivery = default(CollectOnDeliveryAdvancedOption))
         {
             this.BillToAccount = billToAccount;
             this.BillToCountryCode = billToCountryCode;
@@ -81,6 +81,7 @@ namespace ShipWorks.Shipping.ShipEngine.DTOs
             this.CustomField2 = customField2;
             this.CustomField3 = customField3;
             this.AncillaryEndorsement = ancillaryEndorsement;
+            this.CollectOnDelivery = collectOnDelivery;
         }
 
         /// <summary>
@@ -175,6 +176,18 @@ namespace ShipWorks.Shipping.ShipEngine.DTOs
         public string AncillaryEndorsement { get; set; }
 
         /// <summary>
+        /// Gets or Sets ThirdPartyConsignee
+        /// </summary>
+        [DataMember(Name = "third-party-consignee", EmitDefaultValue = false)]
+        public bool ThirdPartyConsignee { get; set; }
+
+        /// <summary>
+        /// Gets or Sets CollectOnDelivery
+        /// </summary>
+        [DataMember(Name = "collect_on_delivery", EmitDefaultValue = false)]
+        public CollectOnDeliveryAdvancedOption CollectOnDelivery { get; set; }
+
+        /// <summary>
         /// Returns the string presentation of the object
         /// </summary>
         /// <returns>String presentation of the object</returns>
@@ -198,6 +211,8 @@ namespace ShipWorks.Shipping.ShipEngine.DTOs
             sb.Append("  CustomField2: ").Append(CustomField2).Append("\n");
             sb.Append("  CustomField3: ").Append(CustomField3).Append("\n");
             sb.Append("  AncillaryEndorsement: ").Append(AncillaryEndorsement).Append("\n");
+            sb.Append("  ThirdPartyConsignee:  ").Append(ThirdPartyConsignee).Append("\n");
+            sb.Append("  CollectOnDelivery: {\n").Append(CollectOnDelivery).Append("\n");
             sb.Append("}\n");
             return sb.ToString();
         }
@@ -311,6 +326,16 @@ namespace ShipWorks.Shipping.ShipEngine.DTOs
                     this.AncillaryEndorsement == input.AncillaryEndorsement ||
                     (this.AncillaryEndorsement != null &&
                      this.AncillaryEndorsement.Equals(input.AncillaryEndorsement))
+                ) &&
+                (
+                    this.ThirdPartyConsignee == input.ThirdPartyConsignee ||
+                    (this.ThirdPartyConsignee != null &&
+                     this.ThirdPartyConsignee.Equals(input.ThirdPartyConsignee))
+                ) &&
+                (
+                    this.CollectOnDelivery == input.CollectOnDelivery ||
+                    (this.CollectOnDelivery != null &&
+                     this.CollectOnDelivery.Equals(input.CollectOnDelivery))
                 );
         }
 
@@ -355,6 +380,8 @@ namespace ShipWorks.Shipping.ShipEngine.DTOs
                     hashCode = hashCode * 59 + this.CustomField3.GetHashCode();
                 if (this.AncillaryEndorsement != null)
                     hashCode = hashCode * 59 + this.AncillaryEndorsement.GetHashCode();
+                if(this.CollectOnDelivery != null)
+                    hashCode = hashCode * 59 + this.CollectOnDelivery.GetHashCode();
                 return hashCode;
             }
         }

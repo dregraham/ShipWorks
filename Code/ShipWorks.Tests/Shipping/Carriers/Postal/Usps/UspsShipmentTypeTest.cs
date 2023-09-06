@@ -148,6 +148,8 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Usps
 
             adultSignatureCombinationsAllowed.Add(new PostalServicePackagingCombination(PostalServiceType.ParcelSelect, PostalPackagingType.Package));
 
+            adultSignatureCombinationsAllowed.Add(new PostalServicePackagingCombination(PostalServiceType.GroundAdvantage, PostalPackagingType.Package));
+
             adultSignatureCombinationsAllowed.Add(new PostalServicePackagingCombination(PostalServiceType.CriticalMail, PostalPackagingType.LargeEnvelope));
         }
 

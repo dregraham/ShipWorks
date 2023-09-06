@@ -431,6 +431,12 @@ namespace ShipWorks.Data.Model.EntityClasses
 			_fieldsCustomProperties.Add("CustomsRecipientTIN", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
 			_fieldsCustomProperties.Add("CustomsRecipientTINType", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+			_fieldsCustomProperties.Add("PayorCountryCode", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+			_fieldsCustomProperties.Add("PayorPostalCode", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+			_fieldsCustomProperties.Add("DeliveredDutyPaid", fieldHashtable);
 		}
 		#endregion
 
@@ -978,6 +984,39 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			get { return (Nullable<System.Int32>)GetValue((int)FedExProfileFieldIndex.CustomsRecipientTINType, false); }
 			set	{ SetValue((int)FedExProfileFieldIndex.CustomsRecipientTINType, value); }
+		}
+
+		/// <summary> The PayorCountryCode property of the Entity FedExProfile<br/><br/></summary>
+		/// <remarks>Mapped on  table field: "FedExProfile"."PayorCountryCode"<br/>
+		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 2<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		[DataMember]
+		public virtual System.String PayorCountryCode
+		{
+			get { return (System.String)GetValue((int)FedExProfileFieldIndex.PayorCountryCode, true); }
+			set	{ SetValue((int)FedExProfileFieldIndex.PayorCountryCode, value); }
+		}
+
+		/// <summary> The PayorPostalCode property of the Entity FedExProfile<br/><br/></summary>
+		/// <remarks>Mapped on  table field: "FedExProfile"."PayorPostalCode"<br/>
+		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 10<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		[DataMember]
+		public virtual System.String PayorPostalCode
+		{
+			get { return (System.String)GetValue((int)FedExProfileFieldIndex.PayorPostalCode, true); }
+			set	{ SetValue((int)FedExProfileFieldIndex.PayorPostalCode, value); }
+		}
+
+		/// <summary> The DeliveredDutyPaid property of the Entity FedExProfile<br/><br/></summary>
+		/// <remarks>Mapped on  table field: "FedExProfile"."DeliveredDutyPaid"<br/>
+		/// Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		[DataMember]
+		public virtual Nullable<System.Boolean> DeliveredDutyPaid
+		{
+			get { return (Nullable<System.Boolean>)GetValue((int)FedExProfileFieldIndex.DeliveredDutyPaid, false); }
+			set	{ SetValue((int)FedExProfileFieldIndex.DeliveredDutyPaid, value); }
 		}
 
 		/// <summary> Gets / sets related entity of type 'ShippingProfileEntity' which has to be set using a fetch action earlier. If no related entity is set for this property, null is returned.<br/><br/>

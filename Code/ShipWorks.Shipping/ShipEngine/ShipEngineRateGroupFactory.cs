@@ -46,7 +46,6 @@ namespace ShipWorks.Shipping.ShipEngine
             {
                 return UpsShipEngineServiceTypeUtility.GetServiceType(serviceCode);
             }
-
             return serviceCode;
         }
 
@@ -55,7 +54,7 @@ namespace ShipWorks.Shipping.ShipEngine
         /// </summary>
         protected virtual RateResult GetRateResult(Rate apiRate, ShipmentTypeCode shipmentType)
         {
-            double amount = (apiRate.ShippingAmount?.Amount ?? 0) + (apiRate.OtherAmount?.Amount ?? 0) + (apiRate.InsuranceAmount?.Amount ?? 0);
+            double amount = (apiRate.ShippingAmount?.Amount ?? 0) + (apiRate.OtherAmount?.Amount ?? 0) + (apiRate.InsuranceAmount?.Amount ?? 0) + (apiRate.ConfirmationAmount?.Amount ?? 0);
             string days = apiRate.DeliveryDays.ToString();
 
             if (!string.IsNullOrWhiteSpace(apiRate.CarrierDeliveryDays))

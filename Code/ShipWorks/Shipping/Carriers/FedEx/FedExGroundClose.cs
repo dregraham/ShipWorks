@@ -1,18 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+using System.Threading.Tasks;
 using Autofac;
-using Divelements.SandRibbon;
-using Interapptive.Shared.Utility;
 using ShipWorks.ApplicationCore;
-using ShipWorks.Common.IO.Hardware.Printers;
-using ShipWorks.Data;
-using ShipWorks.Data.Connection;
-using ShipWorks.Data.Model.Custom;
-using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Data.Model.HelperClasses;
-using ShipWorks.Shipping.Carriers.FedEx.Api;
+using ShipWorks.Common.Threading;
+using ShipWorks.Shipping.ShipEngine.Manifest;
 
 namespace ShipWorks.Shipping.Carriers.FedEx
 {
@@ -24,20 +16,36 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         /// <summary>
         /// Process the end of day close.  Return true if there were any shipments to be closed
         /// </summary>
-        public static List<FedExEndOfDayCloseEntity> ProcessClose()
+        public static List<long> ProcessClose()
         {
             using (var lifetimeScope = IoC.BeginLifetimeScope())
             {
-                List<FedExEndOfDayCloseEntity> closings = new List<FedExEndOfDayCloseEntity>();
+                var closings = new List<long>();
 
-                IFedExShippingClerk shippingClerk = lifetimeScope.Resolve<IFedExShippingClerkFactory>().Create();
+                var shipEngineManifestUtility = lifetimeScope.Resolve<IShipEngineManifestUtility>();
 
-                foreach (FedExAccountEntity account in FedExAccountManager.Accounts)
+                Exception processException = null;
+
+                foreach (var account in FedExAccountManager.Accounts)
                 {
-                    FedExEndOfDayCloseEntity closing = shippingClerk.CloseGround(account);
-                    if (closing != null)
+                    Task.Run(async () =>
                     {
-                        closings.Add(closing);
+                        try
+                        {
+                            closings.AddRange(await shipEngineManifestUtility.CreateManifestTask(account,
+                                new ProgressItem("FedEx Ground Close"), new List<string>(),
+                                new List<string>()));
+                        }
+                        catch (Exception ex)
+                        {
+                            processException = ex;
+                        }
+
+                    }).Wait();
+
+                    if (processException != null)
+                    {
+                        throw processException;
                     }
                 }
 
@@ -46,107 +54,19 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         }
 
         /// <summary>
-        /// Populate the given menu with all the menu items to print fedex end of day reports
-        /// </summary>
-        public static void PopulatePrintReportsMenu(Menu parentMenu)
-        {
-            parentMenu.Items.Clear();
-
-            if (FedExAccountManager.Accounts.Count == 1)
-            {
-                PopulateFedExPrintCloseReportMenu(parentMenu, FedExAccountManager.Accounts[0]);
-            }
-            else
-            {
-                foreach (FedExAccountEntity account in FedExAccountManager.Accounts)
-                {
-                    MenuItem accountItem = new MenuItem(account.Description);
-                    parentMenu.Items.Add(accountItem);
-
-                    Menu accountMenu = new Menu();
-                    accountItem.Items.Add(accountMenu);
-
-                    PopulateFedExPrintCloseReportMenu(accountMenu, account);
-                }
-            }
-
-            if (parentMenu.Items.Count == 0)
-            {
-                parentMenu.Items.Add(new MenuItem("(None)") { Enabled = false });
-            }
-        }
-
-        /// <summary>
-        /// Populate the menu to print end of day reports for the given account
-        /// </summary>
-        private static void PopulateFedExPrintCloseReportMenu(Menu parent, FedExAccountEntity account)
-        {
-            foreach (FedExEndOfDayCloseEntity closing in GetRecentlyClosed(account))
-            {
-                string dateTime = StringUtility.FormatFriendlyDateTime(closing.CloseDate);
-
-                MenuItem printDate = new MenuItem(dateTime);
-                printDate.Activate += new EventHandler(OnPrintFedexEndOfDay);
-                printDate.Tag = closing;
-
-                parent.Items.Add(printDate);
-            }
-
-            // If none, add a default empty item.
-            if (parent.Items.Count == 0)
-            {
-                parent.Items.Add(new MenuItem("(None)") { Enabled = false });
-            }
-        }
-
-        /// <summary>
-        /// Get the list of recently performed fedex closings
-        /// </summary>
-        private static IEnumerable<FedExEndOfDayCloseEntity> GetRecentlyClosed(FedExAccountEntity account)
-        {
-            FedExEndOfDayCloseCollection closings = FedExEndOfDayCloseCollection.Fetch(SqlAdapter.Default,
-                FedExEndOfDayCloseFields.FedExAccountID == account.FedExAccountID &
-                FedExEndOfDayCloseFields.CloseDate >= DateTime.UtcNow.AddDays(-5).Date &
-                FedExEndOfDayCloseFields.IsSmartPost == false);
-
-            return closings.OrderByDescending(c => c.CloseDate);
-        }
-
-        /// <summary>
-        /// Print a Fedex end of day report
-        /// </summary>
-        private static void OnPrintFedexEndOfDay(object sender, EventArgs e)
-        {
-            MenuItem menuItem = (MenuItem) sender;
-            FedExEndOfDayCloseEntity closing = (FedExEndOfDayCloseEntity) menuItem.Tag;
-
-            PrintCloseReports(closing);
-        }
-
-        /// <summary>
-        /// Print the close reports for the given closing.  The user will be prompted for print settings.
-        /// </summary>
-        public static void PrintCloseReports(FedExEndOfDayCloseEntity closing)
-        {
-            PrintCloseReports(new FedExEndOfDayCloseEntity[] { closing });
-        }
-
-        /// <summary>
         /// Print the close reports for all of the given closings.  The user will be prompted for print settings.
         /// </summary>
-        public static void PrintCloseReports(IEnumerable<FedExEndOfDayCloseEntity> closings)
+        public static void PrintCloseReports(IEnumerable<long> closings)
         {
-            StringBuilder contentToPrint = new StringBuilder();
-
-            foreach (FedExEndOfDayCloseEntity closing in closings)
+            using (var lifetimeScope = IoC.BeginLifetimeScope())
             {
-                foreach (DataResourceReference resource in DataResourceManager.LoadConsumerResourceReferences(closing.FedExEndOfDayCloseID))
+                var shipEngineManifestUtility = lifetimeScope.Resolve<IShipEngineManifestUtility>();
+
+                foreach (var c in closings)
                 {
-                    contentToPrint.Append(resource.ReadAllText());
+                    shipEngineManifestUtility.Print(c);
                 }
             }
-
-            PrintUtility.PrintText(null, "ShipWorks - FedEx Reports", contentToPrint.ToString(), false);
         }
     }
 }

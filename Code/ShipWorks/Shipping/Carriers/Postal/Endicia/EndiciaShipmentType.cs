@@ -445,6 +445,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
                     return "Priority";
                 case PostalServiceType.CriticalMail:
                     return "CriticalMail";
+                case PostalServiceType.GroundAdvantage:
+                    return "GroundAdvantage";
 
                 case PostalServiceType.InternationalExpress:
                     return "PriorityMailExpressInternational";

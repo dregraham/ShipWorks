@@ -11,6 +11,7 @@ using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Utility;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.ApplicationCore;
+using ShipWorks.Common.IO.Hardware.Printers;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Shipping.Carriers.FedEx.Api.Enums;
@@ -46,6 +47,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             {
                 packagesCount.Items.Add(i);
             }
+
+            // ShipEngine does not support EPL
+            requestedLabelFormat.ExcludeFormats(ThermalLanguage.EPL);
         }
 
         /// <summary>
@@ -68,9 +72,10 @@ namespace ShipWorks.Shipping.Carriers.FedEx
 
             EnumHelper.BindComboBox<ResidentialDeterminationType>(residentialDetermination);
 
-            // Don't give the user the option to have FedEx perform the address look up; the thought it that the shipper will know
+            EnumHelper.BindComboBox<ResidentialDeterminationType>(senderResidentialCombo);
+            // Don't give the user the option to perform the address look up; the thought it that the shipper will know
             // what type of address they are shipping from, and it saves delays associated with a service call
-            EnumHelper.BindComboBox<ResidentialDeterminationType>(senderResidentialCombo, t => t != ResidentialDeterminationType.FedExAddressLookup && t != ResidentialDeterminationType.FromAddressValidation);
+            EnumHelper.BindComboBox<ResidentialDeterminationType>(senderResidentialCombo, t => t != ResidentialDeterminationType.FromAddressValidation);
 
             EnumHelper.BindComboBox<FedExSmartPostIndicia>(smartIndicia);
             EnumHelper.BindComboBox<FedExSmartPostEndorsement>(smartEndorsement);
@@ -114,8 +119,13 @@ namespace ShipWorks.Shipping.Carriers.FedEx
 
             AddValueMapping(fedex, FedExProfileFields.PayorTransportType, payorTransportTypeState, payorTransport, labelPayorTransport);
             AddValueMapping(fedex, FedExProfileFields.PayorTransportAccount, payorTransportAccountState, transportAccount, labelTransportAccount);
-            AddValueMapping(fedex, FedExProfileFields.PayorDutiesType, payorDutiesTypeState, payorDuties, labelPayorDuties);
+            //Commented out for FedEx platform. Leaving this causes errors and its not currently needed
+            //AddValueMapping(fedex, FedExProfileFields.PayorDutiesType, payorDutiesTypeState, payorDuties, labelPayorDuties);
             AddValueMapping(fedex, FedExProfileFields.PayorDutiesAccount, payorDutiesAccountState, dutiesAccount, labelDutiesAccount);
+            AddValueMapping(fedex, FedExProfileFields.PayorCountryCode, payorCountryCodeState, payorCountryCode, labelPayorCountryCode);
+            AddValueMapping(fedex, FedExProfileFields.PayorPostalCode, payorPostalCodeState, payorPostalCode, labelPayorPostalCode);
+
+            AddValueMapping(fedex, FedExProfileFields.DeliveredDutyPaid, deliveredDutyPaidState, deliveredDutyPaid, labelDeliveredDutyPaid);
 
             AddValueMapping(profile, ShippingProfileFields.ReturnShipment, returnShipmentState, returnShipment);
             AddValueMapping(fedex, FedExProfileFields.ReturnType, returnTypeState, returnType, labelReturnType);
@@ -385,7 +395,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         /// </summary>
         private void LoadPayorTypes()
         {
-            EnumHelper.BindComboBox<FedExPayorType>(payorTransport);
+            EnumHelper.BindComboBox<FedExPayorType>(payorTransport, t => t != FedExPayorType.Collect);
             EnumHelper.BindComboBox<FedExPayorType>(payorDuties);
         }
 

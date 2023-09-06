@@ -60,6 +60,7 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
             NoPostage = source.NoPostage;
             Insurance = source.Insurance;
             CustomsRecipientTin = source.CustomsRecipientTin;
+            InternalTransactionNumber = source.InternalTransactionNumber;
             
             Endicia = (IEndiciaShipmentEntity) source.Endicia?.AsReadOnly(objectMap);
             Shipment = (IShipmentEntity) source.Shipment?.AsReadOnly(objectMap);
@@ -215,6 +216,12 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
         /// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 14<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
         public System.String CustomsRecipientTin { get; }
+        /// <summary> The InternalTransactionNumber property of the Entity PostalShipment<br/><br/>
+        /// </summary>
+        /// <remarks>Mapped on table field: "PostalShipment"."InternalTransactionNumber"<br/>
+        /// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 25<br/>
+        /// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+        public System.String InternalTransactionNumber { get; }
         
         public IEndiciaShipmentEntity Endicia { get; }
         

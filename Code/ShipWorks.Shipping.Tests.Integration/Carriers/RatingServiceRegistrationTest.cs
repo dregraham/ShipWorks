@@ -32,7 +32,7 @@ namespace ShipWorks.Shipping.Tests.Integration.Carriers
         [InlineData(ShipmentTypeCode.Endicia, typeof(EndiciaRatingService))]
         [InlineData(ShipmentTypeCode.Express1Endicia, typeof(Express1EndiciaRatingService))]
         [InlineData(ShipmentTypeCode.Express1Usps, typeof(Express1UspsRatingService))]
-        [InlineData(ShipmentTypeCode.FedEx, typeof(FedExRatingService))]
+        [InlineData(ShipmentTypeCode.FedEx, typeof(FedExShipEngineRatingClient))]
         [InlineData(ShipmentTypeCode.iParcel, typeof(iParcelRatingService))]
         [InlineData(ShipmentTypeCode.OnTrac, typeof(OnTracRatingService))]
         [InlineData(ShipmentTypeCode.Other, typeof(EmptyRatingService))]

@@ -211,7 +211,7 @@
             // accountSettingsControl
             // 
             this.accountSettingsControl.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.accountSettingsControl.Location = new System.Drawing.Point(26, 147);
+            this.accountSettingsControl.Location = new System.Drawing.Point(26, 59);
             this.accountSettingsControl.Name = "accountSettingsControl";
             this.accountSettingsControl.Size = new System.Drawing.Size(326, 201);
             this.accountSettingsControl.TabIndex = 1;
@@ -221,20 +221,18 @@
             this.optionsControl.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.optionsControl.Location = new System.Drawing.Point(23, 6);
             this.optionsControl.Name = "optionsControl";
-            this.optionsControl.Size = new System.Drawing.Size(409, 190);
+            this.optionsControl.Size = new System.Drawing.Size(409, 45);
             this.optionsControl.TabIndex = 0;
             // 
             // label1
             // 
             this.label1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.label1.Font = new System.Drawing.Font("Tahoma", 8F);
-            this.label1.ForeColor = System.Drawing.SystemColors.ControlDark;
+            this.label1.Font = new System.Drawing.Font("Tahoma", 8.25F);
             this.label1.Location = new System.Drawing.Point(3, 545);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(320, 33);
             this.label1.TabIndex = 6;
-            this.label1.Text = "The FedEx service marks are owned by Federal Express Corporation and are used by " +
-    "permission";
+            this.label1.Text = "FedEx service marks are owned by Federal Express Corporation and used by permission.";
             // 
             // wizardPage1
             // 
@@ -324,8 +322,7 @@
             this.Pages.AddRange(new ShipWorks.UI.Wizard.WizardPage[] {
             this.wizardPageInitial,
             this.wizardPageLicense,
-            this.wizardPageContactInfo,
-            this.wizardPageSettings});
+            this.wizardPageContactInfo});
             this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Hide;
             this.Text = "FedEx Setup Wizard";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.OnFormClosing);

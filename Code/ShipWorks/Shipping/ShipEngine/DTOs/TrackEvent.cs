@@ -47,6 +47,12 @@ namespace ShipWorks.Shipping.ShipEngine.DTOs
         public DateTime? OccurredAt { get; set; }
 
         /// <summary>
+        /// Gets or Sets CarrierOccurredAt
+        /// </summary>
+        [DataMember(Name = "carrier_occurred_at", EmitDefaultValue = false)]
+        public DateTime? CarrierOccurredAt { get; set; }
+
+        /// <summary>
         /// Gets or Sets Description
         /// </summary>
         [DataMember(Name = "description", EmitDefaultValue = false)]

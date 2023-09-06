@@ -9502,6 +9502,16 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(FedExAccountFieldIndex.HubCarrierId);}
 		}
+		/// <summary>Creates a new FedExAccountEntity.ShipEngineCarrierID field instance</summary>
+		public static EntityField2 ShipEngineCarrierID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(FedExAccountFieldIndex.ShipEngineCarrierID);}
+		}
+		/// <summary>Creates a new FedExAccountEntity.SmartPostHub field instance</summary>
+		public static EntityField2 SmartPostHub
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(FedExAccountFieldIndex.SmartPostHub);}
+		}
 	}
 
 	/// <summary>Field Creation Class for entity FedExEndOfDayCloseEntity</summary>
@@ -9986,6 +9996,21 @@ namespace ShipWorks.Data.Model.HelperClasses
 		public static EntityField2 CustomsRecipientTINType
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(FedExProfileFieldIndex.CustomsRecipientTINType);}
+		}
+		/// <summary>Creates a new FedExProfileEntity.PayorCountryCode field instance</summary>
+		public static EntityField2 PayorCountryCode
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(FedExProfileFieldIndex.PayorCountryCode);}
+		}
+		/// <summary>Creates a new FedExProfileEntity.PayorPostalCode field instance</summary>
+		public static EntityField2 PayorPostalCode
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(FedExProfileFieldIndex.PayorPostalCode);}
+		}
+		/// <summary>Creates a new FedExProfileEntity.DeliveredDutyPaid field instance</summary>
+		public static EntityField2 DeliveredDutyPaid
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(FedExProfileFieldIndex.DeliveredDutyPaid);}
 		}
 	}
 
@@ -11011,6 +11036,26 @@ namespace ShipWorks.Data.Model.HelperClasses
 		public static EntityField2 CustomsRecipientTINType
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(FedExShipmentFieldIndex.CustomsRecipientTINType);}
+		}
+		/// <summary>Creates a new FedExShipmentEntity.PayorCountryCode field instance</summary>
+		public static EntityField2 PayorCountryCode
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(FedExShipmentFieldIndex.PayorCountryCode);}
+		}
+		/// <summary>Creates a new FedExShipmentEntity.PayorPostalCode field instance</summary>
+		public static EntityField2 PayorPostalCode
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(FedExShipmentFieldIndex.PayorPostalCode);}
+		}
+		/// <summary>Creates a new FedExShipmentEntity.ShipEngineLabelId field instance</summary>
+		public static EntityField2 ShipEngineLabelId
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(FedExShipmentFieldIndex.ShipEngineLabelId);}
+		}
+		/// <summary>Creates a new FedExShipmentEntity.DeliveredDutyPaid field instance</summary>
+		public static EntityField2 DeliveredDutyPaid
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(FedExShipmentFieldIndex.DeliveredDutyPaid);}
 		}
 	}
 
@@ -24182,6 +24227,11 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(PostalProfileFieldIndex.CustomsRecipientTin);}
 		}
+		/// <summary>Creates a new PostalProfileEntity.InternalTransactionNumber field instance</summary>
+		public static EntityField2 InternalTransactionNumber
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(PostalProfileFieldIndex.InternalTransactionNumber);}
+		}
 	}
 
 	/// <summary>Field Creation Class for entity PostalShipmentEntity</summary>
@@ -24306,6 +24356,11 @@ namespace ShipWorks.Data.Model.HelperClasses
 		public static EntityField2 CustomsRecipientTin
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(PostalShipmentFieldIndex.CustomsRecipientTin);}
+		}
+		/// <summary>Creates a new PostalShipmentEntity.InternalTransactionNumber field instance</summary>
+		public static EntityField2 InternalTransactionNumber
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(PostalShipmentFieldIndex.InternalTransactionNumber);}
 		}
 	}
 

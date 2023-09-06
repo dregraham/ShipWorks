@@ -88,6 +88,7 @@ namespace ShipWorks.Shipping.Carriers.Postal
             AddValueMapping(postal, PostalProfileFields.CustomsContentType, customsContentState, contentType);
             AddValueMapping(postal, PostalProfileFields.CustomsContentDescription, customsContentState, contentDescription);
             AddValueMapping(postal, PostalProfileFields.CustomsRecipientTin, customsRecipientTinState, customsRecipientTin);
+            AddValueMapping(postal, PostalProfileFields.InternalTransactionNumber, customsITNstate, customsITN);
 
             AddValueMapping(packageProfile, PackageProfileFields.DimsProfileID, dimensionsState, dimensionsControl,
                 labelDimensions);
@@ -121,8 +122,12 @@ namespace ShipWorks.Shipping.Carriers.Postal
 
             ShipmentTypeCode shipmentType = (ShipmentTypeCode) Profile.ShipmentType;
 
-            service.DataSource = ActiveEnumerationBindingSource.Create<PostalServiceType>(PostalUtility.GetDomesticServices(shipmentType).Concat(PostalUtility.GetInternationalServices(shipmentType))
-                .Select(s => new KeyValuePair<string, PostalServiceType>(PostalUtility.GetPostalServiceTypeDescription(s), s)).ToList());
+            service.DataSource =
+                ActiveEnumerationBindingSource.Create<PostalServiceType>(PostalUtility.GetDomesticServices(shipmentType)
+                .Concat(PostalUtility.GetInternationalServices(shipmentType))
+                .Where(s => !s.IsHiddenFor(HiddenForContext.Profiles))
+                .Select(s => new KeyValuePair<string, PostalServiceType>(PostalUtility.GetPostalServiceTypeDescription(s), s))
+                .ToList());
         }
 
         /// <summary>

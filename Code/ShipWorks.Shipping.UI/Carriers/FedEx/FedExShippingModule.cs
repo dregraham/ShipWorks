@@ -38,7 +38,7 @@ namespace ShipWorks.Shipping.UI.Carriers.FedEx
                 .Keyed<ICarrierShipmentAdapter>(ShipmentTypeCode.FedEx)
                 .ExternallyOwned();
 
-            builder.RegisterType<FedExRatingService>()
+            builder.RegisterType<FedExShipEngineRatingClient>()
                 .Keyed<IRatingService>(ShipmentTypeCode.FedEx);
 
             builder.RegisterType<FedExRateHashingService>()

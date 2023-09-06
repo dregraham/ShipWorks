@@ -72,11 +72,23 @@ namespace ShipWorks.Shipping.ShipEngine
 
             if (request.Shipment.Packages.Any() && shipment.ShipmentTypeCode == ShipmentTypeCode.DhlEcommerce)
             {
-                // Yes, set to Reference3 as per DHL
-                request.Shipment.Packages.First().LabelMessages.Reference3 = shipment.DhlEcommerce.Reference1;
+                // Yes, set to Reference1 as per DHL
+                request.Shipment.Packages.First().LabelMessages.Reference1 = shipment.DhlEcommerce.Reference1;
             }
 
             return request;
+        }
+
+        /// <summary>
+        /// Create a return label
+        /// </summary>
+        /// <param name="shipment"></param>
+        /// <returns></returns>
+        public virtual PurchaseLabelRequest CreateReturnLabelRequest(ShipmentEntity shipment)
+        {
+            var req = CreatePurchaseLabelRequest(shipment);
+            req.IsReturnLabel = true;
+            return req;
         }
 
         /// <summary>
@@ -120,8 +132,8 @@ namespace ShipWorks.Shipping.ShipEngine
 
                 if (request.Shipment.Packages.Any() && shipment.ShipmentTypeCode == ShipmentTypeCode.DhlEcommerce)
                 {
-                    // Yes, set to Reference3 as per DHL
-                    request.Shipment.Packages.First().LabelMessages.Reference3 = shipment.DhlEcommerce.Reference1;
+                    // Yes, set to Reference1 as per DHL
+                    request.Shipment.Packages.First().LabelMessages.Reference1 = shipment.DhlEcommerce.Reference1;
                 }
 
                 request.Shipment.Items = CreateItems(shipment);
@@ -144,6 +156,11 @@ namespace ShipWorks.Shipping.ShipEngine
         {
 
         }
+
+        /// <summary>
+        /// Create shipment items
+        /// </summary>
+        protected virtual List<ShipmentItem> CreateItems(ShipmentEntity shipment) => new List<ShipmentItem>();
 
         /// <summary>
         /// Ensures the carrier specific shipment (ex. shipment.Dhl) is not null
@@ -174,11 +191,6 @@ namespace ShipWorks.Shipping.ShipEngine
         /// Creates the ShipEngine tax identifier node
         /// </summary>
         protected abstract List<TaxIdentifier> CreateTaxIdentifiers(ShipmentEntity shipment);
-
-        /// <summary>
-        /// Create shipment items
-        /// </summary>
-        protected abstract List<ShipmentItem> CreateItems(ShipmentEntity shipment);
 
         /// <summary>
         /// Gets the carrier specific packages

@@ -85,7 +85,7 @@ namespace ShipWorks.Data.Controls
         /// <summary>
         /// Specialized BindingSource that automatically adds non-existing countries to the bound list so we don't just default to Albania
         /// </summary>
-        private class CountryBindingSource : BindingSource
+        public class CountryBindingSource : BindingSource
         {
             /// <summary>
             /// Constructor

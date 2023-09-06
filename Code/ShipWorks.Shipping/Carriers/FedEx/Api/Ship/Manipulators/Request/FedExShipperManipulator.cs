@@ -76,11 +76,6 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Ship.Manipulators.Request
         private Result DetermineAddressType(Party shipper, IShipmentEntity shipment)
         {
             ResidentialDeterminationType residentialDeterminationType = (ResidentialDeterminationType) shipment.FedEx.OriginResidentialDetermination;
-            if (residentialDeterminationType == ResidentialDeterminationType.FedExAddressLookup)
-            {
-                // Don't allow this determination type for the origin address so we cut down on service calls
-                return new InvalidOperationException("FedExAddressLookup is not a valid residential determination type for the shipment's origin address.");
-            }
 
             // Try to determine if the address is residential just based on the whether the residential value was selected
             bool isResidentialAddress = residentialDeterminationType == ResidentialDeterminationType.Residential;

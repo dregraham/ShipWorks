@@ -279,6 +279,11 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
                 throw new InvalidOperationException("Unknown endicia reseller");
             }
 
+			if (!shipment.Postal.InternalTransactionNumber.IsNullOrWhiteSpace())
+			{
+				request.EelPfc = shipment.Postal.InternalTransactionNumber;
+			}
+
             CustomsInfo customs = new CustomsInfo();
             request.CustomsInfo = customs;
 
@@ -364,7 +369,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
 
                         rates = rates
                             .Prepend(GetFirstClassEnvelopeRates(shipment, endiciaShipmentType, packagingType, services))
-                            .Append(GetParcelSelectRates(shipment, endiciaShipmentType, account, services));
+                            .Append(GetGroundAdvantageRates(shipment, endiciaShipmentType, account, services));
                     }
 
                     return rates
@@ -407,6 +412,12 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
             // and therefore get a more accurate rate
             if (serviceType == PostalServiceType.ParcelSelect &&
                 shipment.Postal.Service == (int) PostalServiceType.ParcelSelect)
+            {
+                return false;
+            }
+
+            if (serviceType == PostalServiceType.GroundAdvantage &&
+                shipment.Postal.Service == (int) PostalServiceType.GroundAdvantage)
             {
                 return false;
             }
@@ -477,18 +488,19 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
         /// <summary>
         /// Get parcel select rates and add them to rate result list, if needed
         /// </summary>
-        private RateResult GetParcelSelectRates(ShipmentEntity shipment, EndiciaShipmentType endiciaShipmentType,
+        private RateResult GetGroundAdvantageRates(ShipmentEntity shipment, EndiciaShipmentType endiciaShipmentType,
                                           EndiciaAccountEntity account, IEnumerable<PostalRateSelection> services)
         {
             // As of 01/28/2013 Endicia is not returning Parcel Select in the GetAllRates call - they are returning
             // Standard Post instead. If we can't find Parcel Select, try to get those rates manually. In the future
             // if Endicia updates/fixes it we may be able to remove this.
+            // 07/2023 - Parcel Select is replaced by GroundAdvantage
             if (account.EndiciaReseller == (int) EndiciaReseller.None &&
-                services.None(r => r.ServiceType == PostalServiceType.ParcelSelect))
+                services.None(r => r.ServiceType == PostalServiceType.GroundAdvantage))
             {
                 try
                 {
-                    return GetRate(shipment, endiciaShipmentType, PostalServiceType.ParcelSelect, (PostalConfirmationType) shipment.Postal.Confirmation);
+                    return GetRate(shipment, endiciaShipmentType, PostalServiceType.GroundAdvantage, (PostalConfirmationType) shipment.Postal.Confirmation);
                 }
                 catch (EndiciaException ex)
                 {
@@ -739,7 +751,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
             request.MailClass = endiciaShipmentType.GetMailClassCode(serviceType, packagingType);
 
             // Parcel Select
-            if (serviceType == PostalServiceType.ParcelSelect)
+            if (serviceType == PostalServiceType.ParcelSelect || serviceType == PostalServiceType.GroundAdvantage)
             {
                 // Just hard code these to make sure we get rates back
                 request.SortType = "Presorted";
@@ -1369,7 +1381,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
                 request.ReplyPostage = "FALSE";
                 request.PrintScanBasedPaymentLabel = "TRUE";
 
-                if (serviceType == PostalServiceType.ParcelSelect)
+                if (serviceType == PostalServiceType.ParcelSelect || serviceType == PostalServiceType.GroundAdvantage)
                 {
                     // Only none is allowed for parcel select, so set these to OFF
                     request.Services.SignatureConfirmation = "OFF";

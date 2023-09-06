@@ -4088,6 +4088,10 @@ namespace ShipWorks.Data.Model
 		HubVersion,
 		///<summary>HubCarrierId. </summary>
 		HubCarrierId,
+		///<summary>ShipEngineCarrierID. </summary>
+		ShipEngineCarrierID,
+		///<summary>SmartPostHub. </summary>
+		SmartPostHub,
 		/// <summary></summary>
 		AmountOfFields
 	}
@@ -4294,6 +4298,12 @@ namespace ShipWorks.Data.Model
 		CustomsRecipientTIN,
 		///<summary>CustomsRecipientTINType. </summary>
 		CustomsRecipientTINType,
+		///<summary>PayorCountryCode. </summary>
+		PayorCountryCode,
+		///<summary>PayorPostalCode. </summary>
+		PayorPostalCode,
+		///<summary>DeliveredDutyPaid. </summary>
+		DeliveredDutyPaid,
 		/// <summary></summary>
 		AmountOfFields
 	}
@@ -4712,6 +4722,14 @@ namespace ShipWorks.Data.Model
 		FreightGuaranteeDate,
 		///<summary>CustomsRecipientTINType. </summary>
 		CustomsRecipientTINType,
+		///<summary>PayorCountryCode. </summary>
+		PayorCountryCode,
+		///<summary>PayorPostalCode. </summary>
+		PayorPostalCode,
+		///<summary>ShipEngineLabelId. </summary>
+		ShipEngineLabelId,
+		///<summary>DeliveredDutyPaid. </summary>
+		DeliveredDutyPaid,
 		/// <summary></summary>
 		AmountOfFields
 	}
@@ -10288,6 +10306,8 @@ namespace ShipWorks.Data.Model
 		NoPostage,
 		///<summary>CustomsRecipientTin. </summary>
 		CustomsRecipientTin,
+		///<summary>InternalTransactionNumber. </summary>
+		InternalTransactionNumber,
 		/// <summary></summary>
 		AmountOfFields
 	}
@@ -10342,6 +10362,8 @@ namespace ShipWorks.Data.Model
 		Insurance,
 		///<summary>CustomsRecipientTin. </summary>
 		CustomsRecipientTin,
+		///<summary>InternalTransactionNumber. </summary>
+		InternalTransactionNumber,
 		/// <summary></summary>
 		AmountOfFields
 	}

@@ -82,7 +82,7 @@ namespace ShipWorks.Shipping.Profiles
                 oldControl.SaveToEntity();
             }
 
-            ShippingProfileControlBase newControl = null;
+            ShippingProfileControlBase newControl;
 
             ShipmentTypeCode? selectedProvider = (ShipmentTypeCode?) provider.SelectedValue;
             // Create the new profile control
