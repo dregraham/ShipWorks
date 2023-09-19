@@ -2776,7 +2776,7 @@ namespace ShipWorks
             this.buttonOrderLookupViewReprint2.Image = global::ShipWorks.Properties.Resources.printer;
             this.ribbonSecurityProvider.SetPermission(this.buttonOrderLookupViewReprint2, ShipWorks.Users.Security.PermissionType.ShipmentsCreateEditProcess);
             this.buttonOrderLookupViewReprint2.QuickAccessKey = "R";
-            this.buttonOrderLookupViewReprint2.Text = "Reprint";
+            this.buttonOrderLookupViewReprint2.Text = "Reprint\r\nLabel";
             this.buttonOrderLookupViewReprint2.TextContentRelation = Divelements.SandRibbon.TextContentRelation.Underneath;
             this.buttonOrderLookupViewReprint2.Activate += OnButtonOrderLookupViewReprint;
             //
