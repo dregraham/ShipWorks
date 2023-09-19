@@ -105,8 +105,7 @@ namespace ShipWorks.OrderLookup.ScanToShip
         /// <summary>
         /// Allow reprint label
         /// </summary>
-        public bool ReprintAllowed() =>
-            scanToShipViewModel.OrderLookupViewModel.ShipmentModel?.ShipmentAdapter?.Shipment?.Processed == true;
+        public bool ReprintAllowed() => ShipAgainAllowed();
 
 
         /// <summary>
@@ -140,15 +139,12 @@ namespace ShipWorks.OrderLookup.ScanToShip
         /// </summary>
         public void Reprint()
         {
+            ShipmentEntity shipment = scanToShipViewModel.OrderLookupViewModel.ShipmentModel?.ShipmentAdapter?.Shipment;
+            long? shipmentId = shipment?.ShipmentID;
 
-            long? shipmentId = scanToShipViewModel.OrderLookupViewModel.ShipmentModel?.ShipmentAdapter?.Shipment?.ShipmentID;
-
-            if (shipmentId != 0 && shipmentId != null)
+            if (shipmentId.HasValue && shipmentId != 0)
             {
-                ShipmentEntity shipment = scanToShipViewModel.OrderLookupViewModel.ShipmentModel?.ShipmentAdapter?.Shipment;
-
                 shippingManager.RefreshShipment(shipment);
-
                 messenger.Send(new ReprintLabelsMessage(this, new[] { shipment }), string.Empty);
             }
             
