@@ -277,6 +277,7 @@ namespace ShipWorks
             this.buttonOrderLookupViewCreateLabel = new ShipWorks.UI.Controls.SandRibbon.RibbonButton();
             this.buttonOrderLookupViewNewShipment = new ShipWorks.UI.Controls.SandRibbon.RibbonButton();
             this.buttonOrderLookupViewShipShipAgain = new ShipWorks.UI.Controls.SandRibbon.RibbonButton();
+            this.buttonOrderLookupViewReprint2 = new ShipWorks.UI.Controls.SandRibbon.RibbonButton();
             this.buttonOrderLookupViewUnverify = new ShipWorks.UI.Controls.SandRibbon.RibbonButton();
             this.buttonProductCatalogAddProduct = new ShipWorks.UI.Controls.SandRibbon.RibbonButton();
             this.buttonProductCatalogEditProduct = new ShipWorks.UI.Controls.SandRibbon.RibbonButton();
@@ -2661,7 +2662,7 @@ namespace ShipWorks
             this.ribbonTabOrderLookupViewShipping.Location = new System.Drawing.Point(1, 53);
             this.ribbonTabOrderLookupViewShipping.Manager = this.ribbonManager;
             this.ribbonTabOrderLookupViewShipping.Name = "ribbonTabOrderLookupViewShipping";
-            this.ribbonTabOrderLookupViewShipping.Size = new System.Drawing.Size(967, 90);
+            this.ribbonTabOrderLookupViewShipping.Size = new System.Drawing.Size(1267, 90);
             this.ribbonTabOrderLookupViewShipping.TabIndex = 0;
             this.ribbonTabOrderLookupViewShipping.Text = "&Scan-to-Ship";
             //
@@ -2671,6 +2672,7 @@ namespace ShipWorks
             this.ribbonChunkOrderLookupViewShipping.ItemJustification = Divelements.SandRibbon.ItemJustification.Near;
             this.ribbonChunkOrderLookupViewShipping.Items.AddRange(new Divelements.SandRibbon.WidgetBase[] {
             this.buttonOrderLookupViewCreateLabel,
+            this.buttonOrderLookupViewReprint2,
             this.buttonOrderLookupViewNewShipment,
             this.buttonOrderLookupViewShipShipAgain,
             this.buttonOrderLookupViewUnverify
@@ -2768,6 +2770,16 @@ namespace ShipWorks
             this.buttonOrderLookupViewShipShipAgain.TextContentRelation = Divelements.SandRibbon.TextContentRelation.Underneath;
             this.buttonOrderLookupViewShipShipAgain.Activate += OnButtonOrderLookupViewShipAgain;
             //
+            // buttonOrderLookupViewReprint2
+            //
+            this.buttonOrderLookupViewReprint2.Guid = new System.Guid("6c84fb90-12c4-11e1-840d-7b25c5ee775a");
+            this.buttonOrderLookupViewReprint2.Image = global::ShipWorks.Properties.Resources.printer;
+            this.ribbonSecurityProvider.SetPermission(this.buttonOrderLookupViewReprint2, ShipWorks.Users.Security.PermissionType.ShipmentsCreateEditProcess);
+            this.buttonOrderLookupViewReprint2.QuickAccessKey = "R";
+            this.buttonOrderLookupViewReprint2.Text = "Reprint";
+            this.buttonOrderLookupViewReprint2.TextContentRelation = Divelements.SandRibbon.TextContentRelation.Underneath;
+            this.buttonOrderLookupViewReprint2.Activate += OnButtonOrderLookupViewReprint;
+            //
             // buttonOrderLookupViewUnverify
             //
             this.buttonOrderLookupViewUnverify.Guid = new System.Guid("11d0afcb-9e08-4f4a-9596-00be8a8937ac");
@@ -2777,6 +2789,7 @@ namespace ShipWorks
             this.buttonOrderLookupViewUnverify.Text = "Un-verify";
             this.buttonOrderLookupViewUnverify.TextContentRelation = Divelements.SandRibbon.TextContentRelation.Underneath;
             this.buttonOrderLookupViewUnverify.Activate += OnButtonOrderLookupViewUnverify;
+
             //
             // ribbonChunkOrderLookupViewProfiles
             //
@@ -3538,6 +3551,7 @@ namespace ShipWorks
             buttonOrderLookupViewManageProfiles.TelemetryEventName = "OrderLookup.Profiles.Manage";
             buttonOrderLookupViewVoid.TelemetryEventName = "OrderLookup.Order.Void";
             buttonOrderLookupViewReprint.TelemetryEventName = "OrderLookup.Reprint";
+            buttonOrderLookupViewReprint2.TelemetryEventName = "OrderLookup.Reprint";
             buttonOrderLookupViewShipAgain.TelemetryEventName = "OrderLookup.History.ShipAgain";
             buttonOrderLookupViewShipShipAgain.TelemetryEventName = "OrderLookup.Ship.ShipAgain";
             buttonOrderLookupViewNewShipment.TelemetryEventName = "OrderLookup.Ship.NewShipment";
@@ -3871,6 +3885,7 @@ namespace ShipWorks
         private Divelements.SandRibbon.Popup popup2;
         private ShipWorks.UI.Controls.SandRibbon.RibbonButton buttonOrderLookupViewVoid;
         private ShipWorks.UI.Controls.SandRibbon.RibbonButton buttonOrderLookupViewReprint;
+        private ShipWorks.UI.Controls.SandRibbon.RibbonButton buttonOrderLookupViewReprint2;
         private ShipWorks.UI.Controls.SandRibbon.RibbonButton buttonOrderLookupViewShipAgain;
         private ShipWorks.UI.Controls.SandRibbon.RibbonButton buttonOrderLookupViewSCANForm;
         private ShipWorks.UI.Controls.SandRibbon.RibbonButton buttonOrderLookupViewFedExClose;

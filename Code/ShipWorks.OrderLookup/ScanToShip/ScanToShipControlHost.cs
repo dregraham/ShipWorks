@@ -8,11 +8,14 @@ using System.Windows.Forms;
 using System.Windows.Forms.Integration;
 using System.Windows.Input;
 using Interapptive.Shared.ComponentRegistration;
+using Interapptive.Shared.Utility;
 using ShipWorks.Core.Messaging;
+using ShipWorks.Data.Grid.Paging;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Messaging.Messages.Orders;
 using ShipWorks.Messaging.Messages.Shipping;
 using ShipWorks.OrderLookup.Messages;
+using ShipWorks.Shipping;
 using ShipWorks.Shipping.Profiles;
 using ShipWorks.UI.Controls;
 
@@ -27,11 +30,12 @@ namespace ShipWorks.OrderLookup.ScanToShip
         private ScanToShipControl scanToShipControl;
         private readonly IScanToShipViewModel scanToShipViewModel;
         private readonly IMessenger messenger;
+        private readonly IShippingManager shippingManager;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public ScanToShipControlHost(IScanToShipViewModel scanToShipViewModel, IMessenger messenger)
+        public ScanToShipControlHost(IScanToShipViewModel scanToShipViewModel, IMessenger messenger, IShippingManager shippingManager)
         {
             this.messenger = messenger;
             InitializeComponent();
@@ -42,6 +46,7 @@ namespace ShipWorks.OrderLookup.ScanToShip
             this.scanToShipViewModel.OrderLookupViewModel.ShipmentModel.CreateLabelWrapper = CreateLabelWrapper;
 
             this.scanToShipViewModel.ScanPackViewModel.CanAcceptFocus = () => Visible && CanFocus;
+            this.shippingManager = shippingManager;
         }
 
         public OrderEntity Order => scanToShipViewModel.OrderLookupViewModel.ShipmentModel.SelectedOrder;
@@ -98,6 +103,13 @@ namespace ShipWorks.OrderLookup.ScanToShip
             scanToShipViewModel.OrderLookupViewModel.ShipmentModel?.ShipmentAdapter?.Shipment?.Processed == true;
 
         /// <summary>
+        /// Allow reprint label
+        /// </summary>
+        public bool ReprintAllowed() =>
+            scanToShipViewModel.OrderLookupViewModel.ShipmentModel?.ShipmentAdapter?.Shipment?.Processed == true;
+
+
+        /// <summary>
         /// Ship the shipment again
         /// </summary>
         public void ShipAgain()
@@ -121,6 +133,25 @@ namespace ShipWorks.OrderLookup.ScanToShip
             {
                 messenger.Send(new OrderLookupUnverifyMessage(this, orderId.Value));
             }
+        }
+
+        /// <summary>
+        /// Unverify the order
+        /// </summary>
+        public void Reprint()
+        {
+
+            long? shipmentId = scanToShipViewModel.OrderLookupViewModel.ShipmentModel?.ShipmentAdapter?.Shipment?.ShipmentID;
+
+            if (shipmentId != 0 && shipmentId != null)
+            {
+                ShipmentEntity shipment = scanToShipViewModel.OrderLookupViewModel.ShipmentModel?.ShipmentAdapter?.Shipment;
+
+                shippingManager.RefreshShipment(shipment);
+
+                messenger.Send(new ReprintLabelsMessage(this, new[] { shipment }), string.Empty);
+            }
+            
         }
 
         /// <summary>

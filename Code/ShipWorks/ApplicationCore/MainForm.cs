@@ -226,13 +226,16 @@ namespace ShipWorks
 
 					buttonOrderLookupViewNewShipment.Enabled = orderLookupControl?.CreateNewShipmentAllowed() == true;
 					buttonOrderLookupViewShipShipAgain.Enabled = orderLookupControl?.ShipAgainAllowed() == true;
-				}
+                    buttonOrderLookupViewReprint2.Enabled = orderLookupControl?.ReprintAllowed() == true;
+
+                }
 
 				if ((x is ShipmentSelectionChangedMessage || x is OrderLookupUnverifyMessage || x is OrderVerifiedMessage) &&
 				currentUserSettings.GetUIMode() == UIMode.OrderLookup)
 				{
 					buttonOrderLookupViewUnverify.Enabled = orderLookupControl?.UnverifyOrderAllowed() == true;
-				}
+                    buttonOrderLookupViewReprint2.Enabled = true;
+                }
 
 				if (x is OrderLookupClearOrderMessage && currentUserSettings.GetUIMode() == UIMode.OrderLookup)
 				{
@@ -240,7 +243,8 @@ namespace ShipWorks
 					buttonOrderLookupViewApplyProfile.Enabled = false;
 					buttonOrderLookupViewNewShipment.Enabled = false;
 					buttonOrderLookupViewShipShipAgain.Enabled = false;
-				}
+                    buttonOrderLookupViewReprint2.Enabled = false;
+                }
 			});
 		}
 
@@ -321,13 +325,21 @@ namespace ShipWorks
 			orderLookupControl.Unverify();
 		}
 
-		#region Initialization \ Shutdown
+        /// <summary>
+        /// User clicks the OrderLookupViewUnverify button
+        /// </summary>
+        private void OnButtonOrderLookupViewReprint(object sender, EventArgs e)
+        {
+            orderLookupControl.Reprint();
+        }
 
-		/// <summary>
-		/// Attempt to auto update
-		/// </summary>
-		/// <returns>true if we kicked off the auto update process</returns>
-		private bool AutoUpdate()
+        #region Initialization \ Shutdown
+
+        /// <summary>
+        /// Attempt to auto update
+        /// </summary>
+        /// <returns>true if we kicked off the auto update process</returns>
+        private bool AutoUpdate()
 		{
 			if (SqlSession.IsConfigured)
 			{
@@ -1409,7 +1421,8 @@ namespace ShipWorks
 			buttonOrderLookupViewNewShipment.Enabled = false;
 			buttonOrderLookupViewShipShipAgain.Enabled = false;
 			buttonOrderLookupViewUnverify.Enabled = false;
-		}
+            buttonOrderLookupViewReprint2.Enabled = false;
+        }
 
 		/// <summary>
 		/// Unload the Order Lookup Mode
