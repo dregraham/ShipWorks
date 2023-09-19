@@ -234,6 +234,7 @@ namespace ShipWorks
 				currentUserSettings.GetUIMode() == UIMode.OrderLookup)
 				{
 					buttonOrderLookupViewUnverify.Enabled = orderLookupControl?.UnverifyOrderAllowed() == true;
+                    buttonOrderLookupViewReprint2.Enabled = orderLookupControl?.ReprintAllowed() == true;
                 }
 
 				if (x is OrderLookupClearOrderMessage && currentUserSettings.GetUIMode() == UIMode.OrderLookup)

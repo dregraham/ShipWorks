@@ -105,7 +105,8 @@ namespace ShipWorks.OrderLookup.ScanToShip
         /// <summary>
         /// Allow reprint label
         /// </summary>
-        public bool ReprintAllowed() => ShipAgainAllowed();
+        public bool ReprintAllowed() => 
+            scanToShipViewModel.OrderLookupViewModel.ShipmentModel?.ShipmentAdapter?.Shipment?.Status == ShipmentStatus.Processed;
 
 
         /// <summary>
