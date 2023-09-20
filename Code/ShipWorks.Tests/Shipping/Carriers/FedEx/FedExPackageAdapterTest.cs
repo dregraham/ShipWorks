@@ -12,7 +12,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx
     {
         private ShipmentEntity shipment;
         private FedExPackageEntity package;
-        private IPackageAdapter testObject;
+        private IPackageAdapter testPackageAdapter;
 
         public FedExPackageAdapterTest()
         {
@@ -63,14 +63,14 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx
         [Fact]
         public void Constructor_PopulatesValues_Correctly_Test()
         {
-            Assert.Equal(shipment.FedEx.PackagingType, testObject.PackagingType);
-            Assert.Equal(1, testObject.Index);
-            Assert.Equal(package.DimsLength, testObject.DimsLength);
-            Assert.Equal(package.DimsWidth, testObject.DimsWidth);
-            Assert.Equal(package.DimsHeight, testObject.DimsHeight);
-            Assert.Equal(package.DimsWeight, testObject.AdditionalWeight);
-            Assert.Equal(package.DimsAddWeight, testObject.ApplyAdditionalWeight);
-            Assert.Equal(package.DimsProfileID, testObject.DimsProfileID);
+            Assert.Equal(shipment.FedEx.PackagingType, testPackageAdapter.PackagingType);
+            Assert.Equal(1, testPackageAdapter.Index);
+            Assert.Equal(package.DimsLength, testPackageAdapter.DimsLength);
+            Assert.Equal(package.DimsWidth, testPackageAdapter.DimsWidth);
+            Assert.Equal(package.DimsHeight, testPackageAdapter.DimsHeight);
+            Assert.Equal(package.DimsWeight, testPackageAdapter.AdditionalWeight);
+            Assert.Equal(package.DimsAddWeight, testPackageAdapter.ApplyAdditionalWeight);
+            Assert.Equal(package.DimsProfileID, testPackageAdapter.DimsProfileID);
         }
 
         [Fact]
@@ -78,10 +78,10 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx
         {
             IInsuranceChoice expected = new InsuranceChoice(shipment, package, package, package);
 
-            Assert.Equal(expected.Insured, testObject.InsuranceChoice.Insured);
-            Assert.Equal(expected.InsurancePennyOne, testObject.InsuranceChoice.InsurancePennyOne);
-            Assert.Equal(expected.InsuranceProvider, testObject.InsuranceChoice.InsuranceProvider);
-            Assert.Equal(expected.InsuranceValue, testObject.InsuranceChoice.InsuranceValue);
+            Assert.Equal(expected.Insured, testPackageAdapter.InsuranceChoice.Insured);
+            Assert.Equal(expected.InsurancePennyOne, testPackageAdapter.InsuranceChoice.InsurancePennyOne);
+            Assert.Equal(expected.InsuranceProvider, testPackageAdapter.InsuranceChoice.InsuranceProvider);
+            Assert.Equal(expected.InsuranceValue, testPackageAdapter.InsuranceChoice.InsuranceValue);
         }
 
         [Fact]
@@ -92,21 +92,21 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx
             expected.InsurancePennyOne = !expected.InsurancePennyOne;
             expected.InsuranceValue++;
 
-            testObject.InsuranceChoice = expected;
+            testPackageAdapter.InsuranceChoice = expected;
 
-            Assert.Equal(expected.Insured, testObject.InsuranceChoice.Insured);
-            Assert.Equal(expected.InsurancePennyOne, testObject.InsuranceChoice.InsurancePennyOne);
-            Assert.Equal(expected.InsuranceProvider, testObject.InsuranceChoice.InsuranceProvider);
-            Assert.Equal(expected.InsuranceValue, testObject.InsuranceChoice.InsuranceValue);
+            Assert.Equal(expected.Insured, testPackageAdapter.InsuranceChoice.Insured);
+            Assert.Equal(expected.InsurancePennyOne, testPackageAdapter.InsuranceChoice.InsurancePennyOne);
+            Assert.Equal(expected.InsuranceProvider, testPackageAdapter.InsuranceChoice.InsuranceProvider);
+            Assert.Equal(expected.InsuranceValue, testPackageAdapter.InsuranceChoice.InsuranceValue);
         }
 
         [Fact]
         public void Changing_Weight_ForSinglePackage_Updates_Correctly_Test()
         {
-            testObject.Weight = 88.98;
+            testPackageAdapter.Weight = 88.98;
 
-            Assert.Equal(testObject.Weight, shipment.ContentWeight);
-            Assert.Equal(testObject.Weight, package.Weight);
+            Assert.Equal(testPackageAdapter.Weight, shipment.ContentWeight);
+            Assert.Equal(testPackageAdapter.Weight, package.Weight);
         }
 
         [Fact]
@@ -127,34 +127,35 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx
             shipment.FedEx.Packages.Add(secondPackage);
 
             FedExPackageAdapter secondPackageAdapter = new FedExPackageAdapter(shipment, secondPackage, 2);
-            secondPackageAdapter.Weight = 5;
+            const double secondPackageWeight = 5;
+            secondPackageAdapter.Weight = secondPackageWeight;
 
-            Assert.Equal(originalShipmentWeight, shipment.ContentWeight);
-            Assert.Equal(testObject.Weight, package.Weight);
+            Assert.Equal(originalShipmentWeight + secondPackageWeight, shipment.ContentWeight);
+            Assert.Equal(testPackageAdapter.Weight, package.Weight);
             Assert.Equal(secondPackageAdapter.Weight, secondPackage.Weight);
         }
 
         [Fact]
         public void Changing_AdditionalWeight_UpdatesCorrectly_Test()
         {
-            testObject.AdditionalWeight = 5.4;
+            testPackageAdapter.AdditionalWeight = 5.4;
 
-            Assert.Equal(testObject.AdditionalWeight, package.DimsWeight);
+            Assert.Equal(testPackageAdapter.AdditionalWeight, package.DimsWeight);
         }
 
         [Fact]
         public void Changing_ApplyAdditionalWeight_UpdatesCorrectly_Test()
         {
-            testObject.ApplyAdditionalWeight = !package.DimsAddWeight;
+            testPackageAdapter.ApplyAdditionalWeight = !package.DimsAddWeight;
 
-            Assert.Equal(testObject.ApplyAdditionalWeight, package.DimsAddWeight);
+            Assert.Equal(testPackageAdapter.ApplyAdditionalWeight, package.DimsAddWeight);
         }
 
         [Fact]
         public void Changing_PackagingType_UpdatesCorrectly_WhenNotNull_Test()
         {
             shipment.FedEx.PackagingType = (int) FedExPackagingType.Box25Kg;
-            testObject.PackagingType = (int) FedExPackagingType.Custom;
+            testPackageAdapter.PackagingType = (int) FedExPackagingType.Custom;
 
             Assert.Equal((int) FedExPackagingType.Custom, shipment.FedEx.PackagingType);
         }
@@ -163,36 +164,36 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx
         public void Changing_DimsLength_UpdatesCorrectly_Test()
         {
             double newValue = package.DimsLength + 2.1;
-            testObject.DimsLength = package.DimsLength + newValue;
+            testPackageAdapter.DimsLength = package.DimsLength + newValue;
 
-            Assert.Equal(testObject.DimsLength, package.DimsLength);
+            Assert.Equal(testPackageAdapter.DimsLength, package.DimsLength);
         }
 
         [Fact]
         public void Changing_DimsWidth_UpdatesCorrectly_Test()
         {
             double newValue = package.DimsWidth + 2.1;
-            testObject.DimsWidth = package.DimsWidth + newValue;
+            testPackageAdapter.DimsWidth = package.DimsWidth + newValue;
 
-            Assert.Equal(testObject.DimsWidth, package.DimsWidth);
+            Assert.Equal(testPackageAdapter.DimsWidth, package.DimsWidth);
         }
 
         [Fact]
         public void Changing_DimsHeight_UpdatesCorrectly_Test()
         {
             double newValue = package.DimsHeight + 2.1;
-            testObject.DimsHeight = package.DimsHeight + newValue;
+            testPackageAdapter.DimsHeight = package.DimsHeight + newValue;
 
-            Assert.Equal(testObject.DimsHeight, package.DimsHeight);
+            Assert.Equal(testPackageAdapter.DimsHeight, package.DimsHeight);
         }
 
         [Fact]
         public void Changing_DimsProfileID_UpdatesCorrectly_Test()
         {
             long newValue = package.DimsProfileID + 2;
-            testObject.DimsProfileID = package.DimsProfileID + newValue;
+            testPackageAdapter.DimsProfileID = package.DimsProfileID + newValue;
 
-            Assert.Equal(testObject.DimsProfileID, package.DimsProfileID);
+            Assert.Equal(testPackageAdapter.DimsProfileID, package.DimsProfileID);
         }
 
         private void PopulateDefaultObjects()
@@ -223,7 +224,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx
                 }
             };
 
-            testObject = new FedExPackageAdapter(shipment, package, 1);
+            testPackageAdapter = new FedExPackageAdapter(shipment, package, 1);
         }
     }
 }

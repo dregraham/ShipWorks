@@ -98,9 +98,10 @@ namespace ShipWorks.Tests.Shipping.Carriers.iParcel
             shipment.IParcel.Packages.Add(secondPackage);
 
             iParcelPackageAdapter secondPackageAdapter = new iParcelPackageAdapter(shipment, secondPackage, 2);
-            secondPackageAdapter.Weight = 5;
+            const double secondPackageWeight = 5;
+            secondPackageAdapter.Weight = secondPackageWeight;
 
-            Assert.Equal(originalShipmentWeight, shipment.ContentWeight);
+            Assert.Equal(originalShipmentWeight + secondPackageWeight, shipment.ContentWeight);
             Assert.Equal(testObject.Weight, package.Weight);
             Assert.Equal(secondPackageAdapter.Weight, secondPackage.Weight);
         }
