@@ -374,7 +374,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
 		/// </summary>
 		private static GlobalPostServiceAvailability GetGlobalPostPlusAvailability(CapabilitiesV27 capabilities)
 		{
-			if (capabilities.CanPrintGPSmartSaver && capabilities.CanPrintGlobalPostPlus && capabilities.CanCleanseIntlAddress)
+			if (/*capabilities.CanPrintGPSmartSaver && */capabilities.CanPrintGlobalPostPlus /*&& capabilities.CanCleanseIntlAddress*/)
 			{
 				return GlobalPostServiceAvailability.GlobalPostPlus;
 			}
