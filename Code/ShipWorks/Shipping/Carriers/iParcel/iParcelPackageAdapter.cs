@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Linq;
 using System.Reflection;
 using Interapptive.Shared.Utility;
 using Shared.System.ComponentModel.DataAnnotations;
@@ -67,14 +68,10 @@ namespace ShipWorks.Shipping.Carriers.iParcel
             }
             set
             {
-                if (shipmentEntity.IParcel.Packages.Count == 1)
-                {
-                    // The shipment's content weight will need to be updated as well in the event
-                    // that the weight change is a result of a customs item's weight changing
-                    shipmentEntity.ContentWeight = value;
-                }
-
                 packageEntity.Weight = value;
+                // The shipment's content weight will need to be updated as well in the event
+                // that the weight change is a result of a customs item's weight changing
+                shipmentEntity.ContentWeight = shipmentEntity.IParcel.Packages.Sum(x => x.Weight); ;
             }
         }
 

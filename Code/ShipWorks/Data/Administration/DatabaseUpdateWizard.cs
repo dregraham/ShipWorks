@@ -19,6 +19,7 @@ using Interapptive.Shared.UI;
 using Interapptive.Shared.Utility;
 using Interapptive.Shared.Win32;
 using log4net;
+using Microsoft.Win32;
 using ShipWorks.ApplicationCore;
 using ShipWorks.ApplicationCore.CommandLineOptions;
 using ShipWorks.ApplicationCore.Interaction;
@@ -71,7 +72,7 @@ namespace ShipWorks.Data.Administration
 
         // This is the cutoff version for the FedEx upgrade that requires a database backup when upgraded
         private static Version FedExUpgradeVersion = new Version(9, 13, 0, 0);
-
+        
         /// <summary>
         /// Open the upgrade window and returns true if the wizard completed with an OK result.
         /// </summary>
@@ -362,7 +363,6 @@ namespace ShipWorks.Data.Administration
         #endregion
 
         #region Backup
-
         /// <summary>
         /// Stepping into the backup page
         /// </summary>
@@ -372,6 +372,8 @@ namespace ShipWorks.Data.Administration
             const string fedExBackupHeaderText = "ShipWorks Backup Required";
             const string fedExBackupText = "A ShipWorks backup is required before updating. We don’t expect anything to go wrong, but it doesn’t hurt to be safe. " +
                                            "Please keep in mind that a backup can only be made from your ShipWorks server machine.";
+            
+            RegistryHelper internalRegistry = new RegistryHelper(@"Software\Interapptive\ShipWorks\Internal");
 
             // Make sure we are on the right machine
             if (!SqlSession.Current.IsLocalServer())
@@ -393,8 +395,10 @@ namespace ShipWorks.Data.Administration
                 backup.Enabled = true;
             }
 
+            var allowFedexBackupBypass = internalRegistry.GetValue("allowFedexBackupBypass", false);
+
             // The page needs new text and state when upgrading past the FedEx upgrade
-            if (IsPreFedExUpgrade())
+            if (IsPreFedExUpgrade() && allowFedexBackupBypass == false)
             {
                 wizardPageBackup.Title = fedExBackupHeaderText;
                 labelBackupInfo.Text = fedExBackupText;

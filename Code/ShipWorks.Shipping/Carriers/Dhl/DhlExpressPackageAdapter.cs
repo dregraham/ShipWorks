@@ -7,6 +7,7 @@ using System.ComponentModel.DataAnnotations;
 using Shared.System.ComponentModel.DataAnnotations;
 using Interapptive.Shared.Utility;
 using System.Diagnostics.CodeAnalysis;
+using System.Linq;
 
 namespace ShipWorks.Shipping.Carriers.Dhl
 {
@@ -61,14 +62,10 @@ namespace ShipWorks.Shipping.Carriers.Dhl
             }
             set
             {
-                if (shipment.DhlExpress.Packages.Count == 1)
-                {
-                    // The shipment's content weight will need to be updated as well in the event
-                    // that the weight change is a result of a customs item's weight changing
-                    shipment.ContentWeight = value;
-                }
-
                 package.Weight = value;
+                // The shipment's content weight will need to be updated as well in the event
+                // that the weight change is a result of a customs item's weight changing
+                shipment.ContentWeight = shipment.DhlExpress.Packages.Sum(x => x.Weight);
             }
         }
 
