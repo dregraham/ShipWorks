@@ -15704,15 +15704,6 @@ namespace ShipWorks.Stores.Platforms.Ebay.WebServices {
         private System.Xml.XmlElement[] anyField;
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute("ExcludeShipToLocation")]
-        public string[] ExcludeShipToLocation {
-            get {
-                return this.excludeShipToLocationField;
-            }
-            set {
-                this.excludeShipToLocationField = value;
-            }
-        }
         
         /// <remarks/>
         [System.Xml.Serialization.XmlAnyElementAttribute()]
@@ -17608,15 +17599,6 @@ namespace ShipWorks.Stores.Platforms.Ebay.WebServices {
             }
         }
         
-        /// <remarks/>
-        public SellingManagerProductDetailsType SellingManagerProductDetails {
-            get {
-                return this.sellingManagerProductDetailsField;
-            }
-            set {
-                this.sellingManagerProductDetailsField = value;
-            }
-        }
         
         /// <remarks/>
         public ItemType Template {
@@ -18428,16 +18410,7 @@ namespace ShipWorks.Stores.Platforms.Ebay.WebServices {
             }
         }
         
-        /// <remarks/>
-        public BuyerProtectionCodeType BuyerProtection {
-            get {
-                return this.buyerProtectionField;
-            }
-            set {
-                this.buyerProtectionField = value;
-            }
-        }
-        
+       
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool BuyerProtectionSpecified {
@@ -18750,27 +18723,8 @@ namespace ShipWorks.Stores.Platforms.Ebay.WebServices {
             }
         }
         
-        /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute("PaymentMethods")]
-        public BuyerPaymentMethodCodeType[] PaymentMethods {
-            get {
-                return this.paymentMethodsField;
-            }
-            set {
-                this.paymentMethodsField = value;
-            }
-        }
-        
-        /// <remarks/>
-        public string PayPalEmailAddress {
-            get {
-                return this.payPalEmailAddressField;
-            }
-            set {
-                this.payPalEmailAddressField = value;
-            }
-        }
-        
+       
+       
         /// <remarks/>
         public CategoryType PrimaryCategory {
             get {
@@ -19193,16 +19147,7 @@ namespace ShipWorks.Stores.Platforms.Ebay.WebServices {
             }
         }
         
-        /// <remarks/>
-        public bool GetItFast {
-            get {
-                return this.getItFastField;
-            }
-            set {
-                this.getItFastField = value;
-            }
-        }
-        
+       
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool GetItFastSpecified {
@@ -19766,15 +19711,7 @@ namespace ShipWorks.Stores.Platforms.Ebay.WebServices {
         }
         
         /// <remarks/>
-        public AmountType BuyerGuaranteePrice {
-            get {
-                return this.buyerGuaranteePriceField;
-            }
-            set {
-                this.buyerGuaranteePriceField = value;
-            }
-        }
-        
+       
         /// <remarks/>
         public BuyerRequirementDetailsType BuyerRequirementDetails {
             get {
@@ -19827,15 +19764,6 @@ namespace ShipWorks.Stores.Platforms.Ebay.WebServices {
             }
         }
         
-        /// <remarks/>
-        public bool IntegratedMerchantCreditCardEnabled {
-            get {
-                return this.integratedMerchantCreditCardEnabledField;
-            }
-            set {
-                this.integratedMerchantCreditCardEnabledField = value;
-            }
-        }
         
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
@@ -19848,16 +19776,7 @@ namespace ShipWorks.Stores.Platforms.Ebay.WebServices {
             }
         }
         
-        /// <remarks/>
-        public VariationsType Variations {
-            get {
-                return this.variationsField;
-            }
-            set {
-                this.variationsField = value;
-            }
-        }
-        
+      
         /// <remarks/>
         public ItemCompatibilityListType ItemCompatibilityList {
             get {
@@ -19889,16 +19808,7 @@ namespace ShipWorks.Stores.Platforms.Ebay.WebServices {
             }
         }
         
-        /// <remarks/>
-        public int ConditionID {
-            get {
-                return this.conditionIDField;
-            }
-            set {
-                this.conditionIDField = value;
-            }
-        }
-        
+       
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool ConditionIDSpecified {
@@ -19920,15 +19830,6 @@ namespace ShipWorks.Stores.Platforms.Ebay.WebServices {
             }
         }
         
-        /// <remarks/>
-        public string ConditionDisplayName {
-            get {
-                return this.conditionDisplayNameField;
-            }
-            set {
-                this.conditionDisplayNameField = value;
-            }
-        }
         
         /// <remarks/>
         public string TaxCategory {
@@ -21834,16 +21735,7 @@ namespace ShipWorks.Stores.Platforms.Ebay.WebServices {
         
         private System.Xml.XmlElement[] anyField;
         
-        /// <remarks/>
-        public bool Adult {
-            get {
-                return this.adultField;
-            }
-            set {
-                this.adultField = value;
-            }
-        }
-        
+       
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool AdultSpecified {
@@ -21855,15 +21747,6 @@ namespace ShipWorks.Stores.Platforms.Ebay.WebServices {
             }
         }
         
-        /// <remarks/>
-        public bool BindingAuction {
-            get {
-                return this.bindingAuctionField;
-            }
-            set {
-                this.bindingAuctionField = value;
-            }
-        }
         
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
@@ -21876,16 +21759,7 @@ namespace ShipWorks.Stores.Platforms.Ebay.WebServices {
             }
         }
         
-        /// <remarks/>
-        public bool CheckoutEnabled {
-            get {
-                return this.checkoutEnabledField;
-            }
-            set {
-                this.checkoutEnabledField = value;
-            }
-        }
-        
+       
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool CheckoutEnabledSpecified {
@@ -21897,46 +21771,9 @@ namespace ShipWorks.Stores.Platforms.Ebay.WebServices {
             }
         }
         
-        /// <remarks/>
-        public AmountType ConvertedBuyItNowPrice {
-            get {
-                return this.convertedBuyItNowPriceField;
-            }
-            set {
-                this.convertedBuyItNowPriceField = value;
-            }
-        }
         
-        /// <remarks/>
-        public AmountType ConvertedStartPrice {
-            get {
-                return this.convertedStartPriceField;
-            }
-            set {
-                this.convertedStartPriceField = value;
-            }
-        }
-        
-        /// <remarks/>
-        public AmountType ConvertedReservePrice {
-            get {
-                return this.convertedReservePriceField;
-            }
-            set {
-                this.convertedReservePriceField = value;
-            }
-        }
-        
-        /// <remarks/>
-        public bool HasReservePrice {
-            get {
-                return this.hasReservePriceField;
-            }
-            set {
-                this.hasReservePriceField = value;
-            }
-        }
-        
+       
+       
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool HasReservePriceSpecified {
@@ -21948,15 +21785,6 @@ namespace ShipWorks.Stores.Platforms.Ebay.WebServices {
             }
         }
         
-        /// <remarks/>
-        public string RelistedItemID {
-            get {
-                return this.relistedItemIDField;
-            }
-            set {
-                this.relistedItemIDField = value;
-            }
-        }
         
         /// <remarks/>
         public string SecondChanceOriginalItemID {
@@ -22010,16 +21838,6 @@ namespace ShipWorks.Stores.Platforms.Ebay.WebServices {
             }
         }
         
-        /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(DataType="anyURI")]
-        public string ViewItemURL {
-            get {
-                return this.viewItemURLField;
-            }
-            set {
-                this.viewItemURLField = value;
-            }
-        }
         
         /// <remarks/>
         public bool HasUnansweredQuestions {
@@ -22042,16 +21860,7 @@ namespace ShipWorks.Stores.Platforms.Ebay.WebServices {
             }
         }
         
-        /// <remarks/>
-        public bool HasPublicMessages {
-            get {
-                return this.hasPublicMessagesField;
-            }
-            set {
-                this.hasPublicMessagesField = value;
-            }
-        }
-        
+       
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool HasPublicMessagesSpecified {
@@ -22105,16 +21914,7 @@ namespace ShipWorks.Stores.Platforms.Ebay.WebServices {
             }
         }
         
-        /// <remarks/>
-        public AmountType MinimumBestOfferPrice {
-            get {
-                return this.minimumBestOfferPriceField;
-            }
-            set {
-                this.minimumBestOfferPriceField = value;
-            }
-        }
-        
+       
         /// <remarks/>
         public string MinimumBestOfferMessage {
             get {
@@ -22135,27 +21935,8 @@ namespace ShipWorks.Stores.Platforms.Ebay.WebServices {
             }
         }
         
-        /// <remarks/>
-        public string TCROriginalItemID {
-            get {
-                return this.tCROriginalItemIDField;
-            }
-            set {
-                this.tCROriginalItemIDField = value;
-            }
-        }
-        
-        /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(DataType="anyURI")]
-        public string ViewItemURLForNaturalSearch {
-            get {
-                return this.viewItemURLForNaturalSearchField;
-            }
-            set {
-                this.viewItemURLForNaturalSearchField = value;
-            }
-        }
-        
+       
+       
         /// <remarks/>
         public bool PayPerLeadEnabled {
             get {
@@ -23186,16 +22967,7 @@ namespace ShipWorks.Stores.Platforms.Ebay.WebServices {
         
         private System.Xml.XmlElement[] anyField;
         
-        /// <remarks/>
-        public bool AboutMePage {
-            get {
-                return this.aboutMePageField;
-            }
-            set {
-                this.aboutMePageField = value;
-            }
-        }
-        
+       
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool AboutMePageSpecified {
@@ -23333,14 +23105,6 @@ namespace ShipWorks.Stores.Platforms.Ebay.WebServices {
         }
         
         /// <remarks/>
-        public FeedbackRatingStarCodeType FeedbackRatingStar {
-            get {
-                return this.feedbackRatingStarField;
-            }
-            set {
-                this.feedbackRatingStarField = value;
-            }
-        }
         
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
@@ -23354,14 +23118,6 @@ namespace ShipWorks.Stores.Platforms.Ebay.WebServices {
         }
         
         /// <remarks/>
-        public bool IDVerified {
-            get {
-                return this.iDVerifiedField;
-            }
-            set {
-                this.iDVerifiedField = value;
-            }
-        }
         
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
@@ -23375,15 +23131,7 @@ namespace ShipWorks.Stores.Platforms.Ebay.WebServices {
         }
         
         /// <remarks/>
-        public bool eBayGoodStanding {
-            get {
-                return this.eBayGoodStandingField;
-            }
-            set {
-                this.eBayGoodStandingField = value;
-            }
-        }
-        
+       
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool eBayGoodStandingSpecified {
@@ -23395,16 +23143,7 @@ namespace ShipWorks.Stores.Platforms.Ebay.WebServices {
             }
         }
         
-        /// <remarks/>
-        public bool NewUser {
-            get {
-                return this.newUserField;
-            }
-            set {
-                this.newUserField = value;
-            }
-        }
-        
+       
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool NewUserSpecified {
@@ -23417,14 +23156,6 @@ namespace ShipWorks.Stores.Platforms.Ebay.WebServices {
         }
         
         /// <remarks/>
-        public AddressType RegistrationAddress {
-            get {
-                return this.registrationAddressField;
-            }
-            set {
-                this.registrationAddressField = value;
-            }
-        }
         
         /// <remarks/>
         public System.DateTime RegistrationDate {
@@ -23520,16 +23251,7 @@ namespace ShipWorks.Stores.Platforms.Ebay.WebServices {
             }
         }
         
-        /// <remarks/>
-        public System.DateTime UserIDLastChanged {
-            get {
-                return this.userIDLastChangedField;
-            }
-            set {
-                this.userIDLastChangedField = value;
-            }
-        }
-        
+       
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool UserIDLastChangedSpecified {
@@ -23572,16 +23294,7 @@ namespace ShipWorks.Stores.Platforms.Ebay.WebServices {
             }
         }
         
-        /// <remarks/>
-        public SellerType SellerInfo {
-            get {
-                return this.sellerInfoField;
-            }
-            set {
-                this.sellerInfoField = value;
-            }
-        }
-        
+       
         /// <remarks/>
         public BusinessRoleType BusinessRole {
             get {
@@ -23917,16 +23630,7 @@ namespace ShipWorks.Stores.Platforms.Ebay.WebServices {
             }
         }
         
-        /// <remarks/>
-        public string StaticAlias {
-            get {
-                return this.staticAliasField;
-            }
-            set {
-                this.staticAliasField = value;
-            }
-        }
-        
+       
         /// <remarks/>
         public AddressType ShippingAddress {
             get {
@@ -23945,26 +23649,6 @@ namespace ShipWorks.Stores.Platforms.Ebay.WebServices {
             }
             set {
                 this.membershipField = value;
-            }
-        }
-        
-        /// <remarks/>
-        public string UserFirstName {
-            get {
-                return this.userFirstNameField;
-            }
-            set {
-                this.userFirstNameField = value;
-            }
-        }
-        
-        /// <remarks/>
-        public string UserLastName {
-            get {
-                return this.userLastNameField;
-            }
-            set {
-                this.userLastNameField = value;
             }
         }
         
@@ -24397,15 +24081,7 @@ namespace ShipWorks.Stores.Platforms.Ebay.WebServices {
         }
         
         /// <remarks/>
-        public string ExternalAddressID {
-            get {
-                return this.externalAddressIDField;
-            }
-            set {
-                this.externalAddressIDField = value;
-            }
-        }
-        
+       
         /// <remarks/>
         public string InternationalName {
             get {
@@ -24498,14 +24174,6 @@ namespace ShipWorks.Stores.Platforms.Ebay.WebServices {
         }
         
         /// <remarks/>
-        public AddressUsageCodeType AddressUsage {
-            get {
-                return this.addressUsageField;
-            }
-            set {
-                this.addressUsageField = value;
-            }
-        }
         
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
@@ -24789,17 +24457,7 @@ namespace ShipWorks.Stores.Platforms.Ebay.WebServices {
             }
         }
         
-        /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute("BuyerTaxIdentifier")]
-        public TaxIdentifierType[] BuyerTaxIdentifier {
-            get {
-                return this.buyerTaxIdentifierField;
-            }
-            set {
-                this.buyerTaxIdentifierField = value;
-            }
-        }
-        
+       
         /// <remarks/>
         [System.Xml.Serialization.XmlAnyElementAttribute()]
         public System.Xml.XmlElement[] Any {
@@ -25174,16 +24832,7 @@ namespace ShipWorks.Stores.Platforms.Ebay.WebServices {
             }
         }
         
-        /// <remarks/>
-        public bool CheckoutEnabled {
-            get {
-                return this.checkoutEnabledField;
-            }
-            set {
-                this.checkoutEnabledField = value;
-            }
-        }
-        
+       
         /// <remarks/>
         public bool CIPBankAccountStored {
             get {
@@ -27937,15 +27586,6 @@ namespace ShipWorks.Stores.Platforms.Ebay.WebServices {
             }
         }
         
-        /// <remarks/>
-        public bool ChangePaymentInstructions {
-            get {
-                return this.changePaymentInstructionsField;
-            }
-            set {
-                this.changePaymentInstructionsField = value;
-            }
-        }
         
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
@@ -28020,16 +27660,7 @@ namespace ShipWorks.Stores.Platforms.Ebay.WebServices {
             }
         }
         
-        /// <remarks/>
-        public string ShippingRateErrorMessage {
-            get {
-                return this.shippingRateErrorMessageField;
-            }
-            set {
-                this.shippingRateErrorMessageField = value;
-            }
-        }
-        
+       
         /// <remarks/>
         public ShippingRateTypeCodeType ShippingRateType {
             get {
@@ -28116,16 +27747,6 @@ namespace ShipWorks.Stores.Platforms.Ebay.WebServices {
         }
         
         /// <remarks/>
-        public bool ThirdPartyCheckout {
-            get {
-                return this.thirdPartyCheckoutField;
-            }
-            set {
-                this.thirdPartyCheckoutField = value;
-            }
-        }
-        
-        /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool ThirdPartyCheckoutSpecified {
             get {
@@ -28147,15 +27768,6 @@ namespace ShipWorks.Stores.Platforms.Ebay.WebServices {
             }
         }
         
-        /// <remarks/>
-        public bool GetItFast {
-            get {
-                return this.getItFastField;
-            }
-            set {
-                this.getItFastField = value;
-            }
-        }
         
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
@@ -28332,16 +27944,6 @@ namespace ShipWorks.Stores.Platforms.Ebay.WebServices {
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute("ExcludeShipToLocation")]
-        public string[] ExcludeShipToLocation {
-            get {
-                return this.excludeShipToLocationField;
-            }
-            set {
-                this.excludeShipToLocationField = value;
-            }
-        }
-        
         /// <remarks/>
         public bool SellerExcludeShipToLocationsPreference {
             get {
@@ -34557,15 +34159,6 @@ namespace ShipWorks.Stores.Platforms.Ebay.WebServices {
         
         private System.Xml.XmlElement[] anyField;
         
-        /// <remarks/>
-        public SellingManagerProductDetailsType SellingManagerProductDetails {
-            get {
-                return this.sellingManagerProductDetailsField;
-            }
-            set {
-                this.sellingManagerProductDetailsField = value;
-            }
-        }
         
         /// <remarks/>
         [System.Xml.Serialization.XmlArrayItemAttribute("SellingManagerTemplateDetails", IsNullable=false)]
@@ -39636,17 +39229,7 @@ namespace ShipWorks.Stores.Platforms.Ebay.WebServices {
             }
         }
         
-        /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute("PaymentMethods")]
-        public BuyerPaymentMethodCodeType[] PaymentMethods {
-            get {
-                return this.paymentMethodsField;
-            }
-            set {
-                this.paymentMethodsField = value;
-            }
-        }
-        
+       
         /// <remarks/>
         public string SellerEmail {
             get {
@@ -39697,16 +39280,6 @@ namespace ShipWorks.Stores.Platforms.Ebay.WebServices {
             }
         }
         
-        /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute("ExternalTransaction")]
-        public ExternalTransactionType[] ExternalTransaction {
-            get {
-                return this.externalTransactionField;
-            }
-            set {
-                this.externalTransactionField = value;
-            }
-        }
         
         /// <remarks/>
         [System.Xml.Serialization.XmlArrayItemAttribute("Transaction", IsNullable=false)]
@@ -39771,15 +39344,6 @@ namespace ShipWorks.Stores.Platforms.Ebay.WebServices {
             }
         }
         
-        /// <remarks/>
-        public bool IntegratedMerchantCreditCardEnabled {
-            get {
-                return this.integratedMerchantCreditCardEnabledField;
-            }
-            set {
-                this.integratedMerchantCreditCardEnabledField = value;
-            }
-        }
         
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
@@ -39833,16 +39397,7 @@ namespace ShipWorks.Stores.Platforms.Ebay.WebServices {
             }
         }
         
-        /// <remarks/>
-        public PaymentHoldStatusCodeType PaymentHoldStatus {
-            get {
-                return this.paymentHoldStatusField;
-            }
-            set {
-                this.paymentHoldStatusField = value;
-            }
-        }
-        
+       
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool PaymentHoldStatusSpecified {
@@ -39855,14 +39410,6 @@ namespace ShipWorks.Stores.Platforms.Ebay.WebServices {
         }
         
         /// <remarks/>
-        public PaymentHoldDetailType PaymentHoldDetails {
-            get {
-                return this.paymentHoldDetailsField;
-            }
-            set {
-                this.paymentHoldDetailsField = value;
-            }
-        }
         
         /// <remarks/>
         public AmountType RefundAmount {
@@ -39895,16 +39442,7 @@ namespace ShipWorks.Stores.Platforms.Ebay.WebServices {
             }
         }
         
-        /// <remarks/>
-        public bool IsMultiLegShipping {
-            get {
-                return this.isMultiLegShippingField;
-            }
-            set {
-                this.isMultiLegShippingField = value;
-            }
-        }
-        
+       
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool IsMultiLegShippingSpecified {
@@ -40039,37 +39577,9 @@ namespace ShipWorks.Stores.Platforms.Ebay.WebServices {
             }
         }
         
-        /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(DataType="token")]
-        public string LogisticsPlanType {
-            get {
-                return this.logisticsPlanTypeField;
-            }
-            set {
-                this.logisticsPlanTypeField = value;
-            }
-        }
         
+       
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute("BuyerTaxIdentifier")]
-        public TaxIdentifierType[] BuyerTaxIdentifier {
-            get {
-                return this.buyerTaxIdentifierField;
-            }
-            set {
-                this.buyerTaxIdentifierField = value;
-            }
-        }
-        
-        /// <remarks/>
-        public BuyerPackageEnclosuresType BuyerPackageEnclosures {
-            get {
-                return this.buyerPackageEnclosuresField;
-            }
-            set {
-                this.buyerPackageEnclosuresField = value;
-            }
-        }
         
         /// <remarks/>
         public string ExtendedOrderID {
@@ -40277,16 +39787,7 @@ namespace ShipWorks.Stores.Platforms.Ebay.WebServices {
             }
         }
         
-        /// <remarks/>
-        public bool IntegratedMerchantCreditCardEnabled {
-            get {
-                return this.integratedMerchantCreditCardEnabledField;
-            }
-            set {
-                this.integratedMerchantCreditCardEnabledField = value;
-            }
-        }
-        
+       
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool IntegratedMerchantCreditCardEnabledSpecified {
@@ -41104,26 +40605,7 @@ namespace ShipWorks.Stores.Platforms.Ebay.WebServices {
             }
         }
         
-        /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute("ExternalTransaction")]
-        public ExternalTransactionType[] ExternalTransaction {
-            get {
-                return this.externalTransactionField;
-            }
-            set {
-                this.externalTransactionField = value;
-            }
-        }
         
-        /// <remarks/>
-        public SellingManagerProductDetailsType SellingManagerProductDetails {
-            get {
-                return this.sellingManagerProductDetailsField;
-            }
-            set {
-                this.sellingManagerProductDetailsField = value;
-            }
-        }
         
         /// <remarks/>
         public ShippingServiceOptionsType ShippingServiceSelected {
@@ -41404,14 +40886,6 @@ namespace ShipWorks.Stores.Platforms.Ebay.WebServices {
         }
         
         /// <remarks/>
-        public AmountType BuyerGuaranteePrice {
-            get {
-                return this.buyerGuaranteePriceField;
-            }
-            set {
-                this.buyerGuaranteePriceField = value;
-            }
-        }
         
         /// <remarks/>
         public VariationType Variation {
@@ -41515,14 +40989,6 @@ namespace ShipWorks.Stores.Platforms.Ebay.WebServices {
         }
         
         /// <remarks/>
-        public PaymentHoldDetailType PaymentHoldDetails {
-            get {
-                return this.paymentHoldDetailsField;
-            }
-            set {
-                this.paymentHoldDetailsField = value;
-            }
-        }
         
         /// <remarks/>
         public SellerDiscountsType SellerDiscounts {
@@ -41564,16 +41030,7 @@ namespace ShipWorks.Stores.Platforms.Ebay.WebServices {
             }
         }
         
-        /// <remarks/>
-        public bool IsMultiLegShipping {
-            get {
-                return this.isMultiLegShippingField;
-            }
-            set {
-                this.isMultiLegShippingField = value;
-            }
-        }
-        
+       
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool IsMultiLegShippingSpecified {
@@ -41613,16 +41070,6 @@ namespace ShipWorks.Stores.Platforms.Ebay.WebServices {
             }
             set {
                 this.invoiceSentTimeFieldSpecified = value;
-            }
-        }
-        
-        /// <remarks/>
-        public UnpaidItemType UnpaidItem {
-            get {
-                return this.unpaidItemField;
-            }
-            set {
-                this.unpaidItemField = value;
             }
         }
         
@@ -41687,27 +41134,9 @@ namespace ShipWorks.Stores.Platforms.Ebay.WebServices {
             }
         }
         
-        /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(DataType="token")]
-        public string LogisticsPlanType {
-            get {
-                return this.logisticsPlanTypeField;
-            }
-            set {
-                this.logisticsPlanTypeField = value;
-            }
-        }
         
         /// <remarks/>
-        public BuyerPackageEnclosuresType BuyerPackageEnclosures {
-            get {
-                return this.buyerPackageEnclosuresField;
-            }
-            set {
-                this.buyerPackageEnclosuresField = value;
-            }
-        }
-        
+       
         /// <remarks/>
         public string InventoryReservationID {
             get {
@@ -42052,16 +41481,6 @@ namespace ShipWorks.Stores.Platforms.Ebay.WebServices {
             }
             set {
                 this.paymentHoldStatusFieldSpecified = value;
-            }
-        }
-        
-        /// <remarks/>
-        public bool IntegratedMerchantCreditCardEnabled {
-            get {
-                return this.integratedMerchantCreditCardEnabledField;
-            }
-            set {
-                this.integratedMerchantCreditCardEnabledField = value;
             }
         }
         
@@ -48335,15 +47754,7 @@ namespace ShipWorks.Stores.Platforms.Ebay.WebServices {
         }
         
         /// <remarks/>
-        public FeedbackRatingStarCodeType FeedbackRatingStar {
-            get {
-                return this.feedbackRatingStarField;
-            }
-            set {
-                this.feedbackRatingStarField = value;
-            }
-        }
-        
+       
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool FeedbackRatingStarSpecified {
@@ -69814,14 +69225,6 @@ namespace ShipWorks.Stores.Platforms.Ebay.WebServices {
         }
         
         /// <remarks/>
-        public SellingManagerProductDetailsType SellingManagerProductDetails {
-            get {
-                return this.sellingManagerProductDetailsField;
-            }
-            set {
-                this.sellingManagerProductDetailsField = value;
-            }
-        }
     }
     
     /// <remarks/>
@@ -69844,14 +69247,6 @@ namespace ShipWorks.Stores.Platforms.Ebay.WebServices {
         private SellingManagerProductDetailsType sellingManagerProductDetailsField;
         
         /// <remarks/>
-        public SellingManagerProductDetailsType SellingManagerProductDetails {
-            get {
-                return this.sellingManagerProductDetailsField;
-            }
-            set {
-                this.sellingManagerProductDetailsField = value;
-            }
-        }
     }
     
     /// <remarks/>
@@ -72838,15 +72233,6 @@ namespace ShipWorks.Stores.Platforms.Ebay.WebServices {
             }
         }
         
-        /// <remarks/>
-        public bool PayPalPreferred {
-            get {
-                return this.payPalPreferredField;
-            }
-            set {
-                this.payPalPreferredField = value;
-            }
-        }
         
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
@@ -77579,15 +76965,6 @@ namespace ShipWorks.Stores.Platforms.Ebay.WebServices {
             }
         }
         
-        /// <remarks/>
-        public bool IntegratedMerchantCreditCardEnabled {
-            get {
-                return this.integratedMerchantCreditCardEnabledField;
-            }
-            set {
-                this.integratedMerchantCreditCardEnabledField = value;
-            }
-        }
         
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
@@ -78036,16 +77413,7 @@ namespace ShipWorks.Stores.Platforms.Ebay.WebServices {
             }
         }
         
-        /// <remarks/>
-        public bool PayPalPreferred {
-            get {
-                return this.payPalPreferredField;
-            }
-            set {
-                this.payPalPreferredField = value;
-            }
-        }
-        
+      
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool PayPalPreferredSpecified {
@@ -80743,16 +80111,7 @@ namespace ShipWorks.Stores.Platforms.Ebay.WebServices {
             }
         }
         
-        /// <remarks/>
-        public bool PayPalPreferred {
-            get {
-                return this.payPalPreferredField;
-            }
-            set {
-                this.payPalPreferredField = value;
-            }
-        }
-        
+       
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool PayPalPreferredSpecified {
@@ -83023,14 +82382,6 @@ namespace ShipWorks.Stores.Platforms.Ebay.WebServices {
         }
         
         /// <remarks/>
-        public SellingManagerProductDetailsType SellingManagerProductDetails {
-            get {
-                return this.sellingManagerProductDetailsField;
-            }
-            set {
-                this.sellingManagerProductDetailsField = value;
-            }
-        }
         
         /// <remarks/>
         [System.Xml.Serialization.XmlArrayItemAttribute("Fee", IsNullable=false)]
@@ -83055,14 +82406,6 @@ namespace ShipWorks.Stores.Platforms.Ebay.WebServices {
         private SellingManagerProductDetailsType sellingManagerProductDetailsField;
         
         /// <remarks/>
-        public SellingManagerProductDetailsType SellingManagerProductDetails {
-            get {
-                return this.sellingManagerProductDetailsField;
-            }
-            set {
-                this.sellingManagerProductDetailsField = value;
-            }
-        }
     }
     
     /// <remarks/>
@@ -88034,17 +87377,7 @@ namespace ShipWorks.Stores.Platforms.Ebay.WebServices {
             }
         }
         
-        /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute("PaymentMethods", Order=8)]
-        public BuyerPaymentMethodCodeType[] PaymentMethods {
-            get {
-                return this.paymentMethodsField;
-            }
-            set {
-                this.paymentMethodsField = value;
-            }
-        }
-        
+       
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Order=9)]
         public string PayPalEmailAddress {
@@ -88495,15 +87828,6 @@ namespace ShipWorks.Stores.Platforms.Ebay.WebServices {
         private SellingManagerProductSpecificsType sellingManagerProductSpecificsField;
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order=0)]
-        public SellingManagerProductDetailsType SellingManagerProductDetails {
-            get {
-                return this.sellingManagerProductDetailsField;
-            }
-            set {
-                this.sellingManagerProductDetailsField = value;
-            }
-        }
         
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Order=1)]
@@ -89215,17 +88539,7 @@ namespace ShipWorks.Stores.Platforms.Ebay.WebServices {
             }
         }
         
-        /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order=18)]
-        public ExternalTransactionType ExternalTransaction {
-            get {
-                return this.externalTransactionField;
-            }
-            set {
-                this.externalTransactionField = value;
-            }
-        }
-        
+       
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Order=19)]
         public string MultipleSellerPaymentID {
@@ -98463,15 +97777,6 @@ namespace ShipWorks.Stores.Platforms.Ebay.WebServices {
         private SellingManagerProductSpecificsType sellingManagerProductSpecificsField;
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order=0)]
-        public SellingManagerProductDetailsType SellingManagerProductDetails {
-            get {
-                return this.sellingManagerProductDetailsField;
-            }
-            set {
-                this.sellingManagerProductDetailsField = value;
-            }
-        }
         
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Order=1)]

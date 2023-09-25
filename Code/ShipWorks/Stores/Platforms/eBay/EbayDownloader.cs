@@ -242,7 +242,7 @@ namespace ShipWorks.Stores.Platforms.Ebay
             await UpdateNotes(order, orderType).ConfigureAwait(false);
 
             // Make sure we have the latest GSP data
-            UpdateGlobalShippingProgramInfo(order, orderType.IsMultiLegShipping, orderType.MultiLegShippingDetails);
+            UpdateGlobalShippingProgramInfo(order, false/*orderType.IsMultiLegShipping*/, orderType.MultiLegShippingDetails);
 
             // If all items are shipped, and the local status isn't set yet, set it to shipped
             if (string.IsNullOrWhiteSpace(order.LocalStatus) && order.OrderItems.OfType<EbayOrderItemEntity>().All(item => item.MyEbayShipped))
@@ -624,11 +624,11 @@ namespace ShipWorks.Stores.Platforms.Ebay
             // eBay doesn't always send the real email address. First check for the first real email address we find.
             string email = buyerNodes.Select(b => b.Email).FirstOrDefault(e => e != null && e.Contains('@'));
 
-            // Then fall back to the alias.
-            if (string.IsNullOrWhiteSpace(email))
-            {
-                email = buyerNodes.Select(b => b.StaticAlias).FirstOrDefault(e => e != null && e.Contains('@'));
-            }
+            //// Then fall back to the alias.
+            //if (string.IsNullOrWhiteSpace(email))
+            //{
+            //    email = buyerNodes.Select(b => b.StaticAlias).FirstOrDefault(e => e != null && e.Contains('@'));
+            //}
 
             return email ?? "";
         }

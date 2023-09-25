@@ -143,7 +143,8 @@ namespace ShipWorks.Stores.Platforms.Ebay.WizardPages
                     ebayStore.StoreName = eBayUser.UserID;
                     ebayStore.Email = eBayUser.Email;
 
-                    AddressType address = eBayUser.RegistrationAddress;
+                    //AddressType address = eBayUser.RegistrationAddress;
+                    AddressType address = null;
                     if (address != null)
                     {
                         ebayStore.Company = address.CompanyName ?? "";

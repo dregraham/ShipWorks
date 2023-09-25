@@ -71,7 +71,7 @@ namespace ShipWorks.Stores.Platforms.Ebay.Requests
                 };
 
             request.Order.TransactionArray = transactionsToCombine.ToArray();
-            request.Order.PaymentMethods = paymentMethods.ToArray();
+            //request.Order.PaymentMethods = paymentMethods.ToArray();
 
             ConfigureShippingDetails(shippingService, shippingCost, shippingCountryCode);
             ConfigureSalesTax(salesTaxPercent, taxState, isShippingTaxed);
