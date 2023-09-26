@@ -7,6 +7,7 @@ using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Utility;
 using ShipWorks.Shipping.Carriers.Amazon.SFP.Platform;
 using ShipWorks.Shipping.Carriers.FedEx.Enums;
+using ShipWorks.Shipping.Editing.Enums;
 using ShipWorks.Shipping.Editing.Rating;
 using ShipWorks.Shipping.ShipEngine;
 using ShipWorks.Shipping.ShipEngine.DTOs;
@@ -33,6 +34,25 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             {
                 rateResult.Tag = fedexServiceType.Value;
                 rateResult.Description = EnumHelper.GetDescription(fedexServiceType.Value);
+            }
+
+            switch (apiRate.DeliveryDays)
+            {
+                case 1:
+                    rateResult.ServiceLevel = ServiceLevelType.OneDay;
+                    break;
+                case 2:
+                    rateResult.ServiceLevel = ServiceLevelType.TwoDays;
+                    break;
+                case 3:
+                    rateResult.ServiceLevel = ServiceLevelType.ThreeDays;
+                    break;
+                case 4:
+                case 5:
+                case 6:
+                case 7:
+                    rateResult.ServiceLevel = ServiceLevelType.FourToSevenDays;
+                    break;
             }
 
             return rateResult;
