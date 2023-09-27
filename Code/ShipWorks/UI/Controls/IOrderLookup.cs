@@ -39,6 +39,11 @@ namespace ShipWorks.UI.Controls
         bool ShipAgainAllowed();
 
         /// <summary>
+        /// Allow reprint label
+        /// </summary>
+        bool ReprintAllowed();
+
+        /// <summary>
         /// Allow Unverify Order
         /// </summary>
         bool UnverifyOrderAllowed();
@@ -52,6 +57,11 @@ namespace ShipWorks.UI.Controls
         /// Unverify the order
         /// </summary>
         void Unverify();
+
+        /// <summary>
+        /// Reprint the label
+        /// </summary>
+        void Reprint();
 
         /// <summary>
         /// Register the profile handler
