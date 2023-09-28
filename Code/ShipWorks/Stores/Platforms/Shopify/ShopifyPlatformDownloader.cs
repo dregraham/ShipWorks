@@ -346,6 +346,16 @@ namespace ShipWorks.Stores.Platforms.Shopify
                 var noteText = FormatNoteText(note.Message, OrderSourceNoteType.GiftMessage);
                 await InstantiateNote(order, noteText, order.OrderDate, NoteVisibility.Public).ConfigureAwait(false);
             }
+
+            var tags = salesOrder.RequestedFulfillments
+                .SelectMany(o => o.Extensions.CustomField1?.Split(',').Select(tag => tag?.Trim()) ?? Array.Empty<string>());
+            foreach (var tag in tags)
+            {
+                if (!string.IsNullOrWhiteSpace(tag))
+                {
+                    await InstantiateNote(order, $"tag-{tag.Trim()}", order.OrderDate, NoteVisibility.Internal).ConfigureAwait(false);
+                }
+            }
         }
 
         /// <summary>
