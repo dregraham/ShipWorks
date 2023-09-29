@@ -119,9 +119,10 @@ namespace ShipWorks.Shipping.Tests.Carriers.Dhl
             shipment.DhlExpress.Packages.Add(secondPackage);
 
             DhlExpressPackageAdapter secondPackageAdapter = new DhlExpressPackageAdapter(shipment, secondPackage, 2);
-            secondPackageAdapter.Weight = 5;
+            const double secondPackageWeight = 5;
+            secondPackageAdapter.Weight = secondPackageWeight;
 
-            Assert.Equal(originalShipmentWeight, shipment.ContentWeight);
+            Assert.Equal(originalShipmentWeight + secondPackageWeight, shipment.ContentWeight);
             Assert.Equal(testObject.Weight, package.Weight);
             Assert.Equal(secondPackageAdapter.Weight, secondPackage.Weight);
         }
