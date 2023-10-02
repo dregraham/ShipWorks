@@ -7,6 +7,7 @@ using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Shipping.Carriers.FedEx.Api;
 using ShipWorks.Shipping.Carriers.FedEx.Enums;
+using ShipWorks.Shipping.FedEx;
 using ShipWorks.Shipping.Insurance;
 using ShipWorks.Shipping.Services;
 using ShipWorks.Shipping.ShipEngine;
@@ -144,6 +145,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             var options = new AdvancedOptions()
             {
                 ContainsAlcohol = shipment.FedEx.Packages.Any(p => p.ContainsAlcohol),
+               // FreightClass = shipment.FedEx.FreightClass == FedExFreightClassType.CLASS_050,
             };
 
 
@@ -151,6 +153,15 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             {
                 options.DryIceWeight = new Weight(shipment.FedEx.Packages.Sum(p => p.DryIceWeight), Weight.UnitEnum.Pound);
                 options.DryIce = true;
+            }
+
+            if (!shipment.FedEx.FreightBookingNumber.IsNullOrWhiteSpace()  || !shipment.FedEx.FreightLoadAndCount.ToString().IsNullOrWhiteSpace())
+            {
+                options.FedExFreight = new FedExFreight
+                {
+                    BookingConfirmation = shipment.FedEx.FreightBookingNumber,
+                    ShipperLoadAndCount = shipment.FedEx.FreightLoadAndCount.ToString()
+                };
             }
 
             options.DeliveredDutyPaid = shipment.FedEx.DeliveredDutyPaid;
