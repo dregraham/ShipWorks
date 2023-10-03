@@ -7,6 +7,7 @@
         xmlns:local="clr-namespace:ShipWorks.UI.Controls.WebBrowser"
         xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:wv2="clr-namespace:Microsoft.Web.WebView2.Wpf;assembly=Microsoft.Web.WebView2.Wpf"
         Title="{Binding Title, Mode=OneTime}"
         ShowInTaskbar="False"
         WindowStartupLocation="CenterOwner"
@@ -24,18 +25,19 @@
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
-        <WebBrowser 
+        <wv2:WebView2 
             Grid.Row="0" 
             Grid.Column="0"
             Margin="10 10 10 5"
+            Source="{Binding Url, Mode=OneTime}"
             attachedProperties:WebBrowserUtility.BindableSource="{Binding Url, Mode=OneTime}" >
             <i:Interaction.Behaviors>
-                <behaviors:WebBrowserRunStartupScriptBehavior 
+                <behaviors:WebView2RunStartupScriptBehavior 
                     Script="document.documentElement.style.overflow ='hidden';"
                     ScriptName = "HideScrollBars"  />
-                <behaviors:WebBrowserSuppressPopupBehavior />
+                <behaviors:WebView2SuppressPopupBehavior />
             </i:Interaction.Behaviors>
-        </WebBrowser>
+        </wv2:WebView2>
         <Grid Grid.Row="1" Grid.Column="0">
             <Grid.RowDefinitions>
                 <RowDefinition Height="*" />

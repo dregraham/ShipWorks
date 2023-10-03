@@ -5,6 +5,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:local="clr-namespace:ShipWorks.UI.Controls.WebBrowser"
         xmlns:attachedProperties="clr-namespace:ShipWorks.UI.AttachedProperties"
+        xmlns:wv2="clr-namespace:Microsoft.Web.WebView2.Wpf;assembly=Microsoft.Web.WebView2.Wpf"
         d:DataContext="{d:DesignInstance local:WebBrowserDlgViewModel}"
         mc:Ignorable="d"
         WindowStartupLocation="CenterOwner"
@@ -18,7 +19,7 @@
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
-        <WebBrowser
+        <wv2:WebView2
             Grid.Row="0"
             Grid.Column="0"
             attachedProperties:WebBrowserUtility.BindableSource="{Binding Url, Mode=OneTime}" />
