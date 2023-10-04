@@ -890,6 +890,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             this.fedExFreightContainerControl.Name = "fedExFreightContainerControl";
             this.fedExFreightContainerControl.Size = new System.Drawing.Size(469, 50);
             this.fedExFreightContainerControl.TabIndex = 7;
+            this.fedExFreightContainerControl.Resize += OnFreightContainerControlResize;
             // 
             // sectionOptions
             // 
@@ -1993,6 +1994,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             this.Controls.Add(this.sectionSmartPost);
             this.Controls.Add(this.sectionHoldAtLocation);
             this.Controls.Add(this.sectionBilling);
+            this.Controls.Add(this.sectionFreight);
             this.Controls.Add(this.sectionHomeDelivery);
             this.Controls.Add(this.sectionCOD);
             this.Controls.Add(this.sectionServiceOptions);
@@ -2006,6 +2008,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             this.Controls.SetChildIndex(this.sectionCOD, 0);
             this.Controls.SetChildIndex(this.sectionHomeDelivery, 0);
             this.Controls.SetChildIndex(this.sectionBilling, 0);
+            this.Controls.SetChildIndex(this.sectionFreight, 0);
             this.Controls.SetChildIndex(this.sectionHoldAtLocation, 0);
             this.Controls.SetChildIndex(this.sectionSmartPost, 0);
             this.Controls.SetChildIndex(this.sectionOptions, 0);

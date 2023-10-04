@@ -102,17 +102,29 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         private List<Rate> ClearExcludedTypesByService(List<Rate> rates)
         {
             var excludeServiceTypesIds = shipmentType.GetExcludedServiceTypes().ToList();
+
             var excludeServiceTypeApiValues = excludeServiceTypesIds
-                .Cast<FedExServiceType>()
-                .Select(t => EnumHelper.GetApiValue(t))
+                .Select(intValue => (FedExServiceType) Enum.ToObject(typeof(FedExServiceType), intValue))
+                .Select(t => new EnumInfo
+                {
+                    Description = EnumHelper.GetDescription(t),
+                    ApiValue = EnumHelper.GetApiValue(t)
+                })
                 .ToList();
 
             foreach (var rate in rates.ToList())
             {
-                if (excludeServiceTypeApiValues.Contains(rate.ServiceCode) && rate.PackageType.Contains("_onerate"))
+                bool isOneRate = rate.PackageType.Contains("_onerate");
+
+                foreach (var excludedType in excludeServiceTypeApiValues)
                 {
-                    rates.Remove(rate);
+                    bool isOneRateExcluded = excludedType.Description.Contains("One Rate");
+                    if ((excludedType.ApiValue == rate.ServiceCode) && (isOneRateExcluded == isOneRate))
+                    {
+                        rates.Remove(rate);
+                    }
                 }
+
             }
 
             return rates;
@@ -144,6 +156,12 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         private List<IPackageAdapter> GetPackages(ShipmentEntity shipment)
         {
             return shipmentTypeManager.Get(shipment.ShipmentTypeCode).GetPackageAdapters(shipment).ToList();
+        }
+
+        public class EnumInfo
+        {
+            public string Description { get; set; }
+            public string ApiValue { get; set; }
         }
     }
 }
