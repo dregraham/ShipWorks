@@ -59,10 +59,12 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             }
 
             // Show freight if there are all freight
-            freightInsidePickup.Visible = anyDomestic;
-            freightInsideDelivery.Visible = anyDomestic;
-            labelLoadAndCount.Visible = !anyDomestic;
-            freightLoadAndCount.Visible = !anyDomestic;
+            freightInsidePickup.Visible = false;
+            freightInsideDelivery.Visible = false;
+            labelLoadAndCount.Visible = true;
+            freightLoadAndCount.Visible = true;
+            label3.Visible = true;
+            freightBookingNumber.Visible = true;
         }
 
         /// <summary>
