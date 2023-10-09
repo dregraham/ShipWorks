@@ -79,7 +79,7 @@ namespace ShipWorks.Shipping.ShipEngine
             using (MemoryStream pdfData = new MemoryStream(labelResource))
             {
                 resourceManager.CreateFromPdf(
-                    PdfDocumentType.BlackAndWhite, pdfData, shipment.ShipmentID, i => i == 0 ? "LabelPrimary" : $"LabelPart{i}", (m) => m.ToArray(), true);
+                    PdfDocumentType.BlackAndWhite, pdfData, shipment.ShipmentID, i =>  "LabelPrimary{i}", (m) => m.ToArray(), true);
             }
         }
 
