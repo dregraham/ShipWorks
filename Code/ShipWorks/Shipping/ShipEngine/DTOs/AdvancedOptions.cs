@@ -63,7 +63,7 @@ namespace ShipWorks.Shipping.ShipEngine.DTOs
         /// <param name="ancillaryEndorsement">ancillaryEndorsement.</param>
         public AdvancedOptions(string billToAccount = default(string), string billToCountryCode = default(string), BillToPartyEnum? billToParty = default(BillToPartyEnum?), string billToPostalCode = default(string), bool? containsAlcohol = default(bool?), bool? deliveredDutyPaid = default(bool?), bool? nonMachinable = default(bool?), bool? saturdayDelivery = default(bool?), bool? dryIce = default(bool?), Weight dryIceWeight = default(Weight), bool? useUpsGroundFreightPricing = default(bool?), string freightClass = default(string), 
             string customField1 = default(string), string customField2 = default(string), string customField3 = default(string),
-            string ancillaryEndorsement = default(string), CollectOnDeliveryAdvancedOption collectOnDelivery = default(CollectOnDeliveryAdvancedOption))
+            string ancillaryEndorsement = default(string), CollectOnDeliveryAdvancedOption collectOnDelivery = default(CollectOnDeliveryAdvancedOption), FedExFreight fedExFreight = default(FedExFreight))
         {
             this.BillToAccount = billToAccount;
             this.BillToCountryCode = billToCountryCode;
@@ -82,6 +82,7 @@ namespace ShipWorks.Shipping.ShipEngine.DTOs
             this.CustomField3 = customField3;
             this.AncillaryEndorsement = ancillaryEndorsement;
             this.CollectOnDelivery = collectOnDelivery;
+            this.FedExFreight = fedExFreight;
         }
 
         /// <summary>
@@ -188,6 +189,12 @@ namespace ShipWorks.Shipping.ShipEngine.DTOs
         public CollectOnDeliveryAdvancedOption CollectOnDelivery { get; set; }
 
         /// <summary>
+        /// Gets or Sets CollectOnDelivery
+        /// </summary>
+        [DataMember(Name = "fedex_freight", EmitDefaultValue = false)]
+        public FedExFreight FedExFreight { get; set; }
+
+        /// <summary>
         /// Returns the string presentation of the object
         /// </summary>
         /// <returns>String presentation of the object</returns>
@@ -213,6 +220,7 @@ namespace ShipWorks.Shipping.ShipEngine.DTOs
             sb.Append("  AncillaryEndorsement: ").Append(AncillaryEndorsement).Append("\n");
             sb.Append("  ThirdPartyConsignee:  ").Append(ThirdPartyConsignee).Append("\n");
             sb.Append("  CollectOnDelivery: {\n").Append(CollectOnDelivery).Append("\n");
+            sb.Append("  FedExFreight: {\n").Append(FedExFreight).Append("\n");
             sb.Append("}\n");
             return sb.ToString();
         }
@@ -336,6 +344,11 @@ namespace ShipWorks.Shipping.ShipEngine.DTOs
                     this.CollectOnDelivery == input.CollectOnDelivery ||
                     (this.CollectOnDelivery != null &&
                      this.CollectOnDelivery.Equals(input.CollectOnDelivery))
+                ) &&
+                (
+                    this.FedExFreight == input.FedExFreight ||
+                    (this.FedExFreight != null &&
+                     this.FedExFreight.Equals(input.FedExFreight))
                 );
         }
 
@@ -382,6 +395,8 @@ namespace ShipWorks.Shipping.ShipEngine.DTOs
                     hashCode = hashCode * 59 + this.AncillaryEndorsement.GetHashCode();
                 if(this.CollectOnDelivery != null)
                     hashCode = hashCode * 59 + this.CollectOnDelivery.GetHashCode();
+                if (this.FedExFreight != null)
+                    hashCode = hashCode * 59 + this.FedExFreight.GetHashCode();
                 return hashCode;
             }
         }

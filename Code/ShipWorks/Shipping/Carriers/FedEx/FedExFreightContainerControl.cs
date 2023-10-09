@@ -36,28 +36,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         /// </summary>
         public void LoadShipmentDetails(IEnumerable<ShipmentEntity> shipments)
         {
-            if (shipments.All(s => FedExUtility.IsFreightExpressService((FedExServiceType) s.FedEx.Service)))
-            {
-                panelLtlFreight.Visible = false;
-
-                fedExExpressFreightControl.LoadShipmentDetails(shipments);
-                fedExExpressFreightControl.Location = new Point(2, 2);
-                fedExExpressFreightControl.Visible = true;
-
-                Height = fedExExpressFreightControl.Bottom;
-            }
-            else
-            {
-                fedExExpressFreightControl.Visible = false;
-
-                panelLtlFreight.Location = new Point(2, 2);
-                fedExPackageFreightDetailControl.LoadShipments(shipments, true);
-                fedExLtlFreightControl.LoadShipmentDetails(shipments);
-
-                UpdateLayout();
-
-                panelLtlFreight.Visible = true;
-            }
+            panelLtlFreight.Visible = false;
+            fedExExpressFreightControl.LoadShipmentDetails(shipments);
+            fedExExpressFreightControl.Location = new Point(2, 2);
+            fedExExpressFreightControl.Visible = true;
+            Height = fedExExpressFreightControl.Bottom;
         }
 
         /// <summary>

@@ -1311,6 +1311,7 @@
     <Compile Include="Shipping\ShipEngine\DTOs\AncillaryEndorsement.cs" />
     <Compile Include="Shipping\ShipEngine\DTOs\DHLExpressAccountInformationDTO.cs" />
     <Compile Include="Shipping\ShipEngine\DTOs\Dimensions.cs" />
+    <Compile Include="Shipping\ShipEngine\DTOs\FedExFreight.cs" />
     <Compile Include="Shipping\ShipEngine\DTOs\InternationalOptions.cs" />
     <Compile Include="Shipping\ShipEngine\DTOs\Label.cs" />
     <Compile Include="Shipping\ShipEngine\DTOs\LabelMessages.cs" />
