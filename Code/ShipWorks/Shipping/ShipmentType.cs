@@ -179,7 +179,8 @@ namespace ShipWorks.Shipping
         /// Checks whether this shipment type is allowed for the given shipment
         /// </summary>
         public virtual bool IsAllowedFor(ShipmentEntity shipment)
-        {
+		{
+			return true;
             IAmazonOrder order;
             if (shipment.Order == null)
             {
