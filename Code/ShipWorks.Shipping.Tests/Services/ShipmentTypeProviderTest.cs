@@ -188,8 +188,9 @@ namespace ShipWorks.Shipping.Tests.Services
         }
 
         [Fact]
-        public void GetAvailableShipmentTypes_ReturnsOnlyAmazon_WhenShipmentTypeCodeIsAmazon()
+        public void GetAvailableShipmentTypes_ReturnsAllAvailable_WhenShipmentIsAmazonPrime()
         {
+            //Since October 2023 Prime orders can be sent using any carrier, so changing this to test for all instead of 1
             mock.Mock<IShipmentTypeManager>().SetupGet(x => x.EnabledShipmentTypeCodes)
                 .Returns(new List<ShipmentTypeCode> { ShipmentTypeCode.Other, ShipmentTypeCode.Usps, ShipmentTypeCode.AmazonSFP });
             mock.Mock<IShipmentTypeManager>().SetupGet(x => x.ShipmentTypes)
@@ -207,8 +208,10 @@ namespace ShipWorks.Shipping.Tests.Services
             carrierAdapter.SetupGet(c => c.Shipment).Returns(shipment);
 
             amazonShipmentShippingPolicy.Apply(target);
-            Assert.Equal(1, testObject.GetAvailableShipmentTypes(carrierAdapter.Object).Count());
-            Assert.Equal(ShipmentTypeCode.AmazonSFP, testObject.GetAvailableShipmentTypes(carrierAdapter.Object).First());
+            Assert.Equal(3, testObject.GetAvailableShipmentTypes(carrierAdapter.Object).Count());
+            Assert.Contains(ShipmentTypeCode.Other, testObject.GetAvailableShipmentTypes(carrierAdapter.Object));
+            Assert.Contains(ShipmentTypeCode.Usps, testObject.GetAvailableShipmentTypes(carrierAdapter.Object));
+            Assert.Contains(ShipmentTypeCode.AmazonSFP, testObject.GetAvailableShipmentTypes(carrierAdapter.Object));
         }
 
 
