@@ -95,8 +95,8 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
                 return AmazonIsPrime.Unknown;
             }
 
-            return shippingClass.IndexOf("Prime", StringComparison.OrdinalIgnoreCase) >= 0 /*&&
-                   carrier.IndexOf("Amazon", StringComparison.OrdinalIgnoreCase) >= 0*/ ?
+            return shippingClass.IndexOf("Prime", StringComparison.OrdinalIgnoreCase) >= 0 &&
+                   carrier.IndexOf("Amazon", StringComparison.OrdinalIgnoreCase) >= 0 ?
                 AmazonIsPrime.Yes : AmazonIsPrime.No;
         }
 
