@@ -188,8 +188,9 @@ namespace ShipWorks.Shipping.Tests.Services
         }
 
         [Fact]
-        public void GetAvailableShipmentTypes_ReturnsOnlyAmazon_WhenShipmentTypeCodeIsAmazon()
+        public void GetAvailableShipmentTypes_ReturnsAllAvailable_WhenShipmentIsAmazonPrime()
         {
+            //Since October 2023 Prime orders can be sent using any carrier, so changing this to test for all instead of 1
             mock.Mock<IShipmentTypeManager>().SetupGet(x => x.EnabledShipmentTypeCodes)
                 .Returns(new List<ShipmentTypeCode> { ShipmentTypeCode.Other, ShipmentTypeCode.Usps, ShipmentTypeCode.AmazonSFP });
             mock.Mock<IShipmentTypeManager>().SetupGet(x => x.ShipmentTypes)
@@ -207,8 +208,10 @@ namespace ShipWorks.Shipping.Tests.Services
             carrierAdapter.SetupGet(c => c.Shipment).Returns(shipment);
 
             amazonShipmentShippingPolicy.Apply(target);
-            Assert.Equal(1, testObject.GetAvailableShipmentTypes(carrierAdapter.Object).Count());
-            Assert.Equal(ShipmentTypeCode.AmazonSFP, testObject.GetAvailableShipmentTypes(carrierAdapter.Object).First());
+            Assert.Equal(3, testObject.GetAvailableShipmentTypes(carrierAdapter.Object).Count());
+            Assert.Contains(ShipmentTypeCode.Other, testObject.GetAvailableShipmentTypes(carrierAdapter.Object));
+            Assert.Contains(ShipmentTypeCode.Usps, testObject.GetAvailableShipmentTypes(carrierAdapter.Object));
+            Assert.Contains(ShipmentTypeCode.AmazonSFP, testObject.GetAvailableShipmentTypes(carrierAdapter.Object));
         }
 
 
@@ -232,45 +235,45 @@ namespace ShipWorks.Shipping.Tests.Services
         }
 
         [Theory]
-        [InlineData(Ordertype.Amazon, ShipmentTypeCode.AmazonSFP, RestrictionType.Hidden, AmazonIsPrime.Yes, false, false)]
+        [InlineData(Ordertype.Amazon, ShipmentTypeCode.AmazonSFP, RestrictionType.Hidden, AmazonIsPrime.Yes, false, true)]
         [InlineData(Ordertype.Amazon, ShipmentTypeCode.AmazonSFP, RestrictionType.Hidden, AmazonIsPrime.No, false, true)]
         [InlineData(Ordertype.Amazon, ShipmentTypeCode.AmazonSFP, RestrictionType.Hidden, AmazonIsPrime.Unknown, false, true)]
-        [InlineData(Ordertype.GenericModule, ShipmentTypeCode.AmazonSFP, RestrictionType.Hidden, AmazonIsPrime.Yes, false, false)]
+        [InlineData(Ordertype.GenericModule, ShipmentTypeCode.AmazonSFP, RestrictionType.Hidden, AmazonIsPrime.Yes, false, true)]
         [InlineData(Ordertype.GenericModule, ShipmentTypeCode.AmazonSFP, RestrictionType.Hidden, AmazonIsPrime.No, false, true)]
         [InlineData(Ordertype.GenericModule, ShipmentTypeCode.AmazonSFP, RestrictionType.Hidden, AmazonIsPrime.Unknown, false, true)]
         [InlineData(Ordertype.BigCommerce, ShipmentTypeCode.AmazonSFP, RestrictionType.Hidden, AmazonIsPrime.No, false, true)]
-        [InlineData(Ordertype.Amazon, ShipmentTypeCode.Other, RestrictionType.Hidden, AmazonIsPrime.Yes, false, false)]
+        [InlineData(Ordertype.Amazon, ShipmentTypeCode.Other, RestrictionType.Hidden, AmazonIsPrime.Yes, false, true)]
         [InlineData(Ordertype.Amazon, ShipmentTypeCode.Other, RestrictionType.Hidden, AmazonIsPrime.No, false, true)]
         [InlineData(Ordertype.Amazon, ShipmentTypeCode.Other, RestrictionType.Hidden, AmazonIsPrime.Unknown, false, true)]
-        [InlineData(Ordertype.GenericModule, ShipmentTypeCode.Other, RestrictionType.Hidden, AmazonIsPrime.Yes, false, false)]
+        [InlineData(Ordertype.GenericModule, ShipmentTypeCode.Other, RestrictionType.Hidden, AmazonIsPrime.Yes, false, true)]
         [InlineData(Ordertype.GenericModule, ShipmentTypeCode.Other, RestrictionType.Hidden, AmazonIsPrime.No, false, true)]
         [InlineData(Ordertype.GenericModule, ShipmentTypeCode.Other, RestrictionType.Hidden, AmazonIsPrime.Unknown, false, true)]
         [InlineData(Ordertype.BigCommerce, ShipmentTypeCode.Other, RestrictionType.Hidden, AmazonIsPrime.No, false, true)]
-        [InlineData(Ordertype.Amazon, ShipmentTypeCode.AmazonSFP, RestrictionType.PrimeOnly, AmazonIsPrime.Yes, true, false)]
+        [InlineData(Ordertype.Amazon, ShipmentTypeCode.AmazonSFP, RestrictionType.PrimeOnly, AmazonIsPrime.Yes, true, true)]
         [InlineData(Ordertype.Amazon, ShipmentTypeCode.AmazonSFP, RestrictionType.PrimeOnly, AmazonIsPrime.No, false, true)]
         [InlineData(Ordertype.Amazon, ShipmentTypeCode.AmazonSFP, RestrictionType.PrimeOnly, AmazonIsPrime.Unknown, false, true)]
-        [InlineData(Ordertype.GenericModule, ShipmentTypeCode.AmazonSFP, RestrictionType.PrimeOnly, AmazonIsPrime.Yes, true, false)]
+        [InlineData(Ordertype.GenericModule, ShipmentTypeCode.AmazonSFP, RestrictionType.PrimeOnly, AmazonIsPrime.Yes, true, true)]
         [InlineData(Ordertype.GenericModule, ShipmentTypeCode.AmazonSFP, RestrictionType.PrimeOnly, AmazonIsPrime.No, false, true)]
         [InlineData(Ordertype.GenericModule, ShipmentTypeCode.AmazonSFP, RestrictionType.PrimeOnly, AmazonIsPrime.Unknown, false, true)]
         [InlineData(Ordertype.BigCommerce, ShipmentTypeCode.AmazonSFP, RestrictionType.PrimeOnly, AmazonIsPrime.No, false, true)]
-        [InlineData(Ordertype.Amazon, ShipmentTypeCode.Other, RestrictionType.PrimeOnly, AmazonIsPrime.Yes, true, false)]
+        [InlineData(Ordertype.Amazon, ShipmentTypeCode.Other, RestrictionType.PrimeOnly, AmazonIsPrime.Yes, true, true)]
         [InlineData(Ordertype.Amazon, ShipmentTypeCode.Other, RestrictionType.PrimeOnly, AmazonIsPrime.No, false, true)]
         [InlineData(Ordertype.Amazon, ShipmentTypeCode.Other, RestrictionType.PrimeOnly, AmazonIsPrime.Unknown, false, true)]
-        [InlineData(Ordertype.GenericModule, ShipmentTypeCode.Other, RestrictionType.PrimeOnly, AmazonIsPrime.Yes, true, false)]
+        [InlineData(Ordertype.GenericModule, ShipmentTypeCode.Other, RestrictionType.PrimeOnly, AmazonIsPrime.Yes, true, true)]
         [InlineData(Ordertype.GenericModule, ShipmentTypeCode.Other, RestrictionType.PrimeOnly, AmazonIsPrime.No, false, true)]
         [InlineData(Ordertype.GenericModule, ShipmentTypeCode.Other, RestrictionType.PrimeOnly, AmazonIsPrime.Unknown, false, true)]
         [InlineData(Ordertype.BigCommerce, ShipmentTypeCode.Other, RestrictionType.PrimeOnly, AmazonIsPrime.No, false, true)]
-        [InlineData(Ordertype.Amazon, ShipmentTypeCode.AmazonSFP, RestrictionType.AnyAmazon, AmazonIsPrime.Yes, true, false)]
+        [InlineData(Ordertype.Amazon, ShipmentTypeCode.AmazonSFP, RestrictionType.AnyAmazon, AmazonIsPrime.Yes, true, true)]
         [InlineData(Ordertype.Amazon, ShipmentTypeCode.AmazonSFP, RestrictionType.AnyAmazon, AmazonIsPrime.No, true, true)]
         [InlineData(Ordertype.Amazon, ShipmentTypeCode.AmazonSFP, RestrictionType.AnyAmazon, AmazonIsPrime.Unknown, true, true)]
-        [InlineData(Ordertype.GenericModule, ShipmentTypeCode.AmazonSFP, RestrictionType.AnyAmazon, AmazonIsPrime.Yes, true, false)]
+        [InlineData(Ordertype.GenericModule, ShipmentTypeCode.AmazonSFP, RestrictionType.AnyAmazon, AmazonIsPrime.Yes, true, true)]
         [InlineData(Ordertype.GenericModule, ShipmentTypeCode.AmazonSFP, RestrictionType.AnyAmazon, AmazonIsPrime.No, false, true)]
         [InlineData(Ordertype.GenericModule, ShipmentTypeCode.AmazonSFP, RestrictionType.AnyAmazon, AmazonIsPrime.Unknown, false, true)]
         [InlineData(Ordertype.BigCommerce, ShipmentTypeCode.AmazonSFP, RestrictionType.AnyAmazon, AmazonIsPrime.No, false, true)]
-        [InlineData(Ordertype.Amazon, ShipmentTypeCode.Other, RestrictionType.AnyAmazon, AmazonIsPrime.Yes, true, false)]
+        [InlineData(Ordertype.Amazon, ShipmentTypeCode.Other, RestrictionType.AnyAmazon, AmazonIsPrime.Yes, true, true)]
         [InlineData(Ordertype.Amazon, ShipmentTypeCode.Other, RestrictionType.AnyAmazon, AmazonIsPrime.No, true, true)]
         [InlineData(Ordertype.Amazon, ShipmentTypeCode.Other, RestrictionType.AnyAmazon, AmazonIsPrime.Unknown, true, true)]
-        [InlineData(Ordertype.GenericModule, ShipmentTypeCode.Other, RestrictionType.AnyAmazon, AmazonIsPrime.Yes, true, false)]
+        [InlineData(Ordertype.GenericModule, ShipmentTypeCode.Other, RestrictionType.AnyAmazon, AmazonIsPrime.Yes, true, true)]
         [InlineData(Ordertype.GenericModule, ShipmentTypeCode.Other, RestrictionType.AnyAmazon, AmazonIsPrime.No, false, true)]
         [InlineData(Ordertype.GenericModule, ShipmentTypeCode.Other, RestrictionType.AnyAmazon, AmazonIsPrime.Unknown, false, true)]
         [InlineData(Ordertype.BigCommerce, ShipmentTypeCode.Other, RestrictionType.AnyAmazon, AmazonIsPrime.No, false, true)]
