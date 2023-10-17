@@ -66,7 +66,6 @@ namespace ShipWorks.Shipping.Carriers.BestRate
             ApplyProfilesPackageDimsForDhlEcommerce(profile, shipment);
         }
 
-
         /// <summary>
         /// Apply the profiles dims
         /// </summary>
