@@ -73,32 +73,29 @@ namespace ShipWorks.Shipping.Carriers.BestRate
         private static void ApplyProfilesPackageDimsForDhlEcommerce(IShippingProfileEntity profile, ShipmentEntity shipment)
         {
             var dhlShipment = shipment.DhlEcommerce != null ? shipment.DhlEcommerce : new DhlEcommerceShipmentEntity();
-            
-            if(dhlShipment != null){
 
-                var packageProfile = profile.Packages.Single();
+            var packageProfile = profile.Packages.Single();
 
-                IDhlEcommerceProfileEntity source = profile.DhlEcommerce;
+            IDhlEcommerceProfileEntity source = profile.DhlEcommerce;
 
-                ApplyProfileValue(packageProfile.DimsWeight, dhlShipment, DhlEcommerceShipmentFields.DimsWeight);
+            ApplyProfileValue(packageProfile.DimsWeight, dhlShipment, DhlEcommerceShipmentFields.DimsWeight);
 
-                if (packageProfile.DimsLength.GetValueOrDefault() > 0)
-                {
-                    ApplyProfileValue(packageProfile.DimsLength, dhlShipment, DhlEcommerceShipmentFields.DimsLength);
-                }
-
-                if (packageProfile.DimsWidth.GetValueOrDefault() > 0)
-                {
-                    ApplyProfileValue(packageProfile.DimsWidth, dhlShipment, DhlEcommerceShipmentFields.DimsWidth);
-                }
-
-                if (packageProfile.DimsHeight.GetValueOrDefault() > 0)
-                {
-                    ApplyProfileValue(packageProfile.DimsHeight, dhlShipment, DhlEcommerceShipmentFields.DimsHeight);
-                }
-
-                ApplyProfileValue(packageProfile.DimsAddWeight, dhlShipment, DhlEcommerceShipmentFields.DimsAddWeight);
+            if (packageProfile.DimsLength.GetValueOrDefault() > 0)
+            {
+                ApplyProfileValue(packageProfile.DimsLength, dhlShipment, DhlEcommerceShipmentFields.DimsLength);
             }
+
+            if (packageProfile.DimsWidth.GetValueOrDefault() > 0)
+            {
+                ApplyProfileValue(packageProfile.DimsWidth, dhlShipment, DhlEcommerceShipmentFields.DimsWidth);
+            }
+
+            if (packageProfile.DimsHeight.GetValueOrDefault() > 0)
+            {
+                ApplyProfileValue(packageProfile.DimsHeight, dhlShipment, DhlEcommerceShipmentFields.DimsHeight);
+            }
+
+            ApplyProfileValue(packageProfile.DimsAddWeight, dhlShipment, DhlEcommerceShipmentFields.DimsAddWeight);
         }
     }
 }
