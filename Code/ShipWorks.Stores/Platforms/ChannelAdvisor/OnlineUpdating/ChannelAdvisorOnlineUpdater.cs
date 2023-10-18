@@ -256,8 +256,12 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor.OnlineUpdating
 
                 case ShipmentTypeCode.DhlEcommerce:
                     return GetDhlEcommerceClassCode(shipment);
-                
-                case ShipmentTypeCode.Other:
+
+                case ShipmentTypeCode.Asendia:
+					return EnumHelper.GetDescription(shipment.Asendia.Service).Replace("Asendia", string.Empty).Trim();
+
+
+				case ShipmentTypeCode.Other:
                     // If Other, just take the user-entered value
                     return shipment.Other.Service;
             }
@@ -588,6 +592,9 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor.OnlineUpdating
 
                 case ShipmentTypeCode.DhlEcommerce:
                     return "DHL Global Mail";
+
+                case ShipmentTypeCode.Asendia:
+                    return "Asendia";
 
                 case ShipmentTypeCode.Other:
                     return shipment.Other.Carrier;
