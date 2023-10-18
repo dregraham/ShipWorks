@@ -1084,9 +1084,9 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
 							}));
 				}
 				else
-				{
-					// Labels for all other package types other than envelope get created via the CreateIndicium method
-					var internalTransactionNumber = shipment.Postal.InternalTransactionNumber.IsNullOrWhiteSpace() ? null : shipment.Postal.InternalTransactionNumber;
+                {
+                    // Labels for all other package types other than envelope get created via the CreateIndicium method
+                    var internalTransactionNumber = (shipment.Postal != null && !shipment.Postal.InternalTransactionNumber.IsNullOrWhiteSpace()) ? shipment.Postal.InternalTransactionNumber : null;
 					telemetricResult.RunTimedEvent(TelemetricEventType.GetLabel, () =>
 						result = webService.CreateIndicium(
 							new CreateIndiciumParameters
