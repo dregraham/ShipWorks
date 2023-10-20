@@ -236,6 +236,7 @@ namespace ShipWorks.Shipping
 
         private static bool IsCarrierAllowed(ShipmentTypeCode typeCode)
         {
+            if(typeCode == ShipmentTypeCode.AmazonSWA) return true;
             using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
             {
                 ILicenseService licenseService = lifetimeScope.Resolve<ILicenseService>();

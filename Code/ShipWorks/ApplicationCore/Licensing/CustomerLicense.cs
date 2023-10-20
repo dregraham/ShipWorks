@@ -409,7 +409,10 @@ namespace ShipWorks.ApplicationCore.Licensing
             {
                 return EditionRestrictionLevel.Forbidden.AsEnumResult();
             }
-
+            if(feature == EditionFeature.ShipmentType && (ShipmentTypeCode)data == ShipmentTypeCode.AmazonSWA)
+            {
+                return EditionRestrictionLevel.None.AsEnumResult();
+            }
             IFeatureRestriction restriction = featureRestrictions.SingleOrDefault(r => r.EditionFeature == feature);
             return restriction?.CheckWithReason(LicenseCapabilities, data) ?? EditionRestrictionLevel.None.AsEnumResult();
         }
