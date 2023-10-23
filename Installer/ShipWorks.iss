@@ -96,6 +96,8 @@ Source: {#AppArtifacts}\ShipWorks.Escalator.exe.config; DestDir: {app}; Flags: o
 Source: {#AppArtifacts}\*.dll; DestDir: {app}; Excludes: "ShipWorks.Native.dll"; Flags: overwritereadonly ignoreversion; BeforeInstall: BackupInstallingFile
 Source: {#AppArtifacts}\x64\ShipWorks.Native.dll; DestDir: {app}; Flags: overwritereadonly ignoreversion; Check: Is64BitInstallMode; BeforeInstall: BackupInstallingFile
 Source: {#AppArtifacts}\Win32\ShipWorks.Native.dll; DestDir: {app}; Flags: overwritereadonly ignoreversion; Check: not Is64BitInstallMode; BeforeInstall: BackupInstallingFile
+Source: {#AppArtifacts}\runtimes\win-x64\native\*.dll; DestDir: {app}; Flags: overwritereadonly ignoreversion; Check: Is64BitInstallMode; BeforeInstall: BackupInstallingFile
+Source: {#AppArtifacts}\runtimes\win-x86\native\*.dll; DestDir: {app}; Flags: overwritereadonly ignoreversion; Check: not Is64BitInstallMode; BeforeInstall: BackupInstallingFile
 Source: {#AppArtifacts}\fre3of9x.ttf; DestDir: {fonts}; FontInstall: Free 3 of 9 Extended; Flags: onlyifdoesntexist uninsneveruninstall
 Source: {#AppArtifacts}\FontLicense.txt; DestDir: {app}; Flags: overwritereadonly ignoreversion; BeforeInstall: BackupInstallingFile
 Source: {#AppArtifacts}\MaterialDesignIconLicense.txt; DestDir: {app}; Flags: overwritereadonly ignoreversion; BeforeInstall: BackupInstallingFile
