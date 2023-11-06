@@ -59,6 +59,11 @@ namespace ShipWorks.Stores.Platforms.Shopify.OnlineUpdating
                 return carrier;
             }
 
+			if (shipment.ShipmentTypeCode == ShipmentTypeCode.Asendia)
+			{
+				return "Asendia USA";
+			}
+
             return ShippingManager.GetCarrierName((ShipmentTypeCode) shipment.ShipmentType);
         }
 
