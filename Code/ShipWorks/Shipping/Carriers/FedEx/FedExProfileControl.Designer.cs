@@ -29,12 +29,12 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            ShipWorks.Templates.Tokens.CommonTokenSuggestionsFactory commonTokenSuggestionsFactory1 = new ShipWorks.Templates.Tokens.CommonTokenSuggestionsFactory();
-            ShipWorks.Templates.Tokens.CommonTokenSuggestionsFactory commonTokenSuggestionsFactory2 = new ShipWorks.Templates.Tokens.CommonTokenSuggestionsFactory();
-            ShipWorks.Templates.Tokens.CommonTokenSuggestionsFactory commonTokenSuggestionsFactory3 = new ShipWorks.Templates.Tokens.CommonTokenSuggestionsFactory();
-            ShipWorks.Templates.Tokens.CommonTokenSuggestionsFactory commonTokenSuggestionsFactory4 = new ShipWorks.Templates.Tokens.CommonTokenSuggestionsFactory();
-            ShipWorks.Templates.Tokens.CommonTokenSuggestionsFactory commonTokenSuggestionsFactory5 = new ShipWorks.Templates.Tokens.CommonTokenSuggestionsFactory();
-            ShipWorks.Templates.Tokens.CommonTokenSuggestionsFactory commonTokenSuggestionsFactory6 = new ShipWorks.Templates.Tokens.CommonTokenSuggestionsFactory();
+            ShipWorks.Templates.Tokens.CommonTokenSuggestionsFactory commonTokenSuggestionsFactory7 = new ShipWorks.Templates.Tokens.CommonTokenSuggestionsFactory();
+            ShipWorks.Templates.Tokens.CommonTokenSuggestionsFactory commonTokenSuggestionsFactory8 = new ShipWorks.Templates.Tokens.CommonTokenSuggestionsFactory();
+            ShipWorks.Templates.Tokens.CommonTokenSuggestionsFactory commonTokenSuggestionsFactory9 = new ShipWorks.Templates.Tokens.CommonTokenSuggestionsFactory();
+            ShipWorks.Templates.Tokens.CommonTokenSuggestionsFactory commonTokenSuggestionsFactory10 = new ShipWorks.Templates.Tokens.CommonTokenSuggestionsFactory();
+            ShipWorks.Templates.Tokens.CommonTokenSuggestionsFactory commonTokenSuggestionsFactory11 = new ShipWorks.Templates.Tokens.CommonTokenSuggestionsFactory();
+            ShipWorks.Templates.Tokens.CommonTokenSuggestionsFactory commonTokenSuggestionsFactory12 = new ShipWorks.Templates.Tokens.CommonTokenSuggestionsFactory();
             this.groupBoxFrom = new System.Windows.Forms.GroupBox();
             this.labelSenderResidential = new System.Windows.Forms.Label();
             this.senderResidentialCombo = new ShipWorks.UI.Controls.MultiValueComboBox();
@@ -233,6 +233,9 @@
             this.labelInsureWith = new System.Windows.Forms.Label();
             this.kryptonBorderEdge7 = new ComponentFactory.Krypton.Toolkit.KryptonBorderEdge();
             this.fieldLengthProvider = new ShipWorks.Data.Utility.EntityFieldLengthProvider(this.components);
+            this.customsTinIssuingAuthorityState = new System.Windows.Forms.CheckBox();
+            this.labelCustomsTinIssuingAuthority = new System.Windows.Forms.Label();
+            this.customsTinIssuingAuthority = new ShipWorks.UI.Controls.MultiValueComboBox();
             this.groupBoxFrom.SuspendLayout();
             this.groupShipment.SuspendLayout();
             this.tabControl.SuspendLayout();
@@ -657,7 +660,7 @@
             this.referenceCustomer.Name = "referenceCustomer";
             this.referenceCustomer.Size = new System.Drawing.Size(222, 21);
             this.referenceCustomer.TabIndex = 3;
-            this.referenceCustomer.TokenSuggestionFactory = commonTokenSuggestionsFactory1;
+            this.referenceCustomer.TokenSuggestionFactory = commonTokenSuggestionsFactory7;
             // 
             // labelReference
             // 
@@ -897,7 +900,7 @@
             this.smartManifestID.Name = "smartManifestID";
             this.smartManifestID.Size = new System.Drawing.Size(222, 21);
             this.smartManifestID.TabIndex = 9;
-            this.smartManifestID.TokenSuggestionFactory = commonTokenSuggestionsFactory2;
+            this.smartManifestID.TokenSuggestionFactory = commonTokenSuggestionsFactory8;
             // 
             // groupEmail
             // 
@@ -1408,7 +1411,7 @@
             this.referenceFIMS.Name = "referenceFIMS";
             this.referenceFIMS.Size = new System.Drawing.Size(222, 21);
             this.referenceFIMS.TabIndex = 1;
-            this.referenceFIMS.TokenSuggestionFactory = commonTokenSuggestionsFactory3;
+            this.referenceFIMS.TokenSuggestionFactory = commonTokenSuggestionsFactory9;
             // 
             // referenceFimsState
             // 
@@ -1877,7 +1880,7 @@
             this.referenceShipmentIntegrity.Name = "referenceShipmentIntegrity";
             this.referenceShipmentIntegrity.Size = new System.Drawing.Size(222, 21);
             this.referenceShipmentIntegrity.TabIndex = 9;
-            this.referenceShipmentIntegrity.TokenSuggestionFactory = commonTokenSuggestionsFactory4;
+            this.referenceShipmentIntegrity.TokenSuggestionFactory = commonTokenSuggestionsFactory10;
             // 
             // labelShipmentIntegrity
             // 
@@ -1921,7 +1924,7 @@
             this.referencePO.Name = "referencePO";
             this.referencePO.Size = new System.Drawing.Size(222, 21);
             this.referencePO.TabIndex = 7;
-            this.referencePO.TokenSuggestionFactory = commonTokenSuggestionsFactory5;
+            this.referencePO.TokenSuggestionFactory = commonTokenSuggestionsFactory11;
             // 
             // labelPO
             // 
@@ -1953,7 +1956,7 @@
             this.referenceInvoice.Name = "referenceInvoice";
             this.referenceInvoice.Size = new System.Drawing.Size(222, 21);
             this.referenceInvoice.TabIndex = 5;
-            this.referenceInvoice.TokenSuggestionFactory = commonTokenSuggestionsFactory6;
+            this.referenceInvoice.TokenSuggestionFactory = commonTokenSuggestionsFactory12;
             // 
             // labelInvoice
             // 
@@ -2275,6 +2278,9 @@
             // 
             this.groupBoxCustomsRecipientTIN.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+            this.groupBoxCustomsRecipientTIN.Controls.Add(this.labelCustomsTinIssuingAuthority);
+            this.groupBoxCustomsRecipientTIN.Controls.Add(this.customsTinIssuingAuthority);
+            this.groupBoxCustomsRecipientTIN.Controls.Add(this.customsTinIssuingAuthorityState);
             this.groupBoxCustomsRecipientTIN.Controls.Add(this.customsRecipientTIN);
             this.groupBoxCustomsRecipientTIN.Controls.Add(this.customsRecipientTINState);
             this.groupBoxCustomsRecipientTIN.Controls.Add(this.labelCustomsRecipientTIN);
@@ -2284,7 +2290,7 @@
             this.groupBoxCustomsRecipientTIN.Controls.Add(this.kryptonBorderEdgeTIN);
             this.groupBoxCustomsRecipientTIN.Location = new System.Drawing.Point(6, 8);
             this.groupBoxCustomsRecipientTIN.Name = "groupBoxCustomsRecipientTIN";
-            this.groupBoxCustomsRecipientTIN.Size = new System.Drawing.Size(1240, 72);
+            this.groupBoxCustomsRecipientTIN.Size = new System.Drawing.Size(1240, 102);
             this.groupBoxCustomsRecipientTIN.TabIndex = 0;
             this.groupBoxCustomsRecipientTIN.TabStop = false;
             this.groupBoxCustomsRecipientTIN.Text = "Tax Identification";
@@ -2352,7 +2358,7 @@
             this.kryptonBorderEdgeTIN.BorderStyle = ComponentFactory.Krypton.Toolkit.PaletteBorderStyle.GridDataCellSheet;
             this.kryptonBorderEdgeTIN.Location = new System.Drawing.Point(29, 19);
             this.kryptonBorderEdgeTIN.Name = "kryptonBorderEdgeTIN";
-            this.kryptonBorderEdgeTIN.Size = new System.Drawing.Size(1, 44);
+            this.kryptonBorderEdgeTIN.Size = new System.Drawing.Size(1, 74);
             this.kryptonBorderEdgeTIN.Text = "kryptonBorderEdgeTIN";
             // 
             // groupBoxCommercialInvoice
@@ -2512,6 +2518,35 @@
             this.kryptonBorderEdge7.Name = "kryptonBorderEdge7";
             this.kryptonBorderEdge7.Size = new System.Drawing.Size(1, 31);
             this.kryptonBorderEdge7.Text = "kryptonBorderEdge7";
+            // 
+            // customsTinIssuingAuthorityState
+            // 
+            this.customsTinIssuingAuthorityState.AutoSize = true;
+            this.customsTinIssuingAuthorityState.Location = new System.Drawing.Point(9, 68);
+            this.customsTinIssuingAuthorityState.Name = "customsTinIssuingAuthorityState";
+            this.customsTinIssuingAuthorityState.Size = new System.Drawing.Size(15, 14);
+            this.customsTinIssuingAuthorityState.TabIndex = 7;
+            this.customsTinIssuingAuthorityState.UseVisualStyleBackColor = true;
+            // 
+            // labelCustomsTinIssuingAuthority
+            // 
+            this.labelCustomsTinIssuingAuthority.AutoSize = true;
+            this.labelCustomsTinIssuingAuthority.Location = new System.Drawing.Point(32, 72);
+            this.labelCustomsTinIssuingAuthority.Name = "labelCustomsTinIssuingAuthority";
+            this.labelCustomsTinIssuingAuthority.Size = new System.Drawing.Size(93, 13);
+            this.labelCustomsTinIssuingAuthority.TabIndex = 8;
+            this.labelCustomsTinIssuingAuthority.Text = "Issuing Authority:";
+            // 
+            // customsTinIssuingAuthority
+            // 
+            this.customsTinIssuingAuthority.BackColor = System.Drawing.Color.White;
+            this.customsTinIssuingAuthority.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.customsTinIssuingAuthority.FormattingEnabled = true;
+            this.customsTinIssuingAuthority.Location = new System.Drawing.Point(125, 69);
+            this.customsTinIssuingAuthority.Name = "customsTinIssuingAuthority";
+            this.customsTinIssuingAuthority.PromptText = "(Multiple Values)";
+            this.customsTinIssuingAuthority.Size = new System.Drawing.Size(198, 21);
+            this.customsTinIssuingAuthority.TabIndex = 9;
             // 
             // FedExProfileControl
             // 
@@ -2761,5 +2796,8 @@
         private System.Windows.Forms.Label labelDeliveredDutyPaid;
         private System.Windows.Forms.CheckBox deliveredDutyPaid;
         private System.Windows.Forms.CheckBox deliveredDutyPaidState;
+        private System.Windows.Forms.CheckBox customsTinIssuingAuthorityState;
+        private System.Windows.Forms.Label labelCustomsTinIssuingAuthority;
+        private UI.Controls.MultiValueComboBox customsTinIssuingAuthority;
     }
 }

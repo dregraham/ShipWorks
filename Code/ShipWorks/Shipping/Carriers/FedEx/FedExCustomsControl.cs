@@ -6,6 +6,7 @@ using System.Linq;
 using System.Reactive.Linq;
 using Interapptive.Shared;
 using Interapptive.Shared.Business;
+using Interapptive.Shared.Business.Geography;
 using Interapptive.Shared.Utility;
 using ShipWorks.Core.Messaging;
 using ShipWorks.Data.Model.EntityClasses;
@@ -68,6 +69,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             bool anyCanada = false;
 
             naftaEnabled.CheckedChanged -= new EventHandler(OnNaftaEnabled);
+            
+            if (customsTinIssuingAuthority.DataSource == null)
+            {
+                customsTinIssuingAuthority.DataSource = Geography.Countries;
+            }
 
             using (MultiValueScope scope = new MultiValueScope())
             {
@@ -110,6 +116,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
                     naftaProducerDetermination.ApplyMultiValue((FedExNaftaDeterminationCode) shipment.FedEx.CustomsNaftaDeterminationCode);
                     naftaNetCostMethod.ApplyMultiValue((FedExNaftaNetCostMethod) shipment.FedEx.CustomsNaftaNetCostMethod);
                     naftaProducerId.ApplyMultiText(shipment.FedEx.CustomsNaftaProducerId);
+                    customsTinIssuingAuthority.ApplyMultiText(Geography.GetCountryName(shipment.FedEx.CustomsTinIssuingAuthority));
                 }
             }
 

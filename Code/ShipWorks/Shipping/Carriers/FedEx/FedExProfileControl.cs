@@ -7,6 +7,7 @@ using System.Linq;
 using System.Windows.Forms;
 using Autofac;
 using Interapptive.Shared;
+using Interapptive.Shared.Business.Geography;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Utility;
 using SD.LLBLGen.Pro.ORMSupportClasses;
@@ -85,6 +86,10 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             EnumHelper.BindComboBox<FedexTINType>(customsRecipientTINType);
 
             FedExUtility.LoadSmartPostComboBox(smartHubID);
+
+            customsTinIssuingAuthority.DisplayMember = "Key";
+            customsTinIssuingAuthority.ValueMember = "Value";
+            customsTinIssuingAuthority.DataSource = Geography.Countries.Select(n => new KeyValuePair<string, string>(n, Geography.GetCountryCode(n))).ToList();
 
             if (ShippingSettings.Fetch().FedExInsuranceProvider == (int) InsuranceProvider.Carrier)
             {
@@ -187,6 +192,8 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             AddValueMapping(fedex, FedExProfileFields.FileElectronically, fileElectronicallyState, fileElectronically);
             AddValueMapping(fedex, FedExProfileFields.CustomsRecipientTIN, customsRecipientTINState, customsRecipientTIN);
             AddValueMapping(fedex, FedExProfileFields.CustomsRecipientTINType, customsRecipientTINTypeState, customsRecipientTINType);
+            AddValueMapping(fedex, FedExProfileFields.CustomsTinIssuingAuthority, customsTinIssuingAuthorityState, customsTinIssuingAuthority);
+
 
             // Map parent/child relationships
             SetParentCheckBox(includeReturnState, includeReturn, applyReturnProfileState, applyReturnProfile);
