@@ -10012,6 +10012,11 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(FedExProfileFieldIndex.DeliveredDutyPaid);}
 		}
+		/// <summary>Creates a new FedExProfileEntity.CustomsTinIssuingAuthority field instance</summary>
+		public static EntityField2 CustomsTinIssuingAuthority
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(FedExProfileFieldIndex.CustomsTinIssuingAuthority);}
+		}
 	}
 
 	/// <summary>Field Creation Class for entity FedExProfilePackageEntity</summary>
@@ -11056,6 +11061,11 @@ namespace ShipWorks.Data.Model.HelperClasses
 		public static EntityField2 DeliveredDutyPaid
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(FedExShipmentFieldIndex.DeliveredDutyPaid);}
+		}
+		/// <summary>Creates a new FedExShipmentEntity.CustomsTinIssuingAuthority field instance</summary>
+		public static EntityField2 CustomsTinIssuingAuthority
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(FedExShipmentFieldIndex.CustomsTinIssuingAuthority);}
 		}
 	}
 

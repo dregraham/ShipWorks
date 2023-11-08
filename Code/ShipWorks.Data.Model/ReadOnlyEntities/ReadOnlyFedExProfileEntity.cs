@@ -80,6 +80,7 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
             PayorCountryCode = source.PayorCountryCode;
             PayorPostalCode = source.PayorPostalCode;
             DeliveredDutyPaid = source.DeliveredDutyPaid;
+            CustomsTinIssuingAuthority = source.CustomsTinIssuingAuthority;
             
             ShippingProfile = (IShippingProfileEntity) source.ShippingProfile?.AsReadOnly(objectMap);
             
@@ -353,6 +354,12 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
         /// Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
         public Nullable<System.Boolean> DeliveredDutyPaid { get; }
+        /// <summary> The CustomsTinIssuingAuthority property of the Entity FedExProfile<br/><br/>
+        /// </summary>
+        /// <remarks>Mapped on table field: "FedExProfile"."CustomsTinIssuingAuthority"<br/>
+        /// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 2<br/>
+        /// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+        public System.String CustomsTinIssuingAuthority { get; }
         
         public IShippingProfileEntity ShippingProfile { get; }
         
