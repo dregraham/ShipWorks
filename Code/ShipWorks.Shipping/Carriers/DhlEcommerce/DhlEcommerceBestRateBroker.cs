@@ -60,6 +60,12 @@ namespace ShipWorks.Shipping.Carriers.DhlEcommerce
         /// </summary>
         protected override string AccountDescription(DhlEcommerceAccountEntity account) => account.AccountDescription;
 
+        /// <summary>
+        /// Updates data on the DHL Ecommerce child shipment that is required for checking best rate
+        /// </summary>
+        /// <param name="currentShipment">Shipment that we'll be working with</param>
+        /// <param name="originalShipment">The original shipment from which data can be copied.</param>
+        /// <param name="account">The Account Entity for this shipment.</param>
         protected override void UpdateChildShipmentSettings(ShipmentEntity currentShipment, ShipmentEntity originalShipment, DhlEcommerceAccountEntity account)
         {
             base.UpdateChildShipmentSettings(currentShipment, originalShipment, account);
