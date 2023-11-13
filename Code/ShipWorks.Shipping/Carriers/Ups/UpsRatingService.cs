@@ -66,7 +66,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
 
                 if (!string.IsNullOrEmpty(account?.ShipEngineCarrierId))
                 {
-                    return shipEngineRatingService.GetRates(shipment);
+                    return shipEngineRatingService.GetRates(shipment).Result;
                 }
 
                 // Determine if the user is hoping to get negotiated rates back

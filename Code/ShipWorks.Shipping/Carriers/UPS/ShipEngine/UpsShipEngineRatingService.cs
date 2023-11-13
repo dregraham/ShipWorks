@@ -28,6 +28,8 @@ namespace ShipWorks.Shipping.Carriers.Ups.ShipEngine
         private readonly IUpsShipmentValidatorFactory upsShipmentValidatorFactory;
         private readonly UpsAccountRepository accountRepository;
         private readonly ICarrierShipmentRequestFactory rateRequestFactory;
+        private readonly IProxiedShipEngineWebClient proxiedShipEngineWebClient;
+        private readonly UpsGroundSaverState upsGroundSaverState;
         private readonly ShipmentType shipmentType;
 
         /// <summary>
@@ -37,13 +39,15 @@ namespace ShipWorks.Shipping.Carriers.Ups.ShipEngine
             IIndex<ShipmentTypeCode, ICarrierShipmentRequestFactory> rateRequestFactory,
             IShipmentTypeManager shipmentTypeManager,
             IShipEngineRateGroupFactory rateGroupFactory,
-            IUpsShipmentValidatorFactory upsShipmentValidatorFactory)
+            IUpsShipmentValidatorFactory upsShipmentValidatorFactory,
+            IProxiedShipEngineWebClient proxiedShipEngineWebClient, UpsGroundSaverState upsGroundSaverState)
         {
             this.shipEngineWebClient = shipEngineWebClient;
             this.rateGroupFactory = rateGroupFactory;
             this.upsShipmentValidatorFactory = upsShipmentValidatorFactory;
             this.rateRequestFactory = rateRequestFactory[ShipmentTypeCode.UpsOnLineTools];
-
+            this.proxiedShipEngineWebClient = proxiedShipEngineWebClient;
+            this.upsGroundSaverState = upsGroundSaverState;
             accountRepository = new UpsAccountRepository();
             shipmentType = shipmentTypeManager.Get(ShipmentTypeCode.UpsOnLineTools);
         }
@@ -51,10 +55,11 @@ namespace ShipWorks.Shipping.Carriers.Ups.ShipEngine
         /// <summary>
         /// Gets rates for the given shipment
         /// </summary>
-        public RateGroup GetRates(ShipmentEntity shipment)
+        public async Task<RateGroup> GetRates(ShipmentEntity shipment)
         {
-            // We don't have any ShipEngine UPS accounts, so let the user know they need an account.
-            if (accountRepository.Accounts.All(x => string.IsNullOrEmpty(x.ShipEngineCarrierId)))
+            var account = accountRepository.Accounts.FirstOrDefault(a => !string.IsNullOrEmpty(a.ShipEngineCarrierId));
+            // We don't have any ShipEngine UPS accounts, so let the user know they need an account. In the system, it could be only one account connected to ShipEngine
+            if (account == null)
             {
                 throw new ShippingException("A UPS from ShipWorks account is required to view UPS rates.");
             }
@@ -67,9 +72,11 @@ namespace ShipWorks.Shipping.Carriers.Ups.ShipEngine
 
             try
             {
+                upsGroundSaverState.IsGroundSaverEnabled |= await EnsureGroundSaverIsEnabled(account.ShipEngineCarrierId).ConfigureAwait(false);
+
                 RateShipmentRequest request = rateRequestFactory.CreateRateShipmentRequest(shipment);
-                RateShipmentResponse rateShipmentResponse = Task.Run(async () =>
-                        await shipEngineWebClient.RateShipment(request, ApiLogSource.UPS).ConfigureAwait(false)).Result;
+                RateShipmentResponse rateShipmentResponse = await shipEngineWebClient.RateShipment(request, ApiLogSource.UPS).ConfigureAwait(false);
+
 
                 string countryCode = shipment.AdjustedShipCountryCode();
                 IEnumerable<string> availableServiceTypeApiCodes = shipmentType.GetAvailableServiceTypes()
@@ -87,6 +94,20 @@ namespace ShipWorks.Shipping.Carriers.Ups.ShipEngine
             {
                 throw new ShippingException(ex.GetBaseException().Message);
             }
+        }
+
+        private async Task<bool> EnsureGroundSaverIsEnabled(string shipEngineCarrierId)
+        {
+            var groundSaverEnabledResult = await proxiedShipEngineWebClient.UpsGroundSaverEnabledState(shipEngineCarrierId).ConfigureAwait(false);
+            if (groundSaverEnabledResult.Success)
+            {
+                if (groundSaverEnabledResult.Value)
+                {
+                    return true;
+                }
+                return (await proxiedShipEngineWebClient.UpsGroundSaverEnable(shipEngineCarrierId).ConfigureAwait(false)).Success;
+            }
+            return false;
         }
 
         /// <summary>

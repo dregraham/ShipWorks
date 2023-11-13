@@ -97,6 +97,9 @@ namespace ShipWorks.Shipping.Carriers.UPS.Enums
         UpsCaWorldWideExpress = 28,
 
         [Description("UPS Second Day Air Intra")]
-        Ups2ndDayAirIntra = 29
+        Ups2ndDayAirIntra = 29,
+
+        [Description("UPS® Ground Saver")]
+        UpsGroundSaver = 30
     }
 }

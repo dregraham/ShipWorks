@@ -51,7 +51,7 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating.Surcharges
                 IUpsLocalRatingDeliveryAreaSurchargeEntity deliveryAreaSurcharge =
                     GetDeliveryAreaSurcharge(destinationZip);
                 bool isResidential = residentialDeterminationService.IsResidentialAddress(shipment.Shipment);
-                bool isGround = serviceRate.Service == (int) UpsServiceType.UpsGround;
+                bool isGround = serviceRate.Service == UpsServiceType.UpsGround || serviceRate.Service == UpsServiceType.UpsGroundSaver;
 
                 if (deliveryAreaSurcharge == null)
                 {

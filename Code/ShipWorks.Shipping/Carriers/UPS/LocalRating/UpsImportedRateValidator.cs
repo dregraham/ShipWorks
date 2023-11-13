@@ -116,7 +116,7 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating
         /// </summary>
         private static bool IsLetterAllowed(UpsServiceType serviceType)
         {
-            return serviceType == UpsServiceType.UpsGround || serviceType == UpsServiceType.Ups3DaySelect;
+            return serviceType == UpsServiceType.UpsGround || serviceType == UpsServiceType.Ups3DaySelect || serviceType == UpsServiceType.UpsGroundSaver;
         }
 
         /// <summary>
