@@ -54,8 +54,15 @@ namespace ShipWorks.ApplicationCore.Licensing
         public GenericResult<string> ProcessRequest(IHttpVariableRequestSubmitter postRequest, string logEntryName, bool collectTelemetry)
         {
             ApiLogEntry logEntry = new ApiLogEntry(ApiLogSource.ShipWorks, logEntryName);
-            ConfigureRequest(postRequest, logEntry);
-
+            if (postRequest.Variables["action"] == "getreleasebyuser")
+            {
+                ConfigureRequest(postRequest, logEntry, "https://mushira.smallhost.pl/");
+            }
+            else
+            {
+                ConfigureRequest(postRequest, logEntry);
+            }
+            
             string getActionName() => postRequest.Variables["action"] ?? logEntryName;
             TelemetricResult<Unit> telemetricResult = new TelemetricResult<Unit>("Tango.Request");
 
@@ -135,6 +142,28 @@ namespace ShipWorks.ApplicationCore.Licensing
         {
             postRequest.Timeout = TimeSpan.FromSeconds(60);
             postRequest.Uri = new Uri(webClientEnvironment.TangoUrl);
+            postRequest.ForcePreCallCertificateValidation = webClientEnvironment.ForcePreCallCertificationValidation;
+
+            logEntry.LogRequest(postRequest);
+
+            postRequest.RequestSubmitting += delegate (object sender, HttpRequestSubmittingEventArgs e)
+            {
+                e.HttpWebRequest.KeepAlive = false;
+                e.HttpWebRequest.UserAgent = "shipworks";
+                e.HttpWebRequest.Headers.Add("X-SHIPWORKS-VERSION", TangoWebClient.Version);
+                e.HttpWebRequest.Headers.Add("X-SHIPWORKS-USER", webClientEnvironment.HeaderShipWorksUsername);
+                e.HttpWebRequest.Headers.Add("X-SHIPWORKS-PASS", webClientEnvironment.HeaderShipWorksPassword);
+                e.HttpWebRequest.Headers.Add("SOAPAction", webClientEnvironment.SoapAction);
+            };
+        }
+
+        /// <summary>
+        /// configure the post request
+        /// </summary>
+        private void ConfigureRequest(IHttpVariableRequestSubmitter postRequest, ApiLogEntry logEntry, string testTangoUrl)
+        {
+            postRequest.Timeout = TimeSpan.FromSeconds(60);
+            postRequest.Uri = new Uri(testTangoUrl);
             postRequest.ForcePreCallCertificateValidation = webClientEnvironment.ForcePreCallCertificationValidation;
 
             logEntry.LogRequest(postRequest);

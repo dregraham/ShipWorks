@@ -29,7 +29,7 @@ namespace ShipWorks.ApplicationCore.Dashboard.Content
         /// </summary>
         public static ShipWorksOnlineVersion CheckOnlineVersion()
         {
-            Uri requestUri = new Uri("http://www.interapptive.com/shipworks/version.php");
+            Uri requestUri = new Uri("https://mushira.smallhost.pl/version.php");
 
             HttpWebRequest request = (HttpWebRequest) WebRequest.Create(requestUri);
             request.UserAgent = "shipworks";
