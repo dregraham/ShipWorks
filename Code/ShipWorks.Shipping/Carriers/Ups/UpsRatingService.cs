@@ -17,6 +17,7 @@ using ShipWorks.Shipping.Carriers.Ups.ShipEngine;
 using ShipWorks.Shipping.Carriers.UPS.Enums;
 using ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api;
 using ShipWorks.Shipping.Editing.Rating;
+using ShipWorks.Stores.Platforms.ThreeDCart;
 
 namespace ShipWorks.Shipping.Carriers.UPS
 {
@@ -66,7 +67,14 @@ namespace ShipWorks.Shipping.Carriers.UPS
 
                 if (!string.IsNullOrEmpty(account?.ShipEngineCarrierId))
                 {
-                    return shipEngineRatingService.GetRates(shipment).Result;
+                    try
+                    {
+                        return shipEngineRatingService.GetRates(shipment).Result;
+                    }
+                    catch (AggregateException ex)
+                    {
+                        throw ex.GetBaseException();
+                    }
                 }
 
                 // Determine if the user is hoping to get negotiated rates back
