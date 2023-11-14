@@ -116,7 +116,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
                     naftaProducerDetermination.ApplyMultiValue((FedExNaftaDeterminationCode) shipment.FedEx.CustomsNaftaDeterminationCode);
                     naftaNetCostMethod.ApplyMultiValue((FedExNaftaNetCostMethod) shipment.FedEx.CustomsNaftaNetCostMethod);
                     naftaProducerId.ApplyMultiText(shipment.FedEx.CustomsNaftaProducerId);
-                    customsTinIssuingAuthority.ApplyMultiText(Geography.GetCountryName(shipment.FedEx.CustomsTinIssuingAuthority));
+                    customsTinIssuingAuthority.ApplyMultiText(Geography.GetCountryName(shipment.FedEx.CustomsTinIssuingAuthority ?? "US"));
                 }
             }
 
