@@ -343,6 +343,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             shipment.FedEx.CustomsNaftaNetCostMethod = (int) FedExNaftaNetCostMethod.NotCalculated;
             shipment.FedEx.CustomsNaftaPreferenceType = (int) FedExNaftaPreferenceCriteria.A;
             shipment.FedEx.CustomsNaftaProducerId = string.Empty;
+            shipment.FedEx.CustomsTinIssuingAuthority = "US";
 
             shipment.FedEx.CommercialInvoice = false;
             shipment.FedEx.CommercialInvoiceFileElectronically = false;
