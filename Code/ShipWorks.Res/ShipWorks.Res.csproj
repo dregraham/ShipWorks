@@ -521,7 +521,7 @@
     <EmbeddedResource Include="Data\Administration\Scripts\Support\Products\ProductListView.sql" />
     <EmbeddedResource Include="Data\Administration\Scripts\Update\10.1\10.1.1.0.sql" />
     <EmbeddedResource Include="Data\Administration\Scripts\Update\10.1\10.1.0.0.sql" />
-    <EmbeddedResource Include="Data\Administration\Scripts\Update\10.4\10.4.1.0.sql" />
+    <EmbeddedResource Include="Data\Administration\Scripts\Update\10.4\10.4.2.0.sql" />
     <EmbeddedResource Include="Data\Administration\Scripts\Update\10.3\10.3.1.0.sql" />
     <EmbeddedResource Include="Data\Administration\Scripts\Update\10.4\10.4.2.0.sql" />
     <Content Include="Data\Administration\Scripts\Update\5.27\5.27.1.5.sql" />

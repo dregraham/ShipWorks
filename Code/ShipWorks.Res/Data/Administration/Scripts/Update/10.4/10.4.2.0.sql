@@ -16,4 +16,3 @@ BEGIN
     ALTER TABLE [dbo].[FedExShipment]
     ADD [CustomsTinIssuingAuthority] [nvarchar] (2) NULL
 END
-GO

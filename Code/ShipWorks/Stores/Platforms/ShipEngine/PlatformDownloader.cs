@@ -204,7 +204,8 @@ namespace ShipWorks.Stores.Platforms.ShipEngine
         protected static void LoadAddresses(OrderEntity order, OrderSourceApiSalesOrder salesOrder)
         {
             var shipTo = salesOrder.RequestedFulfillments.FirstOrDefault(x => x?.ShipTo != null)?.ShipTo;
-            if (shipTo == null || !order.IsNew)
+            //WORKS-4362 Shopify Order Ship To and Bill To address info not updating in ShipWorks V10
+            if (shipTo == null /*|| !order.IsNew*/)
             {
                 return;
             }
