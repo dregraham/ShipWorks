@@ -275,6 +275,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
                 naftaProducerDetermination.ReadMultiValue(v => shipment.FedEx.CustomsNaftaDeterminationCode = (int) v);
                 naftaNetCostMethod.ReadMultiValue(v => shipment.FedEx.CustomsNaftaNetCostMethod = (int) v);
                 naftaProducerId.ReadMultiText(v => shipment.FedEx.CustomsNaftaProducerId = v);
+                customsTinIssuingAuthority.ReadMultiText(v => shipment.FedEx.CustomsTinIssuingAuthority = Geography.GetCountryCode(v));
             }
         }
     }
