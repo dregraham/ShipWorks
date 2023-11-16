@@ -284,8 +284,11 @@ namespace ShipWorks.Stores.Platforms.Shopify
                 }
             }
 
-            //item.InventoryItemID = ;
-         
+            if (!string.IsNullOrWhiteSpace(orderItem?.Product?.Identifiers?.Harmonization?.DefaultCode))
+            {
+                item.HarmonizedCode = orderItem.Product.Identifiers.Harmonization.DefaultCode;
+            }
+            
             return item;
         }
 
@@ -368,9 +371,27 @@ namespace ShipWorks.Stores.Platforms.Shopify
                 AddToCharge(order, "ADJUST", orderAdjustment.Description, orderAdjustment.Amount);
             }
 
+            string dutiesLineItemDescription = "line item duties";
+
+            bool isMoreDutiesLine = false;
+
+            if (salesOrder.Payment.ShippingCharges.Count(item => item.Description?.ToString().Contains(dutiesLineItemDescription) == true) > 1)
+            {
+                var firstDutiesItem = salesOrder.Payment.ShippingCharges.FirstOrDefault(item => item.Description?.ToString().Contains(dutiesLineItemDescription) == true);
+
+                AddToCharge(order, "SHIPPING", firstDutiesItem.Description, firstDutiesItem.Amount);
+
+                isMoreDutiesLine = true;
+            }
+
             foreach (var orderShippingCharge in salesOrder.Payment.ShippingCharges)
             {
-                AddToCharge(order, "SHIPPING", orderShippingCharge.Description, orderShippingCharge.Amount);
+                if (isMoreDutiesLine && orderShippingCharge.Description?.Contains(dutiesLineItemDescription) == true)
+                {
+                    continue;
+                }
+
+                AddToCharge(order, "SHIPPING", orderShippingCharge.Description.Replace(" price", string.Empty), orderShippingCharge.Amount);
             }
         }
 

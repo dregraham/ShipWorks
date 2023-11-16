@@ -15,6 +15,8 @@
 
 namespace ShipWorks.Stores.Platforms.ShipEngine.Apollo
 {
+    using System.Collections.Generic;
+    using Newtonsoft.Json;
     using System = global::System;
 
 
@@ -2648,6 +2650,26 @@ namespace ShipWorks.Stores.Platforms.ShipEngine.Apollo
         [Newtonsoft.Json.JsonProperty("inventoryId", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
         public string InventoryId { get; set; }
 
+        [Newtonsoft.Json.JsonProperty("harmonization", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public Harmonization Harmonization { get; set; }
+    }
+
+    public class ByCountry
+    {
+        [Newtonsoft.Json.JsonProperty("code", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public string Code { get; set; }
+
+        [Newtonsoft.Json.JsonProperty("country", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public string Country { get; set; }
+    }
+
+    public class Harmonization
+    {
+        [Newtonsoft.Json.JsonProperty("byCountry", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public List<ByCountry> ByCountry { get; set; }
+
+        [Newtonsoft.Json.JsonProperty("defaultCode", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public string DefaultCode { get; set; }
     }
 
     [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "13.16.1.0 (NJsonSchema v10.7.2.0 (Newtonsoft.Json v12.0.0.0))")]
