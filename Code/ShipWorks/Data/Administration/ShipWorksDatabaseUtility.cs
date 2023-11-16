@@ -312,18 +312,7 @@ namespace ShipWorks.Data.Administration
         /// </summary>
         public static async Task<IEnumerable<ISqlDatabaseDetail>> GetDatabaseDetails(DbConnection con)
         {
-            DbCommand cmd = DbCommandProvider.Create(con);
-            cmd.CommandText = "select name from master..sysdatabases where name not in ('master', 'model', 'msdb', 'tempdb')";
-
-            List<string> names = new List<string>();
-
-            using (DbDataReader reader = DbCommandProvider.ExecuteReader(cmd))
-            {
-                while (reader.Read())
-                {
-                    names.Add((string) reader["name"]);
-                }
-            }
+            List<string> names = await GetDatabaseNames(con).ConfigureAwait(false);
 
             List<ISqlDatabaseDetail> details = new List<ISqlDatabaseDetail>();
 
@@ -334,6 +323,24 @@ namespace ShipWorks.Data.Administration
             }
 
             return details;
+        }
+
+        public static async Task<List<string>> GetDatabaseNames(DbConnection con)
+        {
+            DbCommand cmd = DbCommandProvider.Create(con);
+            cmd.CommandText = "select name from master..sysdatabases where name not in ('master', 'model', 'msdb', 'tempdb')";
+
+            List<string> names = new List<string>();
+
+            using (DbDataReader reader = await DbCommandProvider.ExecuteReaderAsync(cmd).ConfigureAwait(false))
+            {
+                while (reader.Read())
+                {
+                    names.Add((string) reader["name"]);
+                }
+            }
+
+            return names;
         }
 
         /// <summary>
@@ -347,18 +354,17 @@ namespace ShipWorks.Data.Administration
         /// </summary>
         public static async Task<string> GetFirstAvailableDatabaseName(DbConnection con, string baseName = "ShipWorks")
         {
-            string databaseName = baseName;
+            var regex = new Regex('^' + baseName + "(\\d{0,5})$", RegexOptions.IgnoreCase);
 
-            var databases = await ShipWorksDatabaseUtility.GetDatabaseDetails(con).ConfigureAwait(false);
-            List<string> existingNames = databases.Select(d => d.Name).ToList();
+            var databases = await ShipWorksDatabaseUtility.GetDatabaseNames(con).ConfigureAwait(false);
 
-            int index = 1;
-            while (existingNames.Contains(databaseName))
-            {
-                databaseName = string.Format("{0}{1}", baseName, index++);
-            }
+            IEnumerable<int> suffixes = databases
+                .Where(name => regex.IsMatch(name))
+                .Select(name => regex.Matches(name)[0].Groups[1].Value)
+                .Select(x => x.Length > 0 ? int.Parse(x) : 0);
 
-            return databaseName;
+            int index = suffixes.Any() ? suffixes.Max() + 1 : 1;
+            return baseName + index;
         }
 
         /// <summary>
