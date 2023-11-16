@@ -16,7 +16,6 @@
 namespace ShipWorks.Stores.Platforms.ShipEngine.Apollo
 {
     using System.Collections.Generic;
-    using Newtonsoft.Json;
     using System = global::System;
 
 
