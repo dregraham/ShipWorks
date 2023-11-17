@@ -284,11 +284,8 @@ namespace ShipWorks.Stores.Platforms.Shopify
                 }
             }
 
-            if (!string.IsNullOrWhiteSpace(orderItem?.Product?.Identifiers?.Harmonization?.DefaultCode))
-            {
-                item.HarmonizedCode = orderItem.Product.Identifiers.Harmonization.DefaultCode;
-            }
-            
+            item.HarmonizedCode = orderItem?.Product?.Identifiers?.Harmonization?.DefaultCode ?? item.HarmonizedCode;
+
             return item;
         }
 
@@ -377,7 +374,7 @@ namespace ShipWorks.Stores.Platforms.Shopify
 
             if (salesOrder.Payment.ShippingCharges.Count(item => item.Description?.ToString().Contains(dutiesLineItemDescription) == true) > 1)
             {
-                var firstDutiesItem = salesOrder.Payment.ShippingCharges.FirstOrDefault(item => item.Description?.ToString().Contains(dutiesLineItemDescription) == true);
+                var firstDutiesItem = salesOrder.Payment.ShippingCharges.First(item => item.Description?.ToString().Contains(dutiesLineItemDescription) == true);
 
                 AddToCharge(order, "SHIPPING", firstDutiesItem.Description, firstDutiesItem.Amount);
 
