@@ -162,6 +162,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.ServiceManager.Countries
             List<UpsServiceMapping> tmpUpsServiceTypeMapping = new List<UpsServiceMapping>();
 
             tmpUpsServiceTypeMapping.Add(new UpsServiceMapping(UpsServiceType.UpsGround, UsCountryCode, "03", "03", "GND", "GND", WorldShipServiceDescriptions.Ground, false, false));
+            tmpUpsServiceTypeMapping.Add(new UpsServiceMapping(UpsServiceType.UpsGroundSaver, UsCountryCode, "03", "03", "GND", "GND", WorldShipServiceDescriptions.GroundSaver, false, false));
             tmpUpsServiceTypeMapping.Add(new UpsServiceMapping(UpsServiceType.Ups3DaySelect, UsCountryCode, "12", "12", "3DS", "3DS", WorldShipServiceDescriptions.Ups3DaySelect, false, false));
             tmpUpsServiceTypeMapping.Add(new UpsServiceMapping(UpsServiceType.Ups2DayAir, UsCountryCode, "02", "02", "2DA", "2DA", WorldShipServiceDescriptions.Ups2DayAir, false, false));
             tmpUpsServiceTypeMapping.Add(new UpsServiceMapping(UpsServiceType.Ups2DayAirAM, UsCountryCode, "59", "59", "2DM", "2DM", WorldShipServiceDescriptions.Ups2DayAirAm, false, false));

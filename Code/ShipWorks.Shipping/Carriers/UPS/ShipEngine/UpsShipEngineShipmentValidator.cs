@@ -41,7 +41,7 @@ namespace ShipWorks.Shipping.Carriers.Ups.ShipEngine
                 return Result.FromError("Quantum View Notify is not supported with this account.");
             }
 
-            if (shipment.Ups.Packages.Any(p => p.DryIceEnabled && p.UpsShipment.Service != (int)UpsServiceType.UpsGround))
+            if (shipment.Ups.Packages.Any(p => p.DryIceEnabled && !(p.UpsShipment.Service == (int)UpsServiceType.UpsGround || p.UpsShipment.Service == (int)UpsServiceType.UpsGroundSaver)))
             {
                 return Result.FromError("Dry ice is not supported with this service.");
             }

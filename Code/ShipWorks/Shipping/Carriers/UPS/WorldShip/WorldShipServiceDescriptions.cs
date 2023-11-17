@@ -8,6 +8,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.WorldShip
     public static class WorldShipServiceDescriptions
     {
         public const string Ground = "GROUND";
+        public const string GroundSaver = "GROUND SAVER";
         public const string Ups3DaySelectToTheUnitedStates = "3 DAY SELECT TO THE UNITED STATES";
         public const string Ups3DaySelect = "3 DAY SELECT";
         public const string Ups3DaySelectFromCanada = "3 DAY SELECT";

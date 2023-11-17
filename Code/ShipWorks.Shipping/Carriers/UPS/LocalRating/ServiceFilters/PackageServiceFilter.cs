@@ -31,6 +31,7 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating.ServiceFilters
                 if (package.PackagingType != (int) UpsPackagingType.Custom)
                 {
                     eligibleServices.Remove(UpsServiceType.UpsGround);
+                    eligibleServices.Remove(UpsServiceType.UpsGroundSaver);
                     eligibleServices.Remove(UpsServiceType.Ups3DaySelect);
                 }
 

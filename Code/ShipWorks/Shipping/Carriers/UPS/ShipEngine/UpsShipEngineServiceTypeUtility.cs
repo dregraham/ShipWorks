@@ -14,13 +14,14 @@ namespace ShipWorks.Shipping.Carriers.UPS.ShipEngine
         private static readonly Dictionary<UpsServiceType, string> serviceCodeMap = new Dictionary<UpsServiceType, string>()
             {
                 { UpsServiceType.UpsGround, "ups_ground" },
+                { UpsServiceType.UpsGroundSaver, "ups_ground_saver"},
                 { UpsServiceType.Ups3DaySelect, "ups_3_day_select" },
                 { UpsServiceType.Ups2DayAir, "ups_2nd_day_air" },
                 { UpsServiceType.Ups2DayAirAM, "ups_2nd_day_air_am" },
                 { UpsServiceType.UpsNextDayAirSaver, "ups_next_day_air_saver" },
                 { UpsServiceType.UpsNextDayAir, "ups_next_day_air" },
-                { UpsServiceType.UpsNextDayAirAM, "ups_next_day_air_early_am" }
-            };
+                { UpsServiceType.UpsNextDayAirAM, "ups_next_day_air_early_am" },
+        };
 
         private static readonly Dictionary<UpsServiceType, string> internationalServiceCodeMap = new Dictionary<UpsServiceType, string>()
         {

@@ -453,6 +453,7 @@
     <Compile Include="Carriers\Ups\IUpsLabelClient.cs" />
     <Compile Include="Carriers\Ups\IUpsLabelClientFactory.cs" />
     <Compile Include="Carriers\Ups\OneBalance\OneBalanceUpsAccountRegistrationActivity.cs" />
+    <Compile Include="Carriers\Ups\ShipEngine\UpsGroundSaverState.cs" />
     <Compile Include="Carriers\Ups\ShipEngine\UpsShipEngineShipmentValidator.cs" />
     <Compile Include="Carriers\Ups\UpsRateClientFactory.cs" />
     <Compile Include="Carriers\Ups\ShipEngine\UpsShipEngineRatingService.cs" />
@@ -657,6 +658,7 @@
     <Compile Include="ShipEngine\DTOs\Registration\UpsRegistrationRequest.cs" />
     <Compile Include="ShipEngine\DTOs\Registration\UpsRegistrationRequestFactory.cs" />
     <Compile Include="ShipEngine\DTOs\Registration\UpsRegistrationResponse.cs" />
+    <Compile Include="ShipEngine\DTOs\UpsWalletedSettings.cs" />
     <Compile Include="ShipEngine\ICarrierShipmentRequestFactory.cs" />
     <Compile Include="ShipEngine\IProxiedShipEngineWebClient.cs" />
     <Compile Include="ShipEngine\IShipEngineApiKey.cs" />

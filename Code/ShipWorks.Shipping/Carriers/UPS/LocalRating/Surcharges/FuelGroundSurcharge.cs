@@ -26,7 +26,7 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating.Surcharges
         /// </summary>
         public void Apply(UpsShipmentEntity shipment, IUpsLocalServiceRate serviceRate)
         {
-            if (serviceRate.Service == UpsServiceType.UpsGround)
+            if (serviceRate.Service == UpsServiceType.UpsGround || serviceRate.Service == UpsServiceType.UpsGroundSaver)
             {
                 decimal fuelSurchargeRate = (decimal) surcharges[UpsSurchargeType.FuelGround];
                 decimal fuelSurcharge = Math.Round(serviceRate.Amount * fuelSurchargeRate, 2, MidpointRounding.AwayFromZero);
