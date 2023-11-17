@@ -4304,6 +4304,8 @@ namespace ShipWorks.Data.Model
 		PayorPostalCode,
 		///<summary>DeliveredDutyPaid. </summary>
 		DeliveredDutyPaid,
+		///<summary>CustomsTinIssuingAuthority. </summary>
+		CustomsTinIssuingAuthority,
 		/// <summary></summary>
 		AmountOfFields
 	}
@@ -4730,6 +4732,8 @@ namespace ShipWorks.Data.Model
 		ShipEngineLabelId,
 		///<summary>DeliveredDutyPaid. </summary>
 		DeliveredDutyPaid,
+		///<summary>CustomsTinIssuingAuthority. </summary>
+		CustomsTinIssuingAuthority,
 		/// <summary></summary>
 		AmountOfFields
 	}

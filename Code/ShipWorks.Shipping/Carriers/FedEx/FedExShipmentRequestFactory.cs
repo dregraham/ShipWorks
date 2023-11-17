@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Enums;
@@ -276,7 +277,8 @@ namespace ShipWorks.Shipping.Carriers.FedEx
                     // IdentifierType is TIN
                     IdentifierType = TaxIdentifier.IdentifierTypeEnum.Tin,
                     TaxableEntityType = "shipper",
-                    Value = shipment.FedEx.CustomsRecipientTIN
+                    Value = shipment.FedEx.CustomsRecipientTIN,
+                    IssuingAuthority = shipment.FedEx.CustomsTinIssuingAuthority
                 };
 
                 listTaxIds.Add(taxIdentifier);
