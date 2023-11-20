@@ -23,12 +23,16 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Enums
         [ApiValue("fedex_smartpost_bound_printed_matter")]
         BoundPrintedMatter = 2,
 
-        [Description("FedEx Ground® Economy(Under 1lb)")]
+        [Description("FedEx SmartPost Presorted Standard")]
         [ApiValue("fedex_smartpost_presorted_standard")]
         PresortedStandard = 3,
 
         [Description("FedEx Ground® Economy Returns")]
         [ApiValue("fedex_smartpost_returns")]
         ParcelReturn = 4,
+
+        [Description("FedEx Ground Economy (Under 1Lb)")]
+        [ApiValue("fedex_smartpost_parcel_select_lightweight")]
+        SelectLightweight = 5,
     }
 }
