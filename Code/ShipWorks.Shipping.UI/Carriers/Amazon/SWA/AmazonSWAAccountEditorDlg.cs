@@ -10,6 +10,8 @@ using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers;
 using ShipWorks.Shipping.ShipEngine;
 using System.Diagnostics.CodeAnalysis;
+using System.Threading.Tasks;
+using ShipWorks.Stores.Platforms.Amazon;
 
 namespace ShipWorks.Shipping.UI.Carriers.Amazon.SWA
 {
@@ -77,12 +79,21 @@ namespace ShipWorks.Shipping.UI.Carriers.Amazon.SWA
         private string GetDescription(AmazonSWAAccountEntity AmazonSWAAccount)
         {
             return accountDescription.GetDefaultAccountDescription(account);
-        }
+		}
 
-        /// <summary>
-        /// User is ready to save the changes
-        /// </summary>
-        private async void OnOK(object sender, EventArgs e)
+		///// <summary>
+		///// Open the URL to kickoff the UpdateCredentials process
+		///// </summary>
+		//private Task UpdateCredentials()
+		//{
+		//	IAmazonCredentials credentials = ((IAmazonCredentials) store);
+		//	return InitiateMonoauth(async () => await hubOrderSourceClient.GetUpdateCarrierInitiateUrl("amazon", account.ShipEngineCarrierId, credentials.Region, credentials.MerchantID).ConfigureAwait(true));
+		//}
+
+/// <summary>
+		/// User is ready to save the changes
+		/// </summary>
+		private async void OnOK(object sender, EventArgs e)
         {
             try
             {
@@ -98,13 +109,13 @@ namespace ShipWorks.Shipping.UI.Carriers.Amazon.SWA
                 contactInformation.SaveToEntity();
                 accountRetrieverFactory.Create(account.ShipmentType).Save(account);
 
-                var updateResult = await shipEngineWebClient.UpdateAmazonAccount(account);
+                //var updateResult = await shipEngineWebClient.UpdateAmazonAccount(account);
 
-                if (updateResult.Failure)
-                {
-                    messageHelper.ShowError(this, $"An error occurred when updating the account information. {Environment.NewLine}{updateResult.Message}");
-                    return;
-                }
+                //if (updateResult.Failure)
+                //{
+                //    messageHelper.ShowError(this, $"An error occurred when updating the account information. {Environment.NewLine}{updateResult.Message}");
+                //    return;
+                //}
 
                 DialogResult = DialogResult.OK;
             }

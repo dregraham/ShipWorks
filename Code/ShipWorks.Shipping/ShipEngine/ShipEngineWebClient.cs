@@ -184,10 +184,13 @@ namespace ShipWorks.Shipping.ShipEngine
         /// with the ShipEngine API because they have not added connecting to
         /// Amazon to their DLL yet
         /// </remarks>
-        public async Task<GenericResult<string>> ConnectAmazonShippingAccount(string authCode) =>
-            await proxiedShipEngineWebClient.ConnectAmazonShippingAccount(authCode, GetAmazonShippingCarrierID);
+        public async Task<GenericResult<string>> ConnectAmazonShippingAccount(string authCode)
+		{
+			//return await proxiedShipEngineWebClient.ConnectAmazonShippingAccount(authCode, GetAmazonShippingCarrierID);
+			return await GetAmazonShippingCarrierID();
+		}
 
-        /// <summary>
+		/// <summary>
         /// Get the Amazon Shipping carrier ID. There can only ever be one connected per api key.
         /// </summary>
         private async Task<GenericResult<string>> GetAmazonShippingCarrierID()

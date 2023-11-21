@@ -107,7 +107,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon.SWA
             {
                 ShipmentType = ShipmentTypeCode.AmazonSWA,
                 Shipment = shipment,
-                Allowed = false,
+                Allowed = true,
                 AmazonOrder = amazonOrder,
                 AmazonCredentials = storeManager.GetStore(shipment.Order.StoreID) as IAmazonCredentials
             };

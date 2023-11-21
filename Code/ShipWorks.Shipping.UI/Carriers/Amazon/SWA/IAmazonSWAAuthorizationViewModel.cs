@@ -12,6 +12,6 @@ namespace ShipWorks.Shipping.UI.Amazon.SWA
         /// Connect to Amazon Shipping
         /// </summary>
         /// <returns></returns>
-        Task<GenericResult<string>> ConnectToAmazonShipping();
+        GenericResult<string> ConnectToAmazonShipping();
     }
 }
