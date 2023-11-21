@@ -53,6 +53,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.WorldShip
             upsServiceCodes = new Dictionary<UpsServiceType, string>();
 
             upsServiceCodes[UpsServiceType.UpsGround] = "GND";
+            upsServiceCodes[UpsServiceType.UpsGroundSaver] = "GND";
             upsServiceCodes[UpsServiceType.Ups3DaySelect] = "3DS";
             upsServiceCodes[UpsServiceType.Ups3DaySelectFromCanada] = "3DM";
             upsServiceCodes[UpsServiceType.Ups2DayAir] = "2DA";

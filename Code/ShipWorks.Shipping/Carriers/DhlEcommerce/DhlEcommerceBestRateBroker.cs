@@ -59,5 +59,31 @@ namespace ShipWorks.Shipping.Carriers.DhlEcommerce
         /// Gets a description from the specified account
         /// </summary>
         protected override string AccountDescription(DhlEcommerceAccountEntity account) => account.AccountDescription;
+
+        /// <summary>
+        /// Updates data on the DHL Ecommerce child shipment that is required for checking best rate
+        /// </summary>
+        /// <param name="currentShipment">Shipment that we'll be working with</param>
+        /// <param name="originalShipment">The original shipment from which data can be copied.</param>
+        /// <param name="account">The Account Entity for this shipment.</param>
+        protected override void UpdateChildShipmentSettings(ShipmentEntity currentShipment, ShipmentEntity originalShipment, DhlEcommerceAccountEntity account)
+        {
+            base.UpdateChildShipmentSettings(currentShipment, originalShipment, account);
+
+            currentShipment.DhlEcommerce.DimsHeight = originalShipment.BestRate.DimsHeight;
+            currentShipment.DhlEcommerce.DimsLength = originalShipment.BestRate.DimsLength;
+            currentShipment.DhlEcommerce.DimsWidth = originalShipment.BestRate.DimsWidth;
+            currentShipment.DhlEcommerce.DimsProfileID = originalShipment.BestRate.DimsProfileID;
+
+            currentShipment.DhlEcommerce.DimsWeight = originalShipment.BestRate.DimsWeight;
+            currentShipment.DhlEcommerce.DimsAddWeight = originalShipment.BestRate.DimsAddWeight;
+            currentShipment.DhlEcommerce.PackagingType = (int) DhlEcommercePackagingType.ParcelSelectMachinable;
+            currentShipment.DhlEcommerce.InsuranceValue = originalShipment.BestRate.InsuranceValue;
+            currentShipment.Insurance = originalShipment.BestRate.Insurance;
+
+            ShipmentType.UpdateTotalWeight(currentShipment);
+
+            currentShipment.DhlEcommerce.DhlEcommerceAccountID = account.DhlEcommerceAccountID;
+        }
     }
 }

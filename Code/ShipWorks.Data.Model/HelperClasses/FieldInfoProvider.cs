@@ -1543,6 +1543,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 			this.AddElementFieldInfo("FedExProfileEntity", "PayorCountryCode", typeof(System.String), false, false, false, true,  (int)FedExProfileFieldIndex.PayorCountryCode, 2, 0, 0);
 			this.AddElementFieldInfo("FedExProfileEntity", "PayorPostalCode", typeof(System.String), false, false, false, true,  (int)FedExProfileFieldIndex.PayorPostalCode, 10, 0, 0);
 			this.AddElementFieldInfo("FedExProfileEntity", "DeliveredDutyPaid", typeof(Nullable<System.Boolean>), false, false, false, true,  (int)FedExProfileFieldIndex.DeliveredDutyPaid, 0, 0, 0);
+			this.AddElementFieldInfo("FedExProfileEntity", "CustomsTinIssuingAuthority", typeof(System.String), false, false, false, true,  (int)FedExProfileFieldIndex.CustomsTinIssuingAuthority, 2, 0, 0);
 		}
 		/// <summary>Inits FedExProfilePackageEntity's FieldInfo objects</summary>
 		private void InitFedExProfilePackageEntityInfos()
@@ -1751,6 +1752,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 			this.AddElementFieldInfo("FedExShipmentEntity", "PayorPostalCode", typeof(System.String), false, false, false, true,  (int)FedExShipmentFieldIndex.PayorPostalCode, 10, 0, 0);
 			this.AddElementFieldInfo("FedExShipmentEntity", "ShipEngineLabelId", typeof(System.String), false, false, false, true,  (int)FedExShipmentFieldIndex.ShipEngineLabelId, 50, 0, 0);
 			this.AddElementFieldInfo("FedExShipmentEntity", "DeliveredDutyPaid", typeof(Nullable<System.Boolean>), false, false, false, true,  (int)FedExShipmentFieldIndex.DeliveredDutyPaid, 0, 0, 0);
+			this.AddElementFieldInfo("FedExShipmentEntity", "CustomsTinIssuingAuthority", typeof(System.String), false, false, false, true,  (int)FedExShipmentFieldIndex.CustomsTinIssuingAuthority, 2, 0, 0);
 		}
 		/// <summary>Inits FilterEntity's FieldInfo objects</summary>
 		private void InitFilterEntityInfos()

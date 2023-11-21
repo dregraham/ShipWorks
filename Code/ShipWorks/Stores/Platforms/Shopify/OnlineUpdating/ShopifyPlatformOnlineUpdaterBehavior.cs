@@ -23,51 +23,56 @@ namespace ShipWorks.Stores.Platforms.Shopify.OnlineUpdating
 			ShopifyOrderEntity shopifyOrder = (ShopifyOrderEntity) order;
 			shopifyOrder.OnlineStatus = OrderSourceSalesOrderStatus.Completed.ToString();
 			shopifyOrder.FulfillmentStatusCode = (int) ShopifyFulfillmentStatus.Fulfilled;
-			
+
 			unitOfWork.AddForSave(shopifyOrder);
 		}
 
-        public override string GetCarrierName(IShippingManager shippingManager, ShipmentEntity shipment)
-        {
-            return GetTrackingCompany(shipment);
-        }
+		public override string GetCarrierName(IShippingManager shippingManager, ShipmentEntity shipment)
+		{
+			return GetTrackingCompany(shipment);
+		}
 
-        /// <summary>
-        /// Gets the tracking company for uploading tracking to Shopify
-        /// </summary>
-        public static string GetTrackingCompany(ShipmentEntity shipment)
-        {
-            if (ShipmentTypeManager.IsPostal(shipment.ShipmentTypeCode))
-            {
-                ShippingManager.EnsureShipmentLoaded(shipment);
-                if (ShipmentTypeManager.IsDhl((PostalServiceType) shipment.Postal.Service))
-                {
-                    return "DHL eCommerce";
-                }
-            }
+		/// <summary>
+		/// Gets the tracking company for uploading tracking to Shopify
+		/// </summary>
+		public static string GetTrackingCompany(ShipmentEntity shipment)
+		{
+			if (ShipmentTypeManager.IsPostal(shipment.ShipmentTypeCode))
+			{
+				ShippingManager.EnsureShipmentLoaded(shipment);
+				if (ShipmentTypeManager.IsDhl((PostalServiceType) shipment.Postal.Service))
+				{
+					return "DHL eCommerce";
+				}
+			}
 
-            if (shipment.ShipmentTypeCode == ShipmentTypeCode.Other)
-            {
-                ShippingManager.EnsureShipmentLoaded(shipment);
-                string carrier = shipment.Other.Carrier;
+			if (shipment.ShipmentTypeCode == ShipmentTypeCode.Other)
+			{
+				ShippingManager.EnsureShipmentLoaded(shipment);
+				string carrier = shipment.Other.Carrier;
 
-                if (string.IsNullOrWhiteSpace(carrier))
-                {
-                    return "Other";
-                }
+				if (string.IsNullOrWhiteSpace(carrier))
+				{
+					return "Other";
+				}
 
-                return carrier;
-            }
+				return carrier;
+			}
 
-            return ShippingManager.GetCarrierName((ShipmentTypeCode) shipment.ShipmentType);
-        }
+			if (shipment.ShipmentTypeCode == ShipmentTypeCode.Asendia)
+			{
+				return "Asendia USA";
+			}
 
-        public override string GetTrackingUrl(ShipmentEntity shipment)
-        {
-            ShipmentType shipmentType = ShipmentTypeManager.GetType(shipment);
-            shipmentType.LoadShipmentData(shipment, true);
+			return ShippingManager.GetCarrierName((ShipmentTypeCode) shipment.ShipmentType);
+		}
 
-            return shipmentType.GetCarrierTrackingUrl(shipment);
-        }
-    }
+		public override string GetTrackingUrl(ShipmentEntity shipment)
+		{
+			ShipmentType shipmentType = ShipmentTypeManager.GetType(shipment);
+			shipmentType.LoadShipmentData(shipment, true);
+
+			return shipmentType.GetCarrierTrackingUrl(shipment);
+		}
+	}
 }

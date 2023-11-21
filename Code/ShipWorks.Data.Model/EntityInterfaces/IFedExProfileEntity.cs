@@ -285,6 +285,12 @@ namespace ShipWorks.Data.Model.EntityInterfaces
         /// Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
         Nullable<System.Boolean> DeliveredDutyPaid { get; }
+        /// <summary> The CustomsTinIssuingAuthority property of the Entity FedExProfile<br/><br/>
+        /// </summary>
+        /// <remarks>Mapped on table field: "FedExProfile"."CustomsTinIssuingAuthority"<br/>
+        /// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 2<br/>
+        /// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+        System.String CustomsTinIssuingAuthority { get; }
         
         IShippingProfileEntity ShippingProfile { get; }
         

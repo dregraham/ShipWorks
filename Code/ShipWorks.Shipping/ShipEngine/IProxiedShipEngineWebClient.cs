@@ -46,5 +46,7 @@ namespace ShipWorks.Shipping.ShipEngine
         /// Update the given stamps account with the username and password
         /// </summary>
         Task<Result> UpdateStampsAccount(string carrierId, string username, string password);
+        Task<GenericResult<bool>> UpsGroundSaverEnable(string seAccountId);
+        Task<GenericResult<bool>> UpsGroundSaverEnabledState(string seAccountId);
     }
 }

@@ -19,6 +19,7 @@ using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Shipping.ShipEngine.DTOs.Registration;
 using ShipWorks.Stores;
+using ShipWorks.Actions.Triggers;
 
 namespace ShipWorks.Shipping.ShipEngine
 {
@@ -232,6 +233,7 @@ namespace ShipWorks.Shipping.ShipEngine
             }
         }
 
+
         /// <summary>
         /// Register a UPS account with One Balance
         /// </summary>
@@ -272,6 +274,90 @@ namespace ShipWorks.Shipping.ShipEngine
             catch (Exception ex)
             {
                 return GenericResult.FromError<string>("Unable to register the UPS Account", ex);
+            }
+        }
+
+        public async Task<GenericResult<bool>> UpsGroundSaverEnabledState(string seCarrierId)
+        {
+            var result = await CallPlatform<UpsWalletedSettings>(
+                Method.GET,
+                "UpsGroundSaverEnabledState",
+                $"https://api.shipengine.com/v1/connections/carriers/ups_walleted/{seCarrierId}/settings",
+                null)
+                .ConfigureAwait(false);
+            return result.Value?.EnableGroundSaverService == true;
+        }
+
+        public async Task<GenericResult<bool>> UpsGroundSaverEnable(string seCarrierId)
+        {
+            var result = await CallPlatform<bool>(
+                Method.PUT,
+                "UpsGroundSaverEnable",
+                $"https://api.shipengine.com/v1/connections/carriers/ups_walleted/{seCarrierId}/settings",
+                new UpsWalletedSettings { EnableGroundSaverService = true }
+                )
+                .ConfigureAwait(false);
+            return result.Success;
+        }
+
+        /// <summary>
+        /// </summary>
+        public async Task<GenericResult<T>> CallPlatform<T>(Method httpMethod, string logEntryName, string url, object body)
+        {
+            try
+            {
+                IRestClient restClient = new RestClient(ShipEngineProxyUrl);
+
+                IRestRequest request = new RestRequest();
+                request.AddHeader("Content-Type", "application/json");
+                request.AddHeader("SW-on-behalf-of", await GetApiKey().ConfigureAwait(false));
+                request.AddHeader("SW-originalRequestUrl", url);
+                request.AddHeader("SW-originalRequestMethod", httpMethod.ToString());
+                request.Method = Method.POST;
+                request.RequestFormat = DataFormat.Json;
+                request.JsonSerializer = new RestSharpJsonNetSerializer();
+                if (body != null)
+                {
+                    request.AddJsonBody(body);
+                }
+
+                ApiLogEntry logEntry = new ApiLogEntry(ApiLogSource.ShipEngine, logEntryName);
+                logEntry.LogRequest(request, restClient, "json");
+
+                IRestResponse response = await restClient.ExecuteTaskAsync(request).ConfigureAwait(false);
+
+                logEntry.LogResponse(response, "json");
+
+                if (response.StatusCode == HttpStatusCode.OK)
+                {
+                    return JsonConvert.DeserializeObject<T>(response.Content);
+                }
+
+                if(response.StatusCode == HttpStatusCode.NoContent)
+                {
+                    return default(T);
+                }
+                string message = null;
+
+                if (!string.IsNullOrWhiteSpace(response.Content))
+                {
+                    var deserialized = JObject.Parse(response.Content);
+                    message = deserialized["errors"]?.FirstOrDefault()?["message"]?.ToString();
+                    if (message == null)
+                    {
+                        message = deserialized["reason"]?.ToString();
+                    }
+                }
+                if (message == null)
+                {
+                    message = response.StatusDescription ?? response.StatusCode.ToString();
+                }
+
+                return GenericResult.FromError<T>(message);
+            }
+            catch (Exception ex)
+            {
+                return GenericResult.FromError<T>($"Unable to call {logEntryName}", ex);
             }
         }
 

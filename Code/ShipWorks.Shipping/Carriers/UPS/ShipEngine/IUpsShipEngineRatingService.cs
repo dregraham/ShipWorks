@@ -1,4 +1,5 @@
-﻿using ShipWorks.Data.Model.EntityClasses;
+﻿using System.Threading.Tasks;
+using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Editing.Rating;
 
 namespace ShipWorks.Shipping.Carriers.Ups.ShipEngine
@@ -11,6 +12,6 @@ namespace ShipWorks.Shipping.Carriers.Ups.ShipEngine
         /// <summary>
         /// Retrieve rates from ShipEngine for the given shipment
         /// </summary>
-        RateGroup GetRates(ShipmentEntity shipment);
+        Task<RateGroup> GetRates(ShipmentEntity shipment);
     }
 }
