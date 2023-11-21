@@ -189,8 +189,8 @@ namespace ShipWorks.Stores.Platforms.Walmart
             item.OnlineStatus = orderLineStatus?.status.ToString() ?? "Unknown";
 
             item.UnitPrice = orderLine.charges
-                .Where(c => c?.chargeType1 == "PRODUCT")
-                .Sum(c => c.chargeAmount?.amount ?? 0);
+                .FirstOrDefault(c => c?.chargeType1 == "PRODUCT")
+                ?.chargeAmount?.amount ?? 0;
 
             // Walmart spelled "Canceled" wrong, so I added the correct spelling in case they fix it...
             item.Quantity = (item.OnlineStatus == orderLineStatusValueType.Cancelled.ToString())
