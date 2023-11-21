@@ -363,8 +363,19 @@ namespace ShipWorks.Data.Administration
                 .Select(name => regex.Matches(name)[0].Groups[1].Value)
                 .Select(x => x.Length > 0 ? int.Parse(x) : 0);
 
-            int index = suffixes.Any() ? suffixes.Max() + 1 : 1;
-            return baseName + index;
+            string newName = baseName;
+            if (suffixes.Any())
+            {
+                newName += (suffixes.Max() + 1);
+            }
+
+            int index = 0;
+            while (databases.Any(name => name == newName))//in case we raech suffix = 99999
+            {
+                index++;
+                newName = baseName + index;
+            }
+            return newName;
         }
 
         /// <summary>
