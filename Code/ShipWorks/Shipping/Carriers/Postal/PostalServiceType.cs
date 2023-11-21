@@ -51,7 +51,8 @@ namespace ShipWorks.Shipping.Carriers.Postal
         [Description("Express Mail (Premium)")]
         ExpressMailPremium = 12,
 
-        [HiddenFor(HiddenForContext.NewShipment | HiddenForContext.Rates | HiddenForContext.Profiles)]
+        //https://auctane.atlassian.net/browse/WORKS-4386 - Parcel Select restored
+        //[HiddenFor(HiddenForContext.NewShipment | HiddenForContext.Rates | HiddenForContext.Profiles)]
         [Description("Parcel Select")]
         ParcelSelect = 13,
 
