@@ -109,7 +109,11 @@ namespace ShipWorks.Stores.Content
             // Go through each charge
             foreach (OrderChargeEntity charge in charges)
             {
-                totalCharges += charge.Amount;
+                //WORKS-4206 we want the order total to match what the UI in Shopify shows
+                if (charge.Type != "DUTIES")
+                {
+                    totalCharges += charge.Amount;
+                }
             }
 
             decimal orderTotal = totalItems + totalCharges;

@@ -375,8 +375,8 @@ namespace ShipWorks.Stores.Platforms.Shopify
             if (salesOrder.Payment.ShippingCharges.Count(item => item.Description?.ToString().Contains(dutiesLineItemDescription) == true) > 1)
             {
                 var firstDutiesItem = salesOrder.Payment.ShippingCharges.First(item => item.Description?.ToString().Contains(dutiesLineItemDescription) == true);
-
-                AddToCharge(order, "SHIPPING", firstDutiesItem.Description, firstDutiesItem.Amount);
+                //WORKS-4206 we want the order total to match what the UI in Shopify shows - this type is for CalculateTotal to not add charge amount to order total value
+                AddToCharge(order, "DUTIES", firstDutiesItem.Description, firstDutiesItem.Amount);
 
                 isMoreDutiesLine = true;
             }
