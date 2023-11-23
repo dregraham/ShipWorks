@@ -166,5 +166,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Enums
         [Description("FedEx® International Connect Plus")]
         [ApiValue("fedex_international_connect_plus")]
         FedExInternationalConnectPlus = 42,
+        
+        [Description("FedEx Ground® Economy (Under 1Lb)")]
+        [ApiValue("fedex_smartpost_parcel_select_lightweight")]
+        FedExSelectLightweight  = 43,
     }
 }

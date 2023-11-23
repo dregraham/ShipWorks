@@ -110,7 +110,8 @@ namespace ShipWorks.Shipping.Carriers.FedEx
                 FedExServiceType.FedEx1DayFreight,
                 FedExServiceType.FedEx2DayAM,
                 FedExServiceType.FedExFreightEconomy,
-                FedExServiceType.FedExFreightPriority
+                FedExServiceType.FedExFreightPriority,
+                FedExServiceType.FedExSelectLightweight
             };
 
             // Since all shipments are going to the same country, just pick out the first one
